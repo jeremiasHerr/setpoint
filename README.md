@@ -16,8 +16,6 @@
 -  Cobro de inscripciones integrado
 -  Ranking que se actualiza automáticamente
 
-**Cliente:** POLENTA Team Tenis, circuito amateur de Neuquén — 77 jugadores, 2 categorías, 5 torneos por año.
-
 ---
 
 ##  Stack Tecnológico
