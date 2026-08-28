@@ -1,0 +1,21 @@
+{
+  "name": "setpoint",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Plataforma de gestión de torneos de tenis amateur. Web + app móvil instalable.",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n api,web -c blue,green \"npm run dev -w apps/api\" \"npm run dev -w apps/web\"",
+    "test": "npm run test -w apps/api"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeremiasHerr/setpoint.git"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}
