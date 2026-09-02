@@ -64,7 +64,9 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 | 6 | ¿Se implementan los tres modos de sorteo o solo `manual` + `automatico` para v1? | Alcance | **Decidir en grupo** |
 | 7 | **Cambio de categoría:** si un jugador de Tercera pasa a Segunda, ¿qué pasa con sus puntos de Tercera? ¿Se transfieren, quedan congelados, o el jugador desaparece de esa tabla? | Modelo de ranking | Consultar |
 | 8 | ¿DNI o email como identificador en el flujo de inscripción por link? (ver [04](04-flujo-jugador.md) §5.8) | Flujo de inscripción | **Decidir en grupo** |
-| 9 | **Coordinación de partidos:** ¿la app es donde se *negocia* la fecha (propuestas, contrapropuestas, notificaciones) o solo donde se *registra* lo ya acordado por WhatsApp? Son órdenes de magnitud distintos de trabajo | Alcance del módulo de partidos | **Decidir en grupo** |
+| 10 | ¿Se implementan las **proyecciones pre-torneo** sugeridas por la cátedra? ("si llegás a semis sumás 50 y pasás al puesto 4") | Alcance | **Decidir en grupo** |
+
+> **El schema ya no está bloqueado.** Ninguna de las decisiones abiertas cambia las tablas: son valores de configuración, datos del seed o lógica de negocio.
 
 ### Resueltas
 
@@ -84,6 +86,7 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 - ~~Tabla de puntos: ¿fija o configurable?~~ **Configurable por organización** ([07](07-configurabilidad.md) §1)
 - ~~¿La foto del partido es obligatoria?~~ **No.** Es regla interna de POLENTA. El sistema permite adjuntar fotos, opcionalmente
 - ~~¿El modelo de ranking por casilleros es una particularidad de POLENTA?~~ **No.** Es el modelo de la ATP: ventana rodante con reemplazo al volver el torneo
+- ~~¿La app negocia la fecha o solo la registra?~~ **La registra.** Los jugadores siguen coordinando por WhatsApp; cualquiera de los dos anota la fecha y el rival confirma con un toque. La confirmación se modela en el schema desde el inicio ([04](04-flujo-jugador.md) §6)
 
 ---
 
@@ -104,14 +107,19 @@ Lista para llevar a la próxima charla. Las respondidas se tachan.
 5. **Pedir el Excel del ranking** en su formato original, no el PDF. Define qué columnas tiene y qué tan sucio viene.
 6. ¿Estarías dispuesto a cargar el DNI de los jugadores en el padrón, o preferís que el sistema no lo pida?
 
+### Canchas
+
+7. ¿De qué superficie son las canchas de los clubes donde juegan? Polvo de ladrillo, cemento, sintético, carpeta.
+   *Contexto: la cátedra sugirió head-to-head por superficie ("mejor en tierra roja"). Es un campo en `Cancha` y sale casi gratis, pero hace falta el dato.*
+
 ### Organización del torneo
 
-7. ¿Qué modo de sorteo prefieren: que el sistema sortee solo, que sortee en pantalla durante la reunión, o cargar a mano el resultado del sorteo físico?
-8. ¿Desde qué instancia paga las canchas la organización? El reglamento dice "fases de Campeonato y Complementaria", pero mencionaste cuartos en una respuesta y octavos en otra.
+8. ¿Qué modo de sorteo prefieren: que el sistema sortee solo, que sortee en pantalla durante la reunión, o cargar a mano el resultado del sorteo físico?
+9. ¿Desde qué instancia paga las canchas la organización? El reglamento dice "fases de Campeonato y Complementaria", pero mencionaste cuartos en una respuesta y octavos en otra.
 
 ### Resultados
 
-9. **Pedir capturas reales del grupo de WhatsApp** donde llegan los resultados (con los datos personales difuminados). Define qué tendría que entender el modelo de IA.
+10. **Pedir capturas reales del grupo de WhatsApp** donde llegan los resultados (con los datos personales difuminados). Define qué tendría que entender el modelo de IA.
 
 ---
 

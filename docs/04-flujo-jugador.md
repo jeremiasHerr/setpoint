@@ -243,30 +243,73 @@ El DNI es dato personal sensible en Argentina:
 
 ## 6. Coordinación de partidos
 
-Todos los partidos los arreglan los jugadores dentro del plazo de su instancia ([02](02-dominio.md) §8).
+Todos los partidos los arreglan los jugadores dentro del plazo de su instancia ([02-dominio.md](02-dominio.md) §8). La organización no asigna horarios.
 
-**Ciclo de vida del partido:**
+### 6.1 Alcance: registrar, no negociar
 
-```
-pendiente_coordinacion → fecha_propuesta → fecha_acordada → jugado
-                                                          → vencido
-```
+**La app es donde queda registrada la fecha, no donde se negocia.**
 
-**Flujo:**
+Los jugadores siguen coordinando por WhatsApp, que es lo que hacen hoy y funciona. Lo que falta no es una mejor forma de negociar: es que lo acordado quede en algún lado consultable, en vez de perderse en el scroll del grupo.
 
-1. La app muestra los partidos pendientes y los días restantes del plazo
-2. El jugador propone fecha, hora y club
-3. El rival acepta o contrapropone
-4. Con la fecha acordada, ambos reciben recordatorio
-5. **Se admite una sola reprogramación**, con 24 horas de anticipación, según el reglamento
+El reglamento de POLENTA ya exige registrar los turnos pactados en el grupo de WhatsApp. La app resuelve ese mismo requisito mejor.
+
+> **Descartado:** sistema de propuestas y contrapropuestas con ida y vuelta dentro de la app. Es varias veces más trabajo y compite con WhatsApp, que ya funciona y no tiene sentido reemplazar.
+
+### 6.2 El flujo
+
+1. Los dos jugadores acuerdan por WhatsApp, como siempre
+2. **Cualquiera de los dos** anota la fecha, hora y club en la app
+3. El rival recibe una notificación y **confirma** con un toque
+4. Ambos ven el partido agendado y reciben recordatorio
 
 En fase de grupos el club lo eligen ellos. En eliminatorias la sede está fijada por la organización y solo se acuerda fecha y hora.
 
-**No se construye un chat.** WhatsApp ya existe y funciona. Lo que la app aporta es el **estado**: quién falta jugar con quién, qué se propuso, qué se aceptó, cuánto plazo queda. Para hablar, un botón que abra WhatsApp con el rival.
+### 6.3 Por qué existe la confirmación
 
-**Contacto:** los rivales de zona pueden ver el teléfono del jugador, con aviso previo. Nadie más.
+Una fecha pactada tiene consecuencias: si no se juega, alguien debe dar W.O. Si un jugador anota una fecha y el otro nunca se enteró, después no hay forma de determinar quién incumplió.
 
----
+La confirmación deja constancia de que ambos supieron. Es el mismo propósito que persigue el reglamento al exigir el registro en el grupo, resuelto mejor.
+
+Para el jugador es un toque sobre una notificación, así que no vulnera el principio de mínima carga (§2).
+
+### 6.4 Ciclo de vida del partido
+
+```
+pendiente  ->  anotada  ->  confirmada  ->  jugada
+                                         -> vencida
+```
+
+| Estado | Significa |
+|---|---|
+| `pendiente` | Nadie cargó fecha todavía |
+| `anotada` | Uno cargó la fecha, falta que el rival confirme |
+| `confirmada` | Ambos al tanto. Cuenta como turno pactado |
+| `jugada` | Resultado cargado |
+| `vencida` | Se acabó el plazo sin jugarse. Resuelve la organización |
+
+**Reprogramación:** se admite una sola, con 24 horas de anticipación, según el reglamento. Vuelve el partido a `anotada`.
+
+### 6.5 Nota de implementación
+
+La confirmación se modela **desde el schema**, aunque la interfaz inicial pueda no usarla:
+
+```prisma
+model Partido {
+  fechaAcordada    DateTime?
+  clubId           Int?      // en zonas lo eligen los jugadores
+  anotadaPorId     Int?      // quién cargó la fecha
+  confirmadaPorId  Int?      // null = todavía sin confirmar
+  fechaLimite      DateTime  // vence el plazo de la instancia
+}
+```
+
+Con la confirmación desactivada, `anotada` es el estado previo a jugar y `confirmadaPorId` queda en null. Activarla después es un botón en la app y una línea en el endpoint — **sin migración**.
+
+> Dos columnas nullables cuestan nada ahora y evitan reescribir la lógica de coordinación más adelante.
+
+### 6.6 Contacto entre rivales
+
+Los rivales de zona pueden ver el teléfono del jugador, con aviso previo. Nadie más. Para hablar, un botón que abra WhatsApp con el rival: **no se construye un chat.**
 
 ## 7. Mis partidos
 
