@@ -21,6 +21,9 @@ Grupo de 3 · Entrega: fines de noviembre de 2026
 | [07-configurabilidad.md](07-configurabilidad.md) | Qué se parametriza por organización y qué queda fijo |
 | [08-repositorio.md](08-repositorio.md) | Estructura de carpetas, ramas, tags de entrega y forma de trabajo |
 | [09-setup-inicial.md](09-setup-inicial.md) | Guía paso a paso para inicializar el proyecto |
+| [10-features.md](10-features.md) | **Lista de funcionalidades para la 2da entrega** |
+| [design.md](design.md) | Sistema visual: color, tipografía, componentes y voz |
+| [schema.sql](schema.sql) | Modelo de datos en SQL, para la entrega de diseño de base de datos. La fuente real es `apps/api/prisma/schema.prisma` |
 
 > **02-dominio.md documenta el caso POLENTA**, que es el cliente de validación. **07-configurabilidad.md** define qué de eso se parametriza para otras organizaciones y qué queda fijo. Leer los dos juntos.
 
@@ -65,6 +68,8 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 | 7 | **Cambio de categoría:** si un jugador de Tercera pasa a Segunda, ¿qué pasa con sus puntos de Tercera? ¿Se transfieren, quedan congelados, o el jugador desaparece de esa tabla? | Modelo de ranking | Consultar |
 | 8 | ¿DNI o email como identificador en el flujo de inscripción por link? (ver [04](04-flujo-jugador.md) §5.8) | Flujo de inscripción | **Decidir en grupo** |
 | 10 | ¿Se implementan las **proyecciones pre-torneo** sugeridas por la cátedra? ("si llegás a semis sumás 50 y pasás al puesto 4") | Alcance | **Decidir en grupo** |
+| 11 | **Política de devolución:** ¿POLENTA devuelve el dinero si alguien se baja después de pagar? ¿Cambia si ya se hizo el sorteo? | Estados de inscripción | Consultar |
+| 12 | ¿Los jugadores pueden cargar resultados con confirmación del rival, o la carga es exclusiva de la organización? Está parametrizado como `quien_carga_resultados` | Permisos | **Decidir en grupo** |
 
 > **El schema ya no está bloqueado.** Ninguna de las decisiones abiertas cambia las tablas: son valores de configuración, datos del seed o lógica de negocio.
 
@@ -107,19 +112,23 @@ Lista para llevar a la próxima charla. Las respondidas se tachan.
 5. **Pedir el Excel del ranking** en su formato original, no el PDF. Define qué columnas tiene y qué tan sucio viene.
 6. ¿Estarías dispuesto a cargar el DNI de los jugadores en el padrón, o preferís que el sistema no lo pida?
 
+### Pagos y devoluciones
+
+7. ¿Devuelven el dinero si alguien se baja después de pagar? ¿Cambia la respuesta si ya se hizo el sorteo? ¿Alguna vez pasó?
+
 ### Canchas
 
-7. ¿De qué superficie son las canchas de los clubes donde juegan? Polvo de ladrillo, cemento, sintético, carpeta.
+8. ¿De qué superficie son las canchas de los clubes donde juegan? Polvo de ladrillo, cemento, sintético, carpeta.
    *Contexto: la cátedra sugirió head-to-head por superficie ("mejor en tierra roja"). Es un campo en `Cancha` y sale casi gratis, pero hace falta el dato.*
 
 ### Organización del torneo
 
-8. ¿Qué modo de sorteo prefieren: que el sistema sortee solo, que sortee en pantalla durante la reunión, o cargar a mano el resultado del sorteo físico?
-9. ¿Desde qué instancia paga las canchas la organización? El reglamento dice "fases de Campeonato y Complementaria", pero mencionaste cuartos en una respuesta y octavos en otra.
+9. ¿Qué modo de sorteo prefieren: que el sistema sortee solo, que sortee en pantalla durante la reunión, o cargar a mano el resultado del sorteo físico?
+10. ¿Desde qué instancia paga las canchas la organización? El reglamento dice "fases de Campeonato y Complementaria", pero mencionaste cuartos en una respuesta y octavos en otra.
 
 ### Resultados
 
-10. **Pedir capturas reales del grupo de WhatsApp** donde llegan los resultados (con los datos personales difuminados). Define qué tendría que entender el modelo de IA.
+11. **Pedir capturas reales del grupo de WhatsApp** donde llegan los resultados (con los datos personales difuminados). Define qué tendría que entender el modelo de IA.
 
 ---
 

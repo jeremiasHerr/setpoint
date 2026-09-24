@@ -241,26 +241,33 @@ SVG en línea, trazo de 1.7–1.9, grilla de 16/18/20/24, `stroke-linecap: round
 
 ## 11. Pantallas y features
 
+El canvas tiene **21 pantallas**, en el orden en que se usan.
+
 | Pantalla | Superficie | Feature |
 |---|---|---|
+| Cuándo juego | App del jugador | F11 |
+| Mi zona | App del jugador | F07, F11 |
+| Ranking | App del jugador | F09 |
+| Anotar la fecha | App del jugador | F14 |
+| El torneo | App del jugador | F12 |
+| Inscripción y pago | App del jugador | F12 |
+| Cuenta e ingreso | App del jugador | F02 |
+| Qué está en juego | App del jugador | F20 |
+| Registrar la organización | Web del organizador | F01 |
+| Tu circuito | Web del organizador | F01 |
+| Padrón | Web del organizador | F02 |
+| Tablero del torneo | Web del organizador | F15 |
+| Cargar resultado | Web del organizador | F06, F07 |
+| Cerrar el torneo | Web del organizador | F16 |
+| Inscripciones | Web del organizador | F13 |
+| Sorteo de zonas | Web del organizador | F05 |
+| Importar padrón | Web del organizador | F03 |
+| Nuevo torneo | Web del organizador | F04 |
 | Landing | Web pública | — |
-| Ranking | Móvil / web pública | F14 |
-| Ficha y cara a cara | Móvil pública | F15, F16 |
-| Los dos cuadros | Web pública | F11, F21 |
-| Crónica | Móvil pública | F18 |
-| Cuándo juego | App | F17 |
-| Mi zona | App | F10, F17 |
-| Anotar la fecha | App | F08 |
-| El torneo · inscripción y pago | App | F05 |
-| Cuenta e ingreso | App / web | F02 |
-| Tablero del torneo | Web organizador | F12 |
-| Cargar resultado | Web organizador | F09, F10 |
-| Inscripciones | Web organizador | F06 |
-| Sorteo de zonas | Web organizador | F07 |
-| Importar padrón | Web organizador | F03 |
-| Nuevo torneo | Web organizador | F04 |
+| Los dos cuadros | Web pública | F08, F10 |
+| Ficha y cara a cara | Web pública | F17, F18 |
 
-Sin pantalla todavía: cierre de torneo y actualización del ranking (F13), proyecciones de ranking (F20), carga de resultados desde mensajes (F19), alta y configuración de la organización (F01).
+**Sin pantalla:** F19, registro de resultados a partir de mensajes. Está en duda y se diseña solo si se confirma.
 
 ---
 

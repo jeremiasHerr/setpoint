@@ -12,12 +12,25 @@ Se definen una vez, al dar de alta el circuito.
 
 | Parámetro | Tipo | Ejemplo POLENTA |
 |---|---|---|
+| **`usa_ranking`** | `sí` \| `no` | `sí` |
 | Categorías | Lista | Segunda, Tercera |
 | Etapas del calendario | Lista ordenada | Primavera, Verano, Pretemporada, Otoño, Invierno |
 | Tabla de puntos por instancia | Tabla | 100 / 75 / 50 / 25 / 15 / 10 |
 | Ventana del ranking | Meses | 12 |
 | ¿Cuentan todas las etapas o las mejores N? | `todas` \| `mejores_n` | `todas` |
 | Puntos de ingreso de jugador nuevo | Número | 0 |
+| **`quien_carga_resultados`** | `organizacion` \| `organizacion_y_jugadores` | `organizacion` |
+
+**`usa_ranking`** — si la organización administra un circuito con ranking acumulado o solo corre torneos sueltos.
+
+| Valor | Consecuencias |
+|---|---|
+| `sí` | Requiere definir etapas y tabla de puntos. Los torneos otorgan puntos y el sorteo se siembra por ranking |
+| `no` | No hace falta configurar nada. Cada torneo produce sus **posiciones finales** y no acumula. La siembra del sorteo es manual o aleatoria |
+
+> Es la puerta de entrada al producto: una organización puede probar la plataforma creando un torneo suelto en dos minutos, y activar el ranking más adelante sin rehacer nada.
+
+**`quien_carga_resultados`** — si los jugadores pueden reportar el resultado de su partido con confirmación del rival, o si la carga es exclusiva de la organización. POLENTA usa el modo restringido, alineado con el principio de mínima carga.
 
 ---
 
@@ -74,7 +87,26 @@ Estos parámetros solo afectan la **validación** al cargar un resultado y el c�
 | Sede en eliminatorias | `libre` \| `designada` | `designada` |
 | Instancia desde la que paga la organización | Ronda | a confirmar |
 
-### 2.5 Inscripción
+**Los clubes no son entidades obligatorias.** Hay dos formas de indicar dónde se juega:
+
+| Modo | Cómo funciona | Cuándo conviene |
+|---|---|---|
+| **Sede libre** | Se escribe el nombre del lugar como texto | Por defecto. Cero configuración |
+| **Sede registrada** | Se elige de la lista de clubes que la organización cargó, con sus canchas y superficies | Solo si el circuito quiere estadísticas por superficie |
+
+> El club **no tiene usuario ni login** en ningún caso. Registrarlo es opcional y solo habilita funcionalidad adicional, como el head-to-head filtrado por superficie.
+
+### 2.5 Devoluciones
+
+| Parámetro | Valores | POLENTA |
+|---|---|---|
+| Política de reembolso | Texto informativo | a confirmar |
+
+**El movimiento de dinero queda fuera del sistema.** Ante una baja, la plataforma registra la cancelación y marca si corresponde devolución, para que aparezca en la conciliación del torneo. La transferencia la realiza la organización.
+
+Que un circuito devuelva o no cuando alguien se baja después del sorteo es **regla del circuito, no de la plataforma** — mismo criterio que la obligación de enviar foto (§4). Muchos circuitos amateur no devuelven una vez cerrada la inscripción, porque las pelotas ya se compraron y las canchas ya se reservaron.
+
+### 2.6 Inscripción
 
 | Parámetro | Valores | POLENTA |
 |---|---|---|
@@ -115,6 +147,7 @@ Distinción importante: hay reglas que son del **reglamento de cada circuito**, 
 
 | Regla POLENTA | Tratamiento en el sistema |
 |---|---|
+| Política de devolución de inscripciones | El sistema registra la cancelación y si corresponde reembolso. El movimiento de dinero lo hace la organización |
 | Obligación de enviar foto de ambos jugadores al terminar | **El partido admite fotos adjuntas, opcionalmente.** Si un circuito quiere obligar, lo hace su reglamento. Si están, la crónica las usa |
 | Penalidad de 1 game por cada 5 minutos de retraso | No se modela. Se refleja en el resultado que se carga |
 | Código de conducta, saludo final, cantar el tanteador | Fuera de alcance |

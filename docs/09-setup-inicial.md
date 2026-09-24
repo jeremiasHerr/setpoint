@@ -123,64 +123,134 @@ docker compose ps        # debería decir "running"
 
 ## Fase 3 — API con Prisma
 
-**Objetivo:** el schema en la base y un endpoint que devuelva datos reales.
+### 3a. La API arranca
+
+**Objetivo:** que `apps/api` sea un workspace, compile TypeScript y responda un endpoint. Sin base de datos todavía.
 
 ```bash
-mkdir -p apps/api && cd apps/api
-npm init -y
-npm i express cors dotenv zod
-npm i -D typescript tsx @types/express @types/node @types/cors prisma
-npx tsc --init
-npx prisma init
+mkdir -p apps/api/src
 ```
 
-### 3.1 El schema
+Crear `apps/api/package.json` **a mano** (no con `npm init`, que arrastra campos que no aplican):
 
-Escribir `prisma/schema.prisma` a partir de [02-dominio.md](02-dominio.md) y [07-configurabilidad.md](07-configurabilidad.md).
+```json
+{
+  "name": "@setpoint/api",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "echo \"sin tests todavía\"",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "prisma db seed",
+    "db:studio": "prisma studio"
+  },
+  "prisma": { "seed": "tsx prisma/seed.ts" }
+}
+```
 
-> **Escríbanlo completo**, aunque no vayan a usar todas las tablas todavía. Ya está diseñado, y en desarrollo sin datos reales `npx prisma migrate reset` borra todo y vuelve a empezar sin costo. El dolor de las migraciones aparece recién cuando hay datos que no se pueden perder.
+Dependencias, **desde la raíz**, con versiones fijadas:
 
 ```bash
-npx prisma migrate dev --name init
-npx prisma studio        # inspección visual de las tablas
+npm i express cors dotenv zod @prisma/client@6.19.3 -w apps/api
+npm i -D typescript@5 tsx @types/express @types/node @types/cors prisma@6.19.3 -w apps/api
 ```
 
-**Verificación:** Prisma Studio muestra todas las tablas vacías.
+> `prisma` y `@prisma/client` tienen que ser **exactamente la misma versión**. TypeScript va en la 5: la 7 es una versión mayor reciente y el ecosistema todavía la está alcanzando.
 
-### 3.2 Seed
+`apps/api/tsconfig.json`:
 
-Escribir `prisma/seed.ts` con datos realistas:
+```json
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "commonjs",
+    "rootDir": "src",
+    "outDir": "dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src"]
+}
+```
+
+> `commonjs` a propósito: con ESM hay que escribir los imports con extensión `.js` aunque el archivo sea `.ts`, y es una fuente de errores confusos.
+
+```bash
+cd apps/api && npx prisma init && cd ../..
+```
+
+En el `apps/api/.env` que se generó:
+
+```
+DATABASE_URL="postgresql://setpoint:setpoint@localhost:5432/setpoint"
+```
+
+`apps/api/src/index.ts` con un único endpoint `GET /api/salud`.
+
+**Verificación:**
+
+```bash
+npm run dev -w apps/api
+curl http://localhost:3000/api/salud      # {"ok":true,...}
+npm ls --workspaces                        # lista @setpoint/api
+npx tsc --noEmit -p apps/api               # sin salida = compila
+```
+
+> En VS Code: `Ctrl+Shift+P` → **TypeScript: Select TypeScript Version** → **Use Workspace Version**, para que el editor use el mismo TypeScript que el proyecto.
+
+### 3b. Schema y primera migración
+
+**Objetivo:** las 20 tablas creadas en Postgres.
+
+El schema completo está en `apps/api/prisma/schema.prisma`. Es la **única** copia: no duplicarlo en otra carpeta.
+
+```bash
+docker compose up -d db
+cd apps/api
+npx prisma format                   # valida y ordena el schema
+npx prisma migrate dev --name init  # crea la migración, la aplica y genera el cliente
+npx prisma studio                   # inspección visual
+cd ../..
+```
+
+**Verificación:** Prisma Studio muestra las 20 tablas vacías.
+
+> **La carpeta `prisma/migrations/` se commitea.** Es el historial de cambios de la base: los otros dos la necesitan para tener exactamente la misma estructura.
+
+### 3c. Seed
+
+Escribir `apps/api/prisma/seed.ts` con datos realistas:
 
 - 1 organización (POLENTA)
 - 2 categorías (Segunda, Tercera)
 - 5 etapas del calendario
-- 26 jugadores de Tercera con sus puntos reales del ranking de referencia
-- 1 torneo en estado `publicado`
+- La tabla de puntos: 100 / 75 / 50 / 25 / 15 / 10
+- 26 jugadores de Tercera con sus puntos reales por etapa, como movimientos de ranking
+- 1 torneo en estado `PUBLICADO`
 
 ```bash
-npx prisma db seed
+npm run db:seed -w apps/api
 ```
 
-**Verificación:** Prisma Studio muestra los jugadores cargados.
+**Verificación:** los acumulados coinciden con el PDF del ranking. German Fernández tiene que dar 165.
 
-> El seed es la inversión que más rinde de toda esta guía. Sin datos, cada pantalla que construyan después va a estar vacía y no van a poder probar nada. Con 26 jugadores y sus puntos reales, todo lo que hagan de acá en adelante se ve funcionando.
+> El seed es la inversión que más rinde de toda esta guía. Con datos reales, cada pantalla que construyan se ve funcionando desde el primer render, y el motor de ranking se verifica contra un resultado conocido.
 
-### 3.3 Primer endpoint
-
-`src/index.ts` con Express, y un solo endpoint real:
+### 3d. Primer endpoint real
 
 ```
-GET /api/organizaciones/:id/ranking?categoria=tercera
+GET /api/organizaciones/:slug/ranking?categoria=tercera
 ```
 
-Devuelve el ranking ordenado. Es la consulta más simple que produce algo demostrable.
+Devuelve el ranking ordenado, calculado por casillero de etapa con reemplazo ([02-dominio.md](02-dominio.md) §7). La consulta de referencia está en las notas de [schema.sql](schema.sql).
 
-```bash
-npx tsx watch src/index.ts
-curl http://localhost:3000/api/organizaciones/1/ranking?categoria=tercera
-```
-
-**Verificación:** el `curl` devuelve los 26 jugadores ordenados por puntos.
+**Verificación:** el `curl` devuelve los 26 jugadores en el mismo orden que el PDF.
 
 ---
 
@@ -272,7 +342,7 @@ Al terminar esta guía deberían poder responder que sí a todo:
 - [ ] Los tres tienen el repo clonado y levantan el proyecto
 - [ ] `docker compose up -d db` funciona
 - [ ] El schema completo está migrado
-- [ ] El seed carga 26 jugadores con puntos reales
+- [ ] El seed carga 26 jugadores con puntos reales y German Fernández suma 165
 - [ ] Un endpoint devuelve el ranking ordenado
 - [ ] La web muestra la tabla
 - [ ] El celular muestra la tabla

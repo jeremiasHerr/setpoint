@@ -1,59 +1,150 @@
-#  setpoint
+# SetPoint
 
-> Plataforma de gestión de torneos de tenis amateur  
-> Web + app móvil instalable
+Plataforma de gestión de torneos de tenis amateur. Web + app móvil instalable.
 
----
+Reemplaza el circuito actual de planillas de Excel, cuadros en papel y coordinación por WhatsApp: armado de zonas con siembra por ranking, cuadros eliminatorios, coordinación de partidos entre jugadores, cobro de inscripciones y ranking que se actualiza solo.
 
-##  Sobre el proyecto
-
-**SetPoint** reemplaza el circuito actual de planillas de Excel, cuadros en papel y coordinación por WhatsApp.
-
-**Features:**
--  Armado de zonas con siembra por ranking
--  Cuadros eliminatorios automáticos
--  Coordinación de partidos entre jugadores
--  Cobro de inscripciones integrado
--  Ranking que se actualiza automáticamente
+**Cliente:** [POLENTA Team Tenis](docs/02-dominio.md), circuito amateur de Neuquén — 77 jugadores, 2 categorías, 5 torneos por año.
 
 ---
 
-##  Stack Tecnológico
+## Estado
+
+🚧 **En desarrollo.** Fase de diseño completa, implementación en curso.
+
+Ver [`docs/README.md`](docs/README.md) para el estado detallado y las decisiones abiertas.
+
+---
+
+## Stack
 
 | Capa | Tecnología |
-|------|-----------|
-| **Lenguaje** | TypeScript |
-| **Web** | React + Vite |
-| **Móvil** | React Native + Expo |
-| **API** | Express + Prisma |
-| **BD** | PostgreSQL |
-| **Pagos** | MercadoPago |
-| **Contenerización** | Docker |
+|---|---|
+| Lenguaje | TypeScript |
+| Web | React + Vite |
+| Móvil | React Native + Expo |
+| API | Express + Prisma |
+| Base de datos | PostgreSQL |
+| Pagos | MercadoPago |
+| Contenedores | Docker |
 
-**Monorepo** con workspaces de npm.
+Monorepo con workspaces de npm.
 
 ---
 
-##  Requisitos
+## Requisitos
 
-- Node.js 20+
+- Node.js 20 o superior
 - Docker y Docker Compose
-- Para app móvil: Expo Go o emulador Android
+- Para la app móvil: [Expo Go](https://expo.dev/go) en el celular, o un emulador Android
 
 ---
 
-##  Levantar el proyecto
-
-### Con Docker (recomendado)
+## Levantar el proyecto
 
 ```bash
 git clone https://github.com/jeremiasHerr/setpoint.git
 cd setpoint
-cp .env.example .env
-docker compose up
+npm install
+docker compose up -d db              # Postgres en Docker
+cp apps/api/.env.example apps/api/.env
+npm run db:migrate -w apps/api       # crea las tablas
+npm run db:seed -w apps/api          # datos de prueba
+npm run dev -w apps/api              # API en http://localhost:3000
 ```
-## Desarrollado por
-- Jeremías Herrera
-- Tomas Mengon
-- Dana Garcia
 
+> Por ahora Docker levanta solo la base de datos. El `docker compose up` completo, con API y web, llega en la etapa 4.
+
+### App móvil
+
+```bash
+cd apps/mobile
+npx expo start
+```
+
+Escaneá el QR con Expo Go. Para el APK instalable: `npx eas build -p android --profile preview`.
+
+---
+
+## Variables de entorno
+
+Copiar `.env.example` a `.env` y completar:
+
+| Variable | Para qué |
+|---|---|
+| `DATABASE_URL` | Conexión a Postgres |
+| `JWT_SECRET` | Firma de tokens de sesión |
+| `MERCADOPAGO_ACCESS_TOKEN` | Credencial de **sandbox** |
+| `ANTHROPIC_API_KEY` | Funcionalidades de IA |
+
+> Nunca commitear el `.env`. Usar credenciales de sandbox de MercadoPago durante todo el desarrollo.
+
+---
+
+## Estructura
+
+```
+setpoint/
+├── docs/              documentación de diseño
+├── apps/
+│   ├── api/           Express + Prisma
+│   ├── web/           React
+│   └── mobile/        React Native (Expo)
+└── packages/
+    └── shared/        schemas de Zod y tipos compartidos
+```
+
+Detalle completo en [`docs/08-repositorio.md`](docs/08-repositorio.md).
+
+---
+
+## Documentación
+
+| Documento | Contenido |
+|---|---|
+| [Estado y decisiones](docs/README.md) | Índice, decisiones abiertas, riesgos |
+| [Visión](docs/01-vision.md) | Problema, pitch, competencia |
+| [Dominio](docs/02-dominio.md) | **Reglas del circuito.** Formato, desempates, ranking |
+| [Flujo organización](docs/03-flujo-organizacion.md) | Panel web |
+| [Flujo jugador](docs/04-flujo-jugador.md) | App móvil |
+| [Pagos](docs/05-pagos.md) | MercadoPago |
+| [IA](docs/06-ia.md) | Las tres funcionalidades |
+| [Configurabilidad](docs/07-configurabilidad.md) | Qué se parametriza |
+| [Repositorio](docs/08-repositorio.md) | Estructura, ramas, forma de trabajo |
+| [Setup inicial](docs/09-setup-inicial.md) | Guía paso a paso |
+| [Features](docs/10-features.md) | Lista de funcionalidades de la 2da entrega |
+| [Diseño](docs/design.md) | Sistema visual |
+
+---
+
+## Tests
+
+```bash
+npm test
+```
+
+La lógica de competencia (sorteo, tablas de posiciones, cascada de desempates) es lógica pura sin acceso a base de datos y está cubierta por tests. Es la parte del sistema donde un error es silencioso y difícil de detectar a ojo.
+
+---
+
+## Contribuir
+
+Ver [`CONTRIBUTING.md`](CONTRIBUTING.md). En resumen:
+
+- Código por Pull Request, con una aprobación
+- Documentación directo a `main`
+- Un cambio de diseño va en el mismo commit que el código que lo implementa
+- Ramas cortas: `feat/modulo-descripcion`
+
+---
+
+## Equipo
+
+- Jeremías Herrera
+- Tomás Mengón
+- Dana García
+
+Trabajo Final — Tecnicatura Universitaria en Desarrollo Web
+Facultad de Informática, Universidad Nacional del Comahue
+
+Entrega: noviembre de 2026

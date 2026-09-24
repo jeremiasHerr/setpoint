@@ -48,8 +48,6 @@ Cada fila es una funcionalidad del sistema.
 
 **2. Ninguna tiene app nativa instalable.** Es el hueco de mercado, y coincide con lo que la cátedra exige a los grupos de tres. Set and Match, que es la más moderna, resolvió el móvil con una PWA.
 
-**3. Circuito Tenis publica crónicas automáticas de partidos amateur**, varias por día, y ocupan la mitad de su portada. Confirma que el resumen narrativo no es un adorno sino un motor de enganche.
-
 **Dato adicional:** TENIO arma sus grupos por *snake draft*, es decir distribución serpentina. Coincide con la preferencia del organizador de POLENTA.
 
 ---
@@ -62,7 +60,6 @@ Cada fila es una funcionalidad del sistema.
 | Consulta sin cuenta | ✓ | ✓ |
 | Cobro integrado | ✓ | Parcial |
 | Coordinación de partidos entre jugadores | ✓ | No |
-| Crónicas automáticas | ✓ | Solo Circuito Tenis |
 | Importación de padrones existentes | ✓ | No |
 
 Los tres últimos son los que se apoyan en IA y están detallados en [06-ia.md](06-ia.md).

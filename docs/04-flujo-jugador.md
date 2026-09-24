@@ -39,7 +39,6 @@ La distinción clave: coordinar la fecha **no es carga nueva**. El reglamento ya
 | Head-to-head | Comparación entre dos jugadores |
 | Cuadros y zonas | Campeonato y Complementaria en vivo |
 | Calendario | Partidos acordados por fecha |
-| Crónicas | Resúmenes narrativos de partidos ([06-ia.md](06-ia.md) §3) |
 
 Se accede por link directo, sin sesión. **No exponen datos de contacto.** La búsqueda de jugador es **por apellido**, no un listado completo del padrón.
 
@@ -338,7 +337,6 @@ Tabla de posiciones del grupo en vivo, con la línea de corte marcada — arriba
 | Funcionalidad | Web | Móvil |
 |---|---|---|
 | Ver ranking, ficha, cuadros, calendario (**público**) | ✓ | ✓ |
-| Leer crónicas (**público**) | ✓ | ✓ |
 | Registro y login | ✓ | ✓ |
 | Gestionar padrón e importar Excel | ✓ | — |
 | Crear y configurar torneo | ✓ | — |

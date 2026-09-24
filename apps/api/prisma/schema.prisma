@@ -1,15 +1,662 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// ============================================================================
+// SetPoint — Plataforma de gestión de torneos de tenis amateur
+// Trabajo Final 2026 — Tecnicatura Universitaria en Desarrollo Web, UNCo FaI
+//
+// v2 — Cambios respecto de la versión anterior:
+//   * Se elimina TorneoCategoria: cada torneo ES de una categoría.
+//     "Primavera 2026 — Tercera" y "Primavera 2026 — Segunda" son dos torneos.
+//   * Se agrega Torneo.edicion para agrupar las categorías de un mismo evento.
+//   * Se podan los índices redundantes con UNIQUE compuestos.
+//   * Se eliminan Cronica y FotoPartido: fuera de alcance del proyecto.
+//
+// Principios:
+//   * organizacionId es la clave de aislamiento multi-organización.
+//   * Jugador (ficha del circuito) y Usuario (credencial) son distintos.
+//   * El ranking se calcula por casilleros de etapa con reemplazo (modelo ATP).
+// ============================================================================
 
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// ENUMS
+// ============================================================================
+
+enum ModoInscripcion {
+  CERRADA
+  CON_APROBACION
+  ABIERTA
+}
+
+enum ModoDistribucion {
+  SERPENTINA
+  DIRECTA
+  BOMBOS
+}
+
+enum ModoSorteo {
+  AUTOMATICO
+  ASISTIDO
+  MANUAL
+}
+
+enum QuienCargaResultados {
+  ORGANIZACION
+  ORGANIZACION_Y_JUGADORES
+}
+
+enum ModoSede {
+  LIBRE
+  DESIGNADA
+}
+
+enum Superficie {
+  POLVO_LADRILLO
+  CEMENTO
+  SINTETICO
+  CARPETA
+  OTRA
+}
+
+enum TerceroSet {
+  SET_COMPLETO
+  SUPER_TIEBREAK
+}
+
+enum EstadoTorneo {
+  BORRADOR
+  PUBLICADO
+  INSCRIPCIONES_CERRADAS
+  ZONAS_GENERADAS
+  GRUPOS_EN_CURSO
+  ELIMINATORIAS
+  FINALIZADO
+  CANCELADO
+}
+
+enum EstadoInscripcion {
+  PENDIENTE_PAGO
+  PAGADA
+  EXPIRADA
+  RECHAZADA
+  CANCELADA
+  EN_LISTA_ESPERA
+}
+
+enum MedioPago {
+  MERCADOPAGO
+  EFECTIVO
+  TRANSFERENCIA
+  OTRO
+}
+
+enum EstadoPago {
+  PENDIENTE
+  APROBADO
+  RECHAZADO
+  DEVUELTO
+}
+
+enum TipoCuentaCobro {
+  PLATAFORMA
+  PROPIA
+}
+
+enum EstadoLiquidacion {
+  PENDIENTE
+  PAGADA
+}
+
+enum Cuadro {
+  CAMPEONATO
+  COMPLEMENTARIA
+}
+
+enum FasePartido {
+  GRUPOS
+  ELIMINATORIA
+}
+
+enum EstadoPartido {
+  PENDIENTE_COORDINACION
+  ANOTADA
+  CONFIRMADA
+  JUGADA
+  VENCIDA
+  WALKOVER
+  CANCELADA
+}
+
+enum Instancia {
+  CAMPEON
+  FINALISTA
+  SEMIFINALISTA
+  CUARTOS
+  OCTAVOS
+  DIECISEISAVOS
+  PARTICIPACION
+}
+
+enum MotivoMovimiento {
+  IMPORTACION_INICIAL
+  RESULTADO_TORNEO
+  AJUSTE_MANUAL
+  REVERSION
+}
+
+enum EstadoProcesoIA {
+  PENDIENTE
+  PROCESADO
+  CONFIRMADO
+  DESCARTADO
+  ERROR
+}
+
+// ============================================================================
+// USUARIOS Y ORGANIZACIONES
+// ============================================================================
+
+/// Credencial de acceso. NO es la entidad del dominio: eso es Jugador.
+model Usuario {
+  id            Int      @id @default(autoincrement())
+  email         String   @unique
+  passwordHash  String
+  nombre        String
+  apellido      String
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  jugadores           Jugador[]
+  administra          AdminOrganizacion[]
+  partidosAnotados    Partido[]           @relation("PartidoAnotadoPor")
+  partidosConfirmados Partido[]           @relation("PartidoConfirmadoPor")
+
+  @@map("usuarios")
+}
+
+/// Circuito o grupo organizador. Clave de aislamiento de todo el sistema.
+model Organizacion {
+  id          Int     @id @default(autoincrement())
+  nombre      String
+  slug        String  @unique
+  descripcion String?
+  contacto    String?
+
+  usaRanking           Boolean              @default(true)
+  ventanaRankingMeses  Int                  @default(12)
+  soloMejoresN         Int?
+  puntosJugadorNuevo   Int                  @default(0)
+  quienCargaResultados QuienCargaResultados @default(ORGANIZACION)
+
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  admins        AdminOrganizacion[]
+  categorias    Categoria[]
+  etapas        Etapa[]
+  clubes        Club[]
+  jugadores     Jugador[]
+  torneos       Torneo[]
+  puntajes      PuntajeInstancia[]
+  movimientos   MovimientoRanking[]
+  cuentaCobro   CuentaCobro?
+  importaciones ImportacionPadron[]
+
+  @@map("organizaciones")
+}
+
+/// Un circuito puede tener varios administradores (el "Comité Organizador").
+model AdminOrganizacion {
+  id             Int      @id @default(autoincrement())
+  usuarioId      Int
+  organizacionId Int
+  creadoEn       DateTime @default(now())
+
+  usuario      Usuario      @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  organizacion Organizacion @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
+
+  @@unique([usuarioId, organizacionId])
+  // organizacionId no es la primera columna del unique -> necesita índice propio
+  @@index([organizacionId])
+  @@map("admins_organizacion")
+}
+
+/// Categoría de juego. Cada una tiene su ranking independiente.
+model Categoria {
+  id             Int     @id @default(autoincrement())
+  organizacionId Int
+  nombre         String
+  orden          Int
+  activa         Boolean @default(true)
+
+  organizacion Organizacion        @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
+  jugadores    Jugador[]
+  torneos      Torneo[]
+  movimientos  MovimientoRanking[]
+
+  // El unique ya indexa organizacionId: no hace falta un @@index aparte
+  @@unique([organizacionId, nombre])
+  @@map("categorias")
+}
+
+/// Etapa del calendario anual. Define los casilleros del ranking.
+model Etapa {
+  id             Int     @id @default(autoincrement())
+  organizacionId Int
+  nombre         String
+  orden          Int
+  activa         Boolean @default(true)
+
+  organizacion Organizacion        @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
+  torneos      Torneo[]
+  movimientos  MovimientoRanking[]
+
+  @@unique([organizacionId, nombre])
+  @@map("etapas")
+}
+
+/// Puntos que otorga cada instancia alcanzada.
+model PuntajeInstancia {
+  id             Int       @id @default(autoincrement())
+  organizacionId Int
+  instancia      Instancia
+  puntos         Int
+
+  organizacion Organizacion @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
+
+  @@unique([organizacionId, instancia])
+  @@map("puntajes_instancia")
+}
+
+// ============================================================================
+// CLUBES Y CANCHAS (opcionales)
+// ============================================================================
+
+/// Registrar clubes es OPCIONAL. Sin ellos la sede se escribe como texto libre.
+model Club {
+  id             Int     @id @default(autoincrement())
+  organizacionId Int
+  nombre         String
+  direccion      String?
+
+  organizacion Organizacion @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
+  canchas      Cancha[]
+  torneos      Torneo[]
+  partidos     Partido[]
+
+  @@unique([organizacionId, nombre])
+  @@map("clubes")
+}
+
+model Cancha {
+  id         Int        @id @default(autoincrement())
+  clubId     Int
+  nombre     String
+  superficie Superficie @default(POLVO_LADRILLO)
+
+  club     Club      @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  partidos Partido[]
+
+  @@unique([clubId, nombre])
+  @@map("canchas")
+}
+
+// ============================================================================
+// JUGADORES
+// ============================================================================
+
+/// Ficha del jugador en el padrón. Existe SIN cuenta: la crea la organización.
+model Jugador {
+  id             Int     @id @default(autoincrement())
+  organizacionId Int
+  categoriaId    Int?
+  usuarioId      Int?
+  nombre         String
+  apellido       String
+  dni            String?
+  telefono       String?
+  email          String?
+  fotoUrl        String?
+  activo         Boolean @default(true)
+
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  organizacion Organizacion @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
+  categoria    Categoria?   @relation(fields: [categoriaId], references: [id])
+  usuario      Usuario?     @relation(fields: [usuarioId], references: [id])
+
+  inscripciones   Inscripcion[]
+  movimientos     MovimientoRanking[]
+  partidosComoA   Partido[]           @relation("PartidoJugadorA")
+  partidosComoB   Partido[]           @relation("PartidoJugadorB")
+  partidosGanados Partido[]           @relation("PartidoGanador")
+
+  @@unique([organizacionId, dni])
+  @@index([organizacionId, apellido]) // búsqueda pública por apellido
+  @@index([organizacionId, categoriaId]) // listar padrón por categoría
+  @@index([usuarioId]) // del login a la ficha
+  @@map("jugadores")
+}
+
+// ============================================================================
+// TORNEOS
+// ============================================================================
+
+/// UN TORNEO ES DE UNA CATEGORÍA.
+/// "Primavera 2026 — Tercera" y "Primavera 2026 — Segunda" son dos torneos.
+/// El campo `edicion` agrupa las categorías de un mismo evento.
+model Torneo {
+  id             Int     @id @default(autoincrement())
+  organizacionId Int
+  categoriaId    Int
+  etapaId        Int? // null si es un torneo suelto sin ranking
+  clubSedeId     Int? // sede designada para las eliminatorias
+  nombre         String
+  edicion        String? // "Primavera 2026" — agrupa las categorías del evento
+  descripcion    String?
+
+  estado EstadoTorneo @default(BORRADOR)
+
+  // --- inscripción ---
+  cupo               Int
+  precio             Decimal         @default(0) @db.Decimal(12, 2)
+  modoInscripcion    ModoInscripcion @default(CERRADA)
+  minutosReservaCupo Int             @default(15)
+  tieneListaEspera   Boolean         @default(true)
+
+  // --- fechas ---
+  fechaInicio       DateTime?
+  fechaFin          DateTime?
+  cierreInscripcion DateTime?
+  plazoGruposDias   Int       @default(21)
+  plazoPorRondaDias Int       @default(7)
+
+  // --- formato ---
+  cantidadGrupos      Int              @default(8)
+  clasificanPorGrupo  Int              @default(2)
+  tieneComplementaria Boolean          @default(true)
+  modoDistribucion    ModoDistribucion @default(SERPENTINA)
+  modoSorteo          ModoSorteo       @default(MANUAL)
+  sorteoConfirmado    Boolean          @default(false)
+  gruposCerrados      Boolean          @default(false)
+
+  // --- sistema de juego ---
+  setsPorPartido      Int        @default(3)
+  puntoDeOro          Boolean    @default(true)
+  terceroSet          TerceroSet @default(SUPER_TIEBREAK)
+  gamesPorSet         Int        @default(6)
+  puntosTieBreak      Int        @default(7)
+  puntosSuperTieBreak Int        @default(10)
+
+  // --- sedes ---
+  sedeGrupos        ModoSede @default(LIBRE)
+  sedeEliminatorias ModoSede @default(DESIGNADA)
+
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  organizacion Organizacion @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
+  categoria    Categoria    @relation(fields: [categoriaId], references: [id])
+  etapa        Etapa?       @relation(fields: [etapaId], references: [id])
+  clubSede     Club?        @relation(fields: [clubSedeId], references: [id])
+
+  inscripciones Inscripcion[]
+  grupos        Grupo[]
+  partidos      Partido[]
+  movimientos   MovimientoRanking[]
+  liquidacion   Liquidacion?
+
+  @@unique([organizacionId, edicion, categoriaId])
+  @@index([organizacionId, estado]) // listar torneos publicados
+  @@index([etapaId]) // FK usada al calcular el ranking
+  @@index([categoriaId]) // FK
+  @@map("torneos")
+}
+
+// ============================================================================
+// INSCRIPCIONES Y PAGOS
+// ============================================================================
+
+model Inscripcion {
+  id        Int               @id @default(autoincrement())
+  torneoId  Int
+  jugadorId Int
+  grupoId   Int? // se asigna al ejecutar el sorteo
+  estado    EstadoInscripcion @default(PENDIENTE_PAGO)
+
+  reservaVence     DateTime?
+  ordenListaEspera Int?
+  posicionSiembra  Int? // 1..N según ranking al momento del sorteo
+
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  torneo  Torneo  @relation(fields: [torneoId], references: [id], onDelete: Cascade)
+  jugador Jugador @relation(fields: [jugadorId], references: [id])
+  grupo   Grupo?  @relation(fields: [grupoId], references: [id])
+  pago    Pago?
+
+  @@unique([torneoId, jugadorId])
+  @@index([torneoId, estado]) // contar cupo ocupado y listar pendientes
+  @@index([jugadorId]) // historial del jugador
+  @@index([grupoId]) // integrantes de un grupo
+  @@map("inscripciones")
+}
+
+model Pago {
+  id            Int        @id @default(autoincrement())
+  inscripcionId Int        @unique
+  medio         MedioPago  @default(MERCADOPAGO)
+  estado        EstadoPago @default(PENDIENTE)
+  monto         Decimal    @db.Decimal(12, 2)
+
+  mpPreferenceId String?
+  mpPaymentId    String? @unique // el @unique ya lo indexa
+  payloadCrudo   Json?
+
+  requiereDevolucion Boolean   @default(false)
+  devueltoEn         DateTime?
+
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  inscripcion Inscripcion @relation(fields: [inscripcionId], references: [id], onDelete: Cascade)
+
+  @@map("pagos")
+}
+
+/// Hoy siempre tipo PLATAFORMA. Los tokens quedan preparados para Marketplace.
+model CuentaCobro {
+  id             Int             @id @default(autoincrement())
+  organizacionId Int             @unique
+  tipo           TipoCuentaCobro @default(PLATAFORMA)
+  accessToken    String?
+  refreshToken   String?
+  tokenVence     DateTime?
+
+  organizacion Organizacion @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
+
+  @@map("cuentas_cobro")
+}
+
+model Liquidacion {
+  id                Int               @id @default(autoincrement())
+  torneoId          Int               @unique
+  montoRecaudado    Decimal           @default(0) @db.Decimal(12, 2)
+  comision          Decimal           @default(0) @db.Decimal(12, 2)
+  montoOrganizacion Decimal           @default(0) @db.Decimal(12, 2)
+  estado            EstadoLiquidacion @default(PENDIENTE)
+  pagadaEn          DateTime?
+
+  torneo Torneo @relation(fields: [torneoId], references: [id], onDelete: Cascade)
+
+  @@map("liquidaciones")
+}
+
+// ============================================================================
+// COMPETENCIA
+// ============================================================================
+
+model Grupo {
+  id       Int    @id @default(autoincrement())
+  torneoId Int
+  nombre   String // "A", "B", "C"...
+  orden    Int
+
+  torneo        Torneo        @relation(fields: [torneoId], references: [id], onDelete: Cascade)
+  inscripciones Inscripcion[]
+  partidos      Partido[]
+
+  @@unique([torneoId, nombre])
+  @@map("grupos")
+}
+
+model Partido {
+  id                 Int         @id @default(autoincrement())
+  torneoId           Int
+  fase               FasePartido
+  grupoId            Int? // sólo en fase de grupos
+  cuadro             Cuadro? // sólo en eliminatorias
+  ronda              Int?
+  ordenEnRonda       Int?
+  siguientePartidoId Int? // a dónde avanza el ganador
+
+  jugadorAId Int?
+  jugadorBId Int?
+  ganadorId  Int?
+
+  estado EstadoPartido @default(PENDIENTE_COORDINACION)
+
+  // --- coordinación ---
+  fechaLimite      DateTime?
+  fechaAcordada    DateTime?
+  clubId           Int?
+  canchaId         Int?
+  sedeTexto        String? // sede libre, sin clubes registrados
+  anotadaPorId     Int?
+  confirmadaPorId  Int?
+  reprogramaciones Int       @default(0)
+
+  esWalkover    Boolean @default(false)
+  observaciones String?
+
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  torneo        Torneo   @relation(fields: [torneoId], references: [id], onDelete: Cascade)
+  grupo         Grupo?   @relation(fields: [grupoId], references: [id])
+  jugadorA      Jugador? @relation("PartidoJugadorA", fields: [jugadorAId], references: [id])
+  jugadorB      Jugador? @relation("PartidoJugadorB", fields: [jugadorBId], references: [id])
+  ganador       Jugador? @relation("PartidoGanador", fields: [ganadorId], references: [id])
+  club          Club?    @relation(fields: [clubId], references: [id])
+  cancha        Cancha?  @relation(fields: [canchaId], references: [id])
+  anotadaPor    Usuario? @relation("PartidoAnotadoPor", fields: [anotadaPorId], references: [id])
+  confirmadaPor Usuario? @relation("PartidoConfirmadoPor", fields: [confirmadaPorId], references: [id])
+
+  siguientePartido Partido?  @relation("AvanceCuadro", fields: [siguientePartidoId], references: [id])
+  partidosPrevios  Partido[] @relation("AvanceCuadro")
+
+  sets         SetPartido[]
+  extracciones ExtraccionResultado[]
+
+  @@index([torneoId, fase]) // armar zonas y cuadros
+  @@index([torneoId, estado]) // tablero de avance
+  @@index([grupoId]) // tabla de posiciones del grupo
+  @@index([jugadorAId]) // "mis partidos" y head-to-head
+  @@index([jugadorBId])
+  @@map("partidos")
+}
+
+/// Un set del partido. Puede ser un set normal o un super tie-break.
+/// Para desempates: el super tie-break cuenta como 1 set Y como 1 game.
+model SetPartido {
+  id              Int     @id @default(autoincrement())
+  partidoId       Int
+  numero          Int
+  gamesA          Int
+  gamesB          Int
+  tieBreakA       Int?
+  tieBreakB       Int?
+  esSuperTieBreak Boolean @default(false)
+
+  partido Partido @relation(fields: [partidoId], references: [id], onDelete: Cascade)
+
+  @@unique([partidoId, numero])
+  @@map("sets_partido")
+}
+
+// ============================================================================
+// RANKING
+// ============================================================================
+
+/// Modelo de casilleros con reemplazo (igual que el ranking ATP).
+/// Ranking vigente = por cada etapa, el movimiento más reciente; sumados.
+model MovimientoRanking {
+  id             Int              @id @default(autoincrement())
+  organizacionId Int
+  jugadorId      Int
+  categoriaId    Int
+  etapaId        Int? // el "casillero". Null sólo en ajustes manuales
+  torneoId       Int?
+  puntos         Int
+  instancia      Instancia?
+  motivo         MotivoMovimiento
+  detalle        String?
+  fecha          DateTime         @default(now())
+
+  organizacion Organizacion @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
+  jugador      Jugador      @relation(fields: [jugadorId], references: [id], onDelete: Cascade)
+  categoria    Categoria    @relation(fields: [categoriaId], references: [id])
+  etapa        Etapa?       @relation(fields: [etapaId], references: [id])
+  torneo       Torneo?      @relation(fields: [torneoId], references: [id])
+
+  @@index([organizacionId, categoriaId]) // tabla de ranking de la categoría
+  @@index([jugadorId, categoriaId, etapaId]) // el casillero de un jugador
+  @@index([torneoId]) // revertir un torneo
+  @@map("movimientos_ranking")
+}
+
+// ============================================================================
+// FUNCIONALIDADES ASISTIDAS POR IA
+// ============================================================================
+
+/// F03 — Carga masiva de jugadores desde planilla.
+model ImportacionPadron {
+  id             Int             @id @default(autoincrement())
+  organizacionId Int
+  archivoNombre  String
+  archivoUrl     String?
+  respuestaCruda Json?
+  resumen        Json? // { existentes: 73, nuevos: 4, descartados: 2 }
+  estado         EstadoProcesoIA @default(PENDIENTE)
+  confirmadaEn   DateTime?
+  creadoEn       DateTime        @default(now())
+
+  organizacion Organizacion @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
+
+  @@index([organizacionId])
+  @@map("importaciones_padron")
+}
+
+/// F19 — Registro de resultados a partir de mensajes.
+model ExtraccionResultado {
+  id             Int             @id @default(autoincrement())
+  partidoId      Int?
+  entradaCruda   String
+  respuestaCruda Json?
+  estado         EstadoProcesoIA @default(PENDIENTE)
+  confirmadaEn   DateTime?
+  creadoEn       DateTime        @default(now())
+
+  partido Partido? @relation(fields: [partidoId], references: [id])
+
+  @@index([partidoId])
+  @@map("extracciones_resultado")
 }

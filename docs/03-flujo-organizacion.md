@@ -147,13 +147,10 @@ Reemplaza el trabajo actual de revisar el grupo de WhatsApp a mano.
 
 Por partido: sets, games, tie-breaks y ganador, validado contra el sistema de juego configurado en el torneo ([07-configurabilidad.md](07-configurabilidad.md) §2.2).
 
-**Fotos del partido:** se pueden adjuntar, de forma opcional. Si el reglamento de un circuito las exige, es su regla, no del sistema. Cuando están, alimentan la crónica.
-
 Al guardar:
 
 - Se recalcula la tabla de posiciones de la zona con la cascada de desempates
 - Si era de cuadro, el ganador avanza a la siguiente ronda del cuadro que corresponda
-- Se dispara la generación de la crónica ([06-ia.md](06-ia.md) §3)
 
 **Partidos no jugados en plazo:** no se resuelven con regla automática. El sistema presenta el caso con el historial de coordinación y la organización decide W.O., doble W.O. o extensión. El W.O. se registra como **6-0 6-0**.
 
@@ -178,4 +175,3 @@ Con ambos campeones definidos, la organización cierra el torneo. El sistema:
 
 - Genera los `MovimientoRanking` según instancia alcanzada
 - **Reemplaza el casillero de esa etapa** en el ranking de cada jugador
-- Genera el resumen narrativo del torneo
