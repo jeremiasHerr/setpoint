@@ -2,6 +2,14 @@
 // SetPoint — Plataforma de gestión de torneos de tenis amateur
 // Trabajo Final 2026 — Tecnicatura Universitaria en Desarrollo Web, UNCo FaI
 //
+// v3 — Correcciones de la cátedra:
+//   * Se elimina la tabla Grupo: solo guardaba una letra. El grupo pasa a ser
+//     una columna en Inscripcion y en Partido. Un JOIN menos en la tabla de
+//     posiciones, que es la consulta más frecuente del sistema.
+//   * Se elimina Partido.esWalkover: duplicaba el estado WALKOVER.
+//   * Se documentan las dos redundancias intencionales: Partido.ganadorId y
+//     MovimientoRanking.
+//
 // v2 — Cambios respecto de la versión anterior:
 //   * Se elimina TorneoCategoria: cada torneo ES de una categoría.
 //     "Primavera 2026 — Tercera" y "Primavera 2026 — Segunda" son dos torneos.
@@ -408,7 +416,6 @@ model Torneo {
   clubSede     Club?        @relation(fields: [clubSedeId], references: [id])
 
   inscripciones Inscripcion[]
-  grupos        Grupo[]
   partidos      Partido[]
   movimientos   MovimientoRanking[]
   liquidacion   Liquidacion?
@@ -428,7 +435,7 @@ model Inscripcion {
   id        Int               @id @default(autoincrement())
   torneoId  Int
   jugadorId Int
-  grupoId   Int? // se asigna al ejecutar el sorteo
+  grupo     String? // "A", "B"... null hasta el sorteo. Solo inscripciones pagadas
   estado    EstadoInscripcion @default(PENDIENTE_PAGO)
 
   reservaVence     DateTime?
@@ -440,13 +447,12 @@ model Inscripcion {
 
   torneo  Torneo  @relation(fields: [torneoId], references: [id], onDelete: Cascade)
   jugador Jugador @relation(fields: [jugadorId], references: [id])
-  grupo   Grupo?  @relation(fields: [grupoId], references: [id])
   pago    Pago?
 
   @@unique([torneoId, jugadorId])
   @@index([torneoId, estado]) // contar cupo ocupado y listar pendientes
   @@index([jugadorId]) // historial del jugador
-  @@index([grupoId]) // integrantes de un grupo
+  @@index([torneoId, grupo]) // integrantes de un grupo
   @@map("inscripciones")
 }
 
@@ -504,25 +510,11 @@ model Liquidacion {
 // COMPETENCIA
 // ============================================================================
 
-model Grupo {
-  id       Int    @id @default(autoincrement())
-  torneoId Int
-  nombre   String // "A", "B", "C"...
-  orden    Int
-
-  torneo        Torneo        @relation(fields: [torneoId], references: [id], onDelete: Cascade)
-  inscripciones Inscripcion[]
-  partidos      Partido[]
-
-  @@unique([torneoId, nombre])
-  @@map("grupos")
-}
-
 model Partido {
   id                 Int         @id @default(autoincrement())
   torneoId           Int
   fase               FasePartido
-  grupoId            Int? // sólo en fase de grupos
+  grupo              String? // "A", "B"... sólo en fase de grupos. Lo escribe el sorteo
   cuadro             Cuadro? // sólo en eliminatorias
   ronda              Int?
   ordenEnRonda       Int?
@@ -530,6 +522,9 @@ model Partido {
 
   jugadorAId Int?
   jugadorBId Int?
+  // REDUNDANCIA INTENCIONAL: se puede derivar de los sets, pero el cuadro y
+  // el head-to-head lo consultan todo el tiempo. Se escribe en la misma
+  // transacción que los sets, nunca por separado.
   ganadorId  Int?
 
   estado EstadoPartido @default(PENDIENTE_COORDINACION)
@@ -544,14 +539,12 @@ model Partido {
   confirmadaPorId  Int?
   reprogramaciones Int       @default(0)
 
-  esWalkover    Boolean @default(false)
   observaciones String?
 
   creadoEn      DateTime @default(now())
   actualizadoEn DateTime @updatedAt
 
   torneo        Torneo   @relation(fields: [torneoId], references: [id], onDelete: Cascade)
-  grupo         Grupo?   @relation(fields: [grupoId], references: [id])
   jugadorA      Jugador? @relation("PartidoJugadorA", fields: [jugadorAId], references: [id])
   jugadorB      Jugador? @relation("PartidoJugadorB", fields: [jugadorBId], references: [id])
   ganador       Jugador? @relation("PartidoGanador", fields: [ganadorId], references: [id])
@@ -568,7 +561,7 @@ model Partido {
 
   @@index([torneoId, fase]) // armar zonas y cuadros
   @@index([torneoId, estado]) // tablero de avance
-  @@index([grupoId]) // tabla de posiciones del grupo
+  @@index([torneoId, grupo]) // tabla de posiciones del grupo
   @@index([jugadorAId]) // "mis partidos" y head-to-head
   @@index([jugadorBId])
   @@map("partidos")
@@ -598,6 +591,14 @@ model SetPartido {
 
 /// Modelo de casilleros con reemplazo (igual que el ranking ATP).
 /// Ranking vigente = por cada etapa, el movimiento más reciente; sumados.
+/// El ranking NO se guarda: se calcula en cada consulta a partir de acá.
+///
+/// REDUNDANCIA INTENCIONAL respecto de Partido. Para un torneo jugado en el
+/// sistema los puntos se podrían derivar del cuadro, pero se guardan porque:
+///   * el historial importado no tiene partidos de los cuales derivar
+///   * es una foto al cierre: si cambia la tabla de puntos, el pasado no se reescribe
+///   * hay ajustes manuales que no corresponden a ningún partido
+///   * derivarlo exigiría reconstruir cada cuadro de los últimos 12 meses
 model MovimientoRanking {
   id             Int              @id @default(autoincrement())
   organizacionId Int

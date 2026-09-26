@@ -4,6 +4,14 @@
 --
 -- PostgreSQL 16. Equivalente al schema.prisma del proyecto.
 --
+-- v3 — Correcciones de la cátedra:
+--   * Se elimina la tabla grupos: solo guardaba una letra. El grupo pasa a ser
+--     una columna en inscripciones y en partidos. Un JOIN menos en la tabla
+--     de posiciones, que es la consulta más frecuente del sistema.
+--   * Se elimina partidos.es_walkover: duplicaba el estado WALKOVER.
+--   * Se documentan las dos redundancias intencionales: partidos.ganador_id
+--     y movimientos_ranking.
+--
 -- v2 — Cambios respecto de la versión anterior:
 --   * Se elimina torneo_categorias: cada torneo ES de una categoría.
 --     "Primavera 2026 — Tercera" y "Primavera 2026 — Segunda" son dos torneos.
@@ -257,19 +265,6 @@ CREATE INDEX ix_torneos_etapa      ON torneos (etapa_id);                -- cál
 CREATE INDEX ix_torneos_categoria  ON torneos (categoria_id);            -- FK
 
 -- ============================================================================
--- GRUPOS
--- ============================================================================
-
-CREATE TABLE grupos (
-    id        SERIAL PRIMARY KEY,
-    torneo_id INTEGER    NOT NULL REFERENCES torneos(id) ON DELETE CASCADE,
-    nombre    VARCHAR(5) NOT NULL,
-    orden     INTEGER    NOT NULL,
-    -- este unique ya indexa torneo_id
-    CONSTRAINT uq_grupo_torneo UNIQUE (torneo_id, nombre)
-);
-
--- ============================================================================
 -- INSCRIPCIONES Y PAGOS
 -- ============================================================================
 
@@ -277,7 +272,7 @@ CREATE TABLE inscripciones (
     id                 SERIAL PRIMARY KEY,
     torneo_id          INTEGER            NOT NULL REFERENCES torneos(id)   ON DELETE CASCADE,
     jugador_id         INTEGER            NOT NULL REFERENCES jugadores(id) ON DELETE RESTRICT,
-    grupo_id           INTEGER            REFERENCES grupos(id) ON DELETE SET NULL,
+    grupo              VARCHAR(2),        -- 'A', 'B'... null hasta el sorteo
     estado             estado_inscripcion NOT NULL DEFAULT 'PENDIENTE_PAGO',
     reserva_vence      TIMESTAMPTZ,
     orden_lista_espera INTEGER,
@@ -288,7 +283,7 @@ CREATE TABLE inscripciones (
 );
 CREATE INDEX ix_inscripciones_estado  ON inscripciones (torneo_id, estado); -- contar cupo
 CREATE INDEX ix_inscripciones_jugador ON inscripciones (jugador_id);        -- historial
-CREATE INDEX ix_inscripciones_grupo   ON inscripciones (grupo_id);          -- integrantes del grupo
+CREATE INDEX ix_inscripciones_grupo   ON inscripciones (torneo_id, grupo);  -- integrantes del grupo
 
 CREATE TABLE pagos (
     id                  SERIAL PRIMARY KEY,
@@ -335,7 +330,7 @@ CREATE TABLE partidos (
     id                   SERIAL PRIMARY KEY,
     torneo_id            INTEGER        NOT NULL REFERENCES torneos(id) ON DELETE CASCADE,
     fase                 fase_partido   NOT NULL,
-    grupo_id             INTEGER        REFERENCES grupos(id) ON DELETE CASCADE,
+    grupo                VARCHAR(2),    -- 'A', 'B'... solo en fase de grupos
     cuadro               cuadro,
     ronda                INTEGER,
     orden_en_ronda       INTEGER,
@@ -343,6 +338,8 @@ CREATE TABLE partidos (
 
     jugador_a_id         INTEGER        REFERENCES jugadores(id) ON DELETE SET NULL,
     jugador_b_id         INTEGER        REFERENCES jugadores(id) ON DELETE SET NULL,
+    -- redundancia intencional: derivable de los sets, pero se consulta todo
+    -- el tiempo. Se escribe en la misma transacción que los sets.
     ganador_id           INTEGER        REFERENCES jugadores(id) ON DELETE SET NULL,
 
     estado               estado_partido NOT NULL DEFAULT 'PENDIENTE_COORDINACION',
@@ -357,7 +354,6 @@ CREATE TABLE partidos (
     confirmada_por_id    INTEGER      REFERENCES usuarios(id) ON DELETE SET NULL,
     reprogramaciones     INTEGER      NOT NULL DEFAULT 0,
 
-    es_walkover          BOOLEAN      NOT NULL DEFAULT FALSE,
     observaciones        TEXT,
 
     creado_en            TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -365,8 +361,8 @@ CREATE TABLE partidos (
 
     -- un partido de grupos tiene grupo y no cuadro; uno de eliminatoria al revés
     CONSTRAINT ck_partido_fase CHECK (
-        (fase = 'GRUPOS'       AND grupo_id IS NOT NULL AND cuadro IS NULL)
-     OR (fase = 'ELIMINATORIA' AND cuadro   IS NOT NULL AND grupo_id IS NULL)
+        (fase = 'GRUPOS'       AND grupo  IS NOT NULL AND cuadro IS NULL)
+     OR (fase = 'ELIMINATORIA' AND cuadro IS NOT NULL AND grupo  IS NULL)
     ),
     CONSTRAINT ck_partido_distintos CHECK (
         jugador_a_id IS NULL OR jugador_b_id IS NULL OR jugador_a_id <> jugador_b_id
@@ -378,7 +374,7 @@ CREATE TABLE partidos (
 );
 CREATE INDEX ix_partidos_fase      ON partidos (torneo_id, fase);   -- zonas y cuadros
 CREATE INDEX ix_partidos_estado    ON partidos (torneo_id, estado); -- tablero de avance
-CREATE INDEX ix_partidos_grupo     ON partidos (grupo_id);          -- tabla de posiciones
+CREATE INDEX ix_partidos_grupo     ON partidos (torneo_id, grupo);  -- tabla de posiciones
 CREATE INDEX ix_partidos_jugador_a ON partidos (jugador_a_id);      -- mis partidos / head-to-head
 CREATE INDEX ix_partidos_jugador_b ON partidos (jugador_b_id);
 
@@ -405,6 +401,14 @@ CREATE TABLE sets_partido (
 
 -- Modelo de casilleros con reemplazo (igual que el ranking ATP).
 -- Ranking vigente = por cada etapa, el movimiento más reciente; sumados.
+-- El ranking NO se guarda: se calcula en cada consulta a partir de acá.
+--
+-- REDUNDANCIA INTENCIONAL respecto de partidos. Para un torneo jugado en el
+-- sistema los puntos se podrían derivar del cuadro, pero se guardan porque:
+--   * el historial importado no tiene partidos de los cuales derivar
+--   * es una foto al cierre: si cambia la tabla de puntos, el pasado no se reescribe
+--   * hay ajustes manuales que no corresponden a ningún partido
+--   * derivarlo exigiría reconstruir cada cuadro de los últimos 12 meses
 CREATE TABLE movimientos_ranking (
     id              SERIAL PRIMARY KEY,
     organizacion_id INTEGER           NOT NULL REFERENCES organizaciones(id) ON DELETE CASCADE,
@@ -484,7 +488,19 @@ COMMIT;
 --    WHERE organizacion_id = $1 AND edicion = 'Primavera 2026';
 --
 -- 3. AISLAMIENTO MULTI-ORGANIZACIÓN. Toda consulta filtra por organizacion_id.
---    Las tablas que no lo tienen (partidos, sets, grupos) llegan vía torneos.
+--    Las tablas que no lo tienen (partidos, sets) llegan vía torneos.
+--
+-- 7. TODO LO DE UN JUGADOR EN UN TORNEO. Dos JOINs:
+--
+--    SELECT i.estado, i.grupo, i.posicion_siembra,
+--           p.fase, p.cuadro, p.ronda, p.estado, p.ganador_id,
+--           s.numero, s.games_a, s.games_b
+--    FROM inscripciones i
+--    JOIN partidos p
+--      ON p.torneo_id = i.torneo_id
+--     AND (p.jugador_a_id = i.jugador_id OR p.jugador_b_id = i.jugador_id)
+--    LEFT JOIN sets_partido s ON s.partido_id = p.id
+--    WHERE i.torneo_id = $1 AND i.jugador_id = $2;
 --
 -- 4. RESERVA DE CUPO. El job que expira reservas vencidas:
 --
