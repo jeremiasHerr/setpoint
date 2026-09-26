@@ -117,7 +117,7 @@ Detalle completo en [`docs/08-repositorio.md`](docs/08-repositorio.md).
 
 ---
 
-##Riesgos
+## Riesgos
 
 | `npm audit` reporta 3 vulnerabilidades altas en `deepmerge-ts` | Es una dependencia del CLI de Prisma, que solo corre en desarrollo y no procesa datos de usuarios. **No correr `npm audit fix --force`**: baja Prisma a 6.12 y rompe la alineación de versiones. Se resuelve cuando Prisma actualice la dependencia |
 
