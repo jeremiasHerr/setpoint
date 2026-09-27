@@ -41,7 +41,8 @@ Todo el sistema sale de que hay dos personas usando esto en situaciones opuestas
 | `--lima` | `#CDF546` | Acento único. Acción principal, victoria, "vos", etapa en curso |
 | `--lima-tenue` | `#F7FCE7` | Fondo de celda ganada en matrices y tablas |
 | `--negro` | `#0A0B0D` | Texto principal, superficies oscuras, botones secundarios sólidos |
-| `--carbon` | `#17191D` | Celdas dentro de una superficie negra |
+| `--carbon` | `#17191D` | Celdas dentro de una superficie negra, ítem activo de la navegación |
+| `--borde-oscuro` | `#2C3037` | Bordes y separadores sobre una superficie negra |
 | `--gris-700` | `#3F4348` | Texto secundario sobre blanco |
 | `--gris-500` | `#6A7079` | Rótulos, texto de apoyo |
 | `--gris-400` | `#9BA1A9` | Texto sobre negro, datos apagados, perdedor en una tabla |
@@ -136,7 +137,7 @@ El mono es lo que da el acabado de producto y lo que hace que las tablas queden 
 | Principal (jugador) | `--lima` | `--negro` | La acción que el jugador quiere hacer: pagar, anotar la fecha, escribirle al rival |
 | Principal (organizador) | `--negro` | blanco | Guardar, resolver, publicar, cargar resultado |
 | Secundario | transparente + borde `--linea` | `--negro` | Todo lo demás |
-| Sobre fondo negro | transparente + borde `#2C3037` | blanco | Acción alternativa dentro de una tarjeta negra |
+| Sobre fondo negro | transparente + borde `--borde-oscuro` | blanco | Acción alternativa dentro de una tarjeta negra |
 
 Nunca hay flechas pegadas al texto del botón. El texto dice la acción completa: "Anotar y avisarle a Pablo", no "Continuar".
 
@@ -281,6 +282,7 @@ El canvas tiene **21 pantallas**, en el orden en que se usan.
   --lima-tenue: #F7FCE7;
   --negro: #0A0B0D;
   --carbon: #17191D;
+  --borde-oscuro: #2C3037;
   --gris-700: #3F4348;
   --gris-500: #6A7079;
   --gris-400: #9BA1A9;
@@ -311,6 +313,7 @@ theme: {
       lima: { DEFAULT: '#CDF546', tenue: '#F7FCE7' },
       negro: '#0A0B0D',
       carbon: '#17191D',
+      'borde-oscuro': '#2C3037',
       gris: { 700: '#3F4348', 500: '#6A7079', 400: '#9BA1A9', 300: '#C9CDD3' },
       linea: { DEFAULT: '#E6E8EB', suave: '#F1F2F4' },
       rojo: { DEFAULT: '#E5484D', texto: '#C62A2F', fondo: '#FEF6F6', linea: '#F3D3D4' },
