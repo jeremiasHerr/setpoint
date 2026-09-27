@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SetPoint · Nuevo torneo</title>
+  <!-- Pantalla de referencia: Nuevo torneo · F04 · entrega 25% · 1280×1080 px -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+    <style>
+      body { margin: 0; font-family: "Instrument Sans", system-ui, "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; }
+      a { color: #0A0B0D; }
+      a:hover { color: #6A7079; }
+      .mono { font-family: "Geist Mono", ui-monospace, "SF Mono", Consolas, monospace; font-variant-numeric: tabular-nums; }
+      .campo { height: 48px; border-radius: 10px; border: 1px solid #C9CDD3; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 0 14px; font-size: 15px; }
+      .sec { border: 1px solid #E6E8EB; border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+      .rot { font-size: 13px; font-weight: 600; color: #6A7079; }
+      .swon { width: 40px; height: 24px; border-radius: 999px; background: #0A0B0D; display: flex; align-items: center; justify-content: flex-end; padding: 3px; }
+      .swoff { width: 40px; height: 24px; border-radius: 999px; background: #E6E8EB; display: flex; align-items: center; padding: 3px; }
+      .bolita { width: 18px; height: 18px; border-radius: 999px; background: #FFFFFF; }
+    </style>
+</head>
+<body>
+<!--
+NOTA DE DISEÑO
+Nuevo · creación del torneo.
+
+El formulario es la convocatoria que hoy publican en el grupo, campo por campo.
+
+La columna negra de la derecha calcula en vivo lo que el formato implica: 48 partidos de zona, 15 y 15 de cuadro, 78 en total, siete semanas, mínimo cuatro partidos por jugador. Es la traducción de "8 zonas de 4" a algo que un organizador puede evaluar sin hacer cuentas.
+-->
+
+<div style="width: 1280px; min-height: 1080px; background: #FFFFFF; color: #0A0B0D; display: flex; flex-direction: column;">
+
+  <div style="background: #0A0B0D; height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 28px;">
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <div style="display: flex; align-items: center; gap: 9px;">
+        <div style="width: 24px; height: 24px; border-radius: 7px; background: #CDF546; display: flex; align-items: center; justify-content: center;">
+          <div style="width: 8px; height: 8px; border-radius: 999px; background: #0A0B0D;"></div>
+        </div>
+        <div style="font-size: 16px; font-weight: 600; color: #FFFFFF; letter-spacing: -0.02em;">SetPoint</div>
+      </div>
+      <div style="width: 1px; height: 18px; background: #2C3037;"></div>
+      <div style="font-size: 14px; color: #9BA1A9;">Polenta Team Tenis</div>
+    </div>
+    <div class="mono" style="font-size: 13px; color: #9BA1A9;">borrador · se guarda solo</div>
+  </div>
+
+  <div style="padding: 26px 28px 20px 28px; display: flex; flex-direction: column; gap: 7px;">
+    <div style="font-size: 30px; font-weight: 600; letter-spacing: -0.035em;">Nuevo torneo</div>
+    <div style="font-size: 15px; color: #6A7079;">Los valores vienen de la configuración de tu circuito. Cambiá solo lo que sea distinto esta vez.</div>
+  </div>
+
+  <div style="padding: 0 28px 28px 28px; display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 22px; align-items: start;">
+
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+
+      <div class="sec">
+        <div style="font-size: 17px; font-weight: 600;">Lo básico</div>
+        <div style="display: grid; grid-template-columns: minmax(0, 1fr) 240px; gap: 14px;">
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="rot">Nombre</div>
+            <div class="campo" style="border: 2px solid #0A0B0D;">Torneo Primavera 26</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="rot">Etapa del calendario</div>
+            <div class="campo"><span>Primavera 2026</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6A7079" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"></path></svg></div>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div class="rot">Categorías que se disputan</div>
+          <div style="display: flex; gap: 8px;">
+            <div style="height: 40px; padding: 0 15px; display: flex; align-items: center; border-radius: 10px; background: #0A0B0D; color: #FFFFFF; font-size: 14px; font-weight: 600;">Tercera</div>
+            <div style="height: 40px; padding: 0 15px; display: flex; align-items: center; border-radius: 10px; border: 1px solid #E6E8EB; font-size: 14px; color: #3F4348;">Segunda</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+          <div style="font-size: 17px; font-weight: 600;">Formato</div>
+          <div style="font-size: 13px; color: #6A7079;">de acá sale la cuenta de partidos</div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px;">
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="rot">Grupos</div>
+            <div class="campo"><span class="mono" style="font-size: 17px;">8</span><span style="font-size: 13px; color: #6A7079;">zonas</span></div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="rot">Jugadores por grupo</div>
+            <div class="campo"><span class="mono" style="font-size: 17px;">4</span><span style="font-size: 13px; color: #6A7079;">todos contra todos</span></div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="rot">Clasifican a Campeonato</div>
+            <div class="campo"><span class="mono" style="font-size: 17px;">2</span><span style="font-size: 13px; color: #6A7079;">por zona</span></div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 4px;">
+          <div style="display: flex; flex-direction: column; gap: 3px;">
+            <div style="font-size: 15px; font-weight: 500;">Cuadro Complementaria</div>
+            <div style="font-size: 14px; color: #6A7079;">Los que no clasifican siguen jugando en un segundo cuadro. Nadie queda afuera.</div>
+          </div>
+          <div class="swon"><div class="bolita"></div></div>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div style="font-size: 17px; font-weight: 600;">Sistema de juego</div>
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+            <div style="font-size: 15px;">Partidos al mejor de 3 sets</div>
+            <div class="swon"><div class="bolita"></div></div>
+          </div>
+          <div style="height: 1px; background: #F1F2F4;"></div>
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+            <div style="display: flex; flex-direction: column; gap: 3px;">
+              <div style="font-size: 15px;">Punto de oro</div>
+              <div style="font-size: 14px; color: #6A7079;">En 40-40 se juega un punto único, sin ventajas.</div>
+            </div>
+            <div class="swon"><div class="bolita"></div></div>
+          </div>
+          <div style="height: 1px; background: #F1F2F4;"></div>
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+            <div style="display: flex; flex-direction: column; gap: 3px;">
+              <div style="font-size: 15px;">Super tie-break en lugar de tercer set</div>
+              <div style="font-size: 14px; color: #6A7079;">A 10 puntos, sin diferencia.</div>
+            </div>
+            <div class="swon"><div class="bolita"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div style="font-size: 17px; font-weight: 600;">Plazos</div>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px;">
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="rot">Fase de grupos</div>
+            <div class="campo"><span class="mono" style="font-size: 17px;">3</span><span style="font-size: 13px; color: #6A7079;">semanas</span></div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="rot">Cada ronda eliminatoria</div>
+            <div class="campo"><span class="mono" style="font-size: 17px;">1</span><span style="font-size: 13px; color: #6A7079;">semana</span></div>
+          </div>
+        </div>
+        <div style="border-radius: 10px; background: #F6F7F8; padding: 13px 15px; display: flex; flex-direction: column; gap: 7px;">
+          <div class="mono" style="font-size: 13px; color: #3F4348;">grupos · 6 oct al 26 oct</div>
+          <div class="mono" style="font-size: 13px; color: #3F4348;">octavos · 27 oct al 2 nov · cuartos · 3 al 9 nov</div>
+          <div class="mono" style="font-size: 13px; color: #3F4348;">semis · 10 al 16 nov · finales · 17 al 23 nov</div>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div style="font-size: 17px; font-weight: 600;">Inscripción</div>
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px;">
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="rot">Importe</div>
+            <div class="campo"><span class="mono" style="font-size: 17px;">$45.000</span></div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="rot">Cupo</div>
+            <div class="campo"><span class="mono" style="font-size: 17px;">32</span><span style="font-size: 13px; color: #6A7079;">8 × 4</span></div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="rot">Cierra</div>
+            <div class="campo"><span class="mono" style="font-size: 15px;">26 sep</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6A7079" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"></path></svg></div>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div class="rot">Quién se puede inscribir</div>
+          <div style="display: flex; gap: 8px;">
+            <div style="height: 40px; padding: 0 15px; display: flex; align-items: center; border-radius: 10px; background: #0A0B0D; color: #FFFFFF; font-size: 14px; font-weight: 600;">Solo el padrón</div>
+            <div style="height: 40px; padding: 0 15px; display: flex; align-items: center; border-radius: 10px; border: 1px solid #E6E8EB; font-size: 14px; color: #3F4348;">Piden y aprobás</div>
+            <div style="height: 40px; padding: 0 15px; display: flex; align-items: center; border-radius: 10px; border: 1px solid #E6E8EB; font-size: 14px; color: #3F4348;">Cualquiera</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div style="font-size: 17px; font-weight: 600;">Dónde se juega</div>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px;">
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="rot">Fase de grupos</div>
+            <div class="campo"><span>Lo eligen los jugadores</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6A7079" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"></path></svg></div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="rot">Eliminatorias</div>
+            <div class="campo"><span>Club Alta Barda</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6A7079" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"></path></svg></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+
+      <div style="background: #0A0B0D; border-radius: 16px; padding: 22px 20px; display: flex; flex-direction: column; gap: 18px;">
+        <div style="font-size: 16px; font-weight: 600; color: #FFFFFF;">Cómo queda</div>
+
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+            <div style="font-size: 15px; color: #9BA1A9;">Partidos de zona</div>
+            <div class="mono" style="font-size: 16px; color: #FFFFFF;">48</div>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+            <div style="font-size: 15px; color: #9BA1A9;">Cuadro Campeonato</div>
+            <div class="mono" style="font-size: 16px; color: #FFFFFF;">15</div>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+            <div style="font-size: 15px; color: #9BA1A9;">Cuadro Complementaria</div>
+            <div class="mono" style="font-size: 16px; color: #FFFFFF;">15</div>
+          </div>
+          <div style="height: 1px; background: #23262B;"></div>
+          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+            <div style="font-size: 15px; font-weight: 600; color: #FFFFFF;">Total</div>
+            <div style="display: flex; align-items: baseline; gap: 7px;">
+              <div class="mono" style="font-size: 30px; font-weight: 500; color: #CDF546; letter-spacing: -0.03em;">78</div>
+              <div style="font-size: 14px; color: #9BA1A9;">partidos</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="height: 1px; background: #23262B;"></div>
+
+        <div style="display: flex; flex-direction: column; gap: 9px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 5px; height: 5px; border-radius: 999px; background: #CDF546;"></div>
+            <div style="font-size: 14px; color: #FFFFFF;">Todos juegan mínimo 4 partidos</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 5px; height: 5px; border-radius: 999px; background: #CDF546;"></div>
+            <div style="font-size: 14px; color: #FFFFFF;">Dura 7 semanas, del 6 oct al 23 nov</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 5px; height: 5px; border-radius: 999px; background: #CDF546;"></div>
+            <div style="font-size: 14px; color: #FFFFFF;">Reparte hasta 100 puntos al campeón</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="border: 1px solid #E6E8EB; border-radius: 14px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px;">
+        <div style="font-size: 15px; font-weight: 600;">Al publicar</div>
+        <div style="font-size: 14px; line-height: 1.45; color: #6A7079;">El torneo queda visible y se abren las inscripciones. Podés seguir editando el formato hasta que se cierre la inscripción.</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="height: 48px; border-radius: 11px; background: #0A0B0D; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600;">Publicar el torneo</div>
+        <div style="height: 48px; border-radius: 11px; border: 1px solid #E6E8EB; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 500;">Dejarlo en borrador</div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>

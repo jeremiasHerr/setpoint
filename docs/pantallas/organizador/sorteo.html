@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SetPoint · Sorteo de zonas</title>
+  <!-- Pantalla de referencia: Sorteo de zonas · F05 · entrega 50% · 1280×960 px -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+    <style>
+      body { margin: 0; font-family: "Instrument Sans", system-ui, "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; }
+      a { color: #0A0B0D; }
+      a:hover { color: #6A7079; }
+      .mono { font-family: "Geist Mono", ui-monospace, "SF Mono", Consolas, monospace; font-variant-numeric: tabular-nums; }
+      .fila { display: flex; align-items: center; gap: 10px; height: 34px; }
+      .zona { border: 1px solid #E6E8EB; border-radius: 12px; padding: 13px 15px; display: flex; flex-direction: column; gap: 6px; }
+      .cab { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding-bottom: 7px; border-bottom: 1px solid #F1F2F4; }
+    </style>
+</head>
+<body>
+<!--
+NOTA DE DISEÑO
+Nuevo · sorteo y armado de zonas.
+
+Dos decisiones separadas, como en el dominio: cómo se reparten (serpentina, directa, bombos) y quién lo ejecuta (automático, en pantalla para proyectar, o cargado a mano después del sorteo físico).
+
+El número al lado de cada apellido es la posición de siembra, y cada zona muestra su suma. Las ocho dan 66: esa es la prueba visible de que la serpentina dejó las zonas parejas, y es lo que el organizador necesita ver antes de publicar.
+-->
+
+<div style="width: 1280px; min-height: 960px; background: #FFFFFF; color: #0A0B0D; display: flex; flex-direction: column;">
+
+  <div style="background: #0A0B0D; height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 28px;">
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <div style="display: flex; align-items: center; gap: 9px;">
+        <div style="width: 24px; height: 24px; border-radius: 7px; background: #CDF546; display: flex; align-items: center; justify-content: center;">
+          <div style="width: 8px; height: 8px; border-radius: 999px; background: #0A0B0D;"></div>
+        </div>
+        <div style="font-size: 16px; font-weight: 600; color: #FFFFFF; letter-spacing: -0.02em;">SetPoint</div>
+      </div>
+      <div style="width: 1px; height: 18px; background: #2C3037;"></div>
+      <div style="font-size: 14px; color: #9BA1A9;">Polenta Team Tenis</div>
+    </div>
+    <div class="mono" style="height: 34px; padding: 0 12px; display: flex; align-items: center; border-radius: 8px; border: 1px solid #2C3037; font-size: 13px; color: #FFFFFF;">Primavera 26 · Tercera</div>
+  </div>
+
+  <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding: 26px 28px 20px 28px;">
+    <div style="display: flex; flex-direction: column; gap: 7px;">
+      <div style="font-size: 30px; font-weight: 600; letter-spacing: -0.035em;">Sorteo de zonas</div>
+      <div style="font-size: 15px; color: #6A7079;">32 inscriptos · se arman 8 zonas de 4</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div class="mono" style="height: 36px; padding: 0 13px; display: flex; align-items: center; border-radius: 999px; border: 1px solid #E6E8EB; font-size: 13px; color: #6A7079;">todavía no publicado</div>
+    </div>
+  </div>
+
+  <div style="padding: 0 28px 22px 28px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px;">
+    <div style="border: 1px solid #E6E8EB; border-radius: 14px; padding: 16px 18px; display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+        <div style="font-size: 15px; font-weight: 600;">Cómo se reparten</div>
+        <div style="font-size: 13px; color: #6A7079;">usa el ranking vigente</div>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <div style="height: 40px; padding: 0 15px; display: flex; align-items: center; border-radius: 10px; background: #0A0B0D; color: #FFFFFF; font-size: 14px; font-weight: 600;">Serpentina</div>
+        <div style="height: 40px; padding: 0 15px; display: flex; align-items: center; border-radius: 10px; border: 1px solid #E6E8EB; font-size: 14px; color: #3F4348;">Directa</div>
+        <div style="height: 40px; padding: 0 15px; display: flex; align-items: center; border-radius: 10px; border: 1px solid #E6E8EB; font-size: 14px; color: #3F4348;">Por bombos</div>
+      </div>
+      <div style="font-size: 14px; line-height: 1.42; color: #6A7079;">La serpentina invierte la dirección en cada vuelta, así todas las zonas suman lo mismo.</div>
+    </div>
+
+    <div style="border: 1px solid #E6E8EB; border-radius: 14px; padding: 16px 18px; display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+        <div style="font-size: 15px; font-weight: 600;">Quién lo ejecuta</div>
+        <div style="font-size: 13px; color: #6A7079;">podés revisarlo antes de publicar</div>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <div style="height: 40px; padding: 0 15px; display: flex; align-items: center; border-radius: 10px; background: #0A0B0D; color: #FFFFFF; font-size: 14px; font-weight: 600;">Automático</div>
+        <div style="height: 40px; padding: 0 15px; display: flex; align-items: center; border-radius: 10px; border: 1px solid #E6E8EB; font-size: 14px; color: #3F4348;">En pantalla</div>
+        <div style="height: 40px; padding: 0 15px; display: flex; align-items: center; border-radius: 10px; border: 1px solid #E6E8EB; font-size: 14px; color: #3F4348;">Lo cargo a mano</div>
+      </div>
+      <div style="font-size: 14px; line-height: 1.42; color: #6A7079;">Si el sorteo lo hacen presencial con bombos y lo graban, cargá el resultado a mano.</div>
+    </div>
+  </div>
+
+  <div style="padding: 0 28px 20px 28px; display: flex; flex-direction: column; gap: 14px;">
+
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+      <div style="font-size: 20px; font-weight: 600; letter-spacing: -0.025em;">Así quedarían</div>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div style="width: 7px; height: 7px; border-radius: 999px; background: #CDF546;"></div>
+        <div style="font-size: 14px; color: #3F4348;">Las ocho zonas suman 66. Están parejas.</div>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px;">
+
+      <div class="zona">
+        <div class="cab"><div style="font-size: 15px; font-weight: 600;">Zona A</div><div class="mono" style="font-size: 12px; color: #6A7079;">suma 66</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">01</div><div style="font-size: 14px;">Antileo</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">16</div><div style="font-size: 14px;">Vera</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">17</div><div style="font-size: 14px;">Quilodrán</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">32</div><div style="font-size: 14px;">Zúñiga</div></div>
+      </div>
+
+      <div class="zona">
+        <div class="cab"><div style="font-size: 15px; font-weight: 600;">Zona B</div><div class="mono" style="font-size: 12px; color: #6A7079;">suma 66</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">02</div><div style="font-size: 14px;">Roa</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">15</div><div style="font-size: 14px;">Peralta</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">18</div><div style="font-size: 14px;">Millán</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">31</div><div style="font-size: 14px;">Arriagada</div></div>
+      </div>
+
+      <div class="zona">
+        <div class="cab"><div style="font-size: 15px; font-weight: 600;">Zona C</div><div class="mono" style="font-size: 12px; color: #6A7079;">suma 66</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">03</div><div style="font-size: 14px;">Sosa</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">14</div><div style="font-size: 14px;">Sepúlveda</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">19</div><div style="font-size: 14px;">Cárdenas</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">30</div><div style="font-size: 14px;">Paillalef</div></div>
+      </div>
+
+      <div class="zona">
+        <div class="cab"><div style="font-size: 15px; font-weight: 600;">Zona D</div><div class="mono" style="font-size: 12px; color: #6A7079;">suma 66</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">04</div><div style="font-size: 14px;">Painefil</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">13</div><div style="font-size: 14px;">Nieva</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">20</div><div style="font-size: 14px;">Ojeda</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">29</div><div style="font-size: 14px;">Godoy</div></div>
+      </div>
+
+      <div class="zona">
+        <div class="cab"><div style="font-size: 15px; font-weight: 600;">Zona E</div><div class="mono" style="font-size: 12px; color: #6A7079;">suma 66</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">05</div><div style="font-size: 14px;">Sanhueza</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">12</div><div style="font-size: 14px;">Ledesma</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">21</div><div style="font-size: 14px;">Riquelme</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">28</div><div style="font-size: 14px;">Muñoz</div></div>
+      </div>
+
+      <div class="zona">
+        <div class="cab"><div style="font-size: 15px; font-weight: 600;">Zona F</div><div class="mono" style="font-size: 12px; color: #6A7079;">suma 66</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">06</div><div style="font-size: 14px;">Bustos</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">11</div><div style="font-size: 14px;">Ferreyra</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">22</div><div style="font-size: 14px;">Barría</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">27</div><div style="font-size: 14px;">Rivas</div></div>
+      </div>
+
+      <div class="zona">
+        <div class="cab"><div style="font-size: 15px; font-weight: 600;">Zona G</div><div class="mono" style="font-size: 12px; color: #6A7079;">suma 66</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">07</div><div style="font-size: 14px;">Curihual</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">10</div><div style="font-size: 14px;">Domínguez</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">23</div><div style="font-size: 14px;">Huenchul</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">26</div><div style="font-size: 14px;">Contreras</div></div>
+      </div>
+
+      <div class="zona">
+        <div class="cab"><div style="font-size: 15px; font-weight: 600;">Zona H</div><div class="mono" style="font-size: 12px; color: #6A7079;">suma 66</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">08</div><div style="font-size: 14px;">Cabrera</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">09</div><div style="font-size: 14px;">Aguirre</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">24</div><div style="font-size: 14px;">Salgado</div></div>
+        <div class="fila"><div class="mono" style="font-size: 12px; color: #9BA1A9; width: 20px;">25</div><div style="font-size: 14px;">Lagos</div></div>
+      </div>
+
+    </div>
+
+    <div style="font-size: 14px; color: #6A7079;">El número es la posición de siembra, según el ranking al momento del sorteo.</div>
+
+  </div>
+
+  <div style="margin-top: auto; border-top: 1px solid #E6E8EB; padding: 18px 28px; display: flex; align-items: center; justify-content: space-between; gap: 20px;">
+    <div style="display: flex; flex-direction: column; gap: 4px;">
+      <div style="font-size: 15px; font-weight: 600;">Al confirmar se generan 48 partidos de zona</div>
+      <div style="font-size: 14px; color: #6A7079;">Los jugadores reciben aviso con su zona y el plazo de tres semanas.</div>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <div style="height: 44px; padding: 0 18px; display: flex; align-items: center; border-radius: 10px; border: 1px solid #E6E8EB; font-size: 15px; font-weight: 500;">Volver a sortear</div>
+      <div style="height: 44px; padding: 0 20px; display: flex; align-items: center; border-radius: 10px; background: #CDF546; font-size: 15px; font-weight: 600;">Confirmar y publicar</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

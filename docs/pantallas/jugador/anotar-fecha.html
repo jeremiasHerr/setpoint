@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SetPoint · Anotar la fecha</title>
+  <!-- Pantalla de referencia: Anotar la fecha · F14 · entrega 75% · 390×844 px -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+    <style>
+      body { margin: 0; font-family: "Instrument Sans", system-ui, "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; }
+      a { color: #0A0B0D; }
+      a:hover { color: #6A7079; }
+      .mono { font-family: "Geist Mono", ui-monospace, "SF Mono", Consolas, monospace; font-variant-numeric: tabular-nums; }
+    </style>
+</head>
+<body>
+<!--
+NOTA DE DISEÑO
+Tres decisiones y nada más: día, hora y club.
+
+Los días son los que quedan del plazo, no un calendario abierto. Se dice explícito que el rival tiene que confirmar, porque de eso depende quién da W.O. si no se juega.
+-->
+
+<div style="width: 390px; min-height: 844px; background: #FFFFFF; color: #0A0B0D; display: flex; flex-direction: column; gap: 22px; padding: 20px 16px 28px 16px;">
+
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <div style="width: 40px; height: 40px; border-radius: 10px; border: 1px solid #E6E8EB; display: flex; align-items: center; justify-content: center;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0A0B0D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"></path></svg>
+    </div>
+    <div style="font-size: 20px; font-weight: 600; letter-spacing: -0.025em;">Anotar la fecha</div>
+  </div>
+
+  <div style="border: 1px solid #E6E8EB; border-radius: 14px; padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+    <div style="display: flex; flex-direction: column; gap: 4px;">
+      <div style="font-size: 20px; font-weight: 600; letter-spacing: -0.025em;">Pablo Roa</div>
+      <div class="mono" style="font-size: 13px; color: #6A7079;">zona C · fase de grupos</div>
+    </div>
+    <div class="mono" style="font-size: 12px; font-weight: 500; color: #C62A2F; padding: 6px 10px; border: 1px solid #F3D3D4; border-radius: 999px;">4 días</div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 11px;">
+    <div style="font-size: 16px; font-weight: 600;">¿Qué día?</div>
+    <div style="display: flex; gap: 8px;">
+      <div style="flex-grow: 1; height: 68px; border-radius: 12px; border: 1px solid #E6E8EB; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;">
+        <div class="mono" style="font-size: 11px; color: #6A7079;">mié</div>
+        <div class="mono" style="font-size: 20px; font-weight: 500;">11</div>
+      </div>
+      <div style="flex-grow: 1; height: 68px; border-radius: 12px; border: 1px solid #E6E8EB; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;">
+        <div class="mono" style="font-size: 11px; color: #6A7079;">jue</div>
+        <div class="mono" style="font-size: 20px; font-weight: 500;">12</div>
+      </div>
+      <div style="flex-grow: 1; height: 68px; border-radius: 12px; border: 1px solid #E6E8EB; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;">
+        <div class="mono" style="font-size: 11px; color: #6A7079;">vie</div>
+        <div class="mono" style="font-size: 20px; font-weight: 500;">13</div>
+      </div>
+      <div style="flex-grow: 1; height: 68px; border-radius: 12px; background: #0A0B0D; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;">
+        <div class="mono" style="font-size: 11px; color: #9BA1A9;">sáb</div>
+        <div class="mono" style="font-size: 20px; font-weight: 600; color: #CDF546;">14</div>
+      </div>
+      <div style="flex-grow: 1; height: 68px; border-radius: 12px; border: 1px solid #E6E8EB; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;">
+        <div class="mono" style="font-size: 11px; color: #6A7079;">dom</div>
+        <div class="mono" style="font-size: 20px; font-weight: 500;">15</div>
+      </div>
+    </div>
+    <div style="font-size: 14px; color: #6A7079;">El plazo de la zona termina el domingo 15.</div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 11px;">
+    <div style="font-size: 16px; font-weight: 600;">¿A qué hora?</div>
+    <div style="height: 56px; border-radius: 12px; border: 1px solid #C9CDD3; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 16px;">
+      <div class="mono" style="font-size: 18px; font-weight: 500;">10:00</div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6A7079" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.5V12l3 2"></path></svg>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 11px;">
+    <div style="font-size: 16px; font-weight: 600;">¿Dónde juegan?</div>
+    <div style="height: 56px; border-radius: 12px; border: 1px solid #C9CDD3; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 16px;">
+      <div style="font-size: 17px;">Club Alta Barda</div>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6A7079" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"></path></svg>
+    </div>
+    <div style="font-size: 14px; color: #6A7079;">En zona eligen ustedes. En eliminatorias la sede la pone la organización.</div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 12px; margin-top: auto;">
+    <div style="border-radius: 12px; background: #F6F7F8; padding: 14px 16px; display: flex; gap: 11px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6A7079" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 11v5.5M12 8h.01"></path></svg>
+      <div style="font-size: 15px; line-height: 1.42; color: #3F4348;">Pablo recibe un aviso y confirma con un toque. Recién ahí queda agendado para los dos.</div>
+    </div>
+    <div style="height: 56px; border-radius: 12px; background: #CDF546; color: #0A0B0D; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600;">Anotar y avisarle a Pablo</div>
+  </div>
+
+</div>
+</body>
+</html>

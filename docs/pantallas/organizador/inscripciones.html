@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SetPoint · Inscripciones</title>
+  <!-- Pantalla de referencia: Inscripciones · F13 · entrega 75% · 1280×920 px -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+    <style>
+      body { margin: 0; font-family: "Instrument Sans", system-ui, "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; }
+      a { color: #0A0B0D; }
+      a:hover { color: #6A7079; }
+      .mono { font-family: "Geist Mono", ui-monospace, "SF Mono", Consolas, monospace; font-variant-numeric: tabular-nums; }
+    </style>
+</head>
+<body>
+<!--
+NOTA DE DISEÑO
+Nuevo · inscripciones y lista de espera.
+
+Los 32 lugares son la misma barra de marcas del tablero: pagados, reservando, libres. Es el mismo objeto gráfico repetido, no uno nuevo que haya que aprender.
+
+Las reservas muestran el reloj de 15 minutos corriendo, que es el dato que decide si el organizador espera o llama al siguiente de la lista.
+
+La conciliación va en negro abajo a la derecha: recaudado, comisión y lo que le corresponde al circuito. Dice explícito que la transferencia se hace por fuera del sistema, porque así está definido el alcance.
+-->
+
+<div style="width: 1280px; min-height: 920px; background: #FFFFFF; color: #0A0B0D; display: flex; flex-direction: column;">
+
+  <div style="background: #0A0B0D; height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 28px;">
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <div style="display: flex; align-items: center; gap: 9px;">
+        <div style="width: 24px; height: 24px; border-radius: 7px; background: #CDF546; display: flex; align-items: center; justify-content: center;">
+          <div style="width: 8px; height: 8px; border-radius: 999px; background: #0A0B0D;"></div>
+        </div>
+        <div style="font-size: 16px; font-weight: 600; color: #FFFFFF; letter-spacing: -0.02em;">SetPoint</div>
+      </div>
+      <div style="width: 1px; height: 18px; background: #2C3037;"></div>
+      <div style="font-size: 14px; color: #9BA1A9;">Polenta Team Tenis</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 8px; font-size: 14px; color: #9BA1A9;">Padrón</div>
+      <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 8px; background: #1B1E23; font-size: 14px; font-weight: 600; color: #FFFFFF;">Torneos</div>
+      <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 8px; font-size: 14px; color: #9BA1A9;">Tablero</div>
+    </div>
+  </div>
+
+  <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding: 26px 28px 20px 28px;">
+    <div style="display: flex; flex-direction: column; gap: 7px;">
+      <div style="font-size: 30px; font-weight: 600; letter-spacing: -0.035em;">Inscripciones</div>
+      <div style="font-size: 15px; color: #6A7079;">Torneo Primavera 26 · Tercera · cierra el viernes 26</div>
+    </div>
+    <div style="display: flex; gap: 9px;">
+      <div style="height: 40px; padding: 0 16px; display: flex; align-items: center; border-radius: 10px; border: 1px solid #E6E8EB; font-size: 14px; font-weight: 500;">Inscribir a mano</div>
+      <div style="height: 40px; padding: 0 16px; display: flex; align-items: center; border-radius: 10px; background: #0A0B0D; color: #FFFFFF; font-size: 14px; font-weight: 600;">Cerrar inscripciones</div>
+    </div>
+  </div>
+
+  <div style="padding: 0 28px 22px 28px;">
+    <div style="border: 1px solid #E6E8EB; border-radius: 14px; padding: 18px 20px 16px 20px; display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px;">
+        <div style="font-size: 15px; font-weight: 600;">32 lugares</div>
+        <div style="display: flex; align-items: center; gap: 18px;">
+          <div style="display: flex; align-items: center; gap: 7px;"><div style="width: 9px; height: 9px; border-radius: 2px; background: #0A0B0D;"></div><div class="mono" style="font-size: 13px;">28</div><div style="font-size: 13px; color: #6A7079;">pagados</div></div>
+          <div style="display: flex; align-items: center; gap: 7px;"><div style="width: 9px; height: 9px; border-radius: 2px; background: #9BA1A9;"></div><div class="mono" style="font-size: 13px;">2</div><div style="font-size: 13px; color: #6A7079;">reservando</div></div>
+          <div style="display: flex; align-items: center; gap: 7px;"><div style="width: 9px; height: 9px; border-radius: 2px; background: #E6E8EB;"></div><div class="mono" style="font-size: 13px;">2</div><div style="font-size: 13px; color: #6A7079;">libres</div></div>
+          <div style="display: flex; align-items: center; gap: 7px;"><div style="width: 9px; height: 9px; border-radius: 2px; background: #CDF546;"></div><div class="mono" style="font-size: 13px;">5</div><div style="font-size: 13px; color: #6A7079;">en lista de espera</div></div>
+        </div>
+      </div>
+      <div style="display: flex; gap: 3px;">
+        <div style="flex-grow: 28; height: 30px; border-radius: 3px; background: #0A0B0D;"></div>
+        <div style="flex-grow: 2; height: 30px; border-radius: 3px; background: #9BA1A9;"></div>
+        <div style="flex-grow: 2; height: 30px; border-radius: 3px; background: #E6E8EB;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 0 28px 28px 28px; display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px;">
+
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+
+      <div style="display: flex; align-items: center; gap: 6px;">
+        <div style="height: 36px; padding: 0 15px; display: flex; align-items: center; border-radius: 9px; background: #0A0B0D; color: #FFFFFF; font-size: 14px; font-weight: 600;">Confirmados 28</div>
+        <div style="height: 36px; padding: 0 15px; display: flex; align-items: center; gap: 8px; border-radius: 9px; border: 1px solid #E6E8EB; font-size: 14px; font-weight: 500; color: #3F4348;"><span>Reservando 2</span></div>
+        <div style="height: 36px; padding: 0 15px; display: flex; align-items: center; border-radius: 9px; border: 1px solid #E6E8EB; font-size: 14px; font-weight: 500; color: #3F4348;">Lista de espera 5</div>
+        <div style="flex-grow: 1;"></div>
+        <div style="height: 36px; padding: 0 13px; display: flex; align-items: center; gap: 8px; border-radius: 9px; border: 1px solid #E6E8EB; font-size: 14px; color: #6A7079;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6A7079" stroke-width="1.9" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"></circle><path d="M16 16l4.5 4.5"></path></svg>
+          <span>Buscar por apellido</span>
+        </div>
+      </div>
+
+      <div style="border: 1px solid #E6E8EB; border-radius: 14px; overflow: hidden;">
+
+        <div style="display: grid; grid-template-columns: minmax(0, 1fr) 130px 130px 120px 150px; background: #FAFBFC; border-bottom: 1px solid #E6E8EB;">
+          <div style="padding: 11px 18px; font-size: 12px; color: #6A7079;">jugador</div>
+          <div class="mono" style="padding: 11px 4px; font-size: 11px; color: #6A7079;">estado</div>
+          <div class="mono" style="padding: 11px 4px; font-size: 11px; color: #6A7079;">medio</div>
+          <div class="mono" style="padding: 11px 4px; font-size: 11px; color: #6A7079;">fecha</div>
+          <div></div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: minmax(0, 1fr) 130px 130px 120px 150px; align-items: center; height: 56px; border-bottom: 1px solid #F1F2F4;">
+          <div style="padding: 0 18px; display: flex; align-items: center; gap: 10px;">
+            <div style="width: 7px; height: 7px; border-radius: 999px; background: #CDF546;"></div>
+            <div style="font-size: 15px; font-weight: 500;">Marcelo Sanhueza</div>
+          </div>
+          <div style="font-size: 14px;">Pagada</div>
+          <div class="mono" style="font-size: 13px; color: #6A7079;">MercadoPago</div>
+          <div class="mono" style="font-size: 13px; color: #6A7079;">18 sep</div>
+          <div style="display: flex; justify-content: flex-end; padding-right: 18px;">
+            <div style="height: 32px; padding: 0 12px; display: flex; align-items: center; border-radius: 8px; border: 1px solid #E6E8EB; font-size: 13px; color: #3F4348;">Dar de baja</div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: minmax(0, 1fr) 130px 130px 120px 150px; align-items: center; height: 56px; border-bottom: 1px solid #F1F2F4;">
+          <div style="padding: 0 18px; display: flex; align-items: center; gap: 10px;">
+            <div style="width: 7px; height: 7px; border-radius: 999px; background: #CDF546;"></div>
+            <div style="font-size: 15px; font-weight: 500;">Lucas Bravo</div>
+          </div>
+          <div style="font-size: 14px;">Pagada</div>
+          <div class="mono" style="font-size: 13px; color: #6A7079;">MercadoPago</div>
+          <div class="mono" style="font-size: 13px; color: #6A7079;">18 sep</div>
+          <div style="display: flex; justify-content: flex-end; padding-right: 18px;">
+            <div style="height: 32px; padding: 0 12px; display: flex; align-items: center; border-radius: 8px; border: 1px solid #E6E8EB; font-size: 13px; color: #3F4348;">Dar de baja</div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: minmax(0, 1fr) 130px 130px 120px 150px; align-items: center; height: 56px; border-bottom: 1px solid #F1F2F4;">
+          <div style="padding: 0 18px; display: flex; align-items: center; gap: 10px;">
+            <div style="width: 7px; height: 7px; border-radius: 999px; background: #CDF546;"></div>
+            <div style="font-size: 15px; font-weight: 500;">Diego Cabrera</div>
+          </div>
+          <div style="font-size: 14px;">Pagada</div>
+          <div class="mono" style="font-size: 13px; color: #6A7079;">Efectivo</div>
+          <div class="mono" style="font-size: 13px; color: #6A7079;">17 sep</div>
+          <div style="display: flex; justify-content: flex-end; padding-right: 18px;">
+            <div style="height: 32px; padding: 0 12px; display: flex; align-items: center; border-radius: 8px; border: 1px solid #E6E8EB; font-size: 13px; color: #3F4348;">Dar de baja</div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: minmax(0, 1fr) 130px 130px 120px 150px; align-items: center; height: 56px; border-bottom: 1px solid #F1F2F4; background: #FAFBFC;">
+          <div style="padding: 0 18px; display: flex; align-items: center; gap: 10px;">
+            <div style="width: 7px; height: 7px; border-radius: 999px; background: #9BA1A9;"></div>
+            <div style="font-size: 15px;">Ariel Huenchul</div>
+          </div>
+          <div style="font-size: 14px; color: #3F4348;">Reservando</div>
+          <div class="mono" style="font-size: 13px; color: #6A7079;">—</div>
+          <div class="mono" style="font-size: 13px; color: #C62A2F;">vence 08:12</div>
+          <div style="display: flex; justify-content: flex-end; padding-right: 18px;">
+            <div style="height: 32px; padding: 0 12px; display: flex; align-items: center; border-radius: 8px; border: 1px solid #E6E8EB; font-size: 13px; color: #3F4348;">Recordarle</div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: minmax(0, 1fr) 130px 130px 120px 150px; align-items: center; height: 56px; border-bottom: 1px solid #F1F2F4; background: #FAFBFC;">
+          <div style="padding: 0 18px; display: flex; align-items: center; gap: 10px;">
+            <div style="width: 7px; height: 7px; border-radius: 999px; background: #9BA1A9;"></div>
+            <div style="font-size: 15px;">Pablo Roa</div>
+          </div>
+          <div style="font-size: 14px; color: #3F4348;">Reservando</div>
+          <div class="mono" style="font-size: 13px; color: #6A7079;">—</div>
+          <div class="mono" style="font-size: 13px; color: #C62A2F;">vence 03:40</div>
+          <div style="display: flex; justify-content: flex-end; padding-right: 18px;">
+            <div style="height: 32px; padding: 0 12px; display: flex; align-items: center; border-radius: 8px; border: 1px solid #E6E8EB; font-size: 13px; color: #3F4348;">Recordarle</div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: minmax(0, 1fr) 130px 130px 120px 150px; align-items: center; height: 56px;">
+          <div style="padding: 0 18px; display: flex; align-items: center; gap: 10px;">
+            <div style="width: 7px; height: 7px; border-radius: 999px; background: #CDF546;"></div>
+            <div style="font-size: 15px; font-weight: 500;">Nicolás Vera</div>
+          </div>
+          <div style="font-size: 14px;">Pagada</div>
+          <div class="mono" style="font-size: 13px; color: #6A7079;">MercadoPago</div>
+          <div class="mono" style="font-size: 13px; color: #6A7079;">16 sep</div>
+          <div style="display: flex; justify-content: flex-end; padding-right: 18px;">
+            <div style="height: 32px; padding: 0 12px; display: flex; align-items: center; border-radius: 8px; border: 1px solid #E6E8EB; font-size: 13px; color: #3F4348;">Dar de baja</div>
+          </div>
+        </div>
+
+        <div style="padding: 13px 18px; background: #FAFBFC; border-top: 1px solid #E6E8EB; font-size: 13px; color: #6A7079;">Al dar de baja se libera el lugar y se le avisa al primero de la lista de espera. La devolución la maneja la organización por fuera.</div>
+
+      </div>
+
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+
+      <div style="border: 1px solid #E6E8EB; border-radius: 14px; overflow: hidden;">
+        <div style="padding: 14px 16px; border-bottom: 1px solid #E6E8EB; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+          <div style="font-size: 15px; font-weight: 600;">Lista de espera</div>
+          <div class="mono" style="font-size: 13px; color: #6A7079;">por orden de llegada</div>
+        </div>
+        <div style="display: flex; flex-direction: column;">
+          <div style="display: flex; align-items: center; gap: 12px; padding: 0 16px; height: 46px; border-bottom: 1px solid #F1F2F4;">
+            <div class="mono" style="font-size: 13px; color: #6A7079;">1</div>
+            <div style="font-size: 14px; flex-grow: 1;">Julián Ojeda</div>
+            <div class="mono" style="font-size: 12px; color: #6A7079;">19 sep</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; padding: 0 16px; height: 46px; border-bottom: 1px solid #F1F2F4;">
+            <div class="mono" style="font-size: 13px; color: #6A7079;">2</div>
+            <div style="font-size: 14px; flex-grow: 1;">Emiliano Rivas</div>
+            <div class="mono" style="font-size: 12px; color: #6A7079;">19 sep</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; padding: 0 16px; height: 46px; border-bottom: 1px solid #F1F2F4;">
+            <div class="mono" style="font-size: 13px; color: #6A7079;">3</div>
+            <div style="font-size: 14px; flex-grow: 1;">Franco Lagos</div>
+            <div class="mono" style="font-size: 12px; color: #6A7079;">20 sep</div>
+          </div>
+          <div style="padding: 12px 16px; background: #FAFBFC; font-size: 13px; color: #6A7079;">Y 2 más. Cuando se libera un lugar, el primero recibe aviso y puede pagar.</div>
+        </div>
+      </div>
+
+      <div style="background: #0A0B0D; border-radius: 14px; padding: 18px 18px 16px 18px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="font-size: 15px; font-weight: 600; color: #FFFFFF;">Conciliación del torneo</div>
+        <div style="display: flex; flex-direction: column; gap: 11px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+            <div style="font-size: 14px; color: #9BA1A9;">Recaudado</div>
+            <div class="mono" style="font-size: 15px; color: #FFFFFF;">$1.260.000</div>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+            <div style="font-size: 14px; color: #9BA1A9;">Comisión</div>
+            <div class="mono" style="font-size: 15px; color: #9BA1A9;">$63.000</div>
+          </div>
+          <div style="height: 1px; background: #23262B;"></div>
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+            <div style="font-size: 15px; font-weight: 600; color: #FFFFFF;">Te corresponde</div>
+            <div class="mono" style="font-size: 20px; font-weight: 500; color: #CDF546;">$1.197.000</div>
+          </div>
+        </div>
+        <div style="font-size: 13px; line-height: 1.4; color: #6A7079;">27 pagos por MercadoPago y 1 en efectivo. La transferencia se hace por fuera del sistema.</div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>

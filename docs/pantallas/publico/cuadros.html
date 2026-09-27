@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SetPoint · Los dos cuadros</title>
+  <!-- Pantalla de referencia: Los dos cuadros · F08, F10 · entrega 50% · 1860×860 px -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+    <style>
+      body { margin: 0; font-family: "Instrument Sans", system-ui, "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; }
+      a { color: #0A0B0D; }
+      a:hover { color: #6A7079; }
+      .mono { font-family: "Geist Mono", ui-monospace, "SF Mono", Consolas, monospace; font-variant-numeric: tabular-nums; }
+      .col { display: flex; flex-direction: column; height: 594px; }
+      .par { position: relative; flex: 1; display: flex; flex-direction: column; justify-content: space-around; }
+      .par::after { content: ""; position: absolute; right: -17px; top: 25%; bottom: 25%; width: 17px; border: 1px solid #E6E8EB; border-left: 0; border-radius: 0 8px 8px 0; }
+      .conn { position: relative; }
+      .conn::before { content: ""; position: absolute; left: -17px; top: 50%; width: 17px; height: 1px; background: #E6E8EB; }
+    </style>
+</head>
+<body>
+<!--
+NOTA DE DISEÑO
+Los dos cuadros lado a lado: nadie queda afuera después de la fase de grupos.
+
+En las tarjetas va el resultado en sets, que es lo que hace legible un cuadro de 16. La final pendiente es la única con borde negro y franja lima.
+-->
+
+<div style="width: 1860px; min-height: 860px; background: #FFFFFF; color: #0A0B0D; display: flex; flex-direction: column;">
+
+  <div style="height: 58px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 30px; border-bottom: 1px solid #E6E8EB;">
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <div style="display: flex; align-items: center; gap: 9px;">
+        <div style="width: 24px; height: 24px; border-radius: 7px; background: #0A0B0D; display: flex; align-items: center; justify-content: center;">
+          <div style="width: 8px; height: 8px; border-radius: 999px; background: #CDF546;"></div>
+        </div>
+        <div style="font-size: 16px; font-weight: 600; letter-spacing: -0.02em;">Polenta Team Tenis</div>
+      </div>
+      <div style="width: 1px; height: 18px; background: #E6E8EB;"></div>
+      <div class="mono" style="font-size: 13px; color: #6A7079;">Otoño 26 · Tercera</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 6px;">
+      <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 8px; font-size: 14px; color: #6A7079;">Ranking</div>
+      <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 8px; font-size: 14px; color: #6A7079;">Zonas</div>
+      <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 8px; background: #F1F2F4; font-size: 14px; font-weight: 600;">Cuadros</div>
+      <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 8px; font-size: 14px; color: #6A7079;">Calendario</div>
+    </div>
+  </div>
+
+  <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding: 26px 30px 22px 30px;">
+    <div style="display: flex; flex-direction: column; gap: 7px;">
+      <div style="font-size: 30px; font-weight: 600; letter-spacing: -0.035em;">Los dos cuadros</div>
+      <div style="font-size: 15px; color: #6A7079;">Corren en paralelo. Nadie queda afuera de la fase de grupos: los dos primeros de cada zona van a Campeonato y los otros dos a Complementaria.</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div class="mono" style="height: 36px; padding: 0 13px; display: flex; align-items: center; border-radius: 999px; border: 1px solid #E6E8EB; font-size: 13px; color: #6A7079;">actualizado hace 2 h</div>
+      <div style="height: 36px; padding: 0 15px; display: flex; align-items: center; gap: 8px; border-radius: 10px; border: 1px solid #E6E8EB; font-size: 14px; font-weight: 500;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0A0B0D" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"></path><path d="M12 3v13M8 7l4-4 4 4"></path></svg>
+        <span>Compartir</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 60px; padding: 0 30px 34px 30px;">
+
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 12px; border-bottom: 2px solid #0A0B0D;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 9px; height: 9px; border-radius: 999px; background: #CDF546;"></div>
+          <div style="font-size: 20px; font-weight: 600; letter-spacing: -0.025em;">Campeonato</div>
+        </div>
+        <div class="mono" style="font-size: 13px; color: #6A7079;">14 de 15 jugados</div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(4, 190px); gap: 34px;">
+        <div class="mono" style="font-size: 12px; color: #6A7079;">octavos</div>
+        <div class="mono" style="font-size: 12px; color: #6A7079;">cuartos</div>
+        <div class="mono" style="font-size: 12px; color: #6A7079;">semis</div>
+        <div class="mono" style="font-size: 12px; color: #6A7079;">final</div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(4, 190px); gap: 34px;">
+
+        <div class="col">
+          <div class="par">
+            <div style="border: 1px solid #E6E8EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; background: #F7FCE7;"><div style="font-size: 13px; font-weight: 600;">Antileo</div><div class="mono" style="font-size: 12px; font-weight: 600;">2</div></div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; border-top: 1px solid #F1F2F4;"><div style="font-size: 13px; color: #9BA1A9;">Vera</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">0</div></div>
+            </div>
+            <div style="border: 1px solid #E6E8EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; background: #F7FCE7;"><div style="font-size: 13px; font-weight: 600;">Cabrera</div><div class="mono" style="font-size: 12px; font-weight: 600;">2</div></div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; border-top: 1px solid #F1F2F4;"><div style="font-size: 13px; color: #9BA1A9;">Aguirre</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">1</div></div>
+            </div>
+          </div>
+          <div class="par">
+            <div style="border: 1px solid #E6E8EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; background: #F7FCE7;"><div style="font-size: 13px; font-weight: 600;">Sanhueza</div><div class="mono" style="font-size: 12px; font-weight: 600;">2</div></div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; border-top: 1px solid #F1F2F4;"><div style="font-size: 13px; color: #9BA1A9;">Ferreyra</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">0</div></div>
+            </div>
+            <div style="border: 1px solid #E6E8EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; background: #F7FCE7;"><div style="font-size: 13px; font-weight: 600;">Painefil</div><div class="mono" style="font-size: 12px; font-weight: 600;">2</div></div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; border-top: 1px solid #F1F2F4;"><div style="font-size: 13px; color: #9BA1A9;">Ledesma</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">1</div></div>
+            </div>
+          </div>
+          <div class="par">
+            <div style="border: 1px solid #E6E8EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; background: #F7FCE7;"><div style="font-size: 13px; font-weight: 600;">Sosa</div><div class="mono" style="font-size: 12px; font-weight: 600;">2</div></div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; border-top: 1px solid #F1F2F4;"><div style="font-size: 13px; color: #9BA1A9;">Nieva</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">0</div></div>
+            </div>
+            <div style="border: 1px solid #E6E8EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; background: #F7FCE7;"><div style="font-size: 13px; font-weight: 600;">Bustos</div><div class="mono" style="font-size: 12px; font-weight: 600;">2</div></div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; border-top: 1px solid #F1F2F4;"><div style="font-size: 13px; color: #9BA1A9;">Domínguez</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">1</div></div>
+            </div>
+          </div>
+          <div class="par">
+            <div style="border: 1px solid #E6E8EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; background: #F7FCE7;"><div style="font-size: 13px; font-weight: 600;">Curihual</div><div class="mono" style="font-size: 12px; font-weight: 600;">2</div></div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; border-top: 1px solid #F1F2F4;"><div style="font-size: 13px; color: #9BA1A9;">Peralta</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">0</div></div>
+            </div>
+            <div style="border: 1px solid #E6E8EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; background: #F7FCE7;"><div style="font-size: 13px; font-weight: 600;">Roa</div><div class="mono" style="font-size: 12px; font-weight: 600;">2</div></div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; border-top: 1px solid #F1F2F4;"><div style="font-size: 13px; color: #9BA1A9;">Sepúlveda</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">0</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="par">
+            <div class="conn" style="border: 1px solid #E6E8EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; background: #F7FCE7;"><div style="font-size: 13px; font-weight: 600;">Antileo</div><div class="mono" style="font-size: 12px; font-weight: 600;">2</div></div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; border-top: 1px solid #F1F2F4;"><div style="font-size: 13px; color: #9BA1A9;">Cabrera</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">1</div></div>
+            </div>
+            <div class="conn" style="border: 1px solid #E6E8EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; background: #F7FCE7;"><div style="font-size: 13px; font-weight: 600;">Sanhueza</div><div class="mono" style="font-size: 12px; font-weight: 600;">2</div></div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; border-top: 1px solid #F1F2F4;"><div style="font-size: 13px; color: #9BA1A9;">Painefil</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">0</div></div>
+            </div>
+          </div>
+          <div class="par">
+            <div class="conn" style="border: 1px solid #E6E8EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px;"><div style="font-size: 13px; color: #9BA1A9;">Sosa</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">1</div></div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; background: #F7FCE7; border-top: 1px solid #F1F2F4;"><div style="font-size: 13px; font-weight: 600;">Bustos</div><div class="mono" style="font-size: 12px; font-weight: 600;">2</div></div>
+            </div>
+            <div class="conn" style="border: 1px solid #E6E8EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px;"><div style="font-size: 13px; color: #9BA1A9;">Curihual</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">0</div></div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; background: #F7FCE7; border-top: 1px solid #F1F2F4;"><div style="font-size: 13px; font-weight: 600;">Roa</div><div class="mono" style="font-size: 12px; font-weight: 600;">2</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="par">
+            <div class="conn" style="border: 1px solid #E6E8EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px;"><div style="font-size: 13px; color: #9BA1A9;">Antileo</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">1</div></div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; background: #F7FCE7; border-top: 1px solid #F1F2F4;"><div style="font-size: 13px; font-weight: 600;">Sanhueza</div><div class="mono" style="font-size: 12px; font-weight: 600;">2</div></div>
+            </div>
+            <div class="conn" style="border: 1px solid #E6E8EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px;"><div style="font-size: 13px; color: #9BA1A9;">Bustos</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">1</div></div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; background: #F7FCE7; border-top: 1px solid #F1F2F4;"><div style="font-size: 13px; font-weight: 600;">Roa</div><div class="mono" style="font-size: 12px; font-weight: 600;">2</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col" style="justify-content: center;">
+          <div class="conn" style="border: 2px solid #0A0B0D; border-radius: 10px; overflow: hidden;">
+            <div class="mono" style="display: flex; align-items: center; justify-content: center; height: 26px; background: #CDF546; font-size: 11px; font-weight: 600;">domingo 22 · 11:00</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 34px; padding: 0 10px;"><div style="font-size: 14px; font-weight: 600;">Sanhueza</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">—</div></div>
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 34px; padding: 0 10px; border-top: 1px solid #F1F2F4;"><div style="font-size: 14px; font-weight: 600;">Roa</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">—</div></div>
+            <div style="display: flex; align-items: center; justify-content: center; height: 28px; background: #FAFBFC; border-top: 1px solid #F1F2F4;"><div style="font-size: 12px; color: #6A7079;">Club Alta Barda</div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 12px; border-bottom: 2px solid #E6E8EB;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 9px; height: 9px; border-radius: 999px; background: #E6E8EB;"></div>
+          <div style="font-size: 20px; font-weight: 600; letter-spacing: -0.025em;">Complementaria</div>
+        </div>
+        <div class="mono" style="font-size: 13px; color: #6A7079;">14 de 15 jugados</div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(4, 190px); gap: 34px;">
+        <div class="mono" style="font-size: 12px; color: #6A7079;">octavos</div>
+        <div class="mono" style="font-size: 12px; color: #6A7079;">cuartos</div>
+        <div class="mono" style="font-size: 12px; color: #6A7079;">semis</div>
+        <div class="mono" style="font-size: 12px; color: #6A7079;">final</div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(4, 190px); gap: 34px;">
+
+        <div class="col">
+          <div class="par">
+            <div style="border: 1px solid #E6E8EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; background: #F7FCE7;"><div style="font-size: 13px; font-weight: 600;">Quilodrán</div><div class="mono" style="font-size: 12px; font-weight: 600;">2</div></div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; border-top: 1px solid #F1F2F4;"><div style="font-size: 13px; color: #9BA1A9;">Zúñiga</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">0</div></div>
+            </div>
+            <div style="border: 1px solid #E6E8EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px;"><div style="font-size: 13px; color: #9BA1A9;">Millán</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">1</div></div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; background: #F7FCE7; border-top: 1px solid #F1F2F4;"><div style="font-size: 13px; font-weight: 600;">Arriagada</div><div class="mono" style="font-size: 12px; font-weight: 600;">2</div></div>
+            </div>
+          </div>
+          <div class="par">
+            <div style="border: 1px solid #E6E8EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; background: #F7FCE7;"><div style="font-size: 13px; font-weight: 600;">Cárdenas</div><div class="mono" style="font-size: 12px; font-weight: 600;">2</div></div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; border-top: 1px solid #F1F2F4;"><div style="font-size: 13px; color: #9BA1A9;">Paillalef</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">0</div></div>
+            </div>
+            <div style="border: 1px solid #E6E8EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; background: #F7FCE7;"><div style="font-size: 13px; font-weight: 600;">Ojeda</div><div class="mono" style="font-size: 12px; font-weight: 600;">2</div></div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; border-top: 1px solid #F1F2F4;"><div style="font-size: 13px; color: #9BA1A9;">Godoy</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">1</div></div>
+            </div>
+          </div>
+          <div class="par">
+            <div style="border: 1px solid #E6E8EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; background: #F7FCE7;"><div style="font-size: 13px; font-weight: 600;">Riquelme</div><div class="mono" style="font-size: 12px; font-weight: 600;">2</div></div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; border-top: 1px solid #F1F2F4;"><div style="font-size: 13px; color: #9BA1A9;">Muñoz</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">0</div></div>
+            </div>
+            <div style="border: 1px solid #E6E8EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px;"><div style="font-size: 13px; color: #9BA1A9;">Barría</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">1</div></div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; background: #F7FCE7; border-top: 1px solid #F1F2F4;"><div style="font-size: 13px; font-weight: 600;">Rivas</div><div class="mono" style="font-size: 12px; font-weight: 600;">2</div></div>
+            </div>
+          </div>
+          <div class="par">
+            <div style="border: 1px solid #E6E8EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; background: #F7FCE7;"><div style="font-size: 13px; font-weight: 600;">Huenchul</div><div class="mono" style="font-size: 12px; font-weight: 600;">2</div></div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; border-top: 1px solid #F1F2F4;"><div style="font-size: 13px; color: #9BA1A9;">Contreras</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">0</div></div>
+            </div>
+            <div style="border: 1px solid #E6E8EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; background: #F7FCE7;"><div style="font-size: 13px; font-weight: 600;">Salgado</div><div class="mono" style="font-size: 12px; font-weight: 600;">2</div></div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; border-top: 1px solid #F1F2F4;"><div style="font-size: 13px; color: #9BA1A9;">Lagos</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">1</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="par">
+            <div class="conn" style="border: 1px solid #E6E8EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; background: #F7FCE7;"><div style="font-size: 13px; font-weight: 600;">Quilodrán</div><div class="mono" style="font-size: 12px; font-weight: 600;">2</div></div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; border-top: 1px solid #F1F2F4;"><div style="font-size: 13px; color: #9BA1A9;">Arriagada</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">1</div></div>
+            </div>
+            <div class="conn" style="border: 1px solid #E6E8EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px;"><div style="font-size: 13px; color: #9BA1A9;">Cárdenas</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">0</div></div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; background: #F7FCE7; border-top: 1px solid #F1F2F4;"><div style="font-size: 13px; font-weight: 600;">Ojeda</div><div class="mono" style="font-size: 12px; font-weight: 600;">2</div></div>
+            </div>
+          </div>
+          <div class="par">
+            <div class="conn" style="border: 1px solid #E6E8EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; background: #F7FCE7;"><div style="font-size: 13px; font-weight: 600;">Riquelme</div><div class="mono" style="font-size: 12px; font-weight: 600;">2</div></div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; border-top: 1px solid #F1F2F4;"><div style="font-size: 13px; color: #9BA1A9;">Rivas</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">1</div></div>
+            </div>
+            <div class="conn" style="border: 1px solid #E6E8EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; background: #F7FCE7;"><div style="font-size: 13px; font-weight: 600;">Huenchul</div><div class="mono" style="font-size: 12px; font-weight: 600;">2</div></div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; border-top: 1px solid #F1F2F4;"><div style="font-size: 13px; color: #9BA1A9;">Salgado</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">0</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="par">
+            <div class="conn" style="border: 1px solid #E6E8EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px;"><div style="font-size: 13px; color: #9BA1A9;">Quilodrán</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">1</div></div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; background: #F7FCE7; border-top: 1px solid #F1F2F4;"><div style="font-size: 13px; font-weight: 600;">Ojeda</div><div class="mono" style="font-size: 12px; font-weight: 600;">2</div></div>
+            </div>
+            <div class="conn" style="border: 1px solid #E6E8EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px;"><div style="font-size: 13px; color: #9BA1A9;">Riquelme</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">0</div></div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 31px; padding: 0 10px; background: #F7FCE7; border-top: 1px solid #F1F2F4;"><div style="font-size: 13px; font-weight: 600;">Huenchul</div><div class="mono" style="font-size: 12px; font-weight: 600;">2</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col" style="justify-content: center;">
+          <div class="conn" style="border: 1px solid #C9CDD3; border-radius: 10px; overflow: hidden;">
+            <div class="mono" style="display: flex; align-items: center; justify-content: center; height: 26px; background: #F1F2F4; font-size: 11px; font-weight: 500; color: #3F4348;">domingo 22 · 12:30</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 34px; padding: 0 10px;"><div style="font-size: 14px; font-weight: 600;">Ojeda</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">—</div></div>
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 34px; padding: 0 10px; border-top: 1px solid #F1F2F4;"><div style="font-size: 14px; font-weight: 600;">Huenchul</div><div class="mono" style="font-size: 12px; color: #9BA1A9;">—</div></div>
+            <div style="display: flex; align-items: center; justify-content: center; height: 28px; background: #FAFBFC; border-top: 1px solid #F1F2F4;"><div style="font-size: 12px; color: #6A7079;">Club Alta Barda</div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 12px; padding: 0 30px 30px 30px;">
+    <div class="mono" style="font-size: 12px; color: #6A7079;">2 sets ganados define · super tie-break en lugar de tercer set</div>
+    <div style="width: 1px; height: 14px; background: #E6E8EB;"></div>
+    <div style="font-size: 13px; color: #6A7079;">Tocá cualquier partido para ver el marcador set por set.</div>
+  </div>
+
+</div>
+</body>
+</html>

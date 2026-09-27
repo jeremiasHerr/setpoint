@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SetPoint · Tablero del torneo</title>
+  <!-- Pantalla de referencia: Tablero del torneo · F15 · entrega 75% · 1280×1240 px -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+    <style>
+      body { margin: 0; font-family: "Instrument Sans", system-ui, "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; }
+      a { color: #0A0B0D; }
+      a:hover { color: #6A7079; }
+      .mono { font-family: "Geist Mono", ui-monospace, "SF Mono", Consolas, monospace; font-variant-numeric: tabular-nums; }
+    </style>
+</head>
+<body>
+<!--
+NOTA DE DISEÑO
+Los 48 partidos agrupados de a 6 por zona, con la letra debajo: se ve qué zona está atrasada sin leer un número.
+
+"Lo que falta" es la lista de trabajo ordenada por urgencia, con la acción en cada fila. Las zonas se cambian con las letras A a H y las que tienen vencidos vienen marcadas.
+-->
+
+<div style="width: 1280px; min-height: 1240px; background: #FFFFFF; color: #0A0B0D; display: flex; flex-direction: column;">
+
+  <div style="background: #0A0B0D; height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 28px;">
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <div style="display: flex; align-items: center; gap: 9px;">
+        <div style="width: 24px; height: 24px; border-radius: 7px; background: #CDF546; display: flex; align-items: center; justify-content: center;">
+          <div style="width: 8px; height: 8px; border-radius: 999px; background: #0A0B0D;"></div>
+        </div>
+        <div style="font-size: 16px; font-weight: 600; color: #FFFFFF; letter-spacing: -0.02em;">SetPoint</div>
+      </div>
+      <div style="width: 1px; height: 18px; background: #2C3037;"></div>
+      <div style="font-size: 14px; color: #9BA1A9;">Polenta Team Tenis</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 8px; font-size: 14px; color: #9BA1A9;">Padrón</div>
+      <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 8px; font-size: 14px; color: #9BA1A9;">Torneos</div>
+      <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 8px; background: #1B1E23; font-size: 14px; font-weight: 600; color: #FFFFFF;">Tablero</div>
+      <div style="width: 12px;"></div>
+      <div class="mono" style="height: 34px; padding: 0 12px; display: flex; align-items: center; gap: 8px; border-radius: 8px; border: 1px solid #2C3037; font-size: 13px; color: #FFFFFF;">
+        <span>Otoño 26 · Tercera</span>
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#9BA1A9" stroke-width="2.6" stroke-linecap="round"><path d="M6 9l6 6 6-6"></path></svg>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding: 26px 28px 20px 28px;">
+    <div style="display: flex; flex-direction: column; gap: 7px;">
+      <div style="font-size: 30px; font-weight: 600; letter-spacing: -0.035em;">Fase de grupos</div>
+      <div style="font-size: 15px; color: #6A7079;">8 zonas de 4 · terminan el sábado 20</div>
+    </div>
+    <div style="display: flex; gap: 9px;">
+      <div style="height: 40px; padding: 0 16px; display: flex; align-items: center; border-radius: 10px; border: 1px solid #E6E8EB; font-size: 14px; font-weight: 500;">Ver cuadros</div>
+      <div style="height: 40px; padding: 0 16px; display: flex; align-items: center; border-radius: 10px; background: #0A0B0D; color: #FFFFFF; font-size: 14px; font-weight: 600;">Cargar resultado</div>
+    </div>
+  </div>
+
+  <div style="padding: 0 28px 26px 28px; display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 20px;">
+
+    <div style="border: 1px solid #E6E8EB; border-radius: 14px; padding: 18px 20px 16px 20px; display: flex; flex-direction: column; gap: 16px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px;">
+        <div style="font-size: 15px; font-weight: 600;">Los 48 partidos, zona por zona</div>
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <div style="display: flex; align-items: center; gap: 6px;"><div style="width: 9px; height: 9px; border-radius: 2px; background: #0A0B0D;"></div><div style="font-size: 13px; color: #6A7079;">jugado</div></div>
+          <div style="display: flex; align-items: center; gap: 6px;"><div style="width: 9px; height: 9px; border-radius: 2px; background: #9BA1A9;"></div><div style="font-size: 13px; color: #6A7079;">con fecha</div></div>
+          <div style="display: flex; align-items: center; gap: 6px;"><div style="width: 9px; height: 9px; border-radius: 2px; background: #E6E8EB;"></div><div style="font-size: 13px; color: #6A7079;">sin coordinar</div></div>
+          <div style="display: flex; align-items: center; gap: 6px;"><div style="width: 9px; height: 9px; border-radius: 2px; background: #E5484D;"></div><div style="font-size: 13px; color: #6A7079;">vencido</div></div>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 18px;">
+
+        <div style="display: flex; flex-direction: column; gap: 9px;">
+          <div style="display: flex; gap: 3px;">
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #9BA1A9;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #E6E8EB;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #E6E8EB;"></div>
+          </div>
+          <div style="display: flex; align-items: baseline; justify-content: space-between;">
+            <div style="font-size: 14px; font-weight: 600;">A</div>
+            <div class="mono" style="font-size: 12px; color: #6A7079;">3/6</div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 9px;">
+          <div style="display: flex; gap: 3px;">
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #9BA1A9;"></div>
+          </div>
+          <div style="display: flex; align-items: baseline; justify-content: space-between;">
+            <div style="font-size: 14px; font-weight: 600;">B</div>
+            <div class="mono" style="font-size: 12px; color: #6A7079;">5/6</div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 9px;">
+          <div style="display: flex; gap: 3px;">
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #9BA1A9;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #E6E8EB;"></div>
+          </div>
+          <div style="display: flex; align-items: baseline; justify-content: space-between;">
+            <div style="font-size: 14px; font-weight: 600;">C</div>
+            <div class="mono" style="font-size: 12px; color: #6A7079;">4/6</div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 9px;">
+          <div style="display: flex; gap: 3px;">
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #9BA1A9;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #E6E8EB;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #E5484D;"></div>
+          </div>
+          <div style="display: flex; align-items: baseline; justify-content: space-between;">
+            <div style="font-size: 14px; font-weight: 600; color: #C62A2F;">D</div>
+            <div class="mono" style="font-size: 12px; color: #C62A2F;">3/6</div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 9px;">
+          <div style="display: flex; gap: 3px;">
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+          </div>
+          <div style="display: flex; align-items: baseline; justify-content: space-between;">
+            <div style="font-size: 14px; font-weight: 600;">E</div>
+            <div class="mono" style="font-size: 12px; color: #6A7079;">6/6</div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 9px;">
+          <div style="display: flex; gap: 3px;">
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #9BA1A9;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #9BA1A9;"></div>
+          </div>
+          <div style="display: flex; align-items: baseline; justify-content: space-between;">
+            <div style="font-size: 14px; font-weight: 600;">F</div>
+            <div class="mono" style="font-size: 12px; color: #6A7079;">4/6</div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 9px;">
+          <div style="display: flex; gap: 3px;">
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #9BA1A9;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #E6E8EB;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #E5484D;"></div>
+          </div>
+          <div style="display: flex; align-items: baseline; justify-content: space-between;">
+            <div style="font-size: 14px; font-weight: 600; color: #C62A2F;">G</div>
+            <div class="mono" style="font-size: 12px; color: #C62A2F;">3/6</div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 9px;">
+          <div style="display: flex; gap: 3px;">
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #0A0B0D;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #9BA1A9;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #9BA1A9;"></div>
+            <div style="flex-grow: 1; height: 44px; border-radius: 3px; background: #E6E8EB;"></div>
+          </div>
+          <div style="display: flex; align-items: baseline; justify-content: space-between;">
+            <div style="font-size: 14px; font-weight: 600;">H</div>
+            <div class="mono" style="font-size: 12px; color: #6A7079;">3/6</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div style="background: #0A0B0D; border-radius: 14px; padding: 18px 20px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px;">
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <div style="font-size: 14px; font-weight: 500; color: #9BA1A9;">Te quedan</div>
+        <div style="display: flex; align-items: baseline; gap: 9px;">
+          <div class="mono" style="font-size: 46px; font-weight: 500; line-height: 0.95; letter-spacing: -0.04em; color: #CDF546;">6</div>
+          <div style="font-size: 16px; color: #9BA1A9;">días</div>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <div style="font-size: 15px; line-height: 1.4; color: #FFFFFF;">Faltan jugarse 17 partidos y 8 todavía no tienen fecha.</div>
+        <div class="mono" style="font-size: 13px; color: #9BA1A9;">31 de 48 jugados</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="padding: 0 28px 26px 28px; display: flex; flex-direction: column; gap: 12px;">
+
+    <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+      <div style="font-size: 20px; font-weight: 600; letter-spacing: -0.025em;">Lo que falta</div>
+      <div style="font-size: 14px; color: #6A7079;">Ordenado por urgencia</div>
+    </div>
+
+    <div style="border: 1px solid #E6E8EB; border-radius: 14px; overflow: hidden;">
+
+      <div style="display: flex; align-items: center; gap: 9px; padding: 11px 20px; background: #FEF3F3; border-bottom: 1px solid #F3D3D4;">
+        <div style="width: 8px; height: 8px; border-radius: 2px; background: #E5484D;"></div>
+        <div style="font-size: 14px; font-weight: 600; color: #C62A2F;">Vencidos sin jugarse · 2</div>
+        <div style="font-size: 14px; color: #C0656A;">Los resolvés vos: W.O., doble W.O. o extensión</div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 62px minmax(0, 1fr) 190px 250px; align-items: center; column-gap: 16px; padding: 0 20px; height: 64px; border-bottom: 1px solid #F1F2F4;">
+        <div class="mono" style="font-size: 13px; color: #6A7079;">zona D</div>
+        <div style="font-size: 16px; font-weight: 600;">Curihual · Nieva</div>
+        <div class="mono" style="font-size: 14px; color: #C62A2F;">venció ayer</div>
+        <div style="display: flex; gap: 8px; justify-content: flex-end;">
+          <div style="height: 36px; padding: 0 13px; display: flex; align-items: center; border-radius: 9px; border: 1px solid #E6E8EB; font-size: 13px; font-weight: 500;">Escribirles</div>
+          <div style="height: 36px; padding: 0 13px; display: flex; align-items: center; border-radius: 9px; background: #0A0B0D; color: #FFFFFF; font-size: 13px; font-weight: 600;">Resolver</div>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 62px minmax(0, 1fr) 190px 250px; align-items: center; column-gap: 16px; padding: 0 20px; height: 64px; border-bottom: 1px solid #F1F2F4;">
+        <div class="mono" style="font-size: 13px; color: #6A7079;">zona G</div>
+        <div style="font-size: 16px; font-weight: 600;">Ledesma · Painefil</div>
+        <div class="mono" style="font-size: 14px; color: #C62A2F;">venció hace 3 días</div>
+        <div style="display: flex; gap: 8px; justify-content: flex-end;">
+          <div style="height: 36px; padding: 0 13px; display: flex; align-items: center; border-radius: 9px; border: 1px solid #E6E8EB; font-size: 13px; font-weight: 500;">Escribirles</div>
+          <div style="height: 36px; padding: 0 13px; display: flex; align-items: center; border-radius: 9px; background: #0A0B0D; color: #FFFFFF; font-size: 13px; font-weight: 600;">Resolver</div>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 9px; padding: 11px 20px; background: #FAFBFC; border-bottom: 1px solid #E6E8EB; border-top: 1px solid #E6E8EB;">
+        <div style="width: 8px; height: 8px; border-radius: 2px; background: #E6E8EB;"></div>
+        <div style="font-size: 14px; font-weight: 600;">Sin coordinar · 6</div>
+        <div style="font-size: 14px; color: #6A7079;">Nadie anotó fecha todavía y quedan 6 días</div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 62px minmax(0, 1fr) 190px 250px; align-items: center; column-gap: 16px; padding: 0 20px; height: 58px; border-bottom: 1px solid #F1F2F4;">
+        <div class="mono" style="font-size: 13px; color: #6A7079;">zona A</div>
+        <div style="font-size: 16px;">Roa · Peralta</div>
+        <div class="mono" style="font-size: 14px; color: #6A7079;">6 días</div>
+        <div style="display: flex; gap: 8px; justify-content: flex-end;">
+          <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 9px; border: 1px solid #E6E8EB; font-size: 13px; font-weight: 500;">Escribirles</div>
+          <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 9px; border: 1px solid #E6E8EB; font-size: 13px; font-weight: 500;">Anotar fecha</div>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 62px minmax(0, 1fr) 190px 250px; align-items: center; column-gap: 16px; padding: 0 20px; height: 58px; border-bottom: 1px solid #F1F2F4;">
+        <div class="mono" style="font-size: 13px; color: #6A7079;">zona A</div>
+        <div style="font-size: 16px;">Vera · Antileo</div>
+        <div class="mono" style="font-size: 14px; color: #6A7079;">6 días</div>
+        <div style="display: flex; gap: 8px; justify-content: flex-end;">
+          <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 9px; border: 1px solid #E6E8EB; font-size: 13px; font-weight: 500;">Escribirles</div>
+          <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 9px; border: 1px solid #E6E8EB; font-size: 13px; font-weight: 500;">Anotar fecha</div>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 62px minmax(0, 1fr) 190px 250px; align-items: center; column-gap: 16px; padding: 0 20px; height: 58px; border-bottom: 1px solid #F1F2F4;">
+        <div class="mono" style="font-size: 13px; color: #6A7079;">zona C</div>
+        <div style="font-size: 16px;">Bustos · Ledesma</div>
+        <div class="mono" style="font-size: 14px; color: #6A7079;">6 días</div>
+        <div style="display: flex; gap: 8px; justify-content: flex-end;">
+          <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 9px; border: 1px solid #E6E8EB; font-size: 13px; font-weight: 500;">Escribirles</div>
+          <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 9px; border: 1px solid #E6E8EB; font-size: 13px; font-weight: 500;">Anotar fecha</div>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 62px minmax(0, 1fr) 190px 250px; align-items: center; column-gap: 16px; padding: 0 20px; height: 58px; border-bottom: 1px solid #F1F2F4;">
+        <div class="mono" style="font-size: 13px; color: #6A7079;">zona D</div>
+        <div style="font-size: 16px;">Cabrera · Sepúlveda</div>
+        <div class="mono" style="font-size: 14px; color: #6A7079;">6 días</div>
+        <div style="display: flex; gap: 8px; justify-content: flex-end;">
+          <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 9px; border: 1px solid #E6E8EB; font-size: 13px; font-weight: 500;">Escribirles</div>
+          <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 9px; border: 1px solid #E6E8EB; font-size: 13px; font-weight: 500;">Anotar fecha</div>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 62px minmax(0, 1fr) 190px 250px; align-items: center; column-gap: 16px; padding: 0 20px; height: 58px; border-bottom: 1px solid #F1F2F4;">
+        <div class="mono" style="font-size: 13px; color: #6A7079;">zona G</div>
+        <div style="font-size: 16px;">Aguirre · Domínguez</div>
+        <div class="mono" style="font-size: 14px; color: #6A7079;">6 días</div>
+        <div style="display: flex; gap: 8px; justify-content: flex-end;">
+          <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 9px; border: 1px solid #E6E8EB; font-size: 13px; font-weight: 500;">Escribirles</div>
+          <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 9px; border: 1px solid #E6E8EB; font-size: 13px; font-weight: 500;">Anotar fecha</div>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 62px minmax(0, 1fr) 190px 250px; align-items: center; column-gap: 16px; padding: 0 20px; height: 58px; border-bottom: 1px solid #E6E8EB;">
+        <div class="mono" style="font-size: 13px; color: #6A7079;">zona H</div>
+        <div style="font-size: 16px;">Sepúlveda · Nieva</div>
+        <div class="mono" style="font-size: 14px; color: #6A7079;">6 días</div>
+        <div style="display: flex; gap: 8px; justify-content: flex-end;">
+          <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 9px; border: 1px solid #E6E8EB; font-size: 13px; font-weight: 500;">Escribirles</div>
+          <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 9px; border: 1px solid #E6E8EB; font-size: 13px; font-weight: 500;">Anotar fecha</div>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 20px; background: #FAFBFC;">
+        <div style="font-size: 14px; color: #6A7079;">También hay 9 partidos con fecha acordada que todavía no se jugaron.</div>
+        <div style="height: 38px; padding: 0 15px; display: flex; align-items: center; border-radius: 10px; background: #CDF546; font-size: 14px; font-weight: 600;">Recordarles a los 8</div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div style="padding: 0 28px 28px 28px; display: flex; flex-direction: column; gap: 12px;">
+
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+      <div style="font-size: 20px; font-weight: 600; letter-spacing: -0.025em;">Zona por zona</div>
+      <div style="display: flex; gap: 5px;">
+        <div style="height: 34px; padding: 0 15px; display: flex; align-items: center; border-radius: 9px; background: #0A0B0D; color: #FFFFFF; font-size: 14px; font-weight: 600;">A</div>
+        <div style="height: 34px; padding: 0 15px; display: flex; align-items: center; border-radius: 9px; border: 1px solid #E6E8EB; font-size: 14px; font-weight: 500; color: #3F4348;">B</div>
+        <div style="height: 34px; padding: 0 15px; display: flex; align-items: center; border-radius: 9px; border: 1px solid #E6E8EB; font-size: 14px; font-weight: 500; color: #3F4348;">C</div>
+        <div style="height: 34px; padding: 0 15px; display: flex; align-items: center; gap: 7px; border-radius: 9px; border: 1px solid #F3D3D4; font-size: 14px; font-weight: 500; color: #C62A2F;"><span>D</span><span style="width: 5px; height: 5px; border-radius: 999px; background: #E5484D;"></span></div>
+        <div style="height: 34px; padding: 0 15px; display: flex; align-items: center; border-radius: 9px; border: 1px solid #E6E8EB; font-size: 14px; font-weight: 500; color: #3F4348;">E</div>
+        <div style="height: 34px; padding: 0 15px; display: flex; align-items: center; border-radius: 9px; border: 1px solid #E6E8EB; font-size: 14px; font-weight: 500; color: #3F4348;">F</div>
+        <div style="height: 34px; padding: 0 15px; display: flex; align-items: center; gap: 7px; border-radius: 9px; border: 1px solid #F3D3D4; font-size: 14px; font-weight: 500; color: #C62A2F;"><span>G</span><span style="width: 5px; height: 5px; border-radius: 999px; background: #E5484D;"></span></div>
+        <div style="height: 34px; padding: 0 15px; display: flex; align-items: center; border-radius: 9px; border: 1px solid #E6E8EB; font-size: 14px; font-weight: 500; color: #3F4348;">H</div>
+      </div>
+    </div>
+
+    <div style="border: 1px solid #E6E8EB; border-radius: 14px; overflow: hidden;">
+
+      <div style="display: grid; grid-template-columns: 200px repeat(4, minmax(0, 1fr)) 48px 58px 74px; background: #FAFBFC; border-bottom: 1px solid #E6E8EB;">
+        <div style="padding: 10px 16px; font-size: 12px; color: #6A7079;">jugador</div>
+        <div class="mono" style="padding: 10px 4px; font-size: 11px; color: #6A7079; text-align: center;">antileo</div>
+        <div class="mono" style="padding: 10px 4px; font-size: 11px; color: #6A7079; text-align: center;">roa</div>
+        <div class="mono" style="padding: 10px 4px; font-size: 11px; color: #6A7079; text-align: center;">vera</div>
+        <div class="mono" style="padding: 10px 4px; font-size: 11px; color: #6A7079; text-align: center;">peralta</div>
+        <div class="mono" style="padding: 10px 4px; font-size: 11px; color: #6A7079; text-align: center;">pg</div>
+        <div class="mono" style="padding: 10px 4px; font-size: 11px; color: #6A7079; text-align: center;">sets</div>
+        <div class="mono" style="padding: 10px 10px; font-size: 11px; color: #6A7079; text-align: right;">games</div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 200px repeat(4, minmax(0, 1fr)) 48px 58px 74px; align-items: center; height: 60px; border-bottom: 1px solid #F1F2F4;">
+        <div style="padding: 0 16px; display: flex; align-items: center; gap: 10px;">
+          <div class="mono" style="font-size: 12px; color: #6A7079;">1</div>
+          <div style="width: 6px; height: 6px; border-radius: 999px; background: #CDF546;"></div>
+          <div style="font-size: 15px; font-weight: 600;">Antileo</div>
+        </div>
+        <div style="height: 60px; background: #F1F2F4;"></div>
+        <div class="mono" style="font-size: 13px; font-weight: 600; background: #F7FCE7; height: 60px; display: flex; align-items: center; justify-content: center;">6-3 6-4</div>
+        <div class="mono" style="font-size: 13px; font-weight: 600; background: #F7FCE7; height: 60px; display: flex; align-items: center; justify-content: center;">7-5 6-2</div>
+        <div class="mono" style="font-size: 12px; color: #6A7079; text-align: center;">sáb 14</div>
+        <div class="mono" style="font-size: 15px; font-weight: 600; text-align: center;">2</div>
+        <div class="mono" style="font-size: 13px; color: #6A7079; text-align: center;">4-0</div>
+        <div class="mono" style="font-size: 13px; color: #6A7079; text-align: right; padding-right: 10px;">25-14</div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 200px repeat(4, minmax(0, 1fr)) 48px 58px 74px; align-items: center; height: 60px; border-bottom: 1px solid #F1F2F4;">
+        <div style="padding: 0 16px; display: flex; align-items: center; gap: 10px;">
+          <div class="mono" style="font-size: 12px; color: #6A7079;">2</div>
+          <div style="width: 6px; height: 6px; border-radius: 999px; background: #CDF546;"></div>
+          <div style="font-size: 15px; font-weight: 600;">Roa</div>
+        </div>
+        <div class="mono" style="font-size: 13px; color: #9BA1A9; text-align: center;">3-6 4-6</div>
+        <div style="height: 60px; background: #F1F2F4;"></div>
+        <div class="mono" style="font-size: 13px; font-weight: 600; background: #F7FCE7; height: 60px; display: flex; align-items: center; justify-content: center;">6-4 6-2</div>
+        <div style="height: 60px; display: flex; align-items: center; justify-content: center;"><div style="width: 48px; height: 26px; border: 1px dashed #C9CDD3; border-radius: 6px;"></div></div>
+        <div class="mono" style="font-size: 15px; font-weight: 600; text-align: center;">1</div>
+        <div class="mono" style="font-size: 13px; color: #6A7079; text-align: center;">2-2</div>
+        <div class="mono" style="font-size: 13px; color: #6A7079; text-align: right; padding-right: 10px;">19-18</div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 200px repeat(4, minmax(0, 1fr)) 48px 58px 74px; align-items: center; height: 60px; border-bottom: 1px solid #F1F2F4;">
+        <div style="padding: 0 16px; display: flex; align-items: center; gap: 10px;">
+          <div class="mono" style="font-size: 12px; color: #9BA1A9;">3</div>
+          <div style="width: 6px; height: 6px; border-radius: 999px; background: #E6E8EB;"></div>
+          <div style="font-size: 15px; font-weight: 500; color: #3F4348;">Vera</div>
+        </div>
+        <div class="mono" style="font-size: 13px; color: #9BA1A9; text-align: center;">2-7 2-6</div>
+        <div class="mono" style="font-size: 13px; color: #9BA1A9; text-align: center;">4-6 2-6</div>
+        <div style="height: 60px; background: #F1F2F4;"></div>
+        <div class="mono" style="font-size: 13px; font-weight: 600; background: #F7FCE7; height: 60px; display: flex; align-items: center; justify-content: center;">7-5 6-3</div>
+        <div class="mono" style="font-size: 15px; font-weight: 600; color: #3F4348; text-align: center;">1</div>
+        <div class="mono" style="font-size: 13px; color: #9BA1A9; text-align: center;">2-4</div>
+        <div class="mono" style="font-size: 13px; color: #9BA1A9; text-align: right; padding-right: 10px;">21-33</div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 200px repeat(4, minmax(0, 1fr)) 48px 58px 74px; align-items: center; height: 60px;">
+        <div style="padding: 0 16px; display: flex; align-items: center; gap: 10px;">
+          <div class="mono" style="font-size: 12px; color: #9BA1A9;">4</div>
+          <div style="width: 6px; height: 6px; border-radius: 999px; background: #E6E8EB;"></div>
+          <div style="font-size: 15px; font-weight: 500; color: #3F4348;">Peralta</div>
+        </div>
+        <div class="mono" style="font-size: 12px; color: #6A7079; text-align: center;">sáb 14</div>
+        <div style="height: 60px; display: flex; align-items: center; justify-content: center;"><div style="width: 48px; height: 26px; border: 1px dashed #C9CDD3; border-radius: 6px;"></div></div>
+        <div class="mono" style="font-size: 13px; color: #9BA1A9; text-align: center;">5-7 3-6</div>
+        <div style="height: 60px; background: #F1F2F4;"></div>
+        <div class="mono" style="font-size: 15px; font-weight: 600; color: #3F4348; text-align: center;">0</div>
+        <div class="mono" style="font-size: 13px; color: #9BA1A9; text-align: center;">0-2</div>
+        <div class="mono" style="font-size: 13px; color: #9BA1A9; text-align: right; padding-right: 10px;">8-13</div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 10px; padding: 13px 20px; border-top: 1px solid #E6E8EB; background: #FAFBFC;">
+        <div style="width: 6px; height: 6px; border-radius: 999px; background: #CDF546;"></div>
+        <div style="font-size: 13px; color: #6A7079;">Antileo y Roa están clasificando a Campeonato. Vera y Peralta van a Complementaria.</div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>

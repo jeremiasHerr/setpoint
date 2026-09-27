@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SetPoint · Padrón</title>
+  <!-- Pantalla de referencia: Padrón · F02 · entrega 25% · 1280×940 px -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+    <style>
+      body { margin: 0; font-family: "Instrument Sans", system-ui, "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; }
+      a { color: #0A0B0D; }
+      a:hover { color: #6A7079; }
+      .mono { font-family: "Geist Mono", ui-monospace, "SF Mono", Consolas, monospace; font-variant-numeric: tabular-nums; }
+      .fila { display: grid; grid-template-columns: 34px minmax(0, 1fr) 118px 158px 84px 40px; align-items: center; column-gap: 16px; height: 58px; padding: 0 18px; border-bottom: 1px solid #F1F2F4; }
+      .rot { font-size: 11px; color: #6A7079; }
+      .chip { height: 34px; padding: 0 13px; border-radius: 999px; border: 1px solid #E6E8EB; display: flex; align-items: center; font-size: 14px; font-weight: 500; }
+      .campo { height: 48px; border-radius: 10px; border: 1px solid #C9CDD3; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 0 14px; font-size: 15px; }
+      .ini { width: 34px; height: 34px; border-radius: 999px; background: #F1F2F4; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: #6A7079; }
+    </style>
+</head>
+<body>
+<div style="width: 1280px; min-height: 940px; background: #FFFFFF; color: #0A0B0D; display: flex; flex-direction: column;">
+
+  <div style="background: #0A0B0D; height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 28px;">
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <div style="display: flex; align-items: center; gap: 9px;">
+        <div style="width: 24px; height: 24px; border-radius: 7px; background: #CDF546; display: flex; align-items: center; justify-content: center;">
+          <div style="width: 8px; height: 8px; border-radius: 999px; background: #0A0B0D;"></div>
+        </div>
+        <div style="font-size: 16px; font-weight: 600; color: #FFFFFF; letter-spacing: -0.02em;">SetPoint</div>
+      </div>
+      <div style="width: 1px; height: 18px; background: #2C3037;"></div>
+      <div style="font-size: 14px; color: #9BA1A9;">Polenta Team Tenis</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 4px;">
+      <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 8px; background: #1B1E23; font-size: 14px; font-weight: 600; color: #FFFFFF;">Padrón</div>
+      <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 8px; font-size: 14px; color: #9BA1A9;">Torneos</div>
+      <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 8px; font-size: 14px; color: #9BA1A9;">Tablero</div>
+    </div>
+  </div>
+
+  <div style="padding: 26px 28px 18px 28px; display: flex; align-items: flex-end; justify-content: space-between; gap: 24px;">
+    <div style="display: flex; flex-direction: column; gap: 7px;">
+      <div style="font-size: 30px; font-weight: 600; letter-spacing: -0.035em;">Padrón</div>
+      <div style="font-size: 15px; color: #6A7079;">Los jugadores de tu circuito. De acá salen las inscripciones, el ranking y el historial.</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div style="height: 40px; padding: 0 16px; border-radius: 10px; border: 1px solid #E6E8EB; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 500;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0A0B0D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path><path d="M7 10l5 5 5-5"></path><path d="M12 15V3"></path></svg>
+        <span>Importar planilla</span>
+      </div>
+      <div style="height: 40px; padding: 0 16px; border-radius: 10px; background: #0A0B0D; color: #FFFFFF; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 500;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+        <span>Agregar jugador</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 0 28px 28px 28px; display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 22px; align-items: start;">
+
+    <div style="border: 1px solid #E6E8EB; border-radius: 14px; overflow: hidden; display: flex; flex-direction: column;">
+
+      <div style="padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid #E6E8EB;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div class="chip" style="background: #0A0B0D; color: #FFFFFF; border-color: #0A0B0D;">Todas</div>
+          <div class="chip">Segunda</div>
+          <div class="chip">Tercera</div>
+        </div>
+        <div style="width: 250px; height: 38px; border-radius: 10px; border: 1px solid #C9CDD3; display: flex; align-items: center; gap: 9px; padding: 0 13px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6A7079" stroke-width="1.9" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+          <span style="font-size: 14px; color: #9BA1A9;">Buscar por apellido</span>
+        </div>
+      </div>
+
+      <div class="fila" style="height: 38px; background: #FAFBFC; border-bottom: 1px solid #E6E8EB;">
+        <div></div>
+        <div class="rot mono">jugador</div>
+        <div class="rot mono">categoría</div>
+        <div class="rot mono">ranking</div>
+        <div class="rot mono" style="text-align: right;">partidos</div>
+        <div></div>
+      </div>
+
+      <div class="fila">
+        <div class="ini">TQ</div>
+        <div style="display: flex; flex-direction: column; gap: 2px;">
+          <div style="font-size: 16px; font-weight: 500;">Tomás Quiroga</div>
+          <div class="mono" style="font-size: 12px; color: #6A7079;">desde prim 25</div>
+        </div>
+        <div><div class="chip" style="background: #F6F7F8; display: inline-flex;">Tercera</div></div>
+        <div style="display: flex; align-items: baseline; gap: 7px;">
+          <span class="mono" style="font-size: 13px; color: #6A7079;">1º</span>
+          <span class="mono" style="font-size: 17px; font-weight: 500;">165</span>
+          <span style="font-size: 13px; color: #6A7079;">puntos</span>
+        </div>
+        <div class="mono" style="font-size: 15px; text-align: right;">31</div>
+        <div style="display: flex; justify-content: flex-end;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#9BA1A9" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></div>
+      </div>
+
+      <div class="fila">
+        <div class="ini">DM</div>
+        <div style="display: flex; flex-direction: column; gap: 2px;">
+          <div style="font-size: 16px; font-weight: 500;">Diego Mansilla</div>
+          <div class="mono" style="font-size: 12px; color: #6A7079;">desde prim 25</div>
+        </div>
+        <div><div class="chip" style="background: #F6F7F8; display: inline-flex;">Tercera</div></div>
+        <div style="display: flex; align-items: baseline; gap: 7px;">
+          <span class="mono" style="font-size: 13px; color: #6A7079;">2º</span>
+          <span class="mono" style="font-size: 17px; font-weight: 500;">110</span>
+          <span style="font-size: 13px; color: #6A7079;">puntos</span>
+        </div>
+        <div class="mono" style="font-size: 15px; text-align: right;">28</div>
+        <div style="display: flex; justify-content: flex-end;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#9BA1A9" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></div>
+      </div>
+
+      <div class="fila">
+        <div class="ini">JP</div>
+        <div style="display: flex; flex-direction: column; gap: 2px;">
+          <div style="font-size: 16px; font-weight: 500;">Juan Painemil</div>
+          <div class="mono" style="font-size: 12px; color: #6A7079;">desde pre 26</div>
+        </div>
+        <div><div class="chip" style="background: #F6F7F8; display: inline-flex;">Tercera</div></div>
+        <div style="display: flex; align-items: baseline; gap: 7px;">
+          <span class="mono" style="font-size: 13px; color: #6A7079;">3º</span>
+          <span class="mono" style="font-size: 17px; font-weight: 500;">100</span>
+          <span style="font-size: 13px; color: #6A7079;">puntos</span>
+        </div>
+        <div class="mono" style="font-size: 15px; text-align: right;">9</div>
+        <div style="display: flex; justify-content: flex-end;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#9BA1A9" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></div>
+      </div>
+
+      <div class="fila" style="background: #FAFBFC;">
+        <div class="ini" style="background: #CDF546; color: #0A0B0D;">AH</div>
+        <div style="display: flex; flex-direction: column; gap: 2px;">
+          <div style="display: flex; align-items: center; gap: 9px;">
+            <div style="font-size: 16px; font-weight: 500;">Ariel Huenchul</div>
+            <div class="mono" style="font-size: 11px; background: #CDF546; padding: 2px 7px; border-radius: 999px;">nuevo</div>
+          </div>
+          <div class="mono" style="font-size: 12px; color: #6A7079;">dado de alta hoy</div>
+        </div>
+        <div><div class="chip" style="background: #F6F7F8; display: inline-flex;">Tercera</div></div>
+        <div style="display: flex; align-items: baseline; gap: 7px;">
+          <span class="mono" style="font-size: 17px; font-weight: 500; color: #6A7079;">0</span>
+          <span style="font-size: 13px; color: #6A7079;">puntos</span>
+        </div>
+        <div class="mono" style="font-size: 15px; text-align: right; color: #9BA1A9;">0</div>
+        <div style="display: flex; justify-content: flex-end;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#9BA1A9" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></div>
+      </div>
+
+      <div class="fila">
+        <div class="ini">MS</div>
+        <div style="display: flex; flex-direction: column; gap: 2px;">
+          <div style="font-size: 16px; font-weight: 500;">Marcelo Sanhueza</div>
+          <div class="mono" style="font-size: 12px; color: #6A7079;">desde ver 25/26</div>
+        </div>
+        <div><div class="chip" style="background: #F6F7F8; display: inline-flex;">Tercera</div></div>
+        <div style="display: flex; align-items: baseline; gap: 7px;">
+          <span class="mono" style="font-size: 13px; color: #6A7079;">5º</span>
+          <span class="mono" style="font-size: 17px; font-weight: 500;">85</span>
+          <span style="font-size: 13px; color: #6A7079;">puntos</span>
+        </div>
+        <div class="mono" style="font-size: 15px; text-align: right;">24</div>
+        <div style="display: flex; justify-content: flex-end;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#9BA1A9" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></div>
+      </div>
+
+      <div class="fila">
+        <div class="ini">PR</div>
+        <div style="display: flex; flex-direction: column; gap: 2px;">
+          <div style="font-size: 16px; font-weight: 500;">Pablo Roa</div>
+          <div class="mono" style="font-size: 12px; color: #6A7079;">desde prim 25</div>
+        </div>
+        <div><div class="chip" style="background: #F6F7F8; display: inline-flex;">Tercera</div></div>
+        <div style="display: flex; align-items: baseline; gap: 7px;">
+          <span class="mono" style="font-size: 13px; color: #6A7079;">4º</span>
+          <span class="mono" style="font-size: 17px; font-weight: 500;">95</span>
+          <span style="font-size: 13px; color: #6A7079;">puntos</span>
+        </div>
+        <div class="mono" style="font-size: 15px; text-align: right;">26</div>
+        <div style="display: flex; justify-content: flex-end;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#9BA1A9" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></div>
+      </div>
+
+      <div class="fila" style="opacity: 0.5;">
+        <div class="ini">RM</div>
+        <div style="display: flex; flex-direction: column; gap: 2px;">
+          <div style="display: flex; align-items: center; gap: 9px;">
+            <div style="font-size: 16px; font-weight: 500;">Rubén Marquez</div>
+            <div class="mono" style="font-size: 11px; color: #6A7079; background: #F1F2F4; padding: 2px 7px; border-radius: 999px;">de baja</div>
+          </div>
+          <div class="mono" style="font-size: 12px; color: #6A7079;">no aparece en el ranking</div>
+        </div>
+        <div><div class="chip" style="background: #F6F7F8; display: inline-flex;">Tercera</div></div>
+        <div style="display: flex; align-items: baseline; gap: 7px;">
+          <span class="mono" style="font-size: 17px; font-weight: 500; color: #6A7079;">0</span>
+          <span style="font-size: 13px; color: #6A7079;">puntos</span>
+        </div>
+        <div class="mono" style="font-size: 15px; text-align: right;">4</div>
+        <div style="display: flex; justify-content: flex-end;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#9BA1A9" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></div>
+      </div>
+
+      <div style="padding: 15px 18px; display: flex; align-items: center; justify-content: space-between; gap: 16px; background: #FAFBFC;">
+        <div class="mono" style="font-size: 13px; color: #6A7079;">mostrando 7 de 77</div>
+        <div style="font-size: 14px; font-weight: 500;">Ver todos</div>
+      </div>
+
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+
+      <div style="border: 1px solid #E6E8EB; border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 16px;">
+        <div style="font-size: 17px; font-weight: 600;">Agregar jugador</div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="font-size: 13px; font-weight: 600; color: #6A7079;">Nombre y apellido</div>
+          <div class="campo" style="border: 2px solid #0A0B0D;">Ariel Huenchul</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="font-size: 13px; font-weight: 600; color: #6A7079;">Categoría</div>
+          <div class="campo"><span>Tercera</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6A7079" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"></path></svg></div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="font-size: 13px; font-weight: 600; color: #6A7079;">Teléfono <span style="font-weight: 400;">— opcional</span></div>
+          <div class="campo"><span style="color: #9BA1A9;">Para avisarle cambios de horario</span></div>
+        </div>
+        <div style="background: #F6F7F8; border-radius: 10px; padding: 13px; font-size: 13px; color: #6A7079; line-height: 1.45;">
+          Entra con <span class="mono" style="color: #0A0B0D;">0</span> puntos y sube cuando juegue. Le toma unos cuatro torneos alcanzar a la mayoría.
+        </div>
+        <div style="height: 44px; border-radius: 10px; background: #0A0B0D; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 500;">Agregar al padrón</div>
+      </div>
+
+      <div style="border: 1px solid #E6E8EB; border-radius: 14px; background: #F6F7F8; padding: 18px; display: flex; flex-direction: column; gap: 9px;">
+        <div style="font-size: 14px; font-weight: 600;">¿Son muchos?</div>
+        <div style="font-size: 14px; color: #6A7079; line-height: 1.5;">Subí la planilla que ya usás y se cargan todos de una vez, con sus puntos históricos.</div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SetPoint · Mi zona</title>
+  <!-- Pantalla de referencia: Mi zona · F07, F11 · entrega 50% · 390×920 px -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+    <style>
+      body { margin: 0; font-family: "Instrument Sans", system-ui, "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; }
+      a { color: #0A0B0D; }
+      a:hover { color: #6A7079; }
+      .mono { font-family: "Geist Mono", ui-monospace, "SF Mono", Consolas, monospace; font-variant-numeric: tabular-nums; }
+    </style>
+</head>
+<body>
+<!--
+NOTA DE DISEÑO
+La fase de grupos como matriz de todos contra todos: la fila es lo que hiciste, la columna contra quién.
+
+Verde donde ganaste, gris donde perdiste, punteado donde nadie coordinó. Abajo las posiciones con la línea de corte y el desempate explicado en palabras.
+-->
+
+<div style="width: 390px; min-height: 920px; background: #FFFFFF; color: #0A0B0D; display: flex; flex-direction: column; gap: 18px; padding: 20px 16px 28px 16px;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+    <div style="display: flex; align-items: baseline; gap: 10px;">
+      <div style="font-size: 26px; font-weight: 600; letter-spacing: -0.03em;">Zona C</div>
+      <div class="mono" style="font-size: 13px; color: #6A7079;">4 de 6 jugados</div>
+    </div>
+    <div class="mono" style="font-size: 12px; font-weight: 500; color: #C62A2F; padding: 6px 10px; border: 1px solid #F3D3D4; border-radius: 999px;">6 días</div>
+  </div>
+
+  <div style="border: 1px solid #E6E8EB; border-radius: 14px; overflow: hidden;">
+
+    <div style="display: grid; grid-template-columns: 86px repeat(4, minmax(0, 1fr)); background: #FAFBFC; border-bottom: 1px solid #E6E8EB;">
+      <div style="border-right: 1px solid #E6E8EB;"></div>
+      <div class="mono" style="padding: 9px 4px; font-size: 11px; color: #6A7079; text-align: center;">san</div>
+      <div class="mono" style="padding: 9px 4px; font-size: 11px; color: #6A7079; text-align: center;">bus</div>
+      <div class="mono" style="padding: 9px 4px; font-size: 11px; color: #6A7079; text-align: center;">led</div>
+      <div class="mono" style="padding: 9px 4px; font-size: 11px; color: #6A7079; text-align: center;">fer</div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 86px repeat(4, minmax(0, 1fr)); border-bottom: 1px solid #E6E8EB;">
+      <div style="padding: 0 8px; height: 54px; display: flex; align-items: center; font-size: 13px; font-weight: 600; border-right: 1px solid #E6E8EB;">Sanhueza</div>
+      <div style="height: 54px; background: #F1F2F4;"></div>
+      <div style="height: 54px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; background: #F7FCE7; border-left: 1px solid #E6E8EB;">
+        <div class="mono" style="font-size: 12px; font-weight: 600;">7-6</div>
+        <div class="mono" style="font-size: 12px; font-weight: 600;">7-5</div>
+      </div>
+      <div style="height: 54px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; background: #F7FCE7; border-left: 1px solid #E6E8EB;">
+        <div class="mono" style="font-size: 12px; font-weight: 600;">6-1</div>
+        <div class="mono" style="font-size: 12px; font-weight: 600;">6-3</div>
+      </div>
+      <div style="height: 54px; display: flex; align-items: center; justify-content: center; border-left: 1px solid #E6E8EB;">
+        <div class="mono" style="font-size: 11px; color: #6A7079;">sáb 14</div>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 86px repeat(4, minmax(0, 1fr)); border-bottom: 1px solid #E6E8EB;">
+      <div style="padding: 0 8px; height: 54px; display: flex; align-items: center; font-size: 13px; font-weight: 600; border-right: 1px solid #E6E8EB;">Bustos</div>
+      <div style="height: 54px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;">
+        <div class="mono" style="font-size: 12px; color: #9BA1A9;">6-7</div>
+        <div class="mono" style="font-size: 12px; color: #9BA1A9;">5-7</div>
+      </div>
+      <div style="height: 54px; background: #F1F2F4; border-left: 1px solid #E6E8EB;"></div>
+      <div style="height: 54px; display: flex; align-items: center; justify-content: center; border-left: 1px solid #E6E8EB;">
+        <div style="width: 42px; height: 24px; border: 1px dashed #C9CDD3; border-radius: 5px;"></div>
+      </div>
+      <div style="height: 54px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; background: #F7FCE7; border-left: 1px solid #E6E8EB;">
+        <div class="mono" style="font-size: 12px; font-weight: 600;">6-2</div>
+        <div class="mono" style="font-size: 12px; font-weight: 600;">6-2</div>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 86px repeat(4, minmax(0, 1fr)); border-bottom: 1px solid #E6E8EB;">
+      <div style="padding: 0 8px; height: 54px; display: flex; align-items: center; font-size: 13px; font-weight: 600; border-right: 1px solid #E6E8EB;">Ledesma</div>
+      <div style="height: 54px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;">
+        <div class="mono" style="font-size: 12px; color: #9BA1A9;">1-6</div>
+        <div class="mono" style="font-size: 12px; color: #9BA1A9;">3-6</div>
+      </div>
+      <div style="height: 54px; display: flex; align-items: center; justify-content: center; border-left: 1px solid #E6E8EB;">
+        <div style="width: 42px; height: 24px; border: 1px dashed #C9CDD3; border-radius: 5px;"></div>
+      </div>
+      <div style="height: 54px; background: #F1F2F4; border-left: 1px solid #E6E8EB;"></div>
+      <div style="height: 54px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; background: #F7FCE7; border-left: 1px solid #E6E8EB;">
+        <div class="mono" style="font-size: 12px; font-weight: 600;">6-4</div>
+        <div class="mono" style="font-size: 12px; font-weight: 600;">7-6</div>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 86px repeat(4, minmax(0, 1fr));">
+      <div style="padding: 0 8px; height: 54px; display: flex; align-items: center; font-size: 13px; font-weight: 600; border-right: 1px solid #E6E8EB;">Ferreyra</div>
+      <div style="height: 54px; display: flex; align-items: center; justify-content: center;">
+        <div class="mono" style="font-size: 11px; color: #6A7079;">sáb 14</div>
+      </div>
+      <div style="height: 54px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; border-left: 1px solid #E6E8EB;">
+        <div class="mono" style="font-size: 12px; color: #9BA1A9;">2-6</div>
+        <div class="mono" style="font-size: 12px; color: #9BA1A9;">2-6</div>
+      </div>
+      <div style="height: 54px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; border-left: 1px solid #E6E8EB;">
+        <div class="mono" style="font-size: 12px; color: #9BA1A9;">4-6</div>
+        <div class="mono" style="font-size: 12px; color: #9BA1A9;">6-7</div>
+      </div>
+      <div style="height: 54px; background: #F1F2F4; border-left: 1px solid #E6E8EB;"></div>
+    </div>
+
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+    <div style="display: flex; align-items: center; gap: 7px;">
+      <div style="width: 16px; height: 12px; border-radius: 3px; background: #F7FCE7; border: 1px solid #E1EFBE;"></div>
+      <div style="font-size: 13px; color: #6A7079;">ganó</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 7px;">
+      <div style="width: 16px; height: 12px; border-radius: 3px; border: 1px dashed #C9CDD3;"></div>
+      <div style="font-size: 13px; color: #6A7079;">sin coordinar</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 7px;">
+      <div class="mono" style="font-size: 11px; color: #6A7079;">sáb 14</div>
+      <div style="font-size: 13px; color: #6A7079;">fecha acordada</div>
+    </div>
+  </div>
+
+  <div style="height: 1px; background: #E6E8EB;"></div>
+
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+
+    <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+      <div style="font-size: 20px; font-weight: 600; letter-spacing: -0.02em;">Posiciones</div>
+      <div class="mono" style="font-size: 12px; color: #9BA1A9;">pg · sets · games</div>
+    </div>
+
+    <div style="display: flex; flex-direction: column;">
+
+      <div style="display: grid; grid-template-columns: 22px minmax(0, 1fr) 30px 46px 62px; align-items: center; column-gap: 8px; height: 52px; border-bottom: 1px solid #F1F2F4;">
+        <div class="mono" style="font-size: 13px; color: #6A7079;">1</div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div style="width: 7px; height: 7px; border-radius: 999px; background: #CDF546;"></div>
+          <div style="font-size: 17px; font-weight: 600;">Sanhueza</div>
+        </div>
+        <div class="mono" style="font-size: 14px; font-weight: 600; text-align: center;">2</div>
+        <div class="mono" style="font-size: 13px; color: #6A7079; text-align: center;">4-0</div>
+        <div class="mono" style="font-size: 13px; color: #6A7079; text-align: right;">26-15</div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 22px minmax(0, 1fr) 30px 46px 62px; align-items: center; column-gap: 8px; height: 52px;">
+        <div class="mono" style="font-size: 13px; color: #6A7079;">2</div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div style="width: 7px; height: 7px; border-radius: 999px; background: #CDF546;"></div>
+          <div style="font-size: 17px; font-weight: 600;">Bustos</div>
+        </div>
+        <div class="mono" style="font-size: 14px; font-weight: 600; text-align: center;">1</div>
+        <div class="mono" style="font-size: 13px; color: #6A7079; text-align: center;">2-2</div>
+        <div class="mono" style="font-size: 13px; color: #6A7079; text-align: right;">23-18</div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 10px; padding: 10px 0;">
+        <div style="flex-grow: 1; height: 1px; background: #0A0B0D;"></div>
+        <div class="mono" style="font-size: 11px; color: #0A0B0D;">corte · campeonato arriba</div>
+        <div style="flex-grow: 1; height: 1px; background: #0A0B0D;"></div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 22px minmax(0, 1fr) 30px 46px 62px; align-items: center; column-gap: 8px; height: 52px; border-bottom: 1px solid #F1F2F4;">
+        <div class="mono" style="font-size: 13px; color: #9BA1A9;">3</div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div style="width: 7px; height: 7px; border-radius: 999px; background: #E6E8EB;"></div>
+          <div style="font-size: 17px; font-weight: 500; color: #3F4348;">Ledesma</div>
+        </div>
+        <div class="mono" style="font-size: 14px; font-weight: 600; color: #3F4348; text-align: center;">1</div>
+        <div class="mono" style="font-size: 13px; color: #9BA1A9; text-align: center;">2-2</div>
+        <div class="mono" style="font-size: 13px; color: #9BA1A9; text-align: right;">17-22</div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 22px minmax(0, 1fr) 30px 46px 62px; align-items: center; column-gap: 8px; height: 52px;">
+        <div class="mono" style="font-size: 13px; color: #9BA1A9;">4</div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div style="width: 7px; height: 7px; border-radius: 999px; background: #E6E8EB;"></div>
+          <div style="font-size: 17px; font-weight: 500; color: #3F4348;">Ferreyra</div>
+        </div>
+        <div class="mono" style="font-size: 14px; font-weight: 600; color: #3F4348; text-align: center;">0</div>
+        <div class="mono" style="font-size: 13px; color: #9BA1A9; text-align: center;">0-4</div>
+        <div class="mono" style="font-size: 13px; color: #9BA1A9; text-align: right;">14-25</div>
+      </div>
+
+    </div>
+
+    <div style="font-size: 14px; line-height: 1.45; color: #6A7079;">Bustos y Ledesma están igualados en partidos y sets. Desempata games ganados: 23 contra 17.</div>
+
+  </div>
+
+</div>
+</body>
+</html>

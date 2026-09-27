@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SetPoint · Importar padrón</title>
+  <!-- Pantalla de referencia: Importar padrón · F03 · entrega 25% · 1280×900 px -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+    <style>
+      body { margin: 0; font-family: "Instrument Sans", system-ui, "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; }
+      a { color: #0A0B0D; }
+      a:hover { color: #6A7079; }
+      .mono { font-family: "Geist Mono", ui-monospace, "SF Mono", Consolas, monospace; font-variant-numeric: tabular-nums; }
+      .col { display: grid; grid-template-columns: 210px 230px minmax(0, 1fr) 150px; align-items: center; column-gap: 16px; }
+    </style>
+</head>
+<body>
+<!--
+NOTA DE DISEÑO
+Nuevo · importación del padrón desde el Excel que ya usan.
+
+La pantalla no es la carga: es la revisión. Arriba, qué va a pasar en números. Después, cómo interpretó las columnas, incluida la que se llamaba "ETAPA INVIERNO 26".
+
+Lo importante es la fila en rojo: cuando hay dos jugadores parecidos, el sistema no elige. Muestra los dos con partidos y antigüedad, y decide la organización. Nada se guarda hasta confirmar.
+-->
+
+<div style="width: 1280px; min-height: 900px; background: #FFFFFF; color: #0A0B0D; display: flex; flex-direction: column;">
+
+  <div style="background: #0A0B0D; height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 28px;">
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <div style="display: flex; align-items: center; gap: 9px;">
+        <div style="width: 24px; height: 24px; border-radius: 7px; background: #CDF546; display: flex; align-items: center; justify-content: center;">
+          <div style="width: 8px; height: 8px; border-radius: 999px; background: #0A0B0D;"></div>
+        </div>
+        <div style="font-size: 16px; font-weight: 600; color: #FFFFFF; letter-spacing: -0.02em;">SetPoint</div>
+      </div>
+      <div style="width: 1px; height: 18px; background: #2C3037;"></div>
+      <div style="font-size: 14px; color: #9BA1A9;">Polenta Team Tenis</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 8px; background: #1B1E23; font-size: 14px; font-weight: 600; color: #FFFFFF;">Padrón</div>
+      <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 8px; font-size: 14px; color: #9BA1A9;">Torneos</div>
+      <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 8px; font-size: 14px; color: #9BA1A9;">Tablero</div>
+    </div>
+  </div>
+
+  <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding: 26px 28px 20px 28px;">
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div style="font-size: 30px; font-weight: 600; letter-spacing: -0.035em;">Revisá la importación</div>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6A7079" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6z"></path><path d="M14 3v4h4"></path></svg>
+        <div class="mono" style="font-size: 14px; color: #6A7079;">Ranking Tercera 2026.xlsx · 26 filas leídas</div>
+      </div>
+    </div>
+    <div style="height: 40px; padding: 0 16px; display: flex; align-items: center; border-radius: 10px; border: 1px solid #E6E8EB; font-size: 14px; font-weight: 500;">Subir otro archivo</div>
+  </div>
+
+  <div style="padding: 0 28px 20px 28px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px;">
+    <div style="border: 1px solid #E6E8EB; border-radius: 14px; padding: 16px 18px; display: flex; align-items: baseline; gap: 12px;">
+      <div class="mono" style="font-size: 30px; font-weight: 500; letter-spacing: -0.03em;">22</div>
+      <div style="display: flex; flex-direction: column; gap: 2px;">
+        <div style="font-size: 15px; font-weight: 600;">ya están en el padrón</div>
+        <div style="font-size: 13px; color: #6A7079;">se les actualizan los puntos</div>
+      </div>
+    </div>
+    <div style="border: 1px solid #E6E8EB; border-radius: 14px; padding: 16px 18px; display: flex; align-items: baseline; gap: 12px;">
+      <div class="mono" style="font-size: 30px; font-weight: 500; letter-spacing: -0.03em;">3</div>
+      <div style="display: flex; flex-direction: column; gap: 2px;">
+        <div style="font-size: 15px; font-weight: 600;">son nuevos</div>
+        <div style="font-size: 13px; color: #6A7079;">se dan de alta en Tercera</div>
+      </div>
+    </div>
+    <div style="border: 1px solid #F3D3D4; border-radius: 14px; padding: 16px 18px; display: flex; align-items: baseline; gap: 12px; background: #FEF6F6;">
+      <div class="mono" style="font-size: 30px; font-weight: 500; letter-spacing: -0.03em; color: #C62A2F;">1</div>
+      <div style="display: flex; flex-direction: column; gap: 2px;">
+        <div style="font-size: 15px; font-weight: 600; color: #C62A2F;">necesita que decidas</div>
+        <div style="font-size: 13px; color: #C0656A;">hay dos jugadores parecidos</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 0 28px 20px 28px;">
+    <div style="border: 1px solid #E6E8EB; border-radius: 14px; padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; gap: 20px;">
+      <div style="display: flex; flex-direction: column; gap: 9px;">
+        <div style="font-size: 15px; font-weight: 600;">Las columnas quedaron así</div>
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <div class="mono" style="height: 32px; padding: 0 11px; display: flex; align-items: center; border-radius: 8px; background: #F6F7F8; font-size: 12px; color: #3F4348;">PRIM 25 · Primavera 2025</div>
+          <div class="mono" style="height: 32px; padding: 0 11px; display: flex; align-items: center; border-radius: 8px; background: #F6F7F8; font-size: 12px; color: #3F4348;">VER 25/26 · Verano 2025</div>
+          <div class="mono" style="height: 32px; padding: 0 11px; display: flex; align-items: center; border-radius: 8px; background: #F6F7F8; font-size: 12px; color: #3F4348;">PRETEMP · Pretemporada 2026</div>
+          <div class="mono" style="height: 32px; padding: 0 11px; display: flex; align-items: center; border-radius: 8px; background: #F6F7F8; font-size: 12px; color: #3F4348;">OTOÑO 26 · Otoño 2026</div>
+          <div class="mono" style="height: 32px; padding: 0 11px; display: flex; align-items: center; border-radius: 8px; background: #F6F7F8; font-size: 12px; color: #3F4348;">ETAPA INVIERNO 26 · Invierno 2026</div>
+        </div>
+        <div style="font-size: 13px; color: #6A7079;">Se descartaron 3 filas que no eran jugadores: dos encabezados repetidos y una de totales.</div>
+      </div>
+      <div style="height: 36px; padding: 0 14px; display: flex; align-items: center; border-radius: 9px; border: 1px solid #E6E8EB; font-size: 14px; font-weight: 500;">Cambiar</div>
+    </div>
+  </div>
+
+  <div style="padding: 0 28px 20px 28px;">
+    <div style="border: 1px solid #E6E8EB; border-radius: 14px; overflow: hidden;">
+
+      <div class="col" style="background: #FAFBFC; border-bottom: 1px solid #E6E8EB; height: 42px; padding: 0 18px;">
+        <div class="mono" style="font-size: 11px; color: #6A7079;">como figura en el excel</div>
+        <div class="mono" style="font-size: 11px; color: #6A7079;">jugador del padrón</div>
+        <div class="mono" style="font-size: 11px; color: #6A7079;">casilleros</div>
+        <div class="mono" style="font-size: 11px; color: #6A7079; text-align: right;">qué va a pasar</div>
+      </div>
+
+      <div class="col" style="height: 56px; padding: 0 18px; border-bottom: 1px solid #F1F2F4;">
+        <div class="mono" style="font-size: 14px; color: #3F4348;">QUIROGA, Tomás</div>
+        <div style="font-size: 15px; font-weight: 500;">Tomás Quiroga</div>
+        <div class="mono" style="font-size: 13px; color: #6A7079;">10 · 15 · 50 · 15 · 75 = 165</div>
+        <div style="display: flex; justify-content: flex-end;"><div style="font-size: 14px; color: #6A7079;">Actualizar</div></div>
+      </div>
+
+      <div class="col" style="height: 56px; padding: 0 18px; border-bottom: 1px solid #F1F2F4;">
+        <div class="mono" style="font-size: 14px; color: #3F4348;">D. Mansilla</div>
+        <div style="font-size: 15px; font-weight: 500;">Diego Mansilla</div>
+        <div class="mono" style="font-size: 13px; color: #6A7079;">15 · 10 · 10 · 50 · 25 = 110</div>
+        <div style="display: flex; justify-content: flex-end;"><div style="font-size: 14px; color: #6A7079;">Actualizar</div></div>
+      </div>
+
+      <div class="col" style="height: 56px; padding: 0 18px; border-bottom: 1px solid #F1F2F4;">
+        <div class="mono" style="font-size: 14px; color: #3F4348;">Juan Painemil</div>
+        <div style="font-size: 15px; font-weight: 500;">Juan Painemil</div>
+        <div class="mono" style="font-size: 13px; color: #6A7079;">0 · 0 · 100 · 0 · 0 = 100</div>
+        <div style="display: flex; justify-content: flex-end;"><div style="font-size: 14px; color: #6A7079;">Actualizar</div></div>
+      </div>
+
+      <div class="col" style="height: 56px; padding: 0 18px; border-bottom: 1px solid #F1F2F4;">
+        <div class="mono" style="font-size: 14px; color: #3F4348;">HUENCHUL, Ariel</div>
+        <div style="display: flex; align-items: center; gap: 9px;">
+          <div style="width: 7px; height: 7px; border-radius: 999px; background: #CDF546;"></div>
+          <div style="font-size: 15px; font-weight: 500;">Ariel Huenchul</div>
+        </div>
+        <div class="mono" style="font-size: 13px; color: #6A7079;">0 · 0 · 0 · 10 · 15 = 25</div>
+        <div style="display: flex; justify-content: flex-end;"><div style="font-size: 14px; font-weight: 500;">Dar de alta</div></div>
+      </div>
+
+      <div style="border-bottom: 1px solid #F1F2F4; background: #FEF6F6; padding: 16px 18px; display: flex; flex-direction: column; gap: 13px;">
+        <div class="col">
+          <div class="mono" style="font-size: 14px; color: #3F4348;">M. Sanhueza</div>
+          <div style="font-size: 15px; font-weight: 600; color: #C62A2F;">Hay dos posibles</div>
+          <div class="mono" style="font-size: 13px; color: #6A7079;">0 · 25 · 15 · 25 · 15 = 80</div>
+          <div style="display: flex; justify-content: flex-end;"><div style="font-size: 14px; color: #C62A2F;">Elegí uno</div></div>
+        </div>
+        <div style="display: flex; gap: 12px;">
+          <div style="flex-grow: 1; background: #FFFFFF; border: 2px solid #0A0B0D; border-radius: 12px; padding: 13px 15px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+            <div style="display: flex; flex-direction: column; gap: 3px;">
+              <div style="font-size: 15px; font-weight: 600;">Marcelo Sanhueza</div>
+              <div class="mono" style="font-size: 12px; color: #6A7079;">Tercera · 24 partidos · desde 2023</div>
+            </div>
+            <div style="width: 20px; height: 20px; border-radius: 999px; background: #0A0B0D; display: flex; align-items: center; justify-content: center;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#CDF546" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+            </div>
+          </div>
+          <div style="flex-grow: 1; background: #FFFFFF; border: 1px solid #E6E8EB; border-radius: 12px; padding: 13px 15px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+            <div style="display: flex; flex-direction: column; gap: 3px;">
+              <div style="font-size: 15px; font-weight: 500;">Matías Sanhueza</div>
+              <div class="mono" style="font-size: 12px; color: #6A7079;">Segunda · 8 partidos · desde 2026</div>
+            </div>
+            <div style="width: 20px; height: 20px; border-radius: 999px; border: 1px solid #C9CDD3;"></div>
+          </div>
+          <div style="width: 150px; background: #FFFFFF; border: 1px solid #E6E8EB; border-radius: 12px; padding: 13px 15px; display: flex; align-items: center; justify-content: center;">
+            <div style="font-size: 14px; font-weight: 500; color: #3F4348;">Es otro, darlo de alta</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col" style="height: 56px; padding: 0 18px;">
+        <div class="mono" style="font-size: 14px; color: #3F4348;">Roa Pablo</div>
+        <div style="font-size: 15px; font-weight: 500;">Pablo Roa</div>
+        <div class="mono" style="font-size: 13px; color: #6A7079;">25 · 15 · 15 · 25 · 15 = 95</div>
+        <div style="display: flex; justify-content: flex-end;"><div style="font-size: 14px; color: #6A7079;">Actualizar</div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div style="margin-top: auto; border-top: 1px solid #E6E8EB; padding: 18px 28px; display: flex; align-items: center; justify-content: space-between; gap: 20px;">
+    <div style="display: flex; flex-direction: column; gap: 4px;">
+      <div style="font-size: 15px; font-weight: 600;">Todavía no se guardó nada</div>
+      <div style="font-size: 14px; color: #6A7079;">Podés volver a subir la planilla cada vez que haya altas: se actualiza lo que cambió.</div>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <div style="height: 44px; padding: 0 18px; display: flex; align-items: center; border-radius: 10px; border: 1px solid #E6E8EB; font-size: 15px; font-weight: 500;">Cancelar</div>
+      <div style="height: 44px; padding: 0 20px; display: flex; align-items: center; border-radius: 10px; background: #0A0B0D; color: #FFFFFF; font-size: 15px; font-weight: 600;">Importar 26 jugadores</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

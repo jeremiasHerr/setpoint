@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SetPoint · Cuándo juego</title>
+  <!-- Pantalla de referencia: Cuándo juego · F11 · entrega 50% · 390×844 px -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+    <style>
+      body { margin: 0; font-family: "Instrument Sans", system-ui, "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; }
+      a { color: #0A0B0D; }
+      a:hover { color: #6A7079; }
+      .mono { font-family: "Geist Mono", ui-monospace, "SF Mono", Consolas, monospace; font-variant-numeric: tabular-nums; }
+    </style>
+</head>
+<body>
+<!--
+NOTA DE DISEÑO
+El partido que viene, en negro, ocupando el tercio superior. Abajo, lo que todavía falta coordinar.
+
+El rojo aparece una sola vez y solo por vencimiento.
+-->
+
+<div style="width: 390px; min-height: 844px; background: #FFFFFF; color: #0A0B0D; display: flex; flex-direction: column; gap: 20px; padding: 20px 16px 28px 16px;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+    <div style="display: flex; align-items: center; gap: 9px;">
+      <div style="width: 26px; height: 26px; border-radius: 7px; background: #0A0B0D; display: flex; align-items: center; justify-content: center;">
+        <div style="width: 9px; height: 9px; border-radius: 999px; background: #CDF546;"></div>
+      </div>
+      <div style="font-size: 16px; font-weight: 600; letter-spacing: -0.015em;">Polenta Team Tenis</div>
+    </div>
+    <div class="mono" style="font-size: 12px; font-weight: 500; color: #6A7079; padding: 6px 10px; border: 1px solid #E6E8EB; border-radius: 999px;">Otoño 26</div>
+  </div>
+
+  <div style="background: #0A0B0D; border-radius: 18px; padding: 22px 20px 20px 20px; display: flex; flex-direction: column; gap: 18px;">
+
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+      <div style="font-size: 15px; font-weight: 500; color: #9BA1A9;">Tu próximo partido</div>
+      <div class="mono" style="font-size: 12px; font-weight: 500; color: #CDF546; padding: 5px 9px; border: 1px solid #33383F; border-radius: 999px;">zona C</div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 1px;">
+      <div style="font-size: 34px; font-weight: 600; line-height: 1.06; letter-spacing: -0.032em; color: #FFFFFF;">Marcelo</div>
+      <div style="font-size: 34px; font-weight: 600; line-height: 1.06; letter-spacing: -0.032em; color: #FFFFFF;">Sanhueza</div>
+    </div>
+
+    <div style="height: 1px; background: #23262B;"></div>
+
+    <div style="display: flex; flex-direction: column; gap: 7px;">
+      <div class="mono" style="font-size: 24px; font-weight: 500; color: #CDF546; letter-spacing: -0.01em;">sáb 14 · 10:00</div>
+      <div style="font-size: 17px; color: #9BA1A9;">Club Alta Barda · cancha 3</div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 9px;">
+      <div style="height: 56px; border-radius: 12px; background: #CDF546; color: #0A0B0D; display: flex; align-items: center; justify-content: center; gap: 9px; font-size: 17px; font-weight: 600;">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#0A0B0D" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 11.5a7.5 7.5 0 0 1-11 6.6L4 19.5l1.5-4.6A7.5 7.5 0 1 1 20 11.5z"></path>
+        </svg>
+        <span>Escribirle</span>
+      </div>
+      <div style="height: 56px; border-radius: 12px; border: 1px solid #2C3037; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 500;">Cómo te fue con él</div>
+    </div>
+
+  </div>
+
+  <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 2px;">
+    <div style="font-size: 20px; font-weight: 600; letter-spacing: -0.02em;">Te falta coordinar</div>
+    <div class="mono" style="font-size: 13px; font-weight: 500; color: #6A7079;">1 de 3</div>
+  </div>
+
+  <div style="border: 1px solid #E6E8EB; border-radius: 16px; overflow: hidden;">
+    <div style="height: 4px; background: #E5484D;"></div>
+    <div style="padding: 18px 18px 18px 18px; display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+        <div style="font-size: 22px; font-weight: 600; letter-spacing: -0.025em;">Pablo Roa</div>
+        <div class="mono" style="font-size: 14px; font-weight: 500; color: #C62A2F;">vence en 4 días</div>
+      </div>
+      <div style="font-size: 16px; line-height: 1.4; color: #6A7079;">Todavía nadie anotó la fecha. La puede cargar cualquiera de los dos.</div>
+      <div style="height: 56px; border-radius: 12px; background: #0A0B0D; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600;">Anotar la fecha</div>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; border: 1px solid #E6E8EB; border-radius: 16px; overflow: hidden;">
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 17px 18px; border-bottom: 1px solid #E6E8EB;">
+      <div style="font-size: 18px; font-weight: 500;">Nicolás Vera</div>
+      <div class="mono" style="font-size: 14px; color: #6A7079;">mié 11 · 20:30</div>
+    </div>
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 17px 18px;">
+      <div style="display: flex; align-items: center; gap: 9px;">
+        <div style="width: 7px; height: 7px; border-radius: 999px; background: #CDF546;"></div>
+        <div style="font-size: 18px; font-weight: 500;">Andrés Sosa</div>
+      </div>
+      <div class="mono" style="font-size: 14px; font-weight: 500;">6-3 4-6 10-7</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

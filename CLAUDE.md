@@ -21,6 +21,15 @@ El resto de los documentos (`01-vision`, `03-flujo-organizacion`, `04-flujo-juga
 - Escribir *por qué* se tomó una decisión, no solo *qué* se decidió. Sirve para la defensa y evita rediscutir.
 - Los documentos van en español. El código, en inglés.
 
+## Trabajo de frontend
+
+- Las pantallas de referencia están en `docs/pantallas/`, una por archivo. El sistema visual, en `docs/design.md`.
+- **Implementá solo la pantalla que se pide.** No crees otras pantallas, rutas ni componentes "por las dudas", aunque sean del mismo flujo. El equipo trabaja una pantalla por PR y tiene que poder explicar cada archivo.
+- **Antes de escribir código, proponé un plan**: qué componentes, dónde va cada archivo, qué se reutiliza. Esperá la aprobación.
+- Los HTML de referencia son **visuales**: tienen estilos en línea y datos fijos. No se copian tal cual; se reescriben en React con los tokens y los componentes del proyecto.
+- Colores y tipografías siempre desde los tokens de `design.md`. Nunca hex sueltos en un componente.
+- Los números van en Geist Mono con `tabular-nums`. Toda la interfaz en español rioplatense, en sentence case.
+
 ## Restricciones de la cátedra
 
 - La app móvil instalable (APK) es **obligatoria**: el grupo es de 3. No vale una web responsive.

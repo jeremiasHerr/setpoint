@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SetPoint · Cuenta e ingreso</title>
+  <!-- Pantalla de referencia: Cuenta e ingreso · F02, F12 · entrega 75% · 870×880 px -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+    <style>
+      body { margin: 0; font-family: "Instrument Sans", system-ui, "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; }
+      a { color: #0A0B0D; }
+      a:hover { color: #6A7079; }
+      .mono { font-family: "Geist Mono", ui-monospace, "SF Mono", Consolas, monospace; font-variant-numeric: tabular-nums; }
+    </style>
+</head>
+<body>
+<!--
+NOTA DE DISEÑO
+Nuevo · cuenta e ingreso.
+
+A la izquierda, la creación de contraseña después de pagar: muestra a qué ficha del padrón te está vinculando, con partidos y puntos, para que el jugador confirme que es él. Esa vinculación la organización la puede revertir después.
+
+A la derecha, el ingreso. No hay botón de registrarse para jugadores, y es a propósito: las cuentas de jugador nacen al inscribirse a un torneo. La pantalla lo dice en lugar de esconderlo.
+-->
+
+<div style="width: 870px; min-height: 880px; background: #F6F7F8; color: #0A0B0D; display: flex; gap: 30px; padding: 30px;">
+
+  <div style="display: flex; flex-direction: column; gap: 12px;">
+    <div style="font-size: 15px; font-weight: 600;">Crear la cuenta, después de pagar</div>
+    <div style="width: 390px; height: 786px; background: #FFFFFF; border: 1px solid #E6E8EB; border-radius: 20px; display: flex; flex-direction: column; gap: 20px; padding: 24px 18px;">
+
+      <div style="display: flex; align-items: center; gap: 9px;">
+        <div style="width: 26px; height: 26px; border-radius: 7px; background: #0A0B0D; display: flex; align-items: center; justify-content: center;">
+          <div style="width: 9px; height: 9px; border-radius: 999px; background: #CDF546;"></div>
+        </div>
+        <div style="font-size: 15px; font-weight: 600;">Polenta Team Tenis</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <div style="font-size: 28px; font-weight: 600; letter-spacing: -0.032em; line-height: 1.12;">Elegí tu contraseña</div>
+        <div style="font-size: 16px; line-height: 1.45; color: #6A7079;">Es lo único que falta para poder anotar tus fechas desde el teléfono.</div>
+      </div>
+
+      <div style="border: 1px solid #E6E8EB; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 11px;">
+        <div style="display: flex; align-items: center; gap: 9px;">
+          <div style="width: 7px; height: 7px; border-radius: 999px; background: #CDF546;"></div>
+          <div style="font-size: 14px; font-weight: 600; color: #3F4348;">Te encontramos en el padrón</div>
+        </div>
+        <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+          <div style="font-size: 20px; font-weight: 600; letter-spacing: -0.025em;">Lucas Bravo</div>
+          <div class="mono" style="font-size: 14px; color: #6A7079;">Tercera</div>
+        </div>
+        <div class="mono" style="font-size: 14px; color: #6A7079;">95 puntos · 4º · desde 2024</div>
+        <div style="font-size: 14px; line-height: 1.42; color: #6A7079;">Al crear la cuenta recuperás tu historial y tus puntos. Si no sos vos, avisale a la organización.</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 11px;">
+        <div style="font-size: 15px; font-weight: 600;">Tu email</div>
+        <div style="height: 56px; border-radius: 12px; border: 1px solid #C9CDD3; display: flex; align-items: center; padding: 0 16px;">
+          <div style="font-size: 17px; color: #3F4348;">lucas.bravo@gmail.com</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 11px;">
+        <div style="font-size: 15px; font-weight: 600;">Tu contraseña</div>
+        <div style="height: 56px; border-radius: 12px; border: 2px solid #0A0B0D; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 16px;">
+          <div class="mono" style="font-size: 19px; letter-spacing: 0.16em;">••••••••••</div>
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#6A7079" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        </div>
+        <div style="display: flex; align-items: center; gap: 9px;">
+          <div style="display: flex; gap: 3px; flex-grow: 1;">
+            <div style="flex-grow: 1; height: 4px; border-radius: 2px; background: #CDF546;"></div>
+            <div style="flex-grow: 1; height: 4px; border-radius: 2px; background: #CDF546;"></div>
+            <div style="flex-grow: 1; height: 4px; border-radius: 2px; background: #CDF546;"></div>
+            <div style="flex-grow: 1; height: 4px; border-radius: 2px; background: #E6E8EB;"></div>
+          </div>
+          <div class="mono" style="font-size: 12px; color: #6A7079;">buena</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px; margin-top: auto;">
+        <div style="height: 56px; border-radius: 12px; background: #CDF546; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600;">Crear mi cuenta</div>
+        <div style="font-size: 14px; line-height: 1.42; color: #6A7079; text-align: center;">Tu inscripción ya está confirmada. La cuenta es opcional.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 12px;">
+    <div style="font-size: 15px; font-weight: 600;">Volver a entrar</div>
+    <div style="width: 390px; height: 786px; background: #FFFFFF; border: 1px solid #E6E8EB; border-radius: 20px; display: flex; flex-direction: column; gap: 20px; padding: 24px 18px;">
+
+      <div style="display: flex; align-items: center; gap: 9px;">
+        <div style="width: 26px; height: 26px; border-radius: 7px; background: #0A0B0D; display: flex; align-items: center; justify-content: center;">
+          <div style="width: 9px; height: 9px; border-radius: 999px; background: #CDF546;"></div>
+        </div>
+        <div style="font-size: 15px; font-weight: 600;">SetPoint</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 8px; padding-top: 8px;">
+        <div style="font-size: 28px; font-weight: 600; letter-spacing: -0.032em; line-height: 1.12;">Ingresar</div>
+        <div style="font-size: 16px; color: #6A7079;">Para jugadores y para organizaciones.</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 11px;">
+        <div style="font-size: 15px; font-weight: 600;">Email</div>
+        <div style="height: 56px; border-radius: 12px; border: 1px solid #C9CDD3; display: flex; align-items: center; padding: 0 16px;">
+          <div style="font-size: 17px; color: #9BA1A9;">tu@email.com</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 11px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+          <div style="font-size: 15px; font-weight: 600;">Contraseña</div>
+          <div style="font-size: 14px; color: #6A7079;">No me acuerdo</div>
+        </div>
+        <div style="height: 56px; border-radius: 12px; border: 1px solid #C9CDD3; display: flex; align-items: center; padding: 0 16px;">
+          <div class="mono" style="font-size: 19px; letter-spacing: 0.16em; color: #C9CDD3;">••••••••</div>
+        </div>
+      </div>
+
+      <div style="height: 56px; border-radius: 12px; background: #0A0B0D; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600;">Ingresar</div>
+
+      <div style="display: flex; align-items: center; gap: 14px; padding: 6px 0;">
+        <div style="flex-grow: 1; height: 1px; background: #E6E8EB;"></div>
+        <div class="mono" style="font-size: 12px; color: #9BA1A9;">o</div>
+        <div style="flex-grow: 1; height: 1px; background: #E6E8EB;"></div>
+      </div>
+
+      <div style="border: 1px solid #E6E8EB; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 10px;">
+        <div style="font-size: 16px; font-weight: 600;">¿Todavía no tenés cuenta?</div>
+        <div style="font-size: 15px; line-height: 1.45; color: #6A7079;">Las cuentas de jugador se crean al inscribirse a un torneo, no antes. Pedile el link a tu organización.</div>
+        <div style="height: 48px; border-radius: 11px; border: 1px solid #E6E8EB; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 500;">Ver torneos abiertos</div>
+      </div>
+
+      <div style="margin-top: auto; display: flex; flex-direction: column; gap: 10px;">
+        <div style="height: 52px; border-radius: 12px; border: 1px solid #E6E8EB; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 500;">Registrar una organización</div>
+        <div style="font-size: 14px; line-height: 1.42; color: #6A7079; text-align: center;">Mirar el ranking, las zonas y los cuadros no necesita cuenta.</div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
