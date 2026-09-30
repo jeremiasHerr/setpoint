@@ -1,6 +1,9 @@
-import { FormularioRegistro } from '../components/acceso/FormularioRegistro';
+import { Link } from 'react-router-dom';
+import { FormularioRegistro, type ErroresRegistro } from '../components/acceso/FormularioRegistro';
 import { PantallaAcceso } from '../components/acceso/PantallaAcceso';
 import { Tarjeta } from '../components/Tarjeta';
+import { ErrorApi } from '../features/auth/api';
+import { useRegistro } from '../features/auth/useRegistro';
 
 const pasos = [
   { titulo: 'Elegís cómo arrancar', detalle: 'Un torneo suelto o un circuito con ranking' },
@@ -19,11 +22,44 @@ const ayudas = [
   },
 ];
 
+function erroresDe(error: Error | null): ErroresRegistro {
+  if (!error) return {};
+  if (!(error instanceof ErrorApi)) return { general: 'Algo salió mal. Probá de nuevo.' };
+
+  switch (error.codigo) {
+    case 'DATOS_INVALIDOS':
+      return { campos: error.campos };
+    case 'EMAIL_EN_USO':
+      return {
+        campos: {
+          email: (
+            <>
+              Ya hay una cuenta con este email.{' '}
+              <Link to="/ingresar" className="font-medium text-negro underline hover:text-gris-500">
+                Ingresá
+              </Link>
+            </>
+          ),
+        },
+      };
+    case 'SIN_CONEXION':
+      return { general: 'No pudimos conectarnos. Revisá tu conexión y probá de nuevo.' };
+    default:
+      return { general: 'No pudimos crear la organización. Probá de nuevo en unos minutos.' };
+  }
+}
+
 export function RegistroPage() {
+  const registro = useRegistro();
+
   return (
     <PantallaAcceso pregunta="¿Ya tenés cuenta?" enlace={{ texto: 'Ingresar', a: '/ingresar' }}>
       <div className="mx-auto grid max-w-[814px] items-start gap-5 md:grid-cols-[minmax(0,1fr)_300px]">
-        <FormularioRegistro />
+        <FormularioRegistro
+          alEnviar={(datos) => registro.mutate(datos)}
+          enviando={registro.isPending}
+          errores={erroresDe(registro.error)}
+        />
 
         <aside className="flex flex-col gap-4">
           <Tarjeta variante="negra" className="flex flex-col gap-[15px] p-5">

@@ -1,0 +1,11 @@
+{
+  "name": "@setpoint/shared",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Schemas de Zod y tipos compartidos entre la API, la web y la app móvil.",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "dependencies": {
+    "zod": "^4.6.5"
+  }
+}

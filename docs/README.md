@@ -70,6 +70,7 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 | 10 | ¿Se implementan las **proyecciones pre-torneo** sugeridas por la cátedra? ("si llegás a semis sumás 50 y pasás al puesto 4") | Alcance | **Decidir en grupo** |
 | 11 | **Política de devolución:** ¿POLENTA devuelve el dinero si alguien se baja después de pagar? ¿Cambia si ya se hizo el sorteo? | Estados de inscripción | Consultar |
 | 12 | ¿Los jugadores pueden cargar resultados con confirmación del rival, o la carga es exclusiva de la organización? Está parametrizado como `quien_carga_resultados` | Permisos | **Decidir en grupo** |
+| 13 | **Dónde guarda la web el token de sesión.** Hoy va en `localStorage` (`apps/web/src/features/auth/sesion.ts`): es lo más simple y alcanza para el TP, pero un script inyectado por XSS podría leerlo. La alternativa es una cookie `httpOnly`, que JavaScript no puede leer, pero obliga a configurar CORS con credenciales y protección CSRF, y no sirve para la app móvil, que guardará el token en el almacenamiento seguro del dispositivo | Nada por ahora | Revisar antes de un deploy público |
 
 > **El schema ya no está bloqueado.** Ninguna de las decisiones abiertas cambia las tablas: son valores de configuración, datos del seed o lógica de negocio.
 

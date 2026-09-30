@@ -28,6 +28,8 @@ Se definen una vez, al dar de alta el circuito.
 | `sí` | Requiere definir etapas y tabla de puntos. Los torneos otorgan puntos y el sorteo se siembra por ranking |
 | `no` | No hace falta configurar etapas ni tabla de puntos. Cada torneo produce sus **posiciones finales** y no acumula. La siembra del sorteo es manual o aleatoria. **Las categorías se siguen usando**: todo torneo se juega en una categoría, tenga o no ranking |
 
+**Al registrarse, toda organización arranca con `usa_ranking: no`**, aunque el default de la columna en el schema sea `true`. Lo fija el endpoint de alta. El motivo: con el ranking encendido, habría que configurar etapas y tabla de puntos antes del primer torneo, y la promesa es "empezá con un torneo suelto, sin configurar nada".
+
 **Por qué las categorías no dependen de `usa_ranking`.** Un torneo suelto también divide a sus jugadores por nivel, y en el schema `Torneo.categoria_id` es obligatorio mientras que `Torneo.etapa_id` es opcional. Por eso en la pantalla *Tu circuito* las categorías van en una sección propia, y apagar el ranking solo oculta las etapas y la tabla de puntos.
 
 **Apagar el ranking no borra nada.** Las etapas y los puntos ya cargados quedan guardados y vuelven al reactivarlo. Es lo que permite empezar con un torneo suelto y activar el ranking más adelante sin rehacer la configuración.

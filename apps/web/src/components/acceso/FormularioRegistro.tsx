@@ -1,18 +1,21 @@
-import { useState, type FormEvent } from 'react';
+import { useState, type FormEvent, type ReactNode } from 'react';
+import type { DatosRegistroOrganizacion } from '@setpoint/shared';
 import { Boton } from '../Boton';
 import { Campo } from '../Campo';
 import { CampoContrasena } from '../CampoContrasena';
 import { Tarjeta } from '../Tarjeta';
 
-export type DatosRegistro = {
-  organizacion: string;
-  nombre: string;
-  email: string;
-  contrasena: string;
+export type DatosRegistro = DatosRegistroOrganizacion;
+
+export type ErroresRegistro = {
+  campos?: Partial<Record<keyof DatosRegistro, ReactNode>>;
+  general?: string;
 };
 
 type Props = {
   alEnviar?: (datos: DatosRegistro) => void;
+  enviando?: boolean;
+  errores?: ErroresRegistro;
 };
 
 const LARGO_MINIMO_CONTRASENA = 8;
@@ -27,7 +30,18 @@ function aSlug(texto: string) {
     .replace(/^-+|-+$/g, '');
 }
 
-export function FormularioRegistro({ alEnviar }: Props) {
+function MensajeError({ id, children }: { id: string; children?: ReactNode }) {
+  if (!children) return null;
+  return (
+    <p id={id} className="text-[13px] text-rojo-texto">
+      {children}
+    </p>
+  );
+}
+
+export function FormularioRegistro({ alEnviar, enviando = false, errores = {} }: Props) {
+  const campos = errores.campos ?? {};
+
   const [datos, setDatos] = useState<DatosRegistro>({ organizacion: '', nombre: '', email: '', contrasena: '' });
 
   function cambiar(campo: keyof DatosRegistro, valor: string) {
@@ -58,30 +72,43 @@ export function FormularioRegistro({ alEnviar }: Props) {
               required
               value={datos.organizacion}
               onChange={(e) => cambiar('organizacion', e.target.value)}
+              aria-invalid={campos.organizacion ? true : undefined}
+              aria-describedby={campos.organizacion ? 'registro-organizacion-error' : undefined}
             />
+            <MensajeError id="registro-organizacion-error">{campos.organizacion}</MensajeError>
             <p className="font-mono text-xs text-gris-500 tabular-nums">
               setpoint.com.ar/{aSlug(datos.organizacion) || 'tu-circuito'} · así lo van a ver los jugadores
             </p>
           </div>
 
           <div className="grid gap-3.5 sm:grid-cols-2">
-            <Campo
-              id="registro-nombre"
-              rotulo="Tu nombre"
-              autoComplete="name"
-              required
-              value={datos.nombre}
-              onChange={(e) => cambiar('nombre', e.target.value)}
-            />
-            <Campo
-              id="registro-email"
-              rotulo="Tu email"
-              type="email"
-              autoComplete="email"
-              required
-              value={datos.email}
-              onChange={(e) => cambiar('email', e.target.value)}
-            />
+            <div className="flex flex-col gap-2">
+              <Campo
+                id="registro-nombre"
+                rotulo="Tu nombre"
+                autoComplete="name"
+                required
+                value={datos.nombre}
+                onChange={(e) => cambiar('nombre', e.target.value)}
+                aria-invalid={campos.nombre ? true : undefined}
+                aria-describedby={campos.nombre ? 'registro-nombre-error' : undefined}
+              />
+              <MensajeError id="registro-nombre-error">{campos.nombre}</MensajeError>
+            </div>
+            <div className="flex flex-col gap-2">
+              <Campo
+                id="registro-email"
+                rotulo="Tu email"
+                type="email"
+                autoComplete="email"
+                required
+                value={datos.email}
+                onChange={(e) => cambiar('email', e.target.value)}
+                aria-invalid={campos.email ? true : undefined}
+                aria-describedby={campos.email ? 'registro-email-error' : undefined}
+              />
+              <MensajeError id="registro-email-error">{campos.email}</MensajeError>
+            </div>
           </div>
 
           <div className="flex flex-col gap-2">
@@ -93,7 +120,10 @@ export function FormularioRegistro({ alEnviar }: Props) {
               minLength={LARGO_MINIMO_CONTRASENA}
               value={datos.contrasena}
               onChange={(e) => cambiar('contrasena', e.target.value)}
+              aria-invalid={campos.contrasena ? true : undefined}
+              aria-describedby={campos.contrasena ? 'registro-contrasena-error' : undefined}
             />
+            <MensajeError id="registro-contrasena-error">{campos.contrasena}</MensajeError>
             <p className="text-xs text-gris-500">
               Al menos <span className="font-mono tabular-nums">{LARGO_MINIMO_CONTRASENA}</span> caracteres.
             </p>
@@ -101,8 +131,13 @@ export function FormularioRegistro({ alEnviar }: Props) {
         </div>
 
         <div className="flex flex-col gap-[11px]">
-          <Boton type="submit" variante="organizador" grande className="w-full">
-            Crear la organización
+          {errores.general && (
+            <p role="alert" className="rounded-control border border-rojo-linea bg-rojo-fondo px-3.5 py-2.5 text-sm text-rojo-texto">
+              {errores.general}
+            </p>
+          )}
+          <Boton type="submit" variante="organizador" grande className="w-full" disabled={enviando}>
+            {enviando ? 'Creando la organización…' : 'Crear la organización'}
           </Boton>
           <p className="text-center text-[13px] leading-[1.45] text-gris-500">Al continuar aceptás los términos del servicio.</p>
         </div>
