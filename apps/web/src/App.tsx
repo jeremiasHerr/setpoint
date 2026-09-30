@@ -3,6 +3,7 @@ import { Catalogo } from './Catalogo';
 import { IngresoPage } from './pages/IngresoPage';
 import { RecuperarContrasenaPage } from './pages/RecuperarContrasenaPage';
 import { RegistroPage } from './pages/RegistroPage';
+import { TuCircuitoPage } from './pages/TuCircuitoPage';
 
 export default function App() {
   return (
@@ -11,6 +12,7 @@ export default function App() {
       <Route path="/ingresar" element={<IngresoPage />} />
       <Route path="/registro" element={<RegistroPage />} />
       <Route path="/recuperar-contrasena" element={<RecuperarContrasenaPage />} />
+      <Route path="/circuito" element={<TuCircuitoPage />} />
     </Routes>
   );
 }
