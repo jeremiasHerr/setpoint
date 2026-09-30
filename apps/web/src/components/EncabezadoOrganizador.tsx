@@ -1,3 +1,5 @@
+import { Logo } from './Logo';
+
 type ItemNavegacion = {
   etiqueta: string;
   href: string;
@@ -13,12 +15,7 @@ export function EncabezadoOrganizador({ organizacion, navegacion, activo }: Prop
   return (
     <header className="flex h-[60px] items-center justify-between gap-6 bg-negro px-7">
       <div className="flex items-center gap-3.5">
-        <div className="flex items-center gap-[9px]">
-          <div className="flex size-6 items-center justify-center rounded-[7px] bg-lima">
-            <div className="size-2 rounded-full bg-negro" />
-          </div>
-          <span className="text-base font-semibold tracking-[-0.02em] text-white">SetPoint</span>
-        </div>
+        <Logo sobreNegro />
         <div className="h-[18px] w-px bg-borde-oscuro" />
         <span className="text-sm text-gris-400">{organizacion}</span>
       </div>

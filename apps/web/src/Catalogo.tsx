@@ -1,4 +1,5 @@
 import { useState, type ReactNode } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Boton } from './components/Boton';
 import { Campo } from './components/Campo';
 import { Chip } from './components/Chip';
@@ -25,6 +26,7 @@ function Seccion({ titulo, children }: { titulo: string; children: ReactNode }) 
 
 export function Catalogo() {
   const [categoria, setCategoria] = useState('Todas');
+  const navegar = useNavigate();
 
   return (
     <div className="min-h-screen bg-white">
@@ -35,6 +37,16 @@ export function Catalogo() {
           <h1 className="text-3xl font-semibold tracking-[-0.035em]">Componentes</h1>
           <p className="text-[15px] text-gris-500">La base compartida de la web. Todo sale de los tokens de design.md.</p>
         </div>
+
+        <Seccion titulo="acceso">
+          <div className="flex flex-wrap items-center gap-3">
+            <Boton variante="organizador" onClick={() => navegar('/ingresar')}>
+              Ingresar
+            </Boton>
+            <Boton onClick={() => navegar('/registro')}>Registrar organización</Boton>
+            <Boton onClick={() => navegar('/recuperar-contrasena')}>Recuperar contraseña</Boton>
+          </div>
+        </Seccion>
 
         <Seccion titulo="boton">
           <div className="flex flex-wrap items-center gap-3">

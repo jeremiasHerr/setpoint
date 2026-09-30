@@ -10,13 +10,14 @@ const estilos: Record<Variante, string> = {
 
 type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   variante?: Variante;
+  grande?: boolean;
 };
 
-export function Boton({ variante = 'secundario', type = 'button', className = '', ...props }: Props) {
+export function Boton({ variante = 'secundario', grande = false, type = 'button', className = '', ...props }: Props) {
   return (
     <button
       type={type}
-      className={`inline-flex h-10 items-center justify-center gap-2 rounded-control px-4 text-[15px] font-medium disabled:opacity-40 ${estilos[variante]} ${className}`}
+      className={`inline-flex ${grande ? 'h-12' : 'h-10'} items-center justify-center gap-2 rounded-control px-4 text-[15px] font-medium disabled:opacity-40 ${estilos[variante]} ${className}`}
       {...props}
     />
   );
