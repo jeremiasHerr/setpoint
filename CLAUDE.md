@@ -4,6 +4,16 @@ Trabajo Final de la Tecnicatura Universitaria en Desarrollo Web (UNCo FaI). Grup
 
 Cliente de validación real: **POLENTA Team Tenis**, circuito amateur de Neuquén.
 
+## Decisiones de arquitectura
+
+- Cuando una tarea implique una decisión de arquitectura o diseño (había otra alternativa razonable y la elección tiene consecuencias), **no la tomes vos**:presentá 2-3 alternativas con sus contras y esperá a que elijamos.
+- Una vez elegida, escribila en `docs/decisiones/NNN-titulo-corto.md` con:
+  contexto, opciones consideradas, decisión, por qué, y qué se resigna.
+- El ADR va en el mismo commit que el código que lo implementa.
+- No documentes detalles de implementación que no sean decisiones.
+- Si una decisión reemplaza a otra, no borres la vieja: marcala como
+  "Reemplazada por NNN".
+
 ## Documentación
 
 El estado del proyecto y las decisiones abiertas están en @docs/README.md
