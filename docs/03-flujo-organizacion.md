@@ -51,7 +51,17 @@ borrador → publicado → inscripciones_cerradas → zonas_generadas
 
 ## 3. Alta de la organización
 
-Registro con email y contraseña. Se configura:
+Registro con email y contraseña (`POST /api/auth/registro`). En una sola transacción se crean:
+
+- La **organización**, con un slug único derivado de su nombre (`polenta`, `polenta-2`, …) y con `usa_ranking` apagado
+- El **usuario administrador**, que guarda el email y la contraseña. La organización no tiene credenciales propias: se accede a ella a través de sus administradores (`AdminOrganizacion`), lo que permite sumar más adelante a otros miembros del comité sin compartir una contraseña
+- El vínculo entre los dos
+
+La respuesta incluye un token de sesión (JWT), así la organización queda ingresada sin pasar por la pantalla de ingreso.
+
+**Por qué arranca sin ranking.** Es la puerta de entrada al producto: se puede publicar un torneo suelto sin configurar nada, y el ranking se activa después ([07-configurabilidad.md](07-configurabilidad.md) §1).
+
+Después del alta, y en cualquier momento, se configura:
 
 - Nombre del circuito y datos de contacto
 - **Categorías propias** (en POLENTA: Segunda y Tercera)
