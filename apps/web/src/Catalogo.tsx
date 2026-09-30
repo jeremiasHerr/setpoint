@@ -48,6 +48,14 @@ export function Catalogo() {
           </div>
         </Seccion>
 
+        <Seccion titulo="organizador">
+          <div className="flex flex-wrap items-center gap-3">
+            <Boton variante="organizador" onClick={() => navegar('/circuito')}>
+              Tu circuito
+            </Boton>
+          </div>
+        </Seccion>
+
         <Seccion titulo="boton">
           <div className="flex flex-wrap items-center gap-3">
             <Boton variante="principal">Pagar la inscripción</Boton>
