@@ -17,6 +17,7 @@ Ordenado por entrega.
 | Entrega | Feature | Pantalla | Superficie | Ancho |
 |---|---|---|---|---|
 | 25% | F01 | [Registrar la organización](organizador/registro.html) | Web organizador | 870 px |
+| 25% | F01 | [Inicio del organizador](organizador/home.html) | Web organizador | 1280 px |
 | 25% | F01 | [Tu circuito](organizador/tu-circuito.html) | Web organizador | 1280 px |
 | 25% | F02 | [Padrón](organizador/padron.html) | Web organizador | 1280 px |
 | 25% | F03 | [Importar padrón](organizador/importar-padron.html) | Web organizador | 1280 px |

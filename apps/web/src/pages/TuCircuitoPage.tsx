@@ -1,10 +1,11 @@
 import type { Circuito } from '@setpoint/shared';
-import { useEffect, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import { Boton } from '../components/Boton';
 import { EncabezadoOrganizador } from '../components/EncabezadoOrganizador';
 import { Tarjeta } from '../components/Tarjeta';
-import { borrarSesion, leerSesion } from '../features/auth/sesion';
+import { leerSesion } from '../features/auth/sesion';
+import { useSesionInvalida } from '../features/auth/useSesionInvalida';
 import { useAutoguardadoCircuito, useCircuito, type EstadoGuardado } from '../features/circuito/useCircuito';
 import { ResumenCircuito } from '../features/circuito/ResumenCircuito';
 import { SeccionCategorias } from '../features/circuito/SeccionCategorias';
@@ -22,9 +23,6 @@ const textoEstado: Record<EstadoGuardado, string> = {
   error: 'no se pudo guardar',
 };
 
-// Errores que significan que esta sesión ya no sirve para esta organización.
-const ERRORES_DE_SESION = ['NO_AUTENTICADO', 'SIN_PERMISO', 'ORGANIZACION_NO_ENCONTRADA'];
-
 export function TuCircuitoPage() {
   const sesion = leerSesion();
   if (!sesion) return <Navigate to="/ingresar" replace />;
@@ -32,16 +30,8 @@ export function TuCircuitoPage() {
 }
 
 function CargarCircuito({ slug }: { slug: string }) {
-  const navegar = useNavigate();
   const { data, error, refetch } = useCircuito(slug);
-  const sesionInvalida = error && ERRORES_DE_SESION.includes(error.message);
-
-  useEffect(() => {
-    if (sesionInvalida) {
-      borrarSesion();
-      navegar('/ingresar', { replace: true });
-    }
-  }, [sesionInvalida, navegar]);
+  const sesionInvalida = useSesionInvalida(error);
 
   if (data) return <EditorCircuito slug={slug} inicial={data} />;
 
