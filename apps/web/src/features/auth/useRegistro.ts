@@ -10,7 +10,7 @@ export function useRegistro() {
     mutationFn: registrarOrganizacion,
     onSuccess: (sesion) => {
       guardarSesion(sesion);
-      navegar('/circuito');
+      navegar('/inicio');
     },
   });
 }
