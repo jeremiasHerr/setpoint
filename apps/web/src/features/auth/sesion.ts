@@ -12,3 +12,20 @@ export function guardarSesion(sesion: Sesion) {
     // Navegación privada o almacenamiento bloqueado: la sesión dura lo que la pestaña.
   }
 }
+
+export function leerSesion(): Sesion | null {
+  try {
+    const sesion = JSON.parse(localStorage.getItem(CLAVE_SESION) ?? 'null');
+    return sesion?.token && sesion?.organizacion?.slug ? sesion : null;
+  } catch {
+    return null;
+  }
+}
+
+export function borrarSesion() {
+  try {
+    localStorage.removeItem(CLAVE_SESION);
+  } catch {
+    // Nada que borrar.
+  }
+}

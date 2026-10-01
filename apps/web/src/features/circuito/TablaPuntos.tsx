@@ -1,5 +1,5 @@
 import { Tarjeta } from '../../components/Tarjeta';
-import { instancias, type Instancia } from './mockCircuito';
+import { instancias, type Instancia } from '@setpoint/shared';
 
 type Props = {
   puntos: Record<Instancia, number>;

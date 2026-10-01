@@ -1,8 +1,11 @@
-import { useState } from 'react';
+import type { Circuito } from '@setpoint/shared';
+import { useEffect, useState } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { Boton } from '../components/Boton';
 import { EncabezadoOrganizador } from '../components/EncabezadoOrganizador';
 import { Tarjeta } from '../components/Tarjeta';
-import { circuitoEjemplo, jugadoresEnPadronEjemplo, type ConfiguracionCircuito } from '../features/circuito/mockCircuito';
+import { borrarSesion, leerSesion } from '../features/auth/sesion';
+import { useAutoguardadoCircuito, useCircuito, type EstadoGuardado } from '../features/circuito/useCircuito';
 import { ResumenCircuito } from '../features/circuito/ResumenCircuito';
 import { SeccionCategorias } from '../features/circuito/SeccionCategorias';
 import { SeccionClubes } from '../features/circuito/SeccionClubes';
@@ -10,10 +13,62 @@ import { SeccionQuienesSon } from '../features/circuito/SeccionQuienesSon';
 import { SeccionRanking } from '../features/circuito/SeccionRanking';
 import { TablaPuntos } from '../features/circuito/TablaPuntos';
 
-export function TuCircuitoPage() {
-  const [circuito, setCircuito] = useState<ConfiguracionCircuito>(circuitoEjemplo);
+const textoEstado: Record<EstadoGuardado, string> = {
+  'sin-cambios': 'configuración · se guarda solo',
+  pendiente: 'guardando…',
+  guardando: 'guardando…',
+  guardado: 'guardado',
+  incompleto: 'falta el nombre · sin guardar',
+  error: 'no se pudo guardar',
+};
 
-  function cambiar<K extends keyof ConfiguracionCircuito>(campo: K, valor: ConfiguracionCircuito[K]) {
+// Errores que significan que esta sesión ya no sirve para esta organización.
+const ERRORES_DE_SESION = ['NO_AUTENTICADO', 'SIN_PERMISO', 'ORGANIZACION_NO_ENCONTRADA'];
+
+export function TuCircuitoPage() {
+  const sesion = leerSesion();
+  if (!sesion) return <Navigate to="/ingresar" replace />;
+  return <CargarCircuito slug={sesion.organizacion.slug} />;
+}
+
+function CargarCircuito({ slug }: { slug: string }) {
+  const navegar = useNavigate();
+  const { data, error, refetch } = useCircuito(slug);
+  const sesionInvalida = error && ERRORES_DE_SESION.includes(error.message);
+
+  useEffect(() => {
+    if (sesionInvalida) {
+      borrarSesion();
+      navegar('/ingresar', { replace: true });
+    }
+  }, [sesionInvalida, navegar]);
+
+  if (data) return <EditorCircuito slug={slug} inicial={data} />;
+
+  return (
+    <div className="min-h-screen bg-white text-negro">
+      <EncabezadoOrganizador organizacion="Tu circuito" />
+      <div className="flex flex-col items-start gap-3 px-7 pt-[26px]">
+        {error && !sesionInvalida ? (
+          <>
+            <p className="text-[15px] text-gris-500">No pudimos cargar tu circuito.</p>
+            <Boton onClick={() => void refetch()}>Probar de nuevo</Boton>
+          </>
+        ) : (
+          <p className="text-[15px] text-gris-500">Cargando tu circuito…</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function EditorCircuito({ slug, inicial }: { slug: string; inicial: Circuito }) {
+  const [circuito, setCircuito] = useState<Circuito>(inicial);
+  // No hay columna para esto todavía: es solo estado de pantalla.
+  const [usaClubes, setUsaClubes] = useState(false);
+  const estadoGuardado = useAutoguardadoCircuito(slug, circuito);
+
+  function cambiar<K extends keyof Circuito>(campo: K, valor: Circuito[K]) {
     setCircuito((anterior) => ({ ...anterior, [campo]: valor }));
   }
 
@@ -22,7 +77,7 @@ export function TuCircuitoPage() {
 
   return (
     <div className="min-h-screen bg-white text-negro">
-      <EncabezadoOrganizador organizacion={circuito.nombre || 'Tu circuito'} estado="configuración · se guarda solo" />
+      <EncabezadoOrganizador organizacion={circuito.nombre || 'Tu circuito'} estado={textoEstado[estadoGuardado]} />
 
       <div className="flex flex-col gap-[7px] px-7 pt-[26px] pb-5">
         <h1 className="text-[30px] font-semibold tracking-[-0.035em]">Tu circuito</h1>
@@ -52,7 +107,7 @@ export function TuCircuitoPage() {
               alCambiar={(instancia, puntos) => cambiar('puntos', { ...circuito.puntos, [instancia]: puntos })}
             />
           )}
-          <SeccionClubes usaClubes={circuito.usaClubes} alCambiar={(valor) => cambiar('usaClubes', valor)} />
+          <SeccionClubes usaClubes={usaClubes} alCambiar={setUsaClubes} />
         </div>
 
         <aside className="flex flex-col gap-4">
@@ -60,7 +115,7 @@ export function TuCircuitoPage() {
             usaRanking={usaRanking}
             categorias={circuito.categorias.length}
             etapas={circuito.etapas.length}
-            jugadores={jugadoresEnPadronEjemplo}
+            jugadores={circuito.jugadores}
           />
 
           {usaRanking && (
@@ -73,7 +128,7 @@ export function TuCircuitoPage() {
             </Tarjeta>
           )}
 
-          {/* Se conectan cuando existan la API y las pantallas de padrón y de nuevo torneo. */}
+          {/* Se conectan cuando existan las pantallas de padrón y de nuevo torneo. */}
           <div className="flex flex-col gap-2.5">
             <Boton variante="organizador" className="w-full">
               Guardar y cargar el padrón

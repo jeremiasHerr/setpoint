@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { FormularioRegistro, type ErroresRegistro } from '../components/acceso/FormularioRegistro';
 import { PantallaAcceso } from '../components/acceso/PantallaAcceso';
 import { Tarjeta } from '../components/Tarjeta';
-import { ErrorApi } from '../features/auth/api';
+import { ErrorApi } from '../lib/api';
 import { useRegistro } from '../features/auth/useRegistro';
 
 const pasos = [
