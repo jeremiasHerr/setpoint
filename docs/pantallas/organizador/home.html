@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SetPoint · Inicio del organizador</title>
+  <!-- Pantalla de referencia: Inicio del organizador · F01 · entrega 25% · 1280 px · dos estados -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+    <style>
+      body { margin: 0; font-family: "Instrument Sans", system-ui, "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; background: #F6F7F8; }
+      a { color: #0A0B0D; }
+      a:hover { color: #6A7079; }
+      .mono { font-family: "Geist Mono", ui-monospace, "SF Mono", Consolas, monospace; font-variant-numeric: tabular-nums; }
+      .rot { font-size: 13px; font-weight: 600; color: #6A7079; }
+      .estado { width: 1280px; padding: 28px 0 12px 0; font-size: 13px; font-weight: 600; color: #6A7079; }
+      .pantalla { width: 1280px; background: #FFFFFF; color: #0A0B0D; display: flex; flex-direction: column; }
+      .nav { height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 8px; font-size: 14px; color: #9BA1A9; }
+      .nav-on { background: #1B1E23; font-weight: 600; color: #FFFFFF; }
+      .btn-neg { height: 44px; padding: 0 18px; border-radius: 10px; background: #0A0B0D; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px; font-weight: 500; }
+      .btn-sec { height: 44px; padding: 0 18px; border-radius: 10px; border: 1px solid #E6E8EB; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 500; }
+      .sec { border: 1px solid #E6E8EB; border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+      .etiqueta { height: 24px; padding: 0 9px; border-radius: 999px; display: inline-flex; align-items: center; font-size: 12px; font-weight: 600; }
+      .barra { height: 6px; border-radius: 999px; background: #F1F2F4; overflow: hidden; }
+      .fila { display: grid; grid-template-columns: minmax(0, 1fr) 150px 190px 90px; align-items: center; gap: 16px; padding: 13px 20px; border-top: 1px solid #F1F2F4; font-size: 15px; }
+    </style>
+</head>
+<body>
+<!--
+NOTA DE DISEÑO
+Inicio · adonde llega el organizador después de registrarse y cada vez que inicia sesión.
+
+El login es uno solo para todos; el rol decide el destino. Esta es la pantalla del administrador de una organización.
+
+Estado 1 · primera vez. No obliga a elegir entre torneo suelto y circuito: el camino principal es crear un torneo, que no pide ninguna configuración previa. El circuito con ranking aparece como segunda opción, explicado en una línea, y sigue disponible desde "Circuito" en la barra.
+
+Estado 2 · con torneos. La misma pantalla, ya con contenido: lo que pide atención arriba a la derecha, los torneos agrupados por momento (en juego, con inscripción abierta, terminados). Cada tarjeta lleva al tablero o a las inscripciones de ese torneo.
+
+Todos los nombres de personas son ficticios.
+-->
+
+<div style="width: 1280px; margin: 0 auto; padding: 0 0 40px 0;">
+
+  <div class="estado">Estado 1 · primera vez, sin torneos</div>
+
+  <div class="pantalla" style="min-height: 720px;">
+
+    <div style="background: #0A0B0D; height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 28px;">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 9px;">
+          <div style="width: 24px; height: 24px; border-radius: 7px; background: #CDF546; display: flex; align-items: center; justify-content: center;">
+            <div style="width: 8px; height: 8px; border-radius: 999px; background: #0A0B0D;"></div>
+          </div>
+          <div style="font-size: 16px; font-weight: 600; color: #FFFFFF; letter-spacing: -0.02em;">SetPoint</div>
+        </div>
+        <div style="width: 1px; height: 18px; background: #2C3037;"></div>
+        <div style="font-size: 14px; color: #9BA1A9;">Liga Amateur del Valle</div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <div class="nav nav-on">Inicio</div>
+        <div class="nav">Padrón</div>
+        <div class="nav">Circuito</div>
+        <div style="width: 12px;"></div>
+        <div style="width: 32px; height: 32px; border-radius: 999px; background: #1B1E23; border: 1px solid #2C3037; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: #FFFFFF;">LG</div>
+      </div>
+    </div>
+
+    <div style="padding: 26px 28px 22px 28px; display: flex; flex-direction: column; gap: 7px;">
+      <div style="font-size: 30px; font-weight: 600; letter-spacing: -0.035em;">Hola, Laura</div>
+      <div style="font-size: 15px; color: #6A7079;">Todavía no tenés torneos. Empezá por uno: no hace falta configurar nada antes.</div>
+    </div>
+
+    <div style="padding: 0 28px 28px 28px; display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 22px; align-items: start;">
+
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+
+        <div style="border: 2px solid #0A0B0D; border-radius: 18px; padding: 28px; display: flex; flex-direction: column; gap: 22px;">
+          <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 20px;">
+            <div style="display: flex; flex-direction: column; gap: 9px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="font-size: 22px; font-weight: 600; letter-spacing: -0.025em;">Crear un torneo</div>
+                <div class="etiqueta" style="background: #CDF546;">Lo más rápido</div>
+              </div>
+              <div style="font-size: 15px; color: #6A7079; line-height: 1.5; max-width: 520px;">Elegís el formato, la fecha y el precio, y compartís el link de inscripción. Al terminar tenés la tabla de posiciones del torneo.</div>
+            </div>
+            <div style="width: 52px; height: 52px; border-radius: 14px; background: #CDF546; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0B0D" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px;">
+            <div style="background: #F6F7F8; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 6px;">
+              <div class="mono" style="font-size: 12px; color: #6A7079;">1</div>
+              <div style="font-size: 14px; font-weight: 600;">Formato</div>
+              <div style="font-size: 13px; color: #6A7079;">Zonas y cuadros, con cuántos jugadores</div>
+            </div>
+            <div style="background: #F6F7F8; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 6px;">
+              <div class="mono" style="font-size: 12px; color: #6A7079;">2</div>
+              <div style="font-size: 14px; font-weight: 600;">Inscripción</div>
+              <div style="font-size: 13px; color: #6A7079;">Precio, cupo y hasta cuándo se anotan</div>
+            </div>
+            <div style="background: #F6F7F8; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 6px;">
+              <div class="mono" style="font-size: 12px; color: #6A7079;">3</div>
+              <div style="font-size: 14px; font-weight: 600;">Link</div>
+              <div style="font-size: 13px; color: #6A7079;">Lo pasás por el grupo y se anotan pagando</div>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <div class="btn-neg">Crear mi primer torneo</div>
+            <div style="font-size: 14px; color: #6A7079;">Te lleva <span class="mono">2 minutos</span></div>
+          </div>
+        </div>
+
+        <div class="sec" style="flex-direction: row; align-items: center; justify-content: space-between; gap: 24px;">
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div style="font-size: 17px; font-weight: 600;">¿Organizás un circuito con ranking anual?</div>
+            <div style="font-size: 14px; color: #6A7079; line-height: 1.5; max-width: 560px;">Cargá tus categorías, etapas y la tabla de puntos. Los torneos van sumando y el ranking se arma solo. Podés hacerlo ahora o después de tu primer torneo.</div>
+          </div>
+          <div class="btn-sec" style="flex-shrink: 0;">Configurar mi circuito</div>
+        </div>
+
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+
+        <div style="background: #0A0B0D; border-radius: 18px; padding: 22px; display: flex; flex-direction: column; gap: 16px;">
+          <div style="font-size: 15px; font-weight: 600; color: #FFFFFF;">Tu organización</div>
+          <div style="display: flex; flex-direction: column; gap: 13px;">
+            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+              <div style="font-size: 14px; color: #9BA1A9;">Torneos</div>
+              <div class="mono" style="font-size: 24px; font-weight: 500; color: #FFFFFF; letter-spacing: -0.02em;">0</div>
+            </div>
+            <div style="height: 1px; background: #2C3037;"></div>
+            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+              <div style="font-size: 14px; color: #9BA1A9;">Jugadores en el padrón</div>
+              <div class="mono" style="font-size: 24px; font-weight: 500; color: #FFFFFF; letter-spacing: -0.02em;">0</div>
+            </div>
+            <div style="height: 1px; background: #2C3037;"></div>
+            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+              <div style="font-size: 14px; color: #9BA1A9;">Ranking anual</div>
+              <div style="font-size: 14px; font-weight: 500; color: #9BA1A9;">sin activar</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="border: 1px solid #E6E8EB; border-radius: 14px; background: #F6F7F8; padding: 18px; display: flex; flex-direction: column; gap: 9px;">
+          <div style="font-size: 14px; font-weight: 600;">¿Ya tenés tus jugadores en un Excel?</div>
+          <div style="font-size: 14px; color: #6A7079; line-height: 1.5;">Subilo y los cargamos al padrón, con sus puntos si los tiene. Revisás todo antes de guardar.</div>
+          <div style="font-size: 14px; font-weight: 500; margin-top: 2px;">Importar padrón →</div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="estado" style="padding-top: 40px;">Estado 2 · con torneos en marcha</div>
+
+  <div class="pantalla" style="min-height: 900px;">
+
+    <div style="background: #0A0B0D; height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 28px;">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 9px;">
+          <div style="width: 24px; height: 24px; border-radius: 7px; background: #CDF546; display: flex; align-items: center; justify-content: center;">
+            <div style="width: 8px; height: 8px; border-radius: 999px; background: #0A0B0D;"></div>
+          </div>
+          <div style="font-size: 16px; font-weight: 600; color: #FFFFFF; letter-spacing: -0.02em;">SetPoint</div>
+        </div>
+        <div style="width: 1px; height: 18px; background: #2C3037;"></div>
+        <div style="font-size: 14px; color: #9BA1A9;">Polenta Team Tenis</div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <div class="nav nav-on">Inicio</div>
+        <div class="nav">Padrón</div>
+        <div class="nav">Ranking</div>
+        <div class="nav">Circuito</div>
+        <div style="width: 12px;"></div>
+        <div style="width: 32px; height: 32px; border-radius: 999px; background: #1B1E23; border: 1px solid #2C3037; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: #FFFFFF;">GH</div>
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding: 26px 28px 22px 28px;">
+      <div style="display: flex; flex-direction: column; gap: 7px;">
+        <div style="font-size: 30px; font-weight: 600; letter-spacing: -0.035em;">Torneos</div>
+        <div style="font-size: 15px; color: #6A7079;">Uno en juego y dos con la inscripción abierta.</div>
+      </div>
+      <div class="btn-neg" style="height: 40px; font-size: 14px; font-weight: 600; padding: 0 16px;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+        Nuevo torneo
+      </div>
+    </div>
+
+    <div style="padding: 0 28px 28px 28px; display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 22px; align-items: start;">
+
+      <div style="display: flex; flex-direction: column; gap: 22px;">
+
+        <div style="display: flex; flex-direction: column; gap: 11px;">
+          <div class="rot">En juego</div>
+          <div style="border: 1px solid #E6E8EB; border-radius: 14px; padding: 20px; display: grid; grid-template-columns: minmax(0, 1fr) 260px 120px; gap: 24px; align-items: center;">
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="font-size: 18px; font-weight: 600; letter-spacing: -0.02em;">Invierno 26 · Segunda</div>
+                <div class="etiqueta" style="background: #0A0B0D; color: #FFFFFF;">Cuadros</div>
+              </div>
+              <div style="font-size: 14px; color: #6A7079;">32 jugadores · cuartos de final hasta el sábado 3</div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div style="display: flex; align-items: baseline; justify-content: space-between;">
+                <div style="font-size: 13px; color: #6A7079;">Partidos jugados</div>
+                <div class="mono" style="font-size: 14px; font-weight: 500;">58 <span style="color: #9BA1A9;">/ 78</span></div>
+              </div>
+              <div class="barra"><div style="width: 74.4%; height: 100%; background: #0A0B0D;"></div></div>
+              <div style="font-size: 13px; color: #C62A2F;"><span class="mono">3</span> vencidos sin resultado</div>
+            </div>
+            <div class="btn-sec" style="height: 40px; font-size: 14px;">Ver tablero</div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 11px;">
+          <div class="rot">Inscripción abierta</div>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px;">
+
+            <div style="border: 1px solid #E6E8EB; border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 16px;">
+              <div style="display: flex; flex-direction: column; gap: 5px;">
+                <div style="font-size: 17px; font-weight: 600; letter-spacing: -0.02em;">Primavera 26 · Tercera</div>
+                <div style="font-size: 14px; color: #6A7079;">Cierra el viernes 9 · sorteo el sábado 10</div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div style="display: flex; align-items: baseline; justify-content: space-between;">
+                  <div style="font-size: 13px; color: #6A7079;">Inscriptos que pagaron</div>
+                  <div class="mono" style="font-size: 14px; font-weight: 500;">24 <span style="color: #9BA1A9;">/ 32</span></div>
+                </div>
+                <div class="barra"><div style="width: 75%; height: 100%; background: #CDF546;"></div></div>
+              </div>
+              <div style="display: flex; gap: 9px;">
+                <div class="btn-sec" style="height: 38px; font-size: 14px; flex-grow: 1;">Inscripciones</div>
+                <div class="btn-sec" style="height: 38px; font-size: 14px; padding: 0 14px;">Copiar link</div>
+              </div>
+            </div>
+
+            <div style="border: 1px solid #E6E8EB; border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 16px;">
+              <div style="display: flex; flex-direction: column; gap: 5px;">
+                <div style="font-size: 17px; font-weight: 600; letter-spacing: -0.02em;">Primavera 26 · Segunda</div>
+                <div style="font-size: 14px; color: #6A7079;">Cierra el viernes 23 · sorteo el sábado 24</div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div style="display: flex; align-items: baseline; justify-content: space-between;">
+                  <div style="font-size: 13px; color: #6A7079;">Inscriptos que pagaron</div>
+                  <div class="mono" style="font-size: 14px; font-weight: 500;">9 <span style="color: #9BA1A9;">/ 32</span></div>
+                </div>
+                <div class="barra"><div style="width: 28.1%; height: 100%; background: #CDF546;"></div></div>
+              </div>
+              <div style="display: flex; gap: 9px;">
+                <div class="btn-sec" style="height: 38px; font-size: 14px; flex-grow: 1;">Inscripciones</div>
+                <div class="btn-sec" style="height: 38px; font-size: 14px; padding: 0 14px;">Copiar link</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 11px;">
+          <div class="rot">Terminados</div>
+          <div style="border: 1px solid #E6E8EB; border-radius: 14px; overflow: hidden;">
+            <div class="fila" style="border-top: none; background: #FAFBFC; font-size: 13px; font-weight: 600; color: #6A7079; padding-top: 11px; padding-bottom: 11px;">
+              <div>Torneo</div><div>Terminó</div><div>Campeón</div><div style="text-align: right;">Jugadores</div>
+            </div>
+            <div class="fila">
+              <div style="font-weight: 500;">Invierno 26 · Tercera</div>
+              <div class="mono" style="font-size: 14px; color: #6A7079;">05/09/2026</div>
+              <div>Lucas Ferreyra</div>
+              <div class="mono" style="font-size: 14px; text-align: right;">32</div>
+            </div>
+            <div class="fila">
+              <div style="font-weight: 500;">Otoño 26 · Segunda</div>
+              <div class="mono" style="font-size: 14px; color: #6A7079;">27/06/2026</div>
+              <div>Nicolás Arrieta</div>
+              <div class="mono" style="font-size: 14px; text-align: right;">32</div>
+            </div>
+            <div class="fila">
+              <div style="font-weight: 500;">Otoño 26 · Tercera</div>
+              <div class="mono" style="font-size: 14px; color: #6A7079;">20/06/2026</div>
+              <div>Martín Sanhueza</div>
+              <div class="mono" style="font-size: 14px; text-align: right;">28</div>
+            </div>
+            <div style="padding: 13px 20px; border-top: 1px solid #F1F2F4; font-size: 14px; font-weight: 500;">Ver los 9 torneos terminados →</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+
+        <div style="border: 1px solid #F3D3D4; background: #FEF6F6; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="font-size: 15px; font-weight: 600;">Necesita tu atención</div>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; align-items: flex-start; gap: 10px;">
+              <div style="width: 7px; height: 7px; border-radius: 999px; background: #E5484D; margin-top: 7px; flex-shrink: 0;"></div>
+              <div style="font-size: 14px; line-height: 1.45;"><span class="mono">3</span> partidos de Segunda vencieron sin resultado. <span style="font-weight: 500; text-decoration: underline;">Resolver</span></div>
+            </div>
+            <div style="display: flex; align-items: flex-start; gap: 10px;">
+              <div style="width: 7px; height: 7px; border-radius: 999px; background: #E5484D; margin-top: 7px; flex-shrink: 0;"></div>
+              <div style="font-size: 14px; line-height: 1.45;">Primavera 26 · Segunda tiene <span class="mono">9</span> de <span class="mono">32</span> inscriptos y cierra en tres semanas. <span style="font-weight: 500; text-decoration: underline;">Copiar link</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background: #0A0B0D; border-radius: 18px; padding: 22px; display: flex; flex-direction: column; gap: 16px;">
+          <div style="font-size: 15px; font-weight: 600; color: #FFFFFF;">Tu circuito</div>
+          <div style="display: flex; flex-direction: column; gap: 13px;">
+            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+              <div style="font-size: 14px; color: #9BA1A9;">Jugadores</div>
+              <div class="mono" style="font-size: 24px; font-weight: 500; color: #FFFFFF; letter-spacing: -0.02em;">77</div>
+            </div>
+            <div style="height: 1px; background: #2C3037;"></div>
+            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+              <div style="font-size: 14px; color: #9BA1A9;">Categorías</div>
+              <div class="mono" style="font-size: 24px; font-weight: 500; color: #CDF546; letter-spacing: -0.02em;">2</div>
+            </div>
+            <div style="height: 1px; background: #2C3037;"></div>
+            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+              <div style="font-size: 14px; color: #9BA1A9;">Recaudado en inscripciones abiertas</div>
+              <div class="mono" style="font-size: 18px; font-weight: 500; color: #FFFFFF; letter-spacing: -0.02em;">$1.485.000</div>
+            </div>
+          </div>
+          <div style="font-size: 13px; color: #9BA1A9; line-height: 1.45;">Ranking activo. Se actualiza al cerrar cada torneo.</div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>
