@@ -1,5 +1,6 @@
-// Datos de ejemplo para la pantalla de inicio. Todavía no hay endpoint de torneos:
-// cuando exista, estos tipos pasan a packages/shared como schemas de Zod y este archivo se borra.
+// Datos de ejemplo para el estado "con torneos" de la pantalla de inicio (/inicio?ejemplo=1).
+// Todavía no hay endpoint de torneos: cuando exista, estos tipos pasan a packages/shared
+// como schemas de Zod y este archivo se borra.
 // Todos los nombres de personas son ficticios.
 
 export type TorneoEnJuego = {
@@ -43,13 +44,6 @@ export type TorneosDeInicio = {
   categorias: number;
   recaudadoEnInscripcionesAbiertas: number;
   usaRanking: boolean;
-};
-
-export const organizacionEjemplo = {
-  nombre: 'Liga Amateur del Valle',
-  usuario: 'Laura Giménez',
-  jugadores: 0,
-  usaRanking: false,
 };
 
 export const torneosEjemplo: TorneosDeInicio = {
