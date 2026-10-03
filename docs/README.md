@@ -22,6 +22,7 @@ Grupo de 3 · Entrega: fines de noviembre de 2026
 | [08-repositorio.md](08-repositorio.md) | Estructura de carpetas, ramas, tags de entrega y forma de trabajo |
 | [09-setup-inicial.md](09-setup-inicial.md) | Guía paso a paso para inicializar el proyecto |
 | [10-features.md](10-features.md) | **Lista de funcionalidades para la 2da entrega** |
+| [decisiones/](decisiones/) | Decisiones de arquitectura, una por archivo: contexto, opciones, por qué y qué se resigna |
 | [design.md](design.md) | Sistema visual: color, tipografía, componentes y voz |
 | [schema.sql](schema.sql) | Modelo de datos en SQL, para la entrega de diseño de base de datos. La fuente real es `apps/api/prisma/schema.prisma` |
 
