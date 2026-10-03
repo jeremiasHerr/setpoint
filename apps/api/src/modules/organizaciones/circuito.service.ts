@@ -1,7 +1,7 @@
 import { Instancia, type Prisma } from '@prisma/client';
 import type { Circuito, ConfiguracionCircuito, Instancia as ClaveInstancia } from '@setpoint/shared';
+import { organizacionAdministrada } from '../../lib/permisos';
 import { prisma } from '../../lib/prisma';
-import { ErrorHttp } from '../../middleware/errores';
 
 const INSTANCIAS: Record<ClaveInstancia, Instancia> = {
   campeon: Instancia.CAMPEON,
@@ -11,17 +11,6 @@ const INSTANCIAS: Record<ClaveInstancia, Instancia> = {
   octavos: Instancia.OCTAVOS,
   participacion: Instancia.PARTICIPACION,
 };
-
-// Devuelve el id de la organización si el usuario la administra.
-async function organizacionAdministrada(slug: string, usuarioId: number) {
-  const organizacion = await prisma.organizacion.findUnique({
-    where: { slug },
-    select: { id: true, admins: { where: { usuarioId }, select: { id: true } } },
-  });
-  if (!organizacion) throw new ErrorHttp(404, 'ORGANIZACION_NO_ENCONTRADA');
-  if (organizacion.admins.length === 0) throw new ErrorHttp(403, 'SIN_PERMISO');
-  return organizacion.id;
-}
 
 export async function obtenerCircuito(slug: string, usuarioId: number): Promise<Circuito> {
   const id = await organizacionAdministrada(slug, usuarioId);
