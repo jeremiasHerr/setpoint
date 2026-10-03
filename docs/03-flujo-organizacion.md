@@ -94,6 +94,28 @@ La organización es dueña de su padrón. En modo `cerrada` —el que usa POLENT
 
 El padrón actual de POLENTA tiene 77 jugadores en 2 categorías.
 
+### API del padrón
+
+Los tres endpoints exigen sesión y solo responden a administradores de esa organización.
+
+| Endpoint | Qué hace |
+|---|---|
+| `GET /api/organizaciones/:slug/jugadores` | Devuelve el padrón completo, ordenado por apellido. Cada fila trae categoría, puntos, puesto y partidos jugados |
+| `POST /api/organizaciones/:slug/jugadores` | Alta manual: nombre, apellido, categoría y teléfono opcional |
+| `PATCH /api/organizaciones/:slug/jugadores/:id` | Edita solo los campos que llegan. Sirve también para reasignar la categoría y para la baja |
+
+**El padrón viaja entero.** Filtrar por categoría y buscar por apellido se resuelve en la pantalla: con padrones de decenas de jugadores no se justifica paginar.
+
+**Un jugador nuevo entra con 0 puntos porque no se le crea ningún movimiento de ranking**, no porque se le cargue un cero. Figura en el ranking de su categoría desde el alta.
+
+**La baja desactiva, no borra** (`activo = false`). El jugador tiene partidos, inscripciones y movimientos de ranking que son historial del circuito. De baja deja de tener puesto en el ranking y los demás suben; reactivarlo lo devuelve con sus puntos.
+
+**Los puntos y el puesto se calculan en cada consulta** a partir de los movimientos, por casillero con reemplazo ([decisión 001](decisiones/001-calculo-del-ranking.md)). Los empatados comparten puesto.
+
+**Cambio de categoría — provisorio.** El ranking de una categoría lista a los jugadores que hoy están en ella y suma solo los movimientos de esa categoría. Quien pasa de Tercera a Segunda aparece en Segunda con 0 puntos; sus movimientos de Tercera quedan guardados y vuelven a contar si regresa. Es lo mínimo que no pierde información mientras el organizador no responda qué corresponde (decisión abierta 7 del [README](README.md)).
+
+**El teléfono solo sale por estos endpoints.** Ninguna respuesta pública lo incluye.
+
 ---
 
 ## 6. Creación del torneo
