@@ -59,6 +59,8 @@ Registro con email y contraseña (`POST /api/auth/registro`). En una sola transa
 
 La respuesta incluye un token de sesión (JWT), así la organización queda ingresada sin pasar por la pantalla de ingreso.
 
+**Ingreso** (`POST /api/auth/ingreso`): email y contraseña del administrador. Devuelve lo mismo que el registro. Si el email no existe o la contraseña no coincide, la respuesta es la misma (`CREDENCIALES_INVALIDAS`), para no revelar qué emails tienen cuenta. Si el usuario administra más de una organización, entra a la más antigua ([decisión 002](decisiones/002-organizacion-al-ingresar.md)).
+
 **Por qué arranca sin ranking.** Es la puerta de entrada al producto: se puede publicar un torneo suelto sin configurar nada, y el ranking se activa después ([07-configurabilidad.md](07-configurabilidad.md) §1).
 
 Después del alta, y en cualquier momento, se configura:
