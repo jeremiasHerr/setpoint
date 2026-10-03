@@ -32,3 +32,18 @@ export const respuestaRegistroSchema = z.object({
 });
 
 export type RespuestaRegistro = z.infer<typeof respuestaRegistroSchema>;
+
+// Ingreso de quien administra una organización. Responde con la misma forma que el registro.
+export const ingresoSchema = z.object(
+  {
+    email: z
+      .string({ error: 'Escribí tu email' })
+      .trim()
+      .toLowerCase()
+      .pipe(z.email('El email no es válido')),
+    contrasena: z.string({ error: 'Escribí tu contraseña' }).min(1, 'Escribí tu contraseña'),
+  },
+  { error: 'Faltan el email y la contraseña' },
+);
+
+export type DatosIngreso = z.infer<typeof ingresoSchema>;

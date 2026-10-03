@@ -1,20 +1,18 @@
 import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
+import type { DatosIngreso } from '@setpoint/shared';
 import { Boton } from '../Boton';
 import { Campo } from '../Campo';
 import { CampoContrasena } from '../CampoContrasena';
 import { Tarjeta } from '../Tarjeta';
 
-export type DatosIngreso = {
-  email: string;
-  contrasena: string;
-};
-
 type Props = {
   alEnviar?: (datos: DatosIngreso) => void;
+  enviando?: boolean;
+  error?: string;
 };
 
-export function FormularioIngreso({ alEnviar }: Props) {
+export function FormularioIngreso({ alEnviar, enviando = false, error }: Props) {
   const [email, setEmail] = useState('');
   const [contrasena, setContrasena] = useState('');
 
@@ -56,9 +54,16 @@ export function FormularioIngreso({ alEnviar }: Props) {
           />
         </div>
 
-        <Boton type="submit" variante="organizador" grande className="w-full">
-          Ingresar
-        </Boton>
+        <div className="flex flex-col gap-[11px]">
+          {error && (
+            <p role="alert" className="rounded-control border border-rojo-linea bg-rojo-fondo px-3.5 py-2.5 text-sm text-rojo-texto">
+              {error}
+            </p>
+          )}
+          <Boton type="submit" variante="organizador" grande className="w-full" disabled={enviando}>
+            {enviando ? 'Ingresando…' : 'Ingresar'}
+          </Boton>
+        </div>
       </form>
     </Tarjeta>
   );
