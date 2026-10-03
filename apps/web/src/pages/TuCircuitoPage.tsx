@@ -1,6 +1,6 @@
 import type { Circuito } from '@setpoint/shared';
 import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { Boton } from '../components/Boton';
 import { EncabezadoOrganizador } from '../components/EncabezadoOrganizador';
 import { Tarjeta } from '../components/Tarjeta';
@@ -57,6 +57,9 @@ function EditorCircuito({ slug, inicial }: { slug: string; inicial: Circuito }) 
   // No hay columna para esto todavía: es solo estado de pantalla.
   const [usaClubes, setUsaClubes] = useState(false);
   const estadoGuardado = useAutoguardadoCircuito(slug, circuito);
+  const navegar = useNavigate();
+  // Salir con un cambio sin guardar lo perdería: el autoguardado espera un momento antes de mandarlo.
+  const guardando = estadoGuardado === 'pendiente' || estadoGuardado === 'guardando';
 
   function cambiar<K extends keyof Circuito>(campo: K, valor: Circuito[K]) {
     setCircuito((anterior) => ({ ...anterior, [campo]: valor }));
@@ -118,9 +121,9 @@ function EditorCircuito({ slug, inicial }: { slug: string; inicial: Circuito }) 
             </Tarjeta>
           )}
 
-          {/* Se conectan cuando existan las pantallas de padrón y de nuevo torneo. */}
+          {/* "Crear un torneo ahora" se conecta cuando exista la pantalla de nuevo torneo. */}
           <div className="flex flex-col gap-2.5">
-            <Boton variante="organizador" className="w-full">
+            <Boton variante="organizador" className="w-full" disabled={guardando} onClick={() => navegar('/padron')}>
               Guardar y cargar el padrón
             </Boton>
             <Boton className="w-full">Crear un torneo ahora</Boton>

@@ -7,24 +7,10 @@ import { useCircuito } from '../features/circuito/useCircuito';
 import { InicioConTorneos } from '../features/inicio/InicioConTorneos';
 import { InicioSinTorneos } from '../features/inicio/InicioSinTorneos';
 import { torneosEjemplo } from '../features/inicio/torneosEjemplo';
-
-// Padrón y Ranking se suman cuando existan sus pantallas.
-const navegacion = [
-  { etiqueta: 'Inicio', href: '/inicio' },
-  { etiqueta: 'Circuito', href: '/circuito' },
-];
+import { iniciales, navegacionOrganizador } from '../features/organizador/encabezado';
 
 function primerNombre(nombre: string) {
   return nombre.trim().split(/\s+/)[0];
-}
-
-function iniciales(nombre: string) {
-  return nombre
-    .trim()
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((palabra) => palabra[0]?.toUpperCase() ?? '')
-    .join('');
 }
 
 export function InicioPage() {
@@ -46,7 +32,7 @@ function Inicio({ sesion }: { sesion: Sesion }) {
     <div className="min-h-screen bg-white text-negro">
       <EncabezadoOrganizador
         organizacion={circuito?.nombre ?? sesion.organizacion.nombre}
-        navegacion={navegacion}
+        navegacion={navegacionOrganizador}
         activo="Inicio"
         iniciales={iniciales(sesion.usuario.nombre)}
       />

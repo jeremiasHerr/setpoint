@@ -11,7 +11,7 @@ export class ErrorApi extends Error {
   }
 }
 
-type Metodo = 'GET' | 'POST' | 'PUT';
+type Metodo = 'GET' | 'POST' | 'PUT' | 'PATCH';
 
 // Llama a la API con el token de la sesión, si hay. Los errores llegan como ErrorApi con el código de la API.
 export async function pedir<T>(metodo: Metodo, ruta: string, cuerpo?: unknown): Promise<T> {
