@@ -3,6 +3,7 @@ import { Catalogo } from './Catalogo';
 import { IngresoPage } from './pages/IngresoPage';
 import { InicioPage } from './pages/InicioPage';
 import { LandingPage } from './pages/LandingPage';
+import { PadronPage } from './pages/PadronPage';
 import { RecuperarContrasenaPage } from './pages/RecuperarContrasenaPage';
 import { RegistroPage } from './pages/RegistroPage';
 import { TuCircuitoPage } from './pages/TuCircuitoPage';
@@ -17,6 +18,7 @@ export default function App() {
       <Route path="/recuperar-contrasena" element={<RecuperarContrasenaPage />} />
       <Route path="/inicio" element={<InicioPage />} />
       <Route path="/circuito" element={<TuCircuitoPage />} />
+      <Route path="/padron" element={<PadronPage />} />
     </Routes>
   );
 }
