@@ -7,6 +7,7 @@ import { NuevoTorneoPage } from './pages/NuevoTorneoPage';
 import { PadronPage } from './pages/PadronPage';
 import { RecuperarContrasenaPage } from './pages/RecuperarContrasenaPage';
 import { RegistroPage } from './pages/RegistroPage';
+import { RestablecerContrasenaPage } from './pages/RestablecerContrasenaPage';
 import { TuCircuitoPage } from './pages/TuCircuitoPage';
 
 export default function App() {
@@ -17,6 +18,7 @@ export default function App() {
       <Route path="/ingresar" element={<IngresoPage />} />
       <Route path="/registro" element={<RegistroPage />} />
       <Route path="/recuperar-contrasena" element={<RecuperarContrasenaPage />} />
+      <Route path="/restablecer-contrasena" element={<RestablecerContrasenaPage />} />
       <Route path="/inicio" element={<InicioPage />} />
       <Route path="/circuito" element={<TuCircuitoPage />} />
       <Route path="/padron" element={<PadronPage />} />

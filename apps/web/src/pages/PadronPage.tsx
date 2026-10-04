@@ -5,6 +5,7 @@ import { Boton } from '../components/Boton';
 import { EncabezadoOrganizador } from '../components/EncabezadoOrganizador';
 import { IconoMas } from '../components/IconoMas';
 import { leerSesion, type Sesion } from '../features/auth/sesion';
+import { useCerrarSesion } from '../features/auth/useCerrarSesion';
 import { useSesionInvalida } from '../features/auth/useSesionInvalida';
 import { useCircuito } from '../features/circuito/useCircuito';
 import { iniciales, navegacionOrganizador } from '../features/organizador/encabezado';
@@ -43,6 +44,7 @@ function Padron({ sesion }: { sesion: Sesion }) {
   const padron = usePadron(slug);
   const crear = useCrearJugador(slug);
   const editar = useEditarJugador(slug);
+  const cerrarSesion = useCerrarSesion();
 
   const [editando, setEditando] = useState<JugadorPadron | null>(null);
   // Cambia después de cada alta para vaciar el formulario.
@@ -86,6 +88,7 @@ function Padron({ sesion }: { sesion: Sesion }) {
         navegacion={navegacionOrganizador}
         activo="Padrón"
         iniciales={iniciales(sesion.usuario.nombre)}
+        alSalir={cerrarSesion}
       />
 
       <div className="flex flex-wrap items-end justify-between gap-6 px-7 pt-[26px] pb-[18px]">

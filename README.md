@@ -46,14 +46,16 @@ Monorepo con workspaces de npm.
 git clone https://github.com/jeremiasHerr/setpoint.git
 cd setpoint
 npm install
-docker compose up -d db              # Postgres en Docker
+docker compose up -d db mailpit      # Postgres y el servidor de mail de prueba
 cp apps/api/.env.example apps/api/.env
 npm run db:migrate -w apps/api       # crea las tablas
 npm run db:seed -w apps/api          # datos de prueba
 npm run dev -w apps/api              # API en http://localhost:3000
 ```
 
-> Por ahora Docker levanta solo la base de datos. El `docker compose up` completo, con API y web, llega en la etapa 4.
+> Por ahora Docker levanta solo la base de datos y Mailpit. El `docker compose up` completo, con API y web, llega en la etapa 4.
+
+Los mails que manda la API (por ahora, el link para recuperar la contraseña) no salen a internet: los atrapa Mailpit y se leen en http://localhost:8025. Sin `SMTP_HOST` en el `.env`, se imprimen en la consola de la API.
 
 ### App móvil
 

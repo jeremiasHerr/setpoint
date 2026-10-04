@@ -1,8 +1,20 @@
 import bcrypt from 'bcryptjs';
-import type { DatosIngreso, DatosRegistroOrganizacion, RespuestaRegistro } from '@setpoint/shared';
+import type {
+  DatosIngreso,
+  DatosRecuperarContrasena,
+  DatosRegistroOrganizacion,
+  DatosRestablecerContrasena,
+  RespuestaRegistro,
+} from '@setpoint/shared';
+import { enviarCorreo } from '../../lib/correo';
 import { prisma } from '../../lib/prisma';
 import { slugDisponible } from '../../lib/slug';
-import { firmarToken } from '../../lib/token';
+import {
+  firmarToken,
+  firmarTokenRecuperacion,
+  tokenRecuperacionValido,
+  usuarioDeTokenRecuperacion,
+} from '../../lib/token';
 import { ErrorHttp } from '../../middleware/errores';
 
 const COSTO_BCRYPT = 10;
@@ -74,4 +86,45 @@ export async function ingresar(datos: DatosIngreso): Promise<RespuestaRegistro> 
     usuario: { id: usuario.id, email: usuario.email, nombre: usuario.nombre },
     organizacion: { id: organizacion.id, nombre: organizacion.nombre, slug: organizacion.slug },
   };
+}
+
+const WEB_URL = process.env.WEB_URL ?? 'http://localhost:5173';
+
+// No dice si el email existe: responde igual en los dos casos y el mail se manda sin esperarlo,
+// para que la respuesta tarde lo mismo.
+export async function pedirRecuperacion(datos: DatosRecuperarContrasena) {
+  const usuario = await prisma.usuario.findUnique({ where: { email: datos.email } });
+  if (!usuario) return;
+
+  const token = firmarTokenRecuperacion(usuario.id, usuario.passwordHash);
+  const link = `${WEB_URL}/restablecer-contrasena?token=${encodeURIComponent(token)}`;
+
+  void enviarCorreo({
+    para: usuario.email,
+    asunto: 'Elegí una contraseña nueva',
+    texto: [
+      `Hola, ${usuario.nombre}:`,
+      '',
+      'Pediste cambiar la contraseña de tu cuenta de SetPoint. Entrá a este link para elegir una nueva:',
+      '',
+      link,
+      '',
+      'El link vale por una hora y sirve una sola vez. Si no fuiste vos, no hagas nada: tu contraseña sigue siendo la misma.',
+    ].join('\n'),
+  }).catch((error) => console.error('No se pudo mandar el mail de recuperación', error));
+}
+
+export async function restablecerContrasena(datos: DatosRestablecerContrasena) {
+  const usuarioId = usuarioDeTokenRecuperacion(datos.token);
+  const usuario = usuarioId === null ? null : await prisma.usuario.findUnique({ where: { id: usuarioId } });
+
+  // Mismo error para link vencido, ya usado o inventado.
+  if (!usuario || !tokenRecuperacionValido(datos.token, usuario.passwordHash)) {
+    throw new ErrorHttp(400, 'LINK_INVALIDO');
+  }
+
+  await prisma.usuario.update({
+    where: { id: usuario.id },
+    data: { passwordHash: await bcrypt.hash(datos.contrasena, COSTO_BCRYPT) },
+  });
 }

@@ -19,7 +19,7 @@ const textoEstado: Record<EstadoGuardado, string> = {
   pendiente: 'guardando…',
   guardando: 'guardando…',
   guardado: 'guardado',
-  incompleto: 'falta el nombre · sin guardar',
+  incompleto: 'falta un nombre · sin guardar',
   error: 'no se pudo guardar',
 };
 
@@ -54,8 +54,8 @@ function CargarCircuito({ slug }: { slug: string }) {
 
 function EditorCircuito({ slug, inicial }: { slug: string; inicial: Circuito }) {
   const [circuito, setCircuito] = useState<Circuito>(inicial);
-  // No hay columna para esto todavía: es solo estado de pantalla.
-  const [usaClubes, setUsaClubes] = useState(false);
+  // No hay columna para esto: arranca encendido si ya hay clubes, y apagarlo solo los oculta.
+  const [usaClubes, setUsaClubes] = useState(inicial.clubes.length > 0);
   const estadoGuardado = useAutoguardadoCircuito(slug, circuito);
   const navegar = useNavigate();
   // Salir con un cambio sin guardar lo perdería: el autoguardado espera un momento antes de mandarlo.
@@ -100,7 +100,12 @@ function EditorCircuito({ slug, inicial }: { slug: string; inicial: Circuito }) 
               alCambiar={(instancia, puntos) => cambiar('puntos', { ...circuito.puntos, [instancia]: puntos })}
             />
           )}
-          <SeccionClubes usaClubes={usaClubes} alCambiar={setUsaClubes} />
+          <SeccionClubes
+            usaClubes={usaClubes}
+            clubes={circuito.clubes}
+            alCambiarUsaClubes={setUsaClubes}
+            alCambiar={(clubes) => cambiar('clubes', clubes)}
+          />
         </div>
 
         <aside className="flex flex-col gap-4">

@@ -14,9 +14,11 @@ type Props = {
   estado?: string;
   // Iniciales de quien inició sesión, para el círculo de la derecha.
   iniciales?: string;
+  // Si llega, aparece "Salir" al lado de las iniciales.
+  alSalir?: () => void;
 };
 
-export function EncabezadoOrganizador({ organizacion, navegacion = [], activo, estado, iniciales }: Props) {
+export function EncabezadoOrganizador({ organizacion, navegacion = [], activo, estado, iniciales, alSalir }: Props) {
   return (
     <header className="flex h-[60px] items-center justify-between gap-6 bg-negro px-7">
       <div className="flex min-w-0 items-center gap-3.5">
@@ -25,7 +27,7 @@ export function EncabezadoOrganizador({ organizacion, navegacion = [], activo, e
         <span className="truncate text-sm whitespace-nowrap text-gris-400">{organizacion}</span>
       </div>
 
-      {(navegacion.length > 0 || iniciales) && (
+      {(navegacion.length > 0 || iniciales || alSalir) && (
         <div className="flex shrink-0 items-center gap-5">
           {navegacion.length > 0 && (
             <nav className="flex items-center gap-1">
@@ -51,6 +53,12 @@ export function EncabezadoOrganizador({ organizacion, navegacion = [], activo, e
             <span className="flex size-8 items-center justify-center rounded-full border border-borde-oscuro bg-carbon text-[13px] font-semibold text-white">
               {iniciales}
             </span>
+          )}
+
+          {alSalir && (
+            <button type="button" onClick={alSalir} className="text-sm text-gris-400 hover:text-white">
+              Salir
+            </button>
           )}
         </div>
       )}

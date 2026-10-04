@@ -1,7 +1,13 @@
-// Datos de ejemplo para el estado "con torneos" de la pantalla de inicio (/inicio?ejemplo=1).
-// Todavía no hay endpoint de torneos: cuando exista, estos tipos pasan a packages/shared
-// como schemas de Zod y este archivo se borra.
+// Los tipos de la pantalla de inicio y datos de ejemplo para verla completa (/inicio?ejemplo=1).
+// Los datos reales salen de torneosDeInicio.ts, que hoy solo puede llenar borradores e
+// inscripciones abiertas: el ejemplo muestra cómo se ve con torneos en juego y terminados.
 // Todos los nombres de personas son ficticios.
+
+export type TorneoEnBorrador = {
+  id: number;
+  nombre: string;
+  detalle: string;
+};
 
 export type TorneoEnJuego = {
   id: number;
@@ -34,6 +40,7 @@ export type Aviso =
   | { tipo: 'pocos-inscriptos'; torneo: string; pagaron: number; cupo: number; cierraEn: string };
 
 export type TorneosDeInicio = {
+  borradores: TorneoEnBorrador[];
   enJuego: TorneoEnJuego[];
   conInscripcionAbierta: TorneoConInscripcionAbierta[];
   terminados: TorneoTerminado[];
@@ -47,6 +54,7 @@ export type TorneosDeInicio = {
 };
 
 export const torneosEjemplo: TorneosDeInicio = {
+  borradores: [],
   enJuego: [
     {
       id: 1,

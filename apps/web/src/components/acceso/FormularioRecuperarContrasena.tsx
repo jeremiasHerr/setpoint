@@ -6,16 +6,18 @@ import { Tarjeta } from '../Tarjeta';
 
 type Props = {
   alEnviar?: (email: string) => void;
+  enviando?: boolean;
+  // La API ya respondió: se muestra el aviso en lugar del formulario.
+  enviado?: boolean;
+  error?: string;
 };
 
-export function FormularioRecuperarContrasena({ alEnviar }: Props) {
+export function FormularioRecuperarContrasena({ alEnviar, enviando = false, enviado = false, error }: Props) {
   const [email, setEmail] = useState('');
-  const [enviado, setEnviado] = useState(false);
 
   function manejarEnvio(evento: FormEvent<HTMLFormElement>) {
     evento.preventDefault();
     alEnviar?.(email);
-    setEnviado(true);
   }
 
   if (enviado) {
@@ -26,7 +28,7 @@ export function FormularioRecuperarContrasena({ alEnviar }: Props) {
           {/* No confirmamos si la cuenta existe, para no revelar qué emails están registrados. */}
           <p className="text-[15px] text-gris-500">
             Si hay una cuenta con <span className="font-medium text-negro">{email}</span>, te mandamos un link para elegir una
-            contraseña nueva.
+            contraseña nueva. Vale por una hora.
           </p>
         </div>
         <Link
@@ -57,9 +59,16 @@ export function FormularioRecuperarContrasena({ alEnviar }: Props) {
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        <Boton type="submit" variante="organizador" grande className="w-full">
-          Mandarme el link
-        </Boton>
+        <div className="flex flex-col gap-[11px]">
+          {error && (
+            <p role="alert" className="rounded-control border border-rojo-linea bg-rojo-fondo px-3.5 py-2.5 text-sm text-rojo-texto">
+              {error}
+            </p>
+          )}
+          <Boton type="submit" variante="organizador" grande className="w-full" disabled={enviando}>
+            {enviando ? 'Mandando…' : 'Mandarme el link'}
+          </Boton>
+        </div>
       </form>
     </Tarjeta>
   );

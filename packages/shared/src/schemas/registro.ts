@@ -47,3 +47,30 @@ export const ingresoSchema = z.object(
 );
 
 export type DatosIngreso = z.infer<typeof ingresoSchema>;
+
+// Pedido del link para elegir una contraseña nueva.
+export const recuperarContrasenaSchema = z.object(
+  {
+    email: z
+      .string({ error: 'Escribí tu email' })
+      .trim()
+      .toLowerCase()
+      .pipe(z.email('El email no es válido')),
+  },
+  { error: 'Falta el email' },
+);
+
+export type DatosRecuperarContrasena = z.infer<typeof recuperarContrasenaSchema>;
+
+// Lo que manda la pantalla a la que lleva ese link.
+export const restablecerContrasenaSchema = z.object(
+  {
+    token: z.string({ error: 'Falta el link' }).min(1, 'Falta el link'),
+    contrasena: z
+      .string({ error: 'Escribí una contraseña' })
+      .min(LARGO_MINIMO_CONTRASENA, `La contraseña tiene que tener al menos ${LARGO_MINIMO_CONTRASENA} caracteres`),
+  },
+  { error: 'Faltan el link y la contraseña' },
+);
+
+export type DatosRestablecerContrasena = z.infer<typeof restablecerContrasenaSchema>;
