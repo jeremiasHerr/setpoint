@@ -126,7 +126,7 @@ El formulario replica la convocatoria que hoy publican en WhatsApp ([02](02-domi
 
 - Nombre y descripción
 - **Etapa del calendario** — define qué casillero del ranking se actualiza
-- Categorías a disputar y cupo de cada una
+- Categorías a disputar y cupo de cada una. Cada categoría es un `Torneo` aparte que comparte todo lo demás con las otras ([decisión 003](decisiones/003-torneo-con-varias-categorias.md))
 - Importe de inscripción
 - **Formato**: cantidad de grupos, clasificados por grupo, si hay zona Complementaria, modo de distribución y modo de sorteo
 - **Sistema de juego**: sets, punto de oro, super tie-break
