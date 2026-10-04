@@ -11,5 +11,14 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  # Servidor de mail de prueba: atrapa lo que manda la API y lo muestra en http://localhost:8025.
+  # Así recuperar la contraseña funciona sin depender de una cuenta externa.
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: setpoint-mailpit
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
 volumes:
   pgdata:

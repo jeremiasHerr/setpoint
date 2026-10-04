@@ -1,7 +1,12 @@
 import { Router } from 'express';
-import { ingresoSchema, registroOrganizacionSchema } from '@setpoint/shared';
+import {
+  ingresoSchema,
+  recuperarContrasenaSchema,
+  registroOrganizacionSchema,
+  restablecerContrasenaSchema,
+} from '@setpoint/shared';
 import { validar } from '../../middleware/validar';
-import { ingresar, registrarOrganizacion } from './auth.service';
+import { ingresar, pedirRecuperacion, registrarOrganizacion, restablecerContrasena } from './auth.service';
 
 export const authRouter = Router();
 
@@ -12,4 +17,15 @@ authRouter.post('/registro', validar(registroOrganizacionSchema), async (req, re
 
 authRouter.post('/ingreso', validar(ingresoSchema), async (req, res) => {
   res.json(await ingresar(req.body));
+});
+
+// Manda el link para elegir una contraseña nueva. Responde igual exista o no la cuenta.
+authRouter.post('/recuperar-contrasena', validar(recuperarContrasenaSchema), async (req, res) => {
+  await pedirRecuperacion(req.body);
+  res.status(204).end();
+});
+
+authRouter.post('/restablecer-contrasena', validar(restablecerContrasenaSchema), async (req, res) => {
+  await restablecerContrasena(req.body);
+  res.status(204).end();
 });

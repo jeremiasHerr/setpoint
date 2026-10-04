@@ -4,6 +4,7 @@ import { Boton } from '../../components/Boton';
 import { IconoMas } from '../../components/IconoMas';
 import { Numero } from '../../components/Numero';
 import { AvisosAtencion } from './AvisosAtencion';
+import { ListaBorradores } from './ListaBorradores';
 import { ResumenOrganizacion } from './ResumenOrganizacion';
 import { TablaTerminados } from './TablaTerminados';
 import { TarjetaInscripcionAbierta } from './TarjetaInscripcionAbierta';
@@ -19,10 +20,10 @@ function Grupo({ titulo, children }: { titulo: string; children: ReactNode }) {
   );
 }
 
-// Con torneos: agrupados por momento (en juego, con inscripción abierta, terminados),
+// Con torneos: agrupados por momento (en juego, con inscripción abierta, en borrador, terminados),
 // y a la derecha lo que pide atención.
 export function InicioConTorneos({ torneos }: { torneos: TorneosDeInicio }) {
-  const { enJuego, conInscripcionAbierta, terminados, totalTerminados, avisos } = torneos;
+  const { borradores, enJuego, conInscripcionAbierta, terminados, totalTerminados, avisos } = torneos;
   const navegar = useNavigate();
 
   return (
@@ -33,6 +34,12 @@ export function InicioConTorneos({ torneos }: { torneos: TorneosDeInicio }) {
           <p className="text-[15px] text-gris-500">
             <Numero>{enJuego.length}</Numero> en juego · <Numero>{conInscripcionAbierta.length}</Numero> con la inscripción
             abierta
+            {borradores.length > 0 && (
+              <>
+                {' '}
+                · <Numero>{borradores.length}</Numero> en borrador
+              </>
+            )}
           </p>
         </div>
         <Boton variante="organizador" onClick={() => navegar('/torneos/nuevo')}>
@@ -58,6 +65,12 @@ export function InicioConTorneos({ torneos }: { torneos: TorneosDeInicio }) {
                   <TarjetaInscripcionAbierta key={torneo.id} torneo={torneo} />
                 ))}
               </div>
+            </Grupo>
+          )}
+
+          {borradores.length > 0 && (
+            <Grupo titulo="En borrador">
+              <ListaBorradores torneos={borradores} />
             </Grupo>
           )}
 

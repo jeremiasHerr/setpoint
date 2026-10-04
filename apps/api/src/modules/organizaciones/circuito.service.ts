@@ -1,7 +1,13 @@
-import { Instancia, type Prisma } from '@prisma/client';
-import type { Circuito, ConfiguracionCircuito, Instancia as ClaveInstancia } from '@setpoint/shared';
+import { Instancia, type Prisma, type Superficie } from '@prisma/client';
+import type {
+  Circuito,
+  ConfiguracionCircuito,
+  Instancia as ClaveInstancia,
+  Superficie as ClaveSuperficie,
+} from '@setpoint/shared';
 import { organizacionAdministrada } from '../../lib/permisos';
 import { prisma } from '../../lib/prisma';
+import { ErrorHttp } from '../../middleware/errores';
 
 const INSTANCIAS: Record<ClaveInstancia, Instancia> = {
   campeon: Instancia.CAMPEON,
@@ -21,6 +27,7 @@ export async function obtenerCircuito(slug: string, usuarioId: number): Promise<
       categorias: { where: { activa: true }, orderBy: { orden: 'asc' } },
       etapas: { where: { activa: true }, orderBy: { orden: 'asc' } },
       puntajes: true,
+      clubes: { orderBy: { id: 'asc' }, include: { canchas: { orderBy: { id: 'asc' } } } },
       _count: { select: { jugadores: true } },
     },
   });
@@ -41,8 +48,80 @@ export async function obtenerCircuito(slug: string, usuarioId: number): Promise<
     categorias: organizacion.categorias.map((c) => c.nombre),
     etapas: organizacion.etapas.map((e) => e.nombre),
     puntos,
+    clubes: organizacion.clubes.map((club) => ({
+      id: club.id,
+      nombre: club.nombre,
+      direccion: club.direccion ?? '',
+      canchas: club.canchas.map((cancha) => ({
+        id: cancha.id,
+        nombre: cancha.nombre,
+        superficie: cancha.superficie.toLowerCase() as ClaveSuperficie,
+      })),
+    })),
     jugadores: organizacion._count.jugadores,
   };
+}
+
+// Empareja lo que llega con lo que hay: primero por id y, si no trae, por nombre.
+// La web no conoce el id de lo que creó en esta sesión, así que lo vuelve a mandar sin id.
+function emparejar<Llega extends { id?: number; nombre: string }, Hay extends { id: number; nombre: string }>(
+  llegan: Llega[],
+  hay: Hay[],
+) {
+  const libres = new Set(hay);
+  const tomar = (condicion: (fila: Hay) => boolean) => {
+    const fila = [...libres].find(condicion);
+    if (fila) libres.delete(fila);
+    return fila;
+  };
+
+  const porId = llegan.map((fila) => (fila.id === undefined ? undefined : tomar((h) => h.id === fila.id)));
+  const pares = llegan.map((fila, i) => ({
+    llega: fila,
+    existente: porId[i] ?? tomar((h) => h.nombre.toLowerCase() === fila.nombre.toLowerCase()),
+  }));
+  return { pares, sobran: [...libres] };
+}
+
+// Deja exactamente los clubes y canchas recibidos. A diferencia de categorías y etapas, lo que
+// sale de la lista se borra: Club y Cancha no tienen columna `activa`. Si un torneo o un partido
+// ya lo usa, no se puede borrar.
+async function sincronizarClubes(
+  tx: Prisma.TransactionClient,
+  organizacionId: number,
+  clubes: ConfiguracionCircuito['clubes'],
+) {
+  const existentes = await tx.club.findMany({
+    where: { organizacionId },
+    include: {
+      canchas: { include: { _count: { select: { partidos: true } } } },
+      _count: { select: { torneos: true, partidos: true } },
+    },
+  });
+  const { pares, sobran } = emparejar(clubes, existentes);
+
+  // Primero los borrados: liberan nombres que otro club puede estar tomando.
+  if (sobran.some((club) => club._count.torneos + club._count.partidos > 0)) throw new ErrorHttp(409, 'CLUB_EN_USO');
+  if (sobran.length > 0) await tx.club.deleteMany({ where: { id: { in: sobran.map((c) => c.id) } } });
+
+  for (const { llega, existente } of pares) {
+    const datos = { nombre: llega.nombre, direccion: llega.direccion || null };
+    const club = existente
+      ? await tx.club.update({ where: { id: existente.id }, data: datos })
+      : await tx.club.create({ data: { ...datos, organizacionId } });
+
+    const canchas = emparejar(llega.canchas, existente?.canchas ?? []);
+    if (canchas.sobran.some((cancha) => cancha._count.partidos > 0)) throw new ErrorHttp(409, 'CLUB_EN_USO');
+    if (canchas.sobran.length > 0) {
+      await tx.cancha.deleteMany({ where: { id: { in: canchas.sobran.map((c) => c.id) } } });
+    }
+
+    for (const cancha of canchas.pares) {
+      const datosCancha = { nombre: cancha.llega.nombre, superficie: cancha.llega.superficie.toUpperCase() as Superficie };
+      if (cancha.existente) await tx.cancha.update({ where: { id: cancha.existente.id }, data: datosCancha });
+      else await tx.cancha.create({ data: { ...datosCancha, clubId: club.id } });
+    }
+  }
 }
 
 type ModeloLista = 'categoria' | 'etapa';
@@ -88,6 +167,7 @@ export async function guardarCircuito(slug: string, usuarioId: number, datos: Co
 
     await sincronizarLista(tx, 'categoria', organizacionId, datos.categorias);
     await sincronizarLista(tx, 'etapa', organizacionId, datos.etapas);
+    await sincronizarClubes(tx, organizacionId, datos.clubes);
 
     for (const [clave, puntos] of Object.entries(datos.puntos)) {
       const instancia = INSTANCIAS[clave as ClaveInstancia];

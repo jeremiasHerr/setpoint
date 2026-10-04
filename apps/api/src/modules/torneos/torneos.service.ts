@@ -302,11 +302,15 @@ export async function listarConvocatorias(slug: string, usuarioId: number): Prom
   const torneos = await prisma.torneo.findMany({
     where: { organizacionId },
     orderBy: { id: 'asc' },
-    include: CON_RELACIONES,
+    include: {
+      ...CON_RELACIONES,
+      // Solo las pagadas: una reserva sin pagar todavía puede vencer.
+      _count: { select: { inscripciones: { where: { estado: EstadoInscripcion.PAGADA } } } },
+    },
   });
 
   // Mismo agrupamiento que torneosDeLaConvocatoria: por edición, o el torneo solo si no tiene.
-  const porEdicion = new Map<string, TorneoConRelaciones[]>();
+  const porEdicion = new Map<string, typeof torneos>();
   for (const t of torneos) {
     const clave = t.edicion ?? `#${t.id}`;
     porEdicion.set(clave, [...(porEdicion.get(clave) ?? []), t]);
@@ -322,6 +326,9 @@ export async function listarConvocatorias(slug: string, usuarioId: number): Prom
         categorias: c.torneos.map((t) => t.categoria),
         cierreInscripcion: c.cierreInscripcion,
         fechaInicio: c.fechaInicio,
+        precio: c.precio,
+        cupo: grupo.reduce((suma, t) => suma + t.cupo, 0),
+        inscriptos: grupo.reduce((suma, t) => suma + t._count.inscripciones, 0),
       };
     })
     .sort((a, b) => b.id - a.id);

@@ -133,4 +133,8 @@ export type ResumenConvocatoria = {
   categorias: string[];
   cierreInscripcion: string | null;
   fechaInicio: string | null;
+  precio: number;
+  // Sumados entre las categorías de la convocatoria. Inscriptos = los que ya pagaron.
+  cupo: number;
+  inscriptos: number;
 };
