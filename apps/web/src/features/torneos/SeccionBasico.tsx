@@ -4,6 +4,8 @@ import { Campo } from '../../components/Campo';
 import { Chip } from '../../components/Chip';
 import { Selector } from '../../components/Selector';
 import { Tarjeta } from '../../components/Tarjeta';
+import { MensajeError } from './MensajeError';
+import type { ErroresConvocatoria } from './useConvocatoria';
 
 type Props = {
   nombre: string;
@@ -15,6 +17,7 @@ type Props = {
   categoriasDelCircuito: string[];
   // Cupo con el que entra una categoría recién elegida: grupos × jugadores por grupo.
   cupoPorDefecto: number;
+  errores: ErroresConvocatoria;
   alCambiarNombre: (nombre: string) => void;
   alCambiarEtapa: (etapa: string | null) => void;
   alCambiarCategorias: (categorias: DatosConvocatoria['categorias']) => void;
@@ -28,6 +31,7 @@ export function SeccionBasico({
   etapasDelCircuito,
   categoriasDelCircuito,
   cupoPorDefecto,
+  errores,
   alCambiarNombre,
   alCambiarEtapa,
   alCambiarCategorias,
@@ -52,14 +56,19 @@ export function SeccionBasico({
       <h2 className="text-[17px] font-semibold">Lo básico</h2>
 
       <div className={`grid gap-3.5 ${usaRanking ? 'sm:grid-cols-[minmax(0,1fr)_240px]' : ''}`}>
-        <Campo
-          id="torneo-nombre"
-          rotulo="Nombre"
-          placeholder="Torneo Primavera 26"
-          maxLength={80}
-          value={nombre}
-          onChange={(e) => alCambiarNombre(e.target.value)}
-        />
+        <div className="flex flex-col gap-2">
+          <Campo
+            id="torneo-nombre"
+            rotulo="Nombre"
+            placeholder="Torneo Primavera 26"
+            maxLength={80}
+            value={nombre}
+            onChange={(e) => alCambiarNombre(e.target.value)}
+            aria-invalid={errores.nombre ? true : undefined}
+            aria-describedby={errores.nombre ? 'torneo-nombre-error' : undefined}
+          />
+          <MensajeError id="torneo-nombre-error">{errores.nombre}</MensajeError>
+        </div>
         {/* Sin ranking no hay casilleros: todo torneo es suelto. */}
         {usaRanking && (
           <Selector
@@ -101,6 +110,7 @@ export function SeccionBasico({
             ))}
           </div>
         )}
+        <MensajeError id="torneo-categorias-error">{errores.categorias}</MensajeError>
       </div>
     </Tarjeta>
   );
