@@ -38,7 +38,7 @@ borrador → publicado → inscripciones_cerradas → zonas_generadas
 | Estado | Se entra cuando | Qué se puede hacer |
 |---|---|---|
 | `borrador` | Se crea el torneo | Editar todo. No visible |
-| `publicado` | La organización lo publica | Inscripciones abiertas |
+| `publicado` | La organización lo publica | Inscripciones abiertas. Se sigue editando, salvo las categorías |
 | `inscripciones_cerradas` | Se llena el cupo o vence la fecha | Revisar padrón, resolver lista de espera |
 | `zonas_generadas` | Se ejecuta el sorteo | Comunicar grupos y plazos |
 | `grupos_en_curso` | Arranca el plazo de 3 semanas | Cargar resultados de zona |
@@ -135,6 +135,10 @@ El formulario replica la convocatoria que hoy publican en WhatsApp ([02](02-domi
 - Sedes: libre o designada, por fase
 
 > Todos los valores por defecto salen de la configuración de la organización. El listado completo de parámetros está en [07-configurabilidad.md](07-configurabilidad.md).
+
+**Publicar.** El borrador se puede guardar incompleto, pero para publicarlo tienen que estar la fecha de cierre de inscripción, que no puede ser pasada, y la fecha de inicio. Publicar pasa a `publicado` todos los torneos de la convocatoria a la vez.
+
+**Editar con la inscripción abierta.** Mientras el torneo está publicado se puede seguir ajustando todo menos las categorías: cada una ya puede tener inscripciones, y en borrador cambiarlas implica borrar y recrear torneos ([decisión 003](decisiones/003-torneo-con-varias-categorias.md)). El cupo de una categoría no puede bajar de la cantidad de inscriptos que ocupan lugar (pendientes de pago y pagados; la lista de espera no cuenta). Cuando se cierra la inscripción, el formato ya no cambia: el sorteo lo usa.
 
 ---
 

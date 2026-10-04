@@ -1,11 +1,17 @@
 import {
+  EstadoInscripcion,
   EstadoTorneo,
   type ModoInscripcion,
   type ModoSede,
   type Prisma,
   type TerceroSet,
 } from '@prisma/client';
-import type { Convocatoria, DatosConvocatoria, EstadoTorneo as ClaveEstado } from '@setpoint/shared';
+import type {
+  Convocatoria,
+  DatosConvocatoria,
+  EstadoTorneo as ClaveEstado,
+  ResumenConvocatoria,
+} from '@setpoint/shared';
 import { organizacionAdministrada } from '../../lib/permisos';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
@@ -197,11 +203,19 @@ export async function editarConvocatoria(slug: string, usuarioId: number, torneo
   const organizacionId = await organizacionAdministrada(slug, usuarioId);
   const torneos = await torneosDeLaConvocatoria(organizacionId, torneoId);
 
-  // Por ahora solo se edita el borrador. Qué se puede tocar después de publicar es otra regla.
-  if (torneos.some((t) => t.estado !== EstadoTorneo.BORRADOR)) throw new ErrorHttp(409, 'TORNEO_NO_EDITABLE');
+  // Se edita en borrador y mientras la inscripción está abierta. Después, el sorteo ya usó el formato.
+  const enBorrador = torneos.every((t) => t.estado === EstadoTorneo.BORRADOR);
+  const publicado = torneos.every((t) => t.estado === EstadoTorneo.PUBLICADO);
+  if (!enBorrador && !publicado) throw new ErrorHttp(409, 'TORNEO_NO_EDITABLE');
 
   const [principal, ...resto] = torneos;
   await verificarNombreLibre(organizacionId, datos.nombre, principal.edicion ?? principal.nombre);
+
+  if (publicado) {
+    await editarPublicada(torneos, datos);
+    return obtenerConvocatoria(slug, usuarioId, principal.id);
+  }
+
   const { categoriaIds, etapaId, clubSedeId } = await resolverNombres(organizacionId, datos);
   const compartidas = columnasCompartidas(datos, etapaId, clubSedeId);
 
@@ -224,4 +238,91 @@ export async function editarConvocatoria(slug: string, usuarioId: number, torneo
   });
 
   return obtenerConvocatoria(slug, usuarioId, principal.id);
+}
+
+// Inscripciones que ocupan un lugar del cupo. La lista de espera no ocupa: espera uno.
+const OCUPAN_CUPO = [EstadoInscripcion.PENDIENTE_PAGO, EstadoInscripcion.PAGADA];
+
+// Con la inscripción abierta cada torneo puede tener inscripciones colgando: no se borra ni se
+// recrea nada. Las categorías quedan fijas y cada fila se actualiza con el cupo de la suya.
+async function editarPublicada(torneos: TorneoConRelaciones[], datos: DatosConvocatoria) {
+  const cupoPorCategoria = new Map(datos.categorias.map((c) => [c.categoria.toLowerCase(), c.cupo]));
+  const mismasCategorias =
+    cupoPorCategoria.size === torneos.length &&
+    torneos.every((t) => cupoPorCategoria.has(t.categoria.nombre.toLowerCase()));
+  if (!mismasCategorias) throw new ErrorHttp(409, 'CATEGORIAS_BLOQUEADAS');
+
+  const ocupados = await prisma.inscripcion.groupBy({
+    by: ['torneoId'],
+    where: { torneoId: { in: torneos.map((t) => t.id) }, estado: { in: OCUPAN_CUPO } },
+    _count: { _all: true },
+  });
+  const cupoDe = (t: TorneoConRelaciones) => cupoPorCategoria.get(t.categoria.nombre.toLowerCase())!;
+  for (const t of torneos) {
+    const inscriptos = ocupados.find((o) => o.torneoId === t.id)?._count._all ?? 0;
+    if (cupoDe(t) < inscriptos) throw new ErrorHttp(409, 'CUPO_MENOR_A_INSCRIPTOS');
+  }
+
+  const { etapaId, clubSedeId } = await resolverNombres(torneos[0].organizacionId, datos);
+  const compartidas = columnasCompartidas(datos, etapaId, clubSedeId);
+
+  await prisma.$transaction(
+    torneos.map((t) => prisma.torneo.update({ where: { id: t.id }, data: { ...compartidas, cupo: cupoDe(t) } })),
+  );
+}
+
+// Día de hoy en Argentina como 'AAAA-MM-DD'. En UTC, de noche ya sería mañana.
+const hoy = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Argentina/Buenos_Aires' }).format(new Date());
+
+// Publicar abre la inscripción: el torneo se vuelve visible para los jugadores.
+export async function publicarConvocatoria(slug: string, usuarioId: number, torneoId: number) {
+  const organizacionId = await organizacionAdministrada(slug, usuarioId);
+  const torneos = await torneosDeLaConvocatoria(organizacionId, torneoId);
+  if (torneos.some((t) => t.estado !== EstadoTorneo.BORRADOR)) throw new ErrorHttp(409, 'TORNEO_NO_EDITABLE');
+
+  // El borrador puede guardarse sin fechas; publicarlo no. Los datos son iguales en todas las filas.
+  const { cierreInscripcion, fechaInicio } = aConvocatoria(torneos);
+  const campos: Record<string, string> = {};
+  if (cierreInscripcion === null) campos.cierreInscripcion = 'Elegí cuándo cierra la inscripción';
+  else if (cierreInscripcion < hoy()) campos.cierreInscripcion = 'La inscripción no puede cerrar en una fecha pasada';
+  if (fechaInicio === null) campos.fechaInicio = 'Elegí cuándo empieza el torneo';
+  if (Object.keys(campos).length > 0) throw new ErrorHttp(400, 'DATOS_INCOMPLETOS', campos);
+
+  await prisma.torneo.updateMany({
+    where: { id: { in: torneos.map((t) => t.id) }, estado: EstadoTorneo.BORRADOR },
+    data: { estado: EstadoTorneo.PUBLICADO },
+  });
+
+  return obtenerConvocatoria(slug, usuarioId, torneos[0].id);
+}
+
+// Una fila por convocatoria, de la más nueva a la más vieja.
+export async function listarConvocatorias(slug: string, usuarioId: number): Promise<ResumenConvocatoria[]> {
+  const organizacionId = await organizacionAdministrada(slug, usuarioId);
+  const torneos = await prisma.torneo.findMany({
+    where: { organizacionId },
+    orderBy: { id: 'asc' },
+    include: CON_RELACIONES,
+  });
+
+  // Mismo agrupamiento que torneosDeLaConvocatoria: por edición, o el torneo solo si no tiene.
+  const porEdicion = new Map<string, TorneoConRelaciones[]>();
+  for (const t of torneos) {
+    const clave = t.edicion ?? `#${t.id}`;
+    porEdicion.set(clave, [...(porEdicion.get(clave) ?? []), t]);
+  }
+
+  return [...porEdicion.values()]
+    .map((grupo) => {
+      const c = aConvocatoria(grupo);
+      return {
+        id: c.id,
+        nombre: c.nombre,
+        estado: c.estado,
+        categorias: c.torneos.map((t) => t.categoria),
+        cierreInscripcion: c.cierreInscripcion,
+        fechaInicio: c.fechaInicio,
+      };
+    })
+    .sort((a, b) => b.id - a.id);
 }

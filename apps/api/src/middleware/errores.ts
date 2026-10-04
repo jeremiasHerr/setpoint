@@ -5,6 +5,8 @@ export class ErrorHttp extends Error {
   constructor(
     public estado: number,
     public codigo: string,
+    // Mensaje por campo, con la misma forma que responde `validar`.
+    public campos?: Record<string, string>,
   ) {
     super(codigo);
   }
@@ -12,7 +14,7 @@ export class ErrorHttp extends Error {
 
 export const manejarErrores: ErrorRequestHandler = (err, _req, res, _next) => {
   if (err instanceof ErrorHttp) {
-    res.status(err.estado).json({ error: err.codigo });
+    res.status(err.estado).json(err.campos ? { error: err.codigo, campos: err.campos } : { error: err.codigo });
     return;
   }
 
