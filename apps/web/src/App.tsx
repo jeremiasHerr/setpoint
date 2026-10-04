@@ -20,7 +20,8 @@ export default function App() {
       <Route path="/inicio" element={<InicioPage />} />
       <Route path="/circuito" element={<TuCircuitoPage />} />
       <Route path="/padron" element={<PadronPage />} />
-      <Route path="/torneos/nuevo" element={<NuevoTorneoPage />} />
+      {/* /torneos/nuevo entra por acá con id "nuevo": es la misma pantalla antes del primer guardado. */}
+      <Route path="/torneos/:id" element={<NuevoTorneoPage />} />
     </Routes>
   );
 }

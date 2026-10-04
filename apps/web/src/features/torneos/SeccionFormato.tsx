@@ -3,20 +3,19 @@ import { Campo } from '../../components/Campo';
 import { Interruptor } from '../../components/Interruptor';
 import { Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
+import { MensajeError } from './MensajeError';
+import { aEntero } from './texto';
+import type { ErroresConvocatoria } from './useConvocatoria';
 
 // Los mismos topes que convocatoriaSchema.
 const MAXIMO_GRUPOS = 32;
 const MAXIMO_CLASIFICADOS = JUGADORES_POR_GRUPO - 1;
 
-// El campo vacío queda en 0 mientras se escribe; el schema lo rechaza al guardar.
-function aEntero(texto: string, maximo: number) {
-  return Math.min(maximo, Number(texto.replace(/\D/g, '')) || 0);
-}
-
 type Props = {
   cantidadGrupos: number;
   clasificanPorGrupo: number;
   tieneComplementaria: boolean;
+  errores: ErroresConvocatoria;
   alCambiarGrupos: (cantidadGrupos: number) => void;
   alCambiarClasificados: (clasificanPorGrupo: number) => void;
   alCambiarComplementaria: (tieneComplementaria: boolean) => void;
@@ -26,6 +25,7 @@ export function SeccionFormato({
   cantidadGrupos,
   clasificanPorGrupo,
   tieneComplementaria,
+  errores,
   alCambiarGrupos,
   alCambiarClasificados,
   alCambiarComplementaria,
@@ -38,15 +38,20 @@ export function SeccionFormato({
       </div>
 
       <div className="grid gap-3.5 sm:grid-cols-3">
-        <Campo
-          id="torneo-grupos"
-          rotulo="Grupos"
-          numerico
-          inputMode="numeric"
-          sufijo="zonas"
-          value={cantidadGrupos || ''}
-          onChange={(e) => alCambiarGrupos(aEntero(e.target.value, MAXIMO_GRUPOS))}
-        />
+        <div className="flex flex-col gap-2">
+          <Campo
+            id="torneo-grupos"
+            rotulo="Grupos"
+            numerico
+            inputMode="numeric"
+            sufijo="zonas"
+            value={cantidadGrupos || ''}
+            onChange={(e) => alCambiarGrupos(aEntero(e.target.value, MAXIMO_GRUPOS))}
+            aria-invalid={errores.cantidadGrupos ? true : undefined}
+            aria-describedby={errores.cantidadGrupos ? 'torneo-grupos-error' : undefined}
+          />
+          <MensajeError id="torneo-grupos-error">{errores.cantidadGrupos}</MensajeError>
+        </div>
         {/* Fijo: los grupos son siempre de 4, todos contra todos (02-dominio §3.1). */}
         <div className="flex flex-col gap-2">
           <span className="text-[13px] font-semibold text-gris-500">Jugadores por grupo</span>
@@ -55,15 +60,20 @@ export function SeccionFormato({
             <span className="text-[13px] text-gris-500">todos contra todos</span>
           </div>
         </div>
-        <Campo
-          id="torneo-clasificados"
-          rotulo="Clasifican a Campeonato"
-          numerico
-          inputMode="numeric"
-          sufijo="por zona"
-          value={clasificanPorGrupo || ''}
-          onChange={(e) => alCambiarClasificados(aEntero(e.target.value, MAXIMO_CLASIFICADOS))}
-        />
+        <div className="flex flex-col gap-2">
+          <Campo
+            id="torneo-clasificados"
+            rotulo="Clasifican a Campeonato"
+            numerico
+            inputMode="numeric"
+            sufijo="por zona"
+            value={clasificanPorGrupo || ''}
+            onChange={(e) => alCambiarClasificados(aEntero(e.target.value, MAXIMO_CLASIFICADOS))}
+            aria-invalid={errores.clasificanPorGrupo ? true : undefined}
+            aria-describedby={errores.clasificanPorGrupo ? 'torneo-clasificados-error' : undefined}
+          />
+          <MensajeError id="torneo-clasificados-error">{errores.clasificanPorGrupo}</MensajeError>
+        </div>
       </div>
 
       <div className="flex items-center justify-between gap-4 pt-1">
