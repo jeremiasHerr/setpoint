@@ -60,8 +60,7 @@ export function InicioSinTorneos({ nombre, jugadores, usaRanking }: Props) {
             </ol>
 
             <div className="flex flex-wrap items-center gap-3.5">
-              {/* Se conecta cuando exista la pantalla de nuevo torneo. */}
-              <Boton variante="organizador" grande>
+              <Boton variante="organizador" grande onClick={() => navegar('/torneos/nuevo')}>
                 Crear mi primer torneo
               </Boton>
               <span className="text-sm text-gris-500">

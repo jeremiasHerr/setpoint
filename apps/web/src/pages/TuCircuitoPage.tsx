@@ -121,12 +121,13 @@ function EditorCircuito({ slug, inicial }: { slug: string; inicial: Circuito }) 
             </Tarjeta>
           )}
 
-          {/* "Crear un torneo ahora" se conecta cuando exista la pantalla de nuevo torneo. */}
           <div className="flex flex-col gap-2.5">
             <Boton variante="organizador" className="w-full" disabled={guardando} onClick={() => navegar('/padron')}>
               Guardar y cargar el padrón
             </Boton>
-            <Boton className="w-full">Crear un torneo ahora</Boton>
+            <Boton className="w-full" disabled={guardando} onClick={() => navegar('/torneos/nuevo')}>
+              Crear un torneo ahora
+            </Boton>
           </div>
         </aside>
       </main>

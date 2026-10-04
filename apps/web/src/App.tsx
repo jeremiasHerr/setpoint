@@ -3,6 +3,7 @@ import { Catalogo } from './Catalogo';
 import { IngresoPage } from './pages/IngresoPage';
 import { InicioPage } from './pages/InicioPage';
 import { LandingPage } from './pages/LandingPage';
+import { NuevoTorneoPage } from './pages/NuevoTorneoPage';
 import { PadronPage } from './pages/PadronPage';
 import { RecuperarContrasenaPage } from './pages/RecuperarContrasenaPage';
 import { RegistroPage } from './pages/RegistroPage';
@@ -19,6 +20,7 @@ export default function App() {
       <Route path="/inicio" element={<InicioPage />} />
       <Route path="/circuito" element={<TuCircuitoPage />} />
       <Route path="/padron" element={<PadronPage />} />
+      <Route path="/torneos/nuevo" element={<NuevoTorneoPage />} />
     </Routes>
   );
 }
