@@ -124,3 +124,13 @@ export type Convocatoria = DatosConvocatoria & {
   estado: EstadoTorneo;
   torneos: { id: number; categoria: string }[];
 };
+
+// Una fila del listado de torneos de la organización: una por convocatoria, no por categoría.
+export type ResumenConvocatoria = {
+  id: number;
+  nombre: string;
+  estado: EstadoTorneo;
+  categorias: string[];
+  cierreInscripcion: string | null;
+  fechaInicio: string | null;
+};
