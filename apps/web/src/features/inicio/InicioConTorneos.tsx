@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Boton } from '../../components/Boton';
 import { IconoMas } from '../../components/IconoMas';
 import { Numero } from '../../components/Numero';
@@ -22,6 +23,7 @@ function Grupo({ titulo, children }: { titulo: string; children: ReactNode }) {
 // y a la derecha lo que pide atención.
 export function InicioConTorneos({ torneos }: { torneos: TorneosDeInicio }) {
   const { enJuego, conInscripcionAbierta, terminados, totalTerminados, avisos } = torneos;
+  const navegar = useNavigate();
 
   return (
     <>
@@ -33,8 +35,7 @@ export function InicioConTorneos({ torneos }: { torneos: TorneosDeInicio }) {
             abierta
           </p>
         </div>
-        {/* Se conecta cuando exista la pantalla de nuevo torneo. */}
-        <Boton variante="organizador">
+        <Boton variante="organizador" onClick={() => navegar('/torneos/nuevo')}>
           <IconoMas className="size-[13px] stroke-[2.6]" />
           Nuevo torneo
         </Boton>

@@ -110,6 +110,14 @@ export const convocatoriaSchema = z
 export type DatosConvocatoriaEntrada = z.input<typeof convocatoriaSchema>;
 export type DatosConvocatoria = z.output<typeof convocatoriaSchema>;
 
+// Punto de partida del formulario de nuevo torneo. Zod completa los valores por defecto;
+// el nombre y las categorías los elige la organización.
+export function convocatoriaInicial(categorias: string[]): DatosConvocatoria {
+  const datos = convocatoriaSchema.parse({ nombre: 'provisorio', categorias: [{ categoria: 'x', cupo: 2 }] });
+  const cupo = datos.cantidadGrupos * JUGADORES_POR_GRUPO;
+  return { ...datos, nombre: '', categorias: categorias.map((categoria) => ({ categoria, cupo })) };
+}
+
 // Lo que devuelve la API. `id` es el del primer torneo de la convocatoria y es el que va en la URL.
 export type Convocatoria = DatosConvocatoria & {
   id: number;
