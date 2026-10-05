@@ -58,6 +58,8 @@ El registro ocurre **en el momento de inscribirse a un torneo**, no antes. Datos
 
 La organización **ve y puede revertir** las vinculaciones desde su panel. En un circuito cerrado como POLENTA el riesgo es bajo —todos se conocen y nadie gana nada apropiándose del historial ajeno—; en un circuito abierto la revisión de la organización pasa a ser más relevante.
 
+> **Estado:** el lado de la organización ya está: el padrón marca los perfiles con cuenta y permite desvincularlos (`DELETE /jugadores/:id/cuenta`). La creación de la cuenta y la elección del perfil llegan con F12 ([decisión 007](decisiones/007-vinculacion-de-cuentas-en-f02.md)).
+
 > **Descartado:** verificación por SMS y flujo de reclamo de perfiles. Resolvían un riesgo que no existe en un circuito cerrado de 77 personas conocidas entre sí.
 
 ---

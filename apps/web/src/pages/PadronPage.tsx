@@ -11,7 +11,7 @@ import { useCircuito } from '../features/circuito/useCircuito';
 import { iniciales, navegacionOrganizador } from '../features/organizador/encabezado';
 import { PanelJugador, type ErroresJugador } from '../features/padron/PanelJugador';
 import { TablaPadron } from '../features/padron/TablaPadron';
-import { useCrearJugador, useEditarJugador, usePadron } from '../features/padron/usePadron';
+import { useCrearJugador, useDesvincularCuenta, useEditarJugador, usePadron } from '../features/padron/usePadron';
 import { ErrorApi } from '../lib/api';
 
 function erroresDe(error: Error | null): ErroresJugador {
@@ -44,18 +44,22 @@ function Padron({ sesion }: { sesion: Sesion }) {
   const padron = usePadron(slug);
   const crear = useCrearJugador(slug);
   const editar = useEditarJugador(slug);
+  const desvincular = useDesvincularCuenta(slug);
   const cerrarSesion = useCerrarSesion();
 
   const [editando, setEditando] = useState<JugadorPadron | null>(null);
   // Cambia después de cada alta para vaciar el formulario.
   const [altas, setAltas] = useState(0);
 
-  const sesionInvalida = useSesionInvalida(circuito.error ?? padron.error ?? crear.error ?? editar.error);
+  const sesionInvalida = useSesionInvalida(
+    circuito.error ?? padron.error ?? crear.error ?? editar.error ?? desvincular.error,
+  );
   const mutacion = editando ? editar : crear;
 
   function elegir(jugador: JugadorPadron | null) {
     crear.reset();
     editar.reset();
+    desvincular.reset();
     setEditando(jugador);
   }
 
@@ -65,6 +69,7 @@ function Padron({ sesion }: { sesion: Sesion }) {
   }
 
   function guardar(datos: DatosCrearJugador) {
+    desvincular.reset();
     if (editando) {
       editar.mutate({ id: editando.id, datos }, { onSuccess: () => setEditando(null) });
     } else {
@@ -75,7 +80,15 @@ function Padron({ sesion }: { sesion: Sesion }) {
   function cambiarActivo(activo: boolean) {
     if (!editando) return;
     // El panel sigue abierto con el jugador actualizado, para poder deshacerlo.
+    desvincular.reset();
     editar.mutate({ id: editando.id, datos: { activo } }, { onSuccess: (fila) => setEditando(fila) });
+  }
+
+  function desvincularCuenta() {
+    if (!editando) return;
+    editar.reset();
+    // Como con la baja, el panel sigue abierto con el jugador actualizado.
+    desvincular.mutate(editando.id, { onSuccess: (fila) => setEditando(fila) });
   }
 
   const cargando = !circuito.data || !padron.data;
@@ -151,10 +164,11 @@ function Padron({ sesion }: { sesion: Sesion }) {
               categorias={circuito.data.categorias}
               conRanking={circuito.data.usaRanking}
               jugador={editando ?? undefined}
-              enviando={mutacion.isPending}
-              errores={erroresDe(mutacion.error)}
+              enviando={mutacion.isPending || desvincular.isPending}
+              errores={erroresDe(mutacion.error ?? desvincular.error)}
               alGuardar={guardar}
               alCambiarActivo={cambiarActivo}
+              alDesvincular={desvincularCuenta}
               alCancelar={() => elegir(null)}
             />
 

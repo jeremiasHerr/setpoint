@@ -1,6 +1,6 @@
 import type { DatosCrearJugador, DatosEditarJugador } from '@setpoint/shared';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { crearJugador, editarJugador, listarPadron } from './api';
+import { crearJugador, desvincularCuenta, editarJugador, listarPadron } from './api';
 
 export function usePadron(slug: string) {
   return useQuery({
@@ -32,6 +32,14 @@ export function useEditarJugador(slug: string) {
   const refrescar = useRefrescar(slug);
   return useMutation({
     mutationFn: ({ id, datos }: { id: number; datos: DatosEditarJugador }) => editarJugador(slug, id, datos),
+    onSuccess: refrescar,
+  });
+}
+
+export function useDesvincularCuenta(slug: string) {
+  const refrescar = useRefrescar(slug);
+  return useMutation({
+    mutationFn: (id: number) => desvincularCuenta(slug, id),
     onSuccess: refrescar,
   });
 }

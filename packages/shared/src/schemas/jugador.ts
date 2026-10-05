@@ -40,4 +40,7 @@ export type JugadorPadron = {
   puesto: number | null;
   partidos: number;
   creadoEn: string;
+  // La cuenta de jugador que reclamó este perfil del padrón. null si nadie lo vinculó.
+  // La organización la ve para poder revertir una vinculación equivocada.
+  cuenta: { nombre: string; email: string } | null;
 };

@@ -20,6 +20,7 @@ import {
   EstadoTorneo,
   ModoInscripcion,
 } from '@prisma/client';
+import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
@@ -161,6 +162,22 @@ async function main() {
       },
     });
   }
+
+  // --- una cuenta de jugador vinculada a su perfil del padrón ---
+  // Las cuentas de jugador nacen al pagar una inscripción (F12). Hasta que eso exista,
+  // esta es la única forma de ver y probar la desvinculación desde el padrón.
+  const sanhueza = await prisma.jugador.findFirstOrThrow({
+    where: { organizacionId: org.id, apellido: 'Sanhueza' },
+  });
+  await prisma.usuario.create({
+    data: {
+      email: 'martin.sanhueza@example.com',
+      passwordHash: bcrypt.hashSync('jugador-de-prueba', 10),
+      nombre: 'Martín',
+      apellido: 'Sanhueza',
+      jugadores: { connect: { id: sanhueza.id } },
+    },
+  });
 
   // --- un torneo publicado, con las inscripciones abiertas ---
   await prisma.torneo.create({
