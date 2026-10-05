@@ -1,0 +1,169 @@
+{
+  "organizacion": "Polenta Team Tenis",
+  "categoria": "Tercera",
+  "etapas": [
+    "Primavera",
+    "Verano",
+    "Pretemporada",
+    "Otoño",
+    "Invierno"
+  ],
+  "jugadores": [
+    {
+      "id": 1,
+      "nombre": "Martín",
+      "apellido": "Sanhueza",
+      "categoria": "Tercera"
+    },
+    {
+      "id": 2,
+      "nombre": "Diego",
+      "apellido": "Antileo",
+      "categoria": "Tercera"
+    },
+    {
+      "id": 3,
+      "nombre": "Juan",
+      "apellido": "Painemil",
+      "categoria": "Tercera"
+    },
+    {
+      "id": 4,
+      "nombre": "Javier",
+      "apellido": "Roa",
+      "categoria": "Tercera"
+    },
+    {
+      "id": 5,
+      "nombre": "Marcelo",
+      "apellido": "Ledesma",
+      "categoria": "Tercera"
+    },
+    {
+      "id": 6,
+      "nombre": "Walter",
+      "apellido": "Bustos",
+      "categoria": "Tercera"
+    },
+    {
+      "id": 7,
+      "nombre": "Carlos",
+      "apellido": "Huenchul",
+      "categoria": "Tercera"
+    },
+    {
+      "id": 8,
+      "nombre": "Claudio",
+      "apellido": "Nahuel",
+      "categoria": "Tercera"
+    },
+    {
+      "id": 9,
+      "nombre": "Gianluca",
+      "apellido": "Ferraro",
+      "categoria": "Tercera"
+    },
+    {
+      "id": 10,
+      "nombre": "Damián",
+      "apellido": "Curruhuinca",
+      "categoria": "Tercera"
+    },
+    {
+      "id": 11,
+      "nombre": "Fernando",
+      "apellido": "Llancafilo",
+      "categoria": "Tercera"
+    },
+    {
+      "id": 12,
+      "nombre": "Cristian",
+      "apellido": "Sepúlveda",
+      "categoria": "Tercera"
+    },
+    {
+      "id": 13,
+      "nombre": "Gerardo",
+      "apellido": "Quilodrán",
+      "categoria": "Tercera"
+    },
+    {
+      "id": 14,
+      "nombre": "Daniel",
+      "apellido": "Zapata",
+      "categoria": "Tercera"
+    },
+    {
+      "id": 15,
+      "nombre": "Sergio",
+      "apellido": "Mansilla",
+      "categoria": "Tercera"
+    },
+    {
+      "id": 16,
+      "nombre": "Jorge",
+      "apellido": "Pincheira",
+      "categoria": "Tercera"
+    },
+    {
+      "id": 17,
+      "nombre": "Julián",
+      "apellido": "Toledo",
+      "categoria": "Tercera"
+    },
+    {
+      "id": 18,
+      "nombre": "Jesús",
+      "apellido": "Riquelme",
+      "categoria": "Tercera"
+    },
+    {
+      "id": 19,
+      "nombre": "Darío",
+      "apellido": "Parada",
+      "categoria": "Tercera"
+    },
+    {
+      "id": 20,
+      "nombre": "Adrián",
+      "apellido": "Montecino",
+      "categoria": "Tercera"
+    },
+    {
+      "id": 21,
+      "nombre": "Ricardo",
+      "apellido": "Barrera",
+      "categoria": "Tercera"
+    },
+    {
+      "id": 22,
+      "nombre": "Oscar",
+      "apellido": "Villalobos",
+      "categoria": "Tercera"
+    },
+    {
+      "id": 23,
+      "nombre": "Alejo",
+      "apellido": "Figueroa",
+      "categoria": "Tercera"
+    },
+    {
+      "id": 24,
+      "nombre": "Gustavo",
+      "apellido": "Fuentealba",
+      "categoria": "Tercera"
+    },
+    {
+      "id": 25,
+      "nombre": "Pablo",
+      "apellido": "Medel",
+      "categoria": "Tercera"
+    },
+    {
+      "id": 26,
+      "nombre": "Rodrigo",
+      "apellido": "Maturana",
+      "categoria": "Tercera"
+    }
+  ]
+}

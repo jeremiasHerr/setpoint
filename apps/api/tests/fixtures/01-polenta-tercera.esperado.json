@@ -1,0 +1,889 @@
+{
+  "esPlanillaDeJugadores": true,
+  "jugadores": [
+    {
+      "fila": 4,
+      "nombre": "Martín",
+      "apellido": "Sanhueza",
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 10
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 15
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 50
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 15
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 75
+        }
+      ],
+      "acumulado": 165,
+      "coincideCon": 1
+    },
+    {
+      "fila": 5,
+      "nombre": "Diego",
+      "apellido": "Antileo",
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 15
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 50
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 25
+        }
+      ],
+      "acumulado": 110,
+      "coincideCon": 2
+    },
+    {
+      "fila": 6,
+      "nombre": "Juan",
+      "apellido": "Painemil",
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 0
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 100
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 0
+        }
+      ],
+      "acumulado": 100,
+      "coincideCon": 3
+    },
+    {
+      "fila": 7,
+      "nombre": "Javier",
+      "apellido": "Roa",
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 10
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 25
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 50
+        }
+      ],
+      "acumulado": 95,
+      "coincideCon": 4
+    },
+    {
+      "fila": 8,
+      "nombre": "Marcelo",
+      "apellido": "Ledesma",
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 0
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 50
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 15
+        }
+      ],
+      "acumulado": 85,
+      "coincideCon": 5
+    },
+    {
+      "fila": 9,
+      "nombre": "Walter",
+      "apellido": "Bustos",
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 10
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 15
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 50
+        }
+      ],
+      "acumulado": 85,
+      "coincideCon": 6
+    },
+    {
+      "fila": 10,
+      "nombre": "Carlos",
+      "apellido": "Huenchul",
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 10
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 25
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 15
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 25
+        }
+      ],
+      "acumulado": 75,
+      "coincideCon": 7
+    },
+    {
+      "fila": 11,
+      "nombre": "Claudio",
+      "apellido": "Nahuel",
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 10
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 25
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 15
+        }
+      ],
+      "acumulado": 70,
+      "coincideCon": 8
+    },
+    {
+      "fila": 12,
+      "nombre": "Gianluca",
+      "apellido": "Ferraro",
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 10
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 25
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 25
+        }
+      ],
+      "acumulado": 70,
+      "coincideCon": 9
+    },
+    {
+      "fila": 13,
+      "nombre": "Damián",
+      "apellido": "Curruhuinca",
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 0
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 25
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 15
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 10
+        }
+      ],
+      "acumulado": 60,
+      "coincideCon": 10
+    },
+    {
+      "fila": 14,
+      "nombre": "Fernando",
+      "apellido": "Llancafilo",
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 15
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 15
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 10
+        }
+      ],
+      "acumulado": 60,
+      "coincideCon": 11
+    },
+    {
+      "fila": 15,
+      "nombre": "Cristian",
+      "apellido": "Sepúlveda",
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 0
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 50
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 10
+        }
+      ],
+      "acumulado": 60,
+      "coincideCon": 12
+    },
+    {
+      "fila": 16,
+      "nombre": "Gerardo",
+      "apellido": "Quilodrán",
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 10
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 15
+        }
+      ],
+      "acumulado": 55,
+      "coincideCon": 13
+    },
+    {
+      "fila": 17,
+      "nombre": "Daniel",
+      "apellido": "Zapata",
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 0
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 25
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 15
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 15
+        }
+      ],
+      "acumulado": 55,
+      "coincideCon": 14
+    },
+    {
+      "fila": 18,
+      "nombre": "Sergio",
+      "apellido": "Mansilla",
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 10
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 10
+        }
+      ],
+      "acumulado": 50,
+      "coincideCon": 15
+    },
+    {
+      "fila": 19,
+      "nombre": "Jorge",
+      "apellido": "Pincheira",
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 10
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 15
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 15
+        }
+      ],
+      "acumulado": 50,
+      "coincideCon": 16
+    },
+    {
+      "fila": 20,
+      "nombre": "Julián",
+      "apellido": "Toledo",
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 0
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 25
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 10
+        }
+      ],
+      "acumulado": 35,
+      "coincideCon": 17
+    },
+    {
+      "fila": 21,
+      "nombre": "Jesús",
+      "apellido": "Riquelme",
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 0
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 15
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 10
+        }
+      ],
+      "acumulado": 35,
+      "coincideCon": 18
+    },
+    {
+      "fila": 22,
+      "nombre": "Darío",
+      "apellido": "Parada",
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 0
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 25
+        }
+      ],
+      "acumulado": 35,
+      "coincideCon": 19
+    },
+    {
+      "fila": 23,
+      "nombre": "Adrián",
+      "apellido": "Montecino",
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 10
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 0
+        }
+      ],
+      "acumulado": 30,
+      "coincideCon": 20
+    },
+    {
+      "fila": 24,
+      "nombre": "Ricardo",
+      "apellido": "Barrera",
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 0
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 10
+        }
+      ],
+      "acumulado": 30,
+      "coincideCon": 21
+    },
+    {
+      "fila": 25,
+      "nombre": "Oscar",
+      "apellido": "Villalobos",
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 0
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 25
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 0
+        }
+      ],
+      "acumulado": 25,
+      "coincideCon": 22
+    },
+    {
+      "fila": 26,
+      "nombre": "Alejo",
+      "apellido": "Figueroa",
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 0
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 15
+        }
+      ],
+      "acumulado": 15,
+      "coincideCon": 23
+    },
+    {
+      "fila": 27,
+      "nombre": "Gustavo",
+      "apellido": "Fuentealba",
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 0
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 15
+        }
+      ],
+      "acumulado": 15,
+      "coincideCon": 24
+    },
+    {
+      "fila": 28,
+      "nombre": "Pablo",
+      "apellido": "Medel",
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 0
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 0
+        }
+      ],
+      "acumulado": 10,
+      "coincideCon": 25
+    },
+    {
+      "fila": 29,
+      "nombre": "Rodrigo",
+      "apellido": "Maturana",
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 0
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 0
+        }
+      ],
+      "acumulado": 0,
+      "coincideCon": 26
+    }
+  ]
+}
