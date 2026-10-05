@@ -12,3 +12,7 @@ export function crearJugador(slug: string, datos: DatosCrearJugador) {
 export function editarJugador(slug: string, id: number, datos: DatosEditarJugador) {
   return pedir<JugadorPadron>('PATCH', `/api/organizaciones/${slug}/jugadores/${id}`, datos);
 }
+
+export function desvincularCuenta(slug: string, id: number) {
+  return pedir<JugadorPadron>('DELETE', `/api/organizaciones/${slug}/jugadores/${id}/cuenta`);
+}

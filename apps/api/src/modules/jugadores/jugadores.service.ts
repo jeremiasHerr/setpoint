@@ -15,6 +15,7 @@ async function padronDe(organizacionId: number): Promise<JugadorPadron[]> {
       orderBy: [{ apellido: 'asc' }, { nombre: 'asc' }],
       include: {
         categoria: { select: { nombre: true } },
+        usuario: { select: { nombre: true, apellido: true, email: true } },
         _count: { select: { partidosComoA: { where: PARTIDO_JUGADO }, partidosComoB: { where: PARTIDO_JUGADO } } },
       },
     }),
@@ -49,6 +50,7 @@ async function padronDe(organizacionId: number): Promise<JugadorPadron[]> {
     puesto: puestos.get(j.id) ?? null,
     partidos: j._count.partidosComoA + j._count.partidosComoB,
     creadoEn: j.creadoEn.toISOString(),
+    cuenta: j.usuario ? { nombre: `${j.usuario.nombre} ${j.usuario.apellido}`, email: j.usuario.email } : null,
   }));
 }
 
@@ -89,13 +91,17 @@ export async function crearJugador(slug: string, usuarioId: number, datos: Datos
   return filaDe(organizacionId, jugador.id);
 }
 
-export async function editarJugador(slug: string, usuarioId: number, jugadorId: number, datos: DatosEditarJugador) {
-  const organizacionId = await organizacionAdministrada(slug, usuarioId);
+async function verificarJugador(organizacionId: number, jugadorId: number) {
   if (!Number.isInteger(jugadorId)) throw new ErrorHttp(404, 'JUGADOR_NO_ENCONTRADO');
 
   // El filtro por organización es el aislamiento: el id solo no alcanza.
   const jugador = await prisma.jugador.findFirst({ where: { id: jugadorId, organizacionId }, select: { id: true } });
   if (!jugador) throw new ErrorHttp(404, 'JUGADOR_NO_ENCONTRADO');
+}
+
+export async function editarJugador(slug: string, usuarioId: number, jugadorId: number, datos: DatosEditarJugador) {
+  const organizacionId = await organizacionAdministrada(slug, usuarioId);
+  await verificarJugador(organizacionId, jugadorId);
 
   const cambios: Prisma.JugadorUncheckedUpdateInput = {
     nombre: datos.nombre,
@@ -106,5 +112,16 @@ export async function editarJugador(slug: string, usuarioId: number, jugadorId: 
   if (datos.telefono !== undefined) cambios.telefono = datos.telefono || null;
 
   await prisma.jugador.update({ where: { id: jugadorId }, data: cambios });
+  return filaDe(organizacionId, jugadorId);
+}
+
+// Revierte una vinculación equivocada: el perfil vuelve a quedar libre para que lo reclame
+// el jugador correcto. Puntos, partidos e inscripciones cuelgan del Jugador, no de la cuenta,
+// así que no se tocan. La cuenta tampoco se borra: puede seguir vinculada a otros circuitos.
+export async function desvincularCuenta(slug: string, usuarioId: number, jugadorId: number) {
+  const organizacionId = await organizacionAdministrada(slug, usuarioId);
+  await verificarJugador(organizacionId, jugadorId);
+
+  await prisma.jugador.update({ where: { id: jugadorId }, data: { usuarioId: null } });
   return filaDe(organizacionId, jugadorId);
 }

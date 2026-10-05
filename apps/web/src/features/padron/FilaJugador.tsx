@@ -68,6 +68,11 @@ export function FilaJugador({ jugador, columnas, conRanking, seleccionado, alEdi
             {jugador.nombre} {jugador.apellido}
           </span>
           {esNuevo && <span className="shrink-0 rounded-full bg-lima px-[7px] py-0.5 font-mono text-[11px] whitespace-nowrap">nuevo</span>}
+          {jugador.cuenta && (
+            <span className="shrink-0 rounded-full bg-linea-suave px-[7px] py-0.5 font-mono text-[11px] whitespace-nowrap text-gris-500">
+              con cuenta
+            </span>
+          )}
           {!jugador.activo && (
             <span className="shrink-0 rounded-full bg-linea-suave px-[7px] py-0.5 font-mono text-[11px] whitespace-nowrap text-gris-500">
               de baja
