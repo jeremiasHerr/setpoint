@@ -118,6 +118,23 @@ Los tres endpoints exigen sesión y solo responden a administradores de esa orga
 
 **El teléfono solo sale por estos endpoints.** Ninguna respuesta pública lo incluye.
 
+### API de la importación desde planilla (F03)
+
+Mismas reglas de acceso que el padrón. El diseño de la extracción está en [06-ia.md](06-ia.md) §1.
+
+| Endpoint | Qué hace |
+|---|---|
+| `POST /api/organizaciones/:slug/importaciones` | Multipart con `archivo` (`.xlsx`, `.xls` o `.csv`, hasta 2 MB) y `categoria` (por nombre). Procesa la planilla con IA y devuelve la propuesta en estado `PROCESADO`, o `ERROR` con el motivo. Tarda unos 20 segundos |
+| `GET /api/organizaciones/:slug/importaciones/:id` | Propuesta, problemas de la auditoría y conteos (existentes, nuevos, dudosos, con problemas) |
+| `POST /api/organizaciones/:slug/importaciones/:id/confirmar` | Una decisión por fila: `vincular` con un jugador del padrón, `crear` uno nuevo o `excluir`. Aplica todo en una transacción y deja la importación `CONFIRMADO` |
+| `POST /api/organizaciones/:slug/importaciones/:id/descartar` | Pasa a `DESCARTADO` sin guardar nada |
+
+**La propuesta se lee de la base, no del cliente.** El cliente solo manda las decisiones. Así no puede cargar puntos que la IA no extrajo ni la auditoría revisó.
+
+**Un casillero con puntos crea un movimiento `IMPORTACION_INICIAL`**, fechado el 1° de enero del año del casillero ([decisión 008](decisiones/008-fecha-de-los-movimientos-importados.md)). Un casillero en 0 no crea nada, por la misma razón que un jugador nuevo entra sin movimientos.
+
+**Confirmar es idempotente por casillero:** si el jugador ya tiene en esa categoría un movimiento de la misma etapa, el mismo año y los mismos puntos, se saltea. Volver a subir la planilla cuando hay altas solo agrega lo nuevo.
+
 ---
 
 ## 6. Creación del torneo

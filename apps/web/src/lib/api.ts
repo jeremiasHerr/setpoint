@@ -14,17 +14,19 @@ export class ErrorApi extends Error {
 type Metodo = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 // Llama a la API con el token de la sesión, si hay. Los errores llegan como ErrorApi con el código de la API.
+// Un FormData viaja como multipart: el navegador arma el Content-Type con su separador.
 export async function pedir<T>(metodo: Metodo, ruta: string, cuerpo?: unknown): Promise<T> {
   const token = leerSesion()?.token;
+  const esFormulario = cuerpo instanceof FormData;
   let respuesta: Response;
   try {
     respuesta = await fetch(ruta, {
       method: metodo,
       headers: {
-        ...(cuerpo !== undefined && { 'Content-Type': 'application/json' }),
+        ...(cuerpo !== undefined && !esFormulario && { 'Content-Type': 'application/json' }),
         ...(token && { Authorization: `Bearer ${token}` }),
       },
-      body: cuerpo === undefined ? undefined : JSON.stringify(cuerpo),
+      body: cuerpo === undefined ? undefined : esFormulario ? cuerpo : JSON.stringify(cuerpo),
     });
   } catch {
     throw new ErrorApi('SIN_CONEXION');

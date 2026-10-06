@@ -1,0 +1,44 @@
+# Requests de la API para la extensión REST Client de VS Code.
+# El token sale de POST /api/auth/ingreso (o /registro). No lo commitees con un valor real.
+
+@base = http://localhost:3000/api
+@slug = polenta
+@token = pegar-aca-el-token
+@importacion = 1
+
+### Importación del padrón (F03): sube la planilla y la procesa con IA. Tarda ~20 s.
+POST {{base}}/organizaciones/{{slug}}/importaciones
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=limite
+
+--limite
+Content-Disposition: form-data; name="categoria"
+
+Tercera
+--limite
+Content-Disposition: form-data; name="archivo"; filename="01-polenta-tercera.xlsx"
+Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+
+< ./tests/fixtures/01-polenta-tercera.xlsx
+--limite--
+
+### Ver la propuesta, la auditoría y los conteos
+GET {{base}}/organizaciones/{{slug}}/importaciones/{{importacion}}
+Authorization: Bearer {{token}}
+
+### Confirmar: una decisión por cada fila de la propuesta
+POST {{base}}/organizaciones/{{slug}}/importaciones/{{importacion}}/confirmar
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "decisiones": [
+    { "fila": 4, "accion": "vincular", "jugadorId": 1 },
+    { "fila": 5, "accion": "crear" },
+    { "fila": 6, "accion": "excluir" }
+  ]
+}
+
+### Descartar sin guardar nada
+POST {{base}}/organizaciones/{{slug}}/importaciones/{{importacion}}/descartar
+Authorization: Bearer {{token}}
