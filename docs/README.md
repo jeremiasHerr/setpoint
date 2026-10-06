@@ -94,6 +94,8 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 - ~~¿La foto del partido es obligatoria?~~ **No.** Es regla interna de POLENTA. El sistema permite adjuntar fotos, opcionalmente
 - ~~¿El modelo de ranking por casilleros es una particularidad de POLENTA?~~ **No.** Es el modelo de la ATP: ventana rodante con reemplazo al volver el torneo
 - ~~¿La app negocia la fecha o solo la registra?~~ **La registra.** Los jugadores siguen coordinando por WhatsApp; cualquiera de los dos anota la fecha y el rival confirma con un toque. La confirmación se modela en el schema desde el inicio ([04](04-flujo-jugador.md) §6)
+- ~~¿Cómo interpreta la IA la planilla del padrón: mapeo de columnas o extracción completa?~~ **Extracción completa, auditada contra la planilla** antes de mostrarla y confirmada por la organización ([decisión 009](decisiones/009-importacion-extraccion-completa-con-ia.md)). El mapeo se rompía con cada variante de planilla; la auditoría cubre el riesgo de que el modelo invente un número
+- ~~¿Qué fecha llevan los puntos importados de la planilla?~~ **El 1° de enero del año del casillero** ([decisión 008](decisiones/008-fecha-de-los-movimientos-importados.md)). La planilla no tiene fechas y el ranking solo necesita que un torneo real de esa etapa y ese año le gane al importado
 
 ---
 
@@ -111,7 +113,7 @@ Lista para llevar a la próxima charla. Las respondidas se tachan.
 ### Inscripción y padrón
 
 4. ¿Alguna vez alguien de afuera del grupo quiso anotarse a un torneo? ¿Cómo lo manejaron?
-5. **Pedir el Excel del ranking** en su formato original, no el PDF. Define qué columnas tiene y qué tan sucio viene.
+5. **Pedir el Excel del ranking** en su formato original, no el PDF. Ya no bloquea la importación (F03 funciona con columnas en otro orden, totales, notas y nombres escritos distinto), pero hace falta para sumar al eval un caso real ([06](06-ia.md) §1).
 6. ¿Estarías dispuesto a cargar el DNI de los jugadores en el padrón, o preferís que el sistema no lo pida?
 
 ### Pagos y devoluciones
@@ -145,6 +147,7 @@ Lista para llevar a la próxima charla. Las respondidas se tachan.
 | Sobreventa de cupos por concurrencia | Reserva con vencimiento + lista de espera |
 | La demo depende de una cuenta de Neon externa | `docker-compose` con Postgres local, autosuficiente |
 | El insumo de la extracción de resultados no está confirmado | El desarrollo es el mismo para captura, foto o texto libre. Las otras dos funcionalidades de IA no dependen de esto |
+| La importación del padrón depende de la API de Anthropic, y `docker compose up` no puede depender de cuentas externas | Sin `ANTHROPIC_API_KEY` la API levanta igual y la importación termina en error con el motivo; el alta manual sigue funcionando. Para la demo, la key va en el `.env`. El rate limiting y el tope de gasto de [06](06-ia.md) todavía no están implementados |
 | Exposición de datos de contacto en pantallas públicas | Ninguna vista pública incluye teléfono ni email |
 
 ---
