@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import { Catalogo } from './Catalogo';
+import { ImportarPadronPage } from './pages/ImportarPadronPage';
 import { IngresoPage } from './pages/IngresoPage';
 import { InicioPage } from './pages/InicioPage';
 import { LandingPage } from './pages/LandingPage';
@@ -22,6 +23,7 @@ export default function App() {
       <Route path="/inicio" element={<InicioPage />} />
       <Route path="/circuito" element={<TuCircuitoPage />} />
       <Route path="/padron" element={<PadronPage />} />
+      <Route path="/padron/importar" element={<ImportarPadronPage />} />
       {/* /torneos/nuevo entra por acá con id "nuevo": es la misma pantalla antes del primer guardado. */}
       <Route path="/torneos/:id" element={<NuevoTorneoPage />} />
     </Routes>

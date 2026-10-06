@@ -1,17 +1,20 @@
 import { EstadoProcesoIA, MotivoMovimiento, type ImportacionPadron, type Prisma } from '@prisma/client';
-import type { DatosConfirmarImportacion, FilaPropuesta, Importacion, ResultadoConfirmacion } from '@setpoint/shared';
+import type { DatosConfirmarImportacion, FilaExtraida, Importacion, ResultadoConfirmacion } from '@setpoint/shared';
 import { organizacionAdministrada } from '../../../lib/permisos';
 import { prisma } from '../../../lib/prisma';
 import { ErrorHttp } from '../../../middleware/errores';
-import type { Auditoria } from './auditar';
+import { numerosDeFila, type Auditoria } from './auditar';
 import { contarFilas, planificarConfirmacion, yaExiste } from './confirmacion';
+import { leerPlanilla } from './leer-planilla';
 import { procesarPlanilla } from './procesar-planilla';
 
 // Lo que se guarda en ImportacionPadron.resumen. La confirmación lee la propuesta de acá,
 // nunca del cliente.
 type Resumen = {
   categoriaId: number;
-  propuesta: FilaPropuesta[];
+  propuesta: FilaExtraida[];
+  // Texto original de cada fila de la propuesta, por número de fila.
+  textos: Record<number, string>;
   auditoria: Auditoria;
   modelo: string;
   versionPrompt: string;
@@ -41,7 +44,7 @@ async function vista(importacion: ImportacionPadron): Promise<Importacion> {
     creadoEn: importacion.creadoEn.toISOString(),
     confirmadaEn: importacion.confirmadaEn?.toISOString() ?? null,
     error: resumen.error ?? null,
-    propuesta: resumen.propuesta ?? [],
+    propuesta: (resumen.propuesta ?? []).map((f) => ({ ...f, enLaPlanilla: resumen.textos?.[f.fila] ?? '' })),
     problemas: [...(resumen.auditoria?.globales ?? []), ...(resumen.auditoria?.porFila ?? [])],
     conteos: resumen.conteos ?? SIN_CONTEOS,
   };
@@ -97,9 +100,21 @@ export async function crearImportacion(slug: string, usuarioId: number, archivo:
       ? resultado.respuesta.esPlanillaDeJugadores ? null : `No parece una planilla de jugadores: ${resultado.respuesta.motivo ?? 'sin motivo'}`
       : resultado.error;
 
+    // Las celdas de texto de la fila, sin los números: el nombre como lo escribió la organización.
+    const filasPropuestas = new Set(propuesta.map((j) => j.fila));
+    const textos = Object.fromEntries(
+      leerPlanilla(archivo.contenido)
+        .filter((f) => filasPropuestas.has(f.fila))
+        .map((f) => [
+          f.fila,
+          f.celdas.filter((c): c is string => typeof c === 'string' && numerosDeFila([c]).length === 0).join(' · '),
+        ]),
+    );
+
     const resumen: Resumen = {
       categoriaId,
       propuesta,
+      textos,
       auditoria,
       modelo: resultado.modelo,
       versionPrompt: resultado.versionPrompt,

@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Boton } from '../../components/Boton';
 import { Etiqueta } from '../../components/Etiqueta';
 import { IconoMas } from '../../components/IconoMas';
@@ -98,10 +98,9 @@ export function InicioSinTorneos({ nombre, jugadores, usaRanking }: Props) {
             <p className="text-sm leading-normal text-gris-500">
               Subilo y los cargamos al padrón, con sus puntos si los tiene. Revisás todo antes de guardar.
             </p>
-            {/* Se conecta cuando exista la pantalla de importar padrón. */}
-            <button type="button" className="mt-0.5 self-start text-sm font-medium hover:text-gris-500">
+            <Link to="/padron/importar" className="mt-0.5 self-start text-sm font-medium hover:text-gris-500">
               Importar padrón →
-            </button>
+            </Link>
           </Tarjeta>
         </aside>
       </main>

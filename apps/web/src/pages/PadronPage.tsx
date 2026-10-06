@@ -1,6 +1,6 @@
 import type { DatosCrearJugador, JugadorPadron } from '@setpoint/shared';
 import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { Boton } from '../components/Boton';
 import { EncabezadoOrganizador } from '../components/EncabezadoOrganizador';
 import { IconoMas } from '../components/IconoMas';
@@ -46,6 +46,7 @@ function Padron({ sesion }: { sesion: Sesion }) {
   const editar = useEditarJugador(slug);
   const desvincular = useDesvincularCuenta(slug);
   const cerrarSesion = useCerrarSesion();
+  const navegar = useNavigate();
 
   const [editando, setEditando] = useState<JugadorPadron | null>(null);
   // Cambia después de cada alta para vaciar el formulario.
@@ -113,8 +114,7 @@ function Padron({ sesion }: { sesion: Sesion }) {
         </div>
         {!cargando && (
           <div className="flex items-center gap-2.5">
-            {/* Se habilita con la pantalla de importar padrón (F03). */}
-            <Boton disabled>
+            <Boton onClick={() => navegar('/padron/importar')}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="size-[15px]" aria-hidden="true">
                 <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
                 <path d="M7 10l5 5 5-5" />

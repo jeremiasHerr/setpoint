@@ -30,7 +30,7 @@ export type EstadoImportacion = 'PENDIENTE' | 'PROCESADO' | 'CONFIRMADO' | 'DESC
 export type CasilleroPropuesto = { etapa: string; anio: number; puntos: number };
 
 // Un jugador tal como lo interpretó la IA, con su número de fila en la planilla.
-export type FilaPropuesta = {
+export type FilaExtraida = {
   fila: number;
   nombre: string;
   apellido: string;
@@ -39,6 +39,10 @@ export type FilaPropuesta = {
   coincideCon: number | null;
   confianza: 'alta' | 'media' | 'baja' | null;
 };
+
+// Lo que ve quien revisa: además, los textos de la fila tal como están en la planilla
+// ("J. Painemil"). La IA devuelve el nombre del padrón cuando lo reconoce.
+export type FilaPropuesta = FilaExtraida & { enLaPlanilla: string };
 
 export type ProblemaImportacion = { fila: number | null; detalle: string };
 

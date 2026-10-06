@@ -1,4 +1,4 @@
-import type { FilaPropuesta } from '@setpoint/shared';
+import type { FilaExtraida } from '@setpoint/shared';
 import { describe, expect, it } from 'vitest';
 import { ErrorHttp } from '../../src/middleware/errores';
 import {
@@ -8,7 +8,7 @@ import {
   yaExiste,
 } from '../../src/modules/padron/importacion/confirmacion';
 
-function fila(numero: number, coincideCon: number | null, confianza: FilaPropuesta['confianza'], puntos = [10, 0]): FilaPropuesta {
+function fila(numero: number, coincideCon: number | null, confianza: FilaExtraida['confianza'], puntos = [10, 0]): FilaExtraida {
   return {
     fila: numero,
     nombre: 'Nombre',

@@ -1,11 +1,11 @@
 // Lógica pura de la revisión y la confirmación de una importación: conteos, validación de las
 // decisiones de la organización contra la propuesta guardada, y movimientos a crear.
-import type { ConteosImportacion, DecisionImportacion, FilaPropuesta } from '@setpoint/shared';
+import type { ConteosImportacion, DecisionImportacion, FilaExtraida } from '@setpoint/shared';
 import { ErrorHttp } from '../../../middleware/errores';
 import type { Problema } from './auditar';
 
 // Disjuntos, en este orden: una fila con problemas no cuenta como existente aunque coincida.
-export function contarFilas(propuesta: FilaPropuesta[], porFila: Problema[]): ConteosImportacion {
+export function contarFilas(propuesta: FilaExtraida[], porFila: Problema[]): ConteosImportacion {
   const conProblemas = new Set(porFila.map((p) => p.fila));
   const conteos = { existentes: 0, nuevos: 0, dudosos: 0, conProblemas: 0 };
   for (const j of propuesta) {
@@ -32,7 +32,7 @@ export type PlanConfirmacion = {
   excluidos: number;
 };
 
-function movimientosDe(fila: FilaPropuesta, etapaIds: Map<string, number>): MovimientoAImportar[] {
+function movimientosDe(fila: FilaExtraida, etapaIds: Map<string, number>): MovimientoAImportar[] {
   // Un casillero en 0 no crea movimiento: un jugador sin puntos en una etapa no tiene casillero.
   return fila.casilleros
     .filter((c) => c.puntos > 0)
@@ -46,7 +46,7 @@ function movimientosDe(fila: FilaPropuesta, etapaIds: Map<string, number>): Movi
 // Valida que haya exactamente una decisión por fila de la propuesta y que cada vinculación
 // apunte a un jugador distinto de la organización. Los errores van por fila, como en `validar`.
 export function planificarConfirmacion(
-  propuesta: FilaPropuesta[],
+  propuesta: FilaExtraida[],
   decisiones: DecisionImportacion[],
   idsJugadores: Set<number>,
   etapaIds: Map<string, number>,
