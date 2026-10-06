@@ -10,19 +10,19 @@ type Props = {
   organizacion: string;
   navegacion?: ItemNavegacion[];
   activo?: string;
-  // Texto en mono a la derecha, para pantallas sin navegación (por ejemplo, la configuración).
-  estado?: string;
   // Iniciales de quien inició sesión, para el círculo de la derecha.
   iniciales?: string;
   // Si llega, aparece "Salir" al lado de las iniciales.
   alSalir?: () => void;
 };
 
-export function EncabezadoOrganizador({ organizacion, navegacion = [], activo, estado, iniciales, alSalir }: Props) {
+export function EncabezadoOrganizador({ organizacion, navegacion = [], activo, iniciales, alSalir }: Props) {
   return (
     <header className="flex h-[60px] items-center justify-between gap-6 bg-negro px-7">
       <div className="flex min-w-0 items-center gap-3.5">
-        <Logo sobreNegro />
+        <Link to="/inicio" aria-label="Ir al inicio" className="rounded-[7px]">
+          <Logo sobreNegro />
+        </Link>
         <div className="h-[18px] w-px bg-borde-oscuro" />
         <span className="truncate text-sm whitespace-nowrap text-gris-400">{organizacion}</span>
       </div>
@@ -62,8 +62,6 @@ export function EncabezadoOrganizador({ organizacion, navegacion = [], activo, e
           )}
         </div>
       )}
-
-      {estado && <span className="hidden shrink-0 font-mono text-[13px] text-gris-400 tabular-nums md:inline">{estado}</span>}
     </header>
   );
 }
