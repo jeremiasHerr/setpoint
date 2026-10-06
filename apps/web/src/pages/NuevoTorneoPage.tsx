@@ -12,9 +12,11 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Boton } from '../components/Boton';
 import { EncabezadoOrganizador } from '../components/EncabezadoOrganizador';
 import { Tarjeta } from '../components/Tarjeta';
-import { leerSesion } from '../features/auth/sesion';
+import { leerSesion, type Sesion } from '../features/auth/sesion';
+import { useCerrarSesion } from '../features/auth/useCerrarSesion';
 import { useSesionInvalida } from '../features/auth/useSesionInvalida';
 import { useCircuito } from '../features/circuito/useCircuito';
+import { iniciales, navegacionOrganizador } from '../features/organizador/encabezado';
 import { publicarConvocatoria } from '../features/torneos/api';
 import { PanelComoQueda } from '../features/torneos/PanelComoQueda';
 import { SeccionBasico } from '../features/torneos/SeccionBasico';
@@ -46,10 +48,23 @@ export function NuevoTorneoPage() {
   const { id } = useParams();
   if (!sesion) return <Navigate to="/ingresar" replace />;
   // "nuevo" es el torneo que todavía no se guardó nunca.
-  return <CargarTorneo slug={sesion.organizacion.slug} nombre={sesion.organizacion.nombre} id={id === 'nuevo' ? null : Number(id)} />;
+  return <CargarTorneo sesion={sesion} id={id === 'nuevo' ? null : Number(id)} />;
 }
 
-function CargarTorneo({ slug, nombre, id }: { slug: string; nombre: string; id: number | null }) {
+function Encabezado({ sesion, organizacion }: { sesion: Sesion; organizacion: string }) {
+  const cerrarSesion = useCerrarSesion();
+  return (
+    <EncabezadoOrganizador
+      organizacion={organizacion}
+      navegacion={navegacionOrganizador}
+      iniciales={iniciales(sesion.usuario.nombre)}
+      alSalir={cerrarSesion}
+    />
+  );
+}
+
+function CargarTorneo({ sesion, id }: { sesion: Sesion; id: number | null }) {
+  const slug = sesion.organizacion.slug;
   const circuito = useCircuito(slug);
   const convocatoria = useConvocatoria(slug, id);
   const error = circuito.error ?? convocatoria.error;
@@ -59,14 +74,14 @@ function CargarTorneo({ slug, nombre, id }: { slug: string; nombre: string; id: 
   // Al crearse el borrador la URL pasa de /torneos/nuevo a /torneos/:id. El editor sigue montado
   // porque el autoguardado deja la convocatoria en la caché antes de cambiar la URL.
   if (circuito.data && (id === null || convocatoria.data)) {
-    return <EditorTorneo slug={slug} circuito={circuito.data} inicial={convocatoria.data ?? null} />;
+    return <EditorTorneo sesion={sesion} circuito={circuito.data} inicial={convocatoria.data ?? null} />;
   }
 
   const noExiste = error?.message === 'TORNEO_NO_ENCONTRADO';
 
   return (
     <div className="min-h-screen bg-white text-negro">
-      <EncabezadoOrganizador organizacion={nombre} />
+      <Encabezado sesion={sesion} organizacion={sesion.organizacion.nombre} />
       <div className="flex flex-col items-start gap-3 px-7 pt-[26px]">
         {noExiste ? (
           <>
@@ -94,13 +109,14 @@ function CargarTorneo({ slug, nombre, id }: { slug: string; nombre: string; id: 
 }
 
 type PropsEditor = {
-  slug: string;
+  sesion: Sesion;
   circuito: Circuito;
   // null = torneo nuevo.
   inicial: Convocatoria | null;
 };
 
-function EditorTorneo({ slug, circuito, inicial }: PropsEditor) {
+function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
+  const slug = sesion.organizacion.slug;
   // Solo se lee al montar: después manda lo que hay en pantalla. Si viene de la API trae además
   // id, estado y torneos; el schema los descarta al guardar.
   const [datos, setDatos] = useState<DatosConvocatoria>(() => inicial ?? convocatoriaInicial(circuito.categorias));
@@ -175,20 +191,20 @@ function EditorTorneo({ slug, circuito, inicial }: PropsEditor) {
 
   return (
     <div className="min-h-screen bg-white text-negro">
-      <EncabezadoOrganizador
-        organizacion={circuito.nombre}
-        estado={
-          guardado.estado === 'sin-cambios'
-            ? `${enBorrador ? 'borrador' : 'publicado'} · ${textoEstado['sin-cambios']}`
-            : textoEstado[guardado.estado]
-        }
-      />
+      <Encabezado sesion={sesion} organizacion={circuito.nombre} />
 
-      <div className="flex flex-col gap-[7px] px-7 pt-[26px] pb-5">
-        <h1 className="text-[30px] font-semibold tracking-[-0.035em]">Nuevo torneo</h1>
-        <p className="text-[15px] text-gris-500">
-          Los valores vienen de la configuración de tu circuito. Cambiá solo lo que sea distinto esta vez.
-        </p>
+      <div className="flex flex-wrap items-end justify-between gap-6 px-7 pt-[26px] pb-5">
+        <div className="flex flex-col gap-[7px]">
+          <h1 className="text-[30px] font-semibold tracking-[-0.035em]">Nuevo torneo</h1>
+          <p className="text-[15px] text-gris-500">
+            Los valores vienen de la configuración de tu circuito. Cambiá solo lo que sea distinto esta vez.
+          </p>
+        </div>
+        <span aria-live="polite" className="shrink-0 font-mono text-[13px] text-gris-500 tabular-nums">
+          {guardado.estado === 'sin-cambios'
+            ? `${enBorrador ? 'borrador' : 'publicado'} · ${textoEstado['sin-cambios']}`
+            : textoEstado[guardado.estado]}
+        </span>
       </div>
 
       <main className="grid items-start gap-[22px] px-7 pb-7 lg:grid-cols-[minmax(0,1fr)_360px]">
