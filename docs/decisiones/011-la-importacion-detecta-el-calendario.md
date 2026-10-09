@@ -26,7 +26,7 @@ Opción 2.
 - **Sin torneos del calendario configurados**, `etapa` pasa de `z.enum` a `string` en el schema de respuesta, y se agrega `etapasDetectadas` (nombre y orden).
 - **La auditoría verifica** que todos los jugadores usen las mismas etapas y que cada una esté entre las detectadas o las configuradas.
 - **Los nuevos se confirman una vez, como estructura** (*"Detectamos 5 torneos en tu planilla: Primavera, Verano… ¿Los creamos?"*), no fila por fila. Se crean en la misma transacción que la importación; si se descarta, no queda nada.
-- **Encabezados que cruzan de año** ("VERANO 25/26"): *propuesto*, cuenta **el año en que termina**. Es lo que el eval ya espera, y con la [decisión 008](008-fecha-de-los-movimientos-importados.md) deja el movimiento fechado dentro de la temporada que representa.
+- **Encabezados que cruzan de año** ("VERANO 25/26"): cuenta **el año en que termina** (implementado antes que el resto, en el prompt `importacion-v1.1`). Es lo que el eval ya espera, y con la [decisión 008](008-fecha-de-los-movimientos-importados.md) deja el movimiento fechado dentro de la temporada que representa.
 - *Propuesto:* si la importación trae puntos, confirmarla enciende `usa_ranking`.
 - Prompt `importacion-v2` y un caso nuevo en el eval: planilla sin etapas ni padrón.
 

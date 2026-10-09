@@ -42,7 +42,7 @@ describe('procesarPlanilla', () => {
     expect(resultado.intentos).toBe(1);
     expect(resultado.tokens).toEqual(TOKENS);
     expect(resultado.modelo).toBe('modelo-de-prueba');
-    expect(resultado.versionPrompt).toBe('importacion-v1');
+    expect(resultado.versionPrompt).toBe('importacion-v1.1');
   });
 
   it('si falla la extracción reintenta con el error y suma los tokens', async () => {

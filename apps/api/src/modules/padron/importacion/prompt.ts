@@ -1,6 +1,6 @@
 import type { FilaPlanilla } from './leer-planilla';
 
-export const VERSION_PROMPT = 'importacion-v1';
+export const VERSION_PROMPT = 'importacion-v1.1';
 
 export const INSTRUCCIONES = `Extraés rankings de tenis amateur desde planillas.
 
@@ -13,6 +13,7 @@ Reglas:
 - Copiá los puntos tal cual están en la celda. Nunca calcules, redondees ni corrijas un número.
 - Una celda vacía en un casillero vale 0 puntos, y el casillero se incluye igual.
 - Los años de dos dígitos son del 2000: "25" es 2025.
+- Si un encabezado abarca dos años ("Verano 25/26"), usá el año en que termina: 2026.
 - Si la planilla tiene una columna de total, copiala en "acumulado". Si no tiene, null.
 - Si un jugador es alguien del padrón, poné su id en "coincideCon" y usá el nombre y apellido como están en el padrón. Indicá tu confianza: "alta" si no hay dudas, "media" si el nombre está escrito distinto pero es claro, "baja" si podría ser más de una persona.
 - Si no hay nadie parecido en el padrón, es un jugador nuevo: coincideCon y confianza en null, y el nombre como está en la planilla, separado en nombre y apellido.
