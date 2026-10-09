@@ -1,6 +1,6 @@
 # Flujo de la organización (web)
 
-> Reglas de negocio en [02-dominio.md](02-dominio.md).
+> Reglas de negocio en [02-dominio.md](02-dominio.md). Los términos de la interfaz ("torneo del calendario", "edición", "cuadro consuelo") y su equivalencia con el código están en [02](02-dominio.md) §0.
 
 ---
 
@@ -32,7 +32,7 @@ Un club puede alojar torneos de circuitos distintos, y una organización rota en
 
 ```
 borrador → publicado → inscripciones_cerradas → zonas_generadas
-        → grupos_en_curso → campeonato_y_complementaria → finalizado
+        → grupos_en_curso → eliminatorias → finalizado
 ```
 
 | Estado | Se entra cuando | Qué se puede hacer |
@@ -42,7 +42,7 @@ borrador → publicado → inscripciones_cerradas → zonas_generadas
 | `inscripciones_cerradas` | Se llena el cupo o vence la fecha | Revisar padrón, resolver lista de espera |
 | `zonas_generadas` | Se ejecuta el sorteo | Comunicar grupos y plazos |
 | `grupos_en_curso` | Arranca el plazo de 3 semanas | Cargar resultados de zona |
-| `campeonato_y_complementaria` | Cierran todas las zonas | Ambos cuadros en juego, 1 semana por ronda |
+| `eliminatorias` | Cierran todas las zonas | El cuadro principal y, si hay, el consuelo en juego, con el plazo por ronda del torneo. En la interfaz: "cuadros" |
 | `finalizado` | Se definen ambos campeones | Solo lectura. Se impactan los puntos |
 
 > **Nota:** a diferencia de versiones anteriores, la organización **no paga** por publicar un torneo. El modelo de ingresos del circuito son las inscripciones de los jugadores.
@@ -63,17 +63,29 @@ La respuesta incluye un token de sesión (JWT), así la organización queda ingr
 
 **Por qué arranca sin ranking.** Es la puerta de entrada al producto: se puede publicar un torneo suelto sin configurar nada, y el ranking se activa después ([07-configurabilidad.md](07-configurabilidad.md) §1).
 
+**El registro no configura el circuito.** Pide solo lo necesario para entrar: nombre del circuito, nombre de quien lo administra, email y contraseña. Las categorías, el calendario y la tabla de puntos se configuran después, por uno de dos caminos:
+
+| Camino | Para quién | Cómo |
+|---|---|---|
+| **Importar la planilla** | Un circuito que ya existe, con rankings en Excel | La importación detecta las categorías y los torneos del calendario en la planilla y los crea al confirmar ([07](07-configurabilidad.md) §1.1). El circuito queda configurado con solo subir el archivo. *Pendiente de código* |
+| **Configurarlo a mano** en *Tu circuito* | Un circuito nuevo, o quien prefiera hacerlo así | Lo de abajo |
+
+> **Por qué así.** Pedir la configuración en el registro obliga a entender "etapas" y "casilleros" antes de ver el producto, y a tipear lo que la planilla ya tiene. Desde la devolución del 25% ([devolucion-25.md](devolucion-25.md), cambio E) la planilla es la fuente: quien tiene datos previos no configura nada a mano.
+
+**Primeros pasos.** *Propuesto, pendiente de código* ([devolucion-25.md](devolucion-25.md), cambio H). El inicio del organizador muestra una tarjeta con tres pasos que se tildan solos al cumplirse: *Importá tus jugadores · Creá tu primer torneo · Compartí el link de inscripción*. Se eligió esto en lugar de un tutorial que resalta pasos en pantalla, que es caro de hacer y la gente lo saltea. El resto de la ayuda va **en contexto**: el texto que explica algo aparece junto a lo que explica, no en una pantalla aparte.
+
 Después del alta, y en cualquier momento, se configura:
 
 - Nombre del circuito y datos de contacto
 - **Categorías propias** (en POLENTA: Segunda y Tercera)
-- **Etapas del calendario** (Primavera, Verano, Pretemporada, Otoño, Invierno) — definen los casilleros del ranking
+- **Torneos del calendario** (`Etapa` en código; en POLENTA: Primavera, Verano, Pretemporada, Otoño, Invierno) — definen los casilleros del ranking
 - Tabla de puntos por instancia
+- Nombre del cuadro consuelo (por defecto, "cuadro consuelo"; en POLENTA, "Complementaria"). *Pendiente de código*
 - Clubes con los que trabaja
 
 Todo menos los clubes se edita en la pantalla *Tu circuito*, que se guarda sola: cada cambio se envía un momento después de dejar de escribir (`PUT /api/organizaciones/:slug/circuito`, solo para administradores de esa organización). El PUT recibe la configuración completa y la deja tal cual llega.
 
-**Las categorías y etapas que se quitan se desactivan, no se borran** (`activa = false`). Una categoría puede tener torneos y jugadores apuntándole, y una etapa, torneos y movimientos de ranking; borrarlas rompería el historial o directamente fallaría por las claves foráneas. Si el nombre vuelve a agregarse, se reactiva la misma fila, con su historial. El orden de la lista define `orden`: para las etapas, es el orden del calendario.
+**Las categorías y los torneos del calendario que se quitan se desactivan, no se borran** (`activa = false`). Una categoría puede tener torneos y jugadores apuntándole, y una etapa, torneos y movimientos de ranking; borrarlas rompería el historial o directamente fallaría por las claves foráneas. Si el nombre vuelve a agregarse, se reactiva la misma fila, con su historial. El orden de la lista define `orden`: para las etapas, es el orden del calendario.
 
 ---
 
@@ -90,11 +102,11 @@ Para las fases eliminatorias, el torneo declara su **sede designada**. En fase d
 La organización es dueña de su padrón. En modo `cerrada` —el que usa POLENTA— es además la única vía de alta; en modo `abierta` los jugadores se agregan solos al inscribirse ([07-configurabilidad.md](07-configurabilidad.md) §2.5). En todos los modos, la organización puede:
 
 - Alta manual de jugadores
-- **Importación desde Excel** con normalización y resolución de identidad ([06-ia.md](06-ia.md) §1)
+- **Importación desde planilla**, automática por excepción: se importa solo lo que pasa todos los controles, y la organización revisa lo dudoso ([06-ia.md](06-ia.md) §1)
 - Asignación y reasignación de categoría
 - Baja o desactivación
 
-El padrón actual de POLENTA tiene 77 jugadores en 2 categorías.
+En el caso de validación, el padrón de POLENTA tiene 77 jugadores en 2 categorías.
 
 ### API del padrón
 
@@ -135,6 +147,18 @@ Mismas reglas de acceso que el padrón. El diseño de la extracción está en [0
 
 **Confirmar es idempotente por casillero:** si el jugador ya tiene en esa categoría un movimiento de la misma etapa, el mismo año y los mismos puntos, se saltea. Volver a subir la planilla cuando hay altas solo agrega lo nuevo.
 
+#### Cambios planificados a partir de la devolución del 25%
+
+*Pendientes de código.* Lo de arriba describe lo implementado. El diseño de cada cambio está en [06-ia.md](06-ia.md) §1 y en las decisiones [011](decisiones/011-la-importacion-detecta-el-calendario.md) y [012](decisiones/012-importacion-de-varios-archivos-y-hojas.md).
+
+| Hoy | Después |
+|---|---|
+| Todas las filas esperan una decisión de la organización en `confirmar` | **Automática por excepción.** Las filas seguras se aplican solas al terminar el procesamiento; `confirmar` recibe decisiones solo para las filas a revisar. La pantalla dice *"Importamos 74 jugadores. Revisá estos 3"* |
+| Sin forma de deshacer una importación confirmada | **Deshacer la importación**: borra sus movimientos y los jugadores que creó, si no tienen otra actividad. Requiere vincular cada movimiento con su importación (migración) |
+| `archivo` y `categoria` por nombre, un archivo por subida | Hasta **10 archivos de 2 MB**, cada uno con una o varias hojas. La categoría se detecta por el título de la hoja o el nombre del archivo; si no se puede, se pregunta |
+| Sin etapas configuradas termina en `ERROR` (`SIN_ETAPAS`) | **Detecta los torneos del calendario** en los encabezados y los propone; se crean al confirmar, en la misma transacción |
+| Solo `.xlsx`, `.xls` y `.csv` | Propuesto: PDF con texto, texto pegado e imágenes, en ese orden de prioridad |
+
 ---
 
 ## 6. Creación del torneo
@@ -142,10 +166,10 @@ Mismas reglas de acceso que el padrón. El diseño de la extracción está en [0
 El formulario replica la convocatoria que hoy publican en WhatsApp ([02](02-dominio.md) §12):
 
 - Nombre y descripción
-- **Etapa del calendario** — define qué casillero del ranking se actualiza
+- **Torneo del calendario** (`etapaId`) — define qué casillero del ranking se actualiza. Si no se elige, es un torneo suelto
 - Categorías a disputar y cupo de cada una. Cada categoría es un `Torneo` aparte que comparte todo lo demás con las otras ([decisión 003](decisiones/003-torneo-con-varias-categorias.md))
 - Importe de inscripción
-- **Formato**: cantidad de grupos, clasificados por grupo, si hay zona Complementaria, modo de distribución y modo de sorteo
+- **Formato**: cantidad de grupos, clasificados por grupo, si hay cuadro consuelo, modo de distribución y modo de sorteo
 - **Sistema de juego**: sets, punto de oro, super tie-break
 - Fecha de cierre de inscripción
 - **Cronograma por instancia**
@@ -183,7 +207,7 @@ Dos parámetros independientes ([07-configurabilidad.md](07-configurabilidad.md)
 
 El sistema genera los grupos y los partidos de zona. La organización puede revisar antes de confirmar.
 
-**Si hay zona Complementaria** (parámetro del torneo), se reserva desde el sorteo la estructura de ambos cuadros.
+**Si hay cuadro consuelo** (parámetro del torneo), se reserva desde el sorteo la estructura de ambos cuadros.
 
 ---
 
@@ -220,8 +244,8 @@ Al guardar:
 Al completarse las zonas, el sistema:
 
 1. Ordena cada grupo con la cascada de desempates
-2. Manda los N primeros de cada grupo al cuadro **Campeonato** (N configurable; en POLENTA, 2)
-3. **Si el torneo tiene zona Complementaria**, manda al resto a ese segundo cuadro
+2. Manda los N primeros de cada grupo al cuadro **principal** (N configurable; en POLENTA, 2, y lo llaman Campeonato)
+3. **Si el torneo tiene cuadro consuelo**, manda al resto a ese segundo cuadro
 4. Genera los cuadros correspondientes
 
 Cuando hay dos cuadros, corren en paralelo con el mismo plazo por ronda.
@@ -230,7 +254,8 @@ Cuando hay dos cuadros, corren en paralelo con el mismo plazo por ronda.
 
 ## 12. Cierre del torneo
 
-Con ambos campeones definidos, la organización cierra el torneo. El sistema:
+Con los campeones definidos (uno por cuadro), la organización cierra el torneo. El sistema:
 
 - Genera los `MovimientoRanking` según instancia alcanzada
-- **Reemplaza el casillero de esa etapa** en el ranking de cada jugador
+- **Reemplaza el casillero de ese torneo del calendario** en el ranking de cada jugador
+- Si es un torneo suelto, produce las posiciones finales y no otorga puntos

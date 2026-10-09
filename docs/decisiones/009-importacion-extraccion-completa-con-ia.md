@@ -1,6 +1,6 @@
 # 009 — Cómo interpreta la IA la planilla del padrón
 
-**Estado:** aceptada — 5 de octubre de 2026
+**Estado:** aceptada — 5 de octubre de 2026. **Modificada en parte** por la devolución del 25% ([devolucion-25.md](../devolucion-25.md)): la extracción completa sigue en pie, pero "nada se guarda sin revisión humana" pasa a ser revisión **por excepción** (cambio C), y las etapas pueden detectarse en la planilla en lugar de venir configuradas ([decisión 011](011-la-importacion-detecta-el-calendario.md)).
 
 ## Contexto
 

@@ -234,6 +234,15 @@ Escribir `apps/api/prisma/seed.ts` con datos realistas:
 - 26 jugadores de Tercera con sus puntos reales por etapa, como movimientos de ranking
 - 1 torneo en estado `PUBLICADO`
 
+**Pendiente de código** ([devolucion-25.md](devolucion-25.md), cambio A4): una segunda organización ficticia, **Liga Amateur del Valle**, con otra configuración:
+
+- Sin ranking (`usaRanking: false`): sin etapas ni tabla de puntos
+- Inscripción abierta (`modoInscripcion: ABIERTA`)
+- Sin cuadro consuelo (`tieneComplementaria: false`)
+- Una o dos categorías propias y un torneo suelto publicado
+
+Sirve para la demo: muestra en vivo que la plataforma no está hecha a medida de POLENTA, con dos organizaciones que la usan de forma distinta sobre la misma base.
+
 ```bash
 npm run db:seed -w apps/api
 ```

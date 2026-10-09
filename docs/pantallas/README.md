@@ -39,9 +39,32 @@ Ordenado por entrega.
 | 100% | F20 | [Qué está en juego](jugador/que-esta-en-juego.html) | App jugador | 390 px |
 | — | — | [Landing](publico/landing.html) | Web pública | 1280 px |
 
-Sin pantalla: **F19** (resultados desde mensajes), en duda.
+Sin pantalla: **F19** (resultados desde mensajes), condicionada al tiempo y a confirmar con el profesor.
 
 > Los anchos son los del diseño: 390 es un celular, 1280 un escritorio. Las pantallas del organizador tienen que funcionar también en una notebook de 1024; las del jugador, en cualquier celular.
+
+## Términos viejos en las pantallas
+
+Desde la devolución del 25% ([../devolucion-25.md](../devolucion-25.md)) la interfaz dice **"torneo del calendario"** en lugar de "etapa", **"edición"** para un `Torneo` de un torneo del calendario, y **"cuadro consuelo"** (nombre configurable) en lugar de "Complementaria". Vocabulario completo en [../design.md](../design.md) §9.
+
+**Los HTML de referencia no se rehacen**: se mantienen como referencia visual. Al implementar o tocar una de estas pantallas, se usan los términos nuevos, no los del HTML.
+
+| Pantalla | Término viejo | Dónde | ¿Implementada en la web? |
+|---|---|---|---|
+| [Inicio del organizador](organizador/home.html) | "etapas" | Tarjeta de ranking: "Cargá tus categorías, etapas y la tabla de puntos" | — |
+| [Tu circuito](organizador/tu-circuito.html) | "Etapas del calendario", "Cada etapa es un casillero", "Etapas por año" | Sección de ranking y resumen | Sí: `SeccionRanking`, `ResumenCircuito` |
+| [Nuevo torneo](organizador/nuevo-torneo.html) | "Etapa del calendario", "Cuadro Complementaria" | Datos básicos, formato y panel *Cómo queda* | Sí: `SeccionBasico`, `SeccionFormato`, `PanelComoQueda` |
+| [Importar padrón](organizador/importar-padron.html) | "ETAPA INVIERNO 26" | Encabezado de ejemplo de la planilla: es un dato del archivo, puede quedar | — |
+| [Cargar resultado](organizador/cargar-resultado.html) | "va a Complementaria" | Vista previa de la tabla | — |
+| [Tablero del torneo](organizador/tablero.html) | "Complementaria" | Explicación de la línea de corte | — |
+| [Cerrar el torneo](organizador/cierre.html) | "complementaria" | Rótulo de cuadro | — |
+| [Los dos cuadros](publico/cuadros.html) | "Complementaria" | Título del segundo cuadro y bajada | — |
+| [Ficha y cara a cara](publico/ficha-y-cara-a-cara.html) | "Puntos por etapa" | Título de la sección de casilleros | — |
+| [Landing](publico/landing.html) | "Campeonato y Complementaria", "cada etapa tiene su casillero" | Bloques de funcionalidades | Sí: `LandingPage` |
+
+> Las pantallas que muestran a **POLENTA** con sus datos pueden decir "Complementaria", porque es el nombre que esa organización configuró. Lo que cambia es el texto por defecto y que el nombre salga de la configuración, no de un literal.
+
+Además, la **importación por excepción** cambia el planteo de [Importar padrón](organizador/importar-padron.html): hoy la pantalla es la revisión de todas las filas; pasa a ser el resultado ("Importamos 74 jugadores. Revisá estos 3") con solo las filas a revisar. Hay que rediseñarla antes de implementar el cambio. Y la tarjeta **"Primeros pasos"** (propuesta) se suma al [inicio del organizador](organizador/home.html).
 
 ## Cómo se trabaja una pantalla
 

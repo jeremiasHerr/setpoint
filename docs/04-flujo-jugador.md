@@ -34,10 +34,10 @@ La distinción clave: coordinar la fecha **no es carga nueva**. El reglamento ya
 
 | Pantalla | Contenido |
 |---|---|
-| Ranking del circuito | Tabla por categoría, con el desglose por casillero de etapa, como el Excel actual |
+| Ranking del circuito | Tabla por categoría, con el desglose por torneo del calendario, como el Excel actual |
 | Ficha del jugador | Historial de partidos, torneos disputados, evolución |
 | Head-to-head | Comparación entre dos jugadores |
-| Cuadros y zonas | Campeonato y Complementaria en vivo |
+| Cuadros y zonas | Cuadro principal y, si hay, cuadro consuelo, en vivo |
 | Calendario | Partidos acordados por fecha |
 
 Se accede por link directo, sin sesión. **No exponen datos de contacto.** La búsqueda de jugador es **por apellido**, no un listado completo del padrón.
@@ -60,7 +60,7 @@ La organización **ve y puede revertir** las vinculaciones desde su panel. En un
 
 > **Estado:** el lado de la organización ya está: el padrón marca los perfiles con cuenta y permite desvincularlos (`DELETE /jugadores/:id/cuenta`). La creación de la cuenta y la elección del perfil llegan con F12 ([decisión 007](decisiones/007-vinculacion-de-cuentas-en-f02.md)).
 
-> **Descartado:** verificación por SMS y flujo de reclamo de perfiles. Resolvían un riesgo que no existe en un circuito cerrado de 77 personas conocidas entre sí.
+> **Descartado:** verificación por SMS y flujo de reclamo de perfiles. Resolvían un riesgo bajo en los circuitos amateur, donde los jugadores se conocen (POLENTA: 77 personas), y la revisión de la organización ya cubre el caso raro.
 
 ---
 
@@ -218,7 +218,7 @@ Quien no quiera cuenta se queda con las pantallas públicas y no pierde nada, sa
 
 ### 5.7 Reserva de cupo y lista de espera
 
-1. Al iniciar el pago se crea la inscripción en `pendiente_pago` con **reserva de cupo por 15 minutos**
+1. Al iniciar el pago se crea la inscripción en `pendiente_pago` con **reserva de cupo** por los minutos que configure el torneo (por defecto, 15)
 2. Confirmado el webhook, queda `pagada`
 3. Si el cupo está lleno, puede sumarse a la **lista de espera**; si alguien se baja, se le notifica y se le habilita el pago
 
@@ -234,13 +234,13 @@ El DNI es dato personal sensible en Argentina:
 
 > Alternativa evaluada: usar el **email** como identificador, que MercadoPago devuelve en el webhook sin necesidad de pedirlo. Ventaja: dato menos sensible y no hay que solicitarlo. Desventaja: algunos proveedores reciclan direcciones de cuentas borradas.
 >
-> El riesgo del email reciclado es despreciable acá: requiere que la dirección se libere, que alguien la registre, **y que esa persona justo quiera inscribirse a este circuito de 77 personas en Neuquén**. Ambas opciones son razonables; la decisión está abierta.
+> El riesgo del email reciclado es despreciable acá: requiere que la dirección se libere, que alguien la registre, **y que esa persona justo quiera inscribirse a ese mismo circuito** (en POLENTA, 77 personas en Neuquén). Ambas opciones son razonables; la decisión está abierta.
 
 ### 5.9 Puntos abiertos de esta sección
 
 - ¿DNI o email como identificador? (ver §5.8)
 - ¿Qué pasa si el jugador tipea mal su DNI y coincide con otro del padrón?
-- **Red de seguridad definida:** la organización ve y puede revertir cualquier vinculación desde su panel. Para un circuito cerrado de 77 personas conocidas entre sí, ninguna llave técnica es tan confiable como el organizador mirando la lista. El sistema debe hacer que el caso normal sea automático y el caso raro, fácil de corregir a mano
+- **Red de seguridad definida:** la organización ve y puede revertir cualquier vinculación desde su panel. En un circuito donde los jugadores se conocen entre sí, como POLENTA, ninguna llave técnica es tan confiable como el organizador mirando la lista. El sistema debe hacer que el caso normal sea automático y el caso raro, fácil de corregir a mano
 
 ## 6. Coordinación de partidos
 
@@ -252,7 +252,7 @@ Todos los partidos los arreglan los jugadores dentro del plazo de su instancia (
 
 Los jugadores siguen coordinando por WhatsApp, que es lo que hacen hoy y funciona. Lo que falta no es una mejor forma de negociar: es que lo acordado quede en algún lado consultable, en vez de perderse en el scroll del grupo.
 
-El reglamento de POLENTA ya exige registrar los turnos pactados en el grupo de WhatsApp. La app resuelve ese mismo requisito mejor.
+Muchos circuitos ya exigen registrar los turnos pactados: el reglamento de POLENTA, por ejemplo, obliga a hacerlo en el grupo de WhatsApp. La app resuelve ese mismo requisito mejor.
 
 > **Descartado:** sistema de propuestas y contrapropuestas con ida y vuelta dentro de la app. Es varias veces más trabajo y compite con WhatsApp, que ya funciona y no tiene sentido reemplazar.
 
@@ -288,7 +288,7 @@ pendiente  ->  anotada  ->  confirmada  ->  jugada
 | `jugada` | Resultado cargado |
 | `vencida` | Se acabó el plazo sin jugarse. Resuelve la organización |
 
-**Reprogramación:** se admite una sola, con 24 horas de anticipación, según el reglamento. Vuelve el partido a `anotada`.
+**Reprogramación:** la cantidad permitida y la antelación son parámetros del torneo ([07](07-configurabilidad.md) §2.3); en POLENTA, una sola y con 24 horas. Vuelve el partido a `anotada`.
 
 ### 6.5 Nota de implementación
 
@@ -322,14 +322,14 @@ Notificación push al generarse el fixture, al acordarse una fecha y como record
 
 ## 8. Zona y cuadros
 
-Tabla de posiciones del grupo en vivo, con la línea de corte marcada — arriba clasifican a Campeonato, abajo a Complementaria. Ambos cuadros navegables.
+Tabla de posiciones del grupo en vivo, con la línea de corte marcada — arriba clasifican al cuadro principal, abajo al cuadro consuelo si el torneo lo tiene. Los cuadros son navegables.
 
 ---
 
 ## 9. Ranking e historial
 
 - Ranking de su categoría, con su posición destacada
-- **Desglose por casillero de etapa**, igual que la planilla actual, mostrando qué torneo aportó cada puntaje
+- **Desglose por torneo del calendario**, igual que la planilla actual, mostrando qué edición aportó cada puntaje
 - Historial completo de partidos con head-to-head
 
 ---

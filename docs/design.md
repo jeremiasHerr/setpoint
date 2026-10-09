@@ -26,7 +26,7 @@ Todo el sistema sale de que hay dos personas usando esto en situaciones opuestas
 1. **El color no decora.** El lima marca tres cosas y nada más: lo que ganaste, lo que sos vos, y la acción principal. Si aparece en un cuarto lugar, algo está mal.
 2. **Un objeto gráfico, repetido.** La barra de marcas es la misma en el tablero, en la landing y en el cupo de inscripciones. La matriz de zona es la misma para el jugador y para el organizador. Nadie tiene que aprender dos lenguajes.
 3. **El número se lee antes que la etiqueta.** Todo dato numérico va en mono y con más peso visual que su rótulo.
-4. **Decir qué va a pasar antes de que pase.** Antes de guardar un resultado, la pantalla dice quién queda primero y quién va a Complementaria. Antes de pagar, dice que el lugar se reserva 15 minutos.
+4. **Decir qué va a pasar antes de que pase.** Antes de guardar un resultado, la pantalla dice quién queda primero y quién va al cuadro consuelo. Antes de pagar, dice que el lugar se reserva 15 minutos.
 5. **Bordes, no sombras.** La jerarquía la dan el borde de 1px, el fondo negro y el espacio. No hay `box-shadow` en el sistema.
 6. **Sentence case siempre.** Ni títulos ni botones ni etiquetas en mayúsculas. Los rótulos en mono minúscula (`pg`, `sets`, `zona D`) son la única excepción y son parte del acabado.
 
@@ -38,7 +38,7 @@ Todo el sistema sale de que hay dos personas usando esto en situaciones opuestas
 
 | Token | Hex | Para qué |
 |---|---|---|
-| `--lima` | `#CDF546` | Acento único. Acción principal, victoria, "vos", etapa en curso |
+| `--lima` | `#CDF546` | Acento único. Acción principal, victoria, "vos", torneo del calendario en curso |
 | `--lima-tenue` | `#F7FCE7` | Fondo de celda ganada en matrices y tablas |
 | `--negro` | `#0A0B0D` | Texto principal, superficies oscuras, botones secundarios sólidos |
 | `--carbon` | `#17191D` | Celdas dentro de una superficie negra, ítem activo de la navegación |
@@ -217,7 +217,7 @@ Columnas por ronda con rótulo en mono minúscula. Tarjeta de 190×62 con dos fi
 | Puntos | número solo, la palabra al lado | `95 puntos` |
 | Dinero | punto como separador de miles | `$45.000` |
 | Plazo | en días, no en fechas | `quedan 6 días` |
-| Etapa abreviada | tres letras minúscula | `prim` `ver` `pre` `oto` `inv` |
+| Torneo del calendario abreviado | tres letras minúscula | `prim` `ver` `pre` `oto` `inv` |
 
 ---
 
@@ -231,6 +231,27 @@ Español rioplatense, voseo, sentence case. Se le habla al usuario de vos y en p
 Cada pantalla dice la consecuencia, no solo la acción: *"Pablo recibe un aviso y confirma con un toque. Recién ahí queda agendado para los dos."*
 
 Nada de emoji en producto.
+
+### Vocabulario
+
+La interfaz usa términos genéricos, no los del código ni los de un circuito en particular ([devolucion-25.md](devolucion-25.md), cambios A3 y D). Equivalencia completa con el código en [02-dominio.md](02-dominio.md) §0.
+
+| Se dice | No se dice | Nota |
+|---|---|---|
+| **Torneo del calendario** | Etapa | "El Primavera es un torneo del calendario" |
+| **Edición** | Torneo (para una categoría de un torneo del calendario) | "Primavera 26 · Tercera". Un torneo suelto sigue siendo "torneo" (decisión abierta 15 del [README](README.md)) |
+| **Cuadro consuelo**, o el nombre que configure la organización | Complementaria | POLENTA lo configura como "Complementaria"; en sus pantallas se ve así |
+| Campeonato | — | Decisión abierta 16: puede pasar a "cuadro principal" |
+
+**Pendiente de código.** Las pantallas implementadas y los HTML de referencia todavía usan los términos viejos; cuáles, en [pantallas/README.md](pantallas/README.md).
+
+### Ayuda en contexto
+
+*Propuesto* ([devolucion-25.md](devolucion-25.md), cambio H). **No hay tutorial** que resalte pasos en pantalla: es caro de hacer y la gente lo saltea. La explicación aparece donde hace falta:
+
+- Debajo del campo o la sección que explica, en `--gris-500`, cuerpo 13–14 en escritorio. Una o dos oraciones que digan la consecuencia, como el resto de la voz: *"Cada torneo del calendario es un casillero del ranking. Cuando se juega Primavera 26, sus puntos reemplazan los de Primavera 25."*
+- Para explicaciones largas, una caja `--fondo` con radio de tarjeta, sin ícono de ayuda ni signo de pregunta.
+- **Tarjeta "Primeros pasos"** en el inicio del organizador: tres pasos con check (*Importá tus jugadores · Creá tu primer torneo · Compartí el link de inscripción*) que **se tildan solos** cuando se cumplen. Borde `--linea`, no tarjeta negra: no es el dato principal de la pantalla. Desaparece cuando están los tres.
 
 ---
 
@@ -268,7 +289,7 @@ El canvas tiene **21 pantallas**, en el orden en que se usan.
 | Los dos cuadros | Web pública | F08, F10 |
 | Ficha y cara a cara | Web pública | F17, F18 |
 
-**Sin pantalla:** F19, registro de resultados a partir de mensajes. Está en duda y se diseña solo si se confirma.
+**Sin pantalla:** F19, registro de resultados a partir de mensajes. Está condicionada al tiempo y a confirmar con el profesor ([devolucion-25.md](devolucion-25.md), cambio I); se diseña solo si se confirma. Además, la importación por excepción (F03) cambia la pantalla *Importar padrón*, que hay que rediseñar: hoy muestra todas las filas para decidir.
 
 ---
 
