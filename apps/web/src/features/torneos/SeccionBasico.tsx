@@ -73,7 +73,7 @@ export function SeccionBasico({
         {usaRanking && (
           <Selector
             id="torneo-etapa"
-            rotulo="Etapa del calendario"
+            rotulo="Torneo del calendario"
             value={etapa ?? ''}
             onChange={(e) => alCambiarEtapa(e.target.value || null)}
           >

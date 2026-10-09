@@ -49,18 +49,20 @@ Desde la devolución del 25% ([../devolucion-25.md](../devolucion-25.md)) la int
 
 **Los HTML de referencia no se rehacen**: se mantienen como referencia visual. Al implementar o tocar una de estas pantallas, se usan los términos nuevos, no los del HTML.
 
-| Pantalla | Término viejo | Dónde | ¿Implementada en la web? |
+| Pantalla | Término viejo | Dónde | En la web |
 |---|---|---|---|
-| [Inicio del organizador](organizador/home.html) | "etapas" | Tarjeta de ranking: "Cargá tus categorías, etapas y la tabla de puntos" | — |
-| [Tu circuito](organizador/tu-circuito.html) | "Etapas del calendario", "Cada etapa es un casillero", "Etapas por año" | Sección de ranking y resumen | Sí: `SeccionRanking`, `ResumenCircuito` |
-| [Nuevo torneo](organizador/nuevo-torneo.html) | "Etapa del calendario", "Cuadro Complementaria" | Datos básicos, formato y panel *Cómo queda* | Sí: `SeccionBasico`, `SeccionFormato`, `PanelComoQueda` |
-| [Importar padrón](organizador/importar-padron.html) | "ETAPA INVIERNO 26" | Encabezado de ejemplo de la planilla: es un dato del archivo, puede quedar | — |
-| [Cargar resultado](organizador/cargar-resultado.html) | "va a Complementaria" | Vista previa de la tabla | — |
-| [Tablero del torneo](organizador/tablero.html) | "Complementaria" | Explicación de la línea de corte | — |
-| [Cerrar el torneo](organizador/cierre.html) | "complementaria" | Rótulo de cuadro | — |
-| [Los dos cuadros](publico/cuadros.html) | "Complementaria" | Título del segundo cuadro y bajada | — |
-| [Ficha y cara a cara](publico/ficha-y-cara-a-cara.html) | "Puntos por etapa" | Título de la sección de casilleros | — |
-| [Landing](publico/landing.html) | "Campeonato y Complementaria", "cada etapa tiene su casillero" | Bloques de funcionalidades | Sí: `LandingPage` |
+| [Inicio del organizador](organizador/home.html) | "etapas" | Tarjeta de ranking: "Cargá tus categorías, etapas y la tabla de puntos" | Actualizado (`InicioSinTorneos`) |
+| [Tu circuito](organizador/tu-circuito.html) | "Etapas del calendario", "Cada etapa es un casillero", "Etapas por año" | Sección de ranking y resumen | Actualizado (`SeccionRanking`, `ResumenCircuito`, mensaje de repetidos en `packages/shared`) |
+| [Nuevo torneo](organizador/nuevo-torneo.html) | "Etapa del calendario", "Cuadro Complementaria", "Clasifican a Campeonato" | Datos básicos, formato y panel *Cómo queda* | Actualizado (`SeccionBasico`, `SeccionFormato`, `PanelComoQueda`), salvo "Campeonato": decisión abierta 16 |
+| [Importar padrón](organizador/importar-padron.html) | "una columna por etapa", "ETAPA INVIERNO 26" | Ayuda de la subida y encabezado de ejemplo de la planilla (este es un dato del archivo, puede quedar) | Actualizado (`FormularioSubida`, `EstadoProcesando`, error `SIN_ETAPAS` de la API) |
+| [Cargar resultado](organizador/cargar-resultado.html) | "va a Complementaria" | Vista previa de la tabla | Sin implementar |
+| [Tablero del torneo](organizador/tablero.html) | "Complementaria" | Explicación de la línea de corte | Sin implementar |
+| [Cerrar el torneo](organizador/cierre.html) | "complementaria" | Rótulo de cuadro | Sin implementar |
+| [Los dos cuadros](publico/cuadros.html) | "Complementaria" | Título del segundo cuadro y bajada | Sin implementar |
+| [Ficha y cara a cara](publico/ficha-y-cara-a-cara.html) | "Puntos por etapa" | Título de la sección de casilleros | Sin implementar |
+| [Landing](publico/landing.html) | "Campeonato y Complementaria", "cada etapa tiene su casillero" | Bloques de funcionalidades | Actualizado (`LandingPage`) |
+
+"Campeonato" sigue en *Tu circuito* (tabla de puntos) y *Nuevo torneo* hasta cerrar la decisión abierta 16 del [README](../README.md). "Cuadro consuelo" está escrito fijo: que salga del nombre configurado por la organización llega con ese campo ([07](../07-configurabilidad.md) §1.2).
 
 > Las pantallas que muestran a **POLENTA** con sus datos pueden decir "Complementaria", porque es el nombre que esa organización configuró. Lo que cambia es el texto por defecto y que el nombre salga de la configuración, no de un literal.
 

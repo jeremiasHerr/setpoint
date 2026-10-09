@@ -19,7 +19,7 @@ export function EstadoProcesando({ archivo }: { archivo: string }) {
       <div className="flex flex-col gap-1.5">
         <h2 className="text-[17px] font-semibold">Leyendo {archivo}</h2>
         <p className="text-[15px] leading-normal text-gris-500">
-          La IA interpreta cada fila: qué columna es cada etapa, quién es cada jugador y si ya está en tu padrón.
+          La IA interpreta cada fila: qué columna es cada torneo, quién es cada jugador y si ya está en tu padrón.
           Después se revisa cada número contra el archivo, para que no entre ninguno que no esté en la planilla.
         </p>
       </div>

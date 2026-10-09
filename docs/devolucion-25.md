@@ -60,10 +60,10 @@ Relevados en `docs/pantallas/` y en `apps/web/src`.
 
 | Término actual | Dónde aparece | Cambio | Estado |
 |---|---|---|---|
-| **Complementaria** (cuadro, zona) | Pantallas: cargar resultado, cierre, nuevo torneo, tablero, cuadros, landing. Web: `LandingPage`, `SeccionFormato`, `PanelComoQueda` | **"Cuadro consuelo"** por defecto, nombre configurable por la organización. POLENTA lo configura como "Complementaria" | Decidido (A3) |
-| **Etapa** | Pantallas: tu circuito, nuevo torneo, importar padrón, ficha, landing, inicio. Web: `SeccionRanking`, `ResumenCircuito`, `SeccionBasico`, `LandingPage` | **"Torneo del calendario"** | Decidido (D) |
+| **Complementaria** (cuadro, zona) | Pantallas: cargar resultado, cierre, nuevo torneo, tablero, cuadros, landing. Web: `LandingPage`, `SeccionFormato`, `PanelComoQueda` (ya actualizados) | **"Cuadro consuelo"** por defecto, nombre configurable por la organización. POLENTA lo configura como "Complementaria" | Decidido (A3) |
+| **Etapa** | Pantallas: tu circuito, nuevo torneo, importar padrón, ficha, landing, inicio. Web: `SeccionRanking`, `ResumenCircuito`, `SeccionBasico`, `LandingPage`, `InicioSinTorneos`, `FormularioSubida`, `EstadoProcesando`, más un mensaje de `packages/shared` y uno de la API (ya actualizados) | **"Torneo del calendario"** | Decidido (D) |
 | **Torneo** (una categoría de una convocatoria) | Casi todas | **"Edición"** cuando pertenece a un torneo del calendario | Decidido (D) |
-| **Campeonato** | Pantallas: cargar resultado, tablero, cuadros, landing | "Cuadro principal" por defecto, configurable igual que el consuelo | Propuesto |
+| **Campeonato** | Pantallas: cargar resultado, tablero, cuadros, landing. Web: `SeccionFormato`, `PanelComoQueda`, `TablaPuntos` | "Cuadro principal" por defecto, configurable igual que el consuelo | Propuesto |
 | **Pretemporada**, **Primavera**, etc. | Datos de ejemplo de las pantallas | No es un término de la interfaz: es la configuración de POLENTA. Queda como ejemplo | Sin cambio |
 | **Polenta Team Tenis** en el encabezado | Todas las pantallas del organizador y del jugador | Dato de ejemplo. La segunda organización del seed (A4) muestra que es un dato | Sin cambio |
 | **Padrón** | Pantallas del organizador | Se entiende, pero suena administrativo. Alternativa: "Jugadores" en la navegación | Propuesto, baja prioridad |

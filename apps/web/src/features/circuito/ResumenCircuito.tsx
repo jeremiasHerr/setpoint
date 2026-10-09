@@ -11,7 +11,7 @@ type Props = {
 export function ResumenCircuito({ usaRanking, categorias, etapas, jugadores }: Props) {
   const filas = [
     { rotulo: 'Categorías', valor: categorias, acento: true },
-    ...(usaRanking ? [{ rotulo: 'Etapas por año', valor: etapas, acento: true }] : []),
+    ...(usaRanking ? [{ rotulo: 'Torneos por año', valor: etapas, acento: true }] : []),
     { rotulo: 'Jugadores', valor: jugadores, acento: false },
   ];
 

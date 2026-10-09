@@ -131,7 +131,7 @@ export async function crearImportacion(slug: string, usuarioId: number, archivo:
   } catch (err) {
     console.error(err);
     const motivo = err instanceof ErrorHttp && err.codigo === 'SIN_ETAPAS'
-      ? 'El circuito no tiene etapas configuradas: no hay casilleros donde cargar los puntos'
+      ? 'El circuito no tiene torneos del calendario configurados: no hay casilleros donde cargar los puntos'
       : `No se pudo procesar la planilla: ${err instanceof Error ? err.message : String(err)}`;
     datos = { resumen: { categoriaId, error: motivo }, estado: EstadoProcesoIA.ERROR };
   }

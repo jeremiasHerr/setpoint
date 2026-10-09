@@ -37,7 +37,7 @@ export function FormularioSubida({ categorias, enviando, error, alSubir }: Props
         <div className="flex flex-col gap-1.5">
           <h2 className="text-[17px] font-semibold">Subí la planilla que ya usás</h2>
           <p className="text-[15px] leading-normal text-gris-500">
-            Una fila por jugador y una columna por etapa, como el ranking de siempre. No importa el orden de las
+            Una fila por jugador y una columna por torneo, como el ranking de siempre. No importa el orden de las
             columnas ni si tiene títulos, totales o notas.
           </p>
         </div>

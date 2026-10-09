@@ -30,7 +30,7 @@ export function PanelComoQueda({ formato, tieneComplementaria, fechaInicio, vari
   const filas = [
     { rotulo: 'Partidos de zona', valor: formato.partidosZona },
     { rotulo: 'Cuadro Campeonato', valor: formato.partidosCampeonato },
-    ...(tieneComplementaria ? [{ rotulo: 'Cuadro Complementaria', valor: formato.partidosComplementaria }] : []),
+    ...(tieneComplementaria ? [{ rotulo: 'Cuadro consuelo', valor: formato.partidosComplementaria }] : []),
   ];
 
   const enSemanas = formato.duracionDias % DIAS_POR_SEMANA === 0;

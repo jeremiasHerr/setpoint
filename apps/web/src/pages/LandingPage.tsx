@@ -58,7 +58,7 @@ const funciones: { titulo: string; texto: string; icono: ReactNode }[] = [
   {
     titulo: 'Dos cuadros en paralelo',
     texto:
-      'Campeonato y Complementaria corren juntos y cada uno define su campeón. Nadie queda afuera después de la fase de grupos.',
+      'Los que clasifican y los que no siguen jugando en dos cuadros a la vez, y cada uno define su campeón. Nadie queda afuera después de la fase de grupos.',
     icono: <path d="M4 6h5v12H4M15 4h5v6h-5M15 14h5v6h-5M9 12h6" />,
   },
   {
@@ -86,7 +86,7 @@ const funciones: { titulo: string; texto: string; icono: ReactNode }[] = [
   {
     titulo: 'Ranking por casilleros',
     texto:
-      'El mismo mecanismo que usa la ATP: cada etapa tiene su casillero y los puntos nuevos reemplazan a los del año anterior. Configurable por circuito.',
+      'El mismo mecanismo que usa la ATP: cada torneo del calendario tiene su casillero y los puntos nuevos reemplazan a los del año anterior. Configurable por circuito.',
     icono: <path d="M4 19V9M10 19V5M16 19v-7M4 19h16" />,
   },
   {

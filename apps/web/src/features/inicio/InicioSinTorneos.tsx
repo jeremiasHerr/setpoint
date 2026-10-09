@@ -73,7 +73,7 @@ export function InicioSinTorneos({ nombre, jugadores, usaRanking }: Props) {
             <div className="flex flex-col gap-1.5">
               <h2 className="text-[17px] font-semibold">¿Organizás un circuito con ranking anual?</h2>
               <p className="max-w-[560px] text-sm leading-normal text-gris-500">
-                Cargá tus categorías, etapas y la tabla de puntos. Los torneos van sumando y el ranking se arma solo. Podés
+                Cargá tus categorías, los torneos de tu calendario y la tabla de puntos. Los torneos van sumando y el ranking se arma solo. Podés
                 hacerlo ahora o después de tu primer torneo.
               </p>
             </div>
