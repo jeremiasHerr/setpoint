@@ -5,8 +5,18 @@
 // de otras features. NO es la carga de datos del producto: en producción,
 // la organización carga su padrón desde la web (F02 y F03).
 //
+// Dos organizaciones con configuraciones opuestas, para mostrar que la
+// plataforma no está hecha a medida de un circuito:
+//   - Polenta Team Tenis: el caso de validación. Ranking, inscripción cerrada
+//     y cuadro consuelo (que POLENTA llama "Complementaria").
+//   - Liga Amateur del Valle: ficticia. Sin ranking, inscripción abierta y
+//     sin cuadro consuelo.
+//
 // Los puntos son los del ranking real de Tercera 2026 de POLENTA.
 // Los nombres son inventados, para no guardar datos de personas reales en Git.
+//
+// Cuentas de prueba (contraseña de las dos organizaciones: CONTRASENA_ORGANIZADOR):
+//   organizador@polenta.example · organizador@valle.example
 //
 // Uso:
 //   npm run db:seed -w apps/api          -> carga los datos
@@ -23,6 +33,8 @@ import {
 import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
+
+const CONTRASENA_ORGANIZADOR = 'organizador-de-prueba';
 
 const DIA = 24 * 60 * 60 * 1000;
 const diasAtras = (n: number) => new Date(Date.now() - n * DIA);
@@ -79,6 +91,30 @@ const TERCERA: [string, string, number[]][] = [
   ['Rodrigo', 'Maturana', [0, 0, 0, 0, 0]], //   0
 ];
 
+// Liga Amateur del Valle: una sola categoría con ranking apagado, así que los
+// jugadores no tienen movimientos.
+const VALLE_INTERMEDIA: [string, string][] = [
+  ['Lucas', 'Arrieta'],
+  ['Nicolás', 'Bertolini'],
+  ['Matías', 'Cayupán'],
+  ['Federico', 'Domínguez'],
+  ['Emiliano', 'Garrido'],
+  ['Hernán', 'Lagos'],
+  ['Ignacio', 'Mardones'],
+  ['Tomás', 'Ñancucheo'],
+];
+
+// Usuario que administra una organización. Se crea anidado en la organización.
+function administrador(email: string, nombre: string, apellido: string) {
+  return {
+    create: {
+      usuario: {
+        create: { email, nombre, apellido, passwordHash: bcrypt.hashSync(CONTRASENA_ORGANIZADOR, 10) },
+      },
+    },
+  };
+}
+
 // Borra todo, de las tablas hijas a las padres, para que el seed se pueda
 // correr varias veces sin chocar con las restricciones UNIQUE.
 async function limpiar() {
@@ -116,6 +152,7 @@ async function main() {
       descripcion: 'Circuito amateur de tenis de Neuquén',
       usaRanking: true,
       ventanaRankingMeses: 12,
+      admins: administrador('organizador@polenta.example', 'Eduardo', 'Salinas'),
       categorias: {
         create: [
           { nombre: 'Segunda', orden: 1 },
@@ -224,6 +261,66 @@ async function main() {
     );
   }
   console.log('Ranking verificado: el primero suma 165 y el último 0.\n');
+
+  await crearLigaDelValle();
+
+  console.log(`Cuentas de organizador (contraseña "${CONTRASENA_ORGANIZADOR}"):`);
+  console.log('  organizador@polenta.example · organizador@valle.example\n');
+}
+
+// Segunda organización, con la configuración opuesta a POLENTA: sin ranking (sin
+// etapas ni tabla de puntos), inscripción abierta y sin cuadro consuelo.
+async function crearLigaDelValle() {
+  const liga = await prisma.organizacion.create({
+    data: {
+      nombre: 'Liga Amateur del Valle',
+      slug: 'liga-amateur-del-valle',
+      descripcion: 'Torneos sueltos de tenis amateur en el Alto Valle',
+      usaRanking: false,
+      admins: administrador('organizador@valle.example', 'Silvina', 'Ortúzar'),
+      categorias: {
+        create: [
+          { nombre: 'Intermedia', orden: 1 },
+          { nombre: 'Principiantes', orden: 2 },
+        ],
+      },
+    },
+    include: { categorias: true },
+  });
+
+  const intermedia = liga.categorias.find((c) => c.nombre === 'Intermedia')!;
+
+  await prisma.jugador.createMany({
+    data: VALLE_INTERMEDIA.map(([nombre, apellido]) => ({
+      organizacionId: liga.id,
+      categoriaId: intermedia.id,
+      nombre,
+      apellido,
+    })),
+  });
+
+  // Torneo suelto: sin etapa, así que no otorga puntos.
+  await prisma.torneo.create({
+    data: {
+      organizacionId: liga.id,
+      categoriaId: intermedia.id,
+      etapaId: null,
+      nombre: 'Copa del Valle · Intermedia',
+      edicion: 'Copa del Valle 2026',
+      estado: EstadoTorneo.PUBLICADO,
+      cupo: 16,
+      precio: 30000,
+      modoInscripcion: ModoInscripcion.ABIERTA,
+      cantidadGrupos: 4,
+      clasificanPorGrupo: 2,
+      tieneComplementaria: false,
+      cierreInscripcion: diasAdelante(10),
+      fechaInicio: diasAdelante(17),
+    },
+  });
+
+  console.log(`Organización: ${liga.nombre} (sin ranking, inscripción abierta, sin cuadro consuelo)`);
+  console.log(`Jugadores de Intermedia: ${VALLE_INTERMEDIA.length}\n`);
 }
 
 main()

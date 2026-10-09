@@ -234,14 +234,24 @@ Escribir `apps/api/prisma/seed.ts` con datos realistas:
 - 26 jugadores de Tercera con sus puntos reales por etapa, como movimientos de ranking
 - 1 torneo en estado `PUBLICADO`
 
-**Pendiente de código** ([devolucion-25.md](devolucion-25.md), cambio A4): una segunda organización ficticia, **Liga Amateur del Valle**, con otra configuración:
+Y una segunda organización ficticia, **Liga Amateur del Valle** ([devolucion-25.md](devolucion-25.md), cambio A4), con la configuración opuesta:
 
 - Sin ranking (`usaRanking: false`): sin etapas ni tabla de puntos
 - Inscripción abierta (`modoInscripcion: ABIERTA`)
 - Sin cuadro consuelo (`tieneComplementaria: false`)
-- Una o dos categorías propias y un torneo suelto publicado
+- Dos categorías (Intermedia y Principiantes), 8 jugadores de Intermedia sin puntos y un torneo suelto publicado
 
 Sirve para la demo: muestra en vivo que la plataforma no está hecha a medida de POLENTA, con dos organizaciones que la usan de forma distinta sobre la misma base.
+
+**Cuentas de prueba.** Cada organización tiene un administrador, para entrar al panel sin registrarse:
+
+| Organización | Email | Contraseña |
+|---|---|---|
+| Polenta Team Tenis | `organizador@polenta.example` | `organizador-de-prueba` |
+| Liga Amateur del Valle | `organizador@valle.example` | `organizador-de-prueba` |
+| Jugador de POLENTA (Martín Sanhueza) | `martin.sanhueza@example.com` | `jugador-de-prueba` |
+
+Son datos del seed de desarrollo, igual que los jugadores: no se usan fuera de una base local.
 
 ```bash
 npm run db:seed -w apps/api
