@@ -20,13 +20,13 @@ const puntosDeInstancia = z
   .max(10000, 'Como máximo 10.000');
 
 // Lista ordenada de nombres únicos: la posición define el orden (de etapas, del calendario).
-const listaDeNombres = (queEs: string) =>
+const listaDeNombres = (siHayRepetidos: string) =>
   z
     .array(z.string().trim().min(1).max(40))
     .max(30)
     .refine(
       (nombres) => new Set(nombres.map((n) => n.toLowerCase())).size === nombres.length,
-      `Hay ${queEs} repetidas`,
+      siHayRepetidos,
     );
 
 // Superficies de cancha, en el orden en que se ofrecen. Las claves son las del enum de Prisma en minúscula.
@@ -67,8 +67,8 @@ export const configuracionCircuitoSchema = z.object({
   nombre: z.string({ error: 'Escribí el nombre del circuito' }).trim().min(2, 'Escribí el nombre del circuito').max(80),
   contacto: z.string().trim().max(200),
   usaRanking: z.boolean(),
-  categorias: listaDeNombres('categorías'),
-  etapas: listaDeNombres('etapas'),
+  categorias: listaDeNombres('Hay categorías repetidas'),
+  etapas: listaDeNombres('Hay torneos del calendario repetidos'),
   puntos: z.object({
     campeon: puntosDeInstancia,
     finalista: puntosDeInstancia,

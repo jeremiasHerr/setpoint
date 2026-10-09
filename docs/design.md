@@ -243,7 +243,7 @@ La interfaz usa términos genéricos, no los del código ni los de un circuito e
 | **Cuadro consuelo**, o el nombre que configure la organización | Complementaria | POLENTA lo configura como "Complementaria"; en sus pantallas se ve así |
 | Campeonato | — | Decisión abierta 16: puede pasar a "cuadro principal" |
 
-**Pendiente de código.** Las pantallas implementadas y los HTML de referencia todavía usan los términos viejos; cuáles, en [pantallas/README.md](pantallas/README.md).
+**Estado.** Las pantallas implementadas ya usan estos términos, salvo "Campeonato" (decisión abierta 16); el nombre configurable del cuadro consuelo está pendiente. Los HTML de referencia no se rehacen y conservan los términos viejos: cuáles, en [pantallas/README.md](pantallas/README.md).
 
 ### Ayuda en contexto
 
