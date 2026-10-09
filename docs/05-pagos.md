@@ -4,9 +4,9 @@
 
 **Solo la inscripción del jugador al torneo.** La organización no paga por publicar.
 
-Importe actual en POLENTA: **$45.000 ARS**, que incluye tubo de pelotas, canchas de las eliminatorias, asado de cierre y premios.
+El importe lo fija cada torneo. En el caso de validación (POLENTA): **$45.000 ARS**, que incluye tubo de pelotas, canchas de las eliminatorias, asado de cierre y premios.
 
-**Medio actual:** transferencia bancaria, con envío manual del comprobante y verificación a mano. La plataforma reemplaza ese circuito completo.
+**Medio habitual hoy:** transferencia bancaria, con envío manual del comprobante y verificación a mano. Es lo que hace POLENTA y la mayoría de los circuitos amateur. La plataforma reemplaza ese circuito completo.
 
 ---
 
@@ -80,7 +80,7 @@ Un job periódico expira las reservas vencidas, libera el cupo y **notifica al p
 
 ## 6. Lista de espera
 
-Regla tomada del reglamento ([02](02-dominio.md) §11): quienes quedan fuera del cupo se ordenan **por orden de llegada** y cubren deserciones.
+Si el torneo tiene lista de espera (parámetro del torneo, [07](07-configurabilidad.md) §2.6), quienes quedan fuera del cupo se ordenan **por orden de llegada** y cubren deserciones. Es la regla del reglamento de POLENTA ([02](02-dominio.md) §11) y la habitual.
 
 También aplica al cierre de inscripciones: si hay inscriptos que no pagaron, se los consulta con un plazo y, si no cumplen, se pasa al siguiente de la lista.
 

@@ -14,12 +14,13 @@ Se definen una vez, al dar de alta el circuito.
 |---|---|---|
 | **`usa_ranking`** | `sí` \| `no` | `sí` |
 | Categorías | Lista | Segunda, Tercera |
-| Etapas del calendario | Lista ordenada | Primavera, Verano, Pretemporada, Otoño, Invierno |
+| Torneos del calendario (`Etapa`) | Lista ordenada | Primavera, Verano, Pretemporada, Otoño, Invierno |
 | Tabla de puntos por instancia | Tabla | 100 / 75 / 50 / 25 / 15 / 10 |
 | Ventana del ranking | Meses | 12 |
 | ¿Cuentan todas las etapas o las mejores N? | `todas` \| `mejores_n` | `todas` |
 | Puntos de ingreso de jugador nuevo | Número | 0 |
 | **`quien_carga_resultados`** | `organizacion` \| `organizacion_y_jugadores` | `organizacion` |
+| **Nombre del cuadro consuelo** | Texto | "Complementaria" (por defecto: "cuadro consuelo") |
 
 **`usa_ranking`** — si la organización administra un circuito con ranking acumulado o solo corre torneos sueltos.
 
@@ -38,6 +39,30 @@ Se definen una vez, al dar de alta el circuito.
 
 **`quien_carga_resultados`** — si los jugadores pueden reportar el resultado de su partido con confirmación del rival, o si la carga es exclusiva de la organización. POLENTA usa el modo restringido, alineado con el principio de mínima carga.
 
+### 1.1 Configurar el circuito desde la planilla — *pendiente de código*
+
+Las categorías y los torneos del calendario no hace falta cargarlos a mano: **la importación los detecta en la planilla** que la organización ya usa ([06-ia.md](06-ia.md) §1, [decisión 011](decisiones/011-la-importacion-detecta-el-calendario.md)).
+
+- **Torneos del calendario:** se detectan en los encabezados de las columnas y se proponen en orden. Si la organización ya tiene, se usan esos y una columna que no coincide se propone como nueva.
+- **Categorías:** se detectan por el título de la hoja o el nombre del archivo.
+- Se crean **al confirmar la importación, en la misma transacción**. Si se descarta, no queda nada.
+- *Propuesto:* si la importación trae puntos, al confirmarla se enciende `usa_ranking`. Una organización que importa su ranking tiene un ranking; dejarlo apagado escondería lo que acaba de cargar.
+
+Es lo que cierra la promesa de la puerta de entrada: el circuito nuevo empieza con un torneo suelto sin configurar nada, y **el circuito que ya existe sube su archivo y queda configurado**.
+
+### 1.2 Nombres configurables
+
+**La interfaz usa términos genéricos, no los de un circuito** ([devolucion-25.md](devolucion-25.md), cambio A3). Donde un circuito tiene un nombre propio arraigado para algo, el nombre es configurable:
+
+| Concepto | Nombre por defecto | Configurable | POLENTA |
+|---|---|---|---|
+| Cuadro de los que no clasifican al principal | Cuadro consuelo | Sí, por organización. *Pendiente de código* | Complementaria |
+| Cuadro de los clasificados | Campeonato | A decidir (decisión abierta 16 del [README](README.md)) | Campeonato |
+| Torneo que se repite cada año (`Etapa`) | Torneo del calendario | No | Etapa |
+| Una vez que se juega, en una categoría (`Torneo`) | Edición | No | — |
+
+**Por qué solo el cuadro consuelo.** Es el único caso en que el término de POLENTA es un nombre propio del circuito (es el que usa su reglamento) y no hay uno único establecido: otros circuitos le dicen de otra forma a lo mismo. "Torneo del calendario" y "edición" no se configuran porque son vocabulario de la plataforma, y parametrizarlos multiplicaría los textos de cada pantalla sin que ningún circuito lo pida. Es el criterio de este documento: configurable lo que es barato y varía de verdad.
+
 ---
 
 ## 2. Parámetros del torneo
@@ -51,7 +76,7 @@ Se eligen al crear cada torneo. Pueden variar entre torneos de una misma organiz
 | Cantidad de participantes | Número | 32 |
 | Cantidad de grupos | Número | 8 |
 | Clasificados por grupo a Campeonato | Número | 2 |
-| **¿Hay zona Complementaria?** | `sí` \| `no` | `sí` |
+| **¿Hay cuadro consuelo?** (`tieneComplementaria`) | `sí` \| `no` | `sí`, y lo llama "Complementaria" |
 | Modo de distribución | `serpentina` \| `directa` \| `bombos` | `serpentina` |
 | **Modo de sorteo** | `automatico` \| `asistido` \| `manual` | a definir |
 

@@ -2,7 +2,9 @@
 
 **Segunda entrega — Trabajo Final 2026**
 Proyecto: SetPoint — Plataforma de gestión de torneos de tenis amateur
-Cliente: POLENTA Team Tenis
+Caso de validación: POLENTA Team Tenis
+
+> **Actualizado tras la verificación del 25%** ([devolucion-25.md](devolucion-25.md)): F03 pasa a ser automática por excepción y detecta el calendario y las categorías; F19 pasa a ser la candidata a "IA en el uso diario", condicionada al tiempo. Los textos usan los términos genéricos de la interfaz ("torneo del calendario", "cuadro consuelo").
 
 > **Versión 2 — corrige la devolución de la cátedra.** Las features están numeradas en el orden cronológico real de uso del sistema, y las cuatro primeras explicitan quién da de alta la organización, los jugadores y los torneos, y en qué momento.
 
@@ -14,8 +16,8 @@ Antes del listado, la secuencia operativa completa. Cada paso está cubierto por
 
 | # | Momento | Quién | Qué ocurre | Feature |
 |---|---|---|---|---|
-| 1 | Una única vez, al adoptar el sistema | Quien administra el circuito | Crea la cuenta de la organización y, si administra un circuito con ranking, define categorías, etapas y tabla de puntos | F01 |
-| 2 | Antes del primer torneo, y luego cada vez que hay altas | La organización | Carga los jugadores de su circuito: uno por uno, subiendo su planilla, o abriendo la inscripción para que se anoten solos | F02, F03 |
+| 1 | Una única vez, al adoptar el sistema | Quien administra el circuito | Crea la cuenta de la organización. Si administra un circuito con ranking, define categorías, torneos del calendario y tabla de puntos, o deja que la importación los detecte (paso 2) | F01 |
+| 2 | Antes del primer torneo, y luego cada vez que hay altas | La organización | Carga los jugadores de su circuito: uno por uno, subiendo su planilla, o abriendo la inscripción para que se anoten solos. Si sube su planilla, el circuito queda configurado | F02, F03 |
 | 3 | Cada vez que se organiza un torneo | La organización | Crea el torneo con su categoría, cupo, importe, formato y cronograma, y lo publica | F04 |
 | 4 | Desde la publicación hasta el cierre de inscripción | Los jugadores | Se inscriben y pagan | F12, F13 |
 | 5 | Al cerrarse las inscripciones | La organización | Ejecuta el sorteo; se generan los grupos y los partidos | F05 |
@@ -39,13 +41,14 @@ Antes del listado, la secuencia operativa completa. Cada paso está cubierto por
 
 ## F01 — Alta de la organización y configuración del circuito
 
-**Es el primer paso y ocurre una sola vez.** Quien administra el circuito crea la cuenta de su organización con un correo y una contraseña, y a partir de ese momento puede empezar a usar el sistema. Si además administra un circuito con ranking anual, define sus categorías, las etapas de su calendario y la tabla de puntos que otorga cada instancia. Esa configuración es opcional y puede activarse más adelante.
+**Es el primer paso y ocurre una sola vez.** Quien administra el circuito crea la cuenta de su organización con un correo y una contraseña, y a partir de ese momento puede empezar a usar el sistema. Si además administra un circuito con ranking anual, define sus categorías, los torneos de su calendario y la tabla de puntos que otorga cada instancia. Esa configuración es opcional, puede activarse más adelante y, si el circuito ya tiene su ranking en una planilla, la arma la importación (F03).
 
 **Precisiones de alcance:**
 - Lo hace la propia organización desde la web; nadie carga nada por ella.
 - Una organización puede correr torneos sueltos sin ranking, y activar el ranking después.
 - Las categorías son propias de cada circuito; POLENTA usa Segunda y Tercera.
-- Las etapas del calendario definen los casilleros del ranking anual y solo hacen falta si se usa ranking.
+- Los torneos del calendario definen los casilleros del ranking anual y solo hacen falta si se usa ranking.
+- El inicio del organizador muestra una tarjeta de **primeros pasos** que se tildan solos: importar los jugadores, crear el primer torneo, compartir el link de inscripción. *Propuesto.*
 - La tabla de puntos es editable: campeón, finalista, semifinalista, cuartos, octavos y participación.
 - Opcionalmente puede registrar los clubes donde suele jugar, con sus canchas y superficies, para habilitar estadísticas por superficie.
 
@@ -72,16 +75,28 @@ Antes del listado, la secuencia operativa completa. Cada paso está cubierto por
 
 ## F03 — Carga masiva de jugadores desde planilla
 
-**Es la forma rápida de completar el paso anterior cuando el circuito ya existe.** La organización sube la planilla de cálculo que viene usando y el sistema carga a todos los jugadores con sus puntos históricos, en lugar de tipearlos de a uno. Antes de guardar nada, muestra una pantalla de revisión con lo que interpretó para que la organización lo confirme o lo corrija.
+**Es la puerta de entrada de un circuito que ya existe.** La organización sube la planilla de cálculo que viene usando y el sistema carga a todos los jugadores con sus puntos históricos, en lugar de tipearlos de a uno. Lo que el sistema puede verificar contra el archivo se importa solo; la organización revisa únicamente lo que falló o es dudoso: *"Importamos 74 jugadores. Revisá estos 3"*.
 
 **Precisiones de alcance:**
-- Reconoce automáticamente qué columna corresponde a cada etapa del ranking.
+- Reconoce automáticamente qué columna corresponde a cada torneo del calendario.
 - Detecta que "J. Pérez", "Juan Perez" y "PEREZ, Juan" son la misma persona.
-- Informa cuántos jugadores ya existían y cuántos son nuevos antes de confirmar.
 - Descarta filas que no son jugadores, como totales o encabezados repetidos.
-- La importación es repetible: se puede volver a subir la planilla cada vez que haya altas.
+- Cada número importado se verifica contra el archivo: no entra al ranking ningún punto que no esté en la planilla.
+- La importación es repetible: se puede volver a subir la planilla cada vez que haya altas, y solo se agrega lo nuevo.
 
-**Funcionalidad asistida por IA. Entrega: 25%**
+**Estado de la entrega del 25%:** implementada con revisión de todas las filas, para Excel y CSV, una hoja y una categoría por subida.
+
+**Alcance a partir de la devolución del 25%** ([devolucion-25.md](devolucion-25.md)):
+
+| Cambio | Estado |
+|---|---|
+| **Automática por excepción:** lo que pasa todos los controles con una coincidencia segura se importa sin pedir confirmación; la importación entera se puede deshacer | Decidido |
+| **Detecta los torneos del calendario y las categorías** en la planilla y los crea al confirmar. Una organización recién registrada sube su archivo y el circuito queda configurado | Decidido |
+| **Varios archivos** (uno por categoría) **y varias hojas** (una por categoría), hasta 10 archivos de 2 MB | Decidido |
+| Un archivo por torneo del calendario | Fuera de alcance en esta versión |
+| **Más formatos**, en este orden: PDF con texto, texto pegado, imágenes y PDF escaneados. Las imágenes no se pueden auditar contra el origen: todas sus filas pasan por revisión | Propuesto, alcance futuro |
+
+**Funcionalidad asistida por IA. Entrega: 25% (base) · cambios de la devolución: entrega a asignar**
 
 ---
 
@@ -91,7 +106,7 @@ Antes del listado, la secuencia operativa completa. Cada paso está cubierto por
 
 **Precisiones de alcance:**
 - Solo la organización crea torneos; los jugadores no pueden.
-- El formato es configurable: cantidad de grupos, clasificados por grupo y si se juega o no zona Complementaria.
+- El formato es configurable: cantidad de grupos, clasificados por grupo y si se juega o no cuadro consuelo.
 - El sistema de juego se parametriza: cantidad de sets, punto de oro, super tie-break.
 - Se definen los plazos de cada instancia, por ejemplo tres semanas para la fase de grupos y una semana por ronda eliminatoria.
 - **Un torneo puede ser suelto o formar parte de un circuito con ranking.** Si es suelto, el resultado son las posiciones finales de ese torneo y no hace falta configurar etapas ni puntos.
@@ -144,14 +159,14 @@ El sistema ordenará automáticamente la tabla de posiciones de cada grupo aplic
 
 ---
 
-## F08 — Cuadros de Campeonato y Complementaria
+## F08 — Cuadro principal y cuadro consuelo
 
-Al terminar la fase de grupos, el sistema armará automáticamente los cuadros eliminatorios ubicando a cada jugador según su posición en la zona. Los mejores de cada grupo van al cuadro Campeonato y el resto al cuadro Complementaria, de modo que todos los inscriptos sigan compitiendo. Cada resultado hace avanzar al ganador a la ronda siguiente sin intervención manual.
+Al terminar la fase de grupos, el sistema armará automáticamente los cuadros eliminatorios ubicando a cada jugador según su posición en la zona. Los mejores de cada grupo van al cuadro principal y, si el torneo lo tiene, el resto al cuadro consuelo, de modo que todos los inscriptos sigan compitiendo. Cada resultado hace avanzar al ganador a la ronda siguiente sin intervención manual.
 
 **Precisiones de alcance:**
 - Ambos cuadros funcionan en paralelo y cada uno define su propio campeón.
 - La cantidad de clasificados por grupo a cada cuadro es configurable.
-- La zona Complementaria puede desactivarse para circuitos que no la utilicen.
+- El cuadro consuelo puede desactivarse para circuitos que no lo utilicen, y su nombre es configurable (POLENTA lo llama "Complementaria").
 - Con treinta y dos inscriptos se generan quince partidos en cada cuadro.
 
 **Entrega: 50%**
@@ -160,10 +175,10 @@ Al terminar la fase de grupos, el sistema armará automáticamente los cuadros e
 
 ## F09 — Consulta pública del ranking
 
-Cualquier persona podrá consultar el ranking del circuito desde un enlace, sin necesidad de crear cuenta ni instalar nada. La organización comparte el enlace por su canal habitual y los jugadores acceden a la tabla actualizada, con el mismo detalle por etapa que hoy tiene la planilla que se pasan por mensaje.
+Cualquier persona podrá consultar el ranking del circuito desde un enlace, sin necesidad de crear cuenta ni instalar nada. La organización comparte el enlace por su canal habitual y los jugadores acceden a la tabla actualizada, con el mismo detalle por torneo del calendario que hoy tiene la planilla que se pasan por mensaje.
 
 **Precisiones de alcance:**
-- El ranking se muestra por categoría, con el desglose de puntos que aportó cada etapa.
+- El ranking se muestra por categoría, con el desglose de puntos que aportó cada torneo del calendario.
 - Se puede buscar a un jugador por apellido para ver su posición.
 - Ninguna pantalla pública muestra datos de contacto de los jugadores.
 - La información se actualiza sola a medida que se cierran torneos, sin que nadie edite una planilla.
@@ -174,7 +189,7 @@ Cualquier persona podrá consultar el ranking del circuito desde un enlace, sin 
 
 ## F10 — Consulta pública del torneo en vivo
 
-Cualquier persona podrá seguir el desarrollo de un torneo desde un enlace, sin cuenta ni instalación: las tablas de posiciones de cada zona, los cuadros de Campeonato y Complementaria, y el calendario de partidos con fecha, hora y lugar. La información se actualiza a medida que se cargan los resultados.
+Cualquier persona podrá seguir el desarrollo de un torneo desde un enlace, sin cuenta ni instalación: las tablas de posiciones de cada zona, los cuadros eliminatorios, y el calendario de partidos con fecha, hora y lugar. La información se actualiza a medida que se cargan los resultados.
 
 **Precisiones de alcance:**
 - Las tablas de zona muestran con claridad quiénes están clasificando a cada cuadro.
@@ -264,12 +279,12 @@ La organización dispondrá de una pantalla única donde ver el avance completo 
 
 ## F16 — Cierre de torneo y actualización del ranking
 
-Al definirse los campeones, la organización cerrará el torneo y el sistema otorgará automáticamente los puntos que corresponden a cada jugador según la instancia que alcanzó, actualizando el ranking del circuito. Los puntos reemplazan a los obtenidos en la misma etapa del año anterior, tal como funciona hoy la planilla.
+Al definirse los campeones, la organización cerrará el torneo y el sistema otorgará automáticamente los puntos que corresponden a cada jugador según la instancia que alcanzó, actualizando el ranking del circuito. Los puntos reemplazan a los obtenidos en la edición anterior del mismo torneo del calendario, tal como funciona hoy la planilla.
 
 **Precisiones de alcance:**
 - En torneos sueltos sin ranking, el cierre produce la tabla de posiciones finales del torneo y no otorga puntos.
 - Cada jugador puede ver de qué torneo salió cada uno de sus puntos.
-- Los jugadores que completan la fase de grupos sin clasificar a Campeonato reciben los puntos de participación.
+- Los jugadores que completan la fase de grupos sin clasificar al cuadro principal reciben los puntos de participación.
 - Si se corrige un resultado después del cierre, el ranking se recalcula.
 - Cada categoría mantiene su ranking independiente.
 
@@ -284,7 +299,7 @@ Cada jugador tendrá una ficha con su historial completo: todos los partidos que
 **Precisiones de alcance:**
 - Muestra estadísticas acumuladas: partidos jugados, ganados y perdidos.
 - Incluye los torneos disputados y la instancia alcanzada en cada uno.
-- Muestra la evolución de sus puntos etapa por etapa.
+- Muestra la evolución de sus puntos torneo por torneo.
 - Es de acceso público, sin necesidad de cuenta.
 
 **Entrega: 75%**
@@ -313,8 +328,10 @@ La organización podrá cargar varios resultados de una sola vez a partir de los
 - Interpreta mensajes escritos de forma libre, con o sin guiones, en primera persona o en tercera.
 - Distingue qué mensajes son resultados y cuáles son conversación.
 - Reconoce situaciones especiales como abandonos o partidos definidos por super tie-break.
-- Nada se guarda sin que la organización lo confirme.
+- Usa la misma arquitectura que F03: lo que pasa los controles (el partido existe, los jugadores son los de esa zona, el marcador es válido) se carga solo; lo dudoso queda para que la organización lo confirme.
 - Si no logra interpretar un mensaje, ese partido queda para carga manual sin bloquear a los demás.
+
+**Estado: condicionada, a confirmar con el profesor.** Desde la devolución del 25% es la candidata a llevar la IA al uso de todos los días, porque cargar resultados es el dolor recurrente real y F03 se usa pocas veces por año. Depende del tiempo: se encara después de terminar F03 y la app móvil ([devolucion-25.md](devolucion-25.md), cambio I).
 
 **Funcionalidad asistida por IA. Entrega: 100%**
 
@@ -326,7 +343,7 @@ Antes y durante el torneo, cada jugador podrá ver cuántos puntos sumaría y qu
 
 **Precisiones de alcance:**
 - Calcula el escenario para cada instancia posible: octavos, cuartos, semifinal, final y título.
-- Considera el reemplazo de los puntos obtenidos en la misma etapa del año anterior.
+- Considera el reemplazo de los puntos obtenidos en la edición anterior del mismo torneo del calendario.
 - Muestra la posición estimada en el ranking en cada escenario.
 - Se accede desde la ficha del jugador y desde la vista del torneo.
 
@@ -345,6 +362,8 @@ Antes y durante el torneo, cada jugador podrá ver cuántos puntos sumaría y qu
 
 **Orden de lectura.** La lista se recorre de arriba abajo como la historia de uso del sistema: se da de alta la organización, se cargan los jugadores, se crea el torneo, se juega, se cierra. Si alguna feature no encaja en ese relato, está mal ubicada.
 
-**Crónicas automáticas y fotos: fuera de alcance.** Se descartaron por decisión del grupo. Consecuencia a tener presente: quedan dos funcionalidades asistidas por IA confirmadas (F03 y F20) más una en duda (F19). La cátedra exige integración significativa de IA; dos sólidas alcanzan, pero conviene no perder más.
+**Crónicas automáticas y fotos: fuera de alcance.** Se descartaron por decisión del grupo. Consecuencia a tener presente: quedan dos funcionalidades asistidas por IA confirmadas (F03 y F20) más una condicionada (F19). La cátedra exige integración significativa de IA; dos sólidas alcanzan, pero conviene no perder más.
 
-**Riesgo de alcance.** F08 —los dos cuadros en paralelo— es la feature más pesada del proyecto. Si el cronograma se complica, la zona Complementaria puede desactivarse por configuración y entregarse solo el cuadro Campeonato, sin modificar ninguna otra feature.
+**Devolución del 25%.** El profesor dijo que la IA no lo convenció y que "lo ideal es que sea todo automático". F03 responde con la importación por excepción y la detección del calendario; si lo que espera es IA en el uso diario, la respuesta es F19. Las preguntas están en [devolucion-25.md](devolucion-25.md) §4.
+
+**Riesgo de alcance.** F08 —los dos cuadros en paralelo— es la feature más pesada del proyecto. Si el cronograma se complica, el cuadro consuelo puede desactivarse por configuración y entregarse solo el cuadro principal, sin modificar ninguna otra feature.

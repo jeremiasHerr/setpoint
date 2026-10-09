@@ -2,7 +2,31 @@
 
 > **Fuente de autoridad.** Todo lo de este documento sale del *Reglamento POLENTA Team Tenis* (jul-2026), del ranking real de Tercera 2026 y de las respuestas del organizador. No hay supuestos nuestros salvo donde se aclara explícitamente.
 >
-> **POLENTA es el cliente de validación, no el molde.** Este documento describe *un* circuito real; [07-configurabilidad.md](07-configurabilidad.md) define qué de esto se parametriza para otras organizaciones y qué queda fijo.
+> **POLENTA es el cliente de validación, no el molde.** Este documento describe *un* circuito real; [07-configurabilidad.md](07-configurabilidad.md) define qué de esto se parametriza para otras organizaciones y qué queda fijo. Donde una regla es configurable, se indica con **En la plataforma:**.
+>
+> Los términos que usa este documento son los de POLENTA ("etapa", "Complementaria"). La interfaz usa términos genéricos: ver §0.
+
+---
+
+## 0. Glosario: código ↔ interfaz
+
+Desde la devolución del 25% ([devolucion-25.md](devolucion-25.md), cambios A3 y D), la interfaz no usa los nombres del código ni los de POLENTA. **En código, base de datos y API no se renombra nada** ([decisión 010](decisiones/010-torneo-del-calendario-en-la-interfaz.md)).
+
+| Código / base / API | Interfaz | Ejemplo | Término de POLENTA |
+|---|---|---|---|
+| `Etapa` | **Torneo del calendario** | "El Primavera" | Etapa |
+| `Torneo` | **Edición** (si pertenece a un torneo del calendario) | "Primavera 26 · Tercera" | Torneo, etapa |
+| `Torneo` con `etapaId` null | Torneo (suelto) — *decisión abierta 15* | "Abierto de verano" | — |
+| `Torneo.edicion` (texto) | Nombre de la convocatoria que agrupa las categorías | "Primavera 2026" | — |
+| `Cuadro.COMPLEMENTARIA`, `tieneComplementaria` | **Cuadro consuelo**, nombre configurable | — | Complementaria |
+| `Cuadro.CAMPEONATO` | Campeonato — *decisión abierta 16* | — | Campeonato |
+| `Categoria` | Categoría | "Tercera" | Categoría |
+| `MovimientoRanking` (por `etapaId`) | Puntos de un torneo del calendario | "Primavera 25: 15" | Casillero |
+| `Jugador` (de la organización) | Jugador; la lista es el padrón | — | Padrón |
+
+> **Ojo con `Torneo.edicion`.** Es un campo de texto que ya existía y nombra la convocatoria completa ("Primavera 2026", todas las categorías). En la interfaz, en cambio, "edición" es un `Torneo`: una categoría de esa convocatoria. No se renombra el campo; quien lo lea en el código tiene que saber que no es lo mismo que la "edición" de la pantalla.
+
+**Por qué "torneo del calendario".** "Etapa" es un término de POLENTA que fuera del circuito no se entiende: suena a fase de un torneo, no a un torneo que vuelve cada año. "Torneo del calendario" dice lo que es. Como `Torneo` ya existe y es otra cosa (una categoría de una convocatoria), en la interfaz pasa a llamarse "edición": *el Primavera es un torneo del calendario; Primavera 26 · Tercera es una edición*.
 
 ---
 
@@ -51,6 +75,8 @@ Grupos de 4 jugadores, todos contra todos. Con 32 inscriptos: 8 grupos.
 - **Los 2 últimos de cada grupo** → cuadro **Complementaria**
 
 Nadie queda afuera. El reglamento garantiza un mínimo de 4 partidos por jugador: 3 de zona y al menos 1 de eliminatoria.
+
+**En la plataforma:** el tamaño de los grupos, los clasificados al cuadro principal y si hay cuadro consuelo son parámetros del torneo. El cuadro consuelo es opcional y su nombre es configurable: por defecto "cuadro consuelo"; POLENTA lo llama "Complementaria" ([07](07-configurabilidad.md) §2.1).
 
 ### 3.2 Cuadros eliminatorios
 
@@ -145,6 +171,8 @@ Cascada lineal. **Vale el primer criterio que rompa la igualdad.**
 
 El mismo procedimiento se usa para comparar entre grupos cuando hay que definir, por ejemplo, un "mejor tercero" para ubicar posiciones en los cuadros.
 
+**En la plataforma:** la cascada es fija en v1, porque coincide con la práctica habitual ([07](07-configurabilidad.md) §3). Al ser una lista de comparadores, reordenarla para otro circuito es cambiar un array.
+
 **Se implementa como una lista ordenada de comparadores.** Es el único lugar del proyecto donde los tests unitarios se pagan solos: los casos borde son numerosos y no se verifican a mano de forma confiable.
 
 ---
@@ -163,7 +191,7 @@ La diferencia con POLENTA es solo de escala: la ATP calcula sobre los 19 mejores
 
 ### 7.2 Cómo funciona: reemplazo por casillero
 
-**No es una suma rodante de los últimos 12 meses.** Es un conjunto de casilleros, uno por etapa del calendario. Cuando se juega una etapa, sus puntos **reemplazan** a los de esa misma etapa del año anterior.
+**No es una suma rodante de los últimos 12 meses.** Es un conjunto de casilleros, uno por etapa del calendario (en la interfaz, uno por **torneo del calendario**). Cuando se juega una etapa, sus puntos **reemplazan** a los de esa misma etapa del año anterior.
 
 > Torneo Primavera 2026 reemplaza los puntos de Torneo Primavera 2025.
 
@@ -204,6 +232,8 @@ Ventajas de guardar movimientos en vez de un campo `puntos` mutable:
 
 Todo jugador que completa la fase de grupos y no clasifica a Campeonato recibe **10 puntos**.
 
+**En la plataforma:** la tabla de puntos es configurable por organización, y una organización sin ranking no la necesita ([07](07-configurabilidad.md) §1).
+
 ### 7.5 Jugadores nuevos
 
 **Entran con 0 puntos.** No hay estimación de nivel ni puntos provisionales.
@@ -243,6 +273,8 @@ Se admite **una sola reprogramación** por partido, avisando con al menos **24 h
 
 Si se avisa con menos de 24 horas, o si el otro jugador no puede reprogramar, **quien no puede cumplir debe dar W.O.**
 
+**En la plataforma:** los plazos, la cantidad de reprogramaciones y la antelación son parámetros del torneo ([07](07-configurabilidad.md) §2.3).
+
 ### 8.4 Partidos no coordinados
 
 Quien no logre coordinar dentro del plazo debe dar W.O., y gana quien estuvo disponible. Si no hay acuerdo sobre quién fue, **el Comité Organizador decide**: puede dar por ganador a quien estuvo disponible más días, o aplicar otro criterio según el caso.
@@ -265,6 +297,8 @@ En la práctica actual se flexibiliza: agregan días o acomodan la fecha.
 | Eliminatorias | Club designado por la organización | La organización |
 
 Consecuencia: **un torneo es multisede en fase de grupos** — cada partido puede jugarse en un club distinto, elegido por los dos jugadores. En eliminatorias hay sede única.
+
+**En la plataforma:** sede libre o designada, por fase ([07](07-configurabilidad.md) §2.4).
 
 > **Decisión abierta 2:** desde qué instancia exactamente paga la organización. El reglamento dice "fases de Campeonato y Complementaria", la respuesta 9 dice cuartos de final y la 23 dice octavos.
 
@@ -307,6 +341,8 @@ Si al cerrar las inscripciones hay jugadores que no pagaron, se los consulta par
 El circuito de "transferir → sacar foto del comprobante → mandarlo → esperar que alguien lo verifique a mano" se reemplaza por un checkout que confirma solo. Es una mejora directa sobre el proceso actual, no una funcionalidad teórica.
 
 También se modela la **lista de espera**, que hoy se lleva a mano.
+
+**En la plataforma:** quién puede inscribirse, el importe, la lista de espera y los minutos de reserva son parámetros del torneo ([07](07-configurabilidad.md) §2.6).
 
 ---
 

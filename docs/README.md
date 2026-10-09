@@ -3,8 +3,13 @@
 **Trabajo Final — Tecnicatura Universitaria en Desarrollo Web, UNCo FaI**
 Grupo de 3 · Entrega: fines de noviembre de 2026
 
-**Versión de la documentación:** 2.0 — 25 de agosto de 2026
-**Cambio principal de la v2.0:** incorporación del reglamento y datos reales del circuito POLENTA Team Tenis. Se corrigen el modelo de ranking, el formato de torneo (aparece la zona Complementaria) y la cascada de desempates.
+Los circuitos amateur de tenis se organizan con Excel y WhatsApp: el ranking en una planilla que actualiza una persona, los cuadros y los resultados perdidos entre mensajes, las inscripciones cobradas por transferencia y verificadas a mano. SetPoint es una plataforma multi-organización para que cualquier circuito organice sus torneos y su ranking sin eso.
+
+**Caso de validación:** POLENTA Team Tenis, un circuito real de Neuquén con 77 jugadores en 2 categorías. Sus reglas y sus datos prueban que el sistema resuelve un caso real; lo que varía entre circuitos se configura ([07-configurabilidad.md](07-configurabilidad.md)).
+
+**Versión de la documentación:** 2.1 — octubre de 2026
+**Cambio principal de la v2.1:** cambios a partir de la devolución de la verificación del 25% ([devolucion-25.md](devolucion-25.md)): encuadre general en lugar de centrado en POLENTA, resumen de una página, importación automática por excepción, "torneo del calendario" en la interfaz, y detección del calendario y las categorías en la importación.
+**v2.0** (25 de agosto de 2026): incorporación del reglamento y datos reales de POLENTA. Se corrigen el modelo de ranking, el formato de torneo (aparece el cuadro consuelo, que POLENTA llama "Complementaria") y la cascada de desempates.
 
 ---
 
@@ -12,8 +17,10 @@ Grupo de 3 · Entrega: fines de noviembre de 2026
 
 | Documento | Contenido |
 |---|---|
+| [00-resumen.md](00-resumen.md) | **Empezar acá.** El proyecto en dos minutos: problema, usuarios, flujos, arquitectura e IA |
+| [devolucion-25.md](devolucion-25.md) | Devolución de la verificación del 25%: qué dijo el profesor y qué cambia |
 | [01-vision.md](01-vision.md) | Pitch, problema que resuelve, relevamiento de competencia |
-| [02-dominio.md](02-dominio.md) | **Reglas reales del circuito.** Formato, sistema de juego, desempates, ranking, plazos |
+| [02-dominio.md](02-dominio.md) | **Reglas del caso de validación (POLENTA).** Formato, sistema de juego, desempates, ranking, plazos. Glosario código ↔ interfaz |
 | [03-flujo-organizacion.md](03-flujo-organizacion.md) | Qué hace la organización desde la web |
 | [04-flujo-jugador.md](04-flujo-jugador.md) | Qué hace el jugador desde la app |
 | [05-pagos.md](05-pagos.md) | Integración con MercadoPago |
@@ -40,9 +47,9 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 
 ---
 
-## Cliente real
+## Caso de validación
 
-**POLENTA Team Tenis**, circuito amateur sin fines de lucro organizado por un grupo de jugadores independientes. Datos actuales:
+**POLENTA Team Tenis**, circuito amateur sin fines de lucro organizado por un grupo de jugadores independientes. Es el cliente real con el que se valida el sistema, no el único al que apunta: la demo incluye una segunda organización ficticia con otra configuración ([devolucion-25.md](devolucion-25.md), cambio A4). Datos actuales:
 
 | | |
 |---|---|
@@ -63,8 +70,8 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 | 1 | ¿Qué `modo_sorteo` usa POLENTA: automático, asistido o manual? (ver [07](07-configurabilidad.md) §2.1) | Prioridad de implementación | Consultar |
 | 2 | ¿Desde qué instancia paga las canchas la organización? El reglamento dice "fases de Campeonato y Complementaria", la respuesta 9 dice cuartos y la 23 dice octavos | Modelo de sedes | Consultar |
 | 3 | El ranking del PDF tiene 5 casilleros (incluye "Pretemporada"), pero la respuesta 15 menciona 4 torneos + Master. ¿Pretemporada **es** el Master? | Modelo de ranking | Consultar |
-| 4 | ¿Se implementa la zona Complementaria completa, o se recorta el alcance para llegar a noviembre? | Alcance del proyecto | **Decidir en grupo** |
-| 5 | ¿El resultado lo carga la organización a mano, o se extrae del mensaje de WhatsApp con IA? | Alcance de [06](06-ia.md) | **Decidir en grupo** |
+| 4 | ¿Se implementa el cuadro consuelo (la "Complementaria" de POLENTA) completo, o se recorta el alcance para llegar a noviembre? | Alcance del proyecto | **Decidir en grupo** |
+| 5 | ¿El resultado lo carga la organización a mano, o se extrae del mensaje de WhatsApp con IA? Desde la devolución del 25%, F19 es la candidata a "IA en el uso diario", condicionada al tiempo ([devolucion-25.md](devolucion-25.md), cambio I) | Alcance de [06](06-ia.md) | **Preguntar al profesor**, después decidir en grupo |
 | 6 | ¿Se implementan los tres modos de sorteo o solo `manual` + `automatico` para v1? | Alcance | **Decidir en grupo** |
 | 7 | **Cambio de categoría:** si un jugador de Tercera pasa a Segunda, ¿qué pasa con sus puntos de Tercera? ¿Se transfieren, quedan congelados, o el jugador desaparece de esa tabla? | Modelo de ranking | Consultar |
 | 8 | ¿DNI o email como identificador en el flujo de inscripción por link? (ver [04](04-flujo-jugador.md) §5.8) | Flujo de inscripción | **Decidir en grupo** |
@@ -72,6 +79,9 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 | 11 | **Política de devolución:** ¿POLENTA devuelve el dinero si alguien se baja después de pagar? ¿Cambia si ya se hizo el sorteo? | Estados de inscripción | Consultar |
 | 12 | ¿Los jugadores pueden cargar resultados con confirmación del rival, o la carga es exclusiva de la organización? Está parametrizado como `quien_carga_resultados` | Permisos | **Decidir en grupo** |
 | 13 | **Dónde guarda la web el token de sesión.** Hoy va en `localStorage` (`apps/web/src/features/auth/sesion.ts`): es lo más simple y alcanza para el TP, pero un script inyectado por XSS podría leerlo. La alternativa es una cookie `httpOnly`, que JavaScript no puede leer, pero obliga a configurar CORS con credenciales y protección CSRF, y no sirve para la app móvil, que guardará el token en el almacenamiento seguro del dispositivo | Nada por ahora | Revisar antes de un deploy público |
+| 14 | **¿"Todo automático" se refiere a la importación o al uso diario?** La importación por excepción responde lo primero; F19, lo segundo. Ver las preguntas de [devolucion-25.md](devolucion-25.md) §4 | Prioridad de F19 | **Preguntar al profesor** |
+| 15 | **Casos sin nombre cerrado para "edición".** "Edición" es un `Torneo` de un torneo del calendario. ¿Un torneo suelto (sin etapa) se muestra como "torneo"? ¿Y cómo se llama la convocatoria que crea varias ediciones a la vez ("Primavera 26", Segunda y Tercera), que en código es el campo `Torneo.edicion`? ([decisión 010](decisiones/010-torneo-del-calendario-en-la-interfaz.md)) | Textos de *Nuevo torneo* | **Decidir en grupo** |
+| 16 | **¿"Campeonato" también pasa a genérico** ("cuadro principal", configurable), como el cuadro consuelo? ([devolucion-25.md](devolucion-25.md) §3.1) | Textos de la interfaz | **Decidir en grupo** |
 
 > **El schema ya no está bloqueado.** Ninguna de las decisiones abiertas cambia las tablas: son valores de configuración, datos del seed o lógica de negocio.
 
@@ -95,6 +105,10 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 - ~~¿El modelo de ranking por casilleros es una particularidad de POLENTA?~~ **No.** Es el modelo de la ATP: ventana rodante con reemplazo al volver el torneo
 - ~~¿La app negocia la fecha o solo la registra?~~ **La registra.** Los jugadores siguen coordinando por WhatsApp; cualquiera de los dos anota la fecha y el rival confirma con un toque. La confirmación se modela en el schema desde el inicio ([04](04-flujo-jugador.md) §6)
 - ~~¿Cómo interpreta la IA la planilla del padrón: mapeo de columnas o extracción completa?~~ **Extracción completa, auditada contra la planilla** antes de mostrarla y confirmada por la organización ([decisión 009](decisiones/009-importacion-extraccion-completa-con-ia.md)). El mapeo se rompía con cada variante de planilla; la auditoría cubre el riesgo de que el modelo invente un número
+- ~~¿La importación pide confirmar cada fila?~~ **No: automática por excepción.** Se importa solo lo que pasa todos los controles con coincidencia segura; la organización revisa lo que falló o es dudoso ([devolucion-25.md](devolucion-25.md), cambio C). La revisión fila por fila daba la impresión de que la IA hacía poco y desperdiciaba la auditoría
+- ~~¿Cómo se llama "Etapa" en la interfaz?~~ **"Torneo del calendario"**, y `Torneo` se muestra como "Edición". En código no se renombra nada ([decisión 010](decisiones/010-torneo-del-calendario-en-la-interfaz.md)). "Etapa" no se entendía fuera de POLENTA
+- ~~¿Hay que configurar el calendario antes de importar?~~ **No.** La importación detecta los torneos del calendario y las categorías en la planilla y los crea al confirmar ([decisión 011](decisiones/011-la-importacion-detecta-el-calendario.md)). Una organización con datos previos queda configurada con solo subir su archivo
+- ~~¿Se importan varios archivos u hojas a la vez?~~ **Sí, uno o varios por categoría**, hasta 10 archivos. Un archivo por torneo del calendario no se soporta en esta versión ([decisión 012](decisiones/012-importacion-de-varios-archivos-y-hojas.md))
 - ~~¿Qué fecha llevan los puntos importados de la planilla?~~ **El 1° de enero del año del casillero** ([decisión 008](decisiones/008-fecha-de-los-movimientos-importados.md)). La planilla no tiene fechas y el ranking solo necesita que un torneo real de esa etapa y ese año le gane al importado
 
 ---
@@ -140,7 +154,8 @@ Lista para llevar a la próxima charla. Las respondidas se tachan.
 
 | Riesgo | Mitigación |
 |---|---|
-| **78 partidos por torneo y dos cuadros paralelos.** El motor de competencia es más grande de lo estimado | Priorizar Campeonato; Complementaria como incremento posterior (decisión abierta 4). Es parámetro del torneo, no supuesto fijo |
+| **78 partidos por torneo y dos cuadros paralelos.** El motor de competencia es más grande de lo estimado | Priorizar el cuadro principal; el cuadro consuelo como incremento posterior (decisión abierta 4). Es parámetro del torneo, no supuesto fijo |
+| **Los cambios de la devolución del 25% compiten por tiempo** con el motor de competencia y la app móvil | Se ordenan por costo: textos de la interfaz y seed primero; importación por excepción y detección del calendario después; varios formatos (PDF, texto, imágenes) y F19 solo si sobra tiempo ([devolucion-25.md](devolucion-25.md)) |
 | **Sobregeneralizar la configurabilidad** y no llegar a noviembre | [07](07-configurabilidad.md) fija el límite: solo se parametriza lo barato y lo que varía de verdad |
 | Partidos que nunca se coordinan y bloquean el cierre de la zona | Tablero de avance con alertas de plazo; W.O. según reglamento |
 | Los webhooks de MercadoPago necesitan URL pública | ngrok en desarrollo; verificar antes de la demo |
@@ -154,13 +169,16 @@ Lista para llevar a la próxima charla. Las respondidas se tachan.
 
 ## Glosario
 
+Los términos de la interfaz son genéricos; entre paréntesis, cómo los llama POLENTA. La equivalencia con los nombres del código está en [02-dominio.md](02-dominio.md) §0.
+
 | Término | Significado |
 |---|---|
-| **Etapa** | Torneo estacional del circuito (Primavera, Verano, Pretemporada, Otoño, Invierno) |
-| **Zona / grupo** | Grupo de 4 jugadores que juegan todos contra todos en la primera fase |
-| **Campeonato** | Cuadro eliminatorio de los 2 primeros de cada zona |
-| **Complementaria** | Cuadro eliminatorio de los 2 últimos de cada zona |
+| **Torneo del calendario** | Torneo que se repite cada año y tiene su casillero en el ranking. En código, `Etapa`. En POLENTA: Primavera, Verano, Pretemporada, Otoño, Invierno |
+| **Edición** | Una vez que se juega un torneo del calendario, en una categoría: "Primavera 26 · Tercera". En código, `Torneo` |
+| **Zona / grupo** | Grupo de jugadores que juegan todos contra todos en la primera fase. En POLENTA, de 4 |
+| **Cuadro principal** | Cuadro eliminatorio de los mejores de cada zona (POLENTA: "Campeonato", los 2 primeros). La interfaz todavía dice "Campeonato": decisión abierta 16 |
+| **Cuadro consuelo** | Cuadro eliminatorio opcional de los que no clasifican al principal. Nombre configurable (POLENTA: "Complementaria", los 2 últimos de cada zona) |
 | **Cabeza de serie** | Jugador mejor rankeado de cada grupo |
-| **Casillero** | Posición del ranking correspondiente a una etapa; se reemplaza cada año |
+| **Casillero** | Lugar del ranking que corresponde a un torneo del calendario; se reemplaza cada año |
 | **Punto de oro** | Punto único que define el game al llegar a 40-40, sin ventajas |
 | **Super tie-break** | Tie-break a 10 puntos que reemplaza al tercer set |
