@@ -382,6 +382,10 @@ model Jugador {
   fotoUrl        String?
   activo         Boolean @default(true)
 
+  // El código del link personal de inscripción (decisión 050). Aleatorio, se crea la primera vez
+  // que se comparte y se regenera si se mandó a quien no era.
+  codigoLink String? @unique
+
   // Cuándo y cómo se vinculó con la persona, para el aviso de vinculaciones nuevas (decisión 051).
   vinculadoEn  DateTime?
   vinculadoPor Vinculacion?

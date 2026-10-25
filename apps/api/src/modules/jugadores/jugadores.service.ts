@@ -1,15 +1,16 @@
-import { EstadoPartido, type Prisma } from '@prisma/client';
+import { EstadoPartido, EstadoTorneo, type Prisma } from '@prisma/client';
 import type { DatosCrearJugador, DatosEditarJugador, JugadorPadron } from '@setpoint/shared';
 import { organizacionAdministrada } from '../../lib/permisos';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
+import { nuevoCodigoDeLink } from '../link-personal/codigo';
 import { asignarPuestos, puntosVigentes } from '../ranking/ranking';
 
 // Un W.O. cuenta como partido jugado: se registra 6-0 6-0 y entra en la tabla.
 const PARTIDO_JUGADO = { estado: { in: [EstadoPartido.JUGADA, EstadoPartido.WALKOVER] } };
 
 async function padronDe(organizacionId: number): Promise<JugadorPadron[]> {
-  const [jugadores, movimientos] = await Promise.all([
+  const [jugadores, movimientos, abiertos] = await Promise.all([
     prisma.jugador.findMany({
       where: { organizacionId },
       orderBy: [{ apellido: 'asc' }, { nombre: 'asc' }],
@@ -23,7 +24,18 @@ async function padronDe(organizacionId: number): Promise<JugadorPadron[]> {
       where: { organizacionId },
       select: { id: true, jugadorId: true, categoriaId: true, etapaId: true, puntos: true, fecha: true },
     }),
+    prisma.torneo.findMany({
+      where: { organizacionId, estado: EstadoTorneo.PUBLICADO },
+      select: { categoriaId: true, nombre: true, edicion: true },
+    }),
   ]);
+
+  // El mensaje del link personal nombra la edición solo si hay una abierta en la categoría
+  // (decisión 050); con dos, no sabría cuál.
+  const edicionAbierta = (categoriaId: number | null) => {
+    const deLaCategoria = abiertos.filter((t) => t.categoriaId === categoriaId);
+    return deLaCategoria.length === 1 ? (deLaCategoria[0].edicion ?? deLaCategoria[0].nombre) : null;
+  };
 
   // Cada categoría tiene su ranking: de cada jugador cuentan solo los movimientos de la
   // categoría en la que está hoy. Los de una categoría anterior quedan guardados.
@@ -51,6 +63,8 @@ async function padronDe(organizacionId: number): Promise<JugadorPadron[]> {
     partidos: j._count.partidosComoA + j._count.partidosComoB,
     creadoEn: j.creadoEn.toISOString(),
     cuenta: j.usuario ? { nombre: `${j.usuario.nombre} ${j.usuario.apellido}`, email: j.usuario.email } : null,
+    codigoLink: j.codigoLink,
+    edicionAbierta: edicionAbierta(j.categoriaId),
   }));
 }
 
@@ -123,5 +137,15 @@ export async function desvincularCuenta(slug: string, usuarioId: number, jugador
   await verificarJugador(organizacionId, jugadorId);
 
   await prisma.jugador.update({ where: { id: jugadorId }, data: { usuarioId: null } });
+  return filaDe(organizacionId, jugadorId);
+}
+
+// Crea el link personal, o uno nuevo si el anterior se mandó a quien no era: el viejo deja de andar
+// y no se guarda (decisión 050).
+export async function generarLink(slug: string, usuarioId: number, jugadorId: number) {
+  const organizacionId = await organizacionAdministrada(slug, usuarioId);
+  await verificarJugador(organizacionId, jugadorId);
+
+  await prisma.jugador.update({ where: { id: jugadorId }, data: { codigoLink: nuevoCodigoDeLink() } });
   return filaDe(organizacionId, jugadorId);
 }

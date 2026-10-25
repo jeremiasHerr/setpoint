@@ -14,6 +14,7 @@ import { RankingPublicoPage } from './pages/RankingPublicoPage';
 import { RegistroPage } from './pages/RegistroPage';
 import { RestablecerContrasenaPage } from './pages/RestablecerContrasenaPage';
 import { InscripcionPage } from './pages/InscripcionPage';
+import { LinkPersonalPage } from './pages/LinkPersonalPage';
 import { PagoPage } from './pages/PagoPage';
 import { TorneoPublicoPage } from './pages/TorneoPublicoPage';
 import { SorteoPage } from './pages/SorteoPage';
@@ -46,6 +47,7 @@ export default function App() {
       <Route path="/c/:slug/torneos/:id" element={<TorneoPublicoPage />} />
       <Route path="/c/:slug/torneos/:id/inscripcion" element={<InscripcionPage />} />
       <Route path="/c/:slug/inscripciones/:id" element={<PagoPage />} />
+      <Route path="/i/:codigo" element={<LinkPersonalPage />} />
       <Route path="/c/:slug/torneos/:id/cuadros" element={<CuadrosPublicoPage />} />
     </Routes>
   );

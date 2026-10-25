@@ -16,3 +16,7 @@ export function editarJugador(slug: string, id: number, datos: DatosEditarJugado
 export function desvincularCuenta(slug: string, id: number) {
   return pedir<JugadorPadron>('DELETE', `/api/organizaciones/${slug}/jugadores/${id}/cuenta`);
 }
+
+export function generarLink(slug: string, id: number) {
+  return pedir<JugadorPadron>('POST', `/api/organizaciones/${slug}/jugadores/${id}/link`);
+}
