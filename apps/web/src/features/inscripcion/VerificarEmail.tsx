@@ -25,9 +25,15 @@ function mensaje(codigo: string | null): string | null {
   }
 }
 
-// Email y código antes de pagar (decisión 049): pasos 1 y 2 de identificacion.html. Los errores
-// del código son los de cuenta-e-ingreso.html.
-export function VerificarEmail({ onVerificado }: { onVerificado: (sesion: SesionJugador) => void }) {
+type Props = {
+  onVerificado: (sesion: SesionJugador) => void;
+  // Desde el link personal el perfil ya está elegido: la ayuda cuenta que queda con este email.
+  desdeLink?: boolean;
+};
+
+// Email y código antes de pagar (decisión 049): pasos 1 y 2 de identificacion.html y de
+// link-personal.html. Los errores del código son los de cuenta-e-ingreso.html.
+export function VerificarEmail({ onVerificado, desdeLink = false }: Props) {
   const pedirCodigo = usePedirCodigo();
   const verificar = useVerificarCodigo();
   const [email, setEmail] = useState('');
@@ -77,18 +83,26 @@ export function VerificarEmail({ onVerificado }: { onVerificado: (sesion: Sesion
             placeholder="tu@email.com"
             className="h-[60px] rounded-[12px] border border-gris-300 px-4 text-lg outline-none placeholder:text-gris-400 focus:border-2 focus:border-negro focus:px-[15px]"
           />
-          <Ayuda>Te mandamos un código para confirmar que es tuyo. Ese email es tu cuenta: no hay contraseña.</Ayuda>
+          <Ayuda>
+            {desdeLink
+              ? 'Te mandamos un código para confirmar que es tuyo. Desde ahí, tu perfil queda con este email: la próxima vez entrás con él, desde cualquier link del circuito.'
+              : 'Te mandamos un código para confirmar que es tuyo. Ese email es tu cuenta: no hay contraseña.'}
+          </Ayuda>
         </div>
-        <Caja>
-          <strong className="mb-1 block font-semibold text-negro">¿Ya te inscribiste antes?</strong>
-          Usá el mismo email y vas directo a tu perfil.
-        </Caja>
+        {!desdeLink && (
+          <Caja>
+            <strong className="mb-1 block font-semibold text-negro">¿Ya te inscribiste antes?</strong>
+            Usá el mismo email y vas directo a tu perfil.
+          </Caja>
+        )}
         <Aviso mensaje={mensaje(codigoDe(pedirCodigo.error))} />
         <div className="mt-auto flex flex-col gap-3">
           <BotonPrincipal type="submit" disabled={pedirCodigo.isPending}>
             {pedirCodigo.isPending ? 'Mandando…' : 'Mandarme el código'}
           </BotonPrincipal>
-          <p className="text-center text-[15px] text-gris-500">No necesitás registrarte.</p>
+          <p className="text-center text-[15px] text-gris-500">
+            {desdeLink ? 'No necesitás registrarte ni crear una contraseña.' : 'No necesitás registrarte.'}
+          </p>
         </div>
       </form>
     );
