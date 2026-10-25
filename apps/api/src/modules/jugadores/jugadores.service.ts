@@ -1,4 +1,4 @@
-import { EstadoPartido, EstadoTorneo, type Prisma } from '@prisma/client';
+import { EstadoPartido, EstadoTorneo, MotivoRevision, type Prisma } from '@prisma/client';
 import type { DatosCrearJugador, DatosEditarJugador, JugadorPadron } from '@setpoint/shared';
 import { organizacionAdministrada } from '../../lib/permisos';
 import { prisma } from '../../lib/prisma';
@@ -9,7 +9,8 @@ import { asignarPuestos, puntosVigentes } from '../ranking/ranking';
 // Un W.O. cuenta como partido jugado: se registra 6-0 6-0 y entra en la tabla.
 const PARTIDO_JUGADO = { estado: { in: [EstadoPartido.JUGADA, EstadoPartido.WALKOVER] } };
 
-async function padronDe(organizacionId: number): Promise<JugadorPadron[]> {
+// También lo usa la revisión de vinculaciones: los puntos y el puesto salen de la misma cuenta.
+export async function padronDe(organizacionId: number): Promise<JugadorPadron[]> {
   const [jugadores, movimientos, abiertos] = await Promise.all([
     prisma.jugador.findMany({
       where: { organizacionId },
@@ -65,6 +66,7 @@ async function padronDe(organizacionId: number): Promise<JugadorPadron[]> {
     cuenta: j.usuario ? { nombre: `${j.usuario.nombre} ${j.usuario.apellido}`, email: j.usuario.email } : null,
     codigoLink: j.codigoLink,
     edicionAbierta: edicionAbierta(j.categoriaId),
+    revision: j.revision === MotivoRevision.RECLAMO ? 'reclamo' : j.revision === MotivoRevision.HOMONIMO ? 'homonimo' : null,
   }));
 }
 
@@ -129,6 +131,16 @@ export async function editarJugador(slug: string, usuarioId: number, jugadorId: 
   return filaDe(organizacionId, jugadorId);
 }
 
+// El perfil queda libre, y sin nada para revisar: ya no hay vinculación de la que dudar.
+export const SIN_VINCULAR = {
+  usuarioId: null,
+  vinculadoEn: null,
+  vinculadoPor: null,
+  revision: null,
+  reclamadoPorId: null,
+  reclamadoEn: null,
+} satisfies Prisma.JugadorUncheckedUpdateInput;
+
 // Revierte una vinculación equivocada: el perfil vuelve a quedar libre para que lo reclame
 // el jugador correcto. Puntos, partidos e inscripciones cuelgan del Jugador, no de la cuenta,
 // así que no se tocan. La cuenta tampoco se borra: puede seguir vinculada a otros circuitos.
@@ -136,7 +148,7 @@ export async function desvincularCuenta(slug: string, usuarioId: number, jugador
   const organizacionId = await organizacionAdministrada(slug, usuarioId);
   await verificarJugador(organizacionId, jugadorId);
 
-  await prisma.jugador.update({ where: { id: jugadorId }, data: { usuarioId: null } });
+  await prisma.jugador.update({ where: { id: jugadorId }, data: SIN_VINCULAR });
   return filaDe(organizacionId, jugadorId);
 }
 

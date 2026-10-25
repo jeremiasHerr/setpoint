@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buscar, coincidencias, esPosibleHomonimo, MAXIMO_DE_RESULTADOS } from '../../src/modules/inscripcion/busqueda';
+import { buscar, coincidencias, esPosibleHomonimo, homonimosDe, MAXIMO_DE_RESULTADOS } from '../../src/modules/inscripcion/busqueda';
 
 const p = (id: number, nombre: string, apellido: string) => ({ id, nombre, apellido });
 
@@ -52,5 +52,9 @@ describe('posible homónimo', () => {
 
   it('no se compara consigo mismo', () => {
     expect(esPosibleHomonimo(p(1, 'Lucas', 'Bravo'), PADRON)).toBe(false);
+  });
+
+  it('devuelve los otros perfiles para revisar, sin el elegido', () => {
+    expect(homonimosDe(p(4, 'Juan', 'Pérez'), PADRON).map((o) => o.id)).toEqual([5]);
   });
 });
