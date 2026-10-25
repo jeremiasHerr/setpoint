@@ -99,3 +99,46 @@ export const restablecerContrasenaSchema = z.object(
 );
 
 export type DatosRestablecerContrasena = z.infer<typeof restablecerContrasenaSchema>;
+
+// El jugador entra sin contraseña: pide un código de 6 dígitos que le llega por email y lo
+// escribe en la misma pantalla (decisión 049).
+export const pedirCodigoSchema = z.object(
+  {
+    email: z
+      .string({ error: 'Escribí tu email' })
+      .trim()
+      .toLowerCase()
+      .pipe(z.email('El email no es válido')),
+  },
+  { error: 'Falta el email' },
+);
+
+export type DatosPedirCodigo = z.infer<typeof pedirCodigoSchema>;
+
+export const verificarCodigoSchema = z.object(
+  {
+    email: z
+      .string({ error: 'Escribí tu email' })
+      .trim()
+      .toLowerCase()
+      .pipe(z.email('El email no es válido')),
+    // Se acepta con espacios ("482 913"), como se escribe en el email.
+    codigo: z
+      .string({ error: 'Escribí el código' })
+      .transform((c) => c.replace(/\s/g, ''))
+      .pipe(z.string().regex(/^\d{6}$/, 'El código tiene 6 números')),
+  },
+  { error: 'Faltan el email y el código' },
+);
+
+export type DatosVerificarCodigo = z.infer<typeof verificarCodigoSchema>;
+
+// Con el código correcto: la sesión y los circuitos en los que juega. A diferencia del ingreso con
+// contraseña, `perfiles` puede venir vacío: quien se inscribe por primera vez todavía no tiene.
+export const respuestaCodigoSchema = z.object({
+  token: z.string(),
+  usuario: z.object({ id: z.number(), email: z.string(), nombre: z.string() }),
+  perfiles: z.array(perfilDeJugadorSchema),
+});
+
+export type RespuestaCodigo = z.infer<typeof respuestaCodigoSchema>;
