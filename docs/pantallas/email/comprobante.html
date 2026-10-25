@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="x-apple-disable-message-reformatting">
+  <title>SetPoint · Comprobante</title>
+  <!-- Pantalla de referencia: Comprobante por email · F12 · entrega 75% · 600 px por email · dos emails -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+</head>
+<body style="margin: 0; padding: 0; background: #F6F7F8;">
+<!--
+NOTA DE DISEÑO
+Nuevo · los emails que salen cuando el webhook confirma el pago (05-pagos §4, decisiones 049 y 051).
+Nunca salen en la vuelta del checkout: podría llegar un comprobante de un pago que después se rechaza.
+
+Es HTML para email, no para la web. Tablas para el layout, estilos en línea, sin clases ni variables CSS, sin imágenes, y botones hechos con una celda de tabla.
+- Los colores son los valores de los tokens de design.md escritos en hex, porque los clientes de email no leen variables.
+- Las fuentes se piden igual, pero Gmail y Outlook las ignoran: cada familia tiene su respaldo (Helvetica y Arial para Instrument Sans; Menlo, Consolas y Courier New para Geist Mono).
+- Las esquinas redondeadas se pierden en Outlook de escritorio; el diseño no depende de ellas.
+- 600 px de ancho, que es el que entra en la vista previa de cualquier cliente.
+
+1 · Comprobante, sin cuenta. Lleva lo que pide F12: jugador, torneo, categoría, monto, número de inscripción, fecha y link al torneo.
+- Debajo, el link para crear la contraseña. Va acá y no en la pantalla final porque recibir este email prueba que la dirección es de quien se inscribió (decisión 051).
+- Con cuenta (no dibujado), ese bloque no está.
+- Si el email ya es de una cuenta (no dibujado), el bloque dice "Ingresá con tu cuenta" y, al ingresar desde ese link, el perfil se vincula a ella.
+- El pie dice qué hacer si no se inscribió él: es lo que hace que el comprobante le llegue a la persona real aunque otro haya usado su DNI.
+
+2 · Aviso al email anterior, cuando se cambió el email guardado. El email nuevo se muestra enmascarado: quien recibe el aviso puede no ser quien se inscribió.
+- Sin cuenta, el perfil pasa a usar el email nuevo.
+- Con cuenta (no dibujado), el email de la cuenta no cambia, y el aviso lo dice: "El email de tu cuenta sigue siendo este. Se cambia desde tu cuenta".
+
+El remitente es la organización ("Polenta Team Tenis con SetPoint"), porque el jugador conoce al circuito, no a la plataforma.
+Todos los nombres de personas son ficticios.
+-->
+
+<table role="presentation" width="1300" cellpadding="0" cellspacing="0" border="0" style="background: #F6F7F8;">
+  <tr>
+    <td style="padding: 30px 30px 12px 30px; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 600; color: #0A0B0D;" width="600">
+      <span style="font-family: 'Geist Mono', Menlo, Consolas, 'Courier New', monospace; font-size: 13px; font-weight: 400; color: #6A7079;">1</span>&nbsp;&nbsp;Comprobante, sin cuenta
+    </td>
+    <td width="40"></td>
+    <td style="padding: 30px 30px 12px 0; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 600; color: #0A0B0D;" width="600">
+      <span style="font-family: 'Geist Mono', Menlo, Consolas, 'Courier New', monospace; font-size: 13px; font-weight: 400; color: #6A7079;">2</span>&nbsp;&nbsp;Aviso al email anterior
+    </td>
+  </tr>
+  <tr>
+    <td valign="top" style="padding: 0 0 40px 30px;">
+
+      <!-- ============ 1 · Comprobante ============ -->
+      <div style="display: none; max-height: 0; overflow: hidden;">Primavera 26 · Tercera · inscripción 100482. Tu lugar está confirmado.</div>
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width: 600px; background: #FFFFFF; border: 1px solid #E6E8EB; border-radius: 14px; border-collapse: separate; overflow: hidden;">
+        <tr>
+          <td style="background: #0A0B0D; padding: 18px 28px; border-radius: 14px 14px 0 0;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td width="24" style="width: 24px; height: 24px; background: #CDF546; border-radius: 7px; text-align: center; vertical-align: middle; font-size: 0; line-height: 0;">
+                  <span style="display: inline-block; width: 8px; height: 8px; border-radius: 999px; background: #0A0B0D;"></span>
+                </td>
+                <td style="padding-left: 10px; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 600; color: #FFFFFF;">Polenta Team Tenis</td>
+                <td align="right" style="font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 14px; color: #9BA1A9;">con SetPoint</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 32px 28px 8px 28px; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; color: #0A0B0D;">
+            <div style="font-size: 14px; font-weight: 600; color: #6A7079;">Comprobante de inscripción</div>
+            <div style="font-size: 28px; font-weight: 600; letter-spacing: -0.03em; line-height: 1.15; padding-top: 8px;">Estás inscripto en Primavera 26 · Tercera</div>
+            <div style="font-size: 16px; line-height: 1.5; color: #3F4348; padding-top: 12px;">Hola Lucas, se confirmó tu pago. Guardá este email: es tu comprobante.</div>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 20px 28px 4px 28px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border: 1px solid #E6E8EB; border-radius: 12px; border-collapse: separate;">
+              <tr>
+                <td style="padding: 13px 16px; border-bottom: 1px solid #F1F2F4; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; color: #6A7079;">Jugador</td>
+                <td align="right" style="padding: 13px 16px; border-bottom: 1px solid #F1F2F4; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 600; color: #0A0B0D;">Lucas Bravo</td>
+              </tr>
+              <tr>
+                <td style="padding: 13px 16px; border-bottom: 1px solid #F1F2F4; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; color: #6A7079;">Torneo</td>
+                <td align="right" style="padding: 13px 16px; border-bottom: 1px solid #F1F2F4; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; color: #0A0B0D;">Primavera 26</td>
+              </tr>
+              <tr>
+                <td style="padding: 13px 16px; border-bottom: 1px solid #F1F2F4; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; color: #6A7079;">Categoría</td>
+                <td align="right" style="padding: 13px 16px; border-bottom: 1px solid #F1F2F4; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; color: #0A0B0D;">Tercera</td>
+              </tr>
+              <tr>
+                <td style="padding: 13px 16px; border-bottom: 1px solid #F1F2F4; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; color: #6A7079;">Monto</td>
+                <td align="right" style="padding: 13px 16px; border-bottom: 1px solid #F1F2F4; font-family: 'Geist Mono', Menlo, Consolas, 'Courier New', monospace; font-size: 15px; font-weight: 500; color: #0A0B0D;">$45.000</td>
+              </tr>
+              <tr>
+                <td style="padding: 13px 16px; border-bottom: 1px solid #F1F2F4; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; color: #6A7079;">Número de inscripción</td>
+                <td align="right" style="padding: 13px 16px; border-bottom: 1px solid #F1F2F4; font-family: 'Geist Mono', Menlo, Consolas, 'Courier New', monospace; font-size: 15px; color: #0A0B0D;">100482</td>
+              </tr>
+              <tr>
+                <td style="padding: 13px 16px; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; color: #6A7079;">Fecha del pago</td>
+                <td align="right" style="padding: 13px 16px; font-family: 'Geist Mono', Menlo, Consolas, 'Courier New', monospace; font-size: 15px; color: #0A0B0D;">sáb 20 sep · 18:42</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 20px 28px 0 28px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td style="background: #CDF546; border-radius: 10px; padding: 14px 26px; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 600; color: #0A0B0D;">
+                  <a href="#" style="color: #0A0B0D; text-decoration: none;">Ver el torneo</a>
+                </td>
+              </tr>
+            </table>
+            <div style="font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.5; color: #6A7079; padding-top: 14px;">El sorteo de zonas es el lunes 29. Desde el link del torneo ves tu zona y tus rivales cuando se sortee.</div>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 24px 28px 0 28px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #F6F7F8; border-radius: 12px; border-collapse: separate;">
+              <tr>
+                <td style="padding: 20px; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; color: #0A0B0D;">
+                  <div style="font-size: 18px; font-weight: 600; letter-spacing: -0.02em;">La próxima, con un toque</div>
+                  <div style="font-size: 15px; line-height: 1.5; color: #3F4348; padding-top: 6px;">Creá tu contraseña y la próxima vez te inscribís en cualquier circuito con un toque. Tu nombre, tu DNI y este email ya están: solo falta la contraseña.</div>
+                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top: 16px;">
+                    <tr>
+                      <td style="background: #FFFFFF; border: 1px solid #C9CDD3; border-radius: 10px; padding: 12px 22px; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 600; color: #0A0B0D;">
+                        <a href="#" style="color: #0A0B0D; text-decoration: none;">Crear mi contraseña</a>
+                      </td>
+                    </tr>
+                  </table>
+                  <div style="font-size: 14px; line-height: 1.5; color: #6A7079; padding-top: 12px;">Con la cuenta, además, anotás las fechas de tus partidos desde la app.</div>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 26px 28px 28px 28px;">
+            <div style="border-top: 1px solid #E6E8EB; padding-top: 18px; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.5; color: #0A0B0D;">¿No te inscribiste vos? Avisale a la organización: <a href="#" style="color: #0A0B0D; font-weight: 600;">escribile a Polenta Team Tenis</a>.</div>
+            <div style="font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 13px; line-height: 1.5; color: #6A7079; padding-top: 10px;">Te llega este email porque se pagó una inscripción con tu DNI en un torneo de Polenta Team Tenis. SetPoint · setpoint.com.ar</div>
+          </td>
+        </tr>
+      </table>
+
+    </td>
+    <td width="40"></td>
+    <td valign="top" style="padding: 0 30px 40px 0;">
+
+      <!-- ============ 2 · Aviso al email anterior ============ -->
+      <div style="display: none; max-height: 0; overflow: hidden;">Alguien se inscribió en Primavera 26 · Tercera con tu DNI y otro email.</div>
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width: 600px; background: #FFFFFF; border: 1px solid #E6E8EB; border-radius: 14px; border-collapse: separate; overflow: hidden;">
+        <tr>
+          <td style="background: #0A0B0D; padding: 18px 28px; border-radius: 14px 14px 0 0;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td width="24" style="width: 24px; height: 24px; background: #CDF546; border-radius: 7px; text-align: center; vertical-align: middle; font-size: 0; line-height: 0;">
+                  <span style="display: inline-block; width: 8px; height: 8px; border-radius: 999px; background: #0A0B0D;"></span>
+                </td>
+                <td style="padding-left: 10px; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 600; color: #FFFFFF;">Polenta Team Tenis</td>
+                <td align="right" style="font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 14px; color: #9BA1A9;">con SetPoint</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 32px 28px 8px 28px; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; color: #0A0B0D;">
+            <div style="font-size: 14px; font-weight: 600; color: #6A7079;">Aviso de inscripción</div>
+            <div style="font-size: 28px; font-weight: 600; letter-spacing: -0.03em; line-height: 1.15; padding-top: 8px;">Se inscribieron con tu DNI y otro email</div>
+            <div style="font-size: 16px; line-height: 1.5; color: #3F4348; padding-top: 12px;">Hola Lucas, alguien se inscribió en Primavera 26 · Tercera con tu DNI y dejó otro email para el comprobante.</div>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 20px 28px 4px 28px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border: 1px solid #E6E8EB; border-radius: 12px; border-collapse: separate;">
+              <tr>
+                <td style="padding: 13px 16px; border-bottom: 1px solid #F1F2F4; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; color: #6A7079;">Torneo</td>
+                <td align="right" style="padding: 13px 16px; border-bottom: 1px solid #F1F2F4; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; color: #0A0B0D;">Primavera 26 · Tercera</td>
+              </tr>
+              <tr>
+                <td style="padding: 13px 16px; border-bottom: 1px solid #F1F2F4; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; color: #6A7079;">Email nuevo</td>
+                <td align="right" style="padding: 13px 16px; border-bottom: 1px solid #F1F2F4; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 600; color: #0A0B0D;">lu***@hotmail.com</td>
+              </tr>
+              <tr>
+                <td style="padding: 13px 16px; border-bottom: 1px solid #F1F2F4; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; color: #6A7079;">Número de inscripción</td>
+                <td align="right" style="padding: 13px 16px; border-bottom: 1px solid #F1F2F4; font-family: 'Geist Mono', Menlo, Consolas, 'Courier New', monospace; font-size: 15px; color: #0A0B0D;">100482</td>
+              </tr>
+              <tr>
+                <td style="padding: 13px 16px; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; color: #6A7079;">Fecha del pago</td>
+                <td align="right" style="padding: 13px 16px; font-family: 'Geist Mono', Menlo, Consolas, 'Courier New', monospace; font-size: 15px; color: #0A0B0D;">sáb 20 sep · 18:42</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 22px 28px 0 28px; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; color: #0A0B0D;">
+            <div style="font-size: 16px; font-weight: 600;">Si fuiste vos</div>
+            <div style="font-size: 15px; line-height: 1.5; color: #3F4348; padding-top: 4px;">No tenés que hacer nada. Desde ahora te escribimos al email nuevo.</div>
+            <div style="font-size: 16px; font-weight: 600; padding-top: 18px;">Si no fuiste vos</div>
+            <div style="font-size: 15px; line-height: 1.5; color: #3F4348; padding-top: 4px;">Avisale a la organización: puede corregir la inscripción y tu perfil.</div>
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top: 16px;">
+              <tr>
+                <td style="background: #CDF546; border-radius: 10px; padding: 14px 26px; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 600; color: #0A0B0D;">
+                  <a href="#" style="color: #0A0B0D; text-decoration: none;">Escribirle a Polenta Team Tenis</a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 26px 28px 28px 28px;">
+            <div style="border-top: 1px solid #E6E8EB; padding-top: 18px; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 13px; line-height: 1.5; color: #6A7079;">Te llega este aviso porque este era el email guardado en tu perfil de Polenta Team Tenis. SetPoint · setpoint.com.ar</div>
+          </td>
+        </tr>
+      </table>
+
+    </td>
+  </tr>
+</table>
+</body>
+</html>

@@ -4,231 +4,404 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SetPoint · Inscripciones</title>
-  <!-- Pantalla de referencia: Inscripciones · F13 · entrega 75% · 1280×920 px -->
+  <!-- Pantalla de referencia: Inscripciones · F13 · entrega 75% · 1280 px · dos estados -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
     <style>
-      body { margin: 0; font-family: "Instrument Sans", system-ui, "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; }
+      body { margin: 0; font-family: "Instrument Sans", system-ui, "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; background: #F6F7F8; }
       a { color: #0A0B0D; }
       a:hover { color: #6A7079; }
       .mono { font-family: "Geist Mono", ui-monospace, "SF Mono", Consolas, monospace; font-variant-numeric: tabular-nums; }
+      .estado { width: 1280px; padding: 28px 0 12px 0; font-size: 13px; font-weight: 600; color: #6A7079; }
+      .pantalla { width: 1280px; background: #FFFFFF; color: #0A0B0D; display: flex; flex-direction: column; }
+      .nav { height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 8px; font-size: 14px; color: #9BA1A9; }
+      .nav-on { background: #1B1E23; font-weight: 600; color: #FFFFFF; }
+      .grilla { display: grid; grid-template-columns: minmax(0, 1fr) 130px 130px 120px 150px; }
+      .fila { align-items: center; height: 56px; border-bottom: 1px solid #F1F2F4; }
+      .accion { height: 32px; padding: 0 12px; display: flex; align-items: center; border-radius: 8px; border: 1px solid #E6E8EB; font-size: 13px; color: #3F4348; }
+      .pestana { height: 36px; padding: 0 15px; display: flex; align-items: center; border-radius: 9px; border: 1px solid #E6E8EB; font-size: 14px; font-weight: 500; color: #3F4348; }
+      .pestana-on { background: #0A0B0D; color: #FFFFFF; border-color: #0A0B0D; font-weight: 600; }
+      .marca-revisar { height: 20px; padding: 0 7px; border-radius: 999px; border: 1px solid #0A0B0D; display: inline-flex; align-items: center; font-size: 11px; }
     </style>
 </head>
 <body>
 <!--
 NOTA DE DISEÑO
-Nuevo · inscripciones y lista de espera.
+Inscripciones y lista de espera.
 
 Los 32 lugares son la misma barra de marcas del tablero: pagados, reservando, libres. Es el mismo objeto gráfico repetido, no uno nuevo que haya que aprender.
 
 Las reservas muestran el reloj de 15 minutos corriendo, que es el dato que decide si el organizador espera o llama al siguiente de la lista.
 
 La conciliación va en negro abajo a la derecha: recaudado, comisión y lo que le corresponde al circuito. Dice explícito que la transferencia se hace por fuera del sistema, porque así está definido el alcance.
+
+Actualizado para la inscripción y la vinculación (04-flujo-jugador §5.9, decisión 049):
+
+Estado 1 · la inscripción de Juan Pérez está pagada y cuenta como confirmada, pero su vinculación quedó para revisar: hay otro Juan Pérez en Tercera.
+- La fila lleva la marca "para revisar" y la acción pasa a ser "Revisar", que lleva a revisar-vinculacion.html.
+- No se frena nada: el lugar es suyo y entra al sorteo igual.
+
+Estado 2 · un torneo con aprobación, de Liga Amateur del Valle.
+- Las solicitudes son de quienes no están en el padrón. Los que ya están se inscriben solos, sin aprobación.
+- Una solicitud no ocupa lugar en la barra de marcas: se cuenta aparte, en la leyenda. El punto hueco es su estado (design.md §7).
+- La pantalla dice qué pasa al aprobar: entra al padrón con 0 puntos y recibe el link para pagar. No tiene lugar hasta que paga.
+- Rechazar no pide motivo: el reglamento de POLENTA, por ejemplo, no obliga a explicar un rechazo (02-dominio §2).
+
+Todos los nombres de personas son ficticios.
 -->
 
-<div style="width: 1280px; min-height: 920px; background: #FFFFFF; color: #0A0B0D; display: flex; flex-direction: column;">
+<div style="width: 1280px; margin: 0 auto; padding: 0 0 40px 0;">
 
-  <div style="background: #0A0B0D; height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 28px;">
-    <div style="display: flex; align-items: center; gap: 14px;">
-      <div style="display: flex; align-items: center; gap: 9px;">
-        <div style="width: 24px; height: 24px; border-radius: 7px; background: #CDF546; display: flex; align-items: center; justify-content: center;">
-          <div style="width: 8px; height: 8px; border-radius: 999px; background: #0A0B0D;"></div>
+  <div class="estado">Estado 1 · torneo solo para el padrón, con una vinculación para revisar</div>
+
+  <div class="pantalla" style="min-height: 900px;">
+
+    <div style="background: #0A0B0D; height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 28px;">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 9px;">
+          <div style="width: 24px; height: 24px; border-radius: 7px; background: #CDF546; display: flex; align-items: center; justify-content: center;">
+            <div style="width: 8px; height: 8px; border-radius: 999px; background: #0A0B0D;"></div>
+          </div>
+          <div style="font-size: 16px; font-weight: 600; color: #FFFFFF; letter-spacing: -0.02em;">SetPoint</div>
         </div>
-        <div style="font-size: 16px; font-weight: 600; color: #FFFFFF; letter-spacing: -0.02em;">SetPoint</div>
+        <div style="width: 1px; height: 18px; background: #2C3037;"></div>
+        <div style="font-size: 14px; color: #9BA1A9;">Polenta Team Tenis</div>
       </div>
-      <div style="width: 1px; height: 18px; background: #2C3037;"></div>
-      <div style="font-size: 14px; color: #9BA1A9;">Polenta Team Tenis</div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <div class="nav">Padrón</div>
+        <div class="nav nav-on">Torneos</div>
+        <div class="nav">Tablero</div>
+      </div>
     </div>
-    <div style="display: flex; align-items: center; gap: 8px;">
-      <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 8px; font-size: 14px; color: #9BA1A9;">Padrón</div>
-      <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 8px; background: #1B1E23; font-size: 14px; font-weight: 600; color: #FFFFFF;">Torneos</div>
-      <div style="height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 8px; font-size: 14px; color: #9BA1A9;">Tablero</div>
+
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding: 26px 28px 20px 28px;">
+      <div style="display: flex; flex-direction: column; gap: 7px;">
+        <div style="font-size: 30px; font-weight: 600; letter-spacing: -0.035em;">Inscripciones</div>
+        <div style="font-size: 15px; color: #6A7079;">Primavera 26 · Tercera · cierra el viernes 26</div>
+      </div>
+      <div style="display: flex; gap: 9px;">
+        <div style="height: 40px; padding: 0 16px; display: flex; align-items: center; border-radius: 10px; border: 1px solid #E6E8EB; font-size: 14px; font-weight: 500;">Inscribir a mano</div>
+        <div style="height: 40px; padding: 0 16px; display: flex; align-items: center; border-radius: 10px; background: #0A0B0D; color: #FFFFFF; font-size: 14px; font-weight: 600;">Cerrar inscripciones</div>
+      </div>
     </div>
+
+    <div style="padding: 0 28px 22px 28px;">
+      <div style="border: 1px solid #E6E8EB; border-radius: 14px; padding: 18px 20px 16px 20px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px;">
+          <div style="font-size: 15px; font-weight: 600;">32 lugares</div>
+          <div style="display: flex; align-items: center; gap: 18px;">
+            <div style="display: flex; align-items: center; gap: 7px;"><div style="width: 9px; height: 9px; border-radius: 2px; background: #0A0B0D;"></div><div class="mono" style="font-size: 13px;">28</div><div style="font-size: 13px; color: #6A7079;">pagados</div></div>
+            <div style="display: flex; align-items: center; gap: 7px;"><div style="width: 9px; height: 9px; border-radius: 2px; background: #9BA1A9;"></div><div class="mono" style="font-size: 13px;">2</div><div style="font-size: 13px; color: #6A7079;">reservando</div></div>
+            <div style="display: flex; align-items: center; gap: 7px;"><div style="width: 9px; height: 9px; border-radius: 2px; background: #E6E8EB;"></div><div class="mono" style="font-size: 13px;">2</div><div style="font-size: 13px; color: #6A7079;">libres</div></div>
+            <div style="display: flex; align-items: center; gap: 7px;"><div style="width: 9px; height: 9px; border-radius: 2px; background: #CDF546;"></div><div class="mono" style="font-size: 13px;">5</div><div style="font-size: 13px; color: #6A7079;">en lista de espera</div></div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 3px;">
+          <div style="flex-grow: 28; height: 30px; border-radius: 3px; background: #0A0B0D;"></div>
+          <div style="flex-grow: 2; height: 30px; border-radius: 3px; background: #9BA1A9;"></div>
+          <div style="flex-grow: 2; height: 30px; border-radius: 3px; background: #E6E8EB;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding: 0 28px 28px 28px; display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px;">
+
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <div class="pestana pestana-on">Confirmados 28</div>
+          <div class="pestana">Reservando 2</div>
+          <div class="pestana">Lista de espera 5</div>
+          <div style="flex-grow: 1;"></div>
+          <div style="height: 36px; padding: 0 13px; display: flex; align-items: center; gap: 8px; border-radius: 9px; border: 1px solid #E6E8EB; font-size: 14px; color: #6A7079;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6A7079" stroke-width="1.9" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"></circle><path d="M16 16l4.5 4.5"></path></svg>
+            <span>Buscar por apellido</span>
+          </div>
+        </div>
+
+        <div style="border: 1px solid #E6E8EB; border-radius: 14px; overflow: hidden;">
+
+          <div class="grilla" style="background: #FAFBFC; border-bottom: 1px solid #E6E8EB;">
+            <div style="padding: 11px 18px; font-size: 12px; color: #6A7079;">jugador</div>
+            <div class="mono" style="padding: 11px 4px; font-size: 11px; color: #6A7079;">estado</div>
+            <div class="mono" style="padding: 11px 4px; font-size: 11px; color: #6A7079;">medio</div>
+            <div class="mono" style="padding: 11px 4px; font-size: 11px; color: #6A7079;">fecha</div>
+            <div></div>
+          </div>
+
+          <div class="grilla fila">
+            <div style="padding: 0 18px; display: flex; align-items: center; gap: 10px;">
+              <div style="width: 7px; height: 7px; border-radius: 999px; background: #CDF546;"></div>
+              <div style="font-size: 15px; font-weight: 500;">Marcelo Sanhueza</div>
+            </div>
+            <div style="font-size: 14px;">Pagada</div>
+            <div class="mono" style="font-size: 13px; color: #6A7079;">MercadoPago</div>
+            <div class="mono" style="font-size: 13px; color: #6A7079;">18 sep</div>
+            <div style="display: flex; justify-content: flex-end; padding-right: 18px;"><div class="accion">Dar de baja</div></div>
+          </div>
+
+          <div class="grilla fila">
+            <div style="padding: 0 18px; display: flex; align-items: center; gap: 10px;">
+              <div style="width: 7px; height: 7px; border-radius: 999px; background: #CDF546;"></div>
+              <div style="font-size: 15px; font-weight: 500;">Juan Pérez</div>
+              <div class="marca-revisar mono">para revisar</div>
+            </div>
+            <div style="font-size: 14px;">Pagada</div>
+            <div class="mono" style="font-size: 13px; color: #6A7079;">MercadoPago</div>
+            <div class="mono" style="font-size: 13px; color: #6A7079;">18 sep</div>
+            <div style="display: flex; justify-content: flex-end; padding-right: 18px;"><div class="accion" style="border-color: #0A0B0D; color: #0A0B0D; font-weight: 600;">Revisar</div></div>
+          </div>
+
+          <div class="grilla fila">
+            <div style="padding: 0 18px; display: flex; align-items: center; gap: 10px;">
+              <div style="width: 7px; height: 7px; border-radius: 999px; background: #CDF546;"></div>
+              <div style="font-size: 15px; font-weight: 500;">Lucas Bravo</div>
+            </div>
+            <div style="font-size: 14px;">Pagada</div>
+            <div class="mono" style="font-size: 13px; color: #6A7079;">MercadoPago</div>
+            <div class="mono" style="font-size: 13px; color: #6A7079;">18 sep</div>
+            <div style="display: flex; justify-content: flex-end; padding-right: 18px;"><div class="accion">Dar de baja</div></div>
+          </div>
+
+          <div class="grilla fila">
+            <div style="padding: 0 18px; display: flex; align-items: center; gap: 10px;">
+              <div style="width: 7px; height: 7px; border-radius: 999px; background: #CDF546;"></div>
+              <div style="font-size: 15px; font-weight: 500;">Diego Cabrera</div>
+            </div>
+            <div style="font-size: 14px;">Pagada</div>
+            <div class="mono" style="font-size: 13px; color: #6A7079;">Efectivo</div>
+            <div class="mono" style="font-size: 13px; color: #6A7079;">17 sep</div>
+            <div style="display: flex; justify-content: flex-end; padding-right: 18px;"><div class="accion">Dar de baja</div></div>
+          </div>
+
+          <div class="grilla fila" style="background: #FAFBFC;">
+            <div style="padding: 0 18px; display: flex; align-items: center; gap: 10px;">
+              <div style="width: 7px; height: 7px; border-radius: 999px; background: #9BA1A9;"></div>
+              <div style="font-size: 15px;">Ariel Huenchul</div>
+            </div>
+            <div style="font-size: 14px; color: #3F4348;">Reservando</div>
+            <div class="mono" style="font-size: 13px; color: #6A7079;">—</div>
+            <div class="mono" style="font-size: 13px; color: #C62A2F;">vence 08:12</div>
+            <div style="display: flex; justify-content: flex-end; padding-right: 18px;"><div class="accion">Recordarle</div></div>
+          </div>
+
+          <div class="grilla fila" style="background: #FAFBFC;">
+            <div style="padding: 0 18px; display: flex; align-items: center; gap: 10px;">
+              <div style="width: 7px; height: 7px; border-radius: 999px; background: #9BA1A9;"></div>
+              <div style="font-size: 15px;">Pablo Roa</div>
+            </div>
+            <div style="font-size: 14px; color: #3F4348;">Reservando</div>
+            <div class="mono" style="font-size: 13px; color: #6A7079;">—</div>
+            <div class="mono" style="font-size: 13px; color: #C62A2F;">vence 03:40</div>
+            <div style="display: flex; justify-content: flex-end; padding-right: 18px;"><div class="accion">Recordarle</div></div>
+          </div>
+
+          <div class="grilla fila" style="border-bottom: none;">
+            <div style="padding: 0 18px; display: flex; align-items: center; gap: 10px;">
+              <div style="width: 7px; height: 7px; border-radius: 999px; background: #CDF546;"></div>
+              <div style="font-size: 15px; font-weight: 500;">Nicolás Vera</div>
+            </div>
+            <div style="font-size: 14px;">Pagada</div>
+            <div class="mono" style="font-size: 13px; color: #6A7079;">MercadoPago</div>
+            <div class="mono" style="font-size: 13px; color: #6A7079;">16 sep</div>
+            <div style="display: flex; justify-content: flex-end; padding-right: 18px;"><div class="accion">Dar de baja</div></div>
+          </div>
+
+          <div style="padding: 13px 18px; background: #FAFBFC; border-top: 1px solid #E6E8EB; font-size: 13px; color: #6A7079; line-height: 1.5;">Al dar de baja se libera el lugar y se le avisa al primero de la lista de espera. La devolución la maneja la organización por fuera. Juan Pérez ya tiene su lugar: lo que falta revisar es a qué perfil del padrón va.</div>
+
+        </div>
+
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+
+        <div style="border: 1px solid #E6E8EB; border-radius: 14px; overflow: hidden;">
+          <div style="padding: 14px 16px; border-bottom: 1px solid #E6E8EB; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+            <div style="font-size: 15px; font-weight: 600;">Lista de espera</div>
+            <div class="mono" style="font-size: 13px; color: #6A7079;">por orden de llegada</div>
+          </div>
+          <div style="display: flex; flex-direction: column;">
+            <div style="display: flex; align-items: center; gap: 12px; padding: 0 16px; height: 46px; border-bottom: 1px solid #F1F2F4;">
+              <div class="mono" style="font-size: 13px; color: #6A7079;">1</div>
+              <div style="font-size: 14px; flex-grow: 1;">Julián Ojeda</div>
+              <div class="mono" style="font-size: 12px; color: #6A7079;">19 sep</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; padding: 0 16px; height: 46px; border-bottom: 1px solid #F1F2F4;">
+              <div class="mono" style="font-size: 13px; color: #6A7079;">2</div>
+              <div style="font-size: 14px; flex-grow: 1;">Emiliano Rivas</div>
+              <div class="mono" style="font-size: 12px; color: #6A7079;">19 sep</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; padding: 0 16px; height: 46px; border-bottom: 1px solid #F1F2F4;">
+              <div class="mono" style="font-size: 13px; color: #6A7079;">3</div>
+              <div style="font-size: 14px; flex-grow: 1;">Franco Lagos</div>
+              <div class="mono" style="font-size: 12px; color: #6A7079;">20 sep</div>
+            </div>
+            <div style="padding: 12px 16px; background: #FAFBFC; font-size: 13px; color: #6A7079;">Y 2 más. Cuando se libera un lugar, el primero recibe aviso y puede pagar.</div>
+          </div>
+        </div>
+
+        <div style="background: #0A0B0D; border-radius: 14px; padding: 18px 18px 16px 18px; display: flex; flex-direction: column; gap: 14px;">
+          <div style="font-size: 15px; font-weight: 600; color: #FFFFFF;">Conciliación del torneo</div>
+          <div style="display: flex; flex-direction: column; gap: 11px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+              <div style="font-size: 14px; color: #9BA1A9;">Recaudado</div>
+              <div class="mono" style="font-size: 15px; color: #FFFFFF;">$1.260.000</div>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+              <div style="font-size: 14px; color: #9BA1A9;">Comisión</div>
+              <div class="mono" style="font-size: 15px; color: #9BA1A9;">$63.000</div>
+            </div>
+            <div style="height: 1px; background: #23262B;"></div>
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+              <div style="font-size: 15px; font-weight: 600; color: #FFFFFF;">Te corresponde</div>
+              <div class="mono" style="font-size: 20px; font-weight: 500; color: #CDF546;">$1.197.000</div>
+            </div>
+          </div>
+          <div style="font-size: 13px; line-height: 1.4; color: #6A7079;">27 pagos por MercadoPago y 1 en efectivo. La transferencia se hace por fuera del sistema.</div>
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
 
-  <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding: 26px 28px 20px 28px;">
-    <div style="display: flex; flex-direction: column; gap: 7px;">
-      <div style="font-size: 30px; font-weight: 600; letter-spacing: -0.035em;">Inscripciones</div>
-      <div style="font-size: 15px; color: #6A7079;">Torneo Primavera 26 · Tercera · cierra el viernes 26</div>
-    </div>
-    <div style="display: flex; gap: 9px;">
-      <div style="height: 40px; padding: 0 16px; display: flex; align-items: center; border-radius: 10px; border: 1px solid #E6E8EB; font-size: 14px; font-weight: 500;">Inscribir a mano</div>
-      <div style="height: 40px; padding: 0 16px; display: flex; align-items: center; border-radius: 10px; background: #0A0B0D; color: #FFFFFF; font-size: 14px; font-weight: 600;">Cerrar inscripciones</div>
-    </div>
-  </div>
+  <div class="estado" style="padding-top: 40px;">Estado 2 · torneo con aprobación: solicitudes de jugadores que no están en el padrón</div>
 
-  <div style="padding: 0 28px 22px 28px;">
-    <div style="border: 1px solid #E6E8EB; border-radius: 14px; padding: 18px 20px 16px 20px; display: flex; flex-direction: column; gap: 14px;">
-      <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px;">
-        <div style="font-size: 15px; font-weight: 600;">32 lugares</div>
-        <div style="display: flex; align-items: center; gap: 18px;">
-          <div style="display: flex; align-items: center; gap: 7px;"><div style="width: 9px; height: 9px; border-radius: 2px; background: #0A0B0D;"></div><div class="mono" style="font-size: 13px;">28</div><div style="font-size: 13px; color: #6A7079;">pagados</div></div>
-          <div style="display: flex; align-items: center; gap: 7px;"><div style="width: 9px; height: 9px; border-radius: 2px; background: #9BA1A9;"></div><div class="mono" style="font-size: 13px;">2</div><div style="font-size: 13px; color: #6A7079;">reservando</div></div>
-          <div style="display: flex; align-items: center; gap: 7px;"><div style="width: 9px; height: 9px; border-radius: 2px; background: #E6E8EB;"></div><div class="mono" style="font-size: 13px;">2</div><div style="font-size: 13px; color: #6A7079;">libres</div></div>
-          <div style="display: flex; align-items: center; gap: 7px;"><div style="width: 9px; height: 9px; border-radius: 2px; background: #CDF546;"></div><div class="mono" style="font-size: 13px;">5</div><div style="font-size: 13px; color: #6A7079;">en lista de espera</div></div>
+  <div class="pantalla" style="min-height: 720px;">
+
+    <div style="background: #0A0B0D; height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 28px;">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 9px;">
+          <div style="width: 24px; height: 24px; border-radius: 7px; background: #CDF546; display: flex; align-items: center; justify-content: center;">
+            <div style="width: 8px; height: 8px; border-radius: 999px; background: #0A0B0D;"></div>
+          </div>
+          <div style="font-size: 16px; font-weight: 600; color: #FFFFFF; letter-spacing: -0.02em;">SetPoint</div>
         </div>
+        <div style="width: 1px; height: 18px; background: #2C3037;"></div>
+        <div style="font-size: 14px; color: #9BA1A9;">Liga Amateur del Valle</div>
       </div>
-      <div style="display: flex; gap: 3px;">
-        <div style="flex-grow: 28; height: 30px; border-radius: 3px; background: #0A0B0D;"></div>
-        <div style="flex-grow: 2; height: 30px; border-radius: 3px; background: #9BA1A9;"></div>
-        <div style="flex-grow: 2; height: 30px; border-radius: 3px; background: #E6E8EB;"></div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <div class="nav">Padrón</div>
+        <div class="nav nav-on">Torneos</div>
+        <div class="nav">Tablero</div>
       </div>
     </div>
-  </div>
 
-  <div style="padding: 0 28px 28px 28px; display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px;">
-
-    <div style="display: flex; flex-direction: column; gap: 12px;">
-
-      <div style="display: flex; align-items: center; gap: 6px;">
-        <div style="height: 36px; padding: 0 15px; display: flex; align-items: center; border-radius: 9px; background: #0A0B0D; color: #FFFFFF; font-size: 14px; font-weight: 600;">Confirmados 28</div>
-        <div style="height: 36px; padding: 0 15px; display: flex; align-items: center; gap: 8px; border-radius: 9px; border: 1px solid #E6E8EB; font-size: 14px; font-weight: 500; color: #3F4348;"><span>Reservando 2</span></div>
-        <div style="height: 36px; padding: 0 15px; display: flex; align-items: center; border-radius: 9px; border: 1px solid #E6E8EB; font-size: 14px; font-weight: 500; color: #3F4348;">Lista de espera 5</div>
-        <div style="flex-grow: 1;"></div>
-        <div style="height: 36px; padding: 0 13px; display: flex; align-items: center; gap: 8px; border-radius: 9px; border: 1px solid #E6E8EB; font-size: 14px; color: #6A7079;">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6A7079" stroke-width="1.9" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"></circle><path d="M16 16l4.5 4.5"></path></svg>
-          <span>Buscar por apellido</span>
-        </div>
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding: 26px 28px 20px 28px;">
+      <div style="display: flex; flex-direction: column; gap: 7px;">
+        <div style="font-size: 30px; font-weight: 600; letter-spacing: -0.035em;">Inscripciones</div>
+        <div style="font-size: 15px; color: #6A7079;">Copa Confluencia · Intermedia · con aprobación · cierra el viernes 10</div>
       </div>
-
-      <div style="border: 1px solid #E6E8EB; border-radius: 14px; overflow: hidden;">
-
-        <div style="display: grid; grid-template-columns: minmax(0, 1fr) 130px 130px 120px 150px; background: #FAFBFC; border-bottom: 1px solid #E6E8EB;">
-          <div style="padding: 11px 18px; font-size: 12px; color: #6A7079;">jugador</div>
-          <div class="mono" style="padding: 11px 4px; font-size: 11px; color: #6A7079;">estado</div>
-          <div class="mono" style="padding: 11px 4px; font-size: 11px; color: #6A7079;">medio</div>
-          <div class="mono" style="padding: 11px 4px; font-size: 11px; color: #6A7079;">fecha</div>
-          <div></div>
-        </div>
-
-        <div style="display: grid; grid-template-columns: minmax(0, 1fr) 130px 130px 120px 150px; align-items: center; height: 56px; border-bottom: 1px solid #F1F2F4;">
-          <div style="padding: 0 18px; display: flex; align-items: center; gap: 10px;">
-            <div style="width: 7px; height: 7px; border-radius: 999px; background: #CDF546;"></div>
-            <div style="font-size: 15px; font-weight: 500;">Marcelo Sanhueza</div>
-          </div>
-          <div style="font-size: 14px;">Pagada</div>
-          <div class="mono" style="font-size: 13px; color: #6A7079;">MercadoPago</div>
-          <div class="mono" style="font-size: 13px; color: #6A7079;">18 sep</div>
-          <div style="display: flex; justify-content: flex-end; padding-right: 18px;">
-            <div style="height: 32px; padding: 0 12px; display: flex; align-items: center; border-radius: 8px; border: 1px solid #E6E8EB; font-size: 13px; color: #3F4348;">Dar de baja</div>
-          </div>
-        </div>
-
-        <div style="display: grid; grid-template-columns: minmax(0, 1fr) 130px 130px 120px 150px; align-items: center; height: 56px; border-bottom: 1px solid #F1F2F4;">
-          <div style="padding: 0 18px; display: flex; align-items: center; gap: 10px;">
-            <div style="width: 7px; height: 7px; border-radius: 999px; background: #CDF546;"></div>
-            <div style="font-size: 15px; font-weight: 500;">Lucas Bravo</div>
-          </div>
-          <div style="font-size: 14px;">Pagada</div>
-          <div class="mono" style="font-size: 13px; color: #6A7079;">MercadoPago</div>
-          <div class="mono" style="font-size: 13px; color: #6A7079;">18 sep</div>
-          <div style="display: flex; justify-content: flex-end; padding-right: 18px;">
-            <div style="height: 32px; padding: 0 12px; display: flex; align-items: center; border-radius: 8px; border: 1px solid #E6E8EB; font-size: 13px; color: #3F4348;">Dar de baja</div>
-          </div>
-        </div>
-
-        <div style="display: grid; grid-template-columns: minmax(0, 1fr) 130px 130px 120px 150px; align-items: center; height: 56px; border-bottom: 1px solid #F1F2F4;">
-          <div style="padding: 0 18px; display: flex; align-items: center; gap: 10px;">
-            <div style="width: 7px; height: 7px; border-radius: 999px; background: #CDF546;"></div>
-            <div style="font-size: 15px; font-weight: 500;">Diego Cabrera</div>
-          </div>
-          <div style="font-size: 14px;">Pagada</div>
-          <div class="mono" style="font-size: 13px; color: #6A7079;">Efectivo</div>
-          <div class="mono" style="font-size: 13px; color: #6A7079;">17 sep</div>
-          <div style="display: flex; justify-content: flex-end; padding-right: 18px;">
-            <div style="height: 32px; padding: 0 12px; display: flex; align-items: center; border-radius: 8px; border: 1px solid #E6E8EB; font-size: 13px; color: #3F4348;">Dar de baja</div>
-          </div>
-        </div>
-
-        <div style="display: grid; grid-template-columns: minmax(0, 1fr) 130px 130px 120px 150px; align-items: center; height: 56px; border-bottom: 1px solid #F1F2F4; background: #FAFBFC;">
-          <div style="padding: 0 18px; display: flex; align-items: center; gap: 10px;">
-            <div style="width: 7px; height: 7px; border-radius: 999px; background: #9BA1A9;"></div>
-            <div style="font-size: 15px;">Ariel Huenchul</div>
-          </div>
-          <div style="font-size: 14px; color: #3F4348;">Reservando</div>
-          <div class="mono" style="font-size: 13px; color: #6A7079;">—</div>
-          <div class="mono" style="font-size: 13px; color: #C62A2F;">vence 08:12</div>
-          <div style="display: flex; justify-content: flex-end; padding-right: 18px;">
-            <div style="height: 32px; padding: 0 12px; display: flex; align-items: center; border-radius: 8px; border: 1px solid #E6E8EB; font-size: 13px; color: #3F4348;">Recordarle</div>
-          </div>
-        </div>
-
-        <div style="display: grid; grid-template-columns: minmax(0, 1fr) 130px 130px 120px 150px; align-items: center; height: 56px; border-bottom: 1px solid #F1F2F4; background: #FAFBFC;">
-          <div style="padding: 0 18px; display: flex; align-items: center; gap: 10px;">
-            <div style="width: 7px; height: 7px; border-radius: 999px; background: #9BA1A9;"></div>
-            <div style="font-size: 15px;">Pablo Roa</div>
-          </div>
-          <div style="font-size: 14px; color: #3F4348;">Reservando</div>
-          <div class="mono" style="font-size: 13px; color: #6A7079;">—</div>
-          <div class="mono" style="font-size: 13px; color: #C62A2F;">vence 03:40</div>
-          <div style="display: flex; justify-content: flex-end; padding-right: 18px;">
-            <div style="height: 32px; padding: 0 12px; display: flex; align-items: center; border-radius: 8px; border: 1px solid #E6E8EB; font-size: 13px; color: #3F4348;">Recordarle</div>
-          </div>
-        </div>
-
-        <div style="display: grid; grid-template-columns: minmax(0, 1fr) 130px 130px 120px 150px; align-items: center; height: 56px;">
-          <div style="padding: 0 18px; display: flex; align-items: center; gap: 10px;">
-            <div style="width: 7px; height: 7px; border-radius: 999px; background: #CDF546;"></div>
-            <div style="font-size: 15px; font-weight: 500;">Nicolás Vera</div>
-          </div>
-          <div style="font-size: 14px;">Pagada</div>
-          <div class="mono" style="font-size: 13px; color: #6A7079;">MercadoPago</div>
-          <div class="mono" style="font-size: 13px; color: #6A7079;">16 sep</div>
-          <div style="display: flex; justify-content: flex-end; padding-right: 18px;">
-            <div style="height: 32px; padding: 0 12px; display: flex; align-items: center; border-radius: 8px; border: 1px solid #E6E8EB; font-size: 13px; color: #3F4348;">Dar de baja</div>
-          </div>
-        </div>
-
-        <div style="padding: 13px 18px; background: #FAFBFC; border-top: 1px solid #E6E8EB; font-size: 13px; color: #6A7079;">Al dar de baja se libera el lugar y se le avisa al primero de la lista de espera. La devolución la maneja la organización por fuera.</div>
-
+      <div style="display: flex; gap: 9px;">
+        <div style="height: 40px; padding: 0 16px; display: flex; align-items: center; border-radius: 10px; border: 1px solid #E6E8EB; font-size: 14px; font-weight: 500;">Inscribir a mano</div>
+        <div style="height: 40px; padding: 0 16px; display: flex; align-items: center; border-radius: 10px; background: #0A0B0D; color: #FFFFFF; font-size: 14px; font-weight: 600;">Cerrar inscripciones</div>
       </div>
-
     </div>
 
-    <div style="display: flex; flex-direction: column; gap: 16px;">
-
-      <div style="border: 1px solid #E6E8EB; border-radius: 14px; overflow: hidden;">
-        <div style="padding: 14px 16px; border-bottom: 1px solid #E6E8EB; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-          <div style="font-size: 15px; font-weight: 600;">Lista de espera</div>
-          <div class="mono" style="font-size: 13px; color: #6A7079;">por orden de llegada</div>
+    <div style="padding: 0 28px 22px 28px;">
+      <div style="border: 1px solid #E6E8EB; border-radius: 14px; padding: 18px 20px 16px 20px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px;">
+          <div style="font-size: 15px; font-weight: 600;">24 lugares</div>
+          <div style="display: flex; align-items: center; gap: 18px;">
+            <div style="display: flex; align-items: center; gap: 7px;"><div style="width: 9px; height: 9px; border-radius: 2px; background: #0A0B0D;"></div><div class="mono" style="font-size: 13px;">9</div><div style="font-size: 13px; color: #6A7079;">pagados</div></div>
+            <div style="display: flex; align-items: center; gap: 7px;"><div style="width: 9px; height: 9px; border-radius: 2px; background: #9BA1A9;"></div><div class="mono" style="font-size: 13px;">1</div><div style="font-size: 13px; color: #6A7079;">reservando</div></div>
+            <div style="display: flex; align-items: center; gap: 7px;"><div style="width: 9px; height: 9px; border-radius: 2px; background: #E6E8EB;"></div><div class="mono" style="font-size: 13px;">14</div><div style="font-size: 13px; color: #6A7079;">libres</div></div>
+            <div style="display: flex; align-items: center; gap: 7px;"><div style="width: 9px; height: 9px; border-radius: 999px; border: 1.5px solid #9BA1A9; box-sizing: border-box;"></div><div class="mono" style="font-size: 13px;">2</div><div style="font-size: 13px; color: #6A7079;">solicitudes, sin lugar todavía</div></div>
+          </div>
         </div>
-        <div style="display: flex; flex-direction: column;">
-          <div style="display: flex; align-items: center; gap: 12px; padding: 0 16px; height: 46px; border-bottom: 1px solid #F1F2F4;">
-            <div class="mono" style="font-size: 13px; color: #6A7079;">1</div>
-            <div style="font-size: 14px; flex-grow: 1;">Julián Ojeda</div>
-            <div class="mono" style="font-size: 12px; color: #6A7079;">19 sep</div>
-          </div>
-          <div style="display: flex; align-items: center; gap: 12px; padding: 0 16px; height: 46px; border-bottom: 1px solid #F1F2F4;">
-            <div class="mono" style="font-size: 13px; color: #6A7079;">2</div>
-            <div style="font-size: 14px; flex-grow: 1;">Emiliano Rivas</div>
-            <div class="mono" style="font-size: 12px; color: #6A7079;">19 sep</div>
-          </div>
-          <div style="display: flex; align-items: center; gap: 12px; padding: 0 16px; height: 46px; border-bottom: 1px solid #F1F2F4;">
-            <div class="mono" style="font-size: 13px; color: #6A7079;">3</div>
-            <div style="font-size: 14px; flex-grow: 1;">Franco Lagos</div>
-            <div class="mono" style="font-size: 12px; color: #6A7079;">20 sep</div>
-          </div>
-          <div style="padding: 12px 16px; background: #FAFBFC; font-size: 13px; color: #6A7079;">Y 2 más. Cuando se libera un lugar, el primero recibe aviso y puede pagar.</div>
+        <div style="display: flex; gap: 3px;">
+          <div style="flex-grow: 9; height: 30px; border-radius: 3px; background: #0A0B0D;"></div>
+          <div style="flex-grow: 1; height: 30px; border-radius: 3px; background: #9BA1A9;"></div>
+          <div style="flex-grow: 14; height: 30px; border-radius: 3px; background: #E6E8EB;"></div>
         </div>
       </div>
+    </div>
 
-      <div style="background: #0A0B0D; border-radius: 14px; padding: 18px 18px 16px 18px; display: flex; flex-direction: column; gap: 14px;">
-        <div style="font-size: 15px; font-weight: 600; color: #FFFFFF;">Conciliación del torneo</div>
-        <div style="display: flex; flex-direction: column; gap: 11px;">
-          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
-            <div style="font-size: 14px; color: #9BA1A9;">Recaudado</div>
-            <div class="mono" style="font-size: 15px; color: #FFFFFF;">$1.260.000</div>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
-            <div style="font-size: 14px; color: #9BA1A9;">Comisión</div>
-            <div class="mono" style="font-size: 15px; color: #9BA1A9;">$63.000</div>
-          </div>
-          <div style="height: 1px; background: #23262B;"></div>
-          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
-            <div style="font-size: 15px; font-weight: 600; color: #FFFFFF;">Te corresponde</div>
-            <div class="mono" style="font-size: 20px; font-weight: 500; color: #CDF546;">$1.197.000</div>
-          </div>
+    <div style="padding: 0 28px 28px 28px; display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px;">
+
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <div class="pestana">Confirmados 9</div>
+          <div class="pestana">Reservando 1</div>
+          <div class="pestana pestana-on">Solicitudes 2</div>
+          <div class="pestana">Lista de espera 0</div>
         </div>
-        <div style="font-size: 13px; line-height: 1.4; color: #6A7079;">27 pagos por MercadoPago y 1 en efectivo. La transferencia se hace por fuera del sistema.</div>
+
+        <div style="border: 1px solid #E6E8EB; border-radius: 14px; overflow: hidden;">
+
+          <div style="display: grid; grid-template-columns: minmax(0, 1fr) 230px 110px 200px; background: #FAFBFC; border-bottom: 1px solid #E6E8EB;">
+            <div style="padding: 11px 18px; font-size: 12px; color: #6A7079;">jugador</div>
+            <div class="mono" style="padding: 11px 4px; font-size: 11px; color: #6A7079;">email</div>
+            <div class="mono" style="padding: 11px 4px; font-size: 11px; color: #6A7079;">pidió</div>
+            <div></div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: minmax(0, 1fr) 230px 110px 200px; align-items: center; height: 60px; border-bottom: 1px solid #F1F2F4;">
+            <div style="padding: 0 18px; display: flex; align-items: center; gap: 10px;">
+              <div style="width: 8px; height: 8px; border-radius: 999px; border: 1.5px solid #9BA1A9; box-sizing: border-box;"></div>
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <div style="font-size: 15px; font-weight: 500;">Tomás Correa</div>
+                <div class="mono" style="font-size: 12px; color: #6A7079;">no está en el padrón</div>
+              </div>
+            </div>
+            <div style="font-size: 14px; color: #3F4348;">tomascorrea@gmail.com</div>
+            <div class="mono" style="font-size: 13px; color: #6A7079;">lun 6 oct</div>
+            <div style="display: flex; justify-content: flex-end; gap: 8px; padding-right: 18px;">
+              <div class="accion">Rechazar</div>
+              <div class="accion" style="background: #0A0B0D; border-color: #0A0B0D; color: #FFFFFF; font-weight: 600;">Aprobar</div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: minmax(0, 1fr) 230px 110px 200px; align-items: center; height: 60px;">
+            <div style="padding: 0 18px; display: flex; align-items: center; gap: 10px;">
+              <div style="width: 8px; height: 8px; border-radius: 999px; border: 1.5px solid #9BA1A9; box-sizing: border-box;"></div>
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <div style="font-size: 15px; font-weight: 500;">Nicolás Funes</div>
+                <div class="mono" style="font-size: 12px; color: #6A7079;">no está en el padrón</div>
+              </div>
+            </div>
+            <div style="font-size: 14px; color: #3F4348;">nfunes@hotmail.com</div>
+            <div class="mono" style="font-size: 13px; color: #6A7079;">mar 7 oct</div>
+            <div style="display: flex; justify-content: flex-end; gap: 8px; padding-right: 18px;">
+              <div class="accion">Rechazar</div>
+              <div class="accion" style="background: #0A0B0D; border-color: #0A0B0D; color: #FFFFFF; font-weight: 600;">Aprobar</div>
+            </div>
+          </div>
+
+          <div style="padding: 13px 18px; background: #FAFBFC; border-top: 1px solid #E6E8EB; font-size: 13px; color: #6A7079; line-height: 1.5;">Al aprobar, entra al padrón en Intermedia con <span class="mono" style="color: #0A0B0D;">0</span> puntos y le llega un email con el link para pagar. No tiene lugar hasta que paga: los lugares se asignan por orden de pago. Al rechazar, le llega un aviso, sin motivo.</div>
+
+        </div>
+
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+
+        <div style="border: 1px solid #E6E8EB; border-radius: 14px; background: #F6F7F8; padding: 18px; display: flex; flex-direction: column; gap: 9px;">
+          <div style="font-size: 14px; font-weight: 600;">Quiénes piden</div>
+          <div style="font-size: 14px; color: #6A7079; line-height: 1.5;">Solo los que no están en tu padrón. Los que ya están se inscriben y pagan solos, sin pasar por acá.</div>
+        </div>
+
+        <div style="background: #0A0B0D; border-radius: 14px; padding: 18px 18px 16px 18px; display: flex; flex-direction: column; gap: 14px;">
+          <div style="font-size: 15px; font-weight: 600; color: #FFFFFF;">Conciliación del torneo</div>
+          <div style="display: flex; flex-direction: column; gap: 11px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+              <div style="font-size: 14px; color: #9BA1A9;">Recaudado</div>
+              <div class="mono" style="font-size: 15px; color: #FFFFFF;">$270.000</div>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+              <div style="font-size: 14px; color: #9BA1A9;">Comisión</div>
+              <div class="mono" style="font-size: 15px; color: #9BA1A9;">$13.500</div>
+            </div>
+            <div style="height: 1px; background: #23262B;"></div>
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+              <div style="font-size: 15px; font-weight: 600; color: #FFFFFF;">Te corresponde</div>
+              <div class="mono" style="font-size: 20px; font-weight: 500; color: #CDF546;">$256.500</div>
+            </div>
+          </div>
+          <div style="font-size: 13px; line-height: 1.4; color: #6A7079;">9 pagos por MercadoPago. La transferencia se hace por fuera del sistema.</div>
+        </div>
+
       </div>
 
     </div>

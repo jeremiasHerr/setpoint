@@ -4,111 +4,211 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SetPoint · El torneo</title>
-  <!-- Pantalla de referencia: El torneo · F12 · entrega 75% · 390×900 px -->
+  <!-- Pantalla de referencia: El torneo · F12 · entrega 75% · 1290 px · tres estados de 390 px -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
     <style>
-      body { margin: 0; font-family: "Instrument Sans", system-ui, "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; }
+      body { margin: 0; font-family: "Instrument Sans", system-ui, "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; background: #F6F7F8; }
       a { color: #0A0B0D; }
       a:hover { color: #6A7079; }
       .mono { font-family: "Geist Mono", ui-monospace, "SF Mono", Consolas, monospace; font-variant-numeric: tabular-nums; }
+      .lienzo { width: 1290px; box-sizing: border-box; padding: 30px; display: flex; flex-wrap: wrap; gap: 40px 30px; color: #0A0B0D; }
+      .estado { display: flex; flex-direction: column; gap: 12px; }
+      .rotulo { display: flex; align-items: baseline; gap: 9px; font-size: 15px; font-weight: 600; }
+      .rotulo .mono { font-size: 13px; font-weight: 400; color: #6A7079; }
+      .tel { width: 390px; height: 900px; box-sizing: border-box; background: #FFFFFF; border: 1px solid #E6E8EB; border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; gap: 20px; padding: 20px 16px 28px 16px; }
+      .cab { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+      .logo { width: 26px; height: 26px; border-radius: 7px; background: #0A0B0D; display: flex; align-items: center; justify-content: center; }
+      .logo div { width: 9px; height: 9px; border-radius: 999px; background: #CDF546; }
+      .negra { background: #0A0B0D; border-radius: 18px; padding: 22px 20px; display: flex; flex-direction: column; gap: 18px; }
+      .linea { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+      .linea .r { font-size: 15px; color: #9BA1A9; }
+      .linea .v { font-size: 15px; color: #FFFFFF; }
+      .incluye { border: 1px solid #E6E8EB; border-radius: 16px; padding: 18px; display: flex; flex-direction: column; gap: 13px; }
+      .item { display: flex; align-items: center; gap: 11px; font-size: 16px; }
+      .item div { width: 5px; height: 5px; border-radius: 999px; background: #0A0B0D; flex-shrink: 0; }
+      .caja { border-radius: 12px; background: #F6F7F8; padding: 14px 16px; display: flex; gap: 11px; font-size: 15px; line-height: 1.42; color: #3F4348; }
     </style>
 </head>
 <body>
 <!--
 NOTA DE DISEÑO
-La convocatoria que hoy se manda por WhatsApp, hecha pantalla.
+La convocatoria que hoy se manda por WhatsApp, hecha pantalla. Es lo que abre el link del torneo que la organización comparte en el grupo, en el navegador del celular, sin cuenta y sin instalar nada.
 
 Lo que incluye la inscripción está al mismo peso que el precio, porque es lo que justifica los $45.000.
+
+1 · Sin cuenta. Debajo del botón se dice que no hace falta cuenta: alcanza con el DNI (identificacion.html). La cuenta se ofrece después de pagar, desde el comprobante.
+
+2 · Con la sesión iniciada y un perfil en este circuito (04-flujo-jugador §5.7). El botón dice con qué nombre se inscribe y lleva directo al pago, sin identificarse. Si es un circuito en el que todavía no juega, el botón lleva a con-cuenta.html.
+
+3 · Inscripción cerrada. El link sigue circulando en el grupo después del cierre: la pantalla lo dice y ofrece lo que sí se puede hacer, mirar.
+
+Con el cupo completo, el botón pasa a ser "Anotarme en la lista de espera". Ese estado se diseña con F13 completa.
+Usa los términos de la interfaz: la edición es "Primavera 26", con la categoría al lado.
+Todos los nombres de personas son ficticios.
 -->
 
-<div style="width: 390px; min-height: 900px; background: #FFFFFF; color: #0A0B0D; display: flex; flex-direction: column; gap: 20px; padding: 20px 16px 28px 16px;">
+<div class="lienzo">
 
-  <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
-    <div style="display: flex; align-items: center; gap: 9px;">
-      <div style="width: 26px; height: 26px; border-radius: 7px; background: #0A0B0D; display: flex; align-items: center; justify-content: center;">
-        <div style="width: 9px; height: 9px; border-radius: 999px; background: #CDF546;"></div>
+  <!-- 1 -->
+  <div class="estado">
+    <div class="rotulo"><span class="mono">1</span><span>Inscripción abierta, sin cuenta</span></div>
+    <div class="tel">
+      <div class="cab">
+        <div style="display: flex; align-items: center; gap: 9px;">
+          <div class="logo"><div></div></div>
+          <div style="font-size: 16px; font-weight: 600; letter-spacing: -0.015em;">Polenta Team Tenis</div>
+        </div>
+        <div class="mono" style="font-size: 14px; font-weight: 500; color: #6A7079; padding: 6px 10px; border: 1px solid #E6E8EB; border-radius: 999px;">Tercera</div>
       </div>
-      <div style="font-size: 16px; font-weight: 600; letter-spacing: -0.015em;">Polenta Team Tenis</div>
+
+      <div class="negra">
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 7px; height: 7px; border-radius: 999px; background: #CDF546;"></div>
+            <div style="font-size: 15px; font-weight: 500; color: #CDF546;">Inscripción abierta</div>
+          </div>
+          <div style="font-size: 32px; font-weight: 600; line-height: 1.08; letter-spacing: -0.032em; color: #FFFFFF;">Primavera 26</div>
+        </div>
+        <div style="height: 1px; background: #23262B;"></div>
+        <div style="display: flex; flex-direction: column; gap: 13px;">
+          <div class="linea"><div class="r">Cierra</div><div class="v mono">viernes 26 de septiembre</div></div>
+          <div class="linea"><div class="r">Arranca</div><div class="v mono">lunes 6 de octubre</div></div>
+          <div class="linea"><div class="r">Formato</div><div class="v mono">8 zonas de 4 · dos cuadros</div></div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 9px;">
+          <div class="linea"><div class="r">Lugares</div><div class="v mono">28 de 32</div></div>
+          <div style="display: flex; gap: 3px;">
+            <div style="flex-grow: 28; height: 8px; border-radius: 2px; background: #CDF546;"></div>
+            <div style="flex-grow: 4; height: 8px; border-radius: 2px; background: #2C3037;"></div>
+          </div>
+          <div style="font-size: 15px; color: #9BA1A9;">Quedan 4 lugares. Se asignan por orden de pago.</div>
+        </div>
+      </div>
+
+      <div class="incluye">
+        <div style="font-size: 16px; font-weight: 600;">La inscripción incluye</div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div class="item"><div></div>Un tubo de pelotas nuevas</div>
+          <div class="item"><div></div>Las canchas de las eliminatorias</div>
+          <div class="item"><div></div>El asado de cierre y los premios</div>
+        </div>
+        <div style="font-size: 15px; color: #6A7079;">Las canchas de la fase de grupos las pagan los jugadores.</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px; margin-top: auto;">
+        <div class="linea" style="padding: 0 4px;">
+          <div style="font-size: 16px; color: #6A7079;">Inscripción</div>
+          <div class="mono" style="font-size: 26px; font-weight: 500; letter-spacing: -0.02em;">$45.000</div>
+        </div>
+        <div style="height: 60px; border-radius: 12px; background: #CDF546; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 600;">Inscribirme y pagar</div>
+        <div style="font-size: 15px; line-height: 1.42; color: #6A7079; padding: 0 4px;">No necesitás cuenta: te inscribís con tu DNI. Te mandamos el comprobante por email y, si querés, creás la cuenta desde ahí.</div>
+      </div>
     </div>
-    <div class="mono" style="font-size: 12px; font-weight: 500; color: #6A7079; padding: 6px 10px; border: 1px solid #E6E8EB; border-radius: 999px;">Tercera</div>
   </div>
 
-  <div style="background: #0A0B0D; border-radius: 18px; padding: 22px 20px; display: flex; flex-direction: column; gap: 18px;">
-
-    <div style="display: flex; flex-direction: column; gap: 8px;">
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <div style="width: 7px; height: 7px; border-radius: 999px; background: #CDF546;"></div>
-        <div style="font-size: 14px; font-weight: 500; color: #CDF546;">Inscripción abierta</div>
+  <!-- 2 -->
+  <div class="estado">
+    <div class="rotulo"><span class="mono">2</span><span>Con la sesión iniciada</span></div>
+    <div class="tel">
+      <div class="cab">
+        <div style="display: flex; align-items: center; gap: 9px;">
+          <div class="logo"><div></div></div>
+          <div style="font-size: 16px; font-weight: 600; letter-spacing: -0.015em;">Polenta Team Tenis</div>
+        </div>
+        <div class="mono" style="font-size: 14px; font-weight: 500; color: #6A7079; padding: 6px 10px; border: 1px solid #E6E8EB; border-radius: 999px;">Tercera</div>
       </div>
-      <div style="font-size: 32px; font-weight: 600; line-height: 1.08; letter-spacing: -0.032em; color: #FFFFFF;">Torneo Primavera 26</div>
+
+      <div class="negra">
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 7px; height: 7px; border-radius: 999px; background: #CDF546;"></div>
+            <div style="font-size: 15px; font-weight: 500; color: #CDF546;">Inscripción abierta</div>
+          </div>
+          <div style="font-size: 32px; font-weight: 600; line-height: 1.08; letter-spacing: -0.032em; color: #FFFFFF;">Primavera 26</div>
+        </div>
+        <div style="height: 1px; background: #23262B;"></div>
+        <div style="display: flex; flex-direction: column; gap: 13px;">
+          <div class="linea"><div class="r">Cierra</div><div class="v mono">viernes 26 de septiembre</div></div>
+          <div class="linea"><div class="r">Arranca</div><div class="v mono">lunes 6 de octubre</div></div>
+          <div class="linea"><div class="r">Formato</div><div class="v mono">8 zonas de 4 · dos cuadros</div></div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 9px;">
+          <div class="linea"><div class="r">Lugares</div><div class="v mono">28 de 32</div></div>
+          <div style="display: flex; gap: 3px;">
+            <div style="flex-grow: 28; height: 8px; border-radius: 2px; background: #CDF546;"></div>
+            <div style="flex-grow: 4; height: 8px; border-radius: 2px; background: #2C3037;"></div>
+          </div>
+          <div style="font-size: 15px; color: #9BA1A9;">Quedan 4 lugares. Se asignan por orden de pago.</div>
+        </div>
+      </div>
+
+      <div class="incluye">
+        <div style="font-size: 16px; font-weight: 600;">La inscripción incluye</div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div class="item"><div></div>Un tubo de pelotas nuevas</div>
+          <div class="item"><div></div>Las canchas de las eliminatorias</div>
+          <div class="item"><div></div>El asado de cierre y los premios</div>
+        </div>
+        <div style="font-size: 15px; color: #6A7079;">Las canchas de la fase de grupos las pagan los jugadores.</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px; margin-top: auto;">
+        <div class="linea" style="padding: 0 4px;">
+          <div style="font-size: 16px; color: #6A7079;">Inscripción</div>
+          <div class="mono" style="font-size: 26px; font-weight: 500; letter-spacing: -0.02em;">$45.000</div>
+        </div>
+        <div style="height: 60px; border-radius: 12px; background: #CDF546; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 600;">Inscribirme y pagar</div>
+        <div style="display: flex; align-items: center; gap: 9px; padding: 0 4px;">
+          <div style="width: 7px; height: 7px; border-radius: 999px; background: #CDF546; flex-shrink: 0;"></div>
+          <div style="font-size: 15px; line-height: 1.42; color: #3F4348;">Te inscribís como <span style="font-weight: 600; color: #0A0B0D;">Lucas Bravo</span>, de Tercera.</div>
+        </div>
+      </div>
     </div>
-
-    <div style="height: 1px; background: #23262B;"></div>
-
-    <div style="display: flex; flex-direction: column; gap: 13px;">
-      <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
-        <div style="font-size: 15px; color: #9BA1A9;">Cierra</div>
-        <div class="mono" style="font-size: 15px; color: #FFFFFF;">viernes 26 de septiembre</div>
-      </div>
-      <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
-        <div style="font-size: 15px; color: #9BA1A9;">Arranca</div>
-        <div class="mono" style="font-size: 15px; color: #FFFFFF;">lunes 6 de octubre</div>
-      </div>
-      <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
-        <div style="font-size: 15px; color: #9BA1A9;">Formato</div>
-        <div class="mono" style="font-size: 15px; color: #FFFFFF;">8 zonas de 4 · dos cuadros</div>
-      </div>
-    </div>
-
-    <div style="display: flex; flex-direction: column; gap: 9px;">
-      <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
-        <div style="font-size: 15px; color: #9BA1A9;">Lugares</div>
-        <div class="mono" style="font-size: 15px; color: #FFFFFF;">28 de 32</div>
-      </div>
-      <div style="display: flex; gap: 3px;">
-        <div style="flex-grow: 28; height: 8px; border-radius: 2px; background: #CDF546;"></div>
-        <div style="flex-grow: 4; height: 8px; border-radius: 2px; background: #2C3037;"></div>
-      </div>
-      <div style="font-size: 14px; color: #9BA1A9;">Quedan 4 lugares. Se asignan por orden de pago.</div>
-    </div>
-
   </div>
 
-  <div style="border: 1px solid #E6E8EB; border-radius: 16px; padding: 18px; display: flex; flex-direction: column; gap: 13px;">
-    <div style="font-size: 16px; font-weight: 600;">La inscripción incluye</div>
-    <div style="display: flex; flex-direction: column; gap: 10px;">
-      <div style="display: flex; align-items: center; gap: 11px;">
-        <div style="width: 5px; height: 5px; border-radius: 999px; background: #0A0B0D;"></div>
-        <div style="font-size: 16px;">Un tubo de pelotas nuevas</div>
+  <!-- 3 -->
+  <div class="estado">
+    <div class="rotulo"><span class="mono">3</span><span>Inscripción cerrada</span></div>
+    <div class="tel">
+      <div class="cab">
+        <div style="display: flex; align-items: center; gap: 9px;">
+          <div class="logo"><div></div></div>
+          <div style="font-size: 16px; font-weight: 600; letter-spacing: -0.015em;">Polenta Team Tenis</div>
+        </div>
+        <div class="mono" style="font-size: 14px; font-weight: 500; color: #6A7079; padding: 6px 10px; border: 1px solid #E6E8EB; border-radius: 999px;">Tercera</div>
       </div>
-      <div style="display: flex; align-items: center; gap: 11px;">
-        <div style="width: 5px; height: 5px; border-radius: 999px; background: #0A0B0D;"></div>
-        <div style="font-size: 16px;">Las canchas de las eliminatorias</div>
+
+      <div class="negra">
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 7px; height: 7px; border-radius: 999px; background: #6A7079;"></div>
+            <div style="font-size: 15px; font-weight: 500; color: #9BA1A9;">Inscripción cerrada</div>
+          </div>
+          <div style="font-size: 32px; font-weight: 600; line-height: 1.08; letter-spacing: -0.032em; color: #FFFFFF;">Primavera 26</div>
+        </div>
+        <div style="height: 1px; background: #23262B;"></div>
+        <div style="display: flex; flex-direction: column; gap: 13px;">
+          <div class="linea"><div class="r">Cerró</div><div class="v mono">viernes 26 de septiembre</div></div>
+          <div class="linea"><div class="r">Sorteo de zonas</div><div class="v mono">lunes 29</div></div>
+          <div class="linea"><div class="r">Arranca</div><div class="v mono">lunes 6 de octubre</div></div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 9px;">
+          <div class="linea"><div class="r">Inscriptos</div><div class="v mono">32 de 32</div></div>
+          <div style="display: flex; gap: 3px;">
+            <div style="flex-grow: 32; height: 8px; border-radius: 2px; background: #9BA1A9;"></div>
+          </div>
+        </div>
       </div>
-      <div style="display: flex; align-items: center; gap: 11px;">
-        <div style="width: 5px; height: 5px; border-radius: 999px; background: #0A0B0D;"></div>
-        <div style="font-size: 16px;">El asado de cierre y los premios</div>
+
+      <div class="caja">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6A7079" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 11v5.5M12 8h.01"></path></svg>
+        <div>Ya no se puede inscribir nadie. Después del sorteo, las zonas, los cuadros y los resultados se pueden mirar sin cuenta.</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px; margin-top: auto;">
+        <div style="height: 52px; border-radius: 12px; border: 1px solid #E6E8EB; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 500;">Ver el ranking de Tercera</div>
       </div>
     </div>
-    <div style="font-size: 14px; color: #6A7079;">Las canchas de la fase de grupos las pagan los jugadores.</div>
-  </div>
-
-  <div style="display: flex; flex-direction: column; gap: 12px; margin-top: auto;">
-
-    <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 4px;">
-      <div style="font-size: 16px; color: #6A7079;">Inscripción</div>
-      <div class="mono" style="font-size: 26px; font-weight: 500; letter-spacing: -0.02em;">$45.000</div>
-    </div>
-
-    <div style="height: 60px; border-radius: 12px; background: #CDF546; color: #0A0B0D; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 600;">Inscribirme y pagar</div>
-
-    <div style="border-radius: 12px; background: #F6F7F8; padding: 14px 16px; display: flex; gap: 11px;">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6A7079" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.5V12l3 2"></path></svg>
-      <div style="font-size: 15px; line-height: 1.42; color: #3F4348;">Te guardamos el lugar 15 minutos mientras pagás. Si no llegás, vuelve a quedar libre y podés intentar de nuevo.</div>
-    </div>
-
-    <div style="font-size: 14px; line-height: 1.42; color: #6A7079; padding: 0 4px;">No necesitás crear una cuenta para inscribirte. Te la ofrecemos después de pagar, para que puedas coordinar tus partidos desde acá.</div>
-
   </div>
 
 </div>

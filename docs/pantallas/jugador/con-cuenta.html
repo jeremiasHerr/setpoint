@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SetPoint · Inscripción con cuenta</title>
+  <!-- Pantalla de referencia: Inscripción con cuenta · F12 · entrega 75% · 1290 px · cuatro estados de 390 px -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+    <style>
+      body { margin: 0; font-family: "Instrument Sans", system-ui, "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; background: #F6F7F8; }
+      a { color: #0A0B0D; }
+      a:hover { color: #6A7079; }
+      .mono { font-family: "Geist Mono", ui-monospace, "SF Mono", Consolas, monospace; font-variant-numeric: tabular-nums; }
+      .lienzo { width: 1290px; box-sizing: border-box; padding: 30px; display: flex; flex-wrap: wrap; gap: 40px 30px; color: #0A0B0D; }
+      .estado { display: flex; flex-direction: column; gap: 12px; }
+      .rotulo { display: flex; align-items: baseline; gap: 9px; font-size: 15px; font-weight: 600; }
+      .rotulo .mono { font-size: 13px; font-weight: 400; color: #6A7079; }
+      .tel { width: 390px; height: 800px; box-sizing: border-box; background: #FFFFFF; border: 1px solid #E6E8EB; border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; gap: 20px; padding: 22px 18px; }
+      .cab { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+      .marca { display: flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 600; }
+      .logo { width: 26px; height: 26px; border-radius: 7px; background: #0A0B0D; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+      .logo div { width: 9px; height: 9px; border-radius: 999px; background: #CDF546; }
+      .chip { font-size: 14px; color: #6A7079; padding: 6px 10px; border: 1px solid #E6E8EB; border-radius: 999px; }
+      .titulo { font-size: 24px; font-weight: 600; letter-spacing: -0.03em; line-height: 1.15; }
+      .pregunta { font-size: 30px; font-weight: 600; letter-spacing: -0.032em; line-height: 1.12; }
+      .seccion { font-size: 20px; font-weight: 600; letter-spacing: -0.025em; line-height: 1.2; }
+      .bloque { display: flex; flex-direction: column; gap: 10px; }
+      .etiqueta { font-size: 15px; font-weight: 600; }
+      .campo { height: 56px; box-sizing: border-box; border-radius: 12px; border: 1px solid #C9CDD3; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 16px; font-size: 17px; }
+      .activo { border: 2px solid #0A0B0D; padding: 0 15px; }
+      .gris { color: #6A7079; }
+      .ayuda { font-size: 15px; line-height: 1.42; color: #6A7079; }
+      .consentimiento { border-radius: 12px; background: #F6F7F8; padding: 14px 16px; font-size: 15px; line-height: 1.42; color: #3F4348; }
+      .tarjeta { border: 1px solid #E6E8EB; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+      .dato { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+      .punto { width: 7px; height: 7px; border-radius: 999px; background: #CDF546; flex-shrink: 0; }
+      .pie { margin-top: auto; display: flex; flex-direction: column; gap: 12px; }
+      .monto { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 4px; }
+      .btn-lima { height: 56px; border-radius: 12px; background: #CDF546; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600; }
+      .btn-sec { height: 52px; border-radius: 12px; border: 1px solid #E6E8EB; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 500; }
+      .reloj { display: flex; align-items: flex-start; gap: 10px; font-size: 15px; line-height: 1.42; color: #6A7079; padding: 0 4px; }
+    </style>
+</head>
+<body>
+<!--
+NOTA DE DISEÑO
+Nuevo · quien tiene cuenta toca el link de un torneo de una organización en la que todavía no juega (04-flujo-jugador §5.7, decisión 051).
+Federico tiene cuenta porque juega en Polenta Team Tenis; el torneo es de Liga Amateur del Valle, la segunda organización de la demo.
+
+Sirve igual en la app y en la web con la sesión iniciada. Si ya tiene perfil en esa organización, no pasa por acá: el botón de el-torneo.html lo lleva directo al pago.
+
+La persona se cargó una vez: nombre, DNI y email viven en la cuenta. El perfil de jugador es uno por organización, con su categoría, sus puntos y su historial, y no se comparte.
+
+El consentimiento va siempre arriba del botón, con las palabras exactas: "Al inscribirte, Liga Amateur del Valle va a ver tu nombre, tu DNI y tu email". No es una casilla para tildar. Tocar el botón es aceptar, y lo que se acepta se dice antes, no después.
+
+1 · El DNI de la cuenta está en el padrón: se vincula directo.
+
+2 · No está el DNI, pero sí alguien con su apellido en la categoría del torneo: "¿Sos…?" y un toque. Si hay varios, se elige entre hasta 5, con la misma lista que identificacion.html. Si el perfil tiene otro igual o parecido en la categoría, la organización revisa la vinculación sin frenar la inscripción. "No soy yo" lleva a lo mismo que no estar en la lista.
+
+3 · Torneo abierto y no está: se crea el perfil con los datos de la cuenta. El email se ve completo porque quien mira es el dueño de la cuenta; el DNI, enmascarado igual.
+Torneo cerrado o con aprobación y no está: los mismos paneles 7 y 8 de identificacion.html. Con aprobación, la solicitud sale con los datos de la cuenta, sin escribirlos.
+
+4 · Las cuentas creadas antes de este flujo, o las de quien administra y además juega, no tienen DNI: se pide una sola vez.
+
+Como sin cuenta, la vinculación se guarda al confirmarse el pago, y el final es el de inscripcion-y-pago.html (panel "Listo, con cuenta").
+Textos de 15 px para arriba; números y DNI en Geist Mono.
+Todos los nombres de personas son ficticios.
+-->
+
+<div class="lienzo">
+
+  <!-- 1 -->
+  <div class="estado">
+    <div class="rotulo"><span class="mono">1</span><span>Su DNI está en el padrón</span></div>
+    <div class="tel">
+      <div class="cab">
+        <div class="marca"><div class="logo"><div></div></div><span>Liga Amateur del Valle</span></div>
+        <div class="chip mono">Intermedia</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <div class="titulo">Abierto del Valle</div>
+        <div style="font-size: 16px; color: #6A7079;">Intermedia · quedan <span class="mono">6</span> lugares de <span class="mono">24</span></div>
+      </div>
+      <div class="tarjeta" style="padding: 18px;">
+        <div style="display: flex; align-items: center; gap: 9px;">
+          <div class="punto"></div>
+          <div style="font-size: 15px; font-weight: 600; color: #3F4348;">Te encontramos por tu DNI</div>
+        </div>
+        <div class="dato">
+          <div style="font-size: 20px; font-weight: 600; letter-spacing: -0.025em;">Federico Ibáñez</div>
+          <div class="mono gris" style="font-size: 15px;">Intermedia</div>
+        </div>
+        <div class="ayuda">Es tu perfil en este circuito, con tu historial y tus puntos de acá.</div>
+      </div>
+      <div class="pie">
+        <div class="consentimiento">Al inscribirte, Liga Amateur del Valle va a ver tu nombre, tu DNI y tu email. No ve nada de los otros circuitos en los que jugás.</div>
+        <div class="monto">
+          <div style="font-size: 16px; color: #6A7079;">Inscripción</div>
+          <div class="mono" style="font-size: 24px; font-weight: 500; letter-spacing: -0.02em;">$30.000</div>
+        </div>
+        <div class="btn-lima">Inscribirme y pagar</div>
+        <div class="reloj">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6A7079" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.5V12l3 2"></path></svg>
+          <div>Te guardamos el lugar <span class="mono">15</span> minutos mientras pagás.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="estado">
+    <div class="rotulo"><span class="mono">2</span><span>¿Sos vos?</span></div>
+    <div class="tel">
+      <div class="cab">
+        <div class="marca"><div class="logo"><div></div></div><span>Liga Amateur del Valle</span></div>
+        <div class="chip mono">Intermedia</div>
+      </div>
+      <div class="titulo">Abierto del Valle</div>
+      <div style="display: flex; flex-direction: column; gap: 12px; padding-top: 18px;">
+        <div class="pregunta">¿Sos Federico Ibáñez, de Intermedia?</div>
+        <div style="font-size: 16px; line-height: 1.45; color: #6A7079;">Lo encontramos por tu apellido en el padrón de Liga Amateur del Valle. Todavía no tiene tu DNI.</div>
+      </div>
+      <div class="pie">
+        <div class="consentimiento">Al inscribirte, Liga Amateur del Valle va a ver tu nombre, tu DNI y tu email. No ve nada de los otros circuitos en los que jugás.</div>
+        <div class="monto">
+          <div style="font-size: 16px; color: #6A7079;">Inscripción</div>
+          <div class="mono" style="font-size: 24px; font-weight: 500; letter-spacing: -0.02em;">$30.000</div>
+        </div>
+        <div class="btn-lima">Soy yo: inscribirme y pagar</div>
+        <div class="btn-sec">No soy yo</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="estado">
+    <div class="rotulo"><span class="mono">3</span><span>Torneo abierto, no está</span></div>
+    <div class="tel">
+      <div class="cab">
+        <div class="marca"><div class="logo"><div></div></div><span>Liga Amateur del Valle</span></div>
+        <div class="chip mono">Intermedia</div>
+      </div>
+      <div class="titulo">Abierto del Valle</div>
+      <div class="bloque" style="gap: 8px;">
+        <div class="seccion">Todavía no jugás en Liga Amateur del Valle</div>
+        <div class="ayuda">Este torneo es abierto: te sumamos con los datos de tu cuenta, en Intermedia y con <span class="mono">0</span> puntos.</div>
+      </div>
+      <div class="tarjeta" style="gap: 12px; padding: 18px;">
+        <div style="font-size: 15px; font-weight: 600; color: #3F4348;">Tus datos</div>
+        <div class="dato"><span class="gris" style="font-size: 15px;">Nombre</span><span style="font-size: 16px; font-weight: 500;">Federico Ibáñez</span></div>
+        <div class="dato"><span class="gris" style="font-size: 15px;">DNI</span><span class="mono" style="font-size: 16px;">28.4xx.xxx</span></div>
+        <div class="dato"><span class="gris" style="font-size: 15px;">Email</span><span style="font-size: 16px;">federico.ibanez@gmail.com</span></div>
+      </div>
+      <div class="pie">
+        <div class="consentimiento">Al inscribirte, Liga Amateur del Valle va a ver tu nombre, tu DNI y tu email. No ve nada de los otros circuitos en los que jugás.</div>
+        <div class="monto">
+          <div style="font-size: 16px; color: #6A7079;">Inscripción</div>
+          <div class="mono" style="font-size: 24px; font-weight: 500; letter-spacing: -0.02em;">$30.000</div>
+        </div>
+        <div class="btn-lima">Inscribirme y pagar</div>
+        <div class="reloj">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6A7079" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.5V12l3 2"></path></svg>
+          <div>Tu perfil se crea cuando se confirme el pago.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="estado">
+    <div class="rotulo"><span class="mono">4</span><span>La cuenta no tiene DNI</span></div>
+    <div class="tel">
+      <div class="cab">
+        <div class="marca"><div class="logo"><div></div></div><span>Liga Amateur del Valle</span></div>
+        <div class="chip mono">Intermedia</div>
+      </div>
+      <div class="titulo">Abierto del Valle</div>
+      <div class="bloque" style="gap: 8px; padding-top: 8px;">
+        <div class="seccion">Falta tu DNI</div>
+        <div class="ayuda">Te lo pedimos una sola vez: queda en tu cuenta y te encuentra en el padrón de cada circuito.</div>
+      </div>
+      <div class="bloque">
+        <div class="etiqueta">Tu DNI</div>
+        <div class="campo activo" style="height: 60px;"><span class="mono" style="font-size: 20px; letter-spacing: 0.02em;">28.456.123</span></div>
+        <div class="ayuda">No aparece en ninguna pantalla pública. Cada circuito lo ve recién cuando te inscribís.</div>
+      </div>
+      <div class="pie">
+        <div class="btn-lima">Buscarme en el padrón</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
