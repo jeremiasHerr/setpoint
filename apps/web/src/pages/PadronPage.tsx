@@ -155,6 +155,8 @@ function Padron({ sesion }: { sesion: Sesion }) {
             categorias={circuito.data.categorias}
             conRanking={circuito.data.usaRanking}
             seleccionadoId={editando?.id ?? null}
+            slug={slug}
+            organizacion={circuito.data.nombre}
             alEditar={elegir}
           />
 

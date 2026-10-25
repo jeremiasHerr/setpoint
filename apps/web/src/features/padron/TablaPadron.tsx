@@ -10,6 +10,8 @@ type Props = {
   categorias: string[];
   conRanking: boolean;
   seleccionadoId: number | null;
+  slug: string;
+  organizacion: string;
   alEditar: (jugador: JugadorPadron) => void;
 };
 
@@ -38,7 +40,7 @@ function ordenar(jugadores: JugadorPadron[]) {
   );
 }
 
-export function TablaPadron({ jugadores, categorias, conRanking, seleccionadoId, alEditar }: Props) {
+export function TablaPadron({ jugadores, categorias, conRanking, seleccionadoId, slug, organizacion, alEditar }: Props) {
   const [categoria, setCategoria] = useState<string | null>(null);
   const [busqueda, setBusqueda] = useState('');
 
@@ -53,7 +55,8 @@ export function TablaPadron({ jugadores, categorias, conRanking, seleccionadoId,
   const columnas = conRanking ? COLUMNAS_CON_RANKING : COLUMNAS_SIN_RANKING;
 
   return (
-    <Tarjeta className="flex flex-col overflow-hidden">
+    // Sin overflow-hidden: el menú de las últimas filas se saldría recortado.
+    <Tarjeta className="flex flex-col">
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-linea px-[18px] py-4">
         <div className="flex flex-wrap items-center gap-2">
           <Chip activo={categoria === null} onClick={() => setCategoria(null)}>
@@ -98,6 +101,8 @@ export function TablaPadron({ jugadores, categorias, conRanking, seleccionadoId,
           columnas={columnas}
           conRanking={conRanking}
           seleccionado={jugador.id === seleccionadoId}
+          slug={slug}
+          organizacion={organizacion}
           alEditar={() => alEditar(jugador)}
         />
       ))}
@@ -110,7 +115,7 @@ export function TablaPadron({ jugadores, categorias, conRanking, seleccionadoId,
         </p>
       )}
 
-      <div className="bg-fondo-tabla px-[18px] py-[15px]">
+      <div className="rounded-b-tarjeta bg-fondo-tabla px-[18px] py-[15px]">
         <span className="font-mono text-[13px] text-gris-500">
           mostrando <Numero>{visibles.length}</Numero> de <Numero>{jugadores.length}</Numero>
         </span>

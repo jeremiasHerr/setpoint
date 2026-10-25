@@ -1,6 +1,6 @@
 import type { DatosCrearJugador, DatosEditarJugador } from '@setpoint/shared';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { crearJugador, desvincularCuenta, editarJugador, listarPadron } from './api';
+import { crearJugador, desvincularCuenta, editarJugador, generarLink, listarPadron } from './api';
 
 export function usePadron(slug: string) {
   return useQuery({
@@ -40,6 +40,15 @@ export function useDesvincularCuenta(slug: string) {
   const refrescar = useRefrescar(slug);
   return useMutation({
     mutationFn: (id: number) => desvincularCuenta(slug, id),
+    onSuccess: refrescar,
+  });
+}
+
+// Crea el link personal, o uno nuevo que deja sin efecto al anterior (decisión 050).
+export function useGenerarLink(slug: string) {
+  const refrescar = useRefrescar(slug);
+  return useMutation({
+    mutationFn: (id: number) => generarLink(slug, id),
     onSuccess: refrescar,
   });
 }
