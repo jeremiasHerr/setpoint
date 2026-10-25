@@ -30,7 +30,7 @@ Ordenado por entrega.
 | 50% | F11 | [Cuándo juego](jugador/cuando-juego.html) | App jugador | 390 px |
 | 50% · 75% | F02, F12 | [Cuenta e ingreso](jugador/cuenta-e-ingreso.html) | App jugador · ingresar con email y código, los errores del código y quien solo administra. Implementado con código (F12) ([decisión 049](../decisiones/049-identidad-e-ingreso-con-codigo.md)) | 1290 px |
 | 75% | F12 | [El torneo](jugador/el-torneo.html) | Web jugador por link, y app · tres estados. Implementada en la web en `/c/:slug/torneos/:id`, sin el estado con sesión, que llega con la identificación | 1290 px |
-| 75% | F12 | [Identificación](jugador/identificacion.html) · *nueva* | Web jugador por link, y app · quince estados: email y código, encontrar el perfil, perfil vinculado a otra cuenta, no está en la lista según el modo, y quien vuelve | 1290 px |
+| 75% | F12 | [Identificación](jugador/identificacion.html) · *nueva* | Web jugador por link, y app · quince estados: email y código, encontrar el perfil, perfil vinculado a otra cuenta, no está en la lista según el modo, y quien vuelve. Implementada en la web en `/c/:slug/torneos/:id/inscripcion`, salvo el botón de reclamo (llega con la revisión) y los modos con aprobación y abierto | 1290 px |
 | 75% | F02, F12 | [Link personal](jugador/link-personal.html) · *nueva* | Web jugador por link · cinco estados | 1290 px |
 | 75% | F12 | [Inscripción y pago](jugador/inscripcion-y-pago.html) | Web jugador por link, y app · cuatro estados: la espera, listo, pago rechazado y reserva vencida | 1290 px |
 | 75% | F12 | [Código](email/codigo.html) · *nueva* | Email · el código para inscribirse y para entrar a la app, en HTML para email | 600 px por email |
