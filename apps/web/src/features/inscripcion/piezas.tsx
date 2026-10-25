@@ -75,10 +75,11 @@ export function CuentaVerificada({ email, onCambiar }: { email: string; onCambia
   );
 }
 
-export function Consentimiento({ organizacion }: { organizacion: string }) {
+// "Al mandarla" en una solicitud, que todavía no es una inscripción.
+export function Consentimiento({ organizacion, al = 'Al inscribirte' }: { organizacion: string; al?: string }) {
   return (
     <p className="rounded-[12px] border border-linea px-4 py-3.5 text-[15px] leading-[1.42] text-gris-700">
-      Al inscribirte, {organizacion} va a ver tu nombre y tu email.
+      {al}, {organizacion} va a ver tu nombre y tu email.
     </p>
   );
 }

@@ -14,6 +14,7 @@ import {
   Titulo,
 } from './piezas';
 import { AvisarALaOrganizacion, AvisoEnviado } from './AvisarALaOrganizacion';
+import { InscribirmeComoNuevo } from './InscribirmeComoNuevo';
 import { mensajeReserva } from './mensajeReserva';
 import { useBusqueda, useReservar } from './useInscripcion';
 
@@ -22,12 +23,14 @@ type Props = {
   token: string;
   // El email verificado: el aviso de reclamo dice a dónde le escribe la organización.
   email: string;
+  // El nombre de la cuenta: completa el formulario de quien no está en la lista.
+  nombre: string;
   situacion: SituacionEnElTorneo;
   onReservado: (inscripcionId: number) => void;
 };
 
-// Después del código: pasos 3 a 10 de docs/pantallas/jugador/identificacion.html (decisión 051).
-export function EncontrarPerfil({ torneo, token, email, situacion, onReservado }: Props) {
+// Después del código: pasos 3 a 13 de docs/pantallas/jugador/identificacion.html (decisiones 051 y 054).
+export function EncontrarPerfil({ torneo, token, email, nombre, situacion, onReservado }: Props) {
   const reservar = useReservar(torneo.organizacion.slug, String(torneo.id), token);
   const [modo, setModo] = useState<'propuesta' | 'buscar' | 'vinculado' | 'no-esta'>(
     situacion.propuestas.length > 0 ? 'propuesta' : 'buscar',
@@ -174,6 +177,20 @@ export function EncontrarPerfil({ torneo, token, email, situacion, onReservado }
     );
   }
 
+
+  // Con aprobación o abierto, quien no está en la lista deja su nombre (decisión 054).
+  if (modo === 'no-esta' && torneo.modoInscripcion !== 'cerrada') {
+    return (
+      <InscribirmeComoNuevo
+        torneo={torneo}
+        token={token}
+        email={email}
+        nombre={nombre}
+        onReservado={onReservado}
+        onVolver={() => setModo('buscar')}
+      />
+    );
+  }
 
   if (modo === 'no-esta') {
     return (
