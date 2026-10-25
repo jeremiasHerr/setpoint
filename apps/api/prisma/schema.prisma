@@ -88,6 +88,19 @@ enum EstadoTorneo {
   CANCELADO
 }
 
+// Cómo quedó un perfil del padrón vinculado a una persona (decisiones 050 y 051).
+enum Vinculacion {
+  LINK_PERSONAL
+  BUSQUEDA
+  PROPUESTA // el "¿Sos…?" a quien ya juega en otro circuito
+}
+
+// Por qué una vinculación quedó para que la revise la organización (decisión 051).
+enum MotivoRevision {
+  HOMONIMO
+  RECLAMO
+}
+
 enum EstadoInscripcion {
   PENDIENTE_PAGO
   PAGADA
@@ -184,6 +197,7 @@ model Usuario {
   actualizadoEn DateTime @updatedAt
 
   jugadores           Jugador[]
+  inscripciones       Inscripcion[]
   administra          AdminOrganizacion[]
   partidosAnotados    Partido[]           @relation("PartidoAnotadoPor")
   partidosConfirmados Partido[]           @relation("PartidoConfirmadoPor")
@@ -368,6 +382,11 @@ model Jugador {
   fotoUrl        String?
   activo         Boolean @default(true)
 
+  // Cuándo y cómo se vinculó con la persona, para el aviso de vinculaciones nuevas (decisión 051).
+  vinculadoEn  DateTime?
+  vinculadoPor Vinculacion?
+  revision     MotivoRevision?
+
   creadoEn      DateTime @default(now())
   actualizadoEn DateTime @updatedAt
 
@@ -381,7 +400,9 @@ model Jugador {
   partidosComoB   Partido[]           @relation("PartidoJugadorB")
   partidosGanados Partido[]           @relation("PartidoGanador")
 
-  @@unique([organizacionId, dni])
+  // Una persona tiene como mucho un perfil por organización (decisión 051). El DNI ya no identifica
+  // a nadie (decisión 049): queda como dato opcional, sin unicidad.
+  @@unique([organizacionId, usuarioId])
   @@index([organizacionId, apellido]) // búsqueda pública por apellido
   @@index([organizacionId, categoriaId]) // listar padrón por categoría
   @@index([usuarioId]) // del login a la ficha
@@ -474,14 +495,19 @@ model Inscripcion {
   estado    EstadoInscripcion @default(PENDIENTE_PAGO)
 
   reservaVence     DateTime?
+  // Quién se inscribe. Si el perfil todavía no tenía cuenta, queda vinculado a esta persona recién
+  // cuando se confirma el pago, y vinculaPor dice cómo lo eligió (decisión 051).
+  usuarioId        Int?
+  vinculaPor       Vinculacion?
   ordenListaEspera Int?
   posicionSiembra  Int? // 1..N según ranking al momento del sorteo
 
   creadoEn      DateTime @default(now())
   actualizadoEn DateTime @updatedAt
 
-  torneo  Torneo  @relation(fields: [torneoId], references: [id], onDelete: Cascade)
-  jugador Jugador @relation(fields: [jugadorId], references: [id])
+  torneo  Torneo   @relation(fields: [torneoId], references: [id], onDelete: Cascade)
+  jugador Jugador  @relation(fields: [jugadorId], references: [id])
+  usuario Usuario? @relation(fields: [usuarioId], references: [id])
   pago    Pago?
 
   @@unique([torneoId, jugadorId])
