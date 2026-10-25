@@ -108,7 +108,7 @@ en_lista_espera → pendiente_pago   (se liberó un cupo)
 
 Un job periódico expira las reservas vencidas, libera el cupo y **notifica al primero de la lista de espera**. Al expirar, también se descarta la vinculación pendiente, y el perfil vuelve a aparecer en la búsqueda ([decisión 051](decisiones/051-vinculacion-con-el-padron.md)). Si el perfil era pendiente (alguien que no estaba en el padrón), queda descartado ([decisión 054](decisiones/054-perfil-pendiente.md)); lo mismo al rechazarse el pago.
 
-**Solicitudes** (torneos `con_aprobacion`, [decisión 054](decisiones/054-perfil-pendiente.md)). Quien no está en el padrón deja una solicitud (`solicitada`), con un perfil pendiente, que no reserva lugar ni cobra. Si la organización la aprueba, recibe un email con el link para pagar: al abrirlo (con la sesión, o con un código si lo abre en otro navegador) la inscripción pasa a `pendiente_pago`, con la reserva de siempre (`POST /api/inscripcion/:slug/inscripciones/:id/reservar`). Entra al padrón al confirmarse el pago.
+**Solicitudes** (torneos `con_aprobacion`, [decisión 054](decisiones/054-perfil-pendiente.md)). Quien no está en el padrón deja una solicitud (`solicitada`), con un perfil pendiente, que no reserva lugar ni cobra. Si la organización la aprueba, recibe un email con el link para pagar: al abrirlo (con la sesión, o con un código si lo abre en otro navegador) y tocar "Reservar y pagar", la inscripción pasa a `pendiente_pago`, con la reserva de siempre (`POST /api/inscripcion/:slug/inscripciones/:id/reservar`). Entra al padrón al confirmarse el pago.
 
 ---
 
