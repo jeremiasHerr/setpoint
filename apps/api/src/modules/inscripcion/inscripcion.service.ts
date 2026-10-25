@@ -1,5 +1,6 @@
 import { EstadoInscripcion, EstadoTorneo, Prisma, Vinculacion } from '@prisma/client';
 import type { BusquedaEnElPadron, DatosReservar, PerfilEncontrado, Reserva, SituacionEnElTorneo } from '@setpoint/shared';
+import { DEL_PADRON_ACTIVOS } from '../../lib/padron';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
 import { buscar } from './busqueda';
@@ -35,7 +36,7 @@ async function padronDeLaCategoria(organizacionId: number, categoriaId: number) 
     where: {
       organizacionId,
       categoriaId,
-      activo: true,
+      ...DEL_PADRON_ACTIVOS,
       NOT: { usuarioId: null, inscripciones: { some: reservaVigente(ahora) } },
     },
     select: { id: true, nombre: true, apellido: true, usuarioId: true },

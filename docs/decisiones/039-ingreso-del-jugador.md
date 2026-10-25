@@ -1,6 +1,6 @@
 # 039 — El jugador ingresa por un endpoint propio
 
-**Estado:** aceptada — 19 de octubre de 2026. Desde la [decisión 049](049-identidad-e-ingreso-con-codigo.md), el jugador ingresa con su email y un código de 6 dígitos, no con contraseña: este endpoint cambia de contrato. Lo demás sigue: es un ingreso propio que devuelve un perfil por circuito.
+**Estado:** aceptada — 19 de octubre de 2026. Desde la [decisión 049](049-identidad-e-ingreso-con-codigo.md), el jugador ingresa con su email y un código de 6 dígitos, no con contraseña: este endpoint cambia de contrato. Lo demás sigue: es un ingreso propio que devuelve un perfil por circuito. Desde la [decisión 054](054-perfil-pendiente.md), quien no tiene perfil de jugador ya no ve un error en la app: entra, y ve sus inscripciones en curso o que todavía no juega en ningún circuito. Eso incluye al administrador que no juega.
 
 ## Contexto
 

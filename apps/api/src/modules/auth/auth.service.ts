@@ -11,6 +11,7 @@ import type {
   RespuestaRegistro,
 } from '@setpoint/shared';
 import { enviarCorreo } from '../../lib/correo';
+import { DEL_PADRON_ACTIVOS } from '../../lib/padron';
 import { prisma } from '../../lib/prisma';
 import { slugDisponible } from '../../lib/slug';
 import {
@@ -103,7 +104,7 @@ export async function ingresar(datos: DatosIngreso): Promise<RespuestaRegistro> 
 // no cuentan: ya no juegan en ese circuito.
 async function perfilesDe(usuarioId: number): Promise<PerfilDeJugador[]> {
   const jugadores = await prisma.jugador.findMany({
-    where: { usuarioId, activo: true },
+    where: { usuarioId, ...DEL_PADRON_ACTIVOS },
     orderBy: { creadoEn: 'asc' },
     include: { organizacion: true, categoria: true },
   });

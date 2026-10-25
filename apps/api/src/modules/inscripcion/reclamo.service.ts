@@ -1,5 +1,6 @@
 import { MotivoRevision } from '@prisma/client';
 import type { DatosReclamarPerfil } from '@setpoint/shared';
+import { DEL_PADRON_ACTIVOS } from '../../lib/padron';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
 
@@ -7,7 +8,7 @@ import { ErrorHttp } from '../../middleware/errores';
 // en "Para revisar" con su email verificado y no cambia nada más: decide la organización.
 export async function reclamarPerfil(slug: string, usuarioId: number, datos: DatosReclamarPerfil) {
   const jugador = await prisma.jugador.findFirst({
-    where: { id: datos.jugadorId, organizacion: { slug }, activo: true },
+    where: { id: datos.jugadorId, organizacion: { slug }, ...DEL_PADRON_ACTIVOS },
   });
   if (!jugador) throw new ErrorHttp(404, 'JUGADOR_NO_ENCONTRADO');
   // Un perfil libre no se reclama: se inscribe con él y queda vinculado.

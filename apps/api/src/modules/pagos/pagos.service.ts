@@ -2,6 +2,7 @@ import { EstadoInscripcion, EstadoPago, MedioPago, MotivoRevision, type Prisma, 
 import type { DatosPagoSimulado, EstadoDeLaInscripcion, InicioDePago, InscripcionParaPagar } from '@setpoint/shared';
 import { enviarCorreo } from '../../lib/correo';
 import { consultarPago, crearPreferencia, hayMercadoPago } from '../../lib/mercadopago';
+import { DEL_PADRON_ACTIVOS } from '../../lib/padron';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
 import { esPosibleHomonimo } from '../inscripcion/busqueda';
@@ -182,7 +183,7 @@ async function vincularAlPagar(tx: Prisma.TransactionClient, inscripcion: Inscri
 
   const vinculadoPor = inscripcion.vinculaPor ?? Vinculacion.BUSQUEDA;
   const companeros = await tx.jugador.findMany({
-    where: { organizacionId: jugador.organizacionId, categoriaId: jugador.categoriaId, activo: true },
+    where: { organizacionId: jugador.organizacionId, categoriaId: jugador.categoriaId, ...DEL_PADRON_ACTIVOS },
     select: { id: true, nombre: true, apellido: true },
   });
   // Con el link personal el perfil lo eligió la organización: no hay homónimo que revisar.

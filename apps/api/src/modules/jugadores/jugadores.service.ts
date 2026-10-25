@@ -1,5 +1,6 @@
 import { EstadoPartido, EstadoTorneo, MotivoRevision, type Prisma } from '@prisma/client';
 import type { DatosCrearJugador, DatosEditarJugador, JugadorPadron } from '@setpoint/shared';
+import { DEL_PADRON } from '../../lib/padron';
 import { organizacionAdministrada } from '../../lib/permisos';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
@@ -13,7 +14,7 @@ const PARTIDO_JUGADO = { estado: { in: [EstadoPartido.JUGADA, EstadoPartido.WALK
 export async function padronDe(organizacionId: number): Promise<JugadorPadron[]> {
   const [jugadores, movimientos, abiertos] = await Promise.all([
     prisma.jugador.findMany({
-      where: { organizacionId },
+      where: { organizacionId, ...DEL_PADRON },
       orderBy: [{ apellido: 'asc' }, { nombre: 'asc' }],
       include: {
         categoria: { select: { nombre: true } },
@@ -111,7 +112,7 @@ async function verificarJugador(organizacionId: number, jugadorId: number) {
   if (!Number.isInteger(jugadorId)) throw new ErrorHttp(404, 'JUGADOR_NO_ENCONTRADO');
 
   // El filtro por organización es el aislamiento: el id solo no alcanza.
-  const jugador = await prisma.jugador.findFirst({ where: { id: jugadorId, organizacionId }, select: { id: true } });
+  const jugador = await prisma.jugador.findFirst({ where: { id: jugadorId, organizacionId, ...DEL_PADRON }, select: { id: true } });
   if (!jugador) throw new ErrorHttp(404, 'JUGADOR_NO_ENCONTRADO');
 }
 

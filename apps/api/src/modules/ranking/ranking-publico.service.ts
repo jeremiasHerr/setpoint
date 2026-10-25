@@ -1,4 +1,5 @@
 import type { RankingPublico } from '@setpoint/shared';
+import { DEL_PADRON_ACTIVOS } from '../../lib/padron';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
 import { tablaDeCategoria } from './ranking';
@@ -21,7 +22,7 @@ export async function rankingPublico(slug: string): Promise<RankingPublico> {
     prisma.etapa.findMany({ where: { organizacionId, activa: true }, orderBy: { orden: 'asc' }, select: { id: true, nombre: true } }),
     prisma.categoria.findMany({ where: { organizacionId, activa: true }, orderBy: { orden: 'asc' }, select: { id: true, nombre: true } }),
     prisma.jugador.findMany({
-      where: { organizacionId, activo: true, categoriaId: { not: null } },
+      where: { organizacionId, ...DEL_PADRON_ACTIVOS, categoriaId: { not: null } },
       select: { id: true, nombre: true, apellido: true, categoriaId: true },
     }),
     prisma.movimientoRanking.findMany({

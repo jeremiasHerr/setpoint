@@ -8,6 +8,7 @@ import type {
   ResolverRevision,
   Revisiones,
 } from '@setpoint/shared';
+import { DEL_PADRON_ACTIVOS } from '../../lib/padron';
 import { organizacionAdministrada } from '../../lib/permisos';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
@@ -223,7 +224,7 @@ export async function resolverRevision(slug: string, usuarioId: number, jugadorI
         let destinoId: number;
         if (datos.accion === 'pasar_inscripcion') {
           const otro = await tx.jugador.findFirst({
-            where: { id: datos.aJugadorId, organizacionId, categoriaId: jugador.categoriaId, activo: true },
+            where: { id: datos.aJugadorId, organizacionId, categoriaId: jugador.categoriaId, ...DEL_PADRON_ACTIVOS },
           });
           if (!otro || otro.id === jugador.id) throw new ErrorHttp(404, 'JUGADOR_NO_ENCONTRADO');
           if (otro.usuarioId !== null) throw new ErrorHttp(409, 'PERFIL_VINCULADO');

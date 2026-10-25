@@ -1,6 +1,6 @@
 # 051 — Vinculación con el padrón: búsqueda acotada y revisión por excepción
 
-**Estado:** aceptada — 25 de octubre de 2026. Pendiente de código.
+**Estado:** aceptada — 25 de octubre de 2026. Ajustada por la [decisión 054](054-perfil-pendiente.md): en los modos con aprobación y abierto, el perfil existe desde la solicitud o la reserva, como pendiente, y si se abandona queda descartado.
 
 ## Contexto
 
@@ -102,8 +102,8 @@ Buscador acotado, perfiles vinculados marcados, botón de reclamo, vinculación 
   - **Cuando la organización le pasa el perfil a quien lo reclamó**, la vinculación queda como hecha por la organización (`Vinculacion.ORGANIZACION`).
   - **Las inscripciones de la cuenta que tenía el perfil** quedan en el perfil o se dan de baja. La tercera salida de la pantalla de referencia, "va con la otra cuenta", no está: necesita elegir a qué perfil va, y es el caso menos común.
 - ~~**La inscripción guarda el perfil elegido hasta el pago.**~~ Hecho: `Inscripcion.usuarioId` y `vinculaPor`, y la búsqueda excluye los perfiles sin cuenta con una reserva vigente. La vinculación se guarda al confirmarse el pago (`confirmarPago`), con la marca de homónimo si corresponde, y la persona toma el nombre del perfil si todavía no tenía.
-- **En modo abierto, la inscripción existe antes que el perfil.** `Inscripcion.jugadorId` es obligatorio: o se crea el `Jugador` como pendiente al reservar y se borra si la reserva vence, o el campo pasa a opcional hasta el pago. Se decide al implementar.
-- **Estado de solicitud** para los torneos con aprobación.
+- ~~**En modo abierto, la inscripción existe antes que el perfil.**~~ Resuelto en la [decisión 054](054-perfil-pendiente.md): el `Jugador` se crea pendiente con la reserva y, si se abandona, se descarta en vez de borrarse.
+- ~~**Estado de solicitud** para los torneos con aprobación.~~ Hecho: `SOLICITADA`, `APROBADA` y `NO_APROBADA` ([decisión 054](054-perfil-pendiente.md)).
 - **Desvincular** ya existe: `DELETE /api/organizaciones/:slug/jugadores/:id/cuenta` pone `usuarioId` en null ([decisión 007](007-vinculacion-de-cuentas-en-f02.md)).
 - ~~**Límite por IP** de la búsqueda.~~ Hecho ([decisión 052](052-limite-de-pedidos.md)).
 - ~~**Rutas públicas** para la convocatoria y la búsqueda; las que reservan piden la sesión.~~ Hecho: `GET /api/publico/:slug/torneos/:id` y `/padron?q=`, sin login; `GET` y `POST /api/inscripcion/:slug/torneos/:id`, con la sesión del código pero sin pedir un perfil, para ver la situación de la persona en el torneo y reservar el lugar.
