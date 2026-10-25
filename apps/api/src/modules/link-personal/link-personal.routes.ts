@@ -3,13 +3,12 @@ import { autenticar } from '../../middleware/autenticar';
 import { limitePorIp } from '../../middleware/limite';
 import { linkPersonal, situacionDelLink } from './link-personal.service';
 
-// Se monta en /api/links/:codigo. Sin login se ve de quién es el link; con la sesión que deja el
-// código, si le sirve a quien lo abrió. Con límite por IP, como todo lo que resuelve un código.
+// Se monta en /api/links/:codigo. Sin login se ve de quién es el link, con límite por IP como todo
+// lo público que resuelve un código (decisión 052). Con la sesión que deja el código, si le sirve a
+// quien lo abrió: esa ya pasó por el límite del ingreso.
 export const linkPersonalRouter = Router({ mergeParams: true });
 
-linkPersonalRouter.use(limitePorIp);
-
-linkPersonalRouter.get('/', async (req, res) => {
+linkPersonalRouter.get('/', limitePorIp, async (req, res) => {
   const { codigo } = req.params as { codigo: string };
   res.json(await linkPersonal(codigo));
 });
