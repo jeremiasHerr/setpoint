@@ -28,7 +28,7 @@ Ordenado por entrega.
 | 50% | F08, F10 | [Los dos cuadros](publico/cuadros.html) | Web pública | 1860 px |
 | 50% | F09 | [Ranking](jugador/ranking.html) | App jugador, y web pública en `/c/:slug/ranking` ([decisión 033](../decisiones/033-ranking-publico.md)). En la app, sin el "+15" ([decisión 043](../decisiones/043-ranking-sin-el-cambio-del-ultimo-torneo.md)) | 390 px |
 | 50% | F11 | [Cuándo juego](jugador/cuando-juego.html) | App jugador | 390 px |
-| 50% · 75% | F02, F12 | [Cuenta e ingreso](jugador/cuenta-e-ingreso.html) | App jugador · ingresar con email y código, los errores del código y quien solo administra. El ingreso está hecho para el 50% con contraseña; pasa a código con F12 ([decisión 049](../decisiones/049-identidad-e-ingreso-con-codigo.md)) | 1290 px |
+| 50% · 75% | F02, F12 | [Cuenta e ingreso](jugador/cuenta-e-ingreso.html) | App jugador · ingresar con email y código, los errores del código y quien solo administra. Implementado con código (F12) ([decisión 049](../decisiones/049-identidad-e-ingreso-con-codigo.md)) | 1290 px |
 | 75% | F12 | [El torneo](jugador/el-torneo.html) | Web jugador por link, y app · tres estados | 1290 px |
 | 75% | F12 | [Identificación](jugador/identificacion.html) · *nueva* | Web jugador por link, y app · quince estados: email y código, encontrar el perfil, perfil vinculado a otra cuenta, no está en la lista según el modo, y quien vuelve | 1290 px |
 | 75% | F02, F12 | [Link personal](jugador/link-personal.html) · *nueva* | Web jugador por link · cinco estados | 1290 px |
