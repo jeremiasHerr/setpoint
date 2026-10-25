@@ -5,7 +5,8 @@ import { Numero } from '../components/Numero';
 import { Aviso, BotonPrincipal, BotonSecundario, Caja, Monto } from '../features/inscripcion/piezas';
 import { leerSesionJugador } from '../features/inscripcion/sesionJugador';
 import { useCuentaRegresiva } from '../features/inscripcion/useCuentaRegresiva';
-import { useIniciarPago, useInscripcionParaPagar, useSimularPago } from '../features/pago/usePago';
+import { mensajeReserva } from '../features/inscripcion/mensajeReserva';
+import { useIniciarPago, useInscripcionParaPagar, useReservarAprobada, useSimularPago } from '../features/pago/usePago';
 import { importe } from '../features/torneo-publico/convocatoria';
 import { ErrorApi } from '../lib/api';
 
@@ -55,6 +56,9 @@ function Estado({ datos, volviendo, token }: { datos: InscripcionParaPagar; volv
   if (datos.estado === 'pagada') return <Listo datos={datos} />;
   if (datos.estado === 'rechazada') return <Rechazado datos={datos} />;
   if (datos.estado === 'vencida') return <Vencida datos={datos} />;
+  if (datos.estado === 'solicitada') return <EnRevision datos={datos} />;
+  if (datos.estado === 'aprobada') return <Aprobada datos={datos} token={token} />;
+  if (datos.estado === 'no_aprobada') return <NoAprobada datos={datos} />;
   if (datos.estado === 'cancelada') {
     return <p className="text-[15px] text-gris-700">Esta inscripción se dio de baja. Si es un error, hablá con la organización.</p>;
   }
@@ -62,6 +66,15 @@ function Estado({ datos, volviendo, token }: { datos: InscripcionParaPagar; volv
 }
 
 const linkInscripcion = (datos: InscripcionParaPagar) => `/c/${datos.torneo.organizacion.slug}/torneos/${datos.torneo.id}/inscripcion`;
+const linkTorneo = (datos: InscripcionParaPagar) => `/c/${datos.torneo.organizacion.slug}/torneos/${datos.torneo.id}`;
+
+function VolverAlTorneo({ datos }: { datos: InscripcionParaPagar }) {
+  return (
+    <Link to={linkTorneo(datos)} className="mt-auto flex h-[52px] items-center justify-center rounded-[12px] border border-linea text-base font-medium hover:bg-fondo">
+      Volver al torneo
+    </Link>
+  );
+}
 
 function Resumen({ datos }: { datos: InscripcionParaPagar }) {
   return (
@@ -129,6 +142,67 @@ function Pagar({ datos, token }: { datos: InscripcionParaPagar; token: string })
           </BotonPrincipal>
         </div>
       )}
+    </>
+  );
+}
+
+// Torneo con aprobación: la solicitud todavía no tiene lugar ni se cobra (decisión 054).
+function EnRevision({ datos }: { datos: InscripcionParaPagar }) {
+  return (
+    <>
+      <div className="flex flex-col gap-4 pt-10">
+        <span className="flex size-[46px] items-center justify-center rounded-full bg-fondo">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <circle cx="12" cy="12" r="8.5" />
+            <path d="M12 7.5V12l3 2" />
+          </svg>
+        </span>
+        <h1 className="text-[28px] leading-[1.12] font-semibold tracking-[-0.032em]">Tu solicitud está en revisión</h1>
+        <p className="text-base leading-[1.45] text-gris-500">
+          {datos.torneo.organizacion.nombre} la revisa y te avisamos a {datos.email}.
+        </p>
+      </div>
+      <Resumen datos={datos} />
+      <Caja>Todavía no tenés lugar: se asignan por orden de pago. Si te aprueban, pagá apenas te llegue el email.</Caja>
+      <VolverAlTorneo datos={datos} />
+    </>
+  );
+}
+
+// La aprobada reserva el lugar recién ahora, como desde el link del email. Si la reserva vence sin
+// pagar, vuelve a este estado.
+function Aprobada({ datos, token }: { datos: InscripcionParaPagar; token: string }) {
+  const reservar = useReservarAprobada(datos.torneo.organizacion.slug, String(datos.id), token);
+  return (
+    <>
+      <div className="flex flex-col gap-2">
+        <h1 className="text-[28px] leading-[1.12] font-semibold tracking-[-0.032em]">Te aprobaron la solicitud</h1>
+        <p className="text-base leading-[1.45] text-gris-500">
+          Los lugares se asignan por orden de pago. Al reservar te guardamos el tuyo unos minutos mientras pagás.
+        </p>
+      </div>
+      <Resumen datos={datos} />
+      <Aviso mensaje={mensajeReserva(reservar.error)} />
+      <div className="mt-auto flex flex-col gap-3">
+        <Monto precio={datos.precio} />
+        <BotonPrincipal onClick={() => reservar.mutate()} disabled={reservar.isPending}>
+          {reservar.isPending ? 'Reservando…' : 'Reservar y pagar'}
+        </BotonPrincipal>
+      </div>
+    </>
+  );
+}
+
+// Sin explicación (02-dominio §2), y sin rojo: no es un vencimiento.
+function NoAprobada({ datos }: { datos: InscripcionParaPagar }) {
+  return (
+    <>
+      <div className="flex flex-col gap-4 pt-10">
+        <h1 className="text-[28px] leading-[1.12] font-semibold tracking-[-0.032em]">La organización no aprobó tu solicitud</h1>
+        <p className="text-base leading-[1.45] text-gris-500">No se te cobró nada. Si tenés dudas, hablá con {datos.torneo.organizacion.nombre}.</p>
+      </div>
+      <Resumen datos={datos} />
+      <VolverAlTorneo datos={datos} />
     </>
   );
 }
