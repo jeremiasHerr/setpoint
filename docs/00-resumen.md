@@ -13,13 +13,13 @@ SetPoint es una plataforma para que cualquier circuito organice sus torneos y su
 | | Desde dónde | Para qué |
 |---|---|---|
 | **La organización** | Web | Carga sus jugadores, crea los torneos, hace el sorteo, carga resultados y cierra |
-| **El jugador** | App móvil (APK) | Se inscribe y paga, anota la fecha de sus partidos, consulta cuándo juega |
+| **El jugador** | App móvil (APK), y el link del torneo en el navegador | Se inscribe y paga desde el link, sin cuenta; con la app anota la fecha de sus partidos y consulta cuándo juega |
 | **Cualquiera** | Link público, sin cuenta | Ve el ranking, los cuadros y la ficha de cada jugador |
 
 ## Los 4 flujos principales
 
 1. **Puesta en marcha.** La organización se registra y sube la planilla que ya usa. La IA reconoce a los jugadores, sus puntos y el calendario del circuito; la organización revisa solo lo dudoso.
-2. **Inscripción.** La organización publica un torneo y comparte el link. El jugador se inscribe y paga con MercadoPago; el lugar se confirma solo, sin comprobantes.
+2. **Inscripción.** La organización publica un torneo y comparte el link. El jugador se identifica con su DNI, sin crear cuenta, y paga con MercadoPago; el lugar se confirma solo y el comprobante le llega por email.
 3. **Competencia.** El sistema arma las zonas, los jugadores anotan la fecha de cada partido, la organización carga los resultados. Las posiciones y los desempates se calculan solos, y los cuadros avanzan.
 4. **Cierre.** La organización cierra el torneo y cada jugador recibe los puntos de la instancia que alcanzó. El ranking se actualiza solo, con cada punto trazable hasta su origen.
 

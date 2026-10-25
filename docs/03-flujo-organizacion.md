@@ -11,7 +11,7 @@
 | Rol | Accede desde | Responsabilidad |
 |---|---|---|
 | **Organización** | Web | Padrón, torneos, sorteo, resultados, cierre |
-| **Jugador** | App móvil | Se inscribe, paga, coordina fechas, consulta |
+| **Jugador** | App móvil, y web por link | Coordina fechas y consulta. Se inscribe y paga con cuenta o sin ella ([04](04-flujo-jugador.md) §5) |
 
 Solo dos roles con autenticación.
 
@@ -20,7 +20,7 @@ Solo dos roles con autenticación.
 | Entidad | Qué es |
 |---|---|
 | **Club / sede** | Dirección y canchas. Dato, no usuario |
-| **Jugador (perfil de padrón)** | La persona en el padrón. Existe sin cuenta |
+| **Jugador (perfil de padrón)** | La persona en el padrón. Existe sin cuenta, y sin cuenta se inscribe y paga |
 
 El sistema es **multi-organización**: `organizacion_id` es la clave de aislamiento de torneos, categorías, rankings, padrón y liquidaciones. Debe estar en el schema desde el primer día.
 
@@ -105,14 +105,20 @@ Para las fases eliminatorias, el torneo declara su **sede designada**. En fase d
 
 ## 5. Gestión del padrón
 
-La organización es dueña de su padrón. En modo `cerrada` —el que usa POLENTA— es además la única vía de alta; en modo `abierta` los jugadores se agregan solos al inscribirse ([07-configurabilidad.md](07-configurabilidad.md) §2.5). En todos los modos, la organización puede:
+La organización es dueña de su padrón. En modo `cerrada` —el que usa POLENTA— es además la única vía de alta; en modo `abierta` los jugadores se agregan solos al inscribirse ([07-configurabilidad.md](07-configurabilidad.md) §2.6). En todos los modos, la organización puede:
 
 - Alta manual de jugadores
 - **Importación desde planilla**, automática por excepción: se importa solo lo que pasa todos los controles, y la organización revisa lo dudoso ([06-ia.md](06-ia.md) §1)
 - Asignación y reasignación de categoría
 - Baja o desactivación
+- **Compartir el link personal** de cada jugador y generar uno nuevo
+- **Revisar y revertir vinculaciones**
 
 En el caso de validación, el padrón de POLENTA tiene 77 jugadores en 2 categorías.
+
+**Link personal** ([decisión 050](decisiones/050-link-personal-de-inscripcion.md), *pendiente de código*). En cada fila, "Compartir link" abre WhatsApp con el mensaje armado (*"Hola Lucas, inscribite al Primavera 26 desde acá: …"*): en el chat del jugador si tiene teléfono, o para elegir el contacto si no. También "Copiar link" y "Generar link nuevo", que deja sin efecto el anterior. Quien entra por su link se identifica sin buscarse. Para POLENTA, cuyo padrón no tiene DNI, conviene mandarlos antes del primer torneo.
+
+**Vinculaciones** ([decisión 049](decisiones/049-identificacion-en-la-inscripcion.md), *pendiente de código*). El jugador asocia su DNI a su perfil al inscribirse por primera vez, sin pasar por la organización. La organización solo mira las dudosas: si alguien eligió un perfil con otro igual o parecido en la categoría, la vinculación queda **para revisar** (la inscripción sigue). Desde *Revisar vinculación* la confirma, la pasa al otro perfil o da de alta a la persona como jugador nuevo. El panel de cada jugador muestra su DNI enmascarado, su email y si tiene cuenta, y permite desvincularlo. Hoy existe solo desvincular la cuenta ([decisión 007](decisiones/007-vinculacion-de-cuentas-en-f02.md)).
 
 ### API del padrón
 
@@ -198,6 +204,8 @@ Funciones:
 - Inscribir manualmente a quien pagó por fuera del sistema
 - Dar de baja y **promover automáticamente al primero de la lista de espera**
 - Enviar recordatorio a quienes no completaron el pago
+- Aprobar o rechazar las **solicitudes**, en los torneos con aprobación: al aprobar, el jugador entra al padrón y recibe por email el link para pagar
+- Ver qué inscripciones tienen una vinculación **para revisar** e ir a revisarla (§5)
 - Cerrar inscripciones
 
 La lista de espera se ordena **por orden de llegada** y cubre deserciones, replicando la regla actual del reglamento.
@@ -207,7 +215,7 @@ La lista de espera se ordena **por orden de llegada** y cubre deserciones, repli
 - **Las reservas sin pagar no se tocan al cerrar** ([decisión 024](decisiones/024-reservas-sin-pagar-al-cerrar.md)): no entran al sorteo, que toma solo las pagadas, y se resuelven cuando exista F13 completa. La pantalla lo avisa antes de cerrar.
 - **No se puede cerrar si los que pagaron no alcanzan para las zonas**, al menos 3 por zona ([decisión 025](decisiones/025-no-se-cierra-sin-inscriptos-para-las-zonas.md)). La pantalla dice cuántos hacen falta y enlaza al torneo para bajar la cantidad de zonas.
 
-Inscribir a mano, dar de baja, recordar el pago, la lista de espera y la conciliación todavía no están.
+Inscribir a mano, dar de baja, recordar el pago, la lista de espera, la conciliación, las solicitudes y la marca de las vinculaciones para revisar todavía no están.
 
 ---
 

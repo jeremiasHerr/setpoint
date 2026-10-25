@@ -196,7 +196,18 @@ Columnas por ronda con rótulo en mono minúscula. Tarjeta de 190×62 con dos fi
 
 ### Inscripción
 
-`reservando` (con reloj de 15 minutos corriendo, en rojo cuando queda poco) · `pagada` (punto lima) · `en lista de espera` (numerada por orden de llegada) · `libre` (marca `--linea`).
+`reservando` (con reloj de 15 minutos corriendo, en rojo cuando queda poco) · `pagada` (punto lima) · `en lista de espera` (numerada por orden de llegada) · `libre` (marca `--linea`) · `solicitud` (torneo con aprobación: punto hueco con borde `--gris-400`, con "Aprobar" y "Rechazar" en la fila; no ocupa lugar en la barra de marcas hasta que paga).
+
+### Vinculación
+
+Cómo está conectado un perfil del padrón con la persona ([04-flujo-jugador.md](04-flujo-jugador.md) §5). Se ve en el padrón y en las inscripciones, nunca en una pantalla pública.
+
+| Estado | Cómo se ve |
+|---|---|
+| Sin DNI | Nada. Es el estado de todo el padrón importado, no un problema |
+| Con DNI | El DNI enmascarado en mono `--gris-500` debajo del nombre: `dni 30.1xx.xxx` |
+| Con cuenta | Rótulo en mono minúscula `con cuenta`, al lado del DNI |
+| `para revisar` | Chip en mono minúscula con borde 1px `--negro`, sin relleno. **No es rojo**: no venció nada, es un caso dudoso que espera una decisión |
 
 ### Torneo
 
@@ -218,6 +229,12 @@ Columnas por ronda con rótulo en mono minúscula. Tarjeta de 190×62 con dos fi
 | Dinero | punto como separador de miles | `$45.000` |
 | Plazo | en días, no en fechas | `quedan 6 días` |
 | Torneo del calendario abreviado | tres letras minúscula | `prim` `ver` `pre` `oto` `inv` |
+| DNI | mono, con puntos | `30.123.456` |
+| DNI enmascarado | los tres primeros dígitos | `30.1xx.xxx` |
+| Email enmascarado | dos letras y el dominio | `lu***@gmail.com` |
+| Número de inscripción | mono, sin puntos ni numeral | `100482` |
+
+**Enmascarado** es el formato de todo DNI o email que se muestra a alguien que puede no ser su dueño: quien escribió un DNI en la inscripción, la organización en sus listas. El DNI completo solo lo ve la organización en el panel del jugador.
 
 ---
 
@@ -263,7 +280,7 @@ SVG en línea, trazo de 1.7–1.9, grilla de 16/18/20/24, `stroke-linecap: round
 
 ## 11. Pantallas y features
 
-El canvas tiene **21 pantallas**, en el orden en que se usan.
+El canvas tiene **21 pantallas**, en el orden en que se usan. Las **5 del rediseño de la inscripción y la vinculación** (octubre de 2026, [decisiones 049 a 051](decisiones/049-identificacion-en-la-inscripcion.md)) están solo en HTML, en [pantallas/](pantallas/README.md), y van marcadas con *nueva*.
 
 | Pantalla | Superficie | Feature |
 |---|---|---|
@@ -271,13 +288,18 @@ El canvas tiene **21 pantallas**, en el orden en que se usan.
 | Mi zona | App del jugador | F07, F11 |
 | Ranking | App del jugador | F09 |
 | Anotar la fecha | App del jugador | F14 |
-| El torneo | App del jugador | F12 |
-| Inscripción y pago | App del jugador | F12 |
-| Cuenta e ingreso | App del jugador | F02 |
+| El torneo | Web del jugador (por link) y app | F12 |
+| Identificación · *nueva* | Web del jugador (por link) | F12 |
+| Link personal · *nueva* | Web del jugador (por link) | F02, F12 |
+| Inscripción con cuenta · *nueva* | App y web del jugador, con sesión | F12 |
+| Inscripción y pago | Web del jugador (por link) y app | F12 |
+| Comprobante · *nueva* | Email | F12 |
+| Cuenta e ingreso | Web del jugador (crear la cuenta) y app (ingresar) | F02, F12 |
 | Qué está en juego | App del jugador | F20 |
 | Registrar la organización | Web del organizador | F01 |
 | Tu circuito | Web del organizador | F01 |
 | Padrón | Web del organizador | F02 |
+| Revisar vinculación · *nueva* | Web del organizador | F02 |
 | Tablero del torneo | Web del organizador | F15 |
 | Cargar resultado | Web del organizador | F06, F07 |
 | Cerrar el torneo | Web del organizador | F16 |

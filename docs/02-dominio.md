@@ -325,7 +325,7 @@ Consecuencia: **un torneo es multisede en fase de grupos** — cada partido pued
 
 Además, el reglamento de POLENTA **obliga a enviar un registro fotográfico de ambos jugadores** junto con el resultado.
 
-> **Esto es regla interna del circuito, no requisito de la plataforma.** El sistema permite adjuntar fotos a un partido de forma **opcional**; si un circuito quiere obligar, lo hace su propio reglamento. Cuando la foto está, la crónica automática la usa ([06-ia.md](06-ia.md) §3). Ver [07-configurabilidad.md](07-configurabilidad.md) §4.
+> **Esto es regla interna del circuito, no requisito de la plataforma.** El sistema permite adjuntar fotos a un partido de forma **opcional**; si un circuito quiere obligar, lo hace su propio reglamento. Ver [07-configurabilidad.md](07-configurabilidad.md) §4.
 
 ---
 

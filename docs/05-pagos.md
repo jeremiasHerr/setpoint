@@ -40,30 +40,55 @@ En la defensa: *"la arquitectura soporta ambos modelos; entregamos el de cuenta 
 
 ## 3. Flujo de inscripción
 
-1. El jugador toca "inscribirme"
-2. **Se crea la `Inscripcion` en `pendiente_pago` ANTES de ir a MercadoPago**, con reserva de cupo por 15 minutos
+Inscribirse y pagar no piden cuenta: quien llega por el link del torneo lo hace desde el navegador del celular, y quien tiene cuenta, también desde la app ([04-flujo-jugador.md](04-flujo-jugador.md) §5).
+
+1. El jugador se identifica con su DNI y su email (04 §5.5 a §5.7) y toca "Pagar"
+2. **Se crea la `Inscripcion` en `pendiente_pago` ANTES de ir a MercadoPago**, con reserva de cupo por 15 minutos. El DNI y el email quedan pendientes en la inscripción hasta el pago ([decisión 049](decisiones/049-identificacion-en-la-inscripcion.md))
 3. El backend crea la preferencia con `external_reference = inscripcion.id`
-4. La app abre el `init_point` con `expo-web-browser`
+4. La web redirige al `init_point`; la app lo abre con `expo-web-browser`
 5. El jugador paga
-6. MercadoPago redirige a una URL https propia, que redirige al deep link `torneosapp://inscripcion/:id`
-7. La app muestra "confirmando pago…" y hace polling a `GET /inscripciones/:id`
-8. **El webhook** llega a `POST /webhooks/mercadopago`, el backend consulta el pago contra la API de MP y, si está `approved`, pasa la inscripción a `pagada`
-9. El polling devuelve `pagada` y la pantalla cambia a "inscripto"
+6. MercadoPago redirige a una URL https propia: en la web es la página de la inscripción; en la app, redirige al deep link `torneosapp://inscripcion/:id`
+7. La pantalla muestra "Confirmando el pago" y consulta el estado cada unos segundos. Sin sesión, la consulta usa un código que no se puede adivinar, no el número de inscripción
+8. **El webhook** llega a `POST /webhooks/mercadopago`, el backend consulta el pago contra la API de MP y, si está `approved`, pasa la inscripción a `pagada`, guarda la vinculación del DNI con el perfil y manda el comprobante por email (§4)
+9. La consulta devuelve `pagada` y la pantalla cambia a "Listo, estás inscripto", con el número de inscripción y el email (enmascarado) al que se mandó el comprobante
 
 ---
 
-## 4. Reglas no negociables
+## 4. Comprobante por email
+
+**Se manda cuando el webhook confirma el pago**, en la misma transición de `pendiente_pago` a `pagada`. Nunca en la vuelta del checkout: el redirect puede llegar antes de que el pago se acredite, o de un pago que después se rechaza, y el jugador recibiría un comprobante de algo que no pagó.
+
+| Lleva | Ejemplo |
+|---|---|
+| Jugador | Lucas Bravo |
+| Torneo y categoría | Primavera 26 · Tercera |
+| Monto | $45.000 |
+| Número de inscripción | 100482 |
+| Fecha del pago | sábado 20 de septiembre |
+| Link al torneo | La página pública de la edición |
+| Si no tiene cuenta | El link para crear la contraseña ([decisión 051](decisiones/051-identidad-en-la-cuenta.md)) |
+| Al pie | *"¿No te inscribiste vos? Avisale a la organización"*, con su contacto |
+
+- **El número de inscripción** es el id de la `Inscripcion`. Se muestra también en la pantalla final, como respaldo si el email no llega (un email mal escrito no se verifica al inscribirse), y con él la organización la encuentra.
+- **Va al email de la inscripción.** Si el jugador cambió el email guardado, al anterior le llega un aviso: así se entera la persona real si alguien se inscribió con su DNI ([decisión 049](decisiones/049-identificacion-en-la-inscripcion.md)).
+- **Es idempotente, como el webhook.** Si MercadoPago reenvía la notificación y la inscripción ya está `pagada`, no sale otro comprobante.
+- **Se envía con `apps/api/src/lib/correo.ts`**, el mismo de la recuperación de la contraseña. Para la entrega, Mailpit lo atrapa y lo muestra en `http://localhost:8025` ([decisión 006](decisiones/006-recuperar-la-contrasena.md)); el proveedor real es la decisión abierta 17 del [README](README.md).
+
+---
+
+## 5. Reglas no negociables
 
 - **La confirmación viene del webhook, nunca del redirect.** El redirect puede llegar antes de que el pago esté acreditado
 - **El webhook consulta el pago contra la API de MercadoPago.** No se confía en el payload recibido
 - **El webhook es idempotente.** MP reenvía notificaciones; si la inscripción ya está `pagada`, se responde 200 y no se hace nada
 - **El cupo se reserva antes de pagar,** con vencimiento a 15 minutos, para evitar sobreventa
+- **El comprobante sale con el webhook, nunca con el redirect** (§4)
 
 > El "confirmando pago…" con polling no es un parche: es la forma correcta de manejar una confirmación asincrónica.
 
 ---
 
-## 5. Estados de la inscripción
+## 6. Estados de la inscripción
 
 ```
 pendiente_pago → pagada
@@ -74,11 +99,13 @@ pendiente_pago → pagada
 en_lista_espera → pendiente_pago   (se liberó un cupo)
 ```
 
-Un job periódico expira las reservas vencidas, libera el cupo y **notifica al primero de la lista de espera**.
+Un job periódico expira las reservas vencidas, libera el cupo y **notifica al primero de la lista de espera**. Al expirar, también se descartan el DNI y el email pendientes, y el perfil vuelve a aparecer en la búsqueda ([decisión 049](decisiones/049-identificacion-en-la-inscripcion.md)).
+
+**Solicitudes** (torneos `con_aprobacion`, *pendiente de código*). Quien no está en el padrón deja una solicitud, que no reserva lugar ni cobra. Si la organización la aprueba, el jugador entra al padrón y recibe un email con el link para pagar: al abrirlo se crea la inscripción en `pendiente_pago`, con la reserva de siempre. Hace falta un estado nuevo para la solicitud ([decisión 049](decisiones/049-identificacion-en-la-inscripcion.md)).
 
 ---
 
-## 6. Lista de espera
+## 7. Lista de espera
 
 Si el torneo tiene lista de espera (parámetro del torneo, [07](07-configurabilidad.md) §2.6), quienes quedan fuera del cupo se ordenan **por orden de llegada** y cubren deserciones. Es la regla del reglamento de POLENTA ([02](02-dominio.md) §11) y la habitual.
 
@@ -88,7 +115,7 @@ Hoy esto se lleva a mano. Modelarlo es una mejora directa sobre el proceso actua
 
 ---
 
-## 7. Inscripción manual
+## 8. Inscripción manual
 
 La organización puede inscribir a alguien que pagó por fuera del sistema — efectivo o transferencia — sin pasar por MercadoPago. La inscripción queda `pagada` con `medio_pago = manual`, y se refleja en la conciliación del torneo.
 

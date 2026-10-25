@@ -153,7 +153,17 @@ Que un circuito devuelva o no cuando alguien se baja después del sorteo es **re
 |---|---|---|
 | `cerrada` | Solo jugadores que ya están en el padrón de la organización | La organización los da de alta manualmente |
 | `con_aprobacion` | Cualquiera solicita; la organización aprueba o rechaza | Al aprobarse la solicitud |
-| `abierta` | Cualquiera se inscribe pagando | Automáticamente al inscribirse, con 0 puntos |
+| `abierta` | Cualquiera se inscribe pagando | Automáticamente al confirmarse el pago, con 0 puntos |
+
+**Cuando el jugador no está en el padrón.** En los tres modos, quien ya está se encuentra igual: con su DNI, buscándose por su apellido la primera vez, o desde su link personal ([04-flujo-jugador.md](04-flujo-jugador.md) §5). El modo solo decide qué pasa cuando no aparece en la búsqueda:
+
+| Modo | Qué ve el jugador | Qué pasa |
+|---|---|---|
+| `cerrada` | *"Pedile a la organización que te agregue al padrón"*, con el contacto del circuito | No se crea nada. Cuando lo agregan, vuelve al link |
+| `con_aprobacion` | Deja nombre, apellido y email, o los toma de su cuenta | Queda como solicitud, sin reservar lugar ni cobrar. Si la organización la aprueba, entra al padrón con 0 puntos y le llega un email con el link para pagar; la reserva de cupo corre desde que lo abre. Si la rechaza, le llega un aviso, sin explicación |
+| `abierta` | Deja nombre, apellido y email, o los toma de su cuenta | Sigue al pago. El perfil se crea en la categoría del torneo, con 0 puntos, al confirmarse el pago: un pago abandonado no deja perfiles sueltos en el padrón |
+
+En los tres modos la inscripción no pide cuenta ([decisión 049](decisiones/049-identificacion-en-la-inscripcion.md)).
 
 > **POLENTA usa `cerrada`.** Su reglamento exige ser aceptado en el grupo de WhatsApp, y el Comité decide a quién incorpora según comportamiento y nivel de juego, sin obligación de explicar un rechazo. Un desconocido inscribiéndose solo **no es un caso a resolver: es un caso a impedir**.
 >
@@ -179,7 +189,7 @@ Distinción importante: hay reglas que son del **reglamento de cada circuito**, 
 | Regla POLENTA | Tratamiento en el sistema |
 |---|---|
 | Política de devolución de inscripciones | El sistema registra la cancelación y si corresponde reembolso. El movimiento de dinero lo hace la organización |
-| Obligación de enviar foto de ambos jugadores al terminar | **El partido admite fotos adjuntas, opcionalmente.** Si un circuito quiere obligar, lo hace su reglamento. Si están, la crónica las usa |
+| Obligación de enviar foto de ambos jugadores al terminar | **El partido admite fotos adjuntas, opcionalmente.** Si un circuito quiere obligar, lo hace su reglamento |
 | Penalidad de 1 game por cada 5 minutos de retraso | No se modela. Se refleja en el resultado que se carga |
 | Código de conducta, saludo final, cantar el tanteador | Fuera de alcance |
 | Asado de camaradería | Dato de la ficha del torneo, sin lógica asociada |

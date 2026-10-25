@@ -65,11 +65,13 @@ Antes del listado, la secuencia operativa completa. Cada paso está cubierto por
 - En circuitos cerrados como POLENTA, la organización es la única vía de ingreso: quien no está en la lista no puede inscribirse a ningún torneo.
 - Un jugador nuevo ingresa con cero puntos y sube al ir jugando torneos.
 - La organización puede reasignar la categoría de un jugador cuando corresponda.
-- Un mismo jugador puede pertenecer a varios circuitos, con ranking independiente en cada uno.
-- El padrón puede ser cerrado, con aprobación previa o abierto, según lo defina la organización. En modo abierto, quien se inscribe sin estar en el padrón se incorpora automáticamente con cero puntos.
-- Cuando un jugador crea su cuenta, el sistema le ofrece vincularla con su perfil del padrón para recuperar su historial y sus puntos. La organización puede revisar y revertir esas vinculaciones.
+- Un mismo jugador puede pertenecer a varios circuitos, con ranking independiente en cada uno: tiene una sola cuenta y un perfil en cada circuito, y ningún circuito ve los datos del otro.
+- El padrón puede ser cerrado, con aprobación previa o abierto, según lo defina la organización. En modo abierto, quien se inscribe sin estar en el padrón se incorpora automáticamente con cero puntos al confirmarse su pago.
+- El jugador se vincula con su perfil del padrón **al inscribirse por primera vez**, sin necesidad de cuenta: con su DNI, buscándose por su apellido o desde el link personal que le manda la organización. Así recupera su historial y sus puntos.
+- Desde el padrón, la organización comparte el **link personal** de cada jugador por WhatsApp o lo copia, y puede generar uno nuevo si se le mandó a quien no era.
+- La organización **revisa solo las vinculaciones dudosas** (un posible homónimo en la categoría) y puede revertir cualquier vinculación desde el padrón.
 
-**Entrega: 25%**
+**Entrega: 25%.** La vinculación por DNI, el link personal y la revisión de homónimos llegan con F12, en la entrega del 75% ([decisiones 049 a 051](decisiones/049-identificacion-en-la-inscripcion.md)). Para el 25% quedó el lado de la organización: ver qué perfiles tienen cuenta y desvincularlos ([decisión 007](decisiones/007-vinculacion-de-cuentas-en-f02.md)).
 
 ---
 
@@ -247,14 +249,16 @@ El jugador dispondrá de una aplicación instalable en su teléfono donde ver su
 **Desde que el torneo se publica y hasta la fecha de cierre**, el jugador puede inscribirse y abonar la inscripción desde su teléfono, sin transferir por fuera del sistema ni enviar comprobantes. Al confirmarse el pago, su lugar en el torneo queda asegurado automáticamente y tanto él como la organización lo ven reflejado al instante.
 
 **Precisiones de alcance:**
-- Solo pueden inscribirse los jugadores que la organización cargó previamente en el circuito, salvo que haya habilitado la inscripción abierta.
-- El lugar se reserva por quince minutos mientras se completa el pago.
-- Si el pago no se concreta en ese plazo, el lugar se libera para otro jugador.
-- La inscripción se confirma sola: nadie tiene que verificar comprobantes a mano.
-- El jugador no necesita crear una cuenta previa para inscribirse.
+- Solo pueden inscribirse los jugadores que la organización cargó previamente en el circuito, salvo que haya habilitado la inscripción con aprobación o abierta.
+- **El jugador no necesita cuenta para inscribirse ni para pagar.** Entra desde el link del torneo que la organización comparte en el grupo, en el navegador del celular, o desde su link personal.
+- **Se identifica con su DNI**, que lo encuentra en el padrón, y deja un **email** para el comprobante. La primera vez, si su DNI todavía no está asociado, se busca por su apellido entre los jugadores de la categoría.
+- Si no está en el padrón: en un torneo cerrado se le pide que hable con la organización; con aprobación, deja una solicitud; en uno abierto, se le crea el perfil.
+- El lugar se reserva por quince minutos mientras se completa el pago. Si el pago no se concreta en ese plazo, el lugar se libera para otro jugador.
+- La inscripción se confirma sola: nadie tiene que verificar comprobantes a mano. Al confirmarse el pago le llega un **comprobante por email**, con su número de inscripción.
+- **La cuenta es opcional y se ofrece después del pago**, desde el comprobante. Con cuenta, se inscribe en cualquier circuito con un toque, y antes de vincularse a uno nuevo se le dice qué datos va a ver esa organización.
 - Si el cupo está completo, puede anotarse en la lista de espera.
 
-**Entrega: 75%**
+**Entrega: 75%.** Diseño en [04-flujo-jugador.md](04-flujo-jugador.md) §5 y [decisiones 049 a 051](decisiones/049-identificacion-en-la-inscripcion.md).
 
 ---
 
@@ -268,8 +272,10 @@ La organización podrá seguir el estado de las inscripciones de cada torneo en 
 - Permite registrar pagos en efectivo o por transferencia hechos fuera del sistema.
 - Ante una baja, el sistema deja registrada la cancelación y si corresponde devolución, pero **el movimiento de dinero lo realiza la organización por fuera del sistema**. La política de reembolsos es del circuito, no de la plataforma.
 - Muestra la conciliación del torneo: cuánto se recaudó, cuánto corresponde a la organización y qué devoluciones quedaron pendientes.
+- En los torneos con aprobación, muestra las **solicitudes** de quienes no están en el padrón, para aprobarlas o rechazarlas. Al aprobar, el jugador entra al padrón y recibe el link para pagar.
+- Marca las inscripciones cuya vinculación quedó para revisar por un posible homónimo, y lleva a revisarla (F02).
 
-**Estado:** parcial. Hay una versión mínima, que es el camino al sorteo (F05): la pantalla Inscripciones de cada categoría muestra los lugares (pagados, reservando y libres) y la lista de inscriptos con su estado, y permite cerrar la inscripción. Al cerrar, las reservas sin pagar no se tocan y no entran al sorteo ([decisión 024](decisiones/024-reservas-sin-pagar-al-cerrar.md)), y no se puede cerrar si los que pagaron no alcanzan para las zonas ([decisión 025](decisiones/025-no-se-cierra-sin-inscriptos-para-las-zonas.md)). Falta inscribir a mano, dar de baja, recordar el pago, la lista de espera y la conciliación.
+**Estado:** parcial. Hay una versión mínima, que es el camino al sorteo (F05): la pantalla Inscripciones de cada categoría muestra los lugares (pagados, reservando y libres) y la lista de inscriptos con su estado, y permite cerrar la inscripción. Al cerrar, las reservas sin pagar no se tocan y no entran al sorteo ([decisión 024](decisiones/024-reservas-sin-pagar-al-cerrar.md)), y no se puede cerrar si los que pagaron no alcanzan para las zonas ([decisión 025](decisiones/025-no-se-cierra-sin-inscriptos-para-las-zonas.md)). Falta inscribir a mano, dar de baja, recordar el pago, la lista de espera, la conciliación, las solicitudes y la marca de las vinculaciones para revisar.
 
 **Entrega: 75%**
 
