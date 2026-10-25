@@ -1,6 +1,6 @@
 import type { TorneoPublico } from '@setpoint/shared';
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { EncabezadoPublico } from '../components/EncabezadoPublico';
 import { Numero } from '../components/Numero';
 import { EncontrarPerfil } from '../features/inscripcion/EncontrarPerfil';
@@ -39,6 +39,7 @@ export function InscripcionPage() {
 }
 
 function Inscripcion({ torneo }: { torneo: TorneoPublico }) {
+  const navegar = useNavigate();
   const [sesion, setSesion] = useState<SesionJugador | null>(leerSesionJugador);
   const situacion = useSituacion(torneo.organizacion.slug, String(torneo.id), sesion?.token);
 
@@ -89,7 +90,7 @@ function Inscripcion({ torneo }: { torneo: TorneoPublico }) {
                 torneo={torneo}
                 token={activa.token}
                 situacion={situacion.data}
-                onReservado={() => situacion.refetch()}
+                onReservado={(inscripcionId) => navegar(`/c/${torneo.organizacion.slug}/inscripciones/${inscripcionId}`)}
               />
             ))}
         </>
