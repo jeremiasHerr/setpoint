@@ -15,7 +15,7 @@ export async function torneoPublico(slug: string, torneoId: number): Promise<Tor
     // El slug va en el filtro: el id solo no alcanza para saber de qué organización es.
     where: { id: torneoId, organizacion: { slug } },
     include: {
-      organizacion: { select: { nombre: true, slug: true } },
+      organizacion: { select: { nombre: true, slug: true, contacto: true } },
       categoria: { select: { nombre: true } },
       _count: { select: { inscripciones: { where: { estado: { in: OCUPAN_CUPO } } } } },
     },
@@ -35,6 +35,7 @@ export async function torneoPublico(slug: string, torneoId: number): Promise<Tor
     cupo: torneo.cupo,
     ocupados: torneo._count.inscripciones,
     precio: torneo.precio.toNumber(),
+    minutosReserva: torneo.minutosReservaCupo,
     descripcion: torneo.descripcion || null,
   };
 }

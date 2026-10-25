@@ -260,7 +260,7 @@ El jugador dispondrá de una aplicación instalable en su teléfono donde ver su
 
 **Entrega: 75%.** Diseño en [04-flujo-jugador.md](04-flujo-jugador.md) §5 y [decisiones 049 a 051](decisiones/049-identidad-e-ingreso-con-codigo.md).
 
-**Estado:** en curso. El ingreso con email y código está en la API y en la app ([decisión 052](decisiones/052-limite-de-pedidos.md) para los límites). La convocatoria pública del torneo está en la web, en `/c/:slug/torneos/:id` (`GET /api/publico/:slug/torneos/:id`), y el inicio del organizador copia ese link. Faltan encontrar el perfil, el pago con MercadoPago y el comprobante.
+**Estado:** en curso. El ingreso con email y código está en la API y en la app ([decisión 052](decisiones/052-limite-de-pedidos.md) para los límites). La convocatoria pública del torneo está en la web, en `/c/:slug/torneos/:id` (`GET /api/publico/:slug/torneos/:id`), y el inicio del organizador copia ese link. La identificación también: en `/c/:slug/torneos/:id/inscripcion` se verifica el email con el código, se encuentra el perfil (el propio, el "¿Sos…?" o la búsqueda) y se reserva el lugar. Faltan el pago con MercadoPago, el comprobante, el link personal, el botón de reclamo y los modos con aprobación y abierto.
 
 ---
 
