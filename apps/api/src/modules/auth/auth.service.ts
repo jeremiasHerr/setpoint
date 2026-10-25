@@ -102,7 +102,7 @@ export async function ingresar(datos: DatosIngreso): Promise<RespuestaRegistro> 
 
 // Un perfil por circuito en el que juega, del más viejo al más nuevo. Los dados de baja del padrón
 // no cuentan: ya no juegan en ese circuito.
-async function perfilesDe(usuarioId: number): Promise<PerfilDeJugador[]> {
+export async function perfilesDe(usuarioId: number): Promise<PerfilDeJugador[]> {
   const jugadores = await prisma.jugador.findMany({
     where: { usuarioId, ...DEL_PADRON_ACTIVOS },
     orderBy: { creadoEn: 'asc' },
