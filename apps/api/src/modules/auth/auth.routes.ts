@@ -7,6 +7,7 @@ import {
   restablecerContrasenaSchema,
   verificarCodigoSchema,
 } from '@setpoint/shared';
+import { limitePorIp } from '../../middleware/limite';
 import { validar } from '../../middleware/validar';
 import {
   ingresar,
@@ -36,12 +37,12 @@ authRouter.post('/ingreso-jugador', validar(ingresoSchema), async (req, res) => 
 
 // El jugador entra con un código que le llega por email, sin contraseña (decisión 049). Pedirlo
 // responde igual exista o no la cuenta.
-authRouter.post('/codigo', validar(pedirCodigoSchema), async (req, res) => {
+authRouter.post('/codigo', limitePorIp, validar(pedirCodigoSchema), async (req, res) => {
   await pedirCodigo(req.body);
   res.status(204).end();
 });
 
-authRouter.post('/codigo/verificar', validar(verificarCodigoSchema), async (req, res) => {
+authRouter.post('/codigo/verificar', limitePorIp, validar(verificarCodigoSchema), async (req, res) => {
   res.json(await verificarCodigo(req.body));
 });
 
