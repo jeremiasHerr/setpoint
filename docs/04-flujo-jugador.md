@@ -72,7 +72,7 @@ El jugador entra a la app con su email y un código de 6 dígitos que le llega p
 - **Quien solo administra** verifica el código, no tiene perfil de jugador y recibe un aviso para entrar por la web.
 - **La persona edita su nombre desde su cuenta.** Cambiar el email pide un código al email nuevo. *Pendiente de código.*
 
-> **Estado:** el ingreso está implementado en la app para el 50%, todavía con email y contraseña y con la cuenta de prueba del seed. Pasa a código con F12.
+> **Estado:** la API ya pide y verifica el código (`POST /api/auth/codigo` y `/codigo/verificar`), con límites por email y por IP ([decisión 052](decisiones/052-limite-de-pedidos.md)). La app todavía entra con email y contraseña, con la cuenta de prueba del seed.
 
 > **Descartado:** verificación por SMS y pedir el DNI. El SMS necesita un proveedor externo pago; el DNI no se puede verificar desde un celular, así que no agrega seguridad (decisión 049).
 

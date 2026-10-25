@@ -176,7 +176,8 @@ enum EstadoProcesoIA {
 model Usuario {
   id            Int      @id @default(autoincrement())
   email         String   @unique
-  passwordHash  String
+  // Solo los administradores tienen contraseña: el jugador entra con un código (decisión 049).
+  passwordHash  String?
   nombre        String
   apellido      String
   creadoEn      DateTime @default(now())
@@ -189,6 +190,21 @@ model Usuario {
   dispositivos        DispositivoAviso[]
 
   @@map("usuarios")
+}
+
+/// Código de 6 dígitos que le llega por email al jugador para entrar sin contraseña (decisión 049).
+/// Se guarda el hash, nunca el código. Vale solo el último que se pidió para cada email.
+model CodigoIngreso {
+  id         Int       @id @default(autoincrement())
+  email      String
+  codigoHash String
+  intentos   Int       @default(0)
+  venceEn    DateTime
+  usadoEn    DateTime?
+  creadoEn   DateTime  @default(now())
+
+  @@index([email, creadoEn]) // el último de un email, y cuántos pidió hace poco
+  @@map("codigos_ingreso")
 }
 
 /// Un celular donde el usuario recibe avisos push (F11, decisión 047). Es del usuario, no de una
