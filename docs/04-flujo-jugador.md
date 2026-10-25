@@ -59,7 +59,7 @@ En modo `cerrada` —el de POLENTA— **el jugador ya existe en el padrón antes
 
 La organización **ve cada vinculación nueva** en el padrón y revisa solo las dudosas: los posibles homónimos y los perfiles que reclama otra cuenta. También puede desvincular cualquier perfil (§5.9). **La organización no toca la identidad de nadie:** el email y el nombre de la persona son de ella.
 
-> **Estado:** el lado de la organización ya está en parte: el padrón marca los perfiles con cuenta y permite desvincularlos (`DELETE /jugadores/:id/cuenta`, [decisión 007](decisiones/007-vinculacion-de-cuentas-en-f02.md)). El ingreso con código y el link personal ya están; la revisión y el aviso de vinculaciones nuevas llegan con F12 ([decisiones 049 a 051](decisiones/049-identidad-e-ingreso-con-codigo.md)).
+> **Estado:** el lado de la organización ya está en parte: el padrón marca los perfiles con cuenta y permite desvincularlos (`DELETE /jugadores/:id/cuenta`, [decisión 007](decisiones/007-vinculacion-de-cuentas-en-f02.md)). El ingreso con código, el link personal y la revisión ya están; el aviso de vinculaciones nuevas llega con F12 ([decisiones 049 a 051](decisiones/049-identidad-e-ingreso-con-codigo.md)).
 
 ### 4.1 Ingreso a la app
 

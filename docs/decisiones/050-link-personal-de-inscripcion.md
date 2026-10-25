@@ -1,6 +1,6 @@
 # 050 — Link personal de inscripción
 
-**Estado:** aceptada — 25 de octubre de 2026. Implementada, salvo el botón para avisarle a la organización.
+**Estado:** aceptada — 25 de octubre de 2026. Implementada.
 
 ## Contexto
 
@@ -52,4 +52,4 @@ Opción 2.
 - **El código vive en `Jugador.codigoLink`:** 16 caracteres al azar, único. Se crea la primera vez que la organización abre el menú del jugador en el padrón, así el mensaje que ve es el que sale.
 - **`GET /api/links/:codigo`** resuelve el código sin login, con el límite por IP de la [decisión 052](052-limite-de-pedidos.md). **`GET /api/links/:codigo/situacion`** dice, con la sesión del código, si el link le sirve a quien lo abrió; esa no lleva el límite por IP, porque la sesión ya pasó por el del ingreso.
 - **Al reservar**, la API comprueba que el código sea el del perfil: uno regenerado ya no vincula.
-- **Pendiente:** el botón "Avisarle a la organización" del perfil vinculado a otra cuenta. Hasta que llegue, la pantalla le pide que le escriba.
+- **El perfil vinculado a otra cuenta** muestra el botón "Avisarle a la organización", el mismo de la búsqueda ([decisión 051](051-vinculacion-con-el-padron.md)).
