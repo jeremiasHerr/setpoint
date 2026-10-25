@@ -95,7 +95,7 @@ Público para **leer** no es público para **inscribirse**. Y verificar un email
 
 ### 5.2 Cómo entra un jugador nuevo al circuito
 
-Depende del modo. En `cerrada` —el de POLENTA— **lo agrega la organización**, no hay autoservicio. En `con_aprobacion`, entra al padrón cuando la organización aprueba su solicitud. En `abierta`, el perfil se crea al confirmarse el pago de su primera inscripción. El diagrama siguiente describe el modo `cerrada`.
+Depende del modo. En `cerrada` —el de POLENTA— **lo agrega la organización**, no hay autoservicio. En `con_aprobacion` y en `abierta`, su perfil se crea **pendiente** con la solicitud o con la reserva, y entra al padrón al confirmarse el pago de su primera inscripción. Mientras está pendiente no aparece en ningún lado salvo en las solicitudes de la organización, y si la inscripción se abandona queda descartado ([decisión 054](decisiones/054-perfil-pendiente.md)). El diagrama siguiente describe el modo `cerrada`.
 
 ```
 La organización lo da de alta en el padrón (0 puntos)
@@ -190,8 +190,8 @@ Después del código, o con la sesión iniciada:
 | Modo | Qué ve | Qué pasa |
 |---|---|---|
 | `cerrada` | *"Pedile a la organización que te agregue al padrón"*, con el contacto del circuito | Nada. Cuando lo agreguen, vuelve al link |
-| `con_aprobacion` | Escribe su nombre y apellido (o los toma de su cuenta) | Queda como solicitud, sin reservar lugar ni cobrar. Si la organización la aprueba, entra al padrón con 0 puntos y le llega un email con el link para pagar |
-| `abierta` | Escribe su nombre y apellido (o los toma de su cuenta) | Sigue al pago. El perfil se crea con 0 puntos al confirmarse el pago |
+| `con_aprobacion` | Escribe su nombre y apellido (o los toma de su cuenta) | Queda como solicitud, sin reservar lugar ni cobrar, con un perfil pendiente. Si la organización la aprueba, le llega un email con el link para pagar, y la reserva corre desde que lo abre; si no llega a pagar, puede volver a abrirlo mientras la inscripción siga abierta. Entra al padrón con 0 puntos al pagar. Si la rechaza, le llega un aviso, sin explicación |
+| `abierta` | Escribe su nombre y apellido (o los toma de su cuenta) | Reserva el lugar con un perfil pendiente y sigue al pago. Entra al padrón con 0 puntos al confirmarse el pago; si la reserva vence o el pago se rechaza, el perfil queda descartado |
 
 **Consentimiento.** En un circuito donde todavía no tiene perfil, antes de vincularse: *"Al inscribirte, Liga Amateur del Valle va a ver tu nombre y tu email"*. Nunca se muestra nada de otros circuitos.
 
@@ -214,7 +214,7 @@ En el padrón, al lado de cada jugador, la organización tiene "Compartir link":
 ### 5.8 Final común: pago y comprobante
 
 1. **Pagar.** Se crea la inscripción en `pendiente_pago`, con el lugar reservado 15 minutos, y el jugador va al checkout de MercadoPago. Al volver ve *"Confirmando el pago"* hasta que llega el webhook ([05-pagos.md](05-pagos.md) §3).
-2. **Confirmar.** Con el webhook aprobado, la inscripción pasa a `pagada`, se guarda la vinculación del perfil con la persona (o se crea el perfil, en modo abierto) y **recién ahí** se manda el **comprobante por email**: jugador, torneo, categoría, monto, número de inscripción, fecha y link al torneo. No en la vuelta del checkout: podría llegar un comprobante de un pago rechazado ([05](05-pagos.md) §4).
+2. **Confirmar.** Con el webhook aprobado, la inscripción pasa a `pagada`, se guarda la vinculación del perfil con la persona (o el perfil pendiente entra al padrón, en los modos con aprobación y abierto) y **recién ahí** se manda el **comprobante por email**: jugador, torneo, categoría, monto, número de inscripción, fecha y link al torneo. No en la vuelta del checkout: podría llegar un comprobante de un pago rechazado ([05](05-pagos.md) §4).
 3. **Listo.** La pantalla final muestra el número de inscripción, como respaldo si el email no llega, y dice a qué email se mandó el comprobante.
 4. **La app.** Para coordinar sus partidos, el jugador entra a la app con el mismo email y un código. No hay cuenta que crear: ya la tiene.
 
@@ -388,6 +388,8 @@ Tabla de posiciones del grupo en vivo, con la línea de corte marcada — arriba
 | Coordinar fechas | — | ✓ |
 | Mis partidos | ✓ | ✓ |
 | Notificaciones push | — | ✓ |
+
+**La persona entra a la app aunque todavía no juegue en ningún circuito** ([decisión 054](decisiones/054-perfil-pendiente.md)). Su cuenta existe desde que verificó el código. Sin circuitos, la app abre en *Inscripciones en curso* ([pantalla de referencia](pantallas/jugador/inscripciones-en-curso.html)): la solicitud en revisión, la aprobada que falta pagar o el lugar reservado sin pagar, con "Pagar". Sin nada en curso: *"Todavía no jugás en ningún circuito. Inscribite desde el link que comparte tu organización"*. Si ya juega en otro circuito, entra a ese, y las inscripciones en curso van como aviso arriba de Cuándo juego. Una solicitud no aprobada o una reserva vencida se avisan una vez. La app vuelve a pedir la cuenta (`GET /api/auth/cuenta`) al abrirse y al volver al frente: así aparece el circuito nuevo cuando se confirma el pago.
 
 **La inscripción por link es web.** Quien no tiene la sesión iniciada abre el link del torneo en el navegador del celular y verifica su email ahí: sin sesión no hay app que abrir, porque la app sin sesión solo muestra el ingreso ([decisión 042](decisiones/042-la-app-sin-sesion.md)). Si el link abre la app cuando está instalada y con la sesión iniciada es la decisión abierta 18 del [README](README.md).
 
