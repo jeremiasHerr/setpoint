@@ -3,6 +3,7 @@ import { BarraProgreso } from '../../components/BarraProgreso';
 import { Boton } from '../../components/Boton';
 import { Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
+import { BotonCopiarLink } from './BotonCopiarLink';
 import type { TorneoConInscripcionAbierta } from './torneosEjemplo';
 
 export function TarjetaInscripcionAbierta({ torneo }: { torneo: TorneoConInscripcionAbierta }) {
@@ -29,8 +30,7 @@ export function TarjetaInscripcionAbierta({ torneo }: { torneo: TorneoConInscrip
         <Boton className="grow" onClick={() => navegar(`/torneos/${torneo.id}/inscripciones`)}>
           Inscripciones
         </Boton>
-        {/* Se conecta cuando exista el link de inscripción (F12). */}
-        <Boton>Copiar link</Boton>
+        <BotonCopiarLink torneoId={torneo.id} />
       </div>
     </Tarjeta>
   );

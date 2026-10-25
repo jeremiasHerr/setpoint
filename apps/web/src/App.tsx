@@ -13,6 +13,7 @@ import { RecuperarContrasenaPage } from './pages/RecuperarContrasenaPage';
 import { RankingPublicoPage } from './pages/RankingPublicoPage';
 import { RegistroPage } from './pages/RegistroPage';
 import { RestablecerContrasenaPage } from './pages/RestablecerContrasenaPage';
+import { TorneoPublicoPage } from './pages/TorneoPublicoPage';
 import { SorteoPage } from './pages/SorteoPage';
 import { TuCircuitoPage } from './pages/TuCircuitoPage';
 
@@ -40,6 +41,7 @@ export default function App() {
       {/* Pública, sin login: es el enlace que la organización comparte (F09). */}
       <Route path="/c/:slug/ranking" element={<RankingPublicoPage />} />
       {/* Pública, sin login: los cuadros de un torneo (una categoría), para compartir (F08, F10). */}
+      <Route path="/c/:slug/torneos/:id" element={<TorneoPublicoPage />} />
       <Route path="/c/:slug/torneos/:id/cuadros" element={<CuadrosPublicoPage />} />
     </Routes>
   );
