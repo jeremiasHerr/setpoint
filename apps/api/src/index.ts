@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import type { RespuestaSalud } from '@setpoint/shared';
+import { hayMercadoPago } from './lib/mercadopago';
 import { manejarErrores } from './middleware/errores';
 import { authRouter } from './modules/auth/auth.routes';
 import { cuadrosPublicoRouter } from './modules/competencia/cuadros-publico.routes';
@@ -16,6 +17,9 @@ import { padronPublicoRouter } from './modules/inscripcion/padron-publico.routes
 import { jugadorRouter } from './modules/jugador/jugador.routes';
 import { jugadoresRouter } from './modules/jugadores/jugadores.routes';
 import { organizacionesRouter } from './modules/organizaciones/organizaciones.routes';
+import { pagoRouter } from './modules/pagos/pago.routes';
+import { programarVencimientoDeReservas } from './modules/pagos/vencimiento';
+import { webhookRouter } from './modules/pagos/webhook.routes';
 import { importacionesRouter } from './modules/padron/importacion/importaciones.routes';
 import { rankingPublicoRouter } from './modules/ranking/ranking-publico.routes';
 import { torneoPublicoRouter } from './modules/torneos/torneo-publico.routes';
@@ -47,6 +51,9 @@ app.use('/api/publico/:slug/torneos/:id/padron', padronPublicoRouter);
 app.use('/api/publico/:slug/torneos/:id', torneoPublicoRouter);
 // Con la sesión del código, todavía sin perfil: encontrarlo y reservar el lugar (F12).
 app.use('/api/inscripcion/:slug/torneos/:id', inscripcionRouter);
+app.use('/api/inscripcion/:slug/inscripciones/:id', pagoRouter);
+// MercadoPago avisa los pagos acá (05-pagos §3).
+app.use('/api/webhooks/mercadopago', webhookRouter);
 // Con login de jugador: lo suyo, en la app.
 app.use('/api/jugador/:slug', jugadorRouter);
 
@@ -58,3 +65,8 @@ app.listen(PORT, () => {
 });
 
 programarInicioDeGrupos();
+programarVencimientoDeReservas();
+
+if (!hayMercadoPago()) {
+  console.log('Sin MERCADOPAGO_ACCESS_TOKEN: el pago de las inscripciones es simulado (decisión 053).');
+}
