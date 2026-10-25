@@ -16,6 +16,7 @@ import { inscripcionRouter } from './modules/inscripcion/inscripcion.routes';
 import { padronPublicoRouter } from './modules/inscripcion/padron-publico.routes';
 import { jugadorRouter } from './modules/jugador/jugador.routes';
 import { jugadoresRouter } from './modules/jugadores/jugadores.routes';
+import { linkPersonalRouter } from './modules/link-personal/link-personal.routes';
 import { organizacionesRouter } from './modules/organizaciones/organizaciones.routes';
 import { pagoRouter } from './modules/pagos/pago.routes';
 import { programarVencimientoDeReservas } from './modules/pagos/vencimiento';
@@ -50,6 +51,7 @@ app.use('/api/publico/:slug/torneos/:id/cuadros', cuadrosPublicoRouter);
 app.use('/api/publico/:slug/torneos/:id/padron', padronPublicoRouter);
 app.use('/api/publico/:slug/torneos/:id', torneoPublicoRouter);
 // Con la sesión del código, todavía sin perfil: encontrarlo y reservar el lugar (F12).
+app.use('/api/links/:codigo', linkPersonalRouter);
 app.use('/api/inscripcion/:slug/torneos/:id', inscripcionRouter);
 app.use('/api/inscripcion/:slug/inscripciones/:id', pagoRouter);
 // MercadoPago avisa los pagos acá (05-pagos §3).
