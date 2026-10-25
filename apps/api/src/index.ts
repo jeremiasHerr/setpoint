@@ -11,6 +11,8 @@ import { posicionesRouter } from './modules/competencia/posiciones.routes';
 import { resultadosRouter } from './modules/competencia/resultados.routes';
 import { sorteoRouter } from './modules/competencia/sorteo.routes';
 import { inscripcionesRouter } from './modules/inscripciones/inscripciones.routes';
+import { inscripcionRouter } from './modules/inscripcion/inscripcion.routes';
+import { padronPublicoRouter } from './modules/inscripcion/padron-publico.routes';
 import { jugadorRouter } from './modules/jugador/jugador.routes';
 import { jugadoresRouter } from './modules/jugadores/jugadores.routes';
 import { organizacionesRouter } from './modules/organizaciones/organizaciones.routes';
@@ -41,7 +43,10 @@ app.use('/api/organizaciones', organizacionesRouter);
 // Sin login. Nada de acá devuelve datos de contacto.
 app.use('/api/publico/:slug/ranking', rankingPublicoRouter);
 app.use('/api/publico/:slug/torneos/:id/cuadros', cuadrosPublicoRouter);
+app.use('/api/publico/:slug/torneos/:id/padron', padronPublicoRouter);
 app.use('/api/publico/:slug/torneos/:id', torneoPublicoRouter);
+// Con la sesión del código, todavía sin perfil: encontrarlo y reservar el lugar (F12).
+app.use('/api/inscripcion/:slug/torneos/:id', inscripcionRouter);
 // Con login de jugador: lo suyo, en la app.
 app.use('/api/jugador/:slug', jugadorRouter);
 
