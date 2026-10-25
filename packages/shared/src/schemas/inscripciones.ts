@@ -34,4 +34,18 @@ export type InscripcionesDelTorneo = {
   alcanzanParaLasZonas: boolean;
   // De la más reciente a la más vieja.
   inscripciones: InscripcionDelTorneo[];
+  // Torneos con aprobación: quienes no están en el padrón y piden entrar (decisión 054). La
+  // aprobada espera que la persona abra el link y pague; ninguna ocupa lugar.
+  solicitudes: SolicitudDelTorneo[];
+};
+
+export type SolicitudDelTorneo = {
+  id: number;
+  nombre: string;
+  apellido: string;
+  // El email verificado: la organización ve quién pide entrar.
+  email: string;
+  estado: 'solicitada' | 'aprobada';
+  // Día en que la pidió, 'AAAA-MM-DD'.
+  fecha: string;
 };
