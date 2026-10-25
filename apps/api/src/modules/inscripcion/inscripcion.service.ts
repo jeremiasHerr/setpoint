@@ -96,7 +96,11 @@ export async function situacionEnElTorneo(slug: string, torneoId: number, usuari
   };
 }
 
-const VINCULA_POR = { busqueda: Vinculacion.BUSQUEDA, propuesta: Vinculacion.PROPUESTA } as const;
+const VINCULA_POR = {
+  busqueda: Vinculacion.BUSQUEDA,
+  propuesta: Vinculacion.PROPUESTA,
+  link_personal: Vinculacion.LINK_PERSONAL,
+} as const;
 
 // Reserva el lugar en el torneo por los minutos que configura (por defecto, 15). Si el perfil no
 // era suyo, queda reservado para esta persona y se vincula recién al confirmarse el pago.
@@ -134,6 +138,11 @@ export async function reservar(slug: string, torneoId: number, usuarioId: number
         if (!jugador) throw new ErrorHttp(404, 'JUGADOR_NO_ENCONTRADO');
         if (jugador.usuarioId !== null && jugador.usuarioId !== usuarioId) throw new ErrorHttp(409, 'PERFIL_VINCULADO');
         if (jugador.categoriaId !== torneo.categoriaId) throw new ErrorHttp(409, 'OTRA_CATEGORIA');
+        // Con el link personal no hay revisión de homónimo: el código tiene que ser el del perfil, y
+        // uno regenerado ya no sirve (decisión 050).
+        if (datos.vinculaPor === 'link_personal' && (!jugador.codigoLink || jugador.codigoLink !== datos.codigoLink)) {
+          throw new ErrorHttp(404, 'LINK_NO_ENCONTRADO');
+        }
 
         const existente = await tx.inscripcion.findUnique({
           where: { torneoId_jugadorId: { torneoId, jugadorId: jugador.id } },

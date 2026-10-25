@@ -28,7 +28,9 @@ export const reservarSchema = z.object(
   {
     jugadorId: z.number({ error: 'Falta el perfil' }).int().positive(),
     // Cómo lo eligió, si el perfil todavía no era suyo. Queda en el aviso de vinculaciones nuevas.
-    vinculaPor: z.enum(['busqueda', 'propuesta']).optional(),
+    vinculaPor: z.enum(['busqueda', 'propuesta', 'link_personal']).optional(),
+    // Con el link personal, el código del link: prueba que el perfil lo eligió la organización.
+    codigoLink: z.string().max(64).optional(),
   },
   { error: 'Falta el perfil' },
 );
