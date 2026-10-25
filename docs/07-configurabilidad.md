@@ -155,15 +155,15 @@ Que un circuito devuelva o no cuando alguien se baja después del sorteo es **re
 | `con_aprobacion` | Cualquiera solicita; la organización aprueba o rechaza | Al aprobarse la solicitud |
 | `abierta` | Cualquiera se inscribe pagando | Automáticamente al confirmarse el pago, con 0 puntos |
 
-**Cuando el jugador no está en el padrón.** En los tres modos, quien ya está se encuentra igual: con su DNI, buscándose por su apellido la primera vez, o desde su link personal ([04-flujo-jugador.md](04-flujo-jugador.md) §5). El modo solo decide qué pasa cuando no aparece en la búsqueda:
+**Cuando el jugador no está en el padrón.** En los tres modos, el jugador verifica su email con un código y quien ya está se encuentra igual: por su perfil ya vinculado, buscándose por su apellido la primera vez, o desde su link personal ([04-flujo-jugador.md](04-flujo-jugador.md) §5). El modo solo decide qué pasa cuando no aparece en la búsqueda:
 
 | Modo | Qué ve el jugador | Qué pasa |
 |---|---|---|
 | `cerrada` | *"Pedile a la organización que te agregue al padrón"*, con el contacto del circuito | No se crea nada. Cuando lo agregan, vuelve al link |
-| `con_aprobacion` | Deja nombre, apellido y email, o los toma de su cuenta | Queda como solicitud, sin reservar lugar ni cobrar. Si la organización la aprueba, entra al padrón con 0 puntos y le llega un email con el link para pagar; la reserva de cupo corre desde que lo abre. Si la rechaza, le llega un aviso, sin explicación |
-| `abierta` | Deja nombre, apellido y email, o los toma de su cuenta | Sigue al pago. El perfil se crea en la categoría del torneo, con 0 puntos, al confirmarse el pago: un pago abandonado no deja perfiles sueltos en el padrón |
+| `con_aprobacion` | Deja su nombre y apellido, o los toma de su cuenta. El email ya lo verificó | Queda como solicitud, sin reservar lugar ni cobrar. Si la organización la aprueba, entra al padrón con 0 puntos y le llega un email con el link para pagar; la reserva de cupo corre desde que lo abre. Si la rechaza, le llega un aviso, sin explicación |
+| `abierta` | Deja su nombre y apellido, o los toma de su cuenta. El email ya lo verificó | Sigue al pago. El perfil se crea en la categoría del torneo, con 0 puntos, al confirmarse el pago: un pago abandonado no deja perfiles sueltos en el padrón |
 
-En los tres modos la inscripción no pide cuenta ([decisión 049](decisiones/049-identificacion-en-la-inscripcion.md)).
+En los tres modos, la cuenta es el email verificado: no hay registro ni contraseña ([decisión 049](decisiones/049-identidad-e-ingreso-con-codigo.md)).
 
 > **POLENTA usa `cerrada`.** Su reglamento exige ser aceptado en el grupo de WhatsApp, y el Comité decide a quién incorpora según comportamiento y nivel de juego, sin obligación de explicar un rechazo. Un desconocido inscribiéndose solo **no es un caso a resolver: es un caso a impedir**.
 >

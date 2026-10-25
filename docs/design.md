@@ -204,10 +204,12 @@ Cómo está conectado un perfil del padrón con la persona ([04-flujo-jugador.md
 
 | Estado | Cómo se ve |
 |---|---|
-| Sin DNI | Nada. Es el estado de todo el padrón importado, no un problema |
-| Con DNI | El DNI enmascarado en mono `--gris-500` debajo del nombre: `dni 30.1xx.xxx` |
-| Con cuenta | Rótulo en mono minúscula `con cuenta`, al lado del DNI |
+| Sin vincular | Rótulo en mono `--gris-500` debajo del nombre: `sin vincular`. Es el estado de todo el padrón importado, no un problema |
+| Vinculado | El email de la cuenta en `--gris-500` debajo del nombre. Para el jugador que busca su perfil, el rótulo `vinculado` al lado del nombre, sin el email |
+| `nueva` | Chip lima en mono minúscula, el mismo de "nuevo" en el padrón: la vinculación se hizo desde la última visita de la organización |
 | `para revisar` | Chip en mono minúscula con borde 1px `--negro`, sin relleno. **No es rojo**: no venció nada, es un caso dudoso que espera una decisión |
+
+**Motivos de revisión.** Debajo del chip, o en la lista "Para revisar", va el motivo en palabras: *"hay otro Juan Pérez en Tercera"* (posible homónimo) o *"otra cuenta dice que es suyo"* (perfil reclamado).
 
 ### Torneo
 
@@ -229,12 +231,10 @@ Cómo está conectado un perfil del padrón con la persona ([04-flujo-jugador.md
 | Dinero | punto como separador de miles | `$45.000` |
 | Plazo | en días, no en fechas | `quedan 6 días` |
 | Torneo del calendario abreviado | tres letras minúscula | `prim` `ver` `pre` `oto` `inv` |
-| DNI | mono, con puntos | `30.123.456` |
-| DNI enmascarado | los tres primeros dígitos | `30.1xx.xxx` |
-| Email enmascarado | dos letras y el dominio | `lu***@gmail.com` |
+| Código de verificación | mono, seis dígitos en dos grupos de tres | `482 913` |
 | Número de inscripción | mono, sin puntos ni numeral | `100482` |
 
-**Enmascarado** es el formato de todo DNI o email que se muestra a alguien que puede no ser su dueño, como quien escribió un DNI en la inscripción. La organización ve el email completo, igual que el teléfono, porque es dato de su padrón; el DNI lo ve enmascarado en sus listas y en la revisión, y completo solo en el panel del jugador.
+**El email no se enmascara.** Lo ven su dueño, que lo verificó o lo acaba de escribir, y las organizaciones en las que se inscribió, para contactarlo. Nunca aparece en una pantalla pública.
 
 ---
 
@@ -280,7 +280,7 @@ SVG en línea, trazo de 1.7–1.9, grilla de 16/18/20/24, `stroke-linecap: round
 
 ## 11. Pantallas y features
 
-El canvas tiene **21 pantallas**, en el orden en que se usan. Las **5 del rediseño de la inscripción y la vinculación** (octubre de 2026, [decisiones 049 a 051](decisiones/049-identificacion-en-la-inscripcion.md)) están solo en HTML, en [pantallas/](pantallas/README.md), y van marcadas con *nueva*.
+El canvas tiene **21 pantallas**, en el orden en que se usan. Las **5 del rediseño de la inscripción y la vinculación** (octubre de 2026, [decisiones 049 a 051](decisiones/049-identidad-e-ingreso-con-codigo.md)) están solo en HTML, en [pantallas/](pantallas/README.md), y van marcadas con *nueva*.
 
 | Pantalla | Superficie | Feature |
 |---|---|---|
@@ -289,12 +289,12 @@ El canvas tiene **21 pantallas**, en el orden en que se usan. Las **5 del redise
 | Ranking | App del jugador | F09 |
 | Anotar la fecha | App del jugador | F14 |
 | El torneo | Web del jugador (por link) y app | F12 |
-| Identificación · *nueva* | Web del jugador (por link) | F12 |
+| Identificación · *nueva* | Web del jugador (por link) y app, con el código | F12 |
 | Link personal · *nueva* | Web del jugador (por link) | F02, F12 |
-| Inscripción con cuenta · *nueva* | App y web del jugador, con sesión | F12 |
 | Inscripción y pago | Web del jugador (por link) y app | F12 |
+| Código · *nueva* | Email | F12 |
 | Comprobante · *nueva* | Email | F12 |
-| Cuenta e ingreso | Web del jugador (crear la cuenta) y app (ingresar) | F02, F12 |
+| Cuenta e ingreso | App del jugador: ingresar con email y código | F02, F12 |
 | Qué está en juego | App del jugador | F20 |
 | Registrar la organización | Web del organizador | F01 |
 | Tu circuito | Web del organizador | F01 |

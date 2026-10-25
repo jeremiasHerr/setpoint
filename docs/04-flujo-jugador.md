@@ -4,22 +4,20 @@
 
 ---
 
-## 1. Principio: mirar, inscribirse y pagar no piden cuenta
+## 1. Principio: mirar no pide cuenta, e inscribirse es verificar el email
 
-| Sin cuenta | Con cuenta |
+| Sin cuenta | Con cuenta, que es el email verificado |
 |---|---|
-| Ver el ranking, las fichas, el historial, los cuadros, las zonas y el calendario | Coordinar las fechas de sus partidos |
-| Inscribirse a un torneo | Cargar y confirmar resultados, si la organización lo permite (`quien_carga_resultados`, decisión abierta 12 del [README](README.md)) |
-| Pagar la inscripción | Recibir avisos en el celular |
-| | Inscribirse con un toque en cualquier circuito |
+| Ver el ranking, las fichas, el historial, los cuadros, las zonas y el calendario | Inscribirse y pagar |
+| | Coordinar las fechas de sus partidos |
+| | Cargar y confirmar resultados, si la organización lo permite (`quien_carga_resultados`, decisión abierta 12 del [README](README.md)) |
+| | Recibir avisos en el celular |
 
 **Mirar no pide cuenta.** Las páginas públicas se abren por link: la organización comparte la URL en el grupo de WhatsApp donde ya se comunican, el jugador la toca y ve lo que necesita.
 
-**Inscribirse y pagar tampoco.** El jugador se identifica con su DNI y deja un email para el comprobante ([decisión 049](decisiones/049-identificacion-en-la-inscripcion.md)). La cuenta es opcional y se ofrece después del pago (§5.8).
+**Inscribirse pide verificar el email, y eso ya es la cuenta.** El jugador escribe su email y el código de 6 dígitos que le llega. No hay registro aparte ni contraseña ([decisión 049](decisiones/049-identidad-e-ingreso-con-codigo.md)). Con la sesión iniciada en ese dispositivo, ni siquiera el código.
 
-**La cuenta es para lo que dura todo el torneo:** coordinar con el rival, recibir avisos y no volver a identificarse en cada inscripción.
-
-> **Por qué:** el público del circuito es mayoritariamente gente adulta acostumbrada a coordinar por WhatsApp. Pedirles registro para ver su ranking, o como requisito para pagar, es fricción que abandonarían. La inscripción es lo que el jugador viene a hacer: no puede quedar trabada en una contraseña.
+> **Por qué:** el público del circuito es mayoritariamente gente adulta acostumbrada a coordinar por WhatsApp. Pedirles registro para ver su ranking es fricción que abandonarían. Para inscribirse, una contraseña es otra cosa que olvidar entre torneo y torneo; un código que llega al email cuesta un minuto y prueba que el email es suyo.
 >
 > Validado externamente: las tres plataformas relevadas ([01-vision.md](01-vision.md) §3) resuelven la consulta sin autenticación.
 
@@ -33,7 +31,7 @@
 |---|---|
 | Inscribirse y pagar — es lo que quiere hacer | Cargar resultados |
 | Coordinar fecha con su rival — **ya lo hace hoy** por WhatsApp | Actualizar su perfil o su ranking |
-| | Reclamar perfiles o verificar identidad |
+| | Crear o recordar una contraseña |
 
 La distinción clave: coordinar la fecha **no es carga nueva**. El reglamento ya obliga a registrar los turnos pactados en el grupo de WhatsApp; la app solo cambia dónde queda ese registro y lo vuelve consultable.
 
@@ -55,26 +53,28 @@ Se accede por link directo, sin sesión. **No exponen datos de contacto.** La b�
 
 ## 4. Cuenta y vinculación
 
-En modo `cerrada` —el de POLENTA— **el jugador ya existe en el padrón antes de tener cuenta**. La vinculación con su perfil no ocurre al crear la cuenta sino **al inscribirse**: con su DNI, buscándose por su nombre o desde el link personal que le manda la organización (§5). En modo `abierta` el perfil se crea al inscribirse, con 0 puntos.
+**La cuenta es el email verificado** ([decisión 049](decisiones/049-identidad-e-ingreso-con-codigo.md)). La persona (`Usuario`) tiene nombre, apellido y email, y se crea la primera vez que verifica un código. Toda persona que se inscribe ya tiene cuenta. No hay registro de jugadores ni contraseña.
 
-**La cuenta es opcional y nace después del primer pago.** El comprobante trae el link para crear la contraseña; la cuenta toma el nombre del perfil y el DNI y el email de la inscripción ([decisión 051](decisiones/051-identidad-en-la-cuenta.md)). No hay registro de jugadores por separado.
+En modo `cerrada` —el de POLENTA— **el jugador ya existe en el padrón antes de tener cuenta**. La vinculación con su perfil ocurre **al inscribirse**: buscándose por su apellido, con la propuesta "¿Sos…?" si ya juega en otro circuito, o desde el link personal que le manda la organización (§5). En modo `abierta`, el perfil se crea al inscribirse, con 0 puntos.
 
-La organización **ve y puede revertir** las vinculaciones desde el padrón, y revisa solo las dudosas: los posibles homónimos (§5.9). En un circuito cerrado como POLENTA el riesgo es bajo —todos se conocen y nadie gana nada apropiándose del historial ajeno—; en un circuito abierto la revisión de la organización pasa a ser más relevante.
+La organización **ve cada vinculación nueva** en el padrón y revisa solo las dudosas: los posibles homónimos y los perfiles que reclama otra cuenta. También puede desvincular cualquier perfil (§5.9). **La organización no toca la identidad de nadie:** el email y el nombre de la persona son de ella.
 
-> **Estado:** el lado de la organización ya está en parte: el padrón marca los perfiles con cuenta y permite desvincularlos (`DELETE /jugadores/:id/cuenta`, [decisión 007](decisiones/007-vinculacion-de-cuentas-en-f02.md)). La identificación por DNI, el link personal, la revisión de homónimos y la cuenta desde el comprobante llegan con F12 ([decisiones 049 a 051](decisiones/049-identificacion-en-la-inscripcion.md)).
+> **Estado:** el lado de la organización ya está en parte: el padrón marca los perfiles con cuenta y permite desvincularlos (`DELETE /jugadores/:id/cuenta`, [decisión 007](decisiones/007-vinculacion-de-cuentas-en-f02.md)). El ingreso con código, el link personal, la revisión y el aviso de vinculaciones nuevas llegan con F12 ([decisiones 049 a 051](decisiones/049-identidad-e-ingreso-con-codigo.md)).
 
 ### 4.1 Ingreso a la app
 
-Quien ya tiene cuenta entra a la app con su email y su contraseña, por `POST /api/auth/ingreso-jugador`, distinto del ingreso de la web ([decisión 039](decisiones/039-ingreso-del-jugador.md)). La misma cuenta puede administrar una organización desde la web y jugar desde la app.
+El jugador entra a la app con su email y un código de 6 dígitos que le llega por email, por `POST /api/auth/ingreso-jugador`, distinto del ingreso de la web ([decisiones 039](decisiones/039-ingreso-del-jugador.md) y [049](decisiones/049-identidad-e-ingreso-con-codigo.md)). Los administradores siguen entrando a la web con su contraseña. Quien administra y juega con el mismo email es la misma persona: contraseña en la web, código en la app.
 
+- **El código** vence a los 10 minutos, admite 5 intentos y se puede reenviar (§5.5).
 - **Un perfil por circuito.** Si juega en varios, elige en cuál entrar y la app lo recuerda. Para cambiar, toca el nombre del circuito en el encabezado, donde también está "Cerrar sesión" ([decisión 040](decisiones/040-jugador-en-varios-circuitos.md)).
-- **La sesión queda guardada en el celular**, cifrada, y dura 7 días como en la web ([decisión 041](decisiones/041-sesion-en-el-celular.md)).
+- **La sesión queda guardada en el celular**, cifrada, y dura 7 días como en la web ([decisión 041](decisiones/041-sesion-en-el-celular.md)). Con sesión no se pide código.
 - **Sin sesión, la app solo muestra el ingreso.** La consulta sin cuenta es la de la web, por link ([decisión 042](decisiones/042-la-app-sin-sesion.md)).
-- **Quien solo administra** recibe un aviso para entrar por la web.
+- **Quien solo administra** verifica el código, no tiene perfil de jugador y recibe un aviso para entrar por la web.
+- **La persona edita su nombre desde su cuenta.** Cambiar el email pide un código al email nuevo. *Pendiente de código.*
 
-> **Estado:** implementado en la app para el 50%, con la cuenta de prueba del seed. Recuperar la contraseña desde la app todavía no: el link del mail abre la web.
+> **Estado:** el ingreso está implementado en la app para el 50%, todavía con email y contraseña y con la cuenta de prueba del seed. Pasa a código con F12.
 
-> **Descartado:** verificación por SMS y flujo de reclamo de perfiles. Resolvían un riesgo bajo en los circuitos amateur, donde los jugadores se conocen (POLENTA: 77 personas), y la revisión de la organización ya cubre el caso raro.
+> **Descartado:** verificación por SMS y pedir el DNI. El SMS necesita un proveedor externo pago; el DNI no se puede verificar desde un celular, así que no agrega seguridad (decisión 049).
 
 ---
 
@@ -89,9 +89,9 @@ Distinción importante que conviene no mezclar:
 | | Quién |
 |---|---|
 | Ver ranking, cuadros y fichas | Cualquiera, sin cuenta |
-| **Inscribirse a un torneo** | Quien está en el padrón (modo `cerrada`), con cuenta o sin ella |
+| **Inscribirse a un torneo** | Quien está en el padrón (modo `cerrada`), con su email verificado |
 
-Público para **leer** no es público para **inscribirse**. Y no pedir cuenta no es dejar entrar a cualquiera: en modo `cerrada`, quien no está en el padrón no se inscribe, tenga cuenta o no.
+Público para **leer** no es público para **inscribirse**. Y verificar un email no es entrar al circuito: en modo `cerrada`, quien no está en el padrón no se inscribe, aunque tenga cuenta.
 
 ### 5.2 Cómo entra un jugador nuevo al circuito
 
@@ -117,180 +117,162 @@ Sube en el ranking
 
 **Inscribirse no otorga puntos.** Los puntos los da la instancia alcanzada al cerrar el torneo. Alguien puede anotarse a cinco torneos y su ranking no se mueve hasta que juegue.
 
-### 5.3 Principio: el DNI identifica, el email comunica
+### 5.3 Principio: el email verificado es la persona
 
-- **El DNI encuentra al jugador en el padrón.** Es único, no cambia y se sabe de memoria.
-- **El email sirve para mandarle el comprobante y los avisos.**
-- **Inscribirse y pagar no piden cuenta.** La cuenta es opcional y se ofrece después del pago.
-- **Automático por excepción.** El caso normal no lo toca nadie; la organización solo revisa lo dudoso, como en la importación del padrón y la carga de resultados.
-
-No es DNI *o* email: son los dos, cada uno para lo suyo ([decisión 049](decisiones/049-identificacion-en-la-inscripcion.md), que cierra la decisión abierta 8).
+- **El email, verificado con un código, identifica a la persona.** Es lo único que se puede probar desde un celular ([decisión 049](decisiones/049-identidad-e-ingreso-con-codigo.md), que cierra la decisión abierta 8).
+- **El DNI no se pide.** No se puede verificar, así que no agrega seguridad, y si identificara, el primero que lo escribe se lo quedaría para toda la plataforma.
+- **La organización no toca la identidad de nadie.** El email y el nombre de la persona son de ella. La organización decide sobre su padrón: de qué persona es cada perfil, y sus inscripciones.
+- **Automático por excepción.** El caso normal no lo toca nadie; la organización ve las vinculaciones nuevas y revisa solo lo dudoso, como en la importación del padrón y la carga de resultados.
 
 Hay tres formas de llegar a la inscripción, y las tres terminan igual (§5.8):
 
 | Entrada | Cómo llega | Qué hace para identificarse |
 |---|---|---|
-| 1. Link del torneo | La organización lo comparte en el grupo | Escribe su DNI; la primera vez, se busca por su apellido |
-| 2. Link personal | La organización se lo manda a él | Escribe su DNI y su email, sin buscarse |
-| 3. Con cuenta | Toca el link de un torneo con la sesión iniciada | Nada, o un toque para confirmar quién es en un circuito nuevo |
+| 1. Link del torneo | La organización lo comparte en el grupo | Email y código. Después encuentra su perfil (§5.6) |
+| 2. Link personal | La organización se lo manda a él | Email y código. El perfil ya lo eligió la organización (§5.7) |
+| 3. Con la sesión iniciada | Toca el link de un torneo desde la app o la web | Nada: no hay código |
 
 ### 5.4 Persona y perfil
 
-**Distinción central: la persona (`Usuario`) y su perfil en cada circuito (`Jugador`) son entidades distintas** ([decisión 051](decisiones/051-identidad-en-la-cuenta.md)).
+**Distinción central: la persona (`Usuario`) y su perfil en cada circuito (`Jugador`) son entidades distintas.**
 
 | Entidad | Qué es | Alcance | Cuándo existe |
 |---|---|---|---|
 | `Jugador` | El perfil del padrón: categoría, puntos, historial. **Es la entidad del dominio** | Uno por organización | Antes de que la persona toque nada. Lo crea la organización, o la inscripción en modo abierto |
-| `Usuario` | La cuenta de la persona: nombre, DNI, email y contraseña | Global | Opcional, después del primer pago |
+| `Usuario` | La persona: nombre, apellido y email verificado | Global | Desde la primera vez que verifica un código |
 
-**La inscripción se vincula al `Jugador`, no al `Usuario`.** Por eso el flujo funciona sin cuenta: el `Jugador` ya existía en el padrón. Sin cuenta, el DNI y el email se guardan en el perfil; con cuenta, viven en la cuenta y la persona no los vuelve a cargar en otro circuito.
+**La inscripción se vincula al `Jugador`, no al `Usuario`.** El `Jugador` ya existía en el padrón; la inscripción le agrega de qué persona es.
 
-**Una cuenta, un perfil por organización.** Quien juega en dos circuitos tiene una cuenta y dos perfiles, cada uno con su categoría, sus puntos y su historial. Es lo que ya supone la app, que pregunta en qué circuito entra ([decisión 040](decisiones/040-jugador-en-varios-circuitos.md)).
+**Una persona, un perfil por organización.** Quien juega en dos circuitos tiene una cuenta y dos perfiles, cada uno con su categoría, sus puntos y su historial. Es lo que ya supone la app, que pregunta en qué circuito entra ([decisión 040](decisiones/040-jugador-en-varios-circuitos.md)).
 
 **Por qué el perfil no se comparte entre organizaciones:**
 
 - **Cada organización es dueña de su padrón.** Lo arma, cambia categorías, da de baja. Con un perfil compartido, lo que decide una cambiaría lo que ve la otra.
 - **`organizacion_id` es la clave de aislamiento** de toda entidad del dominio. Un perfil global sería la única excepción.
-- **Privacidad.** Que alguien juegue en otro circuito, y con qué categoría y puntos, no es asunto de esta organización. Cada una ve el nombre, el DNI y el email de quien se inscribe en ella, con su consentimiento (§5.7), y nada de otra.
+- **Privacidad.** Que alguien juegue en otro circuito, y con qué categoría y puntos, no es asunto de esta organización. Cada una ve el nombre y el email de quien se inscribe en ella, con su consentimiento (§5.6), y nada de otra.
+
+**El nombre de la persona** sale del primer perfil que vincula, como lo escribió esa organización; si se crea un perfil nuevo, lo escribe ella. Lo puede editar desde su cuenta. El nombre de cada perfil del padrón sigue siendo el que escribió cada organización.
 
 ```
-Pago  ->  Inscripcion  ->  Jugador (uno por organización)  ->  (opcional) Usuario (la persona)
+Pago  ->  Inscripcion  ->  Jugador (uno por organización)  ->  Usuario (la persona)
 ```
 
 > **El vínculo no depende de quién pagó.** Si el jugador paga con la cuenta de MercadoPago de otra persona, no importa: la inscripción ya sabía a qué `jugadorId` pertenecía desde antes de ir al checkout. El `external_reference` es el hilo conductor, no la identidad del pagador.
 >
 > Esa es la razón de fondo para crear la inscripción **antes** del pago y no después.
 
-### 5.5 Entrada 1 · Link del torneo
+### 5.5 Verificar el email: el código
 
-La organización comparte el link del torneo en el grupo. El jugador lo abre en el navegador del celular, ve la convocatoria, toca "Inscribirme y pagar" y escribe su DNI. En la misma pantalla:
+1. El jugador escribe su email.
+2. La pantalla dice *"Te mandamos un código a lucas.bravo@gmail.com"*. Siempre lo dice, exista o no la cuenta: pedir un código no revela qué emails están registrados.
+3. Escribe el código de 6 dígitos. Vence a los 10 minutos y admite 5 intentos; hay "Reenviar el código", y la pantalla avisa que puede haber llegado al spam.
+4. Con el código correcto queda la sesión iniciada en ese dispositivo, por 7 días. La próxima vez no se pide.
 
-**a) El DNI está en el padrón del circuito.** Aparecen su nombre, su categoría y el email guardado, **enmascarado** (`lu***@gmail.com`), para confirmarlo o cambiarlo. Nunca el email completo: si no, cualquiera que sepa un DNI vería el email de otra persona. El nombre está para que un DNI mal tipeado que coincide con el de otro se note antes de pagar.
+**El código va antes de pagar.** Si fuera después, podría quedar alguien que pagó con una inscripción sin confirmar porque el código no le llegó.
 
-- Si el perfil no tiene email guardado, el campo aparece vacío.
-- **Si cambia el email**, el comprobante va al nuevo y al anterior le llega un aviso. Si el perfil tiene cuenta, el email de la cuenta no se cambia desde el link: el nuevo recibe el comprobante de esta inscripción y el de la cuenta recibe el aviso. El de la cuenta solo se cambia desde la cuenta.
-- Si ya tiene una reserva vigente en ese torneo, también la de su primera inscripción, sigue con el pago donde lo dejó. Si ya está inscripto, se lo dice, con su número de inscripción.
+**Código y no link mágico.** El link del torneo muchas veces se abre en el navegador interno de WhatsApp; un link en el email se abriría en otro navegador y perdería la inscripción a medias.
 
-**b) El DNI no está (primera vez).** *"Es tu primera inscripción. Buscate por tu apellido."* Es un buscador, no una lista:
+### 5.6 Encontrar el perfil
 
-- No muestra nada hasta escribir 3 letras, y como mucho 5 resultados.
-- Busca solo en la categoría del torneo y muestra solo nombre y apellido.
-- Compara sin tildes ni mayúsculas y palabra por palabra: "Lucas Matías Bravo" encuentra a "Lucas Bravo".
-- No muestra los perfiles que ya tienen un DNI asociado, ni los que están reservados por otra inscripción en curso.
-- Tiene un límite de búsquedas por IP.
+Después del código, o con la sesión iniciada:
 
-Toca su nombre, escribe su email y sigue al pago. El DNI queda asociado a ese perfil **al confirmarse el pago**; mientras dura la reserva, el perfil no aparece en la búsqueda de nadie más, y si la reserva vence vuelve a aparecer. Si elige un nombre con otro igual o parecido en la categoría, la inscripción sigue igual, pero la organización revisa la vinculación (§5.9).
-
-**c) No está en la lista.** Depende del `modo_inscripcion` ([07](07-configurabilidad.md) §2.6):
+1. **Ya tiene perfil en este circuito.** Ve *"Lucas Bravo · Tercera"* y sigue al pago.
+2. **Ya juega en otro circuito y es nuevo en este.** Se busca su apellido en la categoría del torneo y se le propone *"¿Sos Federico Ibáñez, de Intermedia?"*, que confirma con un toque. Si hay varios, elige entre hasta 5. Si no es ninguno, sigue como en el punto 3.
+3. **Es su primera vez.** *"Buscate por tu apellido."* Es un buscador, no una lista:
+   - no muestra nada hasta escribir 3 letras, y como mucho 5 resultados;
+   - busca solo en la categoría del torneo y muestra solo nombre y apellido;
+   - compara sin tildes ni mayúsculas y palabra por palabra: "Lucas Matías Bravo" encuentra a "Lucas Bravo";
+   - los perfiles vinculados a otra cuenta aparecen marcados; los reservados por otra inscripción en curso, no;
+   - tiene un límite de búsquedas por IP.
+4. **El perfil está vinculado a otra cuenta.** Al tocarlo: *"Este perfil ya está vinculado a otra cuenta"*, con el botón "Avisarle a la organización". El botón crea el caso en "Para revisar" con su email verificado, y la organización decide (§5.9).
+5. **No está en la lista.** Depende del `modo_inscripcion` ([07](07-configurabilidad.md) §2.6):
 
 | Modo | Qué ve | Qué pasa |
 |---|---|---|
 | `cerrada` | *"Pedile a la organización que te agregue al padrón"*, con el contacto del circuito | Nada. Cuando lo agreguen, vuelve al link |
-| `con_aprobacion` | Escribe nombre, apellido y email | Queda como solicitud, sin reservar lugar ni cobrar. Si la organización la aprueba, entra al padrón con 0 puntos y le llega un email con el link para pagar |
-| `abierta` | Escribe nombre, apellido y email | Sigue al pago. El perfil se crea con 0 puntos al confirmarse el pago |
+| `con_aprobacion` | Escribe su nombre y apellido (o los toma de su cuenta) | Queda como solicitud, sin reservar lugar ni cobrar. Si la organización la aprueba, entra al padrón con 0 puntos y le llega un email con el link para pagar |
+| `abierta` | Escribe su nombre y apellido (o los toma de su cuenta) | Sigue al pago. El perfil se crea con 0 puntos al confirmarse el pago |
 
-### 5.6 Entrada 2 · Link personal
+**Consentimiento.** En un circuito donde todavía no tiene perfil, antes de vincularse: *"Al inscribirte, Liga Amateur del Valle va a ver tu nombre y tu email"*. Nunca se muestra nada de otros circuitos.
 
-En el padrón, al lado de cada jugador, la organización tiene "Compartir link": abre WhatsApp con el mensaje armado (*"Hola Lucas, inscribite al Primavera 26 desde acá: …"*), en el chat del jugador si tiene teléfono cargado o para elegir el contacto si no. También "Copiar link" ([decisión 050](decisiones/050-link-personal-de-inscripcion.md)).
+**La vinculación se guarda al confirmarse el pago** ([decisión 051](decisiones/051-vinculacion-con-el-padron.md)). Mientras dura la reserva de 15 minutos, el perfil elegido queda reservado y no aparece en la búsqueda de nadie más; si la reserva vence, vuelve a aparecer. Si elige un nombre con otro igual o parecido en la categoría, la inscripción sigue igual, pero la organización revisa la vinculación (§5.9).
 
-- **Quien entra se saltea la búsqueda:** escribe su DNI, para asociarlo, y su email. Después ve los torneos de su categoría con la inscripción abierta y elige uno.
-- **No hay revisión de homónimo:** el link lo mandó la organización a esa persona.
+### 5.7 El link personal
+
+La primera vez, el padrón no tiene con qué comparar: alguien puede elegir el perfil de otro, y ningún dato que se tipee lo evita. **El link personal cierra ese hueco**, porque el perfil lo elige la organización ([decisión 050](decisiones/050-link-personal-de-inscripcion.md)).
+
+En el padrón, al lado de cada jugador, la organización tiene "Compartir link": abre WhatsApp con el mensaje armado (*"Hola Lucas, inscribite al Primavera 26 desde acá: …"*), en el chat del jugador si tiene teléfono cargado o para elegir el contacto si no. También "Copiar link".
+
+- **Quien entra se saltea la búsqueda:** escribe su email, verifica el código (o ya tiene la sesión) y queda vinculado a ese perfil. Después ve los torneos de su categoría con la inscripción abierta y elige uno.
+- **No hay revisión de homónimo:** el perfil lo eligió la organización.
 - **El link lleva un código aleatorio**, no el id del jugador: no se puede adivinar el de otro. Es del jugador, no de un torneo.
 - **La organización puede generar uno nuevo**, y el anterior deja de andar.
-- **Deja de servir para vincular cuando el perfil ya tiene DNI.** Si se vuelve a abrir, pide el DNI y, si coincide, sigue a los torneos abiertos. Un link regenerado o que nunca existió dice *"Este link ya no anda"*.
+- **Deja de servir para vincular cuando el perfil ya está vinculado.** Si lo abre la misma cuenta, sigue a los torneos abiertos; si lo abre otra, ve el aviso del punto 4 de §5.6. Un link regenerado o que nunca existió dice *"Este link ya no anda"*.
 
-### 5.7 Entrada 3 · Con cuenta
-
-La persona se carga **una vez**: nombre, DNI y email viven en la cuenta, que es global ([decisión 051](decisiones/051-identidad-en-la-cuenta.md)). Al tocar el link de un torneo de cualquier organización, con la sesión iniciada en la app o en la web:
-
-1. Si ya tiene perfil en esa organización, va directo al pago.
-2. Si su DNI está en el padrón, se vincula directo.
-3. Si no, busca por su apellido en la categoría del torneo y propone *"¿Sos Federico Ibáñez, de Tercera?"*, que se confirma con un toque. Si hay varios, elige entre hasta 5. Vale la revisión de homónimos (§5.9).
-4. Si no está: en un torneo abierto se crea el perfil con los datos de la cuenta; con aprobación, la solicitud sale con esos datos; en uno cerrado, *"Pedile a la organización que te agregue al padrón"*.
-
-Como sin cuenta, la vinculación se guarda al confirmarse el pago.
-
-**Consentimiento.** Antes de vincularse a una organización nueva: *"Al inscribirte, Liga Amateur del Valle va a ver tu nombre, tu DNI y tu email"*. Ninguna organización ve datos de otra.
-
-**Cuenta sin DNI.** Las cuentas creadas antes de este flujo, o las de quien administra y además juega, no tienen DNI: se pide una vez y queda en la cuenta.
-
-**Con la decisión 040.** Un circuito nuevo es un perfil más: la app lo suma a la lista de "¿A qué circuito entrás?".
-
-### 5.8 Final común: pago, comprobante y cuenta
+### 5.8 Final común: pago y comprobante
 
 1. **Pagar.** Se crea la inscripción en `pendiente_pago`, con el lugar reservado 15 minutos, y el jugador va al checkout de MercadoPago. Al volver ve *"Confirmando el pago"* hasta que llega el webhook ([05-pagos.md](05-pagos.md) §3).
-2. **Confirmar.** Con el webhook aprobado, la inscripción pasa a `pagada`, se guarda la vinculación del DNI con el perfil (o se crea el perfil, en modo abierto) y **recién ahí** se manda el **comprobante por email**: jugador, torneo, categoría, monto, número de inscripción, fecha y link al torneo. No en la vuelta del checkout: podría llegar un comprobante de un pago rechazado ([05](05-pagos.md) §4).
-3. **Listo.** La pantalla final muestra el número de inscripción, como respaldo si el email no llega, y dice a qué email (enmascarado) se mandó el comprobante.
-4. **La cuenta, si no tiene.** *"Listo, estás inscripto. Creá tu contraseña y la próxima vez te inscribís en cualquier circuito con un toque"*. El email ya está: el link para elegir la contraseña viaja en el comprobante, y recibirlo prueba que el email es suyo ([decisión 051](decisiones/051-identidad-en-la-cuenta.md)).
+2. **Confirmar.** Con el webhook aprobado, la inscripción pasa a `pagada`, se guarda la vinculación del perfil con la persona (o se crea el perfil, en modo abierto) y **recién ahí** se manda el **comprobante por email**: jugador, torneo, categoría, monto, número de inscripción, fecha y link al torneo. No en la vuelta del checkout: podría llegar un comprobante de un pago rechazado ([05](05-pagos.md) §4).
+3. **Listo.** La pantalla final muestra el número de inscripción, como respaldo si el email no llega, y dice a qué email se mandó el comprobante.
+4. **La app.** Para coordinar sus partidos, el jugador entra a la app con el mismo email y un código. No hay cuenta que crear: ya la tiene.
 
 Si el pago se rechaza, el lugar se libera y puede intentar de nuevo. Si la reserva vence antes de pagar, también: vuelve a la convocatoria y, si quedan lugares, reserva otra vez.
-
-**Por qué la cuenta viene después del pago:**
-
-- **La inscripción nunca se bloquea** por no tener cuenta. Respeta el principio de mínima carga (§2).
-- **Es el mejor momento para ofrecerla:** el jugador acaba de comprometerse con el torneo. La pantalla final la anuncia, aunque se cree desde el email.
-
-Quien no quiera cuenta se queda con las pantallas públicas y no pierde nada, salvo los avisos en el celular y la coordinación dentro de la app.
 
 **Reserva de cupo y lista de espera.** La reserva dura los minutos que configure el torneo (por defecto, 15). Si el cupo está lleno, puede sumarse a la **lista de espera**; si alguien se baja, se le avisa y se le habilita el pago. Detalle en [05-pagos.md](05-pagos.md).
 
 ### 5.9 Lo que revisa la organización
 
-Automático por excepción: la organización no aprueba cada vinculación, solo mira lo dudoso.
+Automático por excepción: la organización no aprueba cada vinculación. Decide sobre su padrón, nunca sobre la identidad de nadie ([decisión 051](decisiones/051-vinculacion-con-el-padron.md)).
 
-- **Posible homónimo.** Si el jugador eligió un nombre con otro igual o parecido en la categoría (en la búsqueda de la entrada 1 o en el "¿Sos…?" de la entrada 3), paga y queda inscripto, pero la vinculación queda **pendiente de revisión**: *"Alguien con DNI 30.1xx.xxx se vinculó a Juan Pérez. Hay otro jugador con el mismo nombre en Tercera"*. La organización la confirma, la pasa al otro perfil o da de alta a la persona como jugador nuevo, con un clic. El jugador no ve la revisión: su inscripción no cambia.
+- **Vinculaciones nuevas.** El padrón muestra las que se hicieron desde la última visita, con cómo se hizo cada una: link personal, búsqueda o "¿Sos…?". No frenan nada; están para que la organización mire la lista cuando quiera.
+- **Posible homónimo.** Si el jugador eligió un nombre con otro igual o parecido en la categoría, paga y queda inscripto, pero la vinculación queda **para revisar**: *"lucas.p@gmail.com se vinculó a Juan Pérez. Hay otro jugador con el mismo nombre en Tercera"*. La organización la confirma, pasa la inscripción al otro perfil o da de alta a la persona como jugador nuevo. El jugador no ve la revisión: su inscripción no cambia.
+- **Perfil reclamado.** Si otra cuenta tocó "Avisarle a la organización" sobre un perfil vinculado, el caso aparece solo en "Para revisar", con las dos cuentas. La organización decide de quién es el perfil: lo deja, se lo pasa a quien lo reclama, o lo desvincula para que el dueño lo reclame con su link personal. Y decide qué pasa con las inscripciones que pagó la cuenta que lo tenía.
 - **Solicitudes** de los torneos con aprobación: aprueba o rechaza. Rechazar no pide explicación ([02-dominio.md](02-dominio.md) §2).
-- **Cualquier vinculación** se revisa y se revierte desde el padrón.
-- **Si alguien inscribió a otro con su DNI**, el comprobante le llega a la persona real: va al email guardado y, si lo cambiaron, al anterior le llega un aviso. El comprobante dice *"¿No te inscribiste vos? Avisale a la organización"*.
+- **Desvincular.** Cualquier perfil se puede desvincular desde el padrón y queda libre. No toca el email ni la cuenta de nadie, y sus inscripciones quedan en el perfil.
 
 > **Red de seguridad.** En un circuito donde los jugadores se conocen entre sí, como POLENTA, ninguna llave técnica es tan confiable como el organizador mirando la lista. El sistema hace que el caso normal sea automático y el caso raro, fácil de corregir a mano.
 
-### 5.10 Tratamiento del DNI y del email
+### 5.10 Datos personales
 
-El DNI es dato personal sensible en Argentina:
-
-- Se almacena **cifrado**, nunca en texto plano. Para poder buscarlo cifrado hace falta además un hash de búsqueda; se resuelve al implementar ([decisión 049](decisiones/049-identificacion-en-la-inscripcion.md)).
-- **No aparece en ninguna pantalla pública** ni en respuestas de la API destinadas a otros jugadores.
-- Solo la organización dueña del padrón puede verlo. En las listas y en la revisión se muestra enmascarado: `30.1xx.xxx`.
-- La consulta por DNI y la búsqueda por apellido tienen un límite por IP.
-
-El email se muestra enmascarado siempre que quien mira puede no ser su dueño: las dos primeras letras y el dominio, `lu***@gmail.com`. La organización lo ve completo, igual que el teléfono: es dato de su padrón.
+- **El email** lo ven la persona y las organizaciones en las que se inscribió, para contactarla. No aparece en ninguna pantalla pública ni en respuestas de la API destinadas a otros jugadores.
+- **Un email por persona.** Para un email compartido (un padre que inscribe a dos hijos), la salida es la inscripción manual de la organización ([05-pagos.md](05-pagos.md) §8).
+- **El DNI no se pide.** Puede quedar como dato opcional del padrón, si una organización lo necesita por otro motivo (un seguro, por ejemplo), pero no identifica a nadie ni se usa en la inscripción.
+- **Los pedidos de código y la búsqueda** tienen un límite por email y por IP.
 
 ### 5.11 La secuencia en la base
 
 **Estado inicial** tras importar el padrón:
 
 ```
-Jugador { id: 42, organizacionId: 1, nombre: "Lucas", apellido: "Bravo", dni: null, email: null, usuarioId: null }
+Jugador { id: 42, organizacionId: 1, nombre: "Lucas", apellido: "Bravo", usuarioId: null }
 ```
 
 | Paso | Qué ocurre en la base |
 |---|---|
-| Escribe el DNI 30123456 | Busca `Jugador where organizacionId = 1 and dni = '30123456'`. Sin coincidencia |
+| Escribe lucas.bravo@gmail.com | Se guarda un código para ese email, con hash, vencimiento a 10 minutos e intentos en 0, y se manda por email |
+| Escribe el código | Se verifica. Como no había una persona con ese email: `Usuario { id: 5, email }`, todavía sin nombre. Queda la sesión iniciada |
 | Escribe "bra" y toca "Lucas Bravo" | Nada todavía |
-| Escribe su email y toca "Pagar" | `Inscripcion { id: 100482, jugadorId: 42, torneoId: 7, estado: "pendiente_pago", reservaVence }`, con el DNI y el email pendientes. El perfil 42 deja de aparecer en la búsqueda |
+| Toca "Pagar" | `Inscripcion { id: 100482, jugadorId: 42, torneoId: 7, estado: "pendiente_pago", reservaVence }`, con la persona 5 pendiente de vincular. El perfil 42 deja de aparecer en la búsqueda |
 | Va a MercadoPago | Preferencia con `external_reference = 100482` |
-| Llega el webhook aprobado | `Inscripcion[100482].estado = "pagada"` + `Pago { inscripcionId: 100482, ... }` + `Jugador[42].dni` (cifrado) y `Jugador[42].email`. Se manda el comprobante |
-| (Opcional) crea la contraseña desde el comprobante | `Usuario { id: 5, nombre, apellido, dni, email }` y `Jugador[42].usuarioId = 5` |
+| Llega el webhook aprobado | `Inscripcion[100482].estado = "pagada"` + `Pago { inscripcionId: 100482, ... }` + `Jugador[42].usuarioId = 5` + `Usuario[5]` toma el nombre "Lucas Bravo" del perfil. Se manda el comprobante |
 
-Si la reserva vence sin pago, la inscripción pasa a `expirada`, el DNI y el email pendientes se descartan y el perfil 42 vuelve a aparecer en la búsqueda.
+Si la reserva vence sin pago, la inscripción pasa a `expirada`, no se vincula nada y el perfil 42 vuelve a aparecer en la búsqueda. La persona 5 sigue existiendo: es su email verificado.
 
 ### 5.12 Pasos por situación
 
-| Situación | Pasos hasta pagar | ¿Revisa la organización? |
+| Situación | Pasos hasta pagar | ¿Qué ve la organización? |
 |---|---|---|
-| Sin cuenta, DNI ya asociado | Link del torneo → DNI → confirma el email → paga | No |
-| Sin cuenta, primera vez | Link del torneo → DNI → se busca por apellido → toca su nombre → email → paga | Solo si hay un homónimo |
-| Sin cuenta, link personal | Link personal → DNI → email → elige el torneo → paga | No |
-| Sin cuenta, no está en el padrón (`cerrada`) | Link del torneo → DNI → se busca → "Pedile a la organización…" | Lo agrega al padrón |
-| Sin cuenta, no está (`con_aprobacion`) | Link del torneo → DNI → se busca → nombre, apellido y email → solicitud | Aprueba o rechaza; si aprueba, paga desde el email |
-| Sin cuenta, no está (`abierta`) | Link del torneo → DNI → se busca → nombre, apellido y email → paga | No |
-| Con cuenta, mismo circuito | Link del torneo → paga | No |
-| Con cuenta, circuito nuevo, DNI en el padrón | Link del torneo → consentimiento → paga | No |
-| Con cuenta, circuito nuevo, sin DNI en el padrón | Link del torneo → "¿Sos…?" y consentimiento → paga | Solo si hay un homónimo |
-| Con cuenta, circuito nuevo, torneo abierto y no está | Link del torneo → consentimiento → se crea el perfil → paga | No |
+| Ya tiene perfil en el circuito, sin sesión | Link del torneo → email → código → paga | Nada nuevo |
+| Ya tiene perfil en el circuito, con sesión | Link del torneo → paga | Nada nuevo |
+| Primera vez | Link del torneo → email → código → se busca por apellido → toca su nombre → consentimiento → paga | La vinculación nueva; si hay un homónimo, para revisar |
+| Juega en otro circuito, nuevo en este | Link del torneo → (email y código, si no hay sesión) → "¿Sos…?" y consentimiento → paga | La vinculación nueva; si hay un homónimo, para revisar |
+| Link personal | Link personal → email → código → elige el torneo → paga | La vinculación nueva |
+| Su perfil está vinculado a otra cuenta | … → toca su nombre → "Avisarle a la organización" | El reclamo, para revisar |
+| No está en el padrón (`cerrada`) | … → se busca → "Pedile a la organización…" | Lo agrega al padrón |
+| No está (`con_aprobacion`) | … → se busca → nombre y apellido → solicitud | Aprueba o rechaza; si aprueba, el jugador paga desde el email |
+| No está (`abierta`) | … → se busca → nombre y apellido → consentimiento → paga | El perfil nuevo |
 
-En todos los casos que pagan, el final es el mismo: comprobante por email al confirmarse el pago y, si no tiene cuenta, el link para crear la contraseña.
+En todos los casos que pagan, el final es el mismo: comprobante por email al confirmarse el pago, y la app con el mismo email.
 
 ## 6. Coordinación de partidos
 
@@ -393,19 +375,18 @@ Tabla de posiciones del grupo en vivo, con la línea de corte marcada — arriba
 | Funcionalidad | Web | Móvil |
 |---|---|---|
 | Ver ranking, ficha, cuadros, calendario (**público**) | ✓ | ✓ |
-| Ingresar | ✓ | ✓ |
-| Crear la cuenta del jugador (desde el link del comprobante) | ✓ | — |
+| Ingresar: el jugador con email y código, el administrador con contraseña | ✓ | ✓ |
 | Gestionar padrón e importar Excel | ✓ | — |
 | Crear y configurar torneo | ✓ | — |
 | Gestionar inscripciones y lista de espera | ✓ | — |
 | Sorteo y generación de zonas | ✓ | — |
 | Tablero de avance | ✓ | — |
 | Cargar resultados | ✓ | — |
-| Inscribirse y pagar | ✓ por link, sin cuenta | ✓ con cuenta |
+| Inscribirse y pagar | ✓ por link, con email y código | ✓ con la sesión iniciada |
 | Coordinar fechas | — | ✓ |
 | Mis partidos | ✓ | ✓ |
 | Notificaciones push | — | ✓ |
 
-**La inscripción por link es web.** Quien no tiene cuenta abre el link del torneo en el navegador del celular: sin cuenta no hay app que abrir, porque la app sin sesión solo muestra el ingreso ([decisión 042](decisiones/042-la-app-sin-sesion.md)). Si el link abre la app cuando está instalada y con la sesión iniciada es la decisión abierta 18 del [README](README.md).
+**La inscripción por link es web.** Quien no tiene la sesión iniciada abre el link del torneo en el navegador del celular y verifica su email ahí: sin sesión no hay app que abrir, porque la app sin sesión solo muestra el ingreso ([decisión 042](decisiones/042-la-app-sin-sesion.md)). Si el link abre la app cuando está instalada y con la sesión iniciada es la decisión abierta 18 del [README](README.md).
 
-La app móvil es **obligatoria** para grupos de 3 y no puede ser una web responsive. Su razón de existir es el flujo del jugador durante el torneo: coordinación, avisos y consulta, más la inscripción de un toque para quien tiene cuenta.
+La app móvil es **obligatoria** para grupos de 3 y no puede ser una web responsive. Su razón de existir es el flujo del jugador durante el torneo: coordinación, avisos y consulta, más la inscripción sin código para quien ya tiene la sesión iniciada.

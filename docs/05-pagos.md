@@ -40,17 +40,17 @@ En la defensa: *"la arquitectura soporta ambos modelos; entregamos el de cuenta 
 
 ## 3. Flujo de inscripción
 
-Inscribirse y pagar no piden cuenta: quien llega por el link del torneo lo hace desde el navegador del celular, y quien tiene cuenta, también desde la app ([04-flujo-jugador.md](04-flujo-jugador.md) §5).
+Quien llega por el link del torneo se inscribe desde el navegador del celular; quien tiene la sesión iniciada, también desde la app ([04-flujo-jugador.md](04-flujo-jugador.md) §5). En los dos casos, antes de pagar ya verificó su email con un código: **el código va antes del pago**, para que nadie quede con un pago hecho y una inscripción sin confirmar porque el código no le llegó ([decisión 049](decisiones/049-identidad-e-ingreso-con-codigo.md)).
 
-1. El jugador se identifica con su DNI y su email (04 §5.5 a §5.7) y toca "Pagar"
-2. **Se crea la `Inscripcion` en `pendiente_pago` ANTES de ir a MercadoPago**, con reserva de cupo por 15 minutos. El DNI y el email quedan pendientes en la inscripción hasta el pago ([decisión 049](decisiones/049-identificacion-en-la-inscripcion.md))
+1. El jugador verifica su email, encuentra su perfil (04 §5.5 y §5.6) y toca "Pagar"
+2. **Se crea la `Inscripcion` en `pendiente_pago` ANTES de ir a MercadoPago**, con reserva de cupo por 15 minutos. El perfil elegido queda reservado y la vinculación con la persona, pendiente hasta el pago ([decisión 051](decisiones/051-vinculacion-con-el-padron.md))
 3. El backend crea la preferencia con `external_reference = inscripcion.id`
 4. La web redirige al `init_point`; la app lo abre con `expo-web-browser`
 5. El jugador paga
 6. MercadoPago redirige a una URL https propia: en la web es la página de la inscripción; en la app, redirige al deep link `torneosapp://inscripcion/:id`
-7. La pantalla muestra "Confirmando el pago" y consulta el estado cada unos segundos. Sin sesión, la consulta usa un código que no se puede adivinar, no el número de inscripción
-8. **El webhook** llega a `POST /webhooks/mercadopago`, el backend consulta el pago contra la API de MP y, si está `approved`, pasa la inscripción a `pagada`, guarda la vinculación del DNI con el perfil y manda el comprobante por email (§4)
-9. La consulta devuelve `pagada` y la pantalla cambia a "Listo, estás inscripto", con el número de inscripción y el email (enmascarado) al que se mandó el comprobante
+7. La pantalla muestra "Confirmando el pago" y consulta el estado cada unos segundos, con la sesión que dejó el código
+8. **El webhook** llega a `POST /webhooks/mercadopago`, el backend consulta el pago contra la API de MP y, si está `approved`, pasa la inscripción a `pagada`, guarda la vinculación del perfil con la persona y manda el comprobante por email (§4)
+9. La consulta devuelve `pagada` y la pantalla cambia a "Listo, estás inscripto", con el número de inscripción y el email al que se mandó el comprobante
 
 ---
 
@@ -66,13 +66,12 @@ Inscribirse y pagar no piden cuenta: quien llega por el link del torneo lo hace 
 | Número de inscripción | 100482 |
 | Fecha del pago | sábado 20 de septiembre |
 | Link al torneo | La página pública de la edición |
-| Si no tiene cuenta | El link para crear la contraseña ([decisión 051](decisiones/051-identidad-en-la-cuenta.md)) |
-| Al pie | *"¿No te inscribiste vos? Avisale a la organización"*, con su contacto |
+| Al pie | Que en la app entra con el mismo email y un código |
 
-- **El número de inscripción** es el id de la `Inscripcion`. Se muestra también en la pantalla final, como respaldo si el email no llega (un email mal escrito no se verifica al inscribirse), y con él la organización la encuentra.
-- **Va al email de la inscripción.** Si el jugador cambió el email guardado, al anterior le llega un aviso: así se entera la persona real si alguien se inscribió con su DNI ([decisión 049](decisiones/049-identificacion-en-la-inscripcion.md)).
+- **El número de inscripción** es el id de la `Inscripcion`. Se muestra también en la pantalla final, como respaldo si el email se demora o cae en spam, y con él la organización la encuentra.
+- **Va al email verificado de la persona.** No hay cuenta que crear ni contraseña: la cuenta es ese email ([decisión 049](decisiones/049-identidad-e-ingreso-con-codigo.md)).
 - **Es idempotente, como el webhook.** Si MercadoPago reenvía la notificación y la inscripción ya está `pagada`, no sale otro comprobante.
-- **Se envía con `apps/api/src/lib/correo.ts`**, el mismo de la recuperación de la contraseña. Para la entrega, Mailpit lo atrapa y lo muestra en `http://localhost:8025` ([decisión 006](decisiones/006-recuperar-la-contrasena.md)); el proveedor real es la decisión abierta 17 del [README](README.md).
+- **Se envía con `apps/api/src/lib/correo.ts`**, el mismo de los códigos y de la recuperación de la contraseña de los administradores. Para la entrega, Mailpit lo atrapa y lo muestra en `http://localhost:8025` ([decisión 006](decisiones/006-recuperar-la-contrasena.md)); el proveedor real es la decisión abierta 17 del [README](README.md).
 
 ---
 
@@ -99,9 +98,9 @@ pendiente_pago → pagada
 en_lista_espera → pendiente_pago   (se liberó un cupo)
 ```
 
-Un job periódico expira las reservas vencidas, libera el cupo y **notifica al primero de la lista de espera**. Al expirar, también se descartan el DNI y el email pendientes, y el perfil vuelve a aparecer en la búsqueda ([decisión 049](decisiones/049-identificacion-en-la-inscripcion.md)).
+Un job periódico expira las reservas vencidas, libera el cupo y **notifica al primero de la lista de espera**. Al expirar, también se descarta la vinculación pendiente, y el perfil vuelve a aparecer en la búsqueda ([decisión 051](decisiones/051-vinculacion-con-el-padron.md)).
 
-**Solicitudes** (torneos `con_aprobacion`, *pendiente de código*). Quien no está en el padrón deja una solicitud, que no reserva lugar ni cobra. Si la organización la aprueba, el jugador entra al padrón y recibe un email con el link para pagar: al abrirlo se crea la inscripción en `pendiente_pago`, con la reserva de siempre. Hace falta un estado nuevo para la solicitud ([decisión 049](decisiones/049-identificacion-en-la-inscripcion.md)).
+**Solicitudes** (torneos `con_aprobacion`, *pendiente de código*). Quien no está en el padrón deja una solicitud, que no reserva lugar ni cobra. Si la organización la aprueba, el jugador entra al padrón y recibe un email con el link para pagar: al abrirlo (con la sesión, o con un código si lo abre en otro navegador) se crea la inscripción en `pendiente_pago`, con la reserva de siempre. Hace falta un estado nuevo para la solicitud ([decisión 051](decisiones/051-vinculacion-con-el-padron.md)).
 
 ---
 

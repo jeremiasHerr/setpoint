@@ -1,6 +1,6 @@
 # 006 — Recuperar la contraseña: mail local y link sin tabla de tokens
 
-**Estado:** aceptada — 4 de octubre de 2026
+**Estado:** aceptada — 4 de octubre de 2026. La recuperación ya no aplica a los jugadores, que ingresan con email y un código ([decisión 049](049-identidad-e-ingreso-con-codigo.md)); sigue para los administradores. El envío por Mailpit y `correo.ts` es el mismo que usan los códigos.
 
 ## Contexto
 

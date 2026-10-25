@@ -67,11 +67,11 @@ Antes del listado, la secuencia operativa completa. Cada paso está cubierto por
 - La organización puede reasignar la categoría de un jugador cuando corresponda.
 - Un mismo jugador puede pertenecer a varios circuitos, con ranking independiente en cada uno: tiene una sola cuenta y un perfil en cada circuito, y ningún circuito ve los datos del otro.
 - El padrón puede ser cerrado, con aprobación previa o abierto, según lo defina la organización. En modo abierto, quien se inscribe sin estar en el padrón se incorpora automáticamente con cero puntos al confirmarse su pago.
-- El jugador se vincula con su perfil del padrón **al inscribirse por primera vez**, sin necesidad de cuenta: con su DNI, buscándose por su apellido o desde el link personal que le manda la organización. Así recupera su historial y sus puntos.
+- El jugador se vincula con su perfil del padrón **al inscribirse por primera vez**, después de verificar su email con un código: buscándose por su apellido o desde el link personal que le manda la organización. Así recupera su historial y sus puntos.
 - Desde el padrón, la organización comparte el **link personal** de cada jugador por WhatsApp o lo copia, y puede generar uno nuevo si se le mandó a quien no era.
-- La organización **revisa solo las vinculaciones dudosas** (un posible homónimo en la categoría) y puede revertir cualquier vinculación desde el padrón.
+- La organización **ve cada vinculación nueva** en el padrón, **revisa solo las dudosas** (un posible homónimo en la categoría, o un perfil que reclama otra cuenta) y puede desvincular cualquier perfil. Decide sobre su padrón, nunca sobre el email o los datos de la persona.
 
-**Entrega: 25%.** La vinculación por DNI, el link personal y la revisión de homónimos llegan con F12, en la entrega del 75% ([decisiones 049 a 051](decisiones/049-identificacion-en-la-inscripcion.md)). Para el 25% quedó el lado de la organización: ver qué perfiles tienen cuenta y desvincularlos ([decisión 007](decisiones/007-vinculacion-de-cuentas-en-f02.md)).
+**Entrega: 25%.** La vinculación al inscribirse, el link personal, el aviso de vinculaciones nuevas y la revisión llegan con F12, en la entrega del 75% ([decisiones 049 a 051](decisiones/049-identidad-e-ingreso-con-codigo.md)). Para el 25% quedó el lado de la organización: ver qué perfiles tienen cuenta y desvincularlos ([decisión 007](decisiones/007-vinculacion-de-cuentas-en-f02.md)).
 
 ---
 
@@ -250,15 +250,15 @@ El jugador dispondrá de una aplicación instalable en su teléfono donde ver su
 
 **Precisiones de alcance:**
 - Solo pueden inscribirse los jugadores que la organización cargó previamente en el circuito, salvo que haya habilitado la inscripción con aprobación o abierta.
-- **El jugador no necesita cuenta para inscribirse ni para pagar.** Entra desde el link del torneo que la organización comparte en el grupo, en el navegador del celular, o desde su link personal.
-- **Se identifica con su DNI**, que lo encuentra en el padrón, y deja un **email** para el comprobante. La primera vez, si su DNI todavía no está asociado, se busca por su apellido entre los jugadores de la categoría.
+- **El jugador no necesita registrarse ni crear una contraseña.** Entra desde el link del torneo que la organización comparte en el grupo, en el navegador del celular, o desde su link personal.
+- **Se identifica con su email, verificado con un código de 6 dígitos** que le llega en el momento. Ese email es su cuenta. No se le pide el DNI. La primera vez se busca por su apellido entre los jugadores de la categoría.
 - Si no está en el padrón: en un torneo cerrado se le pide que hable con la organización; con aprobación, deja una solicitud; en uno abierto, se le crea el perfil.
 - El lugar se reserva por quince minutos mientras se completa el pago. Si el pago no se concreta en ese plazo, el lugar se libera para otro jugador.
 - La inscripción se confirma sola: nadie tiene que verificar comprobantes a mano. Al confirmarse el pago le llega un **comprobante por email**, con su número de inscripción.
-- **La cuenta es opcional y se ofrece después del pago**, desde el comprobante. Con cuenta, se inscribe en cualquier circuito con un toque, y antes de vincularse a uno nuevo se le dice qué datos va a ver esa organización.
+- Con la sesión iniciada no se pide el código. En un circuito nuevo, antes de vincularse se le dice qué datos va a ver esa organización: su nombre y su email.
 - Si el cupo está completo, puede anotarse en la lista de espera.
 
-**Entrega: 75%.** Diseño en [04-flujo-jugador.md](04-flujo-jugador.md) §5 y [decisiones 049 a 051](decisiones/049-identificacion-en-la-inscripcion.md).
+**Entrega: 75%.** Diseño en [04-flujo-jugador.md](04-flujo-jugador.md) §5 y [decisiones 049 a 051](decisiones/049-identidad-e-ingreso-con-codigo.md).
 
 ---
 
@@ -273,7 +273,7 @@ La organización podrá seguir el estado de las inscripciones de cada torneo en 
 - Ante una baja, el sistema deja registrada la cancelación y si corresponde devolución, pero **el movimiento de dinero lo realiza la organización por fuera del sistema**. La política de reembolsos es del circuito, no de la plataforma.
 - Muestra la conciliación del torneo: cuánto se recaudó, cuánto corresponde a la organización y qué devoluciones quedaron pendientes.
 - En los torneos con aprobación, muestra las **solicitudes** de quienes no están en el padrón, para aprobarlas o rechazarlas. Al aprobar, el jugador entra al padrón y recibe el link para pagar.
-- Marca las inscripciones cuya vinculación quedó para revisar por un posible homónimo, y lleva a revisarla (F02).
+- Marca las inscripciones cuya vinculación quedó para revisar (un posible homónimo, o un perfil que reclama otra cuenta) y lleva a revisarla (F02).
 
 **Estado:** parcial. Hay una versión mínima, que es el camino al sorteo (F05): la pantalla Inscripciones de cada categoría muestra los lugares (pagados, reservando y libres) y la lista de inscriptos con su estado, y permite cerrar la inscripción. Al cerrar, las reservas sin pagar no se tocan y no entran al sorteo ([decisión 024](decisiones/024-reservas-sin-pagar-al-cerrar.md)), y no se puede cerrar si los que pagaron no alcanzan para las zonas ([decisión 025](decisiones/025-no-se-cierra-sin-inscriptos-para-las-zonas.md)). Falta inscribir a mano, dar de baja, recordar el pago, la lista de espera, la conciliación, las solicitudes y la marca de las vinculaciones para revisar.
 
