@@ -40,6 +40,8 @@ En la defensa: *"la arquitectura soporta ambos modelos; entregamos el de cuenta 
 
 ## 3. Flujo de inscripción
 
+> **Estado:** implementado en la API. `POST /api/inscripcion/:slug/inscripciones/:id/pago` crea la preferencia (con vencimiento igual al de la reserva) y `POST /api/webhooks/mercadopago` confirma o rechaza consultando el pago. Una tarea vence las reservas cada minuto. Sin `MERCADOPAGO_ACCESS_TOKEN`, el pago es simulado ([decisión 053](decisiones/053-pago-sin-credenciales.md)). Si un pago aprobado llega después de vencida la reserva, se confirma igual: el jugador ya pagó.
+
 Quien llega por el link del torneo se inscribe desde el navegador del celular; quien tiene la sesión iniciada, también desde la app ([04-flujo-jugador.md](04-flujo-jugador.md) §5). En los dos casos, antes de pagar ya verificó su email con un código: **el código va antes del pago**, para que nadie quede con un pago hecho y una inscripción sin confirmar porque el código no le llegó ([decisión 049](decisiones/049-identidad-e-ingreso-con-codigo.md)).
 
 1. El jugador verifica su email, encuentra su perfil (04 §5.5 y §5.6) y toca "Pagar"

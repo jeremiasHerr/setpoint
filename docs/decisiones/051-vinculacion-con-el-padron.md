@@ -97,7 +97,7 @@ Buscador acotado, perfiles vinculados marcados, botón de reclamo, vinculación 
 - ~~**Un perfil por organización y cuenta:** `@@unique([organizacionId, usuarioId])` en `Jugador`.~~ Hecho. En PostgreSQL, varios perfiles sin cuenta (`usuarioId` en null) no chocan con esa restricción. Se quitó el `@@unique` del DNI.
 - ~~**Cómo y cuándo se vinculó cada perfil**~~ Hecho: `Jugador.vinculadoEn` y `vinculadoPor`. Se completan al confirmarse el pago.
 - **Estado de revisión en `Jugador`**, con el motivo: homónimo o reclamo. Para el reclamo, quién reclama y cuándo.
-- ~~**La inscripción guarda el perfil elegido hasta el pago.**~~ Hecho: `Inscripcion.usuarioId` y `vinculaPor`, y la búsqueda excluye los perfiles sin cuenta con una reserva vigente. Falta guardar la vinculación con el webhook aprobado.
+- ~~**La inscripción guarda el perfil elegido hasta el pago.**~~ Hecho: `Inscripcion.usuarioId` y `vinculaPor`, y la búsqueda excluye los perfiles sin cuenta con una reserva vigente. La vinculación se guarda al confirmarse el pago (`confirmarPago`), con la marca de homónimo si corresponde, y la persona toma el nombre del perfil si todavía no tenía.
 - **En modo abierto, la inscripción existe antes que el perfil.** `Inscripcion.jugadorId` es obligatorio: o se crea el `Jugador` como pendiente al reservar y se borra si la reserva vence, o el campo pasa a opcional hasta el pago. Se decide al implementar.
 - **Estado de solicitud** para los torneos con aprobación.
 - **Desvincular** ya existe: `DELETE /api/organizaciones/:slug/jugadores/:id/cuenta` pone `usuarioId` en null ([decisión 007](007-vinculacion-de-cuentas-en-f02.md)).
