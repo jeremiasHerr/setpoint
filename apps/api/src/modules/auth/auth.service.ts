@@ -130,7 +130,8 @@ const WEB_URL = process.env.WEB_URL ?? 'http://localhost:5173';
 // para que la respuesta tarde lo mismo.
 export async function pedirRecuperacion(datos: DatosRecuperarContrasena) {
   const usuario = await prisma.usuario.findUnique({ where: { email: datos.email } });
-  if (!usuario) return;
+  // Los jugadores no tienen contraseña: entran con un código (decisión 049).
+  if (!usuario?.passwordHash) return;
 
   const token = firmarTokenRecuperacion(usuario.id, usuario.passwordHash);
   const link = `${WEB_URL}/restablecer-contrasena?token=${encodeURIComponent(token)}`;
@@ -155,7 +156,7 @@ export async function restablecerContrasena(datos: DatosRestablecerContrasena) {
   const usuario = usuarioId === null ? null : await prisma.usuario.findUnique({ where: { id: usuarioId } });
 
   // Mismo error para link vencido, ya usado o inventado.
-  if (!usuario || !tokenRecuperacionValido(datos.token, usuario.passwordHash)) {
+  if (!usuario?.passwordHash || !tokenRecuperacionValido(datos.token, usuario.passwordHash)) {
     throw new ErrorHttp(400, 'LINK_INVALIDO');
   }
 
