@@ -1,5 +1,6 @@
 import type { PerfilEncontrado, SituacionEnElTorneo, TorneoPublico } from '@setpoint/shared';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Aviso,
   AvisoReserva,
@@ -12,18 +13,21 @@ import {
   Tilde,
   Titulo,
 } from './piezas';
+import { AvisarALaOrganizacion, AvisoEnviado } from './AvisarALaOrganizacion';
 import { mensajeReserva } from './mensajeReserva';
 import { useBusqueda, useReservar } from './useInscripcion';
 
 type Props = {
   torneo: TorneoPublico;
   token: string;
+  // El email verificado: el aviso de reclamo dice a dónde le escribe la organización.
+  email: string;
   situacion: SituacionEnElTorneo;
   onReservado: (inscripcionId: number) => void;
 };
 
 // Después del código: pasos 3 a 10 de docs/pantallas/jugador/identificacion.html (decisión 051).
-export function EncontrarPerfil({ torneo, token, situacion, onReservado }: Props) {
+export function EncontrarPerfil({ torneo, token, email, situacion, onReservado }: Props) {
   const reservar = useReservar(torneo.organizacion.slug, String(torneo.id), token);
   const [modo, setModo] = useState<'propuesta' | 'buscar' | 'vinculado' | 'no-esta'>(
     situacion.propuestas.length > 0 ? 'propuesta' : 'buscar',
@@ -125,29 +129,51 @@ export function EncontrarPerfil({ torneo, token, situacion, onReservado }: Props
     );
   }
 
-  if (modo === 'vinculado') {
+  if (modo === 'vinculado' && elegido) {
     return (
-      <>
-        {elegido && (
-          <div className="flex h-14 items-center justify-between gap-3 rounded-tarjeta border-2 border-negro px-[15px] text-[17px] font-medium">
-            <span>
-              {elegido.nombre} {elegido.apellido}
-            </span>
-            <MarcaVinculado />
-          </div>
-        )}
+      <AvisarALaOrganizacion
+        slug={torneo.organizacion.slug}
+        token={token}
+        jugadorId={elegido.jugadorId}
+        enviado={
+          <AvisoEnviado
+            organizacion={torneo.organizacion.nombre}
+            perfil={`${elegido.nombre} ${elegido.apellido}`}
+            email={email}
+            torneo={torneo.nombre}
+            pie={
+              <Link
+                to={`/c/${torneo.organizacion.slug}/torneos/${torneo.id}`}
+                className="flex h-[52px] w-full items-center justify-center rounded-[12px] border border-linea text-base font-medium hover:bg-fondo"
+              >
+                Volver al torneo
+              </Link>
+            }
+          />
+        }
+      >
+        <div className="flex h-14 items-center justify-between gap-3 rounded-tarjeta border-2 border-negro px-[15px] text-[17px] font-medium">
+          <span>
+            {elegido.nombre} {elegido.apellido}
+          </span>
+          <MarcaVinculado />
+        </div>
         <div className="flex flex-col gap-2">
           <Titulo>Este perfil ya está vinculado a otra cuenta</Titulo>
           <Ayuda>¿Te inscribiste antes con otro email? Entrá con ese y vas directo.</Ayuda>
         </div>
-        <Caja>Si es tu perfil y no fuiste vos, avisale a la organización: ve las dos cuentas y decide de quién es.</Caja>
-        {torneo.organizacion.contacto && <Contacto contacto={torneo.organizacion.contacto} />}
-        <div className="mt-auto">
-          <BotonSecundario onClick={() => setModo('buscar')}>Volver a buscarme</BotonSecundario>
-        </div>
-      </>
+        <Caja>Si es tu perfil y no fuiste vos, avisale a la organización. Ve las dos cuentas y decide de quién es.</Caja>
+        <button
+          type="button"
+          onClick={() => setModo('buscar')}
+          className="self-start text-[15px] font-medium text-gris-500 underline underline-offset-[3px]"
+        >
+          Volver a buscarme
+        </button>
+      </AvisarALaOrganizacion>
     );
   }
+
 
   if (modo === 'no-esta') {
     return (

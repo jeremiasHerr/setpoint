@@ -89,6 +89,7 @@ function Inscripcion({ torneo }: { torneo: TorneoPublico }) {
               <EncontrarPerfil
                 torneo={torneo}
                 token={activa.token}
+                email={activa.usuario.email}
                 situacion={situacion.data}
                 onReservado={(inscripcionId) => navegar(`/c/${torneo.organizacion.slug}/inscripciones/${inscripcionId}`)}
               />

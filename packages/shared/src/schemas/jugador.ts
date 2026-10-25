@@ -48,4 +48,6 @@ export type JugadorPadron = {
   // La edición con la inscripción abierta en su categoría, si hay una sola: el mensaje del link la
   // nombra.
   edicionAbierta: string | null;
+  // Si su vinculación quedó para revisar (decisión 051): posible homónimo o reclamada por otra cuenta.
+  revision: 'homonimo' | 'reclamo' | null;
 };

@@ -36,8 +36,12 @@ export function buscar<T extends ConNombre>(perfiles: T[], consulta: string): T[
 
 // Otro perfil de la categoría con el mismo apellido y el mismo nombre, o la misma inicial: la
 // vinculación queda para que la revise la organización (decisión 051).
-export function esPosibleHomonimo(elegido: ConNombre & { id: number }, otros: (ConNombre & { id: number })[]) {
+export function homonimosDe<T extends ConNombre & { id: number }>(elegido: ConNombre & { id: number }, otros: T[]): T[] {
   const apellido = normalizar(elegido.apellido);
   const inicial = normalizar(elegido.nombre)[0];
-  return otros.some((o) => o.id !== elegido.id && normalizar(o.apellido) === apellido && normalizar(o.nombre)[0] === inicial);
+  return otros.filter((o) => o.id !== elegido.id && normalizar(o.apellido) === apellido && normalizar(o.nombre)[0] === inicial);
+}
+
+export function esPosibleHomonimo(elegido: ConNombre & { id: number }, otros: (ConNombre & { id: number })[]) {
+  return homonimosDe(elegido, otros).length > 0;
 }

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { EncabezadoPublico } from '../components/EncabezadoPublico';
 import { Numero } from '../components/Numero';
+import { AvisarALaOrganizacion, AvisoEnviado } from '../features/inscripcion/AvisarALaOrganizacion';
 import { Ayuda, Caja, CuentaVerificada, Titulo } from '../features/inscripcion/piezas';
 import {
   borrarSesionJugador,
@@ -89,13 +90,24 @@ function LinkEncontrado({ link, codigo }: { link: LinkPersonal; codigo: string }
             <p className="text-[15px] text-gris-700">No pudimos revisar tu perfil. Probá de nuevo en unos minutos.</p>
           )}
           {enCurso === 'otra_cuenta' && (
-            <>
+            <AvisarALaOrganizacion
+              slug={link.organizacion.slug}
+              token={activa.token}
+              jugadorId={link.jugador.id}
+              enviado={
+                <AvisoEnviado
+                  organizacion={link.organizacion.nombre}
+                  perfil={`${link.jugador.nombre} ${link.jugador.apellido}`}
+                  email={activa.usuario.email}
+                />
+              }
+            >
               <div className="flex flex-col gap-2">
                 <Titulo>Este perfil ya está vinculado a otra cuenta</Titulo>
                 <Ayuda>¿Te inscribiste antes con otro email? Entrá con ese y vas directo.</Ayuda>
               </div>
-              <Caja>Si es tu perfil y no fuiste vos, escribile a la organización. Ve las dos cuentas y decide de quién es.</Caja>
-            </>
+              <Caja>Si es tu perfil y no fuiste vos, avisale a la organización. Ve las dos cuentas y decide de quién es.</Caja>
+            </AvisarALaOrganizacion>
           )}
           {enCurso === 'otro_perfil' && (
             <div className="flex flex-col gap-2">
