@@ -94,12 +94,12 @@ Buscador acotado, perfiles vinculados marcados, botón de reclamo, vinculación 
 
 ## Pendiente de código
 
-- **Un perfil por organización y cuenta:** `@@unique([organizacionId, usuarioId])` en `Jugador`. Hoy no existe: solo hay `@@index([usuarioId])`. En PostgreSQL, varios perfiles sin cuenta (`usuarioId` en null) no chocan con esa restricción.
-- **Cómo y cuándo se vinculó cada perfil** (link personal, búsqueda o "¿Sos…?"), para el aviso de vinculaciones nuevas.
+- ~~**Un perfil por organización y cuenta:** `@@unique([organizacionId, usuarioId])` en `Jugador`.~~ Hecho. En PostgreSQL, varios perfiles sin cuenta (`usuarioId` en null) no chocan con esa restricción. Se quitó el `@@unique` del DNI.
+- ~~**Cómo y cuándo se vinculó cada perfil**~~ Hecho: `Jugador.vinculadoEn` y `vinculadoPor`. Se completan al confirmarse el pago.
 - **Estado de revisión en `Jugador`**, con el motivo: homónimo o reclamo. Para el reclamo, quién reclama y cuándo.
-- **La inscripción guarda el perfil elegido hasta el pago.** Con el webhook aprobado se guarda la vinculación. La búsqueda excluye los perfiles con una inscripción `pendiente_pago` vigente.
+- ~~**La inscripción guarda el perfil elegido hasta el pago.**~~ Hecho: `Inscripcion.usuarioId` y `vinculaPor`, y la búsqueda excluye los perfiles sin cuenta con una reserva vigente. Falta guardar la vinculación con el webhook aprobado.
 - **En modo abierto, la inscripción existe antes que el perfil.** `Inscripcion.jugadorId` es obligatorio: o se crea el `Jugador` como pendiente al reservar y se borra si la reserva vence, o el campo pasa a opcional hasta el pago. Se decide al implementar.
 - **Estado de solicitud** para los torneos con aprobación.
 - **Desvincular** ya existe: `DELETE /api/organizaciones/:slug/jugadores/:id/cuenta` pone `usuarioId` en null ([decisión 007](007-vinculacion-de-cuentas-en-f02.md)).
-- **Límite por IP** de la búsqueda.
-- **Rutas públicas** bajo `/api/publico/:slug` ([decisión 033](033-ranking-publico.md)) para la convocatoria y la búsqueda; las que vinculan y reservan piden la sesión de la decisión 049.
+- ~~**Límite por IP** de la búsqueda.~~ Hecho ([decisión 052](052-limite-de-pedidos.md)).
+- ~~**Rutas públicas** para la convocatoria y la búsqueda; las que reservan piden la sesión.~~ Hecho: `GET /api/publico/:slug/torneos/:id` y `/padron?q=`, sin login; `GET` y `POST /api/inscripcion/:slug/torneos/:id`, con la sesión del código pero sin pedir un perfil, para ver la situación de la persona en el torneo y reservar el lugar.

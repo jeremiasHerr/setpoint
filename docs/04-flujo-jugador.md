@@ -195,6 +195,8 @@ Después del código, o con la sesión iniciada:
 
 **Consentimiento.** En un circuito donde todavía no tiene perfil, antes de vincularse: *"Al inscribirte, Liga Amateur del Valle va a ver tu nombre y tu email"*. Nunca se muestra nada de otros circuitos.
 
+**Si su perfil es de otra categoría** que la del torneo, no puede reservar: la categoría la asigna la organización, y la pantalla le dice que hable con ella.
+
 **La vinculación se guarda al confirmarse el pago** ([decisión 051](decisiones/051-vinculacion-con-el-padron.md)). Mientras dura la reserva de 15 minutos, el perfil elegido queda reservado y no aparece en la búsqueda de nadie más; si la reserva vence, vuelve a aparecer. Si elige un nombre con otro igual o parecido en la categoría, la inscripción sigue igual, pero la organización revisa la vinculación (§5.9).
 
 ### 5.7 El link personal
