@@ -1,6 +1,6 @@
 # 039 — El jugador ingresa por un endpoint propio
 
-**Estado:** aceptada — 19 de octubre de 2026
+**Estado:** aceptada — 19 de octubre de 2026. Desde la [decisión 049](049-identidad-e-ingreso-con-codigo.md), el jugador ingresa con su email y un código de 6 dígitos, no con contraseña: este endpoint cambia de contrato. Lo demás sigue: es un ingreso propio que devuelve un perfil por circuito.
 
 ## Contexto
 

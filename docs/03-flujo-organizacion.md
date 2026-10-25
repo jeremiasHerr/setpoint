@@ -11,7 +11,7 @@
 | Rol | Accede desde | Responsabilidad |
 |---|---|---|
 | **Organización** | Web | Padrón, torneos, sorteo, resultados, cierre |
-| **Jugador** | App móvil | Se inscribe, paga, coordina fechas, consulta |
+| **Jugador** | App móvil, y web por link | Se inscribe y paga, coordina fechas y consulta. Entra con su email y un código, sin contraseña ([04](04-flujo-jugador.md) §5) |
 
 Solo dos roles con autenticación.
 
@@ -20,7 +20,7 @@ Solo dos roles con autenticación.
 | Entidad | Qué es |
 |---|---|
 | **Club / sede** | Dirección y canchas. Dato, no usuario |
-| **Jugador (perfil de padrón)** | La persona en el padrón. Existe sin cuenta |
+| **Jugador (perfil de padrón)** | La persona en el padrón. Existe antes de que la persona tenga cuenta, y se vincula a ella en su primera inscripción |
 
 El sistema es **multi-organización**: `organizacion_id` es la clave de aislamiento de torneos, categorías, rankings, padrón y liquidaciones. Debe estar en el schema desde el primer día.
 
@@ -105,14 +105,25 @@ Para las fases eliminatorias, el torneo declara su **sede designada**. En fase d
 
 ## 5. Gestión del padrón
 
-La organización es dueña de su padrón. En modo `cerrada` —el que usa POLENTA— es además la única vía de alta; en modo `abierta` los jugadores se agregan solos al inscribirse ([07-configurabilidad.md](07-configurabilidad.md) §2.5). En todos los modos, la organización puede:
+La organización es dueña de su padrón. En modo `cerrada` —el que usa POLENTA— es además la única vía de alta; en modo `abierta` los jugadores se agregan solos al inscribirse ([07-configurabilidad.md](07-configurabilidad.md) §2.6). En todos los modos, la organización puede:
 
 - Alta manual de jugadores
 - **Importación desde planilla**, automática por excepción: se importa solo lo que pasa todos los controles, y la organización revisa lo dudoso ([06-ia.md](06-ia.md) §1)
 - Asignación y reasignación de categoría
 - Baja o desactivación
+- **Compartir el link personal** de cada jugador y generar uno nuevo
+- **Ver las vinculaciones nuevas, revisar las dudosas y desvincular perfiles**
 
 En el caso de validación, el padrón de POLENTA tiene 77 jugadores en 2 categorías.
+
+**Link personal** ([decisión 050](decisiones/050-link-personal-de-inscripcion.md), *pendiente de código*). En cada fila, "Compartir link" abre WhatsApp con el mensaje armado (*"Hola Lucas, inscribite al Primavera 26 desde acá: …"*): en el chat del jugador si tiene teléfono, o para elegir el contacto si no. También "Copiar link" y "Generar link nuevo", que deja sin efecto el anterior. Quien entra por su link verifica su email con un código y queda vinculado sin buscarse. Es lo que cierra el hueco de la primera vez: el perfil lo elige la organización. Para POLENTA, conviene mandarlos antes del primer torneo.
+
+**Vinculaciones** ([decisión 051](decisiones/051-vinculacion-con-el-padron.md), *pendiente de código*). El jugador verifica su email con un código y vincula su perfil al inscribirse por primera vez, sin pasar por la organización. **La organización no toca la identidad de nadie** (el email y el nombre de la persona son de ella); decide sobre su padrón: de qué persona es cada perfil.
+
+- **Vinculaciones nuevas:** el padrón las muestra desde la última visita, con cómo se hizo cada una (link personal, búsqueda o "¿Sos…?"). No frenan nada.
+- **Para revisar** quedan dos casos, y en los dos la inscripción sigue en pie. *Posible homónimo:* alguien eligió un perfil con otro igual o parecido en la categoría; desde *Revisar vinculación* la organización confirma, pasa la inscripción al otro perfil o da de alta a la persona como jugador nuevo. *Perfil reclamado:* otra cuenta tocó "Avisarle a la organización" sobre un perfil vinculado; la organización decide de quién es el perfil y qué pasa con las inscripciones que pagó la cuenta que lo tenía.
+- **Desvincular:** el panel de cada jugador muestra el email de su cuenta y cuándo y cómo se vinculó, y permite desvincularlo. El perfil queda libre para que lo reclame su dueño; no se toca el email ni la cuenta de nadie. Ya existe ([decisión 007](decisiones/007-vinculacion-de-cuentas-en-f02.md)).
+- **El DNI** puede quedar como dato opcional del perfil, si la organización lo necesita por otro motivo (un seguro, por ejemplo). No identifica a nadie ni se usa en la inscripción ([decisión 049](decisiones/049-identidad-e-ingreso-con-codigo.md)).
 
 ### API del padrón
 
@@ -198,6 +209,8 @@ Funciones:
 - Inscribir manualmente a quien pagó por fuera del sistema
 - Dar de baja y **promover automáticamente al primero de la lista de espera**
 - Enviar recordatorio a quienes no completaron el pago
+- Aprobar o rechazar las **solicitudes**, en los torneos con aprobación: al aprobar, el jugador entra al padrón y recibe por email el link para pagar
+- Ver qué inscripciones tienen una vinculación **para revisar** e ir a revisarla (§5)
 - Cerrar inscripciones
 
 La lista de espera se ordena **por orden de llegada** y cubre deserciones, replicando la regla actual del reglamento.
@@ -207,7 +220,7 @@ La lista de espera se ordena **por orden de llegada** y cubre deserciones, repli
 - **Las reservas sin pagar no se tocan al cerrar** ([decisión 024](decisiones/024-reservas-sin-pagar-al-cerrar.md)): no entran al sorteo, que toma solo las pagadas, y se resuelven cuando exista F13 completa. La pantalla lo avisa antes de cerrar.
 - **No se puede cerrar si los que pagaron no alcanzan para las zonas**, al menos 3 por zona ([decisión 025](decisiones/025-no-se-cierra-sin-inscriptos-para-las-zonas.md)). La pantalla dice cuántos hacen falta y enlaza al torneo para bajar la cantidad de zonas.
 
-Inscribir a mano, dar de baja, recordar el pago, la lista de espera y la conciliación todavía no están.
+Inscribir a mano, dar de baja, recordar el pago, la lista de espera, la conciliación, las solicitudes y la marca de las vinculaciones para revisar todavía no están.
 
 ---
 

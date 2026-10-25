@@ -73,7 +73,6 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 | 4 | ¿Se implementa el cuadro consuelo (la "Complementaria" de POLENTA) completo, o se recorta el alcance para llegar a noviembre? | Alcance del proyecto | **Decidir en grupo** |
 | 5 | ¿El resultado lo carga la organización a mano, o se extrae del mensaje de WhatsApp con IA? Desde la devolución del 25%, F19 es la candidata a "IA en el uso diario", condicionada al tiempo ([devolucion-25.md](devolucion-25.md), cambio I) | Alcance de [06](06-ia.md) | **Preguntar al profesor**, después decidir en grupo |
 | 7 | **Cambio de categoría:** si un jugador de Tercera pasa a Segunda, ¿qué pasa con sus puntos de Tercera? ¿Se transfieren, quedan congelados, o el jugador desaparece de esa tabla? | Modelo de ranking | Consultar |
-| 8 | ¿DNI o email como identificador en el flujo de inscripción por link? (ver [04](04-flujo-jugador.md) §5.8) | Flujo de inscripción | **Decidir en grupo** |
 | 10 | ¿Se implementan las **proyecciones pre-torneo** sugeridas por la cátedra? ("si llegás a semis sumás 50 y pasás al puesto 4") | Alcance | **Decidir en grupo** |
 | 11 | **Política de devolución:** ¿POLENTA devuelve el dinero si alguien se baja después de pagar? ¿Cambia si ya se hizo el sorteo? | Estados de inscripción | Consultar |
 | 12 | ¿Los jugadores pueden cargar resultados con confirmación del rival, o la carga es exclusiva de la organización? Está parametrizado como `quien_carga_resultados` | Permisos | **Decidir en grupo** |
@@ -81,6 +80,8 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 | 14 | **¿"Todo automático" se refiere a la importación o al uso diario?** La importación por excepción responde lo primero; F19, lo segundo. Ver las preguntas de [devolucion-25.md](devolucion-25.md) §4 | Prioridad de F19 | **Preguntar al profesor** |
 | 15 | **Casos sin nombre cerrado para "edición".** "Edición" es un `Torneo` de un torneo del calendario. ¿Un torneo suelto (sin etapa) se muestra como "torneo"? ¿Y cómo se llama la convocatoria que crea varias ediciones a la vez ("Primavera 26", Segunda y Tercera), que en código es el campo `Torneo.edicion`? ([decisión 010](decisiones/010-torneo-del-calendario-en-la-interfaz.md)) | Textos de *Nuevo torneo* | **Decidir en grupo** |
 | 16 | **¿"Campeonato" también pasa a genérico** ("cuadro principal", configurable), como el cuadro consuelo? ([devolucion-25.md](devolucion-25.md) §3.1) | Textos de la interfaz | **Decidir en grupo** |
+| 17 | **Proveedor de email para un deploy público.** Para la entrega, Mailpit en el `docker-compose` atrapa los emails y los muestra en una página local, sin cuentas externas; ya lo usa la recuperación de la contraseña de los administradores ([decisión 006](decisiones/006-recuperar-la-contrasena.md)). Con el ingreso por código, el email pasa a ser la puerta de entrada del jugador: sin un SMTP real, nadie fuera de la máquina puede inscribirse ni entrar a la app ([decisión 049](decisiones/049-identidad-e-ingreso-con-codigo.md)) | Nada para la entrega | Revisar antes de un deploy público |
+| 18 | **¿El link del torneo abre la web o la app** cuando la app está instalada? Sin la sesión iniciada en la app tiene que abrir la web, porque la app sin sesión solo muestra el ingreso ([decisión 042](decisiones/042-la-app-sin-sesion.md)). Con la sesión iniciada, abrirla evitaría pedir el código, pero necesita App Links de Android, con un dominio verificado | Inscripción desde la app ([04](04-flujo-jugador.md) §5.3) | **Decidir en grupo** |
 
 > **El schema ya no está bloqueado.** Ninguna de las decisiones abiertas cambia las tablas: son valores de configuración, datos del seed o lógica de negocio.
 
@@ -146,6 +147,9 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 - ~~¿A quién se le muestra el teléfono de un jugador?~~ **Solo al rival de un partido que todavía no se jugó, para escribirle por WhatsApp** ([decisión 046](decisiones/046-telefono-del-rival.md)). Es lo mínimo para coordinar; el aviso previo de [04](04-flujo-jugador.md) §6.6 queda pendiente
 - ~~¿Cómo llegan los avisos al celular?~~ **El fixture, por push desde la API con el servicio de Expo; el recordatorio antes de cada partido, programado en el celular** ([decisión 047](decisiones/047-avisos-push.md)). Es lo único que avisa el fixture sin abrir la app, la API no guarda secretos y el recordatorio llega aunque no haya señal. El aviso de la confirmación del rival llega con F14
 - ~~¿Cómo se conecta el APK a una API sin https?~~ **Se permite http solo en el APK de prueba, el del perfil `preview`** ([decisión 048](decisiones/048-http-en-el-apk-de-prueba.md)). Android bloquea http en los APK; así se prueba en la red de casa y un APK de producción sigue exigiendo https
+- ~~¿DNI o email como identificador en el flujo de inscripción por link?~~ **El email, verificado con un código de 6 dígitos, y sin DNI** ([decisión 049](decisiones/049-identidad-e-ingreso-con-codigo.md)). Es lo único que se puede probar desde un celular: el DNI no se verifica, y si identificara, quien lo escribe primero se lo quedaría para toda la plataforma. El email verificado es la cuenta: los jugadores entran sin contraseña, con un código antes de pagar; los administradores siguen con la suya
+- ~~¿Cómo se cierra el hueco de la primera vez?~~ **Con un link personal por jugador, con un código aleatorio, que la organización comparte por WhatsApp desde el padrón** ([decisión 050](decisiones/050-link-personal-de-inscripcion.md)). La primera vez el padrón no tiene con qué comparar y cualquiera podría elegir el perfil de otro; con el link, el perfil lo elige la organización
+- ~~¿Cómo se vincula la persona con su perfil del padrón?~~ **Con un buscador acotado, vinculación al confirmarse el pago y revisión por excepción** ([decisión 051](decisiones/051-vinculacion-con-el-padron.md)). La organización ve cada vinculación nueva y revisa solo los homónimos y los perfiles que reclama otra cuenta, sin frenar la inscripción. Decide sobre su padrón, nunca sobre el email de nadie
 
 ---
 
@@ -164,7 +168,7 @@ Lista para llevar a la próxima charla. Las respondidas se tachan.
 
 4. ¿Alguna vez alguien de afuera del grupo quiso anotarse a un torneo? ¿Cómo lo manejaron?
 5. **Pedir el Excel del ranking** en su formato original, no el PDF. Ya no bloquea la importación (F03 funciona con columnas en otro orden, totales, notas y nombres escritos distinto), pero hace falta para sumar al eval un caso real ([06](06-ia.md) §1).
-6. ¿Estarías dispuesto a cargar el DNI de los jugadores en el padrón, o preferís que el sistema no lo pida?
+6. ~~¿Estarías dispuesto a cargar el DNI de los jugadores en el padrón, o preferís que el sistema no lo pida?~~ Ya no hace falta: el DNI no se usa para identificar a nadie ([decisión 049](decisiones/049-identidad-e-ingreso-con-codigo.md)). Puede quedar como dato opcional del padrón si el circuito lo necesita por otro motivo
 
 ### Pagos y devoluciones
 
@@ -211,7 +215,8 @@ Lista para llevar a la próxima charla. Las respondidas se tachan.
 | El APK se genera con la cuenta de Expo de un integrante ([decisión 036](decisiones/036-apk-con-eas.md)), y los avisos remotos piden además un proyecto de Firebase ([decisión 047](decisiones/047-avisos-push.md)) | El APK se entrega como archivo y no necesita la cuenta para funcionar. Generarlo con tiempo, porque el plan gratuito tiene cola. Sin Firebase el APK funciona igual, sin avisos remotos |
 | El insumo de la extracción de resultados no está confirmado | El desarrollo es el mismo para captura, foto o texto libre. Las otras dos funcionalidades de IA no dependen de esto |
 | La importación del padrón depende de la API de Anthropic, y `docker compose up` no puede depender de cuentas externas | Sin `ANTHROPIC_API_KEY` la API levanta igual y la importación termina en error con el motivo; el alta manual sigue funcionando. Para la demo, la key va en el `.env`. El rate limiting y el tope de gasto de [06](06-ia.md) todavía no están implementados |
-| Exposición de datos de contacto en pantallas públicas | Ninguna vista pública incluye teléfono ni email |
+| Sin un SMTP real, los códigos y los comprobantes no llegan a casillas reales, y el jugador no puede inscribirse ni entrar a la app | Para la demo, Mailpit los muestra en `http://localhost:8025`, y sin `SMTP_HOST` el código se imprime en la consola de la API. Proveedor real: decisión abierta 17 |
+| Exposición de datos de contacto en pantallas públicas | Ninguna vista pública incluye teléfono ni email. El email de un jugador lo ven solo él y las organizaciones en las que se inscribió |
 
 ---
 

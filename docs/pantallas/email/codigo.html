@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="x-apple-disable-message-reformatting">
+  <title>SetPoint · Código</title>
+  <!-- Pantalla de referencia: Código por email · F12 · entrega 75% · 600 px por email · dos emails -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+</head>
+<body style="margin: 0; padding: 0; background: #F6F7F8;">
+<!--
+NOTA DE DISEÑO
+Nuevo · el email con el código de 6 dígitos que verifica el email del jugador (04-flujo-jugador §5.5, decisión 049). Sirve para inscribirse, para el link personal y para entrar a la app.
+
+- El código está en el asunto: muchos lo leen desde la notificación del celular, sin abrir el email, y vuelven a la pantalla donde lo pidieron. Por eso el asunto va arriba de cada email, rotulado.
+- En el cuerpo, el código va grande, en mono y en dos grupos de tres, como en la pantalla (design.md §8). No hay botón ni link para verificar: código y no link mágico, porque el link del torneo se abre muchas veces en el navegador interno de WhatsApp, y un link en el email abriría otro navegador y perdería la inscripción.
+- Dice cuánto dura (10 minutos) y qué hacer si no lo pidió: ignorarlo, porque sin el código nadie entra con ese email.
+- 1 · Para inscribirse nombra el torneo y la organización, para que se reconozca de dónde viene. Lo manda la organización con SetPoint, como el comprobante.
+- 2 · Para entrar a la app no tiene torneo: lo manda SetPoint.
+
+Es HTML para email: tablas, estilos en línea, sin imágenes, colores de los tokens escritos en hex y fuentes con respaldo (Gmail y Outlook ignoran las de Google Fonts).
+-->
+
+<table role="presentation" width="1300" cellpadding="0" cellspacing="0" border="0" style="background: #F6F7F8;">
+  <tr>
+    <td style="padding: 30px 0 6px 30px; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 600; color: #0A0B0D;" width="600">
+      <span style="font-family: 'Geist Mono', Menlo, Consolas, 'Courier New', monospace; font-size: 13px; font-weight: 400; color: #6A7079;">1</span>&nbsp;&nbsp;Para inscribirse
+    </td>
+    <td width="40"></td>
+    <td style="padding: 30px 30px 6px 0; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 600; color: #0A0B0D;" width="600">
+      <span style="font-family: 'Geist Mono', Menlo, Consolas, 'Courier New', monospace; font-size: 13px; font-weight: 400; color: #6A7079;">2</span>&nbsp;&nbsp;Para entrar a la app
+    </td>
+  </tr>
+  <tr>
+    <td style="padding: 0 0 12px 30px; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 14px; color: #6A7079;">Asunto: <span style="color: #0A0B0D; font-weight: 500;"><span style="font-family: 'Geist Mono', Menlo, Consolas, 'Courier New', monospace;">482 913</span> es tu código para Primavera 26</span></td>
+    <td width="40"></td>
+    <td style="padding: 0 30px 12px 0; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 14px; color: #6A7079;">Asunto: <span style="color: #0A0B0D; font-weight: 500;"><span style="font-family: 'Geist Mono', Menlo, Consolas, 'Courier New', monospace;">207 518</span> es tu código para entrar a SetPoint</span></td>
+  </tr>
+  <tr>
+    <td valign="top" style="padding: 0 0 40px 30px;">
+
+      <!-- ============ 1 · Para inscribirse ============ -->
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width: 600px; background: #FFFFFF; border: 1px solid #E6E8EB; border-radius: 14px; border-collapse: separate; overflow: hidden;">
+        <tr>
+          <td style="background: #0A0B0D; padding: 18px 28px; border-radius: 14px 14px 0 0;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td width="24" style="width: 24px; height: 24px; background: #CDF546; border-radius: 7px; text-align: center; vertical-align: middle; font-size: 0; line-height: 0;">
+                  <span style="display: inline-block; width: 8px; height: 8px; border-radius: 999px; background: #0A0B0D;"></span>
+                </td>
+                <td style="padding-left: 10px; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 600; color: #FFFFFF;">Polenta Team Tenis</td>
+                <td align="right" style="font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 14px; color: #9BA1A9;">con SetPoint</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 32px 28px 8px 28px; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; color: #0A0B0D;">
+            <div style="font-size: 26px; font-weight: 600; letter-spacing: -0.03em; line-height: 1.15;">Tu código para inscribirte</div>
+            <div style="font-size: 16px; line-height: 1.5; color: #3F4348; padding-top: 10px;">Escribilo en la pantalla de Primavera 26 · Tercera, donde lo pediste.</div>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 18px 28px 0 28px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #F6F7F8; border-radius: 12px; border-collapse: separate;">
+              <tr>
+                <td align="center" style="padding: 26px 20px 22px 20px;">
+                  <div style="font-family: 'Geist Mono', Menlo, Consolas, 'Courier New', monospace; font-size: 44px; font-weight: 500; letter-spacing: 0.08em; color: #0A0B0D;">482 913</div>
+                  <div style="font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; color: #6A7079; padding-top: 10px;">Vence en <span style="font-family: 'Geist Mono', Menlo, Consolas, 'Courier New', monospace;">10</span> minutos</div>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 22px 28px 0 28px; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.5; color: #3F4348;">
+            Con este código confirmás que lucas.bravo@gmail.com es tuyo. Ese email es tu cuenta: no hay contraseña que recordar.
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 26px 28px 28px 28px;">
+            <div style="border-top: 1px solid #E6E8EB; padding-top: 18px; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 13px; line-height: 1.5; color: #6A7079;">¿No lo pediste vos? Ignorá este email: sin el código, nadie puede entrar con tu email. SetPoint · setpoint.com.ar</div>
+          </td>
+        </tr>
+      </table>
+
+    </td>
+    <td width="40"></td>
+    <td valign="top" style="padding: 0 30px 40px 0;">
+
+      <!-- ============ 2 · Para entrar a la app ============ -->
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width: 600px; background: #FFFFFF; border: 1px solid #E6E8EB; border-radius: 14px; border-collapse: separate; overflow: hidden;">
+        <tr>
+          <td style="background: #0A0B0D; padding: 18px 28px; border-radius: 14px 14px 0 0;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td width="24" style="width: 24px; height: 24px; background: #CDF546; border-radius: 7px; text-align: center; vertical-align: middle; font-size: 0; line-height: 0;">
+                  <span style="display: inline-block; width: 8px; height: 8px; border-radius: 999px; background: #0A0B0D;"></span>
+                </td>
+                <td style="padding-left: 10px; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 600; color: #FFFFFF;">SetPoint</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 32px 28px 8px 28px; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; color: #0A0B0D;">
+            <div style="font-size: 26px; font-weight: 600; letter-spacing: -0.03em; line-height: 1.15;">Tu código para entrar</div>
+            <div style="font-size: 16px; line-height: 1.5; color: #3F4348; padding-top: 10px;">Escribilo en la app, donde lo pediste.</div>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 18px 28px 0 28px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #F6F7F8; border-radius: 12px; border-collapse: separate;">
+              <tr>
+                <td align="center" style="padding: 26px 20px 22px 20px;">
+                  <div style="font-family: 'Geist Mono', Menlo, Consolas, 'Courier New', monospace; font-size: 44px; font-weight: 500; letter-spacing: 0.08em; color: #0A0B0D;">207 518</div>
+                  <div style="font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; color: #6A7079; padding-top: 10px;">Vence en <span style="font-family: 'Geist Mono', Menlo, Consolas, 'Courier New', monospace;">10</span> minutos</div>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 22px 28px 0 28px; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.5; color: #3F4348;">
+            Si pediste varios, solo sirve el último. La sesión queda guardada en tu celular, así que no te lo vamos a pedir cada vez.
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 26px 28px 28px 28px;">
+            <div style="border-top: 1px solid #E6E8EB; padding-top: 18px; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 13px; line-height: 1.5; color: #6A7079;">¿No lo pediste vos? Ignorá este email: sin el código, nadie puede entrar con tu email. SetPoint · setpoint.com.ar</div>
+          </td>
+        </tr>
+      </table>
+
+    </td>
+  </tr>
+</table>
+</body>
+</html>

@@ -48,7 +48,7 @@ Cada fila es una funcionalidad del sistema.
 
 ### Conclusiones
 
-**1. Ninguna exige cuenta para consultar.** Las tres resuelven la lectura sin autenticación. Esto valida el principio de diseño de [04-flujo-jugador.md](04-flujo-jugador.md): leer es público, escribir requiere cuenta.
+**1. Ninguna exige cuenta para consultar.** Las tres resuelven la lectura sin autenticación. Esto valida el principio de diseño de [04-flujo-jugador.md](04-flujo-jugador.md) §1: mirar no pide cuenta (y, en SetPoint, inscribirse tampoco pide registro: alcanza con verificar el email).
 
 **2. Ninguna tiene app nativa instalable.** Es el hueco de mercado, y coincide con lo que la cátedra exige a los grupos de tres. Set and Match, que es la más moderna, resolvió el móvil con una PWA.
 
