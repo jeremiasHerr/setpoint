@@ -79,11 +79,11 @@ Email verificado con un código, sin DNI. Los administradores siguen con contras
 
 ## Pendiente de código
 
-- **Tabla de códigos:** email, hash del código, vencimiento e intentos. El código nunca se guarda en claro.
-- **Ingreso por código** en `POST /api/auth/ingreso-jugador` ([decisión 039](039-ingreso-del-jugador.md)): un paso que pide el código y otro que lo verifica y devuelve el token y los perfiles. El mismo par sirve a la inscripción en la web.
-- **`Usuario.passwordHash` opcional.** Una persona sin contraseña no puede entrar por el ingreso de los administradores: el chequeo ya compara contra un hash de relleno cuando no hay contraseña, así que la respuesta es la misma que con una contraseña incorrecta.
+- ~~**Tabla de códigos:** email, hash del código, vencimiento e intentos.~~ Hecho: `CodigoIngreso`, con un HMAC del código, nunca el código en claro.
+- ~~**Ingreso por código:** un paso que pide el código y otro que lo verifica y devuelve el token y los perfiles.~~ Hecho: `POST /api/auth/codigo` y `POST /api/auth/codigo/verificar`. El mismo par sirve a la inscripción en la web. Falta que la app lo use; después, `POST /api/auth/ingreso-jugador` con contraseña se quita ([decisión 039](039-ingreso-del-jugador.md)).
+- ~~**`Usuario.passwordHash` opcional.**~~ Hecho. Una persona sin contraseña no puede entrar por el ingreso de los administradores: el chequeo compara contra un hash de relleno, así que la respuesta es la misma que con una contraseña incorrecta.
 - **`Usuario.nombre` y `apellido`** se completan con el primer perfil vinculado. Hasta entonces pueden estar vacíos.
 - **Quitar `Jugador.dni` y `Jugador.email` del flujo.** El email es de la persona. El DNI puede quedar como dato opcional del padrón, sin `@@unique` y sin uso en la identificación.
-- **Límite de pedidos y de intentos de código**, por email y por IP. La API no tiene ningún límite todavía.
+- ~~**Límite de pedidos y de intentos de código**, por email y por IP.~~ Hecho ([decisión 052](052-limite-de-pedidos.md)).
 - **Editar el propio nombre** y **cambiar el propio email** desde la cuenta, este último con un código al email nuevo.
 - **El seed:** la cuenta de prueba del jugador deja de necesitar contraseña.
