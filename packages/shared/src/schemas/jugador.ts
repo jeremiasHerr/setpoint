@@ -43,4 +43,9 @@ export type JugadorPadron = {
   // La cuenta de jugador que reclamó este perfil del padrón. null si nadie lo vinculó.
   // La organización la ve para poder revertir una vinculación equivocada.
   cuenta: { nombre: string; email: string } | null;
+  // El código de su link personal (decisión 050). null hasta que se comparte por primera vez.
+  codigoLink: string | null;
+  // La edición con la inscripción abierta en su categoría, si hay una sola: el mensaje del link la
+  // nombra.
+  edicionAbierta: string | null;
 };
