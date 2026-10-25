@@ -59,7 +59,7 @@ En modo `cerrada` —el de POLENTA— **el jugador ya existe en el padrón antes
 
 La organización **ve cada vinculación nueva** en el padrón y revisa solo las dudosas: los posibles homónimos y los perfiles que reclama otra cuenta. También puede desvincular cualquier perfil (§5.9). **La organización no toca la identidad de nadie:** el email y el nombre de la persona son de ella.
 
-> **Estado:** el lado de la organización ya está en parte: el padrón marca los perfiles con cuenta y permite desvincularlos (`DELETE /jugadores/:id/cuenta`, [decisión 007](decisiones/007-vinculacion-de-cuentas-en-f02.md)). El ingreso con código, el link personal, la revisión y el aviso de vinculaciones nuevas llegan con F12 ([decisiones 049 a 051](decisiones/049-identidad-e-ingreso-con-codigo.md)).
+> **Estado:** el lado de la organización ya está en parte: el padrón marca los perfiles con cuenta y permite desvincularlos (`DELETE /jugadores/:id/cuenta`, [decisión 007](decisiones/007-vinculacion-de-cuentas-en-f02.md)). El ingreso con código y el link personal ya están; la revisión y el aviso de vinculaciones nuevas llegan con F12 ([decisiones 049 a 051](decisiones/049-identidad-e-ingreso-con-codigo.md)).
 
 ### 4.1 Ingreso a la app
 
@@ -205,11 +205,11 @@ La primera vez, el padrón no tiene con qué comparar: alguien puede elegir el p
 
 En el padrón, al lado de cada jugador, la organización tiene "Compartir link": abre WhatsApp con el mensaje armado (*"Hola Lucas, inscribite al Primavera 26 desde acá: …"*), en el chat del jugador si tiene teléfono cargado o para elegir el contacto si no. También "Copiar link".
 
-- **Quien entra se saltea la búsqueda:** escribe su email, verifica el código (o ya tiene la sesión) y queda vinculado a ese perfil. Después ve los torneos de su categoría con la inscripción abierta y elige uno.
+- **Quien entra se saltea la búsqueda:** escribe su email, verifica el código (o ya tiene la sesión) y queda vinculado a ese perfil. Después ve los torneos de su categoría con la inscripción abierta y elige uno. Si no hay ninguno abierto, el mismo link le sirve para el próximo.
 - **No hay revisión de homónimo:** el perfil lo eligió la organización.
 - **El link lleva un código aleatorio**, no el id del jugador: no se puede adivinar el de otro. Es del jugador, no de un torneo.
 - **La organización puede generar uno nuevo**, y el anterior deja de andar.
-- **Deja de servir para vincular cuando el perfil ya está vinculado.** Si lo abre la misma cuenta, sigue a los torneos abiertos; si lo abre otra, ve el aviso del punto 4 de §5.6. Un link regenerado o que nunca existió dice *"Este link ya no anda"*.
+- **Deja de servir para vincular cuando el perfil ya está vinculado.** Si lo abre la misma cuenta, sigue a los torneos abiertos; si lo abre otra, ve el aviso del punto 4 de §5.6. Un link regenerado o que nunca existió dice *"Este link ya no anda"*. Si su cuenta ya tiene otro perfil en el circuito, no se vincula: se le pide que le escriba a la organización.
 
 ### 5.8 Final común: pago y comprobante
 
