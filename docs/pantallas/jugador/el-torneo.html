@@ -32,13 +32,13 @@
 <body>
 <!--
 NOTA DE DISEÑO
-La convocatoria que hoy se manda por WhatsApp, hecha pantalla. Es lo que abre el link del torneo que la organización comparte en el grupo, en el navegador del celular, sin cuenta y sin instalar nada.
+La convocatoria que hoy se manda por WhatsApp, hecha pantalla. Es lo que abre el link del torneo que la organización comparte en el grupo, en el navegador del celular, sin instalar nada.
 
 Lo que incluye la inscripción está al mismo peso que el precio, porque es lo que justifica los $45.000.
 
-1 · Sin cuenta. Debajo del botón se dice que no hace falta cuenta: alcanza con el DNI (identificacion.html). La cuenta se ofrece después de pagar, desde el comprobante.
+1 · Sin la sesión iniciada. Debajo del botón se dice cómo sigue: el email y un código (identificacion.html). No hay registro ni contraseña: el email verificado es la cuenta (decisión 049).
 
-2 · Con la sesión iniciada y un perfil en este circuito (04-flujo-jugador §5.7). El botón dice con qué nombre se inscribe y lleva directo al pago, sin identificarse. Si es un circuito en el que todavía no juega, el botón lleva a con-cuenta.html.
+2 · Con la sesión iniciada y un perfil en este circuito (04-flujo-jugador §5.6). El botón dice con qué nombre se inscribe y lleva directo al pago, sin código. Si es un circuito en el que todavía no juega, el botón lleva a identificacion.html, al paso que corresponda ("¿Sos…?" o la búsqueda), también sin código.
 
 3 · Inscripción cerrada. El link sigue circulando en el grupo después del cierre: la pantalla lo dice y ofrece lo que sí se puede hacer, mirar.
 
@@ -51,7 +51,7 @@ Todos los nombres de personas son ficticios.
 
   <!-- 1 -->
   <div class="estado">
-    <div class="rotulo"><span class="mono">1</span><span>Inscripción abierta, sin cuenta</span></div>
+    <div class="rotulo"><span class="mono">1</span><span>Inscripción abierta, sin sesión</span></div>
     <div class="tel">
       <div class="cab">
         <div style="display: flex; align-items: center; gap: 9px;">
@@ -101,7 +101,7 @@ Todos los nombres de personas son ficticios.
           <div class="mono" style="font-size: 26px; font-weight: 500; letter-spacing: -0.02em;">$45.000</div>
         </div>
         <div style="height: 60px; border-radius: 12px; background: #CDF546; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 600;">Inscribirme y pagar</div>
-        <div style="font-size: 15px; line-height: 1.42; color: #6A7079; padding: 0 4px;">No necesitás cuenta: te inscribís con tu DNI. Te mandamos el comprobante por email y, si querés, creás la cuenta desde ahí.</div>
+        <div style="font-size: 15px; line-height: 1.42; color: #6A7079; padding: 0 4px;">Te inscribís con tu email: te mandamos un código para confirmarlo. No hay registro ni contraseña.</div>
       </div>
     </div>
   </div>

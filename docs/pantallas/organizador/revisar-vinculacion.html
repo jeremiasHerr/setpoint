@@ -4,13 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SetPoint · Revisar vinculación</title>
-  <!-- Pantalla de referencia: Revisar vinculación · F02 · entrega 75% · 1280×960 px -->
+  <!-- Pantalla de referencia: Revisar vinculación · F02 · entrega 75% · 1280 px · dos estados -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
     <style>
-      body { margin: 0; font-family: "Instrument Sans", system-ui, "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; }
+      body { margin: 0; font-family: "Instrument Sans", system-ui, "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; background: #F6F7F8; }
       a { color: #0A0B0D; }
       a:hover { color: #6A7079; }
       .mono { font-family: "Geist Mono", ui-monospace, "SF Mono", Consolas, monospace; font-variant-numeric: tabular-nums; }
+      .estado { width: 1280px; padding: 28px 0 12px 0; font-size: 13px; font-weight: 600; color: #6A7079; }
+      .pantalla { width: 1280px; background: #FFFFFF; color: #0A0B0D; display: flex; flex-direction: column; }
       .nav { height: 34px; padding: 0 13px; display: flex; align-items: center; border-radius: 8px; font-size: 14px; color: #9BA1A9; }
       .nav-on { background: #1B1E23; font-weight: 600; color: #FFFFFF; }
       .rot { font-size: 11px; color: #6A7079; }
@@ -20,177 +22,325 @@
       .cifras { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
       .cifra { background: #FAFBFC; border-radius: 10px; padding: 11px 12px; display: flex; flex-direction: column; gap: 4px; }
       .dato { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; }
-      .dato span:first-child { color: #6A7079; }
+      .dato span:first-child { color: #6A7079; white-space: nowrap; }
       .marca-revisar { height: 22px; padding: 0 8px; border-radius: 999px; border: 1px solid #0A0B0D; display: inline-flex; align-items: center; font-size: 11px; }
+      .opcion { border: 1px solid #E6E8EB; border-radius: 12px; padding: 13px 15px; display: flex; align-items: flex-start; gap: 11px; }
+      .opcion.elegida { border: 2px solid #0A0B0D; padding: 12px 14px; }
+      .radio { width: 18px; height: 18px; border-radius: 999px; border: 1px solid #C9CDD3; flex-shrink: 0; margin-top: 1px; box-sizing: border-box; }
+      .radio.on { border: 5px solid #0A0B0D; }
     </style>
 </head>
 <body>
 <!--
 NOTA DE DISEÑO
-Nuevo · la única vinculación que el sistema no resuelve solo: un posible homónimo (04-flujo-jugador §5.9, decisión 049).
+Nuevo · los dos casos de vinculación que el sistema no resuelve solo (04-flujo-jugador §5.9, decisión 051).
 
-Automático por excepción, como la importación del padrón: las demás vinculaciones se guardaron solas, y la columna derecha lo dice con el número. Esta pantalla es para el caso en que el sistema sabe que puede estar equivocándose.
+Automático por excepción, como la importación del padrón: las demás vinculaciones se guardaron solas, y la columna derecha lo dice con el número. Esta pantalla es para cuando el sistema sabe que puede estar equivocándose.
 
-La inscripción ya está pagada y sigue en pie: lo que se decide es a qué perfil va. Por eso arriba va quién se inscribió (DNI enmascarado, email, número de inscripción) y abajo los dos perfiles lado a lado, con lo que los distingue: partidos, puntos, antigüedad y teléfono. El teléfono está para llamar a cada uno si no se sabe cuál es: la organización ya lo tiene.
+La organización decide sobre su padrón (de qué cuenta es cada perfil, y sus inscripciones), nunca sobre la identidad de nadie: ninguna acción de esta pantalla cambia el email de una persona (decisión 049). Las cuentas se muestran por su email verificado, que es lo que la organización ve de cada jugador.
 
-Tres salidas:
-- Confirmar: queda como eligió el jugador.
-- Pasar la inscripción al otro perfil: el DNI y el email van con ella, y el primero vuelve a aparecer en la búsqueda.
-- Darlo de alta como jugador nuevo: no era ninguno de los dos.
+Estado 1 · Posible homónimo. La inscripción ya está pagada y sigue en pie: lo que se decide es a qué perfil va. Arriba, quién se inscribió (su email, cómo se vinculó, número de inscripción). Abajo, los dos perfiles lado a lado con lo que los distingue: partidos, puntos, antigüedad y teléfono. El teléfono está para llamar a cada uno si no se sabe cuál es. Tres salidas: confirmar, pasar la inscripción al otro perfil o dar de alta a un jugador nuevo.
+
+Estado 2 · Perfil reclamado. Otra cuenta tocó "Avisarle a la organización" sobre un perfil vinculado, y el caso apareció solo acá: nadie tuvo que escribir por WhatsApp. Las dos cuentas lado a lado: la que tiene el perfil (desde cuándo, cómo se vinculó, qué inscripciones pagó) y la que lo reclama (con su email verificado).
+- Si el perfil pasa a quien lo reclama, queda una pregunta: qué hace la inscripción que pagó la otra cuenta. Se elige ahí mismo, antes de confirmar.
+- Si no se sabe de quién es, la tercera salida desvincula el perfil y lo deja libre: la organización le manda el link personal al dueño por WhatsApp, y con eso queda vinculado sin buscarse.
+- Un reclamo no cambia nada hasta que la organización decide.
 
 Se llega desde la marca "para revisar" en el padrón y en las inscripciones, y desde "Necesita tu atención" en el inicio.
 La marca es un chip con borde negro, no rojo: no venció nada (design.md §7).
-El jugador no ve esta revisión: su inscripción no cambia.
 Todos los nombres de personas son ficticios.
 -->
 
-<div style="width: 1280px; min-height: 960px; background: #FFFFFF; color: #0A0B0D; display: flex; flex-direction: column;">
+<div style="width: 1280px; margin: 0 auto; padding: 0 0 40px 0;">
 
-  <div style="background: #0A0B0D; height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 28px;">
-    <div style="display: flex; align-items: center; gap: 14px;">
-      <div style="display: flex; align-items: center; gap: 9px;">
-        <div style="width: 24px; height: 24px; border-radius: 7px; background: #CDF546; display: flex; align-items: center; justify-content: center;">
-          <div style="width: 8px; height: 8px; border-radius: 999px; background: #0A0B0D;"></div>
+  <div class="estado">Estado 1 · posible homónimo</div>
+
+  <div class="pantalla" style="min-height: 960px;">
+
+    <div style="background: #0A0B0D; height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 28px;">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 9px;">
+          <div style="width: 24px; height: 24px; border-radius: 7px; background: #CDF546; display: flex; align-items: center; justify-content: center;">
+            <div style="width: 8px; height: 8px; border-radius: 999px; background: #0A0B0D;"></div>
+          </div>
+          <div style="font-size: 16px; font-weight: 600; color: #FFFFFF; letter-spacing: -0.02em;">SetPoint</div>
         </div>
-        <div style="font-size: 16px; font-weight: 600; color: #FFFFFF; letter-spacing: -0.02em;">SetPoint</div>
+        <div style="width: 1px; height: 18px; background: #2C3037;"></div>
+        <div style="font-size: 14px; color: #9BA1A9;">Polenta Team Tenis</div>
       </div>
-      <div style="width: 1px; height: 18px; background: #2C3037;"></div>
-      <div style="font-size: 14px; color: #9BA1A9;">Polenta Team Tenis</div>
-    </div>
-    <div style="display: flex; align-items: center; gap: 8px;">
-      <div class="nav">Inicio</div>
-      <div class="nav nav-on">Padrón</div>
-      <div class="nav">Ranking</div>
-      <div class="nav">Circuito</div>
-      <div style="width: 12px;"></div>
-      <div style="width: 32px; height: 32px; border-radius: 999px; background: #1B1E23; border: 1px solid #2C3037; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: #FFFFFF;">GH</div>
-    </div>
-  </div>
-
-  <div style="padding: 24px 28px 20px 28px; display: flex; flex-direction: column; gap: 7px;">
-    <div style="font-size: 14px; color: #6A7079;">Padrón · para revisar</div>
-    <div style="display: flex; align-items: center; gap: 12px;">
-      <div style="font-size: 30px; font-weight: 600; letter-spacing: -0.035em;">Revisar vinculación</div>
-      <div class="marca-revisar mono">para revisar</div>
-    </div>
-    <div style="font-size: 15px; color: #6A7079;">Primavera 26 · Tercera · se inscribió el jueves 18 de septiembre</div>
-  </div>
-
-  <div style="padding: 0 28px 28px 28px; display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 22px; align-items: start;">
-
-    <div style="display: flex; flex-direction: column; gap: 18px;">
-
-      <div style="border: 2px solid #0A0B0D; border-radius: 16px; padding: 22px 24px; display: flex; flex-direction: column; gap: 18px;">
-        <div style="display: flex; flex-direction: column; gap: 8px;">
-          <div style="font-size: 20px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.3;">Alguien con DNI <span class="mono" style="font-weight: 500;">30.1xx.xxx</span> se vinculó a Juan Pérez. Hay otro jugador con el mismo nombre en Tercera.</div>
-          <div style="font-size: 15px; color: #6A7079; line-height: 1.5;">La inscripción ya está pagada y sigue en pie. Lo que decidís es a qué perfil va: con ella van el DNI, el email, y los puntos que gane en este torneo.</div>
-        </div>
-        <div style="background: #FAFBFC; border: 1px solid #E6E8EB; border-radius: 12px; padding: 14px 18px; display: grid; grid-template-columns: 130px minmax(0, 1fr) 150px 170px; gap: 16px; align-items: start;">
-          <div style="display: flex; flex-direction: column; gap: 5px;">
-            <div class="rot mono">dni</div>
-            <div class="mono" style="font-size: 15px;">30.1xx.xxx</div>
-          </div>
-          <div style="display: flex; flex-direction: column; gap: 5px;">
-            <div class="rot mono">email</div>
-            <div style="font-size: 15px;">juanperez.84@gmail.com</div>
-          </div>
-          <div style="display: flex; flex-direction: column; gap: 5px;">
-            <div class="rot mono">inscripción</div>
-            <div class="mono" style="font-size: 15px;">100491 · $45.000</div>
-          </div>
-          <div style="display: flex; flex-direction: column; gap: 5px;">
-            <div class="rot mono">pagó</div>
-            <div class="mono" style="font-size: 15px;">jue 18 sep · 19:20</div>
-          </div>
-        </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <div class="nav">Inicio</div>
+        <div class="nav nav-on">Padrón</div>
+        <div class="nav">Ranking</div>
+        <div class="nav">Circuito</div>
+        <div style="width: 12px;"></div>
+        <div style="width: 32px; height: 32px; border-radius: 999px; background: #1B1E23; border: 1px solid #2C3037; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: #FFFFFF;">GH</div>
       </div>
+    </div>
 
-      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px;">
+    <div style="padding: 24px 28px 20px 28px; display: flex; flex-direction: column; gap: 7px;">
+      <div style="font-size: 14px; color: #6A7079;">Padrón · para revisar</div>
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div style="font-size: 30px; font-weight: 600; letter-spacing: -0.035em;">Revisar vinculación</div>
+        <div class="marca-revisar mono">para revisar</div>
+      </div>
+      <div style="font-size: 15px; color: #6A7079;">Primavera 26 · Tercera · se inscribió el jueves 18 de septiembre</div>
+    </div>
 
-        <div class="perfil" style="border: 2px solid #0A0B0D;">
-          <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;">
-            <div style="display: flex; flex-direction: column; gap: 4px;">
-              <div style="font-size: 20px; font-weight: 600; letter-spacing: -0.02em;">Juan Pérez</div>
-              <div class="mono" style="font-size: 13px; color: #6A7079;">tercera · desde prim 25</div>
+    <div style="padding: 0 28px 28px 28px; display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 22px; align-items: start;">
+
+      <div style="display: flex; flex-direction: column; gap: 18px;">
+
+        <div style="border: 2px solid #0A0B0D; border-radius: 16px; padding: 22px 24px; display: flex; flex-direction: column; gap: 18px;">
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="font-size: 20px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.3;">juanperez.84@gmail.com se vinculó a Juan Pérez. Hay otro jugador con el mismo nombre en Tercera.</div>
+            <div style="font-size: 15px; color: #6A7079; line-height: 1.5;">La inscripción ya está pagada y sigue en pie. Lo que decidís es a qué perfil va, y con ella la cuenta y los puntos que gane en este torneo.</div>
+          </div>
+          <div style="background: #FAFBFC; border: 1px solid #E6E8EB; border-radius: 12px; padding: 14px 18px; display: grid; grid-template-columns: minmax(0, 1fr) 150px 150px 170px; gap: 16px; align-items: start;">
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+              <div class="rot mono">cuenta</div>
+              <div style="font-size: 15px;">juanperez.84@gmail.com</div>
             </div>
-            <div class="mono" style="font-size: 11px; background: #0A0B0D; color: #FFFFFF; padding: 4px 9px; border-radius: 999px;">eligió este</div>
-          </div>
-          <div class="cifras">
-            <div class="cifra"><div class="rot mono">partidos</div><div class="mono" style="font-size: 20px; font-weight: 500;">24</div></div>
-            <div class="cifra"><div class="rot mono">puntos</div><div class="mono" style="font-size: 20px; font-weight: 500;">35</div></div>
-            <div class="cifra"><div class="rot mono">puesto</div><div class="mono" style="font-size: 20px; font-weight: 500;">9º</div></div>
-          </div>
-          <div style="display: flex; flex-direction: column; gap: 9px;">
-            <div class="dato"><span>Teléfono</span><span class="mono">299 412-3456</span></div>
-            <div class="dato"><span>Último torneo</span><span>Invierno 26 · cuartos</span></div>
-            <div class="dato"><span>DNI antes de esta inscripción</span><span>no tenía</span></div>
-          </div>
-          <div class="btn-neg">Es este: confirmar</div>
-        </div>
-
-        <div class="perfil">
-          <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;">
-            <div style="display: flex; flex-direction: column; gap: 4px;">
-              <div style="font-size: 20px; font-weight: 600; letter-spacing: -0.02em;">Juan Pérez</div>
-              <div class="mono" style="font-size: 13px; color: #6A7079;">tercera · desde oto 26</div>
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+              <div class="rot mono">cómo se vinculó</div>
+              <div style="font-size: 15px;">buscándose</div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+              <div class="rot mono">inscripción</div>
+              <div class="mono" style="font-size: 15px;">100491 · $45.000</div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+              <div class="rot mono">pagó</div>
+              <div class="mono" style="font-size: 15px;">jue 18 sep · 19:20</div>
             </div>
           </div>
-          <div class="cifras">
-            <div class="cifra"><div class="rot mono">partidos</div><div class="mono" style="font-size: 20px; font-weight: 500;">3</div></div>
-            <div class="cifra"><div class="rot mono">puntos</div><div class="mono" style="font-size: 20px; font-weight: 500;">10</div></div>
-            <div class="cifra"><div class="rot mono">puesto</div><div class="mono" style="font-size: 20px; font-weight: 500;">21º</div></div>
-          </div>
-          <div style="display: flex; flex-direction: column; gap: 9px;">
-            <div class="dato"><span>Teléfono</span><span class="mono">299 588-1020</span></div>
-            <div class="dato"><span>Último torneo</span><span>Otoño 26 · zona</span></div>
-            <div class="dato"><span>DNI</span><span>no tiene</span></div>
-          </div>
-          <div class="btn-sec">Es este otro: pasar la inscripción</div>
         </div>
+
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px;">
+
+          <div class="perfil" style="border: 2px solid #0A0B0D;">
+            <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;">
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <div style="font-size: 20px; font-weight: 600; letter-spacing: -0.02em;">Juan Pérez</div>
+                <div class="mono" style="font-size: 13px; color: #6A7079;">tercera · desde prim 25</div>
+              </div>
+              <div class="mono" style="font-size: 11px; background: #0A0B0D; color: #FFFFFF; padding: 4px 9px; border-radius: 999px;">eligió este</div>
+            </div>
+            <div class="cifras">
+              <div class="cifra"><div class="rot mono">partidos</div><div class="mono" style="font-size: 20px; font-weight: 500;">24</div></div>
+              <div class="cifra"><div class="rot mono">puntos</div><div class="mono" style="font-size: 20px; font-weight: 500;">35</div></div>
+              <div class="cifra"><div class="rot mono">puesto</div><div class="mono" style="font-size: 20px; font-weight: 500;">9º</div></div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 9px;">
+              <div class="dato"><span>Teléfono</span><span class="mono">299 412-3456</span></div>
+              <div class="dato"><span>Último torneo</span><span>Invierno 26 · cuartos</span></div>
+              <div class="dato"><span>Cuenta antes de esta inscripción</span><span>ninguna</span></div>
+            </div>
+            <div class="btn-neg">Es este: confirmar</div>
+          </div>
+
+          <div class="perfil">
+            <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;">
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <div style="font-size: 20px; font-weight: 600; letter-spacing: -0.02em;">Juan Pérez</div>
+                <div class="mono" style="font-size: 13px; color: #6A7079;">tercera · desde oto 26</div>
+              </div>
+            </div>
+            <div class="cifras">
+              <div class="cifra"><div class="rot mono">partidos</div><div class="mono" style="font-size: 20px; font-weight: 500;">3</div></div>
+              <div class="cifra"><div class="rot mono">puntos</div><div class="mono" style="font-size: 20px; font-weight: 500;">10</div></div>
+              <div class="cifra"><div class="rot mono">puesto</div><div class="mono" style="font-size: 20px; font-weight: 500;">21º</div></div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 9px;">
+              <div class="dato"><span>Teléfono</span><span class="mono">299 588-1020</span></div>
+              <div class="dato"><span>Último torneo</span><span>Otoño 26 · zona</span></div>
+              <div class="dato"><span>Cuenta</span><span>ninguna</span></div>
+            </div>
+            <div class="btn-sec">Es este otro: pasar la inscripción</div>
+          </div>
+
+        </div>
+
+        <div style="border: 1px solid #E6E8EB; border-radius: 14px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; gap: 20px;">
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <div style="font-size: 15px; font-weight: 600;">No es ninguno de los dos</div>
+            <div style="font-size: 14px; color: #6A7079;">Se crea un jugador nuevo en Tercera, con <span class="mono">0</span> puntos, y la inscripción y la cuenta pasan a él.</div>
+          </div>
+          <div class="btn-sec" style="flex-shrink: 0;">Darlo de alta como jugador nuevo</div>
+        </div>
+
+        <div style="font-size: 14px; color: #6A7079; line-height: 1.5;">Si pasás la inscripción al otro perfil, la cuenta va con ella, y el Juan Pérez de prim 25 vuelve a quedar sin vincular. Se puede deshacer desde el padrón.</div>
 
       </div>
 
-      <div style="border: 1px solid #E6E8EB; border-radius: 14px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; gap: 20px;">
-        <div style="display: flex; flex-direction: column; gap: 4px;">
-          <div style="font-size: 15px; font-weight: 600;">No es ninguno de los dos</div>
-          <div style="font-size: 14px; color: #6A7079;">Se crea un jugador nuevo en Tercera, con <span class="mono">0</span> puntos, y la inscripción pasa a él.</div>
-        </div>
-        <div class="btn-sec" style="flex-shrink: 0;">Darlo de alta como jugador nuevo</div>
-      </div>
+      <div style="display: flex; flex-direction: column; gap: 16px;">
 
-      <div style="font-size: 14px; color: #6A7079; line-height: 1.5;">Si pasás la inscripción al otro perfil, el DNI y el email van con ella, y el Juan Pérez de prim 25 vuelve a aparecer en la búsqueda de la inscripción. Se puede deshacer desde el padrón.</div>
+        <div style="border: 1px solid #E6E8EB; border-radius: 14px; overflow: hidden;">
+          <div style="padding: 14px 16px; border-bottom: 1px solid #E6E8EB; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+            <div style="font-size: 15px; font-weight: 600;">Para revisar</div>
+            <div class="mono" style="font-size: 13px; color: #6A7079;">2</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 3px; padding: 12px 16px; background: #FAFBFC; border-bottom: 1px solid #F1F2F4;">
+            <div style="font-size: 14px; font-weight: 600;">Juan Pérez</div>
+            <div style="font-size: 13px; color: #6A7079;">Tercera · hay otro Juan Pérez</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 3px; padding: 12px 16px;">
+            <div style="font-size: 14px; font-weight: 500;">Lucas Bravo</div>
+            <div style="font-size: 13px; color: #6A7079;">Tercera · otra cuenta dice que es suyo</div>
+          </div>
+        </div>
+
+        <div style="background: #0A0B0D; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="font-size: 15px; font-weight: 600; color: #FFFFFF;">Se vincularon solos</div>
+          <div style="display: flex; align-items: baseline; gap: 10px;">
+            <div class="mono" style="font-size: 34px; font-weight: 500; color: #FFFFFF; letter-spacing: -0.03em; line-height: 1;">39</div>
+            <div style="font-size: 14px; color: #9BA1A9;">jugadores en Primavera 26</div>
+          </div>
+          <div style="font-size: 13px; line-height: 1.45; color: #9BA1A9;">El sistema solo pide que decidas cuando hay dos perfiles iguales o parecidos, o cuando otra cuenta reclama un perfil.</div>
+        </div>
+
+        <div style="border: 1px solid #E6E8EB; border-radius: 14px; background: #F6F7F8; padding: 18px; display: flex; flex-direction: column; gap: 9px;">
+          <div style="font-size: 14px; font-weight: 600;">¿No sabés cuál es?</div>
+          <div style="font-size: 14px; color: #6A7079; line-height: 1.5;">Llamalos: el teléfono de cada perfil está en su tarjeta. Mientras tanto, la inscripción sigue confirmada.</div>
+        </div>
+
+      </div>
 
     </div>
 
-    <div style="display: flex; flex-direction: column; gap: 16px;">
+  </div>
 
-      <div style="border: 1px solid #E6E8EB; border-radius: 14px; overflow: hidden;">
-        <div style="padding: 14px 16px; border-bottom: 1px solid #E6E8EB; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-          <div style="font-size: 15px; font-weight: 600;">Para revisar</div>
-          <div class="mono" style="font-size: 13px; color: #6A7079;">2</div>
+  <div class="estado" style="padding-top: 40px;">Estado 2 · perfil reclamado por otra cuenta</div>
+
+  <div class="pantalla" style="min-height: 1000px;">
+
+    <div style="background: #0A0B0D; height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 28px;">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 9px;">
+          <div style="width: 24px; height: 24px; border-radius: 7px; background: #CDF546; display: flex; align-items: center; justify-content: center;">
+            <div style="width: 8px; height: 8px; border-radius: 999px; background: #0A0B0D;"></div>
+          </div>
+          <div style="font-size: 16px; font-weight: 600; color: #FFFFFF; letter-spacing: -0.02em;">SetPoint</div>
         </div>
-        <div style="display: flex; flex-direction: column; gap: 3px; padding: 12px 16px; background: #FAFBFC; border-bottom: 1px solid #F1F2F4;">
-          <div style="font-size: 14px; font-weight: 600;">Juan Pérez</div>
-          <div style="font-size: 13px; color: #6A7079;">Tercera · Primavera 26 · hay otro igual</div>
+        <div style="width: 1px; height: 18px; background: #2C3037;"></div>
+        <div style="font-size: 14px; color: #9BA1A9;">Polenta Team Tenis</div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <div class="nav">Inicio</div>
+        <div class="nav nav-on">Padrón</div>
+        <div class="nav">Ranking</div>
+        <div class="nav">Circuito</div>
+        <div style="width: 12px;"></div>
+        <div style="width: 32px; height: 32px; border-radius: 999px; background: #1B1E23; border: 1px solid #2C3037; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: #FFFFFF;">GH</div>
+      </div>
+    </div>
+
+    <div style="padding: 24px 28px 20px 28px; display: flex; flex-direction: column; gap: 7px;">
+      <div style="font-size: 14px; color: #6A7079;">Padrón · para revisar</div>
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div style="font-size: 30px; font-weight: 600; letter-spacing: -0.035em;">Revisar vinculación</div>
+        <div class="marca-revisar mono">para revisar</div>
+      </div>
+      <div style="font-size: 15px; color: #6A7079;">Lucas Bravo · Tercera · reclamado el sábado 20 de septiembre</div>
+    </div>
+
+    <div style="padding: 0 28px 28px 28px; display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 22px; align-items: start;">
+
+      <div style="display: flex; flex-direction: column; gap: 18px;">
+
+        <div style="border: 2px solid #0A0B0D; border-radius: 16px; padding: 22px 24px; display: flex; flex-direction: column; gap: 8px;">
+          <div style="font-size: 20px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.3;">Otra cuenta dice que el perfil de Lucas Bravo es suyo.</div>
+          <div style="font-size: 15px; color: #6A7079; line-height: 1.5;">El perfil está vinculado a lucasb.tenis@gmail.com. Lo reclama lucasbravo.nqn@hotmail.com, que verificó su email. Vos decidís de quién es el perfil; los emails de cada uno no cambian.</div>
         </div>
-        <div style="display: flex; flex-direction: column; gap: 3px; padding: 12px 16px;">
-          <div style="font-size: 14px; font-weight: 500;">Martín Gómez</div>
-          <div style="font-size: 13px; color: #6A7079;">Segunda · Primavera 26 · hay un Martín Gómez Ríos</div>
+
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px;">
+
+          <div class="perfil">
+            <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;">
+              <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0;">
+                <div class="rot mono">tiene el perfil</div>
+                <div style="font-size: 18px; font-weight: 600; letter-spacing: -0.02em;">lucasb.tenis@gmail.com</div>
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 9px;">
+              <div class="dato"><span>Vinculado</span><span><span class="mono">jue 18 sep</span>, buscándose</span></div>
+              <div class="dato"><span>Inscripciones con este perfil</span><span>Primavera 26 · pagada</span></div>
+              <div class="dato"><span>Otro perfil en el circuito</span><span>ninguno</span></div>
+            </div>
+            <div class="btn-sec">Es de esta cuenta: dejarlo así</div>
+          </div>
+
+          <div class="perfil" style="border: 2px solid #0A0B0D;">
+            <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;">
+              <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0;">
+                <div class="rot mono">lo reclama</div>
+                <div style="font-size: 18px; font-weight: 600; letter-spacing: -0.02em;">lucasbravo.nqn@hotmail.com</div>
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 9px;">
+              <div class="dato"><span>Reclamó</span><span class="mono">sáb 20 sep · 11:05</span></div>
+              <div class="dato"><span>Inscripciones</span><span>ninguna todavía</span></div>
+              <div class="dato"><span>Otro perfil en el circuito</span><span>ninguno</span></div>
+            </div>
+            <div class="btn-neg">Es de esta cuenta: pasarle el perfil</div>
+          </div>
+
         </div>
+
+        <div style="border: 1px solid #E6E8EB; border-radius: 14px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <div style="font-size: 15px; font-weight: 600;">Si le pasás el perfil: ¿qué hace la inscripción a Primavera 26?</div>
+            <div style="font-size: 14px; color: #6A7079;">La pagó lucasb.tenis@gmail.com (inscripción <span class="mono">100491</span>, <span class="mono">$45.000</span>).</div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px;">
+            <div class="opcion elegida"><div class="radio on"></div><div style="display: flex; flex-direction: column; gap: 3px;"><div style="font-size: 14px; font-weight: 600;">Queda en el perfil</div><div style="font-size: 13px; color: #6A7079; line-height: 1.4;">Lucas Bravo sigue inscripto</div></div></div>
+            <div class="opcion"><div class="radio"></div><div style="display: flex; flex-direction: column; gap: 3px;"><div style="font-size: 14px; font-weight: 600;">Va con la otra cuenta</div><div style="font-size: 13px; color: #6A7079; line-height: 1.4;">A otro perfil o a un jugador nuevo</div></div></div>
+            <div class="opcion"><div class="radio"></div><div style="display: flex; flex-direction: column; gap: 3px;"><div style="font-size: 14px; font-weight: 600;">Se da de baja</div><div style="font-size: 13px; color: #6A7079; line-height: 1.4;">La devolución, por fuera del sistema</div></div></div>
+          </div>
+        </div>
+
+        <div style="border: 1px solid #E6E8EB; border-radius: 14px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; gap: 20px;">
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <div style="font-size: 15px; font-weight: 600;">No sabés de quién es</div>
+            <div style="font-size: 14px; color: #6A7079;">El perfil queda libre. Mandale el link personal al dueño por WhatsApp: con eso queda vinculado sin buscarse.</div>
+          </div>
+          <div class="btn-sec" style="flex-shrink: 0;">Desvincular y compartir el link</div>
+        </div>
+
       </div>
 
-      <div style="background: #0A0B0D; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 12px;">
-        <div style="font-size: 15px; font-weight: 600; color: #FFFFFF;">Se vincularon solos</div>
-        <div style="display: flex; align-items: baseline; gap: 10px;">
-          <div class="mono" style="font-size: 34px; font-weight: 500; color: #FFFFFF; letter-spacing: -0.03em; line-height: 1;">39</div>
-          <div style="font-size: 14px; color: #9BA1A9;">jugadores en Primavera 26</div>
-        </div>
-        <div style="font-size: 13px; line-height: 1.45; color: #9BA1A9;">El sistema solo pide que decidas cuando hay dos perfiles iguales o parecidos en la categoría. Entre esos dos, no elige.</div>
-      </div>
+      <div style="display: flex; flex-direction: column; gap: 16px;">
 
-      <div style="border: 1px solid #E6E8EB; border-radius: 14px; background: #F6F7F8; padding: 18px; display: flex; flex-direction: column; gap: 9px;">
-        <div style="font-size: 14px; font-weight: 600;">¿No sabés cuál es?</div>
-        <div style="font-size: 14px; color: #6A7079; line-height: 1.5;">Llamalos: el teléfono de cada perfil está en su tarjeta. Mientras tanto, la inscripción sigue confirmada.</div>
+        <div style="border: 1px solid #E6E8EB; border-radius: 14px; overflow: hidden;">
+          <div style="padding: 14px 16px; border-bottom: 1px solid #E6E8EB; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+            <div style="font-size: 15px; font-weight: 600;">Para revisar</div>
+            <div class="mono" style="font-size: 13px; color: #6A7079;">2</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 3px; padding: 12px 16px; border-bottom: 1px solid #F1F2F4;">
+            <div style="font-size: 14px; font-weight: 500;">Juan Pérez</div>
+            <div style="font-size: 13px; color: #6A7079;">Tercera · hay otro Juan Pérez</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 3px; padding: 12px 16px; background: #FAFBFC;">
+            <div style="font-size: 14px; font-weight: 600;">Lucas Bravo</div>
+            <div style="font-size: 13px; color: #6A7079;">Tercera · otra cuenta dice que es suyo</div>
+          </div>
+        </div>
+
+        <div style="border: 1px solid #E6E8EB; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="font-size: 15px; font-weight: 600;">El perfil</div>
+          <div style="display: flex; flex-direction: column; gap: 9px;">
+            <div class="dato"><span>Jugador</span><span>Lucas Bravo</span></div>
+            <div class="dato"><span>Desde</span><span class="mono">2024</span></div>
+            <div class="dato"><span>Ranking</span><span class="mono">4º · 95 puntos</span></div>
+            <div class="dato"><span>Teléfono</span><span class="mono">299 455-7812</span></div>
+          </div>
+        </div>
+
+        <div style="border: 1px solid #E6E8EB; border-radius: 14px; background: #F6F7F8; padding: 18px; display: flex; flex-direction: column; gap: 9px;">
+          <div style="font-size: 14px; font-weight: 600;">¿Cómo saber de quién es?</div>
+          <div style="font-size: 14px; color: #6A7079; line-height: 1.5;">Escribile a Lucas al teléfono del padrón y preguntale con qué email se inscribe. Un reclamo no cambia nada hasta que decidís.</div>
+        </div>
+
       </div>
 
     </div>

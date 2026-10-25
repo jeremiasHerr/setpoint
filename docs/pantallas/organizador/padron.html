@@ -34,20 +34,22 @@
 <body>
 <!--
 NOTA DE DISEÑO
-Padrón · actualizado para la inscripción y la vinculación (04-flujo-jugador §5, decisiones 049 y 050). Lo de la entrega del 25% (alta, categoría, baja, búsqueda) no cambia.
+Padrón · actualizado para la inscripción y la vinculación (04-flujo-jugador §5, decisiones 049 a 051). Lo de la entrega del 25% (alta, categoría, baja, búsqueda) no cambia.
+
+La organización decide sobre su padrón (de qué cuenta es cada perfil), nunca sobre la identidad de nadie: no edita ni ve otro dato de la persona que su email, que usa para contactarla.
 
 Estado 1 · compartir el link personal.
-- En el menú de cada fila: "Compartir por WhatsApp" abre el chat del jugador con el mensaje armado, si tiene teléfono; si no, WhatsApp para elegir el contacto. También "Copiar link" y "Generar link nuevo", que deja sin efecto el anterior.
+- En el menú de cada fila: "Compartir por WhatsApp" abre el chat del jugador con el mensaje armado, si tiene teléfono; si no, WhatsApp para elegir el contacto. También "Copiar link" y "Generar link nuevo", que deja sin efecto el anterior. En un perfil vinculado, el menú suma "Desvincular".
 - El menú muestra el mensaje tal como va a salir, para que la organización sepa qué manda antes de mandarlo.
-- Debajo de cada nombre se ve cómo está vinculado: el DNI enmascarado, "con cuenta" o "sin DNI todavía". Sin DNI no es un problema: es el estado de todo el padrón importado.
-- La columna derecha dice cuántos faltan. Es el argumento para mandar los links antes del primer torneo: quien entra por su link no se busca por apellido.
+- Debajo de cada nombre se ve el email de la cuenta, o "sin vincular". Sin vincular no es un problema: es el estado de todo el padrón importado.
+- La columna derecha dice cuántos faltan. Es el argumento para mandar los links antes del primer torneo: el link cierra el hueco de la primera vez, porque el perfil lo elige la organización y no quien abre el link del torneo.
 - El menú es un borde de 1px, sin sombra (design.md §2).
 
-Estado 2 · revisar y revertir una vinculación.
-- El filtro "Para revisar" junta los posibles homónimos; el pie dice que las demás se guardaron solas.
-- El panel del jugador muestra la vinculación: el DNI enmascarado (completo con el ojo), el email, si tiene cuenta y cuándo se vinculó. Desde ahí se va a revisar-vinculacion.html, o se desvincula.
-- Desvincular borra el DNI y el email del perfil, y la cuenta si tiene. La persona se vuelve a identificar en su próxima inscripción. Amplía el "desvincular la cuenta" de la decisión 007: con la decisión 049, la vinculación también es el DNI.
-- La marca "para revisar" es un chip con borde negro, no rojo: no venció nada.
+Estado 2 · vinculaciones nuevas y desvincular.
+- El filtro "Nuevas" junta las vinculaciones desde la última visita, con cómo se hizo cada una: link personal, búsqueda o "¿Sos…?". No hay que aprobar nada: es para mirar la lista cuando se quiera. Las que el sistema no resuelve solo llevan "para revisar" y van a revisar-vinculacion.html.
+- El panel del jugador muestra la cuenta (su email), cuándo y cómo se vinculó, y sus inscripciones.
+- Desvincular deja el perfil libre para que lo reclame su dueño, por ejemplo con el link personal. No cambia el email de nadie, y las inscripciones quedan en el perfil. Es lo que ya hace "desvincular la cuenta" (decisión 007).
+- La marca "para revisar" es un chip con borde negro, no rojo: no venció nada; "nueva" es el mismo chip lima que "nuevo".
 
 Todos los nombres de personas son ficticios.
 -->
@@ -106,7 +108,8 @@ Todos los nombres de personas son ficticios.
               <div class="chip" style="background: #0A0B0D; color: #FFFFFF; border-color: #0A0B0D;">Todas</div>
               <div class="chip">Segunda</div>
               <div class="chip">Tercera</div>
-              <div class="chip" style="gap: 7px;">Para revisar <span class="mono" style="font-size: 13px;">1</span></div>
+              <div class="chip" style="gap: 7px;">Nuevas <span class="mono" style="font-size: 13px;">3</span></div>
+              <div class="chip" style="gap: 7px;">Para revisar <span class="mono" style="font-size: 13px;">2</span></div>
             </div>
             <div style="width: 230px; height: 38px; box-sizing: border-box; border-radius: 10px; border: 1px solid #C9CDD3; display: flex; align-items: center; gap: 9px; padding: 0 13px;">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6A7079" stroke-width="1.9" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
@@ -127,7 +130,7 @@ Todos los nombres de personas son ficticios.
             <div class="ini">TQ</div>
             <div style="display: flex; flex-direction: column; gap: 2px;">
               <div style="font-size: 16px; font-weight: 500;">Tomás Quiroga</div>
-              <div class="mono sub">desde prim 25 · dni 29.8xx.xxx · con cuenta</div>
+              <div class="sub">desde prim 25 · tomas.quiroga@gmail.com</div>
             </div>
             <div><div class="chip" style="background: #F6F7F8; display: inline-flex;">Tercera</div></div>
             <div style="display: flex; align-items: baseline; gap: 7px;"><span class="mono" style="font-size: 13px; color: #6A7079;">1º</span><span class="mono" style="font-size: 17px; font-weight: 500;">165</span><span style="font-size: 13px; color: #6A7079;">puntos</span></div>
@@ -139,7 +142,7 @@ Todos los nombres de personas son ficticios.
             <div class="ini">DM</div>
             <div style="display: flex; flex-direction: column; gap: 2px;">
               <div style="font-size: 16px; font-weight: 500;">Diego Mansilla</div>
-              <div class="mono sub">desde prim 25 · dni 31.2xx.xxx</div>
+              <div class="sub">desde prim 25 · dmansilla@gmail.com</div>
             </div>
             <div><div class="chip" style="background: #F6F7F8; display: inline-flex;">Tercera</div></div>
             <div style="display: flex; align-items: baseline; gap: 7px;"><span class="mono" style="font-size: 13px; color: #6A7079;">2º</span><span class="mono" style="font-size: 17px; font-weight: 500;">110</span><span style="font-size: 13px; color: #6A7079;">puntos</span></div>
@@ -151,7 +154,7 @@ Todos los nombres de personas son ficticios.
             <div class="ini">JP</div>
             <div style="display: flex; flex-direction: column; gap: 2px;">
               <div style="font-size: 16px; font-weight: 500;">Juan Painemil</div>
-              <div class="mono sub">desde pre 26 · sin dni todavía</div>
+              <div class="sub">desde pre 26 · <span class="mono">sin vincular</span></div>
             </div>
             <div><div class="chip" style="background: #F6F7F8; display: inline-flex;">Tercera</div></div>
             <div style="display: flex; align-items: baseline; gap: 7px;"><span class="mono" style="font-size: 13px; color: #6A7079;">3º</span><span class="mono" style="font-size: 17px; font-weight: 500;">100</span><span style="font-size: 13px; color: #6A7079;">puntos</span></div>
@@ -166,7 +169,7 @@ Todos los nombres de personas son ficticios.
                 <div style="font-size: 16px; font-weight: 500;">Ariel Huenchul</div>
                 <div class="mono" style="font-size: 11px; background: #CDF546; padding: 2px 7px; border-radius: 999px;">nuevo</div>
               </div>
-              <div class="mono sub">dado de alta hoy · sin dni todavía</div>
+              <div class="sub">dado de alta hoy · <span class="mono">sin vincular</span></div>
             </div>
             <div><div class="chip" style="background: #F6F7F8; display: inline-flex;">Tercera</div></div>
             <div style="display: flex; align-items: baseline; gap: 7px;"><span class="mono" style="font-size: 17px; font-weight: 500; color: #6A7079;">0</span><span style="font-size: 13px; color: #6A7079;">puntos</span></div>
@@ -181,7 +184,7 @@ Todos los nombres de personas son ficticios.
                 <div style="font-size: 16px; font-weight: 500;">Juan Pérez</div>
                 <div class="marca-revisar mono">para revisar</div>
               </div>
-              <div class="mono sub">desde prim 25 · dni 30.1xx.xxx</div>
+              <div class="sub">desde prim 25 · juanperez.84@gmail.com</div>
             </div>
             <div><div class="chip" style="background: #F6F7F8; display: inline-flex;">Tercera</div></div>
             <div style="display: flex; align-items: baseline; gap: 7px;"><span class="mono" style="font-size: 13px; color: #6A7079;">9º</span><span class="mono" style="font-size: 17px; font-weight: 500;">35</span><span style="font-size: 13px; color: #6A7079;">puntos</span></div>
@@ -193,7 +196,7 @@ Todos los nombres de personas son ficticios.
             <div class="ini">PR</div>
             <div style="display: flex; flex-direction: column; gap: 2px;">
               <div style="font-size: 16px; font-weight: 500;">Pablo Roa</div>
-              <div class="mono sub">desde prim 25 · dni 32.6xx.xxx</div>
+              <div class="sub">desde prim 25 · pabloroa@yahoo.com.ar</div>
             </div>
             <div><div class="chip" style="background: #F6F7F8; display: inline-flex;">Tercera</div></div>
             <div style="display: flex; align-items: baseline; gap: 7px;"><span class="mono" style="font-size: 13px; color: #6A7079;">4º</span><span class="mono" style="font-size: 17px; font-weight: 500;">95</span><span style="font-size: 13px; color: #6A7079;">puntos</span></div>
@@ -247,12 +250,12 @@ Todos los nombres de personas son ficticios.
           <div style="font-size: 17px; font-weight: 600;">Links personales</div>
           <div style="display: flex; flex-direction: column; gap: 8px;">
             <div style="display: flex; align-items: baseline; justify-content: space-between;">
-              <div style="font-size: 13px; color: #6A7079;">Jugadores con DNI</div>
+              <div style="font-size: 13px; color: #6A7079;">Jugadores vinculados</div>
               <div class="mono" style="font-size: 14px; font-weight: 500;">16 <span style="color: #9BA1A9;">/ 77</span></div>
             </div>
             <div style="height: 6px; border-radius: 999px; background: #F1F2F4; overflow: hidden;"><div style="width: 20.8%; height: 100%; background: #0A0B0D;"></div></div>
           </div>
-          <div style="font-size: 14px; color: #6A7079; line-height: 1.5;">Los otros <span class="mono" style="color: #0A0B0D;">61</span> se buscan por su apellido la primera vez que se inscriben. Si les mandás su link antes, entran directo.</div>
+          <div style="font-size: 14px; color: #6A7079; line-height: 1.5;">Los otros <span class="mono" style="color: #0A0B0D;">61</span> se buscan por su apellido la primera vez que se inscriben. Si les mandás su link antes, entran directo y nadie puede elegir su perfil por error.</div>
           <div style="font-size: 14px; color: #6A7079; line-height: 1.5;">El link es de cada jugador, no de un torneo: se manda una vez.</div>
         </div>
 
@@ -271,7 +274,7 @@ Todos los nombres de personas son ficticios.
             <div class="campo"><span style="color: #9BA1A9;">Para mandarle su link por WhatsApp</span></div>
           </div>
           <div style="background: #F6F7F8; border-radius: 10px; padding: 13px; font-size: 13px; color: #6A7079; line-height: 1.45;">
-            Entra con <span class="mono" style="color: #0A0B0D;">0</span> puntos y sube cuando juegue. El DNI lo escribe él al inscribirse: no hace falta cargarlo.
+            Entra con <span class="mono" style="color: #0A0B0D;">0</span> puntos y sube cuando juegue. El email lo da él al inscribirse: no hace falta cargarlo.
           </div>
           <div style="height: 44px; border-radius: 10px; background: #0A0B0D; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 500;">Agregar al padrón</div>
         </div>
@@ -282,9 +285,9 @@ Todos los nombres de personas son ficticios.
 
   </div>
 
-  <div class="estado" style="padding-top: 40px;">Estado 2 · revisar y revertir una vinculación</div>
+    <div class="estado" style="padding-top: 40px;">Estado 2 · vinculaciones nuevas y desvincular</div>
 
-  <div class="pantalla" style="min-height: 780px;">
+  <div class="pantalla" style="min-height: 820px;">
 
     <div style="background: #0A0B0D; height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 28px;">
       <div style="display: flex; align-items: center; gap: 14px;">
@@ -319,42 +322,71 @@ Todos los nombres de personas son ficticios.
           <div class="chip">Todas</div>
           <div class="chip">Segunda</div>
           <div class="chip">Tercera</div>
-          <div class="chip" style="gap: 7px; background: #0A0B0D; color: #FFFFFF; border-color: #0A0B0D;">Para revisar <span class="mono" style="font-size: 13px;">1</span></div>
+          <div class="chip" style="gap: 7px; background: #0A0B0D; color: #FFFFFF; border-color: #0A0B0D;">Nuevas <span class="mono" style="font-size: 13px;">3</span></div>
+          <div class="chip" style="gap: 7px;">Para revisar <span class="mono" style="font-size: 13px;">2</span></div>
         </div>
         <div class="fila" style="height: 38px; background: #FAFBFC; border-bottom: 1px solid #E6E8EB;">
           <div></div>
           <div class="rot mono">jugador</div>
           <div class="rot mono">categoría</div>
-          <div class="rot mono">ranking</div>
-          <div class="rot mono" style="text-align: right;">partidos</div>
+          <div class="rot mono">cómo se vinculó</div>
+          <div class="rot mono" style="text-align: right;">cuándo</div>
           <div></div>
         </div>
         <div class="fila" style="background: #FAFBFC; border-left: 3px solid #0A0B0D; padding-left: 15px;">
+          <div class="ini" style="background: #CDF546; color: #0A0B0D;">AH</div>
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <div style="display: flex; align-items: center; gap: 9px;">
+              <div style="font-size: 16px; font-weight: 500;">Ariel Huenchul</div>
+              <div class="mono" style="font-size: 11px; background: #CDF546; padding: 2px 7px; border-radius: 999px;">nueva</div>
+            </div>
+            <div class="sub">arielhuenchul@gmail.com</div>
+          </div>
+          <div><div class="chip" style="background: #F6F7F8; display: inline-flex;">Tercera</div></div>
+          <div style="font-size: 14px;">link personal</div>
+          <div class="mono" style="font-size: 13px; color: #6A7079; text-align: right;">hoy</div>
+          <div></div>
+        </div>
+        <div class="fila">
+          <div class="ini">NH</div>
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <div style="display: flex; align-items: center; gap: 9px;">
+              <div style="font-size: 16px; font-weight: 500;">Nahuel Huenchupán</div>
+              <div class="mono" style="font-size: 11px; background: #CDF546; padding: 2px 7px; border-radius: 999px;">nueva</div>
+            </div>
+            <div class="sub">nhuenchupan@gmail.com</div>
+          </div>
+          <div><div class="chip" style="background: #F6F7F8; display: inline-flex;">Tercera</div></div>
+          <div style="font-size: 14px;">buscándose</div>
+          <div class="mono" style="font-size: 13px; color: #6A7079; text-align: right;">ayer</div>
+          <div></div>
+        </div>
+        <div class="fila">
           <div class="ini">JP</div>
           <div style="display: flex; flex-direction: column; gap: 2px;">
             <div style="display: flex; align-items: center; gap: 9px;">
               <div style="font-size: 16px; font-weight: 500;">Juan Pérez</div>
               <div class="marca-revisar mono">para revisar</div>
             </div>
-            <div class="mono sub">desde prim 25 · dni 30.1xx.xxx</div>
+            <div class="sub">juanperez.84@gmail.com · hay otro Juan Pérez</div>
           </div>
           <div><div class="chip" style="background: #F6F7F8; display: inline-flex;">Tercera</div></div>
-          <div style="display: flex; align-items: baseline; gap: 7px;"><span class="mono" style="font-size: 13px; color: #6A7079;">9º</span><span class="mono" style="font-size: 17px; font-weight: 500;">35</span><span style="font-size: 13px; color: #6A7079;">puntos</span></div>
-          <div class="mono" style="font-size: 15px; text-align: right;">24</div>
+          <div style="font-size: 14px;">buscándose</div>
+          <div class="mono" style="font-size: 13px; color: #6A7079; text-align: right;">jue 18</div>
           <div></div>
         </div>
-        <div style="padding: 15px 18px; background: #FAFBFC; font-size: 13px; color: #6A7079; line-height: 1.5;">Las demás vinculaciones se guardaron solas: <span class="mono" style="color: #0A0B0D;">39</span> en Primavera 26. Acá aparecen solo los posibles homónimos.</div>
+        <div style="padding: 15px 18px; background: #FAFBFC; font-size: 13px; color: #6A7079; line-height: 1.5;">Las vinculaciones desde tu última visita, el jueves 18. No tenés que aprobar nada: si alguna no te cierra, la desvinculás.</div>
       </div>
 
       <div style="border: 1px solid #E6E8EB; border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 16px;">
         <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
-          <div style="font-size: 17px; font-weight: 600;">Juan Pérez</div>
-          <div class="mono" style="font-size: 13px; color: #6A7079;">tercera · 24 partidos</div>
+          <div style="font-size: 17px; font-weight: 600;">Ariel Huenchul</div>
+          <div class="mono" style="font-size: 13px; color: #6A7079;">tercera · 0 partidos</div>
         </div>
         <div style="display: grid; grid-template-columns: minmax(0, 1fr) 130px; gap: 10px;">
           <div style="display: flex; flex-direction: column; gap: 8px;">
             <div style="font-size: 13px; font-weight: 600; color: #6A7079;">Teléfono</div>
-            <div class="campo"><span class="mono">299 412-3456</span></div>
+            <div class="campo"><span class="mono">299 631-0458</span></div>
           </div>
           <div style="display: flex; flex-direction: column; gap: 8px;">
             <div style="font-size: 13px; font-weight: 600; color: #6A7079;">Categoría</div>
@@ -364,28 +396,23 @@ Todos los nombres de personas son ficticios.
 
         <div style="border-top: 1px solid #E6E8EB; padding-top: 16px; display: flex; flex-direction: column; gap: 12px;">
           <div style="font-size: 15px; font-weight: 600;">Vinculación</div>
-          <div style="border: 1px solid #0A0B0D; border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
-            <div style="font-size: 14px; line-height: 1.4;">Hay otro Juan Pérez en Tercera.</div>
-            <div style="font-size: 14px; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; flex-shrink: 0;">Revisar</div>
-          </div>
-          <div class="dato"><span>DNI</span><span style="display: flex; align-items: center; gap: 8px;"><span class="mono">30.1xx.xxx</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6A7079" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"></path><circle cx="12" cy="12" r="3"></circle></svg></span></div>
-          <div class="dato"><span>Email</span><span>juanperez.84@gmail.com</span></div>
-          <div class="dato"><span>Cuenta</span><span>no tiene</span></div>
-          <div class="dato"><span>Vinculado</span><span>en Primavera 26 · <span class="mono">jue 18 sep</span></span></div>
+          <div class="dato"><span>Cuenta</span><span>arielhuenchul@gmail.com</span></div>
+          <div class="dato"><span>Vinculado</span><span>hoy, con el link personal</span></div>
+          <div class="dato"><span>Inscripciones</span><span>Primavera 26 · pagada</span></div>
           <div style="display: flex; flex-direction: column; gap: 8px; padding-top: 4px;">
             <div class="btn-sec" style="align-self: flex-start;">Desvincular</div>
-            <div style="font-size: 13px; color: #6A7079; line-height: 1.45;">Borra el DNI y el email de este perfil, y la cuenta si tiene. La inscripción no cambia; la persona se vuelve a identificar en la próxima.</div>
+            <div style="font-size: 13px; color: #6A7079; line-height: 1.45;">El perfil queda libre para que lo reclame su dueño. No cambia el email de nadie, y las inscripciones quedan en el perfil.</div>
           </div>
         </div>
 
         <div style="border-top: 1px solid #E6E8EB; padding-top: 16px; display: flex; flex-direction: column; gap: 10px;">
           <div style="font-size: 15px; font-weight: 600;">Link personal</div>
-          <div class="mono" style="font-size: 13px; color: #3F4348; background: #F6F7F8; border-radius: 8px; padding: 9px 11px;">setpoint.com.ar/i/r4ty8wn2</div>
+          <div class="mono" style="font-size: 13px; color: #3F4348; background: #F6F7F8; border-radius: 8px; padding: 9px 11px;">setpoint.com.ar/i/k7m2qx9p</div>
           <div style="display: flex; gap: 8px;">
             <div class="btn-sec">Copiar</div>
             <div class="btn-sec">Generar uno nuevo</div>
           </div>
-          <div style="font-size: 13px; color: #6A7079; line-height: 1.45;">Ya tiene DNI: el link no sirve para vincular, solo para entrar con su DNI.</div>
+          <div style="font-size: 13px; color: #6A7079; line-height: 1.45;">Ya está vinculado: el link no vuelve a vincular hasta que lo desvincules.</div>
         </div>
 
         <div style="height: 44px; border-radius: 10px; background: #0A0B0D; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 500;">Guardar cambios</div>

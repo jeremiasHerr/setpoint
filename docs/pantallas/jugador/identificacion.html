@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SetPoint · Identificación</title>
-  <!-- Pantalla de referencia: Identificación · F12 · entrega 75% · 1290 px · doce estados de 390 px -->
+  <!-- Pantalla de referencia: Identificación · F12 · entrega 75% · 1290 px · quince estados de 390 px -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
     <style>
       body { margin: 0; font-family: "Instrument Sans", system-ui, "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; background: #F6F7F8; }
@@ -24,21 +24,29 @@
       .chip { font-size: 14px; color: #6A7079; padding: 6px 10px; border: 1px solid #E6E8EB; border-radius: 999px; }
       .titulo { font-size: 24px; font-weight: 600; letter-spacing: -0.03em; line-height: 1.15; }
       .seccion { font-size: 20px; font-weight: 600; letter-spacing: -0.025em; line-height: 1.2; }
+      .pregunta { font-size: 30px; font-weight: 600; letter-spacing: -0.032em; line-height: 1.12; }
       .bloque { display: flex; flex-direction: column; gap: 10px; }
       .etiqueta { font-size: 15px; font-weight: 600; }
       .campo { height: 56px; box-sizing: border-box; border-radius: 12px; border: 1px solid #C9CDD3; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 16px; font-size: 17px; }
       .activo { border: 2px solid #0A0B0D; padding: 0 15px; }
-      .dni { height: 52px; }
+      .cuenta { height: 52px; background: #F6F7F8; border-color: #F6F7F8; font-size: 16px; }
+      .cuenta .yo { display: flex; align-items: center; gap: 10px; min-width: 0; }
+      .cuenta .yo span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .tilde { width: 22px; height: 22px; border-radius: 999px; background: #0A0B0D; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
       .gris { color: #6A7079; }
       .ayuda { font-size: 15px; line-height: 1.42; color: #6A7079; }
       .caja { border-radius: 12px; background: #F6F7F8; padding: 14px 16px; font-size: 15px; line-height: 1.42; color: #3F4348; }
+      .consentimiento { border-radius: 12px; border: 1px solid #E6E8EB; padding: 14px 16px; font-size: 15px; line-height: 1.42; color: #3F4348; }
       .tarjeta { border: 1px solid #E6E8EB; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
       .punto { width: 7px; height: 7px; border-radius: 999px; background: #CDF546; flex-shrink: 0; }
       .lista { border: 1px solid #E6E8EB; border-radius: 14px; overflow: hidden; }
       .fila { height: 56px; box-sizing: border-box; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 17px; font-weight: 500; border-bottom: 1px solid #F1F2F4; }
       .fila:last-child { border-bottom: none; }
       .elegida { border: 2px solid #0A0B0D; border-radius: 14px; }
-      .tilde { width: 22px; height: 22px; border-radius: 999px; background: #0A0B0D; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+      .vinculado { font-family: "Geist Mono", ui-monospace, monospace; font-size: 13px; font-weight: 400; color: #6A7079; background: #F1F2F4; padding: 3px 8px; border-radius: 999px; }
+      .digitos { display: flex; align-items: center; gap: 8px; }
+      .digito { width: 46px; height: 58px; box-sizing: border-box; border-radius: 10px; border: 1px solid #C9CDD3; display: flex; align-items: center; justify-content: center; font-family: "Geist Mono", ui-monospace, monospace; font-size: 26px; font-weight: 500; }
+      .digito.activo { border: 2px solid #0A0B0D; padding: 0; }
       .dos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
       .pie { margin-top: auto; display: flex; flex-direction: column; gap: 12px; }
       .monto { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 4px; }
@@ -51,46 +59,44 @@
 <body>
 <!--
 NOTA DE DISEÑO
-Nuevo · cómo se identifica quien llega por el link del torneo, sin cuenta (04-flujo-jugador §5.5, decisión 049).
-Reemplaza el panel "Quién sos" de inscripcion-y-pago.html, que respondía al flujo anterior: nombre y elegir de una lista.
+Nuevo · cómo se identifica quien llega por el link del torneo (04-flujo-jugador §5.5 y §5.6, decisiones 049 y 051).
+El identificador es el email, verificado con un código. No hay DNI, contraseña ni registro: el email verificado es la cuenta.
 
-Todo pasa en una sola pantalla. El DNI queda arriba, a la vista y con "Cambiar", y lo que se encontró aparece abajo. El DNI identifica y el email comunica: los dos se piden, cada uno para lo suyo.
+1 y 2 · El código va antes de pagar: si fuera después, alguien podría quedar con un pago hecho y una inscripción sin confirmar porque el código no le llegó.
+- Pedir el código siempre dice "te mandamos un código", exista o no la cuenta: no revela qué emails están registrados.
+- Código y no link mágico: el link del torneo muchas veces se abre en el navegador interno de WhatsApp, y un link en el email abriría otro navegador y perdería la inscripción.
+- Los seis dígitos van en dos grupos de tres, como se escriben en el email (design.md §8).
+- Los errores (código incorrecto, vencido, demasiados intentos) están una sola vez, en cuenta-e-ingreso.html: son los mismos acá, en el link personal y en el ingreso a la app.
+- Con la sesión iniciada en ese dispositivo, no se pide código y se salta directo al paso que corresponda. Arriba de cada pantalla queda el email verificado, con "Cambiar", que cierra la sesión en ese dispositivo para entrar con otro email.
 
-1 a 3 · El DNI está en el padrón.
-- Se muestran el nombre y la categoría del perfil, para que un DNI mal tipeado que coincide con el de otro se note antes de pagar.
-- El email guardado aparece enmascarado: dos letras y el dominio. Nunca completo: si no, cualquiera que sepa un DNI vería el email de otra persona. Si el perfil no tiene email, el campo aparece vacío.
-- Si lo cambia, la pantalla dice la consecuencia: el comprobante va al nuevo y al anterior le llega un aviso.
-- Con cuenta (no dibujado): el email de la cuenta no cambia desde acá. El nuevo recibe el comprobante de esta inscripción, el de la cuenta recibe el aviso, y la pantalla dice "El email de tu cuenta se cambia desde tu cuenta".
+3 a 9 · Después del código.
+- 3: ya tiene perfil en este circuito. Se ve su nombre y su categoría, que son de este circuito.
+- 4: ya juega en otro circuito y es nuevo en este. Se busca su apellido en esta categoría y se le propone con un toque. Si hay varios, elige entre hasta 5. "No soy yo" lleva a la búsqueda.
+- 5 a 7: primera vez. Es un buscador, no una lista. Nada hasta 3 letras y como mucho 5 resultados, solo de la categoría del torneo y solo nombre y apellido. Compara sin tildes ni mayúsculas y palabra por palabra. Los perfiles reservados por otra inscripción en curso no aparecen.
+- 6: los perfiles vinculados a otra cuenta aparecen marcados ("vinculado"). Así el dueño real se encuentra y sabe qué pasa.
+- 8 y 9: al tocar uno vinculado, el aviso y el botón "Avisarle a la organización", que crea el caso solo en "Para revisar" con su email verificado. Antes, la pista más común: quizás se inscribió con otro email.
+- Dos homónimos se ven iguales: elige cualquiera y la organización revisa la vinculación sin frenar la inscripción (revisar-vinculacion.html).
 
-4 a 6 · Primera vez. Es un buscador, no una lista.
-- Nada hasta 3 letras y como mucho 5 resultados, solo de la categoría del torneo y solo nombre y apellido.
-- Compara sin tildes ni mayúsculas y palabra por palabra.
-- No aparecen los perfiles que ya tienen DNI ni los reservados por otra inscripción en curso.
-- Dos homónimos se ven iguales: el jugador elige cualquiera y la organización revisa la vinculación, sin frenar la inscripción (revisar-vinculacion.html).
-- La pantalla dice cuándo queda asociado el DNI: al confirmarse el pago.
+Consentimiento: en un circuito donde todavía no tiene perfil, arriba del botón: "Al inscribirte, [organización] va a ver tu nombre y tu email". No es una casilla: tocar el botón es aceptar, y se dice antes. Nunca se muestra nada de otros circuitos.
 
-7 a 10 · No está en la lista: depende del modo de inscripción del torneo.
-- Cerrada (POLENTA): la acción principal es escribirle a la organización, con el contacto del circuito.
-- Con aprobación y abierta: los dos ejemplos son de Liga Amateur del Valle, la segunda organización de la demo.
-- La solicitud dice explícito que no reserva lugar ni cobra.
+La vinculación se guarda al confirmarse el pago. Mientras dura la reserva, el perfil elegido no aparece en la búsqueda de nadie más.
 
-11 y 12 · Quien vuelve. Si tiene una reserva vigente, sigue con el pago, también si era su primera inscripción. Si ya está inscripto, ve su número.
+10 a 13 · No está en la lista: depende del modo de inscripción del torneo. Cerrada es POLENTA; con aprobación y abierta, Liga Amateur del Valle, la segunda organización de la demo. Si la persona ya tiene nombre en su cuenta, los campos vienen completos.
 
-Sin panel: el límite de búsquedas por IP. Al pasarlo, debajo del campo: "Probaste muchas veces. Esperá unos minutos y volvé a intentar".
+14 y 15 · Quien vuelve, con una reserva vigente o ya inscripto.
 
-No hay pantalla de resumen antes de pagar: el monto y el aviso de los 15 minutos van al pie, al lado del botón.
-Nada pide cuenta, y ningún texto la menciona como requisito.
-Textos de 15 px para arriba; números y DNI en Geist Mono.
+Sin panel: el límite de búsquedas y de códigos por IP. Al pasarlo, debajo del campo: "Probaste muchas veces. Esperá unos minutos y volvé a intentar".
+Textos de 15 px para arriba; números y código en Geist Mono. El email no se enmascara: lo ve su dueño.
 Todos los nombres de personas son ficticios.
 -->
 
 <div class="lienzo">
 
-  <div class="grupo">a · El DNI está en el padrón</div>
+  <div class="grupo">Verificar el email</div>
 
   <!-- 1 -->
   <div class="estado">
-    <div class="rotulo"><span class="mono">1</span><span>Escribe su DNI</span></div>
+    <div class="rotulo"><span class="mono">1</span><span>Escribe su email</span></div>
     <div class="tel">
       <div class="cab">
         <div class="marca"><div class="logo"><div></div></div><span>Polenta Team Tenis</span></div>
@@ -102,46 +108,86 @@ Todos los nombres de personas son ficticios.
       </div>
       <div style="height: 1px; background: #E6E8EB;"></div>
       <div class="bloque">
-        <div class="etiqueta">Tu DNI</div>
-        <div class="campo activo" style="height: 60px;"><span class="mono" style="font-size: 20px; letter-spacing: 0.02em;">30.123.456</span></div>
-        <div class="ayuda">Con tu DNI te encontramos en el padrón del circuito. No aparece en ninguna pantalla pública.</div>
+        <div class="etiqueta">Tu email</div>
+        <div class="campo activo" style="height: 60px;"><span style="font-size: 18px;">lucas.bravo@gmail.com</span></div>
+        <div class="ayuda">Te mandamos un código para confirmar que es tuyo. Ese email es tu cuenta: no hay contraseña.</div>
       </div>
       <div class="caja">
-        <div style="font-weight: 600; color: #0A0B0D; margin-bottom: 4px;">¿Primera vez que te inscribís por acá?</div>
-        Si tu DNI todavía no está en el padrón, te buscás por tu apellido. Desde la próxima, alcanza con el DNI.
+        <div style="font-weight: 600; color: #0A0B0D; margin-bottom: 4px;">¿Ya te inscribiste antes?</div>
+        Usá el mismo email y vas directo a tu perfil.
       </div>
       <div class="pie">
-        <div class="btn-lima">Buscarme en el padrón</div>
-        <div class="ayuda" style="text-align: center;">No necesitás cuenta para inscribirte.</div>
+        <div class="btn-lima">Mandarme el código</div>
+        <div class="ayuda" style="text-align: center;">No necesitás registrarte.</div>
       </div>
     </div>
   </div>
 
   <!-- 2 -->
   <div class="estado">
-    <div class="rotulo"><span class="mono">2</span><span>Está en el padrón</span></div>
+    <div class="rotulo"><span class="mono">2</span><span>Escribe el código</span></div>
     <div class="tel">
       <div class="cab">
         <div class="marca"><div class="logo"><div></div></div><span>Polenta Team Tenis</span></div>
         <div class="chip mono">Tercera</div>
       </div>
       <div class="titulo">Primavera 26</div>
-      <div class="campo dni"><span><span class="gris" style="font-size: 15px;">DNI</span>&nbsp;&nbsp;<span class="mono" style="font-size: 18px;">30.123.456</span></span><span class="accion">Cambiar</span></div>
-      <div class="tarjeta">
+      <div class="bloque" style="gap: 8px; padding-top: 8px;">
+        <div class="seccion">Revisá tu email</div>
+        <div class="ayuda">Te mandamos un código de <span class="mono">6</span> dígitos a <span style="color: #0A0B0D; font-weight: 500;">lucas.bravo@gmail.com</span>.</div>
+      </div>
+      <div class="bloque" style="gap: 12px;">
+        <div class="digitos">
+          <div class="digito">4</div><div class="digito">8</div><div class="digito">2</div>
+          <div style="width: 6px;"></div>
+          <div class="digito">9</div><div class="digito">1</div><div class="digito activo"></div>
+        </div>
+        <div class="ayuda">Vence en <span class="mono">10</span> minutos.</div>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+        <div class="accion">Reenviar el código</div>
+        <div class="accion" style="color: #6A7079;">Cambiar el email</div>
+      </div>
+      <div class="caja">¿No te llegó? Fijate en spam o en correo no deseado. Puede tardar un minuto.</div>
+      <div class="pie">
+        <div class="btn-lima">Confirmar</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- placeholder para alinear la fila -->
+  <div class="estado" style="width: 390px;">
+    <div class="rotulo"><span class="mono">·</span><span style="color: #6A7079; font-weight: 500;">Errores del código</span></div>
+    <div style="width: 390px; box-sizing: border-box; border: 1px dashed #C9CDD3; border-radius: 20px; padding: 22px 20px; display: flex; flex-direction: column; gap: 10px;">
+      <div style="font-size: 16px; font-weight: 600;">Están en cuenta-e-ingreso.html</div>
+      <div class="ayuda">Código incorrecto, vencido y demasiados intentos se ven igual acá, en el link personal y en el ingreso a la app.</div>
+    </div>
+  </div>
+
+  <div class="grupo">Después del código: encontrar el perfil</div>
+
+  <!-- 3 -->
+  <div class="estado">
+    <div class="rotulo"><span class="mono">3</span><span>Ya tiene perfil en este circuito</span></div>
+    <div class="tel">
+      <div class="cab">
+        <div class="marca"><div class="logo"><div></div></div><span>Polenta Team Tenis</span></div>
+        <div class="chip mono">Tercera</div>
+      </div>
+      <div class="titulo">Primavera 26</div>
+      <div class="campo cuenta">
+        <div class="yo"><div class="tilde"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#CDF546" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></div><span>lucas.bravo@gmail.com</span></div>
+        <span class="accion" style="color: #6A7079;">Cambiar</span>
+      </div>
+      <div class="tarjeta" style="padding: 18px;">
         <div style="display: flex; align-items: center; gap: 9px;">
           <div class="punto"></div>
-          <div style="font-size: 15px; font-weight: 600; color: #3F4348;">Te encontramos en el padrón</div>
+          <div style="font-size: 15px; font-weight: 600; color: #3F4348;">Tu perfil en Polenta Team Tenis</div>
         </div>
         <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
           <div style="font-size: 20px; font-weight: 600; letter-spacing: -0.025em;">Lucas Bravo</div>
           <div class="mono gris" style="font-size: 15px;">Tercera</div>
         </div>
-        <div class="ayuda">¿No sos vos? Revisá el DNI.</div>
-      </div>
-      <div class="bloque">
-        <div class="etiqueta">Tu email</div>
-        <div class="campo"><span style="color: #3F4348;">lu***@gmail.com</span><span class="accion">Cambiar</span></div>
-        <div class="ayuda">Ahí te mandamos el comprobante cuando se confirme el pago.</div>
       </div>
       <div class="pie">
         <div class="monto">
@@ -156,58 +202,51 @@ Todos los nombres de personas son ficticios.
       </div>
     </div>
   </div>
-
-  <!-- 3 -->
-  <div class="estado">
-    <div class="rotulo"><span class="mono">3</span><span>Cambia el email</span></div>
-    <div class="tel">
-      <div class="cab">
-        <div class="marca"><div class="logo"><div></div></div><span>Polenta Team Tenis</span></div>
-        <div class="chip mono">Tercera</div>
-      </div>
-      <div class="titulo">Primavera 26</div>
-      <div class="campo dni"><span><span class="gris" style="font-size: 15px;">DNI</span>&nbsp;&nbsp;<span class="mono" style="font-size: 18px;">30.123.456</span></span><span class="accion">Cambiar</span></div>
-      <div class="tarjeta" style="flex-direction: row; align-items: center; justify-content: space-between;">
-        <div style="display: flex; align-items: center; gap: 9px;">
-          <div class="punto"></div>
-          <div style="font-size: 17px; font-weight: 600;">Lucas Bravo</div>
-        </div>
-        <div class="mono gris" style="font-size: 15px;">Tercera</div>
-      </div>
-      <div class="bloque">
-        <div class="etiqueta">Tu email</div>
-        <div class="campo activo"><span>lucasbravo.nqn@hotmail.com</span></div>
-      </div>
-      <div class="caja">Mandamos el comprobante a este email y un aviso al anterior, <span style="white-space: nowrap;">lu***@gmail.com</span>. Desde ahora usamos este.</div>
-      <div class="pie">
-        <div class="monto">
-          <div style="font-size: 16px; color: #6A7079;">Inscripción</div>
-          <div class="mono" style="font-size: 24px; font-weight: 500; letter-spacing: -0.02em;">$45.000</div>
-        </div>
-        <div class="btn-lima">Ir a pagar con MercadoPago</div>
-        <div class="reloj">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6A7079" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.5V12l3 2"></path></svg>
-          <div>Te guardamos el lugar <span class="mono">15</span> minutos mientras pagás.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="grupo">b · Primera vez: el DNI no está</div>
 
   <!-- 4 -->
   <div class="estado">
-    <div class="rotulo"><span class="mono">4</span><span>Es su primera inscripción</span></div>
+    <div class="rotulo"><span class="mono">4</span><span>Ya juega en otro circuito</span></div>
+    <div class="tel">
+      <div class="cab">
+        <div class="marca"><div class="logo"><div></div></div><span>Liga Amateur del Valle</span></div>
+        <div class="chip mono">Intermedia</div>
+      </div>
+      <div class="titulo">Abierto del Valle</div>
+      <div class="campo cuenta">
+        <div class="yo"><div class="tilde"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#CDF546" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></div><span>federico.ibanez@gmail.com</span></div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px; padding-top: 10px;">
+        <div class="pregunta">¿Sos Federico Ibáñez, de Intermedia?</div>
+        <div style="font-size: 16px; line-height: 1.45; color: #6A7079;">Lo encontramos por tu apellido en el padrón de Liga Amateur del Valle.</div>
+      </div>
+      <div class="pie">
+        <div class="consentimiento">Al inscribirte, Liga Amateur del Valle va a ver tu nombre y tu email.</div>
+        <div class="monto">
+          <div style="font-size: 16px; color: #6A7079;">Inscripción</div>
+          <div class="mono" style="font-size: 24px; font-weight: 500; letter-spacing: -0.02em;">$30.000</div>
+        </div>
+        <div class="btn-lima">Soy yo: inscribirme y pagar</div>
+        <div class="btn-sec">No soy yo</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="estado">
+    <div class="rotulo"><span class="mono">5</span><span>Primera vez: se busca</span></div>
     <div class="tel">
       <div class="cab">
         <div class="marca"><div class="logo"><div></div></div><span>Polenta Team Tenis</span></div>
         <div class="chip mono">Tercera</div>
       </div>
       <div class="titulo">Primavera 26</div>
-      <div class="campo dni"><span><span class="gris" style="font-size: 15px;">DNI</span>&nbsp;&nbsp;<span class="mono" style="font-size: 18px;">35.882.104</span></span><span class="accion">Cambiar</span></div>
+      <div class="campo cuenta">
+        <div class="yo"><div class="tilde"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#CDF546" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></div><span>arielhuenchul@gmail.com</span></div>
+        <span class="accion" style="color: #6A7079;">Cambiar</span>
+      </div>
       <div class="bloque" style="gap: 6px;">
-        <div class="seccion">Es tu primera inscripción</div>
-        <div class="ayuda">Buscate por tu apellido entre los jugadores de Tercera.</div>
+        <div class="seccion">Buscate en el padrón</div>
+        <div class="ayuda">Escribí tu apellido. Buscamos entre los jugadores de Tercera.</div>
       </div>
       <div class="bloque">
         <div class="campo activo" style="justify-content: flex-start;">
@@ -217,24 +256,27 @@ Todos los nombres de personas son ficticios.
         <div class="ayuda">Escribí al menos <span class="mono">3</span> letras.</div>
       </div>
       <div class="pie">
-        <div class="caja">Tu DNI queda asociado a tu nombre cuando se confirme el pago. La próxima vez entrás directo.</div>
+        <div class="caja">Tu perfil queda vinculado a este email cuando se confirme el pago. La próxima vez vas directo.</div>
       </div>
     </div>
   </div>
 
-  <!-- 5 -->
+  <!-- 6 -->
   <div class="estado">
-    <div class="rotulo"><span class="mono">5</span><span>Se busca</span></div>
+    <div class="rotulo"><span class="mono">6</span><span>Resultados, con un vinculado</span></div>
     <div class="tel">
       <div class="cab">
         <div class="marca"><div class="logo"><div></div></div><span>Polenta Team Tenis</span></div>
         <div class="chip mono">Tercera</div>
       </div>
       <div class="titulo">Primavera 26</div>
-      <div class="campo dni"><span><span class="gris" style="font-size: 15px;">DNI</span>&nbsp;&nbsp;<span class="mono" style="font-size: 18px;">35.882.104</span></span><span class="accion">Cambiar</span></div>
+      <div class="campo cuenta">
+        <div class="yo"><div class="tilde"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#CDF546" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></div><span>arielhuenchul@gmail.com</span></div>
+        <span class="accion" style="color: #6A7079;">Cambiar</span>
+      </div>
       <div class="bloque" style="gap: 6px;">
-        <div class="seccion">Es tu primera inscripción</div>
-        <div class="ayuda">Buscate por tu apellido entre los jugadores de Tercera.</div>
+        <div class="seccion">Buscate en el padrón</div>
+        <div class="ayuda">Escribí tu apellido. Buscamos entre los jugadores de Tercera.</div>
       </div>
       <div class="campo activo" style="justify-content: flex-start;">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6A7079" stroke-width="1.9" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
@@ -242,36 +284,35 @@ Todos los nombres de personas son ficticios.
       </div>
       <div class="lista">
         <div class="fila"><span>Ariel Huenchul</span></div>
-        <div class="fila"><span>Nahuel Huenchupán</span></div>
+        <div class="fila"><span>Nahuel Huenchupán</span><span class="vinculado">vinculado</span></div>
       </div>
-      <div class="ayuda">Tocá tu nombre. Si no aparece, revisá cómo lo escribiste.</div>
+      <div class="ayuda">Tocá tu nombre. "Vinculado" quiere decir que ese perfil ya tiene una cuenta.</div>
       <div class="pie">
         <div class="btn-sec">No estoy en la lista</div>
       </div>
     </div>
   </div>
 
-  <!-- 6 -->
+  <!-- 7 -->
   <div class="estado">
-    <div class="rotulo"><span class="mono">6</span><span>Eligió su nombre</span></div>
+    <div class="rotulo"><span class="mono">7</span><span>Eligió su perfil</span></div>
     <div class="tel">
       <div class="cab">
         <div class="marca"><div class="logo"><div></div></div><span>Polenta Team Tenis</span></div>
         <div class="chip mono">Tercera</div>
       </div>
       <div class="titulo">Primavera 26</div>
-      <div class="campo dni"><span><span class="gris" style="font-size: 15px;">DNI</span>&nbsp;&nbsp;<span class="mono" style="font-size: 18px;">35.882.104</span></span><span class="accion">Cambiar</span></div>
+      <div class="campo cuenta">
+        <div class="yo"><div class="tilde"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#CDF546" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></div><span>arielhuenchul@gmail.com</span></div>
+        <span class="accion" style="color: #6A7079;">Cambiar</span>
+      </div>
       <div class="fila elegida">
         <span>Ariel Huenchul</span>
         <div class="tilde"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#CDF546" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></div>
       </div>
-      <div class="bloque">
-        <div class="etiqueta">Tu email</div>
-        <div class="campo activo"><span>arielhuenchul@gmail.com</span></div>
-        <div class="ayuda">Ahí te mandamos el comprobante cuando se confirme el pago.</div>
-      </div>
+      <div class="ayuda" style="padding: 0 4px;">Tu perfil queda vinculado a este email cuando se confirme el pago.</div>
       <div class="pie">
-        <div class="ayuda" style="padding: 0 4px;">Tu DNI queda asociado a Ariel Huenchul cuando se confirme el pago.</div>
+        <div class="consentimiento">Al inscribirte, Polenta Team Tenis va a ver tu nombre y tu email.</div>
         <div class="monto">
           <div style="font-size: 16px; color: #6A7079;">Inscripción</div>
           <div class="mono" style="font-size: 24px; font-weight: 500; letter-spacing: -0.02em;">$45.000</div>
@@ -285,18 +326,72 @@ Todos los nombres de personas son ficticios.
     </div>
   </div>
 
-  <div class="grupo">c · No está en la lista: depende del modo de inscripción</div>
-
-  <!-- 7 -->
+  <!-- 8 -->
   <div class="estado">
-    <div class="rotulo"><span class="mono">7</span><span>Torneo cerrado</span></div>
+    <div class="rotulo"><span class="mono">8</span><span>El perfil ya está vinculado</span></div>
     <div class="tel">
       <div class="cab">
         <div class="marca"><div class="logo"><div></div></div><span>Polenta Team Tenis</span></div>
         <div class="chip mono">Tercera</div>
       </div>
       <div class="titulo">Primavera 26</div>
-      <div class="campo dni"><span><span class="gris" style="font-size: 15px;">DNI</span>&nbsp;&nbsp;<span class="mono" style="font-size: 18px;">35.882.104</span></span><span class="accion">Cambiar</span></div>
+      <div class="campo cuenta">
+        <div class="yo"><div class="tilde"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#CDF546" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></div><span>lucasbravo.nqn@hotmail.com</span></div>
+        <span class="accion" style="color: #6A7079;">Cambiar</span>
+      </div>
+      <div class="fila elegida">
+        <span>Lucas Bravo</span>
+        <span class="vinculado">vinculado</span>
+      </div>
+      <div class="bloque" style="gap: 8px;">
+        <div class="seccion">Este perfil ya está vinculado a otra cuenta</div>
+        <div class="ayuda">¿Te inscribiste antes con otro email? Entrá con ese y vas directo.</div>
+      </div>
+      <div class="caja">Si es tu perfil y no fuiste vos, avisale a la organización. Ve las dos cuentas y decide de quién es.</div>
+      <div class="pie">
+        <div class="btn-lima">Avisarle a la organización</div>
+        <div class="btn-sec">Volver a buscarme</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9 -->
+  <div class="estado">
+    <div class="rotulo"><span class="mono">9</span><span>Aviso enviado</span></div>
+    <div class="tel">
+      <div class="cab">
+        <div class="marca"><div class="logo"><div></div></div><span>Polenta Team Tenis</span></div>
+        <div class="chip mono">Tercera</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 16px; padding-top: 28px;">
+        <div style="width: 46px; height: 46px; border-radius: 999px; background: #F6F7F8; display: flex; align-items: center; justify-content: center;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0B0D" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h16v10.5H9.5L4 20z"></path></svg>
+        </div>
+        <div style="font-size: 28px; font-weight: 600; letter-spacing: -0.032em; line-height: 1.12;">Le avisamos a Polenta Team Tenis</div>
+        <div style="font-size: 16px; line-height: 1.45; color: #6A7079;">La organización ve tu email y la cuenta que tiene el perfil de Lucas Bravo, y decide de quién es. Te escriben a lucasbravo.nqn@hotmail.com.</div>
+      </div>
+      <div class="caja">Todavía no estás inscripto en Primavera 26. Si la organización te pasa el perfil, inscribite desde el mismo link.</div>
+      <div class="pie">
+        <div class="btn-sec">Volver al torneo</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grupo">No está en la lista: depende del modo de inscripción</div>
+
+  <!-- 10 -->
+  <div class="estado">
+    <div class="rotulo"><span class="mono">10</span><span>Torneo cerrado</span></div>
+    <div class="tel">
+      <div class="cab">
+        <div class="marca"><div class="logo"><div></div></div><span>Polenta Team Tenis</span></div>
+        <div class="chip mono">Tercera</div>
+      </div>
+      <div class="titulo">Primavera 26</div>
+      <div class="campo cuenta">
+        <div class="yo"><div class="tilde"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#CDF546" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></div><span>tomascorrea@gmail.com</span></div>
+        <span class="accion" style="color: #6A7079;">Cambiar</span>
+      </div>
       <div class="bloque" style="gap: 8px;">
         <div class="seccion">No estás en el padrón de Polenta Team Tenis</div>
         <div class="ayuda">Este torneo es solo para los jugadores del circuito. Pedile a la organización que te agregue, y después volvé a este link.</div>
@@ -316,38 +411,37 @@ Todos los nombres de personas son ficticios.
     </div>
   </div>
 
-  <!-- 8 -->
+  <!-- 11 -->
   <div class="estado">
-    <div class="rotulo"><span class="mono">8</span><span>Torneo con aprobación</span></div>
+    <div class="rotulo"><span class="mono">11</span><span>Torneo con aprobación</span></div>
     <div class="tel">
       <div class="cab">
         <div class="marca"><div class="logo"><div></div></div><span>Liga Amateur del Valle</span></div>
         <div class="chip mono">Intermedia</div>
       </div>
       <div class="titulo">Copa Confluencia</div>
-      <div class="campo dni"><span><span class="gris" style="font-size: 15px;">DNI</span>&nbsp;&nbsp;<span class="mono" style="font-size: 18px;">36.104.552</span></span><span class="accion">Cambiar</span></div>
+      <div class="campo cuenta">
+        <div class="yo"><div class="tilde"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#CDF546" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></div><span>tomascorrea@gmail.com</span></div>
+      </div>
       <div class="bloque" style="gap: 8px;">
         <div class="seccion">No estás en el padrón de Liga Amateur del Valle</div>
         <div class="ayuda">En este torneo pueden anotarse jugadores nuevos, con aprobación de la organización.</div>
       </div>
       <div class="dos">
         <div class="bloque" style="gap: 8px;"><div class="etiqueta">Nombre</div><div class="campo">Tomás</div></div>
-        <div class="bloque" style="gap: 8px;"><div class="etiqueta">Apellido</div><div class="campo">Correa</div></div>
-      </div>
-      <div class="bloque" style="gap: 8px;">
-        <div class="etiqueta">Tu email</div>
-        <div class="campo activo"><span>tomascorrea@gmail.com</span></div>
+        <div class="bloque" style="gap: 8px;"><div class="etiqueta">Apellido</div><div class="campo activo">Correa</div></div>
       </div>
       <div class="pie">
         <div class="caja">No te cobramos ni te guardamos lugar hasta que te aprueben. Si te aprueban, te llega un email con el link para pagar.</div>
+        <div class="consentimiento">Al mandarla, Liga Amateur del Valle va a ver tu nombre y tu email.</div>
         <div class="btn-lima">Mandar mi solicitud</div>
       </div>
     </div>
   </div>
 
-  <!-- 9 -->
+  <!-- 12 -->
   <div class="estado">
-    <div class="rotulo"><span class="mono">9</span><span>Solicitud enviada</span></div>
+    <div class="rotulo"><span class="mono">12</span><span>Solicitud enviada</span></div>
     <div class="tel">
       <div class="cab">
         <div class="marca"><div class="logo"><div></div></div><span>Liga Amateur del Valle</span></div>
@@ -358,7 +452,7 @@ Todos los nombres de personas son ficticios.
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0B0D" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.5V12l3 2"></path></svg>
         </div>
         <div style="font-size: 28px; font-weight: 600; letter-spacing: -0.032em; line-height: 1.12;">Mandamos tu solicitud</div>
-        <div style="font-size: 16px; line-height: 1.45; color: #6A7079;">La organización la revisa y te avisamos a <span style="white-space: nowrap;">to***@gmail.com</span>.</div>
+        <div style="font-size: 16px; line-height: 1.45; color: #6A7079;">La organización la revisa y te avisamos a tomascorrea@gmail.com.</div>
       </div>
       <div class="tarjeta" style="gap: 12px;">
         <div style="display: flex; justify-content: space-between; gap: 12px;"><span class="gris" style="font-size: 15px;">Torneo</span><span style="font-size: 16px; font-weight: 500;">Copa Confluencia · Intermedia</span></div>
@@ -371,18 +465,20 @@ Todos los nombres de personas son ficticios.
     </div>
   </div>
 
-  <div class="grupo">c · Abierto, y quien vuelve</div>
+  <div class="grupo">Torneo abierto, y quien vuelve</div>
 
-  <!-- 10 -->
+  <!-- 13 -->
   <div class="estado">
-    <div class="rotulo"><span class="mono">10</span><span>Torneo abierto</span></div>
+    <div class="rotulo"><span class="mono">13</span><span>Torneo abierto</span></div>
     <div class="tel">
       <div class="cab">
         <div class="marca"><div class="logo"><div></div></div><span>Liga Amateur del Valle</span></div>
         <div class="chip mono">Intermedia</div>
       </div>
       <div class="titulo">Abierto del Valle</div>
-      <div class="campo dni"><span><span class="gris" style="font-size: 15px;">DNI</span>&nbsp;&nbsp;<span class="mono" style="font-size: 18px;">36.104.552</span></span><span class="accion">Cambiar</span></div>
+      <div class="campo cuenta">
+        <div class="yo"><div class="tilde"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#CDF546" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></div><span>tomascorrea@gmail.com</span></div>
+      </div>
       <div class="bloque" style="gap: 8px;">
         <div class="seccion">No estás en el padrón de Liga Amateur del Valle</div>
         <div class="ayuda">Este torneo es abierto: te sumamos al circuito en Intermedia, con <span class="mono">0</span> puntos.</div>
@@ -391,11 +487,8 @@ Todos los nombres de personas son ficticios.
         <div class="bloque" style="gap: 8px;"><div class="etiqueta">Nombre</div><div class="campo">Tomás</div></div>
         <div class="bloque" style="gap: 8px;"><div class="etiqueta">Apellido</div><div class="campo">Correa</div></div>
       </div>
-      <div class="bloque" style="gap: 8px;">
-        <div class="etiqueta">Tu email</div>
-        <div class="campo activo"><span>tomascorrea@gmail.com</span></div>
-      </div>
       <div class="pie">
+        <div class="consentimiento">Al inscribirte, Liga Amateur del Valle va a ver tu nombre y tu email.</div>
         <div class="monto">
           <div style="font-size: 16px; color: #6A7079;">Inscripción</div>
           <div class="mono" style="font-size: 24px; font-weight: 500; letter-spacing: -0.02em;">$30.000</div>
@@ -409,16 +502,19 @@ Todos los nombres de personas son ficticios.
     </div>
   </div>
 
-  <!-- 11 -->
+  <!-- 14 -->
   <div class="estado">
-    <div class="rotulo"><span class="mono">11</span><span>Vuelve con una reserva</span></div>
+    <div class="rotulo"><span class="mono">14</span><span>Vuelve con una reserva</span></div>
     <div class="tel">
       <div class="cab">
         <div class="marca"><div class="logo"><div></div></div><span>Polenta Team Tenis</span></div>
         <div class="chip mono">Tercera</div>
       </div>
       <div class="titulo">Primavera 26</div>
-      <div class="campo dni"><span><span class="gris" style="font-size: 15px;">DNI</span>&nbsp;&nbsp;<span class="mono" style="font-size: 18px;">30.123.456</span></span><span class="accion">Cambiar</span></div>
+      <div class="campo cuenta">
+        <div class="yo"><div class="tilde"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#CDF546" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></div><span>lucas.bravo@gmail.com</span></div>
+        <span class="accion" style="color: #6A7079;">Cambiar</span>
+      </div>
       <div class="tarjeta" style="flex-direction: row; align-items: center; justify-content: space-between;">
         <div style="display: flex; align-items: center; gap: 9px;">
           <div class="punto"></div>
@@ -444,16 +540,19 @@ Todos los nombres de personas son ficticios.
     </div>
   </div>
 
-  <!-- 12 -->
+  <!-- 15 -->
   <div class="estado">
-    <div class="rotulo"><span class="mono">12</span><span>Ya está inscripto</span></div>
+    <div class="rotulo"><span class="mono">15</span><span>Ya está inscripto</span></div>
     <div class="tel">
       <div class="cab">
         <div class="marca"><div class="logo"><div></div></div><span>Polenta Team Tenis</span></div>
         <div class="chip mono">Tercera</div>
       </div>
       <div class="titulo">Primavera 26</div>
-      <div class="campo dni"><span><span class="gris" style="font-size: 15px;">DNI</span>&nbsp;&nbsp;<span class="mono" style="font-size: 18px;">30.123.456</span></span><span class="accion">Cambiar</span></div>
+      <div class="campo cuenta">
+        <div class="yo"><div class="tilde"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#CDF546" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></div><span>lucas.bravo@gmail.com</span></div>
+        <span class="accion" style="color: #6A7079;">Cambiar</span>
+      </div>
       <div class="tarjeta" style="gap: 12px; padding: 18px;">
         <div style="display: flex; align-items: center; gap: 9px;">
           <div class="punto"></div>
@@ -465,7 +564,7 @@ Todos los nombres de personas son ficticios.
         </div>
         <div style="height: 1px; background: #F1F2F4;"></div>
         <div style="display: flex; justify-content: space-between; gap: 12px;"><span class="gris" style="font-size: 15px;">Número de inscripción</span><span class="mono" style="font-size: 16px;">100482</span></div>
-        <div class="ayuda">El comprobante te llegó a <span style="white-space: nowrap;">lu***@gmail.com</span> cuando se confirmó el pago.</div>
+        <div class="ayuda">El comprobante te llegó a este email cuando se confirmó el pago.</div>
       </div>
       <div class="pie">
         <div class="btn-sec">Ver el torneo</div>

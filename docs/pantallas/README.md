@@ -19,7 +19,7 @@ Ordenado por entrega.
 | 25% | F01 | [Registrar la organización](organizador/registro.html) | Web organizador | 870 px |
 | 25% | F01 | [Inicio del organizador](organizador/home.html) | Web organizador | 1280 px |
 | 25% | F01 | [Tu circuito](organizador/tu-circuito.html) | Web organizador | 1280 px |
-| 25% · 75% | F02 | [Padrón](organizador/padron.html) | Web organizador · dos estados: compartir el link personal y revisar una vinculación (75%) | 1280 px |
+| 25% · 75% | F02 | [Padrón](organizador/padron.html) | Web organizador · dos estados: compartir el link personal, y las vinculaciones nuevas con "Desvincular" (75%) | 1280 px |
 | 25% | F03 | [Importar padrón](organizador/importar-padron.html) | Web organizador | 1280 px |
 | 25% | F04 | [Nuevo torneo](organizador/nuevo-torneo.html) | Web organizador | 1280 px |
 | 50% | F05 | [Sorteo de zonas](organizador/sorteo.html) | Web organizador | 1280 px |
@@ -28,15 +28,15 @@ Ordenado por entrega.
 | 50% | F08, F10 | [Los dos cuadros](publico/cuadros.html) | Web pública | 1860 px |
 | 50% | F09 | [Ranking](jugador/ranking.html) | App jugador, y web pública en `/c/:slug/ranking` ([decisión 033](../decisiones/033-ranking-publico.md)). En la app, sin el "+15" ([decisión 043](../decisiones/043-ranking-sin-el-cambio-del-ultimo-torneo.md)) | 390 px |
 | 50% | F11 | [Cuándo juego](jugador/cuando-juego.html) | App jugador | 390 px |
-| 50% · 75% | F02, F12 | [Cuenta e ingreso](jugador/cuenta-e-ingreso.html) | Web jugador (crear la cuenta desde el link del comprobante) y app (ingresar). El ingreso está hecho para el 50%; crear la cuenta llega con F12 | 870 px |
+| 50% · 75% | F02, F12 | [Cuenta e ingreso](jugador/cuenta-e-ingreso.html) | App jugador · ingresar con email y código, los errores del código y quien solo administra. El ingreso está hecho para el 50% con contraseña; pasa a código con F12 ([decisión 049](../decisiones/049-identidad-e-ingreso-con-codigo.md)) | 1290 px |
 | 75% | F12 | [El torneo](jugador/el-torneo.html) | Web jugador por link, y app · tres estados | 1290 px |
-| 75% | F12 | [Identificación](jugador/identificacion.html) · *nueva* | Web jugador por link · doce estados: DNI encontrado, primera vez, no está en la lista según el modo, y quien vuelve | 1290 px |
-| 75% | F02, F12 | [Link personal](jugador/link-personal.html) · *nueva* | Web jugador por link · cuatro estados | 1290 px |
-| 75% | F12 | [Inscripción con cuenta](jugador/con-cuenta.html) · *nueva* | App y web jugador, con sesión · cuatro estados, con el consentimiento | 1290 px |
-| 75% | F12 | [Inscripción y pago](jugador/inscripcion-y-pago.html) | Web jugador por link, y app · cinco estados: la espera, el final sin cuenta y con cuenta, pago rechazado y reserva vencida | 1290 px |
-| 75% | F12 | [Comprobante](email/comprobante.html) · *nueva* | Email · el comprobante y el aviso al email anterior, en HTML para email | 600 px por email |
+| 75% | F12 | [Identificación](jugador/identificacion.html) · *nueva* | Web jugador por link, y app · quince estados: email y código, encontrar el perfil, perfil vinculado a otra cuenta, no está en la lista según el modo, y quien vuelve | 1290 px |
+| 75% | F02, F12 | [Link personal](jugador/link-personal.html) · *nueva* | Web jugador por link · cinco estados | 1290 px |
+| 75% | F12 | [Inscripción y pago](jugador/inscripcion-y-pago.html) | Web jugador por link, y app · cuatro estados: la espera, listo, pago rechazado y reserva vencida | 1290 px |
+| 75% | F12 | [Código](email/codigo.html) · *nueva* | Email · el código para inscribirse y para entrar a la app, en HTML para email | 600 px por email |
+| 75% | F12 | [Comprobante](email/comprobante.html) · *nueva* | Email · el comprobante al confirmarse el pago, en HTML para email | 600 px |
 | 75% | F13 | [Inscripciones](organizador/inscripciones.html) | Web organizador · dos estados: una vinculación para revisar, y las solicitudes de un torneo con aprobación | 1280 px |
-| 75% | F02 | [Revisar vinculación](organizador/revisar-vinculacion.html) · *nueva* | Web organizador | 1280 px |
+| 75% | F02 | [Revisar vinculación](organizador/revisar-vinculacion.html) · *nueva* | Web organizador · dos estados: posible homónimo y perfil reclamado por otra cuenta | 1280 px |
 | 75% | F14 | [Anotar la fecha](jugador/anotar-fecha.html) | App jugador | 390 px |
 | 75% | F15 | [Tablero del torneo](organizador/tablero.html) | Web organizador | 1280 px |
 | 75% | F16 | [Cerrar el torneo](organizador/cierre.html) | Web organizador | 1280 px |
@@ -46,7 +46,7 @@ Ordenado por entrega.
 
 Sin pantalla: **F19** (resultados desde mensajes), condicionada al tiempo y a confirmar con el profesor.
 
-**Rediseño de la inscripción y la vinculación** (octubre de 2026, [04-flujo-jugador.md](../04-flujo-jugador.md) §5, [decisiones 049 a 051](../decisiones/049-identificacion-en-la-inscripcion.md)). Las marcadas *nueva* están solo en HTML, no en el canvas. Se actualizaron *El torneo*, *Inscripción y pago* (su panel "Quién sos" pasó a *Identificación*), *Cuenta e ingreso*, *Padrón*, *Inscripciones* y el *Inicio del organizador* ("Necesita tu atención" suma las vinculaciones para revisar). Estas pantallas ya usan los términos nuevos de la interfaz. Sin dibujar: el cupo completo con la lista de espera, que se diseña con F13 completa.
+**Rediseño de la inscripción y la vinculación** (octubre de 2026, [04-flujo-jugador.md](../04-flujo-jugador.md) §5, [decisiones 049 a 051](../decisiones/049-identidad-e-ingreso-con-codigo.md)). El jugador se identifica con su email y un código, sin contraseña ni DNI. Las marcadas *nueva* están solo en HTML, no en el canvas. Se actualizaron *El torneo*, *Inscripción y pago* (su panel "Quién sos" pasó a *Identificación*), *Cuenta e ingreso* (ahora es el ingreso con código), *Padrón*, *Inscripciones* y el *Inicio del organizador* ("Necesita tu atención" suma las vinculaciones para revisar). Estas pantallas ya usan los términos nuevos de la interfaz. Sin dibujar: el cupo completo con la lista de espera, que se diseña con F13 completa, y el email de la solicitud aprobada.
 
 Implementada sin referencia: **Tus circuitos**, en la app (`apps/mobile/src/app/circuitos.tsx`). Es la elección del circuito al entrar, si el jugador juega en varios, y el menú que abre el nombre del circuito en el encabezado, con "Cerrar sesión" ([decisión 040](../decisiones/040-jugador-en-varios-circuitos.md)). Está armada con los componentes de [design.md](../design.md).
 
