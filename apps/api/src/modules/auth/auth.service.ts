@@ -8,7 +8,6 @@ import type {
   DatosVerificarCodigo,
   PerfilDeJugador,
   RespuestaCodigo,
-  RespuestaIngresoJugador,
   RespuestaRegistro,
 } from '@setpoint/shared';
 import { enviarCorreo } from '../../lib/correo';
@@ -71,7 +70,6 @@ export async function registrarOrganizacion(datos: DatosRegistroOrganizacion): P
 // y no delate qué emails están registrados.
 const HASH_DE_RELLENO = bcrypt.hashSync('contrasena-de-relleno', COSTO_BCRYPT);
 
-// Lo comparten los dos ingresos, el de la web y el de la app.
 async function usuarioConCredenciales(datos: DatosIngreso) {
   const usuario = await prisma.usuario.findUnique({ where: { email: datos.email } });
 
@@ -98,21 +96,6 @@ export async function ingresar(datos: DatosIngreso): Promise<RespuestaRegistro> 
     token: firmarToken(usuario.id),
     usuario: { id: usuario.id, email: usuario.email, nombre: usuario.nombre },
     organizacion: { id: organizacion.id, nombre: organizacion.nombre, slug: organizacion.slug },
-  };
-}
-
-// Ingreso del jugador en la app (decisión 039). Devuelve todos los circuitos en los que juega;
-// si hay más de uno, elige en la app (decisión 040). Quien solo administra entra por la web.
-export async function ingresarJugador(datos: DatosIngreso): Promise<RespuestaIngresoJugador> {
-  const usuario = await usuarioConCredenciales(datos);
-
-  const perfiles = await perfilesDe(usuario.id);
-  if (perfiles.length === 0) throw new ErrorHttp(403, 'SIN_PERFIL_DE_JUGADOR');
-
-  return {
-    token: firmarToken(usuario.id),
-    usuario: { id: usuario.id, email: usuario.email, nombre: usuario.nombre },
-    perfiles,
   };
 }
 

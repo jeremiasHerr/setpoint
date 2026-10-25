@@ -33,8 +33,8 @@ export const respuestaRegistroSchema = z.object({
 
 export type RespuestaRegistro = z.infer<typeof respuestaRegistroSchema>;
 
-// Email y contraseña. Lo usan los dos ingresos: el de la web, que responde con la misma forma que
-// el registro, y el del jugador en la app (respuestaIngresoJugadorSchema).
+// Email y contraseña: el ingreso de quien administra, en la web. Responde con la misma forma que el
+// registro. El jugador entra con un código (pedirCodigoSchema).
 export const ingresoSchema = z.object(
   {
     email: z
@@ -63,7 +63,7 @@ export const perfilDeJugadorSchema = z.object({
 
 export type PerfilDeJugador = z.infer<typeof perfilDeJugadorSchema>;
 
-// Ingreso del jugador en la app (decisión 039): un perfil por circuito en el que juega, del más
+// La sesión del jugador en la app (decisión 039): un perfil por circuito en el que juega, del más
 // viejo al más nuevo. Si hay más de uno, elige el jugador (decisión 040).
 export const respuestaIngresoJugadorSchema = z.object({
   token: z.string(),

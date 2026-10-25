@@ -17,7 +17,8 @@
 //
 // Cuentas de prueba (contraseña de las dos organizaciones: CONTRASENA_ORGANIZADOR):
 //   organizador@polenta.example · organizador@valle.example
-// Cuenta de jugador para la app, con perfil en los dos circuitos: EMAIL_JUGADOR / CONTRASENA_JUGADOR.
+// Cuenta de jugador para la app, con perfil en los dos circuitos: EMAIL_JUGADOR. Entra con un código
+// que llega por email (en desarrollo, Mailpit o la consola de la API).
 //
 // Uso:
 //   npm run db:seed -w apps/api          -> carga los datos
@@ -47,7 +48,6 @@ const prisma = new PrismaClient();
 
 const CONTRASENA_ORGANIZADOR = 'organizador-de-prueba';
 const EMAIL_JUGADOR = 'martin.sanhueza@example.com';
-const CONTRASENA_JUGADOR = 'jugador-de-prueba';
 
 const DIA = 24 * 60 * 60 * 1000;
 const diasAtras = (n: number) => new Date(Date.now() - n * DIA);
@@ -214,15 +214,15 @@ async function main() {
   }
 
   // --- una cuenta de jugador vinculada a su perfil del padrón ---
-  // Las cuentas de jugador nacen al pagar una inscripción (F12). Hasta que eso exista,
-  // esta es la única forma de ver y probar la desvinculación desde el padrón.
+  // Las cuentas de jugador nacen con la primera inscripción (F12). Hasta que eso exista,
+  // esta es la única forma de ver y probar la desvinculación desde el padrón. Sin contraseña:
+  // el jugador entra con un código (decisión 049).
   const sanhueza = await prisma.jugador.findFirstOrThrow({
     where: { organizacionId: org.id, apellido: 'Sanhueza' },
   });
   await prisma.usuario.create({
     data: {
       email: EMAIL_JUGADOR,
-      passwordHash: bcrypt.hashSync(CONTRASENA_JUGADOR, 10),
       nombre: 'Martín',
       apellido: 'Sanhueza',
       jugadores: { connect: { id: sanhueza.id } },
@@ -319,7 +319,7 @@ async function main() {
 
   console.log(`Cuentas de organizador (contraseña "${CONTRASENA_ORGANIZADOR}"):`);
   console.log('  organizador@polenta.example · organizador@valle.example');
-  console.log(`Cuenta de jugador para la app, en los dos circuitos (contraseña "${CONTRASENA_JUGADOR}"):`);
+  console.log('Cuenta de jugador para la app, en los dos circuitos (entra con un código por email):');
   console.log(`  ${EMAIL_JUGADOR}\n`);
 }
 
