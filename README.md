@@ -71,9 +71,9 @@ npm run dev -w apps/mobile                     # Metro, con el QR
 2. El celular tiene que estar en la misma Wi-Fi que la notebook. Escaneá el QR con Expo Go. Mientras el Expo Go del Play Store no soporte el SDK 58, instalá el APK que publica Expo: [Expo-Go-58.0.4.apk](https://github.com/expo/expo-go-releases/releases/download/Expo-Go-58.0.4/Expo-Go-58.0.4.apk). Si ya tenías el del Play Store, desinstalalo antes.
 3. Si el celular no llega a la API, revisá que el firewall de Windows deje entrar a Node en redes privadas, y que la Wi-Fi esté marcada como red privada.
 4. La variable se lee al compilar: si la cambiás, reiniciá con `npx expo start --clear` (desde `apps/mobile`). La IP de la notebook puede cambiar de un día para el otro: si la app no conecta, revisala primero.
-5. Ingresá con la cuenta de jugador del seed: `martin.sanhueza@example.com`, contraseña `jugador-de-prueba`. Juega en los dos circuitos del seed, así que la app pregunta en cuál entrar.
+5. Ingresá con la cuenta de jugador del seed, `martin.sanhueza@example.com`. No tiene contraseña: la app pide un código, que llega a Mailpit (`http://localhost:8025`, con `SMTP_HOST=localhost` en `apps/api/.env`) o, sin SMTP, se imprime en la consola de la API. Juega en los dos circuitos del seed, así que la app pregunta en cuál entrar.
 
-La app tiene tres pestañas: *Cuándo juego*, *Mi zona* y *Ranking*. Con la cuenta de prueba (`martin.sanhueza@example.com` / `jugador-de-prueba`) se ve la Copa Alta Barda. En la Liga del Valle el ranking dice que el circuito no lleva ranking: es lo esperado.
+La app tiene tres pestañas: *Cuándo juego*, *Mi zona* y *Ranking*. Con la cuenta de prueba (`martin.sanhueza@example.com`) se ve la Copa Alta Barda. En la Liga del Valle el ranking dice que el circuito no lleva ranking: es lo esperado.
 
 En Expo Go no anda ningún aviso, ni el del fixture ni los recordatorios: Expo Go para Android no trae un módulo nativo que `expo-notifications` carga al importarse. La app abre igual, con los avisos apagados y sin pedir permiso. Se prueban con el APK. Los recordatorios andan en un APK sin Firebase; el aviso del fixture necesita Firebase ([decisión 047](docs/decisiones/047-avisos-push.md)).
 

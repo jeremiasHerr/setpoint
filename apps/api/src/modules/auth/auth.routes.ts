@@ -11,7 +11,6 @@ import { limitePorIp } from '../../middleware/limite';
 import { validar } from '../../middleware/validar';
 import {
   ingresar,
-  ingresarJugador,
   pedirCodigo,
   pedirRecuperacion,
   registrarOrganizacion,
@@ -28,11 +27,6 @@ authRouter.post('/registro', validar(registroOrganizacionSchema), async (req, re
 
 authRouter.post('/ingreso', validar(ingresoSchema), async (req, res) => {
   res.json(await ingresar(req.body));
-});
-
-// El de la app: quien juega, no quien administra (decisión 039).
-authRouter.post('/ingreso-jugador', validar(ingresoSchema), async (req, res) => {
-  res.json(await ingresarJugador(req.body));
 });
 
 // El jugador entra con un código que le llega por email, sin contraseña (decisión 049). Pedirlo

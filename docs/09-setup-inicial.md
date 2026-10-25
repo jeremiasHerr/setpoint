@@ -252,7 +252,7 @@ Sirve para la demo: muestra en vivo que la plataforma no está hecha a medida de
 |---|---|---|
 | Polenta Team Tenis | `organizador@polenta.example` | `organizador-de-prueba` |
 | Liga Amateur del Valle | `organizador@valle.example` | `organizador-de-prueba` |
-| Jugador de POLENTA (Martín Sanhueza) | `martin.sanhueza@example.com` | `jugador-de-prueba` |
+| Jugador de POLENTA (Martín Sanhueza) | `martin.sanhueza@example.com` | Sin contraseña: entra con un código por email |
 
 Son datos del seed de desarrollo, igual que los jugadores: no se usan fuera de una base local.
 
