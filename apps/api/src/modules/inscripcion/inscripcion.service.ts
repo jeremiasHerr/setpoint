@@ -114,6 +114,19 @@ export async function reservar(slug: string, torneoId: number, usuarioId: number
         });
         // Una persona tiene un solo perfil por organización (decisión 051).
         if (propio && propio.id !== datos.jugadorId) throw new ErrorHttp(409, 'YA_TENES_PERFIL');
+        // Tampoco puede reservar dos perfiles distintos mientras todavía no tiene ninguno: al pagar,
+        // solo uno se podría vincular.
+        if (!propio) {
+          const otraReserva = await tx.inscripcion.findFirst({
+            where: {
+              usuarioId,
+              jugadorId: { not: datos.jugadorId },
+              jugador: { organizacionId: torneo.organizacionId, usuarioId: null },
+              ...reservaVigente(ahora),
+            },
+          });
+          if (otraReserva) throw new ErrorHttp(409, 'OTRO_PERFIL_RESERVADO');
+        }
 
         const jugador = await tx.jugador.findFirst({
           where: { id: datos.jugadorId, organizacionId: torneo.organizacionId, activo: true },

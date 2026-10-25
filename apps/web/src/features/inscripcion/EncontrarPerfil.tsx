@@ -19,7 +19,7 @@ type Props = {
   torneo: TorneoPublico;
   token: string;
   situacion: SituacionEnElTorneo;
-  onReservado: () => void;
+  onReservado: (inscripcionId: number) => void;
 };
 
 function mensajeReserva(error: Error | null): string | null {
@@ -32,6 +32,8 @@ function mensajeReserva(error: Error | null): string | null {
       return 'Alguien está pagando con ese perfil en este momento. Si es el tuyo, avisale a la organización.';
     case 'OTRA_CATEGORIA':
       return 'Ese perfil es de otra categoría. Si te corresponde esta, hablá con la organización.';
+    case 'OTRO_PERFIL_RESERVADO':
+      return 'Ya tenés otro perfil reservado en este circuito. Terminá ese pago o esperá a que venza la reserva.';
     case 'YA_INSCRIPTO':
       return 'Ese perfil ya está inscripto en este torneo.';
     case 'INSCRIPCION_NO_ABIERTA':
@@ -52,7 +54,7 @@ export function EncontrarPerfil({ torneo, token, situacion, onReservado }: Props
   const [elegido, setElegido] = useState<PerfilEncontrado | null>(null);
 
   const pagar = (jugadorId: number, vinculaPor?: 'busqueda' | 'propuesta') =>
-    reservar.mutate({ jugadorId, vinculaPor }, { onSuccess: onReservado });
+    reservar.mutate({ jugadorId, vinculaPor }, { onSuccess: (reserva) => onReservado(reserva.inscripcionId) });
 
   const pie = (texto: string, jugadorId: number, vinculaPor?: 'busqueda' | 'propuesta', consentimiento = true) => (
     <div className="mt-auto flex flex-col gap-3">
