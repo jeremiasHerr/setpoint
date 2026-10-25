@@ -7,6 +7,7 @@ export * from './schemas/importacion';
 export * from './schemas/sorteo';
 export * from './schemas/posiciones';
 export * from './schemas/inscripciones';
+export * from './schemas/inscripcion';
 export * from './schemas/cuadros';
 export * from './schemas/resultado';
 export * from './schemas/ranking';
