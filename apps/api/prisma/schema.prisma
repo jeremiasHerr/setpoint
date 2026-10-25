@@ -93,6 +93,7 @@ enum Vinculacion {
   LINK_PERSONAL
   BUSQUEDA
   PROPUESTA // el "¿Sos…?" a quien ya juega en otro circuito
+  ORGANIZACION // al resolver un reclamo, la organización le pasó el perfil a quien lo reclamó
 }
 
 // Por qué una vinculación quedó para que la revise la organización (decisión 051).
@@ -196,7 +197,9 @@ model Usuario {
   creadoEn      DateTime @default(now())
   actualizadoEn DateTime @updatedAt
 
-  jugadores           Jugador[]
+  jugadores           Jugador[]           @relation("PerfilDeJugador")
+  // Perfiles de otras cuentas que esta persona dijo que son suyos (decisión 051).
+  reclamos            Jugador[]           @relation("ReclamoDePerfil")
   inscripciones       Inscripcion[]
   administra          AdminOrganizacion[]
   partidosAnotados    Partido[]           @relation("PartidoAnotadoPor")
@@ -390,13 +393,17 @@ model Jugador {
   vinculadoEn  DateTime?
   vinculadoPor Vinculacion?
   revision     MotivoRevision?
+  // Con revision RECLAMO: quién dice que el perfil es suyo, y cuándo.
+  reclamadoPorId Int?
+  reclamadoEn    DateTime?
 
   creadoEn      DateTime @default(now())
   actualizadoEn DateTime @updatedAt
 
   organizacion Organizacion @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
   categoria    Categoria?   @relation(fields: [categoriaId], references: [id])
-  usuario      Usuario?     @relation(fields: [usuarioId], references: [id])
+  usuario      Usuario?     @relation("PerfilDeJugador", fields: [usuarioId], references: [id])
+  reclamadoPor Usuario?     @relation("ReclamoDePerfil", fields: [reclamadoPorId], references: [id], onDelete: SetNull)
 
   inscripciones   Inscripcion[]
   movimientos     MovimientoRanking[]
