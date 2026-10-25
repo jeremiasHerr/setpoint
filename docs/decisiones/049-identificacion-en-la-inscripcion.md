@@ -84,6 +84,7 @@ DNI más email, buscador acotado y revisión por excepción.
 - **La inscripción guarda el DNI y el email hasta el pago.** Con el webhook aprobado pasan al perfil; si el perfil tiene cuenta, el email nuevo queda solo en la inscripción.
 - **En modo abierto, la inscripción existe antes que el perfil.** `Inscripcion.jugadorId` es obligatorio: o se crea el `Jugador` como pendiente al reservar y se borra si la reserva vence, o el campo pasa a opcional hasta el pago. Se decide al implementar.
 - **Estado de solicitud** para los torneos con aprobación.
+- **Desvincular desde el padrón** borra el DNI y el email del perfil, y la cuenta si tiene. Hoy `DELETE /jugadores/:id/cuenta` solo quita la cuenta ([decisión 007](007-vinculacion-de-cuentas-en-f02.md)).
 - **La búsqueda excluye los perfiles con una inscripción `pendiente_pago` vigente**, y la consulta por DNI también mira los DNI pendientes de esas reservas, para que quien vuelve retome el pago.
 - **Límite por IP** de la búsqueda y de la consulta por DNI. La API no tiene ninguno; la [decisión 006](006-recuperar-la-contrasena.md) ya lo dejó pendiente para la recuperación de la contraseña.
 - **Rutas públicas** bajo `/api/publico/:slug` ([decisión 033](033-ranking-publico.md)). Sin sesión, la consulta del estado del pago ("Confirmando el pago") usa un código que no se pueda adivinar, no el número de inscripción.

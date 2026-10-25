@@ -254,7 +254,7 @@ El DNI es dato personal sensible en Argentina:
 - Solo la organización dueña del padrón puede verlo. En las listas y en la revisión se muestra enmascarado: `30.1xx.xxx`.
 - La consulta por DNI y la búsqueda por apellido tienen un límite por IP.
 
-El email se muestra enmascarado siempre que quien mira puede no ser su dueño: las dos primeras letras y el dominio, `lu***@gmail.com`.
+El email se muestra enmascarado siempre que quien mira puede no ser su dueño: las dos primeras letras y el dominio, `lu***@gmail.com`. La organización lo ve completo, igual que el teléfono: es dato de su padrón.
 
 ### 5.11 La secuencia en la base
 

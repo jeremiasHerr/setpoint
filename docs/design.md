@@ -234,7 +234,7 @@ Cómo está conectado un perfil del padrón con la persona ([04-flujo-jugador.md
 | Email enmascarado | dos letras y el dominio | `lu***@gmail.com` |
 | Número de inscripción | mono, sin puntos ni numeral | `100482` |
 
-**Enmascarado** es el formato de todo DNI o email que se muestra a alguien que puede no ser su dueño: quien escribió un DNI en la inscripción, la organización en sus listas. El DNI completo solo lo ve la organización en el panel del jugador.
+**Enmascarado** es el formato de todo DNI o email que se muestra a alguien que puede no ser su dueño, como quien escribió un DNI en la inscripción. La organización ve el email completo, igual que el teléfono, porque es dato de su padrón; el DNI lo ve enmascarado en sus listas y en la revisión, y completo solo en el panel del jugador.
 
 ---
 
