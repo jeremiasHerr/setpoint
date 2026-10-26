@@ -26,6 +26,8 @@ export type InscripcionesDelTorneo = {
   // "Primavera 2026 · Tercera"
   nombre: string;
   estado: EstadoTorneo;
+  // Con aprobación, la pantalla muestra las solicitudes aunque todavía no haya ninguna.
+  modoInscripcion: 'cerrada' | 'con_aprobacion' | 'abierta';
   sorteoConfirmado: boolean;
   cierreInscripcion: string | null;
   cupo: number;

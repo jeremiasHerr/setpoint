@@ -83,6 +83,7 @@ async function aInscripciones(torneo: TorneoConInscripciones): Promise<Inscripci
     convocatoriaId: await idDeLaConvocatoria(torneo),
     nombre: `${torneo.edicion ?? torneo.nombre} · ${torneo.categoria.nombre}`,
     estado: torneo.estado.toLowerCase() as ClaveEstado,
+    modoInscripcion: torneo.modoInscripcion.toLowerCase() as InscripcionesDelTorneo['modoInscripcion'],
     sorteoConfirmado: torneo.sorteoConfirmado,
     cierreInscripcion: torneo.cierreInscripcion?.toISOString().slice(0, 10) ?? null,
     cupo: torneo.cupo,

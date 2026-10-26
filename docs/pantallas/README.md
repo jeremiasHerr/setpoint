@@ -36,7 +36,7 @@ Ordenado por entrega.
 | 75% | F12 | [Inscripción y pago](jugador/inscripcion-y-pago.html) | Web jugador por link, y app · cuatro estados: la espera, listo, pago rechazado y reserva vencida. Implementada en la web en `/c/:slug/inscripciones/:id`, con un estado más antes del checkout, y el pago simulado sin credenciales ([decisión 053](../decisiones/053-pago-sin-credenciales.md)) | 1290 px |
 | 75% | F12 | [Código](email/codigo.html) · *nueva* | Email · el código para inscribirse y para entrar a la app, en HTML para email | 600 px por email |
 | 75% | F12 | [Comprobante](email/comprobante.html) · *nueva* | Email · el comprobante al confirmarse el pago, en HTML para email | 600 px |
-| 75% | F13 | [Inscripciones](organizador/inscripciones.html) | Web organizador · dos estados: una vinculación para revisar, y las solicitudes de un torneo con aprobación | 1280 px |
+| 75% | F13 | [Inscripciones](organizador/inscripciones.html) | Web organizador · dos estados: una vinculación para revisar, y las solicitudes de un torneo con aprobación. Implementadas en la web, en `/torneos/:id/inscripciones`, la barra de lugares, la tabla de inscriptos y las solicitudes, con dos pestañas (Inscriptos y Solicitudes); las de Reservando y Lista de espera, la conciliación y la marca para revisar llegan con F13 completa | 1280 px |
 | 75% | F02 | [Revisar vinculación](organizador/revisar-vinculacion.html) · *nueva* | Web organizador · dos estados: posible homónimo y perfil reclamado por otra cuenta | 1280 px |
 | 75% | F14 | [Anotar la fecha](jugador/anotar-fecha.html) | App jugador | 390 px |
 | 75% | F15 | [Tablero del torneo](organizador/tablero.html) | Web organizador | 1280 px |
