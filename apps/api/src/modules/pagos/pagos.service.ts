@@ -146,10 +146,14 @@ export async function confirmarPago(inscripcionId: number, pago: PagoRecibido) {
     // Si llega aprobado después de vencer la reserva, se confirma igual: el jugador ya pagó. La
     // preferencia vence con la reserva, así que no debería pasar.
     const pagadoEn = new Date();
-    await tx.inscripcion.update({
-      where: { id: inscripcion.id },
+    // MercadoPago avisa el mismo pago más de una vez, y a veces a la vez. El cambio de estado lleva
+    // la condición: el segundo aviso espera el bloqueo de la fila, ya la encuentra pagada y no sigue.
+    // Así el comprobante sale una sola vez.
+    const { count } = await tx.inscripcion.updateMany({
+      where: { id: inscripcion.id, estado: { not: EstadoInscripcion.PAGADA } },
       data: { estado: EstadoInscripcion.PAGADA, reservaVence: null },
     });
+    if (count === 0) return null;
     await tx.pago.upsert({
       where: { inscripcionId: inscripcion.id },
       create: {
