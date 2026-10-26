@@ -101,10 +101,19 @@ Copiar `.env.example` a `.env` y completar:
 |---|---|
 | `DATABASE_URL` | Conexión a Postgres |
 | `JWT_SECRET` | Firma de tokens de sesión |
-| `MERCADOPAGO_ACCESS_TOKEN` | Credencial de **sandbox** |
+| `MERCADOPAGO_ACCESS_TOKEN` | Credencial de **prueba** de MercadoPago. Vacía, el pago es simulado ([decisión 053](docs/decisiones/053-pago-sin-credenciales.md)) |
+| `API_URL_PUBLICA` | Dirección pública de la API, para que llegue el webhook de MercadoPago (en desarrollo, ngrok) |
 | `ANTHROPIC_API_KEY` | Funcionalidades de IA |
 
-> Nunca commitear el `.env`. Usar credenciales de sandbox de MercadoPago durante todo el desarrollo.
+> Nunca commitear el `.env`. Usar credenciales de prueba de MercadoPago durante todo el desarrollo.
+
+### Probar con MercadoPago
+
+1. En el [panel de desarrolladores](https://www.mercadopago.com.ar/developers/panel/app), crear una aplicación de Checkout Pro con la API de **Preferences**, que es la que usa la API. Copiar el Access Token de las credenciales de prueba en `MERCADOPAGO_ACCESS_TOKEN`.
+2. Levantar un túnel a la API (`ngrok http 3000`) y poner su dirección en `API_URL_PUBLICA`. Sin webhook, el checkout abre pero la inscripción queda en "Confirmando el pago" hasta que vence la reserva: la confirmación nunca sale de la vuelta del checkout.
+3. Pagar con un usuario comprador de prueba, creado en el mismo panel, no con una cuenta real. Si el token empieza con `TEST-` se abre el checkout del sandbox; si empieza con `APP_USR-`, el checkout normal con los usuarios de prueba.
+
+Con `WEB_URL` en `http://localhost`, MercadoPago no acepta la vuelta automática después de pagar: el jugador vuelve con el botón "Volver al sitio" del checkout. Con una dirección `https`, vuelve solo.
 
 ---
 
