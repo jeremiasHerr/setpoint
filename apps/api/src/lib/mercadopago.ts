@@ -33,13 +33,19 @@ export async function crearPreferencia(datos: Preferencia) {
       // El hilo conductor entre el pago y la inscripción (04-flujo-jugador §5.4).
       external_reference: String(datos.inscripcionId),
       back_urls: { success: datos.vuelta, failure: datos.vuelta, pending: datos.vuelta },
-      auto_return: 'approved',
+      // MercadoPago rechaza la vuelta automática a una dirección http (localhost en desarrollo): ahí
+      // el jugador vuelve con el botón "Volver al sitio" del checkout.
+      ...(datos.vuelta.startsWith('https://') && { auto_return: 'approved' }),
       ...(datos.webhook && { notification_url: datos.webhook }),
       expires: true,
       expiration_date_to: datos.vence.toISOString(),
     }),
   });
-  if (!respuesta.ok) throw new Error(`MercadoPago respondió ${respuesta.status} al crear la preferencia`);
+  if (!respuesta.ok) {
+    // El motivo que da MercadoPago, para el log: sin él, un 400 no dice qué campo rechazó.
+    const motivo = await respuesta.json().then((d: { message?: string }) => d.message, () => undefined);
+    throw new Error(`MercadoPago respondió ${respuesta.status} al crear la preferencia${motivo ? `: ${motivo}` : ''}`);
+  }
   const preferencia = preferenciaCreadaSchema.parse(await respuesta.json());
   // Con las credenciales de prueba, el checkout es el del sandbox.
   const url = ACCESS_TOKEN!.startsWith('TEST-') ? (preferencia.sandbox_init_point ?? preferencia.init_point) : preferencia.init_point;
