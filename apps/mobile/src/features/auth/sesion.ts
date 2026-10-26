@@ -1,4 +1,4 @@
-import { respuestaIngresoJugadorSchema, type RespuestaIngresoJugador } from '@setpoint/shared';
+import { respuestaCodigoSchema, type RespuestaCodigo } from '@setpoint/shared';
 import * as SecureStore from 'expo-secure-store';
 
 // La sesión queda cifrada con el Keystore de Android (decisión 041).
@@ -6,7 +6,9 @@ const CLAVE_SESION = 'setpoint.sesion';
 // El circuito que eligió, si juega en varios (decisión 040). Va aparte porque no viene de la API.
 const CLAVE_CIRCUITO = 'setpoint.circuito';
 
-export type Sesion = RespuestaIngresoJugador;
+// Los perfiles pueden venir vacíos: quien todavía no juega en ningún circuito también entra, y ve
+// sus inscripciones en curso (decisión 054).
+export type Sesion = RespuestaCodigo;
 
 export async function guardarSesion(sesion: Sesion) {
   await SecureStore.setItemAsync(CLAVE_SESION, JSON.stringify(sesion));
@@ -17,7 +19,7 @@ export async function leerSesion(): Promise<Sesion | null> {
   try {
     const guardada = await SecureStore.getItemAsync(CLAVE_SESION);
     if (!guardada) return null;
-    const resultado = respuestaIngresoJugadorSchema.safeParse(JSON.parse(guardada));
+    const resultado = respuestaCodigoSchema.safeParse(JSON.parse(guardada));
     return resultado.success ? resultado.data : null;
   } catch {
     return null;

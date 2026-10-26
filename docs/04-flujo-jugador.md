@@ -69,7 +69,7 @@ El jugador entra a la app con su email y un código de 6 dígitos que le llega p
 - **Un perfil por circuito.** Si juega en varios, elige en cuál entrar y la app lo recuerda. Para cambiar, toca el nombre del circuito en el encabezado, donde también está "Cerrar sesión" ([decisión 040](decisiones/040-jugador-en-varios-circuitos.md)).
 - **La sesión queda guardada en el celular**, cifrada, y dura 7 días como en la web ([decisión 041](decisiones/041-sesion-en-el-celular.md)). Con sesión no se pide código.
 - **Sin sesión, la app solo muestra el ingreso.** La consulta sin cuenta es la de la web, por link ([decisión 042](decisiones/042-la-app-sin-sesion.md)).
-- **Quien solo administra** verifica el código, no tiene perfil de jugador y recibe un aviso para entrar por la web.
+- **Quien todavía no juega en ningún circuito** entra igual, y ve sus inscripciones en curso o que todavía no juega en ninguno (§10, [decisión 054](decisiones/054-perfil-pendiente.md)). Eso incluye a quien solo administra.
 - **La persona edita su nombre desde su cuenta.** Cambiar el email pide un código al email nuevo. *Pendiente de código.*
 
 > **Estado:** implementado. La API pide y verifica el código (`POST /api/auth/codigo` y `/codigo/verificar`), con límites por email y por IP ([decisión 052](decisiones/052-limite-de-pedidos.md)), y la app entra así, con la cuenta de prueba del seed. El ingreso con contraseña quedó solo para los administradores, en la web.

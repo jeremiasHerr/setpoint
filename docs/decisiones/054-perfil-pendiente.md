@@ -1,6 +1,6 @@
 # 054 — Perfil pendiente y la persona que todavía no juega en ningún circuito
 
-**Estado:** aceptada — 25 de octubre de 2026. Ajusta la [decisión 051](051-vinculacion-con-el-padron.md) en lo que dice de los flujos abandonados, y la [decisión 039](039-ingreso-del-jugador.md) en lo que ve en la app quien no tiene perfil. Implementada en la API; la web y la app, en los PRs siguientes.
+**Estado:** aceptada — 25 de octubre de 2026. Ajusta la [decisión 051](051-vinculacion-con-el-padron.md) en lo que dice de los flujos abandonados, y la [decisión 039](039-ingreso-del-jugador.md) en lo que ve en la app quien no tiene perfil. Implementada en la API, la web y la app.
 
 ## Contexto
 

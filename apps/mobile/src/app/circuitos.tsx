@@ -10,11 +10,11 @@ import { useSesion } from '../features/auth/SesionProvider';
 import { colores, fuentes, medidas, radios } from '../lib/tokens';
 
 export default function Circuitos() {
-  const { sesion, perfil, elegirCircuito, cerrarSesion } = useSesion();
+  const { sesion, perfiles, perfil, elegirCircuito, cerrarSesion } = useSesion();
   if (!sesion) return null;
 
   const eligiendo = perfil === null;
-  const titulo = eligiendo ? '¿A qué circuito entrás?' : sesion.perfiles.length > 1 ? 'Tus circuitos' : 'Tu circuito';
+  const titulo = eligiendo ? '¿A qué circuito entrás?' : perfiles.length > 1 ? 'Tus circuitos' : 'Tu circuito';
 
   async function elegir(jugadorId: number) {
     await elegirCircuito(jugadorId);
@@ -35,13 +35,13 @@ export default function Circuitos() {
           <Text style={estilos.titulo}>{titulo}</Text>
           {eligiendo && (
             <Text style={estilos.bajada}>
-              Jugás en {sesion.perfiles.length}. Después podés cambiar tocando el nombre del circuito, arriba de todo.
+              Jugás en {perfiles.length}. Después podés cambiar tocando el nombre del circuito, arriba de todo.
             </Text>
           )}
         </View>
 
         <View style={estilos.lista}>
-          {sesion.perfiles.map(({ jugador, organizacion }, i) => {
+          {perfiles.map(({ jugador, organizacion }, i) => {
             const actual = perfil?.jugador.id === jugador.id;
             return (
               <Pressable
