@@ -198,6 +198,20 @@ Columnas por ronda con rótulo en mono minúscula. Tarjeta de 190×62 con dos fi
 
 `reservando` (con reloj de 15 minutos corriendo, en rojo cuando queda poco) · `pagada` (punto lima) · `en lista de espera` (numerada por orden de llegada) · `libre` (marca `--linea`) · `solicitud` (torneo con aprobación: punto hueco con borde `--gris-400`, con "Aprobar" y "Rechazar" en la fila; no ocupa lugar en la barra de marcas hasta que paga).
 
+Desde la [decisión 054](decisiones/054-perfil-pendiente.md), la solicitud tiene tres momentos. Para el jugador se escriben en mono minúscula al lado de un punto:
+
+| Estado | Cómo se ve |
+|---|---|
+| `en revisión` | El mismo punto hueco con borde `--gris-400` de la solicitud |
+| `aprobada` | Punto lleno `--negro`, con "Pagar". **No es lima**: el lima es de `pagada`, y todavía no pagó |
+| `no aprobada` | Sin punto ni color: se avisa una vez, con un texto, y desaparece |
+
+Una reserva vencida se avisa igual que una no aprobada: una vez, con texto, sin rojo. El rojo es para lo que vence mientras se mira, no para lo que ya pasó.
+
+### Perfil pendiente
+
+Un perfil `pendiente` (de una solicitud o una reserva de alguien que no estaba en el padrón) **no se muestra en el padrón ni en ninguna pantalla pública**: solo aparece en las solicitudes de la pantalla Inscripciones de la organización, con su nombre y su email. Un perfil `descartado` no se muestra en ningún lado.
+
 ### Vinculación
 
 Cómo está conectado un perfil del padrón con la persona ([04-flujo-jugador.md](04-flujo-jugador.md) §5). Se ve en el padrón y en las inscripciones, nunca en una pantalla pública.

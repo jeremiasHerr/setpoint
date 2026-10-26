@@ -7,6 +7,7 @@ import {
   restablecerContrasenaSchema,
   verificarCodigoSchema,
 } from '@setpoint/shared';
+import { autenticar } from '../../middleware/autenticar';
 import { limitePorIp } from '../../middleware/limite';
 import { validar } from '../../middleware/validar';
 import {
@@ -17,6 +18,7 @@ import {
   restablecerContrasena,
   verificarCodigo,
 } from './auth.service';
+import { cuentaDe } from './cuenta.service';
 
 export const authRouter = Router();
 
@@ -49,4 +51,10 @@ authRouter.post('/recuperar-contrasena', validar(recuperarContrasenaSchema), asy
 authRouter.post('/restablecer-contrasena', validar(restablecerContrasenaSchema), async (req, res) => {
   await restablecerContrasena(req.body);
   res.status(204).end();
+});
+
+// La app la pide al abrirse y al volver al frente: los circuitos, las inscripciones en curso y los
+// avisos para mostrar una vez (decisión 054).
+authRouter.get('/cuenta', autenticar, async (_req, res) => {
+  res.json(await cuentaDe(res.locals.usuarioId));
 });

@@ -24,6 +24,7 @@ export function aTorneoPublico(torneo: TorneoConConvocatoria): TorneoPublico {
     nombre: torneo.edicion ?? torneo.nombre,
     categoria: torneo.categoria.nombre,
     inscripcion: torneo.estado === EstadoTorneo.PUBLICADO ? 'abierta' : 'cerrada',
+    modoInscripcion: torneo.modoInscripcion.toLowerCase() as TorneoPublico['modoInscripcion'],
     cierreInscripcion: torneo.cierreInscripcion?.toISOString().slice(0, 10) ?? null,
     fechaInicio: torneo.fechaInicio?.toISOString().slice(0, 10) ?? null,
     cantidadGrupos: torneo.cantidadGrupos,

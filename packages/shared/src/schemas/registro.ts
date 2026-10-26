@@ -142,3 +142,29 @@ export const respuestaCodigoSchema = z.object({
 });
 
 export type RespuestaCodigo = z.infer<typeof respuestaCodigoSchema>;
+
+// Lo que la app pide al abrirse y al volver al frente (decisión 054): los circuitos en los que
+// juega, las inscripciones que todavía no son un circuito y los avisos para mostrar una vez.
+export type InscripcionEnCurso = {
+  inscripcionId: number;
+  organizacion: { nombre: string; slug: string };
+  torneo: string;
+  categoria: string;
+  estado: 'solicitada' | 'aprobada' | 'reservando';
+  reservaVence: string | null;
+};
+
+export type AvisoDeInscripcion = {
+  inscripcionId: number;
+  organizacion: { nombre: string; slug: string };
+  torneo: string;
+  categoria: string;
+  motivo: 'no_aprobada' | 'vencida';
+};
+
+export type Cuenta = {
+  usuario: { id: number; email: string; nombre: string };
+  perfiles: PerfilDeJugador[];
+  enCurso: InscripcionEnCurso[];
+  avisos: AvisoDeInscripcion[];
+};

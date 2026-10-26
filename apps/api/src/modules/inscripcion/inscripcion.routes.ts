@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { reservarSchema } from '@setpoint/shared';
+import { inscribirComoNuevoSchema, reservarSchema } from '@setpoint/shared';
 import { autenticar } from '../../middleware/autenticar';
 import { validar } from '../../middleware/validar';
-import { reservar, situacionEnElTorneo } from './inscripcion.service';
+import { inscribirComoNuevo, reservar, situacionEnElTorneo } from './inscripcion.service';
 
 // Se monta en /api/inscripcion/:slug/torneos/:id. Pide la sesión que deja el código (decisión
 // 049), pero no un perfil en la organización: es justo lo que se está por vincular.
@@ -18,4 +18,10 @@ inscripcionRouter.get('/', async (req, res) => {
 inscripcionRouter.post('/', validar(reservarSchema), async (req, res) => {
   const { slug, id } = req.params as { slug: string; id: string };
   res.status(201).json(await reservar(slug, Number(id), res.locals.usuarioId, req.body));
+});
+
+// Quien no está en el padrón, si el torneo es con aprobación o abierto (decisión 054).
+inscripcionRouter.post('/nuevo', validar(inscribirComoNuevoSchema), async (req, res) => {
+  const { slug, id } = req.params as { slug: string; id: string };
+  res.status(201).json(await inscribirComoNuevo(slug, Number(id), res.locals.usuarioId, req.body));
 });

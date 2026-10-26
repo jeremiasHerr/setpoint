@@ -1,5 +1,6 @@
 import { EstadoTorneo } from '@prisma/client';
 import type { LinkPersonal, SituacionDelLink } from '@setpoint/shared';
+import { DEL_PADRON, esDelPadron } from '../../lib/padron';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
 import { aTorneoPublico, CONVOCATORIA } from '../torneos/torneo-publico';
@@ -16,7 +17,7 @@ async function jugadorDelLink(codigo: string) {
       })
     : null;
   // Uno dado de baja no se inscribe: para el link, es como si no existiera.
-  if (!jugador || !jugador.activo) throw new ErrorHttp(404, 'LINK_NO_ENCONTRADO');
+  if (!jugador || !jugador.activo || !esDelPadron(jugador)) throw new ErrorHttp(404, 'LINK_NO_ENCONTRADO');
   return jugador;
 }
 
@@ -46,8 +47,9 @@ export async function situacionDelLink(codigo: string, usuarioId: number): Promi
   if (jugador.usuarioId !== null) return { situacion: 'otra_cuenta' };
 
   // Una cuenta tiene un solo perfil por circuito (decisión 051): si ya tiene otro, no se vincula.
-  const otro = await prisma.jugador.findUnique({
-    where: { organizacionId_usuarioId: { organizacionId: jugador.organizacionId, usuarioId } },
+  // Un perfil pendiente no es otro perfil: es una inscripción en curso, y la reserva lo dice.
+  const otro = await prisma.jugador.findFirst({
+    where: { organizacionId: jugador.organizacionId, usuarioId, ...DEL_PADRON },
     select: { id: true },
   });
   return { situacion: otro ? 'otro_perfil' : 'libre' };
