@@ -5,10 +5,12 @@ type Props = {
   cupo: number;
   pagados: number;
   reservando: number;
+  // En un torneo con aprobación: van solo en la leyenda, porque no ocupan lugar hasta que pagan.
+  solicitudes?: number;
 };
 
 // La barra de marcas de design.md §6: una marca por lugar del cupo.
-export function BarraDeLugares({ cupo, pagados, reservando }: Props) {
+export function BarraDeLugares({ cupo, pagados, reservando, solicitudes }: Props) {
   const libres = Math.max(0, cupo - pagados - reservando);
   const tramos = [
     { cantidad: pagados, rotulo: 'pagados', color: 'bg-negro' },
@@ -30,6 +32,15 @@ export function BarraDeLugares({ cupo, pagados, reservando }: Props) {
               <span className="text-[13px] text-gris-500">{rotulo}</span>
             </li>
           ))}
+          {solicitudes !== undefined && (
+            <li className="flex items-center gap-[7px]">
+              <span className="size-[9px] rounded-full border-[1.5px] border-gris-400" />
+              <Numero className="text-[13px]">{solicitudes}</Numero>
+              <span className="text-[13px] text-gris-500">
+                {solicitudes === 1 ? 'solicitud' : 'solicitudes'}, sin lugar todavía
+              </span>
+            </li>
+          )}
         </ul>
       </div>
       {/* Los números ya están en la leyenda: las marcas son solo el dibujo. */}

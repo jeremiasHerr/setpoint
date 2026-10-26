@@ -1,5 +1,5 @@
 import type { InscripcionesDelTorneo } from '@setpoint/shared';
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Boton } from '../components/Boton';
 import { EncabezadoOrganizador } from '../components/EncabezadoOrganizador';
@@ -9,6 +9,7 @@ import { useCerrarSesion } from '../features/auth/useCerrarSesion';
 import { useSesionInvalida } from '../features/auth/useSesionInvalida';
 import { BarraDeLugares } from '../features/inscripciones/BarraDeLugares';
 import { TablaInscriptos } from '../features/inscripciones/TablaInscriptos';
+import { TablaSolicitudes } from '../features/inscripciones/TablaSolicitudes';
 import { useCerrarInscripcion, useInscripciones } from '../features/inscripciones/useInscripciones';
 import { iniciales, navegacionOrganizador } from '../features/organizador/encabezado';
 import { diaConSemana } from '../features/torneos/texto';
@@ -149,10 +150,32 @@ function textoDeError(error: Error): ReactNode {
   }
 }
 
+function Pestana({ activa, onClick, children }: { activa: boolean; onClick: () => void; children: ReactNode }) {
+  return (
+    <button
+      type="button"
+      role="tab"
+      aria-selected={activa}
+      onClick={onClick}
+      className={`flex h-9 items-center gap-1.5 rounded-[9px] border px-[15px] text-sm ${
+        activa ? 'border-negro bg-negro font-semibold text-white' : 'border-linea font-medium text-gris-700 hover:bg-fondo'
+      }`}
+    >
+      {children}
+    </button>
+  );
+}
+
 function Inscripciones({ sesion, datos }: { sesion: Sesion; datos: InscripcionesDelTorneo }) {
   const cerrar = useCerrarInscripcion(sesion.organizacion.slug, datos.torneoId);
   useSesionInvalida(cerrar.error);
   const navegar = useNavigate();
+
+  // Con aprobación, las solicitudes van en su propia pestaña; abre en ella si hay alguna para resolver.
+  const conAprobacion = datos.modoInscripcion === 'con_aprobacion';
+  const [pestana, setPestana] = useState<'inscriptos' | 'solicitudes'>(() =>
+    datos.solicitudes.some((s) => s.estado === 'solicitada') ? 'solicitudes' : 'inscriptos',
+  );
 
   const pagados = datos.inscripciones.filter((i) => i.estado === 'pagada').length;
   const reservando = datos.inscripciones.length - pagados;
@@ -166,7 +189,8 @@ function Inscripciones({ sesion, datos }: { sesion: Sesion; datos: Inscripciones
         <div className="flex flex-col gap-[7px]">
           <h1 className="text-[30px] font-semibold tracking-[-0.035em]">Inscripciones</h1>
           <p className="text-[15px] text-gris-500">
-            {datos.nombre} · {textoDelCierre(datos)}
+            {datos.nombre} · {conAprobacion && 'con aprobación · '}
+            {textoDelCierre(datos)}
           </p>
         </div>
 
@@ -190,12 +214,40 @@ function Inscripciones({ sesion, datos }: { sesion: Sesion; datos: Inscripciones
 
       <main className="flex flex-col gap-[22px] px-7 pb-7">
         <section className="flex flex-col gap-3">
-          <BarraDeLugares cupo={datos.cupo} pagados={pagados} reservando={reservando} />
+          <BarraDeLugares
+            cupo={datos.cupo}
+            pagados={pagados}
+            reservando={reservando}
+            solicitudes={conAprobacion ? datos.solicitudes.length : undefined}
+          />
           <QuePasaAlCerrar datos={datos} pagados={pagados} reservando={reservando} />
           {cerrar.error && <p className="text-sm text-rojo-texto">{textoDeError(cerrar.error)}</p>}
         </section>
 
-        <TablaInscriptos inscripciones={datos.inscripciones} />
+        {conAprobacion ? (
+          <section className="flex flex-col gap-3">
+            <div role="tablist" aria-label="Inscripciones y solicitudes" className="flex flex-wrap items-center gap-1.5">
+              <Pestana activa={pestana === 'inscriptos'} onClick={() => setPestana('inscriptos')}>
+                Inscriptos <Numero>{datos.inscripciones.length}</Numero>
+              </Pestana>
+              <Pestana activa={pestana === 'solicitudes'} onClick={() => setPestana('solicitudes')}>
+                Solicitudes <Numero>{datos.solicitudes.length}</Numero>
+              </Pestana>
+            </div>
+            {pestana === 'inscriptos' ? (
+              <TablaInscriptos inscripciones={datos.inscripciones} />
+            ) : (
+              <TablaSolicitudes
+                slug={sesion.organizacion.slug}
+                torneoId={datos.torneoId}
+                solicitudes={datos.solicitudes}
+                abierta={datos.estado === 'publicado'}
+              />
+            )}
+          </section>
+        ) : (
+          <TablaInscriptos inscripciones={datos.inscripciones} />
+        )}
       </main>
     </div>
   );
