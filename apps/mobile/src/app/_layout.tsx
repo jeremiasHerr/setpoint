@@ -43,11 +43,14 @@ export default function RootLayout() {
   );
 }
 
-// Sin sesión solo se llega al ingreso (decisión 042). Con sesión, al inicio si ya hay circuito y a
-// elegirlo si juega en varios y todavía no eligió (decisión 040).
+// Sin sesión solo se llega al ingreso (decisión 042). Con sesión, al inicio si ya hay circuito, a
+// elegirlo si juega en varios y todavía no eligió (decisión 040), y a sus inscripciones en curso si
+// todavía no juega en ninguno (decisión 054). Cuando se confirma el pago, el circuito aparece y la
+// app pasa sola al inicio.
 function Navegacion({ fuentesListas }: { fuentesListas: boolean }) {
-  const { cargando, sesion, perfil } = useSesion();
+  const { cargando, sesion, perfiles, perfil } = useSesion();
   const listo = fuentesListas && !cargando;
+  const sinCircuitos = sesion !== null && perfiles.length === 0;
 
   useEffect(() => {
     if (listo) SplashScreen.hideAsync();
@@ -59,11 +62,17 @@ function Navegacion({ fuentesListas }: { fuentesListas: boolean }) {
     <>
       <StatusBar style="dark" />
       <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Protected guard={perfil !== null} redirectTo={sesion ? '/circuitos' : '/ingresar'}>
+        <Stack.Protected
+          guard={perfil !== null}
+          redirectTo={!sesion ? '/ingresar' : sinCircuitos ? '/inscripciones' : '/circuitos'}
+        >
           <Stack.Screen name="(pestanas)" />
         </Stack.Protected>
-        <Stack.Protected guard={sesion !== null} redirectTo="/ingresar">
+        <Stack.Protected guard={sesion !== null && !sinCircuitos} redirectTo="/">
           <Stack.Screen name="circuitos" />
+        </Stack.Protected>
+        <Stack.Protected guard={sinCircuitos} redirectTo="/">
+          <Stack.Screen name="inscripciones" />
         </Stack.Protected>
         <Stack.Protected guard={sesion === null} redirectTo="/">
           <Stack.Screen name="ingresar" />

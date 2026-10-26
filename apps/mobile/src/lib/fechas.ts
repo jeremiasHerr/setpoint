@@ -9,9 +9,14 @@ export function diaCorto(iso: string) {
   return `${DIAS[fecha.getDay()]} ${fecha.getDate()}`;
 }
 
-export function diaYHora(iso: string) {
+// "18:42", en 24 horas.
+export function hora(iso: string) {
   const fecha = new Date(iso);
-  return `${diaCorto(iso)} · ${dosCifras(fecha.getHours())}:${dosCifras(fecha.getMinutes())}`;
+  return `${dosCifras(fecha.getHours())}:${dosCifras(fecha.getMinutes())}`;
+}
+
+export function diaYHora(iso: string) {
+  return `${diaCorto(iso)} · ${hora(iso)}`;
 }
 
 // Días enteros que faltan hasta la fecha, contando hoy como 0. Negativo si ya pasó.
