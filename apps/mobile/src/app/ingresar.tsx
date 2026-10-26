@@ -112,25 +112,6 @@ export default function Ingresar() {
             </>
           )}
 
-          {paso === 'codigo' && errorVerificar === 'SIN_PERFIL_DE_JUGADOR' && (
-            <>
-              <View style={estilos.encabezado}>
-                <Text style={estilos.titulo}>No tenés perfil de jugador</Text>
-                <Text style={estilos.bajada}>
-                  Esta app es para jugar. Si administrás un circuito, entrá desde la web, con tu contraseña.
-                </Text>
-              </View>
-              <View style={estilos.caja}>
-                <Text style={estilos.textoCaja}>
-                  Si además jugás, tu perfil aparece acá después de tu primera inscripción con este email.
-                </Text>
-              </View>
-              <View style={estilos.pie}>
-                <Boton texto="Usar otro email" onPress={cambiarEmail} />
-              </View>
-            </>
-          )}
-
           {paso === 'codigo' && (errorVerificar === 'CODIGO_VENCIDO' || errorVerificar === 'DEMASIADOS_INTENTOS') && (
             <>
               <View style={estilos.encabezado}>
@@ -159,7 +140,6 @@ export default function Ingresar() {
           )}
 
           {paso === 'codigo' &&
-            errorVerificar !== 'SIN_PERFIL_DE_JUGADOR' &&
             errorVerificar !== 'CODIGO_VENCIDO' &&
             errorVerificar !== 'DEMASIADOS_INTENTOS' && (
               <>

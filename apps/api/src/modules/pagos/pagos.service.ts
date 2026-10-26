@@ -1,10 +1,14 @@
-import { EstadoInscripcion, EstadoPago, MedioPago, MotivoRevision, type Prisma, Vinculacion } from '@prisma/client';
+import { EstadoInscripcion, EstadoPago, EstadoTorneo, MedioPago, MotivoRevision, Prisma, Vinculacion } from '@prisma/client';
 import type { DatosPagoSimulado, EstadoDeLaInscripcion, InicioDePago, InscripcionParaPagar } from '@setpoint/shared';
 import { enviarCorreo } from '../../lib/correo';
 import { consultarPago, crearPreferencia, hayMercadoPago } from '../../lib/mercadopago';
+import { DEL_PADRON_ACTIVOS } from '../../lib/padron';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
 import { esPosibleHomonimo } from '../inscripcion/busqueda';
+import { estadoDe } from '../inscripcion/estados';
+import { ocupanCupo } from '../inscripcion/inscripcion.service';
+import { descartarPerfil, entrarAlPadron } from '../inscripcion/perfil-pendiente';
 import { comprobante } from './comprobante';
 
 // El pago de la inscripción (F12, 05-pagos.md): iniciar el checkout, confirmar con el webhook y
@@ -36,21 +40,6 @@ async function inscripcionDe(slug: string, inscripcionId: number, usuarioId: num
   return inscripcion;
 }
 
-function estadoDe(inscripcion: { estado: EstadoInscripcion; reservaVence: Date | null }): EstadoDeLaInscripcion {
-  switch (inscripcion.estado) {
-    case EstadoInscripcion.PAGADA:
-      return 'pagada';
-    case EstadoInscripcion.RECHAZADA:
-      return 'rechazada';
-    case EstadoInscripcion.CANCELADA:
-      return 'cancelada';
-    case EstadoInscripcion.PENDIENTE_PAGO:
-      // La tarea que las vence corre cada minuto: mientras tanto, se calcula.
-      return inscripcion.reservaVence && inscripcion.reservaVence <= new Date() ? 'vencida' : 'reservando';
-    default:
-      return 'vencida';
-  }
-}
 
 export async function inscripcionParaPagar(slug: string, inscripcionId: number, usuarioId: number): Promise<InscripcionParaPagar> {
   const inscripcion = await inscripcionDe(slug, inscripcionId, usuarioId);
@@ -71,6 +60,38 @@ export async function inscripcionParaPagar(slug: string, inscripcionId: number, 
     email: usuario.email,
     pagoSimulado: !hayMercadoPago(),
   };
+}
+
+// La solicitud aprobada reserva el lugar recién cuando se abre el link para pagar (07 §2.6): la
+// reserva corre desde ahí, con los mismos minutos que cualquier otra.
+export async function reservarAprobada(slug: string, inscripcionId: number, usuarioId: number): Promise<InscripcionParaPagar> {
+  const inscripcion = await inscripcionDe(slug, inscripcionId, usuarioId);
+  if (inscripcion.estado !== EstadoInscripcion.APROBADA) throw new ErrorHttp(409, 'NO_ESTA_APROBADA');
+  const { torneo } = inscripcion;
+  if (torneo.estado !== EstadoTorneo.PUBLICADO) throw new ErrorHttp(409, 'INSCRIPCION_NO_ABIERTA');
+
+  try {
+    await prisma.$transaction(
+      async (tx) => {
+        const ahora = new Date();
+        const ocupados = await tx.inscripcion.count({ where: { torneoId: torneo.id, ...ocupanCupo(ahora) } });
+        if (ocupados >= torneo.cupo) throw new ErrorHttp(409, 'SIN_LUGARES');
+        await tx.inscripcion.updateMany({
+          where: { id: inscripcion.id, estado: EstadoInscripcion.APROBADA },
+          data: {
+            estado: EstadoInscripcion.PENDIENTE_PAGO,
+            reservaVence: new Date(ahora.getTime() + torneo.minutosReservaCupo * 60_000),
+          },
+        });
+      },
+      // Como al reservar: dos reservas simultáneas no pasan las dos el chequeo del cupo.
+      { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+    );
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2034') throw new ErrorHttp(409, 'CONFLICTO');
+    throw error;
+  }
+  return inscripcionParaPagar(slug, inscripcionId, usuarioId);
 }
 
 // Abre el checkout de una reserva vigente. Sin credenciales, el pago es simulado (decisión 053).
@@ -143,6 +164,8 @@ export async function confirmarPago(inscripcionId: number, pago: PagoRecibido) {
     });
 
     await vincularAlPagar(tx, inscripcion);
+    // Quien no estaba en el padrón entra ahora (decisión 054).
+    await entrarAlPadron(tx, inscripcion.jugador, inscripcion.usuarioId);
 
     const usuarioId = inscripcion.usuarioId ?? inscripcion.jugador.usuarioId;
     const usuario = usuarioId ? await tx.usuario.findUnique({ where: { id: usuarioId } }) : null;
@@ -182,7 +205,7 @@ async function vincularAlPagar(tx: Prisma.TransactionClient, inscripcion: Inscri
 
   const vinculadoPor = inscripcion.vinculaPor ?? Vinculacion.BUSQUEDA;
   const companeros = await tx.jugador.findMany({
-    where: { organizacionId: jugador.organizacionId, categoriaId: jugador.categoriaId, activo: true },
+    where: { organizacionId: jugador.organizacionId, categoriaId: jugador.categoriaId, ...DEL_PADRON_ACTIVOS },
     select: { id: true, nombre: true, apellido: true },
   });
   // Con el link personal el perfil lo eligió la organización: no hay homónimo que revisar.
@@ -205,15 +228,20 @@ async function vincularAlPagar(tx: Prisma.TransactionClient, inscripcion: Inscri
 }
 
 export async function rechazarPago(inscripcionId: number, pago: Omit<PagoRecibido, 'medio'>) {
-  const { count } = await prisma.inscripcion.updateMany({
-    where: { id: inscripcionId, estado: EstadoInscripcion.PENDIENTE_PAGO },
-    data: { estado: EstadoInscripcion.RECHAZADA },
-  });
-  if (count === 0) return;
-  await prisma.pago.upsert({
-    where: { inscripcionId },
-    create: { inscripcionId, estado: EstadoPago.RECHAZADO, monto: pago.monto, mpPaymentId: pago.mpPaymentId, payloadCrudo: pago.payload },
-    update: { estado: EstadoPago.RECHAZADO, mpPaymentId: pago.mpPaymentId, payloadCrudo: pago.payload },
+  await prisma.$transaction(async (tx) => {
+    const { count } = await tx.inscripcion.updateMany({
+      where: { id: inscripcionId, estado: EstadoInscripcion.PENDIENTE_PAGO },
+      data: { estado: EstadoInscripcion.RECHAZADA, resueltaEn: new Date() },
+    });
+    if (count === 0) return;
+    await tx.pago.upsert({
+      where: { inscripcionId },
+      create: { inscripcionId, estado: EstadoPago.RECHAZADO, monto: pago.monto, mpPaymentId: pago.mpPaymentId, payloadCrudo: pago.payload },
+      update: { estado: EstadoPago.RECHAZADO, mpPaymentId: pago.mpPaymentId, payloadCrudo: pago.payload },
+    });
+    // Un perfil pendiente se descarta, como al vencer la reserva. Si vuelve a intentar, se crea otro.
+    const { jugadorId } = await tx.inscripcion.findUniqueOrThrow({ where: { id: inscripcionId }, select: { jugadorId: true } });
+    await descartarPerfil(tx, jugadorId);
   });
 }
 

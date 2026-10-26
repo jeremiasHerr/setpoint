@@ -9,6 +9,8 @@ export type TorneoPublico = {
   categoria: string;
   // Abierta mientras el torneo está publicado; después ya no se inscribe nadie.
   inscripcion: 'abierta' | 'cerrada';
+  // Quién puede inscribirse: solo el padrón, con aprobación o cualquiera (07 §2.6).
+  modoInscripcion: 'cerrada' | 'con_aprobacion' | 'abierta';
   // 'AAAA-MM-DD'.
   cierreInscripcion: string | null;
   fechaInicio: string | null;

@@ -89,10 +89,19 @@ enum EstadoTorneo {
 }
 
 // Cómo quedó un perfil del padrón vinculado a una persona (decisiones 050 y 051).
+// En los torneos con aprobación y abiertos el perfil existe desde la solicitud o la reserva, pero
+// entra al padrón recién al pagar. Si se abandona, se descarta: no se borra (decisión 054).
+enum EstadoJugador {
+  PADRON
+  PENDIENTE
+  DESCARTADO
+}
+
 enum Vinculacion {
   LINK_PERSONAL
   BUSQUEDA
   PROPUESTA // el "¿Sos…?" a quien ya juega en otro circuito
+  ORGANIZACION // al resolver un reclamo, la organización le pasó el perfil a quien lo reclamó
 }
 
 // Por qué una vinculación quedó para que la revise la organización (decisión 051).
@@ -102,6 +111,11 @@ enum MotivoRevision {
 }
 
 enum EstadoInscripcion {
+  // Torneos con aprobación (decisión 054): la solicitud, la que ya aprobó la organización y la que
+  // no. Ninguna ocupa lugar en el cupo.
+  SOLICITADA
+  APROBADA
+  NO_APROBADA
   PENDIENTE_PAGO
   PAGADA
   EXPIRADA
@@ -196,7 +210,9 @@ model Usuario {
   creadoEn      DateTime @default(now())
   actualizadoEn DateTime @updatedAt
 
-  jugadores           Jugador[]
+  jugadores           Jugador[]           @relation("PerfilDeJugador")
+  // Perfiles de otras cuentas que esta persona dijo que son suyos (decisión 051).
+  reclamos            Jugador[]           @relation("ReclamoDePerfil")
   inscripciones       Inscripcion[]
   administra          AdminOrganizacion[]
   partidosAnotados    Partido[]           @relation("PartidoAnotadoPor")
@@ -381,18 +397,28 @@ model Jugador {
   email          String?
   fotoUrl        String?
   activo         Boolean @default(true)
+  // Solo los del padrón cuentan para todo lo demás: ver src/lib/padron.ts.
+  estado         EstadoJugador @default(PADRON)
+
+  // El código del link personal de inscripción (decisión 050). Aleatorio, se crea la primera vez
+  // que se comparte y se regenera si se mandó a quien no era.
+  codigoLink String? @unique
 
   // Cuándo y cómo se vinculó con la persona, para el aviso de vinculaciones nuevas (decisión 051).
   vinculadoEn  DateTime?
   vinculadoPor Vinculacion?
   revision     MotivoRevision?
+  // Con revision RECLAMO: quién dice que el perfil es suyo, y cuándo.
+  reclamadoPorId Int?
+  reclamadoEn    DateTime?
 
   creadoEn      DateTime @default(now())
   actualizadoEn DateTime @updatedAt
 
   organizacion Organizacion @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
   categoria    Categoria?   @relation(fields: [categoriaId], references: [id])
-  usuario      Usuario?     @relation(fields: [usuarioId], references: [id])
+  usuario      Usuario?     @relation("PerfilDeJugador", fields: [usuarioId], references: [id])
+  reclamadoPor Usuario?     @relation("ReclamoDePerfil", fields: [reclamadoPorId], references: [id], onDelete: SetNull)
 
   inscripciones   Inscripcion[]
   movimientos     MovimientoRanking[]
@@ -495,6 +521,8 @@ model Inscripcion {
   estado    EstadoInscripcion @default(PENDIENTE_PAGO)
 
   reservaVence     DateTime?
+  // Cuándo la organización aprobó o rechazó la solicitud, o cuándo se descartó la reserva.
+  resueltaEn       DateTime?
   // Quién se inscribe. Si el perfil todavía no tenía cuenta, queda vinculado a esta persona recién
   // cuando se confirma el pago, y vinculaPor dice cómo lo eligió (decisión 051).
   usuarioId        Int?

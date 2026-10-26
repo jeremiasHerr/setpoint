@@ -1,6 +1,6 @@
 # 050 — Link personal de inscripción
 
-**Estado:** aceptada — 25 de octubre de 2026. Pendiente de código.
+**Estado:** aceptada — 25 de octubre de 2026. Implementada.
 
 ## Contexto
 
@@ -47,8 +47,9 @@ Opción 2.
 - **Mandarlos es uno por uno.** No hay envío masivo: WhatsApp no lo permite sin su API para empresas, que es una cuenta externa.
 - **Un código por jugador** que guardar y regenerar.
 
-## Pendiente de código
+## Estado del código
 
-- **Código del link en `Jugador`:** único, aleatorio y no secuencial, regenerable. Puede generarse la primera vez que se comparte.
-- **Ruta pública que resuelve el código** a la organización y el perfil, con límite por IP.
-- **Acciones del padrón:** compartir, copiar y generar uno nuevo.
+- **El código vive en `Jugador.codigoLink`:** 16 caracteres al azar, único. Se crea la primera vez que la organización abre el menú del jugador en el padrón, así el mensaje que ve es el que sale.
+- **`GET /api/links/:codigo`** resuelve el código sin login, con el límite por IP de la [decisión 052](052-limite-de-pedidos.md). **`GET /api/links/:codigo/situacion`** dice, con la sesión del código, si el link le sirve a quien lo abrió; esa no lleva el límite por IP, porque la sesión ya pasó por el del ingreso.
+- **Al reservar**, la API comprueba que el código sea el del perfil: uno regenerado ya no vincula.
+- **El perfil vinculado a otra cuenta** muestra el botón "Avisarle a la organización", el mismo de la búsqueda ([decisión 051](051-vinculacion-con-el-padron.md)).

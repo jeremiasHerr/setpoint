@@ -16,6 +16,7 @@ import {
   type Sorteo,
 } from '@setpoint/shared';
 import { hoy } from '../../lib/fechas';
+import { DEL_PADRON } from '../../lib/padron';
 import { organizacionAdministrada } from '../../lib/permisos';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
@@ -39,9 +40,10 @@ import {
 const CON_INSCRIPTOS = {
   categoria: { select: { nombre: true } },
   organizacion: { select: { usaRanking: true } },
-  // Solo las pagadas entran al sorteo: una reserva sin pagar todavía puede vencer.
+  // Solo las pagadas entran al sorteo: una reserva sin pagar todavía puede vencer. Una pagada ya es
+  // del padrón; el filtro lo asegura igual (decisión 054).
   inscripciones: {
-    where: { estado: EstadoInscripcion.PAGADA },
+    where: { estado: EstadoInscripcion.PAGADA, jugador: DEL_PADRON },
     select: {
       id: true,
       jugadorId: true,

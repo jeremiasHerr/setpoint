@@ -8,6 +8,15 @@ export function obtenerInscripciones(slug: string, id: number) {
   return pedir<InscripcionesDelTorneo>('GET', ruta(slug, id));
 }
 
+// Las dos devuelven las inscripciones como quedaron, con las solicitudes (decisión 054).
+export function aprobarSolicitud(slug: string, id: number, inscripcionId: number) {
+  return pedir<InscripcionesDelTorneo>('POST', `${ruta(slug, id)}/${inscripcionId}/aprobar`);
+}
+
+export function rechazarSolicitud(slug: string, id: number, inscripcionId: number) {
+  return pedir<InscripcionesDelTorneo>('POST', `${ruta(slug, id)}/${inscripcionId}/rechazar`);
+}
+
 export function cerrarInscripcion(slug: string, id: number) {
   return pedir<InscripcionesDelTorneo>('POST', `${ruta(slug, id)}/cerrar`);
 }

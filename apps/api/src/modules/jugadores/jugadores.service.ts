@@ -1,17 +1,20 @@
-import { EstadoPartido, type Prisma } from '@prisma/client';
+import { EstadoPartido, EstadoTorneo, MotivoRevision, type Prisma } from '@prisma/client';
 import type { DatosCrearJugador, DatosEditarJugador, JugadorPadron } from '@setpoint/shared';
+import { DEL_PADRON } from '../../lib/padron';
 import { organizacionAdministrada } from '../../lib/permisos';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
+import { nuevoCodigoDeLink } from '../link-personal/codigo';
 import { asignarPuestos, puntosVigentes } from '../ranking/ranking';
 
 // Un W.O. cuenta como partido jugado: se registra 6-0 6-0 y entra en la tabla.
 const PARTIDO_JUGADO = { estado: { in: [EstadoPartido.JUGADA, EstadoPartido.WALKOVER] } };
 
-async function padronDe(organizacionId: number): Promise<JugadorPadron[]> {
-  const [jugadores, movimientos] = await Promise.all([
+// También lo usa la revisión de vinculaciones: los puntos y el puesto salen de la misma cuenta.
+export async function padronDe(organizacionId: number): Promise<JugadorPadron[]> {
+  const [jugadores, movimientos, abiertos] = await Promise.all([
     prisma.jugador.findMany({
-      where: { organizacionId },
+      where: { organizacionId, ...DEL_PADRON },
       orderBy: [{ apellido: 'asc' }, { nombre: 'asc' }],
       include: {
         categoria: { select: { nombre: true } },
@@ -23,7 +26,18 @@ async function padronDe(organizacionId: number): Promise<JugadorPadron[]> {
       where: { organizacionId },
       select: { id: true, jugadorId: true, categoriaId: true, etapaId: true, puntos: true, fecha: true },
     }),
+    prisma.torneo.findMany({
+      where: { organizacionId, estado: EstadoTorneo.PUBLICADO },
+      select: { categoriaId: true, nombre: true, edicion: true },
+    }),
   ]);
+
+  // El mensaje del link personal nombra la edición solo si hay una abierta en la categoría
+  // (decisión 050); con dos, no sabría cuál.
+  const edicionAbierta = (categoriaId: number | null) => {
+    const deLaCategoria = abiertos.filter((t) => t.categoriaId === categoriaId);
+    return deLaCategoria.length === 1 ? (deLaCategoria[0].edicion ?? deLaCategoria[0].nombre) : null;
+  };
 
   // Cada categoría tiene su ranking: de cada jugador cuentan solo los movimientos de la
   // categoría en la que está hoy. Los de una categoría anterior quedan guardados.
@@ -51,6 +65,9 @@ async function padronDe(organizacionId: number): Promise<JugadorPadron[]> {
     partidos: j._count.partidosComoA + j._count.partidosComoB,
     creadoEn: j.creadoEn.toISOString(),
     cuenta: j.usuario ? { nombre: `${j.usuario.nombre} ${j.usuario.apellido}`, email: j.usuario.email } : null,
+    codigoLink: j.codigoLink,
+    edicionAbierta: edicionAbierta(j.categoriaId),
+    revision: j.revision === MotivoRevision.RECLAMO ? 'reclamo' : j.revision === MotivoRevision.HOMONIMO ? 'homonimo' : null,
   }));
 }
 
@@ -95,7 +112,7 @@ async function verificarJugador(organizacionId: number, jugadorId: number) {
   if (!Number.isInteger(jugadorId)) throw new ErrorHttp(404, 'JUGADOR_NO_ENCONTRADO');
 
   // El filtro por organización es el aislamiento: el id solo no alcanza.
-  const jugador = await prisma.jugador.findFirst({ where: { id: jugadorId, organizacionId }, select: { id: true } });
+  const jugador = await prisma.jugador.findFirst({ where: { id: jugadorId, organizacionId, ...DEL_PADRON }, select: { id: true } });
   if (!jugador) throw new ErrorHttp(404, 'JUGADOR_NO_ENCONTRADO');
 }
 
@@ -115,6 +132,16 @@ export async function editarJugador(slug: string, usuarioId: number, jugadorId: 
   return filaDe(organizacionId, jugadorId);
 }
 
+// El perfil queda libre, y sin nada para revisar: ya no hay vinculación de la que dudar.
+export const SIN_VINCULAR = {
+  usuarioId: null,
+  vinculadoEn: null,
+  vinculadoPor: null,
+  revision: null,
+  reclamadoPorId: null,
+  reclamadoEn: null,
+} satisfies Prisma.JugadorUncheckedUpdateInput;
+
 // Revierte una vinculación equivocada: el perfil vuelve a quedar libre para que lo reclame
 // el jugador correcto. Puntos, partidos e inscripciones cuelgan del Jugador, no de la cuenta,
 // así que no se tocan. La cuenta tampoco se borra: puede seguir vinculada a otros circuitos.
@@ -122,6 +149,16 @@ export async function desvincularCuenta(slug: string, usuarioId: number, jugador
   const organizacionId = await organizacionAdministrada(slug, usuarioId);
   await verificarJugador(organizacionId, jugadorId);
 
-  await prisma.jugador.update({ where: { id: jugadorId }, data: { usuarioId: null } });
+  await prisma.jugador.update({ where: { id: jugadorId }, data: SIN_VINCULAR });
+  return filaDe(organizacionId, jugadorId);
+}
+
+// Crea el link personal, o uno nuevo si el anterior se mandó a quien no era: el viejo deja de andar
+// y no se guarda (decisión 050).
+export async function generarLink(slug: string, usuarioId: number, jugadorId: number) {
+  const organizacionId = await organizacionAdministrada(slug, usuarioId);
+  await verificarJugador(organizacionId, jugadorId);
+
+  await prisma.jugador.update({ where: { id: jugadorId }, data: { codigoLink: nuevoCodigoDeLink() } });
   return filaDe(organizacionId, jugadorId);
 }

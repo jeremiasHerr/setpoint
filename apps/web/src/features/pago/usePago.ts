@@ -14,6 +14,17 @@ export function useInscripcionParaPagar(slug: string, id: string, token: string 
   });
 }
 
+// La solicitud aprobada reserva el lugar al abrir el link del email (decisión 054). Devuelve la
+// inscripción ya reservada.
+export function useReservarAprobada(slug: string, id: string, token: string | undefined) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: () => pedir<InscripcionParaPagar>('POST', `/api/inscripcion/${slug}/inscripciones/${id}/reservar`, undefined, token),
+    onSuccess: (inscripcion) => queryClient.setQueryData(['inscripcion-para-pagar', slug, id, token], inscripcion),
+    onError: () => queryClient.invalidateQueries({ queryKey: ['inscripcion-para-pagar', slug, id] }),
+  });
+}
+
 export function useIniciarPago(slug: string, id: string, token: string | undefined) {
   return useMutation({
     mutationFn: () => pedir<InicioDePago>('POST', `/api/inscripcion/${slug}/inscripciones/${id}/pago`, undefined, token),

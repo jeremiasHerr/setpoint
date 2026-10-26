@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SetPoint · Inscripciones en curso</title>
+  <!-- Pantalla de referencia: Inscripciones en curso · F02, F12 · entrega 75% · app · 1290 px · seis estados de 390 px -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+    <style>
+      body { margin: 0; font-family: "Instrument Sans", system-ui, "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; background: #F6F7F8; }
+      .mono { font-family: "Geist Mono", ui-monospace, "SF Mono", Consolas, monospace; font-variant-numeric: tabular-nums; }
+      .lienzo { width: 1290px; box-sizing: border-box; padding: 30px; display: flex; flex-wrap: wrap; gap: 40px 30px; color: #0A0B0D; }
+      .estado { display: flex; flex-direction: column; gap: 12px; }
+      .rotulo { display: flex; align-items: baseline; gap: 9px; font-size: 15px; font-weight: 600; }
+      .rotulo .mono { font-size: 13px; font-weight: 400; color: #6A7079; }
+      .tel { width: 390px; height: 800px; box-sizing: border-box; background: #FFFFFF; border: 1px solid #E6E8EB; border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; gap: 20px; padding: 22px 16px; }
+      .cab { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+      .marca { display: flex; align-items: center; gap: 9px; font-size: 16px; font-weight: 600; letter-spacing: -0.015em; }
+      .logo { width: 26px; height: 26px; border-radius: 7px; background: #0A0B0D; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+      .logo div { width: 9px; height: 9px; border-radius: 999px; background: #CDF546; }
+      .chip { font-size: 12px; font-weight: 500; color: #6A7079; padding: 6px 10px; border: 1px solid #E6E8EB; border-radius: 999px; }
+      .titulo { font-size: 30px; font-weight: 600; letter-spacing: -0.032em; line-height: 1.1; }
+      .seccion { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; }
+      .ayuda { font-size: 16px; line-height: 1.45; color: #6A7079; }
+      .tarjeta { border: 1px solid #E6E8EB; border-radius: 16px; padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+      .edicion { font-size: 22px; font-weight: 600; letter-spacing: -0.025em; }
+      .circuito { font-size: 15px; color: #6A7079; }
+      .texto { font-size: 16px; line-height: 1.42; color: #3F4348; }
+      .marca-estado { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; color: #6A7079; }
+      .hueco { width: 9px; height: 9px; border-radius: 999px; border: 1.5px solid #9BA1A9; box-sizing: border-box; }
+      .lleno { width: 9px; height: 9px; border-radius: 999px; background: #0A0B0D; }
+      .btn-lima { height: 56px; border-radius: 12px; background: #CDF546; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600; }
+      .btn-neg { height: 56px; border-radius: 12px; background: #0A0B0D; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600; }
+      .btn-sec { height: 52px; border-radius: 12px; border: 1px solid #E6E8EB; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 500; }
+      .reloj { display: flex; align-items: flex-start; gap: 10px; font-size: 15px; line-height: 1.42; color: #6A7079; }
+      .pie { margin-top: auto; display: flex; flex-direction: column; gap: 12px; }
+      .cuenta { font-size: 14px; color: #6A7079; text-align: center; }
+      .caja { border-radius: 12px; background: #F6F7F8; padding: 14px 16px; font-size: 15px; line-height: 1.42; color: #3F4348; }
+    </style>
+</head>
+<body>
+<!--
+NOTA DE DISEÑO
+Nuevo · lo que ve en la app una persona con inscripciones en curso que todavía no son un circuito (04-flujo-jugador §10, decisión 054).
+
+La cuenta existe desde que verificó el código, así que entra a la app aunque todavía no juegue en ningún circuito. Su perfil pendiente no es un circuito: no aparece en la lista de circuitos (decisión 040). Lo que sí ve son sus inscripciones en curso.
+
+1 a 4 · Sin ningún circuito. Reemplaza al error "sin perfil" del ingreso. El encabezado es de SetPoint, porque no hay organización elegida, y abajo están "Cerrar sesión" y el email, como en la lista de circuitos.
+- 1 · Solicitud en revisión (torneo con aprobación). Punto hueco, como la solicitud en Inscripciones de la organización (design.md §7).
+- 2 · Solicitud aprobada, falta pagar. La reserva de 15 minutos corre recién desde que toca "Pagar". Punto negro lleno: el lima queda para "pagada" (design.md §7).
+- 3 · Reserva sin pagar, con la hora en que vence. Rojo solo cuando quedan menos de 5 minutos (design.md §7).
+- 4 · Sin circuitos ni inscripciones en curso.
+
+5 · Aviso único, cuando la solicitud no se aprobó o la reserva venció. Se muestra una sola vez; "Entendido" lo descarta. Si después no queda nada en curso, sigue al 4.
+
+6 · Ya juega en otro circuito: entra a ese como siempre, y cada inscripción en curso va como aviso arriba de Cuándo juego. El aviso es un borde de 1 px, sin sombra (design.md §2), y no tapa el partido que viene.
+
+"Pagar" abre la pantalla de pago de esa inscripción. La app vuelve a pedir las inscripciones al abrirse y al volver al frente: cuando se confirma el pago, el circuito aparece solo.
+
+Textos de 15 px para arriba; números y horas en Geist Mono.
+Todos los nombres de personas y circuitos son ficticios, salvo Polenta Team Tenis.
+-->
+
+<div class="lienzo">
+
+  <!-- 1 -->
+  <div class="estado">
+    <div class="rotulo"><span class="mono">1</span><span>Solicitud en revisión</span></div>
+    <div class="tel">
+      <div class="cab"><div class="marca"><div class="logo"><div></div></div><span>SetPoint</span></div></div>
+      <div style="display: flex; flex-direction: column; gap: 10px; padding-top: 10px;">
+        <div class="titulo">Tus inscripciones</div>
+        <div class="ayuda">Todavía no jugás en ningún circuito. Cuando se confirme una inscripción, el circuito aparece acá.</div>
+      </div>
+      <div class="tarjeta">
+        <div class="marca-estado"><div class="hueco"></div><span>en revisión</span></div>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <div class="edicion">Copa del Valle 2026 · Intermedia</div>
+          <div class="circuito">Liga Amateur del Valle</div>
+        </div>
+        <div class="texto">Tu solicitud está en revisión. Te avisamos cuando la organización la apruebe.</div>
+      </div>
+      <div class="pie">
+        <div class="btn-sec">Cerrar sesión</div>
+        <div class="cuenta">Entraste como tomascorrea@gmail.com</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="estado">
+    <div class="rotulo"><span class="mono">2</span><span>Aprobada, falta pagar</span></div>
+    <div class="tel">
+      <div class="cab"><div class="marca"><div class="logo"><div></div></div><span>SetPoint</span></div></div>
+      <div style="display: flex; flex-direction: column; gap: 10px; padding-top: 10px;">
+        <div class="titulo">Tus inscripciones</div>
+        <div class="ayuda">Todavía no jugás en ningún circuito. Cuando se confirme una inscripción, el circuito aparece acá.</div>
+      </div>
+      <div class="tarjeta">
+        <div class="marca-estado"><div class="lleno"></div><span>aprobada</span></div>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <div class="edicion">Copa del Valle 2026 · Intermedia</div>
+          <div class="circuito">Liga Amateur del Valle</div>
+        </div>
+        <div class="texto">La organización aprobó tu solicitud. Pagá para confirmar tu lugar.</div>
+        <div class="btn-lima">Pagar</div>
+        <div class="reloj">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6A7079" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.5V12l3 2"></path></svg>
+          <div>Te guardamos el lugar <span class="mono">15</span> minutos desde que tocás Pagar.</div>
+        </div>
+      </div>
+      <div class="pie">
+        <div class="btn-sec">Cerrar sesión</div>
+        <div class="cuenta">Entraste como tomascorrea@gmail.com</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="estado">
+    <div class="rotulo"><span class="mono">3</span><span>Reserva sin pagar</span></div>
+    <div class="tel">
+      <div class="cab"><div class="marca"><div class="logo"><div></div></div><span>SetPoint</span></div></div>
+      <div style="display: flex; flex-direction: column; gap: 10px; padding-top: 10px;">
+        <div class="titulo">Tus inscripciones</div>
+        <div class="ayuda">Todavía no jugás en ningún circuito. Cuando se confirme una inscripción, el circuito aparece acá.</div>
+      </div>
+      <div class="tarjeta">
+        <div class="marca-estado">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6A7079" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.5V12l3 2"></path></svg>
+          <span>reservando</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <div class="edicion">Copa del Valle 2026 · Intermedia</div>
+          <div class="circuito">Liga Amateur del Valle</div>
+        </div>
+        <div class="texto">Tenés un lugar reservado hasta las <span class="mono" style="color: #0A0B0D; font-weight: 500;">18:42</span>.</div>
+        <div class="btn-lima">Pagar</div>
+      </div>
+      <div class="pie">
+        <div class="btn-sec">Cerrar sesión</div>
+        <div class="cuenta">Entraste como tomascorrea@gmail.com</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="estado">
+    <div class="rotulo"><span class="mono">4</span><span>Sin circuitos ni inscripciones</span></div>
+    <div class="tel">
+      <div class="cab"><div class="marca"><div class="logo"><div></div></div><span>SetPoint</span></div></div>
+      <div style="display: flex; flex-direction: column; gap: 12px; padding-top: 40px;">
+        <div class="titulo">Todavía no jugás en ningún circuito</div>
+        <div class="ayuda">Inscribite desde el link que comparte tu organización. Cuando se confirme la inscripción, entrás a tu circuito desde acá, con este mismo email.</div>
+      </div>
+      <div class="caja">Mirar el ranking, las zonas y los cuadros no necesita cuenta: se abren desde el link que comparte la organización.</div>
+      <div class="pie">
+        <div class="btn-sec">Cerrar sesión</div>
+        <div class="cuenta">Entraste como tomascorrea@gmail.com</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="estado">
+    <div class="rotulo"><span class="mono">5</span><span>Aviso único: no aprobada o vencida</span></div>
+    <div class="tel">
+      <div class="cab"><div class="marca"><div class="logo"><div></div></div><span>SetPoint</span></div></div>
+      <div style="display: flex; flex-direction: column; gap: 16px; padding-top: 40px;">
+        <div style="width: 46px; height: 46px; border-radius: 999px; background: #F6F7F8; display: flex; align-items: center; justify-content: center;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0B0D" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h16v10.5H9.5L4 20z"></path></svg>
+        </div>
+        <div class="titulo" style="font-size: 28px;">La organización no aprobó tu solicitud</div>
+        <div class="ayuda">Para Copa del Valle 2026 · Intermedia, de Liga Amateur del Valle. No tenés que hacer nada más: no se te cobró.</div>
+      </div>
+      <div class="caja">Si es una reserva que venció, el título es <strong style="font-weight: 600; color: #0A0B0D;">"Venció tu reserva"</strong> y la bajada dice: "No llegaste a pagar a tiempo y el lugar se liberó. Si quedan lugares, podés inscribirte de nuevo desde el link del torneo."</div>
+      <div class="pie">
+        <div class="btn-neg">Entendido</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 -->
+  <div class="estado">
+    <div class="rotulo"><span class="mono">6</span><span>Ya juega en otro circuito</span></div>
+    <div class="tel">
+      <div class="cab">
+        <div class="marca"><div class="logo"><div></div></div><span>Polenta Team Tenis</span></div>
+        <div class="chip mono">Primavera 26</div>
+      </div>
+      <div style="border: 1px solid #E6E8EB; border-radius: 14px; padding: 14px 16px; display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; align-items: flex-start; gap: 10px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6A7079" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.5V12l3 2"></path></svg>
+          <div style="font-size: 15px; line-height: 1.42; color: #3F4348;">Tenés un lugar reservado en <span style="font-weight: 600; color: #0A0B0D;">Copa del Valle 2026 · Intermedia</span> hasta las <span class="mono" style="font-weight: 500; color: #0A0B0D;">18:42</span>.</div>
+        </div>
+        <div style="height: 44px; border-radius: 10px; background: #CDF546; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600;">Pagar</div>
+      </div>
+      <div style="background: #0A0B0D; border-radius: 18px; padding: 22px 20px 20px 20px; display: flex; flex-direction: column; gap: 18px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+          <div style="font-size: 15px; font-weight: 500; color: #9BA1A9;">Tu próximo partido</div>
+          <div class="mono" style="font-size: 12px; font-weight: 500; color: #CDF546; padding: 5px 9px; border: 1px solid #33383F; border-radius: 999px;">zona C</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 1px;">
+          <div style="font-size: 34px; font-weight: 600; line-height: 1.06; letter-spacing: -0.032em; color: #FFFFFF;">Marcelo</div>
+          <div style="font-size: 34px; font-weight: 600; line-height: 1.06; letter-spacing: -0.032em; color: #FFFFFF;">Sanhueza</div>
+        </div>
+        <div style="height: 1px; background: #23262B;"></div>
+        <div class="mono" style="font-size: 24px; font-weight: 500; color: #CDF546; letter-spacing: -0.01em;">sáb 14 · 10:00</div>
+      </div>
+      <div style="font-size: 15px; color: #6A7079; line-height: 1.42;">Con una solicitud en revisión, el aviso dice "Tu solicitud para Copa del Valle 2026 · Intermedia está en revisión", sin botón.</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

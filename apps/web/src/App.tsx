@@ -14,7 +14,9 @@ import { RankingPublicoPage } from './pages/RankingPublicoPage';
 import { RegistroPage } from './pages/RegistroPage';
 import { RestablecerContrasenaPage } from './pages/RestablecerContrasenaPage';
 import { InscripcionPage } from './pages/InscripcionPage';
+import { LinkPersonalPage } from './pages/LinkPersonalPage';
 import { PagoPage } from './pages/PagoPage';
+import { RevisarVinculacionPage } from './pages/RevisarVinculacionPage';
 import { TorneoPublicoPage } from './pages/TorneoPublicoPage';
 import { SorteoPage } from './pages/SorteoPage';
 import { TuCircuitoPage } from './pages/TuCircuitoPage';
@@ -32,6 +34,7 @@ export default function App() {
       <Route path="/circuito" element={<TuCircuitoPage />} />
       <Route path="/padron" element={<PadronPage />} />
       <Route path="/padron/importar" element={<ImportarPadronPage />} />
+      <Route path="/padron/revisar/:jugadorId" element={<RevisarVinculacionPage />} />
       {/* /torneos/nuevo entra por acá con id "nuevo": es la misma pantalla antes del primer guardado. */}
       <Route path="/torneos/:id" element={<NuevoTorneoPage />} />
       {/* Desde acá, el :id es el de un torneo (una categoría), no el de la convocatoria como
@@ -46,6 +49,7 @@ export default function App() {
       <Route path="/c/:slug/torneos/:id" element={<TorneoPublicoPage />} />
       <Route path="/c/:slug/torneos/:id/inscripcion" element={<InscripcionPage />} />
       <Route path="/c/:slug/inscripciones/:id" element={<PagoPage />} />
+      <Route path="/i/:codigo" element={<LinkPersonalPage />} />
       <Route path="/c/:slug/torneos/:id/cuadros" element={<CuadrosPublicoPage />} />
     </Routes>
   );

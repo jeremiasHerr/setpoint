@@ -47,9 +47,9 @@ Quien llega por el link del torneo se inscribe desde el navegador del celular; q
 1. El jugador verifica su email, encuentra su perfil (04 §5.5 y §5.6) y toca "Pagar"
 2. **Se crea la `Inscripcion` en `pendiente_pago` ANTES de ir a MercadoPago**, con reserva de cupo por 15 minutos. El perfil elegido queda reservado y la vinculación con la persona, pendiente hasta el pago ([decisión 051](decisiones/051-vinculacion-con-el-padron.md))
 3. El backend crea la preferencia con `external_reference = inscripcion.id`
-4. La web redirige al `init_point`; la app lo abre con `expo-web-browser`
+4. La web redirige al `init_point`; la app lo abre con el sistema (`Linking.openURL`), para que Android pueda abrir la app de MercadoPago si está instalada ([decisión 054](decisiones/054-perfil-pendiente.md))
 5. El jugador paga
-6. MercadoPago redirige a una URL https propia: en la web es la página de la inscripción; en la app, redirige al deep link `torneosapp://inscripcion/:id`
+6. MercadoPago redirige a la página de la inscripción en la web. Desde la app no hace falta volver por un link: al volver al frente, la app pide de nuevo la cuenta y ve si se confirmó
 7. La pantalla muestra "Confirmando el pago" y consulta el estado cada unos segundos, con la sesión que dejó el código
 8. **El webhook** llega a `POST /webhooks/mercadopago`, el backend consulta el pago contra la API de MP y, si está `approved`, pasa la inscripción a `pagada`, guarda la vinculación del perfil con la persona y manda el comprobante por email (§4)
 9. La consulta devuelve `pagada` y la pantalla cambia a "Listo, estás inscripto", con el número de inscripción y el email al que se mandó el comprobante
@@ -97,12 +97,18 @@ pendiente_pago → pagada
               → rechazada     (MercadoPago rechazó el pago)
               → cancelada     (baja del jugador o de la organización)
 
+solicitada → aprobada       (la organización la aprobó; no ocupa lugar)
+           → no_aprobada    (la rechazó, o cerró la inscripción sin aprobarla)
+aprobada   → pendiente_pago (abrió el link para pagar: corre la reserva)
+           → expirada       (cerró la inscripción sin que pagara)
+pendiente_pago de una aprobada → aprobada (venció la reserva: puede volver a abrir el link)
+
 en_lista_espera → pendiente_pago   (se liberó un cupo)
 ```
 
-Un job periódico expira las reservas vencidas, libera el cupo y **notifica al primero de la lista de espera**. Al expirar, también se descarta la vinculación pendiente, y el perfil vuelve a aparecer en la búsqueda ([decisión 051](decisiones/051-vinculacion-con-el-padron.md)).
+Un job periódico expira las reservas vencidas, libera el cupo y **notifica al primero de la lista de espera**. Al expirar, también se descarta la vinculación pendiente, y el perfil vuelve a aparecer en la búsqueda ([decisión 051](decisiones/051-vinculacion-con-el-padron.md)). Si el perfil era pendiente (alguien que no estaba en el padrón), queda descartado ([decisión 054](decisiones/054-perfil-pendiente.md)); lo mismo al rechazarse el pago.
 
-**Solicitudes** (torneos `con_aprobacion`, *pendiente de código*). Quien no está en el padrón deja una solicitud, que no reserva lugar ni cobra. Si la organización la aprueba, el jugador entra al padrón y recibe un email con el link para pagar: al abrirlo (con la sesión, o con un código si lo abre en otro navegador) se crea la inscripción en `pendiente_pago`, con la reserva de siempre. Hace falta un estado nuevo para la solicitud ([decisión 051](decisiones/051-vinculacion-con-el-padron.md)).
+**Solicitudes** (torneos `con_aprobacion`, [decisión 054](decisiones/054-perfil-pendiente.md)). Quien no está en el padrón deja una solicitud (`solicitada`), con un perfil pendiente, que no reserva lugar ni cobra. Si la organización la aprueba, recibe un email con el link para pagar: al abrirlo (con la sesión, o con un código si lo abre en otro navegador) y tocar "Reservar y pagar", la inscripción pasa a `pendiente_pago`, con la reserva de siempre (`POST /api/inscripcion/:slug/inscripciones/:id/reservar`). Entra al padrón al confirmarse el pago.
 
 ---
 

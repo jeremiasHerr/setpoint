@@ -1,5 +1,7 @@
 import type { JugadorPadron } from '@setpoint/shared';
+import { Link } from 'react-router-dom';
 import { Numero } from '../../components/Numero';
+import { MenuJugador } from './MenuJugador';
 
 const DIAS_COMO_NUEVO = 7;
 const MS_POR_DIA = 24 * 60 * 60 * 1000;
@@ -10,6 +12,9 @@ type Props = {
   columnas: string;
   conRanking: boolean;
   seleccionado: boolean;
+  // Para el link personal: el mensaje nombra a la organización.
+  slug: string;
+  organizacion: string;
   alEditar: () => void;
 };
 
@@ -37,7 +42,7 @@ function textoAlta(dias: number) {
   return `dado de alta hace ${dias} días`;
 }
 
-export function FilaJugador({ jugador, columnas, conRanking, seleccionado, alEditar }: Props) {
+export function FilaJugador({ jugador, columnas, conRanking, seleccionado, slug, organizacion, alEditar }: Props) {
   const dias = diasDesde(jugador.creadoEn);
   const esNuevo = jugador.activo && dias < DIAS_COMO_NUEVO;
   // Un jugador con 0 puntos comparte el último puesto con los demás: mostrarlo no aporta.
@@ -73,6 +78,14 @@ export function FilaJugador({ jugador, columnas, conRanking, seleccionado, alEdi
               con cuenta
             </span>
           )}
+          {jugador.revision && (
+            <Link
+              to={`/padron/revisar/${jugador.id}`}
+              className="shrink-0 rounded-full border border-negro px-[7px] py-px font-mono text-[11px] whitespace-nowrap hover:bg-negro hover:text-white"
+            >
+              para revisar
+            </Link>
+          )}
           {!jugador.activo && (
             <span className="shrink-0 rounded-full bg-linea-suave px-[7px] py-0.5 font-mono text-[11px] whitespace-nowrap text-gris-500">
               de baja
@@ -106,20 +119,7 @@ export function FilaJugador({ jugador, columnas, conRanking, seleccionado, alEdi
         {jugador.partidos}
       </Numero>
 
-      <div className="flex justify-end">
-        <button
-          type="button"
-          onClick={alEditar}
-          aria-label={`Editar a ${jugador.nombre} ${jugador.apellido}`}
-          className="flex size-8 items-center justify-center rounded-lg text-gris-400 hover:bg-linea-suave hover:text-negro"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" className="size-[17px]" aria-hidden="true">
-            <circle cx="12" cy="5" r="1" />
-            <circle cx="12" cy="12" r="1" />
-            <circle cx="12" cy="19" r="1" />
-          </svg>
-        </button>
-      </div>
+      <MenuJugador jugador={jugador} slug={slug} organizacion={organizacion} alEditar={alEditar} />
     </div>
   );
 }

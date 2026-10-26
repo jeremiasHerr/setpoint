@@ -26,6 +26,8 @@ export type InscripcionesDelTorneo = {
   // "Primavera 2026 · Tercera"
   nombre: string;
   estado: EstadoTorneo;
+  // Con aprobación, la pantalla muestra las solicitudes aunque todavía no haya ninguna.
+  modoInscripcion: 'cerrada' | 'con_aprobacion' | 'abierta';
   sorteoConfirmado: boolean;
   cierreInscripcion: string | null;
   cupo: number;
@@ -34,4 +36,18 @@ export type InscripcionesDelTorneo = {
   alcanzanParaLasZonas: boolean;
   // De la más reciente a la más vieja.
   inscripciones: InscripcionDelTorneo[];
+  // Torneos con aprobación: quienes no están en el padrón y piden entrar (decisión 054). La
+  // aprobada espera que la persona abra el link y pague; ninguna ocupa lugar.
+  solicitudes: SolicitudDelTorneo[];
+};
+
+export type SolicitudDelTorneo = {
+  id: number;
+  nombre: string;
+  apellido: string;
+  // El email verificado: la organización ve quién pide entrar.
+  email: string;
+  estado: 'solicitada' | 'aprobada';
+  // Día en que la pidió, 'AAAA-MM-DD'.
+  fecha: string;
 };

@@ -2,7 +2,16 @@ import { z } from 'zod';
 
 // El pago de la inscripción (F12, 05-pagos.md).
 
-export type EstadoDeLaInscripcion = 'reservando' | 'pagada' | 'vencida' | 'rechazada' | 'cancelada';
+// solicitada, aprobada y no_aprobada son de los torneos con aprobación (decisión 054).
+export type EstadoDeLaInscripcion =
+  | 'solicitada'
+  | 'aprobada'
+  | 'no_aprobada'
+  | 'reservando'
+  | 'pagada'
+  | 'vencida'
+  | 'rechazada'
+  | 'cancelada';
 
 // Lo que muestra la pantalla de pago: la espera, el final y los errores.
 export type InscripcionParaPagar = {

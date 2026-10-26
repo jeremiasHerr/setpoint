@@ -1,5 +1,6 @@
 import { EstadoProcesoIA, MotivoMovimiento, type ImportacionPadron, type Prisma } from '@prisma/client';
 import type { DatosConfirmarImportacion, FilaExtraida, Importacion, ResultadoConfirmacion } from '@setpoint/shared';
+import { DEL_PADRON, DEL_PADRON_ACTIVOS } from '../../../lib/padron';
 import { organizacionAdministrada } from '../../../lib/permisos';
 import { prisma } from '../../../lib/prisma';
 import { ErrorHttp } from '../../../middleware/errores';
@@ -83,7 +84,7 @@ export async function crearImportacion(slug: string, usuarioId: number, archivo:
   let datos: Prisma.ImportacionPadronUpdateInput;
   try {
     const [padron, etapas] = await Promise.all([
-      prisma.jugador.findMany({ where: { organizacionId, activo: true }, select: { id: true, nombre: true, apellido: true } }),
+      prisma.jugador.findMany({ where: { organizacionId, ...DEL_PADRON_ACTIVOS }, select: { id: true, nombre: true, apellido: true } }),
       prisma.etapa.findMany({ where: { organizacionId, activa: true }, orderBy: { orden: 'asc' }, select: { nombre: true } }),
     ]);
     if (etapas.length === 0) throw new ErrorHttp(409, 'SIN_ETAPAS');
@@ -164,7 +165,7 @@ export async function confirmarImportacion(
   if (!categoria) throw new ErrorHttp(409, 'CATEGORIA_NO_ENCONTRADA');
 
   const [jugadores, etapas] = await Promise.all([
-    prisma.jugador.findMany({ where: { organizacionId }, select: { id: true } }),
+    prisma.jugador.findMany({ where: { organizacionId, ...DEL_PADRON }, select: { id: true } }),
     prisma.etapa.findMany({ where: { organizacionId }, select: { id: true, nombre: true } }),
   ]);
   const plan = planificarConfirmacion(

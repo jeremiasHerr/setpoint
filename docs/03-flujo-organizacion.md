@@ -116,12 +116,12 @@ La organización es dueña de su padrón. En modo `cerrada` —el que usa POLENT
 
 En el caso de validación, el padrón de POLENTA tiene 77 jugadores en 2 categorías.
 
-**Link personal** ([decisión 050](decisiones/050-link-personal-de-inscripcion.md), *pendiente de código*). En cada fila, "Compartir link" abre WhatsApp con el mensaje armado (*"Hola Lucas, inscribite al Primavera 26 desde acá: …"*): en el chat del jugador si tiene teléfono, o para elegir el contacto si no. También "Copiar link" y "Generar link nuevo", que deja sin efecto el anterior. Quien entra por su link verifica su email con un código y queda vinculado sin buscarse. Es lo que cierra el hueco de la primera vez: el perfil lo elige la organización. Para POLENTA, conviene mandarlos antes del primer torneo.
+**Link personal** ([decisión 050](decisiones/050-link-personal-de-inscripcion.md)). En el menú de cada fila, "Compartir link" abre WhatsApp con el mensaje armado (*"Hola Lucas, inscribite al Primavera 26 desde acá: …"*): en el chat del jugador si tiene teléfono, o para elegir el contacto si no. También "Copiar link" y "Generar link nuevo", que deja sin efecto el anterior. Quien entra por su link verifica su email con un código y queda vinculado sin buscarse. Es lo que cierra el hueco de la primera vez: el perfil lo elige la organización. Para POLENTA, conviene mandarlos antes del primer torneo.
 
 **Vinculaciones** ([decisión 051](decisiones/051-vinculacion-con-el-padron.md), *pendiente de código*). El jugador verifica su email con un código y vincula su perfil al inscribirse por primera vez, sin pasar por la organización. **La organización no toca la identidad de nadie** (el email y el nombre de la persona son de ella); decide sobre su padrón: de qué persona es cada perfil.
 
 - **Vinculaciones nuevas:** el padrón las muestra desde la última visita, con cómo se hizo cada una (link personal, búsqueda o "¿Sos…?"). No frenan nada.
-- **Para revisar** quedan dos casos, y en los dos la inscripción sigue en pie. *Posible homónimo:* alguien eligió un perfil con otro igual o parecido en la categoría; desde *Revisar vinculación* la organización confirma, pasa la inscripción al otro perfil o da de alta a la persona como jugador nuevo. *Perfil reclamado:* otra cuenta tocó "Avisarle a la organización" sobre un perfil vinculado; la organización decide de quién es el perfil y qué pasa con las inscripciones que pagó la cuenta que lo tenía.
+- **Para revisar** quedan dos casos, y en los dos la inscripción sigue en pie. *Posible homónimo:* alguien eligió un perfil con otro igual o parecido en la categoría; desde *Revisar vinculación* la organización confirma, pasa la inscripción al otro perfil o da de alta a la persona como jugador nuevo. *Perfil reclamado:* otra cuenta tocó "Avisarle a la organización" sobre un perfil vinculado; la organización decide de quién es el perfil y qué pasa con las inscripciones que pagó la cuenta que lo tenía. Cada caso aparece en el padrón con la marca "para revisar", que lleva a *Revisar vinculación*.
 - **Desvincular:** el panel de cada jugador muestra el email de su cuenta y cuándo y cómo se vinculó, y permite desvincularlo. El perfil queda libre para que lo reclame su dueño; no se toca el email ni la cuenta de nadie. Ya existe ([decisión 007](decisiones/007-vinculacion-de-cuentas-en-f02.md)).
 - **El DNI** puede quedar como dato opcional del perfil, si la organización lo necesita por otro motivo (un seguro, por ejemplo). No identifica a nadie ni se usa en la inscripción ([decisión 049](decisiones/049-identidad-e-ingreso-con-codigo.md)).
 
@@ -209,7 +209,7 @@ Funciones:
 - Inscribir manualmente a quien pagó por fuera del sistema
 - Dar de baja y **promover automáticamente al primero de la lista de espera**
 - Enviar recordatorio a quienes no completaron el pago
-- Aprobar o rechazar las **solicitudes**, en los torneos con aprobación: al aprobar, el jugador entra al padrón y recibe por email el link para pagar
+- Aprobar o rechazar las **solicitudes**, en los torneos con aprobación: al aprobar, el jugador recibe por email el link para pagar, y entra al padrón cuando paga ([decisión 054](decisiones/054-perfil-pendiente.md))
 - Ver qué inscripciones tienen una vinculación **para revisar** e ir a revisarla (§5)
 - Cerrar inscripciones
 
@@ -220,7 +220,7 @@ La lista de espera se ordena **por orden de llegada** y cubre deserciones, repli
 - **Las reservas sin pagar no se tocan al cerrar** ([decisión 024](decisiones/024-reservas-sin-pagar-al-cerrar.md)): no entran al sorteo, que toma solo las pagadas, y se resuelven cuando exista F13 completa. La pantalla lo avisa antes de cerrar.
 - **No se puede cerrar si los que pagaron no alcanzan para las zonas**, al menos 3 por zona ([decisión 025](decisiones/025-no-se-cierra-sin-inscriptos-para-las-zonas.md)). La pantalla dice cuántos hacen falta y enlaza al torneo para bajar la cantidad de zonas.
 
-Inscribir a mano, dar de baja, recordar el pago, la lista de espera, la conciliación, las solicitudes y la marca de las vinculaciones para revisar todavía no están.
+Inscribir a mano, dar de baja, recordar el pago, la lista de espera, la conciliación y la marca de las vinculaciones para revisar todavía no están.
 
 ---
 

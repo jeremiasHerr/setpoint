@@ -8,6 +8,8 @@ export * from './schemas/sorteo';
 export * from './schemas/posiciones';
 export * from './schemas/inscripciones';
 export * from './schemas/inscripcion';
+export * from './schemas/link-personal';
+export * from './schemas/revision';
 export * from './schemas/pago';
 export * from './schemas/cuadros';
 export * from './schemas/resultado';

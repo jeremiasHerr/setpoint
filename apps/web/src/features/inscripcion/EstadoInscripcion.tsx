@@ -1,5 +1,5 @@
 import type { SituacionEnElTorneo, TorneoPublico } from '@setpoint/shared';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { Numero } from '../../components/Numero';
 import { Ayuda, Monto } from './piezas';
 import { useCuentaRegresiva } from './useCuentaRegresiva';
@@ -14,6 +14,11 @@ type Props = {
 // Quien vuelve con una reserva vigente o ya inscripto: pasos 14 y 15 de identificacion.html.
 export function EstadoInscripcion({ torneo, perfil, inscripcion, email }: Props) {
   const resta = useCuentaRegresiva(inscripcion.reservaVence);
+
+  // La solicitud en revisión o aprobada se ve en la página de la inscripción, como desde el email.
+  if (inscripcion.estado === 'solicitada' || inscripcion.estado === 'aprobada') {
+    return <Navigate to={`/c/${torneo.organizacion.slug}/inscripciones/${inscripcion.id}`} replace />;
+  }
 
   if (inscripcion.estado === 'pagada') {
     return (

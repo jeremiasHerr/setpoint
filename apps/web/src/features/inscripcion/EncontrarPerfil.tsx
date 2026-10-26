@@ -1,6 +1,6 @@
 import type { PerfilEncontrado, SituacionEnElTorneo, TorneoPublico } from '@setpoint/shared';
 import { useState } from 'react';
-import { ErrorApi } from '../../lib/api';
+import { Link } from 'react-router-dom';
 import {
   Aviso,
   AvisoReserva,
@@ -13,40 +13,24 @@ import {
   Tilde,
   Titulo,
 } from './piezas';
+import { AvisarALaOrganizacion, AvisoEnviado } from './AvisarALaOrganizacion';
+import { InscribirmeComoNuevo } from './InscribirmeComoNuevo';
+import { mensajeReserva } from './mensajeReserva';
 import { useBusqueda, useReservar } from './useInscripcion';
 
 type Props = {
   torneo: TorneoPublico;
   token: string;
+  // El email verificado: el aviso de reclamo dice a dónde le escribe la organización.
+  email: string;
+  // El nombre de la cuenta: completa el formulario de quien no está en la lista.
+  nombre: string;
   situacion: SituacionEnElTorneo;
   onReservado: (inscripcionId: number) => void;
 };
 
-function mensajeReserva(error: Error | null): string | null {
-  if (!error) return null;
-  if (!(error instanceof ErrorApi)) return 'Algo salió mal. Probá de nuevo.';
-  switch (error.codigo) {
-    case 'SIN_LUGARES':
-      return 'Ya no quedan lugares en este torneo.';
-    case 'PERFIL_RESERVADO':
-      return 'Alguien está pagando con ese perfil en este momento. Si es el tuyo, avisale a la organización.';
-    case 'OTRA_CATEGORIA':
-      return 'Ese perfil es de otra categoría. Si te corresponde esta, hablá con la organización.';
-    case 'OTRO_PERFIL_RESERVADO':
-      return 'Ya tenés otro perfil reservado en este circuito. Terminá ese pago o esperá a que venza la reserva.';
-    case 'YA_INSCRIPTO':
-      return 'Ese perfil ya está inscripto en este torneo.';
-    case 'INSCRIPCION_NO_ABIERTA':
-      return 'La inscripción de este torneo ya cerró.';
-    case 'SIN_CONEXION':
-      return 'No pudimos conectarnos. Revisá tu conexión y probá de nuevo.';
-    default:
-      return 'No pudimos reservar el lugar. Probá de nuevo en unos minutos.';
-  }
-}
-
-// Después del código: pasos 3 a 10 de docs/pantallas/jugador/identificacion.html (decisión 051).
-export function EncontrarPerfil({ torneo, token, situacion, onReservado }: Props) {
+// Después del código: pasos 3 a 13 de docs/pantallas/jugador/identificacion.html (decisiones 051 y 054).
+export function EncontrarPerfil({ torneo, token, email, nombre, situacion, onReservado }: Props) {
   const reservar = useReservar(torneo.organizacion.slug, String(torneo.id), token);
   const [modo, setModo] = useState<'propuesta' | 'buscar' | 'vinculado' | 'no-esta'>(
     situacion.propuestas.length > 0 ? 'propuesta' : 'buscar',
@@ -148,27 +132,63 @@ export function EncontrarPerfil({ torneo, token, situacion, onReservado }: Props
     );
   }
 
-  if (modo === 'vinculado') {
+  if (modo === 'vinculado' && elegido) {
     return (
-      <>
-        {elegido && (
-          <div className="flex h-14 items-center justify-between gap-3 rounded-tarjeta border-2 border-negro px-[15px] text-[17px] font-medium">
-            <span>
-              {elegido.nombre} {elegido.apellido}
-            </span>
-            <MarcaVinculado />
-          </div>
-        )}
+      <AvisarALaOrganizacion
+        slug={torneo.organizacion.slug}
+        token={token}
+        jugadorId={elegido.jugadorId}
+        enviado={
+          <AvisoEnviado
+            organizacion={torneo.organizacion.nombre}
+            perfil={`${elegido.nombre} ${elegido.apellido}`}
+            email={email}
+            torneo={torneo.nombre}
+            pie={
+              <Link
+                to={`/c/${torneo.organizacion.slug}/torneos/${torneo.id}`}
+                className="flex h-[52px] w-full items-center justify-center rounded-[12px] border border-linea text-base font-medium hover:bg-fondo"
+              >
+                Volver al torneo
+              </Link>
+            }
+          />
+        }
+      >
+        <div className="flex h-14 items-center justify-between gap-3 rounded-tarjeta border-2 border-negro px-[15px] text-[17px] font-medium">
+          <span>
+            {elegido.nombre} {elegido.apellido}
+          </span>
+          <MarcaVinculado />
+        </div>
         <div className="flex flex-col gap-2">
           <Titulo>Este perfil ya está vinculado a otra cuenta</Titulo>
           <Ayuda>¿Te inscribiste antes con otro email? Entrá con ese y vas directo.</Ayuda>
         </div>
-        <Caja>Si es tu perfil y no fuiste vos, avisale a la organización: ve las dos cuentas y decide de quién es.</Caja>
-        {torneo.organizacion.contacto && <Contacto contacto={torneo.organizacion.contacto} />}
-        <div className="mt-auto">
-          <BotonSecundario onClick={() => setModo('buscar')}>Volver a buscarme</BotonSecundario>
-        </div>
-      </>
+        <Caja>Si es tu perfil y no fuiste vos, avisale a la organización. Ve las dos cuentas y decide de quién es.</Caja>
+        <button
+          type="button"
+          onClick={() => setModo('buscar')}
+          className="self-start text-[15px] font-medium text-gris-500 underline underline-offset-[3px]"
+        >
+          Volver a buscarme
+        </button>
+      </AvisarALaOrganizacion>
+    );
+  }
+
+
+  // Con aprobación o abierto, quien no está en la lista deja su nombre (decisión 054).
+  if (modo === 'no-esta' && torneo.modoInscripcion !== 'cerrada') {
+    return (
+      <InscribirmeComoNuevo
+        torneo={torneo}
+        token={token}
+        email={email}
+        nombre={nombre}
+        onReservado={onReservado}
+        onVolver={() => setModo('buscar')}
+      />
     );
   }
 

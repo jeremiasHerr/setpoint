@@ -1,4 +1,5 @@
 import { ErrorHttp } from '../middleware/errores';
+import { DEL_PADRON_ACTIVOS } from './padron';
 import { prisma } from './prisma';
 
 // Devuelve el id de la organización si el usuario la administra.
@@ -17,7 +18,7 @@ export async function organizacionAdministrada(slug: string, usuarioId: number) 
 export async function perfilDeJugador(slug: string, usuarioId: number) {
   const organizacion = await prisma.organizacion.findUnique({
     where: { slug },
-    select: { id: true, jugadores: { where: { usuarioId, activo: true }, select: { id: true } } },
+    select: { id: true, jugadores: { where: { usuarioId, ...DEL_PADRON_ACTIVOS }, select: { id: true } } },
   });
   if (!organizacion) throw new ErrorHttp(404, 'ORGANIZACION_NO_ENCONTRADA');
   const [jugador] = organizacion.jugadores;

@@ -1,8 +1,11 @@
 import type {
   BusquedaEnElPadron,
+  DatosInscribirComoNuevo,
   DatosPedirCodigo,
+  DatosReclamarPerfil,
   DatosReservar,
   DatosVerificarCodigo,
+  InscripcionComoNuevo,
   Reserva,
   RespuestaCodigo,
   SituacionEnElTorneo,
@@ -48,5 +51,21 @@ export function useBusqueda(slug: string, torneoId: string, consulta: string) {
 export function useReservar(slug: string, torneoId: string, token: string | undefined) {
   return useMutation({
     mutationFn: (datos: DatosReservar) => pedir<Reserva>('POST', `/api/inscripcion/${slug}/torneos/${torneoId}`, datos, token),
+  });
+}
+
+// Quien no está en el padrón, en un torneo con aprobación o abierto (decisión 054): con aprobación
+// queda la solicitud; abierto, reserva el lugar.
+export function useInscribirComoNuevo(slug: string, torneoId: string, token: string | undefined) {
+  return useMutation({
+    mutationFn: (datos: DatosInscribirComoNuevo) =>
+      pedir<InscripcionComoNuevo>('POST', `/api/inscripcion/${slug}/torneos/${torneoId}/nuevo`, datos, token),
+  });
+}
+
+// "Avisarle a la organización": abre el caso en "Para revisar" con el email verificado (decisión 051).
+export function useReclamar(slug: string, token: string | undefined) {
+  return useMutation({
+    mutationFn: (datos: DatosReclamarPerfil) => pedir<void>('POST', `/api/inscripcion/${slug}/reclamos`, datos, token),
   });
 }
