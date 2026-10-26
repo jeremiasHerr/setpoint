@@ -17,6 +17,10 @@ export function mensajeReserva(error: Error | null): string | null {
       return 'Ese perfil es de otra categoría. Si te corresponde esta, hablá con la organización.';
     case 'OTRO_PERFIL_RESERVADO':
       return 'Ya tenés otro perfil reservado en este circuito. Terminá ese pago o esperá a que venza la reserva.';
+    case 'INSCRIPCION_EN_CURSO':
+      return 'Ya tenés una inscripción en curso en este circuito. Esperá a que se resuelva.';
+    case 'SOLO_PADRON':
+      return 'Este torneo es solo para los jugadores del padrón. Pedile a la organización que te agregue.';
     case 'YA_INSCRIPTO':
       return 'Ese perfil ya está inscripto en este torneo.';
     case 'LINK_NO_ENCONTRADO':
