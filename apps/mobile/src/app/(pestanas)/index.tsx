@@ -4,8 +4,10 @@ import type { MisPartidos } from '@setpoint/shared';
 import { useEffect } from 'react';
 import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { AvisoInscripcion } from '../../components/AvisoInscripcion';
 import { EncabezadoCircuito } from '../../features/auth/EncabezadoCircuito';
 import { ErrorDeCarga } from '../../features/auth/ErrorDeCarga';
+import { useSesion } from '../../features/auth/SesionProvider';
 import { programarRecordatorios } from '../../features/avisos/recordatorios';
 import { agruparPartidos } from '../../features/partidos/agrupar';
 import { OtrosPartidos } from '../../features/partidos/OtrosPartidos';
@@ -16,6 +18,7 @@ import { colores, fuentes, medidas, radios, tabular } from '../../lib/tokens';
 
 export default function CuandoJuego() {
   const consulta = useMisPartidos();
+  const { cuenta } = useSesion();
   const partidos = consulta.data?.partidos?.partidos;
 
   // Cada vez que llegan los partidos, los recordatorios quedan con las fechas de ahora.
@@ -32,6 +35,7 @@ export default function CuandoJuego() {
             refreshing={consulta.isRefetching}
             onRefresh={() => {
               consulta.refetch();
+              cuenta.refetch();
             }}
           />
         }
@@ -46,6 +50,8 @@ export default function CuandoJuego() {
             </View>
           )}
         </View>
+        {/* Las inscripciones en curso en otro circuito, sin tapar el partido que viene (decisión 054). */}
+        <AvisoInscripcion />
         {consulta.isPending && <Text style={estilos.aviso}>Cargando tus partidos…</Text>}
         {consulta.error && <ErrorDeCarga error={consulta.error} que="tus partidos" />}
         {consulta.data &&
