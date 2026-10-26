@@ -209,7 +209,7 @@ Funciones:
 - Inscribir manualmente a quien pagó por fuera del sistema
 - Dar de baja y **promover automáticamente al primero de la lista de espera**
 - Enviar recordatorio a quienes no completaron el pago
-- Aprobar o rechazar las **solicitudes**, en los torneos con aprobación: al aprobar, el jugador entra al padrón y recibe por email el link para pagar
+- Aprobar o rechazar las **solicitudes**, en los torneos con aprobación: al aprobar, el jugador recibe por email el link para pagar, y entra al padrón cuando paga ([decisión 054](decisiones/054-perfil-pendiente.md))
 - Ver qué inscripciones tienen una vinculación **para revisar** e ir a revisarla (§5)
 - Cerrar inscripciones
 
@@ -220,7 +220,7 @@ La lista de espera se ordena **por orden de llegada** y cubre deserciones, repli
 - **Las reservas sin pagar no se tocan al cerrar** ([decisión 024](decisiones/024-reservas-sin-pagar-al-cerrar.md)): no entran al sorteo, que toma solo las pagadas, y se resuelven cuando exista F13 completa. La pantalla lo avisa antes de cerrar.
 - **No se puede cerrar si los que pagaron no alcanzan para las zonas**, al menos 3 por zona ([decisión 025](decisiones/025-no-se-cierra-sin-inscriptos-para-las-zonas.md)). La pantalla dice cuántos hacen falta y enlaza al torneo para bajar la cantidad de zonas.
 
-Inscribir a mano, dar de baja, recordar el pago, la lista de espera, la conciliación, las solicitudes y la marca de las vinculaciones para revisar todavía no están.
+Inscribir a mano, dar de baja, recordar el pago, la lista de espera, la conciliación y la marca de las vinculaciones para revisar todavía no están.
 
 ---
 
