@@ -149,7 +149,7 @@ La organización podrá registrar el resultado de cada partido indicando los gam
 
 **Estado:** implementada (`PUT .../torneos/:id/partidos/:partidoId/resultado`, [03-flujo-organizacion.md](03-flujo-organizacion.md) §10).
 - El resultado se valida contra el sistema de juego del torneo con `resultadoDelTorneoSchema()` en `packages/shared`, y el ganador lo calcula el servidor. Los puntos del tie-break son opcionales ([decisión 030](decisiones/030-puntos-del-tie-break-opcionales.md)).
-- El W.O. no guarda sets ([decisión 016](decisiones/016-walkover-sin-sets-guardados.md)). El abandono guarda lo que se jugó y se computa como un W.O. ([decisión 027](decisiones/027-abandono.md)).
+- El W.O. no guarda sets ([decisión 016](decisiones/016-walkover-sin-sets-guardados.md)). El abandono tampoco: se elige quién siguió y se computa como un W.O. ([decisión 059](decisiones/059-abandono-sin-sets.md), que reemplaza a la 027).
 - Corregir es volver a cargar: se puede mientras no cambie lo que ya se armó con ese resultado ([decisión 028](decisiones/028-correccion-de-resultados.md)).
 - Un resultado de cuadro hace avanzar al ganador en la misma transacción.
 - La carga es solo de la organización: que también puedan cargar los jugadores sigue abierto (decisión abierta 12).
@@ -325,6 +325,13 @@ Al definirse los campeones, la organización cerrará el torneo y el sistema oto
 - Cada categoría mantiene su ranking independiente.
 
 **Entrega: 75%**
+
+**Estado:** implementada (`GET` y `POST .../torneos/:id/cierre`, [03-flujo-organizacion.md](03-flujo-organizacion.md) §12).
+- La pantalla *Cerrar el torneo* (`/torneos/:id/cierre`) muestra los campeones y, antes de confirmar, los puntos de cada jugador, qué reemplazan en su casillero, el acumulado y el puesto antes y después. Se llega desde *Cargar resultado* al cargar el último resultado de los cuadros ([decisión 058](decisiones/058-como-se-llega-al-cierre.md)).
+- La instancia sale del cuadro principal; el cuadro consuelo y quien pierde antes de octavos reciben participación ([decisión 056](decisiones/056-instancias-fuera-de-la-tabla-de-puntos.md)).
+- Un torneo suelto, o de una organización sin ranking, se cierra con sus posiciones finales y sin puntos ([decisión 057](decisiones/057-cierre-sin-ranking.md)).
+- Corregir un resultado después del cierre recalcula los puntos de quien cambia de instancia ([decisión 055](decisiones/055-correccion-despues-del-cierre.md)).
+- De qué torneo salió cada punto ya se ve en el ranking, en el casillero de cada torneo del calendario (F09). El historial por torneo llega con la ficha del jugador (F17).
 
 ---
 

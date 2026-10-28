@@ -24,7 +24,6 @@ const set = (gamesA: number, gamesB: number, tieBreak?: [number | null, number |
 const superTieBreak = (puntosA: number, puntosB: number) => ({ gamesA: puntosA, gamesB: puntosB, esSuperTieBreak: true });
 
 const jugado = (...sets: ReturnType<typeof set>[]): DatosResultadoEntrada => ({ tipo: 'jugado', sets });
-const abandono = (...sets: ReturnType<typeof set>[]): DatosResultadoEntrada => ({ tipo: 'abandono', ganadorId: 1, sets });
 
 // Los problemas del resultado como { campo: mensaje }. Vacío si se puede guardar.
 function problemas(datos: DatosResultadoEntrada, sistema = POLENTA) {
@@ -149,28 +148,18 @@ describe('resultadoDelTorneoSchema', () => {
       expect(problemas({ tipo: 'walkover', ganadorId: 1 })).toEqual({});
     });
 
-    it('el abandono guarda lo que se jugó: el último set puede haber quedado en juego', () => {
-      expect(problemas(abandono(set(6, 3), set(2, 1)))).toEqual({});
-      expect(problemas(abandono(set(6, 3), set(6, 6)))).toEqual({});
-      expect(problemas(abandono(set(6, 3), set(3, 6), superTieBreak(5, 3)))).toEqual({});
+    it('el abandono tampoco lleva sets: alcanza con quién siguió (decisión 059)', () => {
+      expect(problemas({ tipo: 'abandono', ganadorId: 1 })).toEqual({});
     });
 
-    it('puede haber abandono entre dos sets', () => {
-      expect(problemas(abandono(set(6, 3), set(3, 6)))).toEqual({});
+    it('el W.O. y el abandono necesitan saber quién ganó', () => {
+      expect(problemas({ tipo: 'abandono' } as DatosResultadoEntrada)).toEqual({ ganadorId: 'Elegí quién ganó' });
+      expect(problemas({ tipo: 'walkover' } as DatosResultadoEntrada)).toEqual({ ganadorId: 'Elegí quién ganó' });
     });
 
-    it('solo el último set puede quedar sin terminar', () => {
-      expect(problemas(abandono(set(2, 1), set(6, 3)))).toEqual({ 'sets.0': 'Un set termina 6-4 o menos, 7-5 o 7-6' });
-    });
-
-    it('un set sin terminar va hasta 6-6', () => {
-      expect(problemas(abandono(set(6, 3), set(8, 2)))).toEqual({
-        'sets.1': 'Un set termina 6-4 o menos, 7-5 o 7-6, y sin terminar va hasta 6-6',
-      });
-    });
-
-    it('si el partido ya estaba definido, no fue abandono', () => {
-      expect(problemas(abandono(set(6, 3), set(6, 2)))).toEqual({ sets: 'El partido terminó 2 a 0: cargalo como jugado' });
+    it('si un abandono trae sets, no se guardan: se descartan al validar', () => {
+      const validado = resultadoDelTorneoSchema(POLENTA).parse({ tipo: 'abandono', ganadorId: 1, sets: [set(6, 3)] });
+      expect(validado).toEqual({ tipo: 'abandono', ganadorId: 1 });
     });
   });
 });

@@ -43,7 +43,7 @@ borrador → publicado → inscripciones_cerradas → zonas_generadas
 | `zonas_generadas` | Se confirma el sorteo, antes de la fecha de inicio | Comunicar grupos y plazos. Cargar los partidos que se adelanten |
 | `grupos_en_curso` | Llega la fecha de inicio: arranca el plazo de 3 semanas. Lo cambia una tarea de la API que revisa cada hora; si el sorteo se confirma después de esa fecha, entra directo ([decisión 029](decisiones/029-grupos-en-curso.md)) | Cargar resultados de zona |
 | `eliminatorias` | Cierran todas las zonas | El cuadro principal y, si hay, el consuelo en juego, con el plazo por ronda del torneo. En la interfaz: "cuadros" |
-| `finalizado` | Se definen ambos campeones | Solo lectura. Se impactan los puntos |
+| `finalizado` | La organización cierra el torneo, con ambos campeones definidos (§12) | Se impactan los puntos. Solo se corrigen resultados, y los puntos se recalculan ([decisión 055](decisiones/055-correccion-despues-del-cierre.md)) |
 
 > **Nota:** a diferencia de versiones anteriores, la organización **no paga** por publicar un torneo. El modelo de ingresos del circuito son las inscripciones de los jugadores.
 
@@ -274,7 +274,7 @@ Hay tres tipos de resultado:
 |---|---|---|
 | Jugado | Los sets | Los sets |
 | Walkover | Quién ganó. No se guardan sets ([decisión 016](decisiones/016-walkover-sin-sets-guardados.md)) | 6-0 6-0 a favor del ganador |
-| Abandono | Quién ganó y lo que se jugó; el último set puede haber quedado sin terminar | 6-0 6-0 a favor del ganador, como el W.O. ([decisión 027](decisiones/027-abandono.md)) |
+| Abandono | Quién siguió jugando. No se guardan sets: los casilleros quedan bloqueados ([decisión 059](decisiones/059-abandono-sin-sets.md)) | 6-0 6-0 a favor de quien siguió, como el W.O. |
 
 Al guardar:
 
@@ -286,7 +286,7 @@ Al guardar:
 - Con las zonas abiertas, siempre.
 - Con las zonas cerradas, solo si los cuadros quedan con la misma siembra.
 - En un cuadro, si cambia el ganador, solo si el partido siguiente todavía no se jugó: el nuevo ganador reemplaza al anterior.
-- Con el torneo finalizado, nunca.
+- Con el torneo finalizado, con las mismas reglas, y los puntos de quien cambia de instancia se recalculan ([decisión 055](decisiones/055-correccion-despues-del-cierre.md)). En la práctica, solo puede cambiar el ganador de una final.
 
 **Partidos no jugados en plazo:** no se resuelven con regla automática. El sistema presenta el caso con el historial de coordinación y la organización decide W.O., doble W.O. o extensión. El W.O. se registra como **6-0 6-0**. El doble W.O. todavía no se puede cargar.
 
@@ -296,10 +296,10 @@ Al guardar:
 |---|---|
 | `GET /api/organizaciones/:slug/torneos/:id/partidos` | Los partidos del torneo, para elegir cuál cargar: zona o cuadro y ronda, jugadores, estado y ganador, sin los sets ([decisión 031](decisiones/031-como-se-llega-a-cargar-resultado.md)) |
 | `GET /api/organizaciones/:slug/torneos/:id/partidos/:partidoId` | El partido con su resultado y el sistema de juego del torneo. Si es de cuadro, también cuántas rondas tiene el cuadro |
-| `PUT /api/organizaciones/:slug/torneos/:id/partidos/:partidoId/resultado` | Guarda o corrige el resultado: `{ tipo: 'jugado', sets }`, `{ tipo: 'walkover', ganadorId }` o `{ tipo: 'abandono', ganadorId, sets }` |
+| `PUT /api/organizaciones/:slug/torneos/:id/partidos/:partidoId/resultado` | Guarda o corrige el resultado: `{ tipo: 'jugado', sets }`, `{ tipo: 'walkover', ganadorId }` o `{ tipo: 'abandono', ganadorId }` |
 | `POST /api/organizaciones/:slug/torneos/:id/partidos/:partidoId/simulacion` | Con el mismo body que el `PUT`, cómo quedaría la tabla de la zona sin guardar nada, y si con las zonas cerradas la corrección cambiaría los cuadros. Rechaza lo mismo que el `PUT`. En un partido de cuadro devuelve la zona en `null` ([decisión 032](decisiones/032-vista-previa-del-resultado.md)) |
 
-Todos son solo para quien administra la organización. Los errores de validación responden `400 DATOS_INVALIDOS` con un mensaje por set. Los que no dependen de los datos responden 409: `PARTIDO_SIN_JUGADORES` (un partido de cuadro que espera al ganador del anterior), `CORRECCION_CAMBIA_LOS_CUADROS`, `SIGUIENTE_YA_JUGADO`, `TORNEO_TERMINADO`, y `RESULTADO_DESACTUALIZADO` si otra carga del mismo partido llegó antes.
+Todos son solo para quien administra la organización. Los errores de validación responden `400 DATOS_INVALIDOS` con un mensaje por set. Los que no dependen de los datos responden 409: `PARTIDO_SIN_JUGADORES` (un partido de cuadro que espera al ganador del anterior), `CORRECCION_CAMBIA_LOS_CUADROS`, `SIGUIENTE_YA_JUGADO`, `TORNEO_CANCELADO`, y `RESULTADO_DESACTUALIZADO` si otra carga del mismo partido llegó antes.
 
 ---
 
@@ -320,8 +320,20 @@ Cuando hay dos cuadros, corren en paralelo con el mismo plazo por ronda, contado
 
 ## 12. Cierre del torneo
 
-Con los campeones definidos (uno por cuadro), la organización cierra el torneo. El sistema:
+Con los campeones definidos (uno por cuadro), la organización cierra el torneo. Se puede cerrar cuando todos los partidos de los cuadros tienen resultado; los cancelados no frenan. Al cerrar, el sistema:
 
-- Genera los `MovimientoRanking` según instancia alcanzada
-- **Reemplaza el casillero de ese torneo del calendario** en el ranking de cada jugador
-- Si es un torneo suelto, produce las posiciones finales y no otorga puntos
+- Calcula la **instancia** de cada jugador que tuvo zona. Cuenta solo el cuadro principal: quien perdió en la final es finalista, en semis semifinalista, y así hasta octavos. Todo el cuadro consuelo, con su campeón, es participación, y también quien perdió en el principal antes de octavos ([decisión 056](decisiones/056-instancias-fuera-de-la-tabla-de-puntos.md)). Con byes, cuenta la ronda en que perdió cada uno.
+- Genera un `MovimientoRanking` por jugador (`RESULTADO_TORNEO`), con los puntos de su instancia según la tabla de la organización, aunque sumen 0.
+- **Reemplaza el casillero de ese torneo del calendario** en el ranking de cada jugador: el movimiento nuevo es el más reciente de su casillero. No se borra nada.
+- Si es un torneo suelto o la organización no lleva ranking, produce las posiciones finales y no otorga puntos ([decisión 057](decisiones/057-cierre-sin-ranking.md)).
+
+El torneo pasa a `finalizado`. Cerrar no se deshace, pero un resultado se puede corregir después: si alguien cambia de instancia, su movimiento se actualiza en la misma transacción y conserva la fecha del cierre ([decisión 055](decisiones/055-correccion-despues-del-cierre.md)).
+
+**Antes de confirmar**, la pantalla *Cerrar el torneo* muestra los campeones, los puntos de cada jugador con lo que reemplazan en su casillero, el acumulado y el puesto antes y después, cuántos jugadores de la categoría cambian de puesto y quién queda número uno. Lo calcula la API sin guardar nada, con las mismas funciones del ranking. Se llega desde *Cargar resultado*, al cargar el último resultado de los cuadros ([decisión 058](decisiones/058-como-se-llega-al-cierre.md)).
+
+| Endpoint | Qué hace |
+|---|---|
+| `GET /api/organizaciones/:slug/torneos/:id/cierre` | Lo que va a pasar al cerrar, o lo que pasó si ya se cerró |
+| `POST /api/organizaciones/:slug/torneos/:id/cierre` | Cierra el torneo y da los puntos. Devuelve la misma vista, ya cerrada |
+
+Solo para quien administra la organización. Responden `409 TORNEO_NO_CERRABLE` si el torneo no está en cuadros (o, al cerrar, si ya se cerró) y `409 CUADROS_INCOMPLETOS` si falta algún resultado de los cuadros.

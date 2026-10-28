@@ -60,7 +60,8 @@ export function marcadorDelLado(partido: PartidoDelCuadro, lado: Lado, abierta: 
   if (!tieneResultado(partido)) return '—';
   const esGanador = partido.ganadorId === (lado === 'A' ? partido.jugadorA : partido.jugadorB)?.jugadorId;
   if (partido.estado === 'walkover') return esGanador ? 'W.O.' : '';
-  if (partido.estado === 'abandono' && !abierta) return esGanador ? 'ab.' : '';
+  // Desde la decisión 059 el abandono no tiene sets; uno de antes puede traer lo que se jugó.
+  if (partido.estado === 'abandono' && (!abierta || partido.sets.length === 0)) return esGanador ? 'ab.' : '';
 
   const propios = (set: PartidoDelCuadro['sets'][number]) => (lado === 'A' ? set.gamesA : set.gamesB);
   const ajenos = (set: PartidoDelCuadro['sets'][number]) => (lado === 'A' ? set.gamesB : set.gamesA);

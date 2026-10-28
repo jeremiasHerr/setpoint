@@ -245,6 +245,8 @@ Ventajas de guardar movimientos en vez de un campo `puntos` mutable:
 
 Todo jugador que completa la fase de grupos y no clasifica a Campeonato recibe **10 puntos**.
 
+**Si el cuadro principal tiene más de 16 jugadores**, quien pierde antes de octavos también recibe participación. POLENTA no tiene ese caso y el reglamento no lo define: es una decisión nuestra ([decisión 056](decisiones/056-instancias-fuera-de-la-tabla-de-puntos.md)).
+
 **En la plataforma:** la tabla de puntos es configurable por organización, y una organización sin ranking no la necesita ([07](07-configurabilidad.md) §1).
 
 ### 7.5 Jugadores nuevos
@@ -300,7 +302,7 @@ En la práctica actual se flexibiliza: agregan días o acomodan la fecha.
 
 **6-0 6-0 a favor del rival.** Esto resuelve limpiamente el impacto en los criterios de desempate por sets y games.
 
-**Abandono.** Si un jugador abandona un partido empezado, se computa igual que un W.O.: 6-0 6-0 a favor del que siguió. Se guarda el marcador hasta el abandono, pero no cuenta para los desempates. El reglamento no lo define: es una decisión nuestra ([decisión 027](decisiones/027-abandono.md)).
+**Abandono.** Si un jugador abandona un partido empezado, se computa igual que un W.O.: 6-0 6-0 a favor del que siguió. Se carga igual que un W.O., eligiendo quién siguió, y no se guarda el marcador hasta el abandono. El reglamento no lo define: es una decisión nuestra ([decisión 059](decisiones/059-abandono-sin-sets.md), que reemplaza a la [027](decisiones/027-abandono.md)).
 
 ---
 

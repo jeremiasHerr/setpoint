@@ -424,12 +424,12 @@ async function crearTorneoConZonas(organizacionId: number, categoriaId: number, 
       i === walkover
         ? { tipo: 'walkover', ganadorId: jugadorAId }
         : i === abandono
-          ? { tipo: 'abandono', ganadorId: jugadorBId, sets: [{ gamesA: 6, gamesB: 4 }, { gamesA: 2, gamesB: 1 }] }
+          ? { tipo: 'abandono', ganadorId: jugadorBId }
           : modelo;
     // Si el seed no respeta el sistema de juego, que falle acá y no en la pantalla.
     const resultado = resultadoDelTorneoSchema(SISTEMA_POLENTA).parse(datos);
     const sets =
-      resultado.tipo === 'walkover'
+      resultado.tipo !== 'jugado'
         ? []
         : resultado.sets.map((set) =>
             vuelta ? { ...set, gamesA: set.gamesB, gamesB: set.gamesA, tieBreakA: set.tieBreakB, tieBreakB: set.tieBreakA } : set,

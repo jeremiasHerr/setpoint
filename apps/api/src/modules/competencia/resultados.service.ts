@@ -16,6 +16,7 @@ import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
 import { camposConError } from '../../middleware/validar';
 import { correccionCambiaLosCuadros } from './cuadros';
+import { recalcularPuntos } from './cierre.service';
 import { avanzarGanador } from './cuadros.service';
 import { simularZona } from './posiciones';
 import { INCLUIR_ZONAS, inscriptosYPartidos } from './posiciones.service';
@@ -23,8 +24,6 @@ import { INCLUIR_ZONAS, inscriptosYPartidos } from './posiciones.service';
 // Carga y corrección de resultados (F06). Los carga la organización (03-flujo-organizacion.md §10).
 // Las tablas de las zonas se calculan en cada consulta, así que guardar un resultado de zona ya
 // las actualiza. Uno de cuadro, además, hace avanzar al ganador.
-
-const TERMINADO = [EstadoTorneo.FINALIZADO, EstadoTorneo.CANCELADO];
 
 const jugador = { select: { id: true, nombre: true, apellido: true } } as const;
 
@@ -179,8 +178,8 @@ async function zonasDelTorneo(torneo: Torneo) {
 // El resultado validado contra el torneo, como se guardaría: lo usan la carga y la simulación,
 // así que la vista previa rechaza lo mismo que el guardado.
 function resultadoAGuardar(torneo: Torneo, partido: Partido, datos: DatosResultado) {
-  // Terminado el torneo, sus puntos ya se repartieron (F16).
-  if (TERMINADO.some((e) => e === torneo.estado)) throw new ErrorHttp(409, 'TORNEO_TERMINADO');
+  // Con el torneo cerrado se puede corregir: los puntos se recalculan al guardar (decisión 055).
+  if (torneo.estado === EstadoTorneo.CANCELADO) throw new ErrorHttp(409, 'TORNEO_CANCELADO');
   if (partido.estado === EstadoPrisma.CANCELADA) throw new ErrorHttp(409, 'PARTIDO_CANCELADO');
   const { jugadorAId, jugadorBId } = partido;
   // En un cuadro, el partido espera a que llegue el ganador del anterior.
@@ -195,8 +194,8 @@ function resultadoAGuardar(torneo: Torneo, partido: Partido, datos: DatosResulta
     jugadorBId,
     estado: ESTADO_DEL_RESULTADO[resultado.tipo],
     ganadorId: ganadorDelResultado(resultado, jugadorAId, jugadorBId),
-    // El W.O. no guarda sets (decisión 016); el abandono guarda lo que se jugó (decisión 027).
-    sets: resultado.tipo === 'walkover' ? [] : resultado.sets,
+    // El W.O. y el abandono no guardan sets: cuentan 6-0 6-0 al calcular (decisiones 016 y 059).
+    sets: resultado.tipo === 'jugado' ? resultado.sets : [],
   };
 }
 
@@ -254,7 +253,7 @@ export async function guardarResultado(
   await prisma.$transaction(async (tx) => {
     // Con las zonas como condición: si se cerraron mientras tanto, esta carga no se comparó con los cuadros.
     const torneoSinCambios = await tx.torneo.updateMany({
-      where: { id: torneo.id, gruposCerrados: torneo.gruposCerrados, estado: { notIn: TERMINADO } },
+      where: { id: torneo.id, gruposCerrados: torneo.gruposCerrados, estado: { not: EstadoTorneo.CANCELADO } },
       data: { actualizadoEn: new Date() },
     });
     // Con la última modificación como condición, dos correcciones simultáneas no se pisan.
@@ -272,6 +271,10 @@ export async function guardarResultado(
 
     // Si el ganador es el mismo, el cuadro queda como estaba.
     if (!deZona && ganadorId !== partido.ganadorId) await avanzarGanador(tx, partido.id);
+
+    // Con el torneo cerrado, quien cambió de instancia cambia de puntos. Se lee el estado en la
+    // transacción: si el cierre llegó mientras tanto, esta corrección esperó al torneo y lo ve cerrado.
+    await recalcularPuntos(tx, organizacionId, torneo.id);
   });
 
   return aPartidoConResultado(torneo, await partidoDelTorneo(torneo.id, partido.id));
