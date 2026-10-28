@@ -38,11 +38,13 @@ function instancia(p: PartidoLeido, rondasPorCuadro: Map<string, number>) {
   return `${cuadro} · ${nombreDeRonda(p.ronda!, rondasPorCuadro.get(p.cuadro!)!)}`;
 }
 
-// El marcador desde el lado del jugador. El W.O. no guarda sets (decisión 016).
+// El marcador desde el lado del jugador. El W.O. y el abandono no guardan sets (decisiones 016 y
+// 059); un abandono de antes de la 059 puede traer lo que se jugó.
 function marcador(p: PartidoLeido, esA: boolean) {
   if (p.estado === 'WALKOVER') return 'W.O.';
   const sets = p.sets.map((s) => (esA ? `${s.gamesA}-${s.gamesB}` : `${s.gamesB}-${s.gamesA}`)).join(' ');
-  return p.estado === 'ABANDONO' ? `${sets} ab.` : sets;
+  if (p.estado === 'ABANDONO') return sets ? `${sets} ab.` : 'ab.';
+  return sets;
 }
 
 // Cada partido del torneo en el que juega, visto desde su lado. Todos los del torneo hacen falta

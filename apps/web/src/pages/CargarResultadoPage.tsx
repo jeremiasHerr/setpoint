@@ -96,13 +96,26 @@ function PrimeroSinResultado({ sesion, torneoId }: { sesion: Sesion; torneoId: n
   if (partidos.data) {
     const primero = primeroSinResultado(partidos.data.partidos);
     if (primero) return <Navigate to={`/torneos/${torneoId}/resultados/${primero.id}`} replace />;
+    // Con los cuadros jugados, están los campeones: el torneo se puede cerrar (decisión 058).
+    const conCuadros = partidos.data.partidos.some((p) => p.fase === 'eliminatoria');
     return (
       <Marco sesion={sesion}>
         <Migas torneoId={torneoId} nombre={partidos.data.nombre} />
         <Tarjeta className="overflow-hidden">
-          <div className="flex flex-col gap-[5px] border-b border-linea px-6 py-5">
-            <h1 className="text-[22px] font-semibold tracking-[-0.03em]">No falta cargar ningún resultado</h1>
-            <p className="text-sm text-gris-500">Si tenés que corregir uno, elegí el partido.</p>
+          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-linea px-6 py-5">
+            <div className="flex flex-col gap-[5px]">
+              <h1 className="text-[22px] font-semibold tracking-[-0.03em]">No falta cargar ningún resultado</h1>
+              <p className="text-sm text-gris-500">
+                {conCuadros
+                  ? 'Los campeones están definidos. Si tenés que corregir un resultado, elegí el partido.'
+                  : 'Si tenés que corregir uno, elegí el partido.'}
+              </p>
+            </div>
+            {conCuadros && (
+              <Boton variante="organizador" className="font-semibold" onClick={() => navegar(`/torneos/${torneoId}/cierre`)}>
+                Cerrar el torneo
+              </Boton>
+            )}
           </div>
           <SelectorDePartido slug={slug} torneoId={torneoId} />
         </Tarjeta>
@@ -221,6 +234,8 @@ function TarjetaDelPartido({ sesion, partido }: { sesion: Sesion; partido: Parti
   const resumen = lectura.datos && resumenDelResultado(lectura.datos, partido);
   const recienGuardado = guardar.isSuccess && !cambio;
   const siguiente = primeroSinResultado(partidos.data?.partidos.filter((p) => p.id !== partido.id) ?? []);
+  // El último resultado de los cuadros define a los campeones: lo que sigue es cerrar el torneo (decisión 058).
+  const paraCerrar = !siguiente && partido.fase === 'eliminatoria';
 
   function cambiar(nueva: Partial<Carga>) {
     guardar.reset();
@@ -260,27 +275,21 @@ function TarjetaDelPartido({ sesion, partido }: { sesion: Sesion; partido: Parti
         ) : (
           <>
             <div className="flex flex-col gap-4 px-6 pt-6 pb-5">
-              {carga.tipo === 'walkover' ? (
-                <ElegirGanador
-                  pregunta="¿Quién ganó?"
-                  partido={partido}
-                  elegido={carga.ganadorId}
-                  alElegir={(ganadorId) => cambiar({ ganadorId })}
-                />
-              ) : (
-                <GrillaDeSets
-                  sistema={partido.sistema}
-                  nombres={nombres}
-                  sets={carga.sets}
-                  problemas={lectura.problemas}
-                  ganador={lectura.ganador}
-                  alCambiar={cambiarSet}
-                />
-              )}
+              {/* En un W.O. o un abandono los casilleros quedan bloqueados: no se cargan sets y
+                  cuenta 6-0 6-0 a favor de quien se elige (decisiones 016 y 059). */}
+              <GrillaDeSets
+                sistema={partido.sistema}
+                nombres={nombres}
+                sets={carga.sets}
+                problemas={lectura.problemas}
+                ganador={lectura.ganador}
+                alCambiar={cambiarSet}
+                bloqueada={carga.tipo !== 'jugado'}
+              />
 
-              {carga.tipo === 'abandono' && (
+              {carga.tipo !== 'jugado' && (
                 <ElegirGanador
-                  pregunta="¿Quién siguió jugando?"
+                  pregunta={carga.tipo === 'walkover' ? '¿Quién ganó?' : '¿Quién siguió jugando?'}
                   partido={partido}
                   elegido={carga.ganadorId}
                   alElegir={(ganadorId) => cambiar({ ganadorId })}
@@ -307,14 +316,23 @@ function TarjetaDelPartido({ sesion, partido }: { sesion: Sesion; partido: Parti
               </div>
             </div>
 
-            <AlGuardar partido={partido} datos={lectura.datos} simulacion={simulacion} siguienteYaJugado={siguienteYaJugado} />
+            <AlGuardar
+              partido={partido}
+              datos={lectura.datos}
+              simulacion={simulacion}
+              siguienteYaJugado={siguienteYaJugado}
+            />
 
             <div className="flex items-center justify-between gap-4 border-t border-linea px-6 py-[18px]">
               {guardar.error ? (
                 <p className="min-w-0 flex-1 text-sm text-rojo-texto">{textoDelError(guardar.error)}</p>
               ) : recienGuardado ? (
                 <p className="min-w-0 flex-1 text-[15px] font-semibold">
-                  {siguiente ? 'Resultado guardado.' : 'Resultado guardado. No falta cargar ningún otro.'}
+                  {siguiente
+                    ? 'Resultado guardado.'
+                    : paraCerrar
+                      ? 'Resultado guardado. Los campeones están definidos.'
+                      : 'Resultado guardado. No falta cargar ningún otro.'}
                 </p>
               ) : (
                 <p className="min-w-0 flex-1 text-sm text-gris-500">
@@ -330,6 +348,10 @@ function TarjetaDelPartido({ sesion, partido }: { sesion: Sesion; partido: Parti
                     onClick={() => navegar(`/torneos/${torneoId}/resultados/${siguiente.id}`)}
                   >
                     Cargar el siguiente partido
+                  </Boton>
+                ) : recienGuardado && paraCerrar ? (
+                  <Boton variante="organizador" className="font-semibold" onClick={() => navegar(`/torneos/${torneoId}/cierre`)}>
+                    Cerrar el torneo
                   </Boton>
                 ) : (
                   <Boton

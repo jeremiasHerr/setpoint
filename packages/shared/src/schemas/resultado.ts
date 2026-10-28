@@ -30,9 +30,8 @@ export const resultadoSchema = z.discriminatedUnion('tipo', [
   z.object({ tipo: z.literal('jugado'), sets }),
   // El W.O. no lleva sets: el 6-0 6-0 se arma al calcular la tabla (decisión 016).
   z.object({ tipo: z.literal('walkover'), ganadorId }),
-  // Lo que se jugó hasta el abandono: el último set puede haber quedado sin terminar.
-  // Para la tabla cuenta como un W.O. a favor de quien siguió (decisión 027).
-  z.object({ tipo: z.literal('abandono'), ganadorId, sets }),
+  // El abandono tampoco: se elige quién siguió y cuenta 6-0 6-0 a su favor, como el W.O. (decisión 059).
+  z.object({ tipo: z.literal('abandono'), ganadorId }),
 ]);
 
 export type DatosResultadoEntrada = z.input<typeof resultadoSchema>;
@@ -53,8 +52,7 @@ type Problema = { path: (string | number)[]; message: string };
 
 const setsParaGanar = (sistema: SistemaDeJuego) => Math.floor(sistema.setsPorPartido / 2) + 1;
 
-// Sets que ganó cada uno. Sirve para un partido terminado: en un abandono, el set que quedó
-// sin terminar no lo ganó nadie.
+// Sets que ganó cada uno. Un set que todavía no se ganó, 6-6 o 3-3, no suma para nadie.
 export function setsGanados(sets: { gamesA: number; gamesB: number }[]) {
   return { a: sets.filter((s) => s.gamesA > s.gamesB).length, b: sets.filter((s) => s.gamesB > s.gamesA).length };
 }
@@ -70,12 +68,6 @@ export function ganadorDeLosSets(sets: { gamesA: number; gamesB: number }[]): 'A
 function setTerminado({ gamesA, gamesB }: SetCargado, g: number) {
   const [mayor, menor] = [Math.max(gamesA, gamesB), Math.min(gamesA, gamesB)];
   return (mayor === g && menor <= g - 2) || (mayor === g + 1 && menor >= g - 1);
-}
-
-// Sin terminar, va hasta G−G: en el tie-break del set todavía no lo ganó nadie.
-function setEnJuego({ gamesA, gamesB }: SetCargado, g: number) {
-  const [mayor, menor] = [Math.max(gamesA, gamesB), Math.min(gamesA, gamesB)];
-  return mayor < g || (mayor === g && menor >= g - 1);
 }
 
 // Tie-break y super tie-break son sin diferencia: se gana con P puntos y, si llegan a P−1
@@ -103,8 +95,8 @@ function problemaDelTieBreak(set: SetCargado, sistema: SistemaDeJuego): Problema
   return null;
 }
 
-// El problema de un set, si tiene. El último set de un abandono puede haber quedado en juego.
-function problemaDelSet(set: SetCargado, numero: number, sistema: SistemaDeJuego, puedeEstarEnJuego: boolean): Problema | null {
+// El problema de un set, si tiene.
+function problemaDelSet(set: SetCargado, numero: number, sistema: SistemaDeJuego): Problema | null {
   const decisivo = numero === sistema.setsPorPartido;
   const conSuperTieBreak = sistema.terceroSet === 'super_tiebreak';
   const g = sistema.gamesPorSet;
@@ -121,31 +113,18 @@ function problemaDelSet(set: SetCargado, numero: number, sistema: SistemaDeJuego
       return { path: ['tieBreakA'], message: 'El super tie-break no lleva tie-break: sus puntos van en el set' };
     }
     if (tieBreakTerminado(set.gamesA, set.gamesB, p)) return null;
-    if (puedeEstarEnJuego && Math.max(set.gamesA, set.gamesB) < p) return null;
-    return {
-      path: [],
-      message: puedeEstarEnJuego
-        ? `El super tie-break es a ${p} puntos: termina ${p}-0 a ${p}-${p - 1}, y sin terminar no llega a ${p}`
-        : `El super tie-break es a ${p} puntos: termina ${p}-0 a ${p}-${p - 1}`,
-    };
+    return { path: [], message: `El super tie-break es a ${p} puntos: termina ${p}-0 a ${p}-${p - 1}` };
   }
 
   if (setTerminado(set, g)) return problemaDelTieBreak(set, sistema);
-  if (puedeEstarEnJuego && setEnJuego(set, g)) {
-    // Un set sin terminar no tiene tie-break terminado.
-    return set.tieBreakA !== null || set.tieBreakB !== null
-      ? { path: ['tieBreakA'], message: `Solo un ${g + 1}-${g} se define por tie-break` }
-      : null;
-  }
-  const comoTermina = `Un set termina ${g}-${g - 2} o menos, ${g + 1}-${g - 1} o ${g + 1}-${g}`;
-  return { path: [], message: puedeEstarEnJuego ? `${comoTermina}, y sin terminar va hasta ${g}-${g}` : comoTermina };
+  return { path: [], message: `Un set termina ${g}-${g - 2} o menos, ${g + 1}-${g - 1} o ${g + 1}-${g}` };
 }
 
 // Todo lo que impide guardar el resultado con el sistema de juego del torneo.
 function problemasDelResultado(resultado: DatosResultado, sistema: SistemaDeJuego): Problema[] {
-  if (resultado.tipo === 'walkover') return [];
+  // El W.O. y el abandono no llevan sets: no hay nada que validar (decisiones 016 y 059).
+  if (resultado.tipo !== 'jugado') return [];
 
-  const abandono = resultado.tipo === 'abandono';
   const paraGanar = setsParaGanar(sistema);
   const problemas: Problema[] = [];
   const terminados = { a: 0, b: 0 };
@@ -158,26 +137,17 @@ function problemasDelResultado(resultado: DatosResultado, sistema: SistemaDeJueg
       break;
     }
 
-    const ultimo = i === resultado.sets.length - 1;
-    const problema = problemaDelSet(set, i + 1, sistema, abandono && ultimo);
+    const problema = problemaDelSet(set, i + 1, sistema);
     if (problema) {
       problemas.push({ path: ['sets', i, ...problema.path], message: problema.message });
       continue;
     }
-
-    // En un abandono, el último set puede no tener ganador todavía.
-    const terminado = set.esSuperTieBreak
-      ? tieBreakTerminado(set.gamesA, set.gamesB, sistema.puntosSuperTieBreak)
-      : setTerminado(set, sistema.gamesPorSet);
-    if (terminado) terminados[set.gamesA > set.gamesB ? 'a' : 'b']++;
+    terminados[set.gamesA > set.gamesB ? 'a' : 'b']++;
   }
   if (problemas.length > 0) return problemas;
 
   const [mas, menos] = [Math.max(terminados.a, terminados.b), Math.min(terminados.a, terminados.b)];
-  if (!abandono && mas < paraGanar) return [{ path: ['sets'], message: `El partido no terminó: va ${mas} a ${menos}` }];
-  if (abandono && mas === paraGanar) {
-    return [{ path: ['sets'], message: `El partido terminó ${mas} a ${menos}: cargalo como jugado` }];
-  }
+  if (mas < paraGanar) return [{ path: ['sets'], message: `El partido no terminó: va ${mas} a ${menos}` }];
   return [];
 }
 
@@ -210,7 +180,8 @@ export type PartidoConResultado = {
   jugadorB: JugadorDelPartido | null;
   estado: EstadoPartido;
   ganadorId: number | null;
-  // Un W.O. no tiene sets. En un abandono, el último puede haber quedado sin terminar.
+  // Un W.O. no tiene sets, y un abandono tampoco desde la decisión 059. Los abandonos cargados
+  // antes pueden traer lo que se jugó.
   sets: SetCargado[];
   sistema: SistemaDeJuego;
 };

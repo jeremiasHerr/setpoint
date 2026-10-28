@@ -1,6 +1,6 @@
 # 028 — Un resultado se corrige si no cambia lo que ya se armó con él
 
-**Estado:** aceptada — 16 de octubre de 2026
+**Estado:** aceptada — 16 de octubre de 2026. El punto "Torneo finalizado" está reemplazado por la [decisión 055](055-correccion-despues-del-cierre.md).
 
 ## Contexto
 
@@ -27,7 +27,7 @@ Opción 2. Cargar y corregir es el mismo `PUT .../partidos/:partidoId/resultado`
 - **Zona abierta:** se corrige siempre.
 - **Zona cerrada:** se recalculan las siembras de los dos cuadros con el resultado corregido (`correccionCambiaLosCuadros()` en `apps/api/src/modules/competencia/cuadros.ts`). Si alguna cambia, responde `409 CORRECCION_CAMBIA_LOS_CUADROS`.
 - **Cuadro:** si el ganador es el mismo, el cuadro no se toca. Si cambia, `avanzarGanador()` pone al nuevo en el partido siguiente, salvo que ese partido ya tenga resultado: `409 SIGUIENTE_YA_JUGADO`.
-- **Torneo finalizado:** no se corrige nada (`409 TORNEO_TERMINADO`), porque ya se repartieron los puntos (F16).
+- **Torneo finalizado:** no se corrige nada (`409 TORNEO_TERMINADO`), porque ya se repartieron los puntos (F16). *Reemplazado por la [decisión 055](055-correccion-despues-del-cierre.md): se corrige con las mismas reglas y los puntos se recalculan.*
 
 ## Por qué
 

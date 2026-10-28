@@ -28,7 +28,7 @@ export type SetEscrito = { gamesA: string; gamesB: string; tieBreakA: string; ti
 
 export type Carga = {
   tipo: TipoDeResultado;
-  // Una columna por set del sistema de juego. En un W.O. se conserva, pero no se manda.
+  // Una columna por set del sistema de juego. En un W.O. o un abandono se conserva, pero no se manda.
   sets: SetEscrito[];
   // En un W.O., quién ganó; en un abandono, quién siguió jugando.
   ganadorId: number | null;
@@ -108,11 +108,11 @@ export function leerCarga(carga: Carga, partido: PartidoConResultado): Lectura {
   const ladoDe = (jugadorId: number | null) =>
     jugadorId === null ? null : jugadorId === partido.jugadorA?.jugadorId ? 'A' : 'B';
 
-  if (carga.tipo === 'walkover') {
-    const datos = carga.ganadorId === null ? null : ({ tipo: 'walkover', ganadorId: carga.ganadorId } as const);
+  // El W.O. y el abandono no llevan sets: alcanza con quién ganó (decisiones 016 y 059).
+  if (carga.tipo !== 'jugado') {
+    const datos = carga.ganadorId === null ? null : { tipo: carga.tipo, ganadorId: carga.ganadorId };
     return { datos, problemas, ganador: ladoDe(carga.ganadorId) };
   }
-  const ganadorElegido = carga.tipo === 'abandono' ? ladoDe(carga.ganadorId) : null;
 
   // Los sets son las columnas escritas, de izquierda a derecha, hasta la primera vacía. Si
   // después hay otra escrita, falta esa.
@@ -122,7 +122,7 @@ export function leerCarga(carga: Carga, partido: PartidoConResultado): Lectura {
     if (escritos < 2) {
       const sigueOtro = carga.sets.slice(i + 1).some((s) => !vacio(s.gamesA) || !vacio(s.gamesB));
       if (sigueOtro) problemas.sets[i] = escritos === 0 ? 'Falta este set' : 'Faltan los games de uno de los dos';
-      if (sigueOtro || escritos === 1) return { datos: null, problemas, ganador: ganadorElegido };
+      if (sigueOtro || escritos === 1) return { datos: null, problemas, ganador: null };
       break;
     }
     const tieBreak = llevaTieBreak(set, columnas[i], sistema);
@@ -134,18 +134,15 @@ export function leerCarga(carga: Carga, partido: PartidoConResultado): Lectura {
       esSuperTieBreak: columnas[i].esSuperTieBreak,
     });
   }
-  if (sets.length === 0) return { datos: null, problemas, ganador: ganadorElegido };
+  if (sets.length === 0) return { datos: null, problemas, ganador: null };
 
-  // Sin ganador elegido, el abandono se valida igual para avisar de los sets: el 0 no es de nadie.
-  const resultado =
-    carga.tipo === 'jugado' ? { tipo: carga.tipo, sets } : { tipo: carga.tipo, ganadorId: carga.ganadorId ?? 0, sets };
-  const validado = resultadoDelTorneoSchema(sistema).safeParse(resultado);
+  const validado = resultadoDelTorneoSchema(sistema).safeParse({ tipo: 'jugado', sets });
   for (const { path, message } of validado.error?.issues ?? []) {
     const [campo, i, detalle] = path;
     if (campo === 'sets' && typeof i === 'number') {
       const donde = detalle === 'tieBreakA' || detalle === 'tieBreakB' ? problemas.tieBreaks : problemas.sets;
       donde[i] ??= message;
-    } else if (campo !== 'ganadorId') {
+    } else {
       problemas.partido ??= message;
     }
   }
@@ -153,11 +150,10 @@ export function leerCarga(carga: Carga, partido: PartidoConResultado): Lectura {
   // Un partido que todavía no se definió, con sets por escribir, se está cargando.
   const { a, b } = setsGanados(sets);
   const sinDefinir = Math.max(a, b) < Math.floor(sistema.setsPorPartido / 2) + 1;
-  if (carga.tipo === 'jugado' && sinDefinir && sets.length < columnas.length) problemas.partido = null;
+  if (sinDefinir && sets.length < columnas.length) problemas.partido = null;
 
-  if (!validado.success) return { datos: null, problemas, ganador: ganadorElegido };
-  const datos = validado.data;
-  return { datos, problemas, ganador: datos.tipo === 'jugado' ? ganadorDeLosSets(datos.sets) : ladoDe(datos.ganadorId) };
+  if (!validado.success) return { datos: null, problemas, ganador: null };
+  return { datos: validado.data, problemas, ganador: ganadorDeLosSets(sets) };
 }
 
 // Cómo se nombra a cada jugador: por el apellido, salvo que los dos lo compartan.
@@ -192,7 +188,7 @@ export function resumenDelResultado(datos: DatosResultado, partido: PartidoConRe
       detalle: decisivo.esSuperTieBreak ? `el ${ORDINALES[datos.sets.length - 1]} set se definió por super tie-break` : null,
     };
   }
-  // W.O. y abandono se computan 6-0 6-0 (decisiones 016 y 027).
+  // W.O. y abandono se computan 6-0 6-0 (decisiones 016 y 059).
   return datos.tipo === 'walkover'
     ? { titulo: [`Gana ${ganador.nombre} por walkover`], detalle: 'para la tabla cuenta 6-0 6-0' }
     : {
@@ -381,8 +377,8 @@ export function textoDelError(error: Error, porDefecto = 'No se pudo guardar. Pr
       return CAMBIA_LOS_CUADROS;
     case 'SIGUIENTE_YA_JUGADO':
       return SIGUIENTE_YA_JUGADO;
-    case 'TORNEO_TERMINADO':
-      return 'El torneo ya terminó y sus puntos se repartieron: no se pueden cargar ni corregir resultados.';
+    case 'TORNEO_CANCELADO':
+      return 'El torneo se canceló: no se pueden cargar ni corregir resultados.';
     case 'PARTIDO_CANCELADO':
       return 'Este partido se canceló: no lleva resultado.';
     case 'PARTIDO_SIN_JUGADORES':

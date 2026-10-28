@@ -10,7 +10,12 @@ type Props = {
   problemas: Problemas;
   ganador: 'A' | 'B' | null;
   alCambiar: (columna: number, campo: keyof SetEscrito, valor: string) => void;
+  // En un W.O. o un abandono no se cargan sets: los casilleros quedan vacíos y no se pueden editar
+  // (decisiones 016 y 059).
+  bloqueada?: boolean;
 };
+
+const VACIO: SetEscrito = { gamesA: '', gamesB: '', tieBreakA: '', tieBreakB: '' };
 
 // Solo dígitos, como mucho dos: un super tie-break puede pasar de 10.
 const soloDigitos = (valor: string) => valor.replace(/\D/g, '').slice(0, 2);
@@ -22,7 +27,7 @@ function CampoNumerico({ alCambiar, className = '', ...props }: InputHTMLAttribu
       autoComplete="off"
       maxLength={2}
       onChange={(e) => alCambiar(soloDigitos(e.target.value))}
-      className={`min-w-0 border border-gris-300 bg-white text-center font-mono font-medium tabular-nums outline-none focus:border-2 focus:border-negro ${className}`}
+      className={`min-w-0 border border-gris-300 bg-white text-center font-mono font-medium tabular-nums outline-none focus:border-2 focus:border-negro disabled:cursor-not-allowed disabled:border-linea disabled:bg-fondo ${className}`}
       {...props}
     />
   );
@@ -30,8 +35,9 @@ function CampoNumerico({ alCambiar, className = '', ...props }: InputHTMLAttribu
 
 // Una fila por jugador y una columna por set, según el sistema de juego del torneo. En un set
 // que queda 7-6 aparecen abajo los puntos del tie-break, que son opcionales (decisión 030).
-export function GrillaDeSets({ sistema, nombres, sets, problemas, ganador, alCambiar }: Props) {
+export function GrillaDeSets({ sistema, nombres, sets: escritos, problemas, ganador, alCambiar, bloqueada = false }: Props) {
   const columnas = columnasDeLaGrilla(sistema);
+  const sets = bloqueada ? columnas.map(() => VACIO) : escritos;
   const conTieBreak = columnas.map((columna, i) => llevaTieBreak(sets[i], columna, sistema));
   const filaDeMensajes = conTieBreak.some(Boolean) ? 5 : 4;
   // La última columna, flexible, deja lugar a los mensajes del último set.
@@ -82,6 +88,7 @@ export function GrillaDeSets({ sistema, nombres, sets, problemas, ganador, alCam
                 aria-invalid={problemas.sets[i] !== null}
                 aria-describedby={describe(`problema-set-${i}`)}
                 value={set[games]}
+                disabled={bloqueada}
                 alCambiar={(valor) => alCambiar(i, games, valor)}
                 className="h-14 w-full rounded-control text-[22px]"
                 style={campo(j + 2)}

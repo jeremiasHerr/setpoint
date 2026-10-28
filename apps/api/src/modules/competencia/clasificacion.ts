@@ -47,8 +47,8 @@ export function conElResultado<P extends PartidoDeLaTabla>(partidos: P[], nuevo:
 }
 
 // El W.O. se computa 6-0 6-0 a favor del rival (02-dominio.md §8.5). No se guardan sets:
-// se arman acá a partir del estado y del ganador (decisión 016). El abandono cuenta igual:
-// sus sets son lo que se jugó, no lo que se computa (decisión 027).
+// se arman acá a partir del estado y del ganador (decisión 016). El abandono cuenta igual
+// (decisión 059); si es de antes de esa decisión y guardó lo que se jugó, eso no cuenta.
 function setsDelResultado(partido: PartidoDeLaTabla): SetDelPartido[] {
   if (partido.estado !== 'WALKOVER' && partido.estado !== 'ABANDONO') return partido.sets;
   const ganaA = partido.ganadorId === partido.jugadorAId;

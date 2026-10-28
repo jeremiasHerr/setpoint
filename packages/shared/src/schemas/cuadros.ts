@@ -35,8 +35,8 @@ export type PartidoDelCuadro = {
   fechaAcordada: string | null;
   // El club registrado o la sede escrita a mano. null si todavía no se sabe.
   sede: string | null;
-  // En un super tie-break, gamesA y gamesB son los puntos. Un W.O. no tiene sets (decisión 016);
-  // en un abandono, el último puede haber quedado sin terminar (decisión 027).
+  // En un super tie-break, gamesA y gamesB son los puntos. Un W.O. no tiene sets (decisión 016),
+  // y un abandono tampoco (decisión 059); los cargados antes pueden traer lo que se jugó.
   sets: { gamesA: number; gamesB: number; esSuperTieBreak: boolean }[];
 };
 

@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import { Catalogo } from './Catalogo';
 import { CargarResultadoPage } from './pages/CargarResultadoPage';
+import { CierrePage } from './pages/CierrePage';
 import { CuadrosPublicoPage } from './pages/CuadrosPublicoPage';
 import { ImportarPadronPage } from './pages/ImportarPadronPage';
 import { IngresoPage } from './pages/IngresoPage';
@@ -43,6 +44,8 @@ export default function App() {
       <Route path="/torneos/:id/sorteo" element={<SorteoPage />} />
       {/* Sin partido, abre el primero que no tiene resultado (decisión 031). */}
       <Route path="/torneos/:id/resultados/:partidoId?" element={<CargarResultadoPage />} />
+      {/* Se llega desde Cargar resultado, con las finales cargadas (decisión 058). */}
+      <Route path="/torneos/:id/cierre" element={<CierrePage />} />
       {/* Pública, sin login: es el enlace que la organización comparte (F09). */}
       <Route path="/c/:slug/ranking" element={<RankingPublicoPage />} />
       {/* Pública, sin login: los cuadros de un torneo (una categoría), para compartir (F08, F10). */}

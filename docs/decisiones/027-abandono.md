@@ -1,6 +1,6 @@
 # 027 — El abandono guarda lo que se jugó y se computa como un W.O.
 
-**Estado:** aceptada — 16 de octubre de 2026
+**Estado:** Reemplazada por la [decisión 059](059-abandono-sin-sets.md) — aceptada el 16 de octubre de 2026
 
 ## Contexto
 
