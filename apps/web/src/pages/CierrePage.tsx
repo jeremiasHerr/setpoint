@@ -13,7 +13,8 @@ import { TarjetaCampeon } from '../features/cierre/TarjetaCampeon';
 import { useCerrarTorneo, useCierre } from '../features/cierre/useCierre';
 import { iniciales, navegacionOrganizador } from '../features/organizador/encabezado';
 
-// Cerrar el torneo (F16). Se llega desde Cargar resultado, con las finales cargadas (decisión 058).
+// Cerrar el torneo (F16). Se llega desde el tablero y desde Cargar resultado, con las finales cargadas
+// (decisiones 058 y 063).
 export function CierrePage() {
   const sesion = leerSesion();
   const { id } = useParams();
@@ -126,7 +127,7 @@ function VistaDelCierre({ sesion, cierre }: { sesion: Sesion; cierre: CierreDelT
     <Marco sesion={sesion}>
       <div className="flex flex-col gap-[7px] px-7 pt-[26px] pb-5">
         <nav aria-label="Migas" className="flex flex-wrap items-center gap-[9px] text-sm">
-          <Link to={`/torneos/${torneoId}/resultados`} className="text-gris-500 hover:text-negro">
+          <Link to={`/torneos/${torneoId}/tablero`} className="text-gris-500 hover:text-negro">
             <Numero>{cierre.nombre}</Numero>
           </Link>
           <span aria-hidden="true" className="text-gris-300">
@@ -162,7 +163,7 @@ function VistaDelCierre({ sesion, cierre }: { sesion: Sesion; cierre: CierreDelT
                   Ver el ranking
                 </Boton>
               )}
-              <Boton onClick={() => navegar(`/torneos/${torneoId}/resultados`)}>Ver los resultados</Boton>
+              <Boton onClick={() => navegar(`/torneos/${torneoId}/tablero`)}>Ver el tablero</Boton>
             </div>
           ) : (
             <div className="flex flex-col gap-2.5">
@@ -172,7 +173,7 @@ function VistaDelCierre({ sesion, cierre }: { sesion: Sesion; cierre: CierreDelT
               <Boton variante="organizador" grande disabled={cerrar.isPending} onClick={() => cerrar.mutate()}>
                 {cerrar.isPending ? 'Cerrando…' : conRanking ? 'Cerrar y actualizar el ranking' : 'Cerrar el torneo'}
               </Boton>
-              <Boton onClick={() => navegar(`/torneos/${torneoId}/resultados`)}>Volver a los resultados</Boton>
+              <Boton onClick={() => navegar(`/torneos/${torneoId}/tablero`)}>Volver al tablero</Boton>
             </div>
           )}
         </div>

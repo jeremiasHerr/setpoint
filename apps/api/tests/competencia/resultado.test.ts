@@ -47,6 +47,10 @@ describe('resultadoDelTorneoSchema', () => {
       expect(problemas(jugado(set(8, 6), set(6, 2)))).toEqual({ 'sets.0': 'Un set termina 6-4 o menos, 7-5 o 7-6' });
     });
 
+    it('un set no termina empatado: 7-7 no existe', () => {
+      expect(problemas(jugado(set(7, 6), set(7, 7), superTieBreak(10, 9)))).toEqual({ 'sets.1': 'Un set termina 6-4 o menos, 7-5 o 7-6' });
+    });
+
     it('sigue los games por set del torneo', () => {
       const cortos = { ...POLENTA, gamesPorSet: 4 };
 

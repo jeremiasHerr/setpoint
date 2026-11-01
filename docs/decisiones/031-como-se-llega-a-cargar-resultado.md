@@ -1,6 +1,6 @@
 # 031 — Cargar resultado se abre desde el Sorteo de zonas y el partido se elige adentro
 
-**Estado:** aceptada — 16 de octubre de 2026
+**Estado:** aceptada — 16 de octubre de 2026. La entrada desde el Sorteo está reemplazada por la [decisión 063](063-entrada-al-tablero.md): ahora se entra desde el tablero. La ruta y la elección del partido siguen igual.
 
 ## Contexto
 
