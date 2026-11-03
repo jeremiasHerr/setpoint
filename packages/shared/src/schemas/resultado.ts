@@ -67,7 +67,7 @@ export function ganadorDeLosSets(sets: { gamesA: number; gamesB: number }[]): 'A
 // Un set a G games termina G a G−2 o menos, G+1 a G−1, o G+1 a G con tie-break.
 function setTerminado({ gamesA, gamesB }: SetCargado, g: number) {
   const [mayor, menor] = [Math.max(gamesA, gamesB), Math.min(gamesA, gamesB)];
-  return (mayor === g && menor <= g - 2) || (mayor === g + 1 && menor >= g - 1);
+  return (mayor === g && menor <= g - 2) || (mayor === g + 1 && menor >= g - 1 && menor <= g);
 }
 
 // Tie-break y super tie-break son sin diferencia: se gana con P puntos y, si llegan a P−1

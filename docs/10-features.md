@@ -186,12 +186,12 @@ Al terminar la fase de grupos, el sistema armará automáticamente los cuadros e
 
 **Entrega: 50%**
 
-**Estado:** implementada, salvo el nombre configurable del cuadro consuelo y el botón para cerrar las zonas.
+**Estado:** implementada, salvo el nombre configurable del cuadro consuelo.
 - La organización cierra las zonas (`POST .../torneos/:id/cuadros`) y en ese momento se arman los dos cuadros completos ([decisión 026](decisiones/026-cierre-de-zonas.md)). Dónde va cada uno sale de una siembra única de los clasificados ([decisión 022](decisiones/022-ubicacion-en-el-cuadro.md)), y los byes no generan partido ([decisión 023](decisiones/023-byes-sin-partido.md)). El ganador avanza al cargarse cada resultado de cuadro (F06), con `avanzarGanador()`.
 - `GET .../torneos/:id/cuadros` los devuelve a la organización, y `GET /api/publico/:slug/torneos/:id/cuadros`, a cualquiera ([decisión 019](decisiones/019-acceso-a-las-posiciones.md), [decisión 033](decisiones/033-ranking-publico.md)).
 - La pantalla *Los dos cuadros* es pública, en `/c/:slug/torneos/:id/cuadros` (`CuadrosPublicoPage`). En escritorio muestra los cuadros completos; en el celular, una ronda a la vez ([decisión 038](decisiones/038-cuadros-en-el-celular.md)).
 - El segundo cuadro dice "Cuadro consuelo" fijo hasta que exista el nombre configurable ([07](07-configurabilidad.md) §1.2).
-- Ninguna pantalla cierra las zonas todavía: se hace por la API. El lugar natural es el tablero (F15).
+- Las zonas se cierran desde el tablero (F15), cuando todos sus partidos tienen resultado.
 
 ---
 
@@ -310,6 +310,13 @@ La organización dispondrá de una pantalla única donde ver el avance completo 
 - Ofrece una vista general del torneo y otra en detalle por grupo.
 
 **Entrega: 75%**
+
+**Estado:** implementada (`GET .../torneos/:id/tablero`, [03-flujo-organizacion.md](03-flujo-organizacion.md) §9).
+- La pantalla *Tablero del torneo* (`/torneos/:id/tablero`) muestra las barras zona por zona, los días que quedan, "Lo que falta" ordenado por urgencia y la tabla de cada zona con su matriz de resultados.
+- Un partido vencido se calcula al consultar: pasó su fecha límite sin resultado ([decisión 060](decisiones/060-partidos-vencidos-calculados.md)).
+- En los cuadros muestra lo mismo por ronda, y ofrece cerrar las zonas y cerrar el torneo cuando corresponde ([decisión 061](decisiones/061-tablero-en-los-cuadros.md)).
+- Resolver carga el W.O. y Escribirles abre el WhatsApp de cada jugador; extender el plazo, el doble W.O. y recordarles no están ([decisión 062](decisiones/062-acciones-del-tablero.md)). Anotar fecha llega con F14.
+- Se llega desde el Sorteo confirmado; el inicio todavía no muestra los torneos en juego ([decisión 063](decisiones/063-entrada-al-tablero.md)).
 
 ---
 

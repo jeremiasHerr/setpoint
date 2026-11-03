@@ -78,7 +78,7 @@ La respuesta incluye un token de sesión (JWT), así la organización queda ingr
 
 - Las categorías con la inscripción abierta llevan a su pantalla Inscripciones (§7).
 - Las que cerraron y todavía no se sortearon van en "Para sortear", con "Sortear zonas" como acción principal. No van en "Necesita tu atención": ese bloque es rojo, y el rojo solo significa vencimiento.
-- Una categoría con el sorteo confirmado deja de verse hasta que exista el tablero (F15), que es lo que llena "En juego".
+- Una categoría con el sorteo confirmado deja de verse hasta que el inicio lea los partidos, que es lo que llena "En juego". El tablero (F15) ya existe, pero por ahora se llega desde el Sorteo ([decisión 063](decisiones/063-entrada-al-tablero.md)).
 
 Después del alta, y en cualquier momento, se configura:
 
@@ -251,14 +251,23 @@ El sistema genera los grupos y los partidos de zona. La organización puede revi
 
 ## 9. Seguimiento: tablero de avance
 
-Pantalla central durante el torneo. Por grupo muestra:
+Pantalla central durante el torneo, en `/torneos/:id/tablero`. Reemplaza el trabajo actual de revisar el grupo de WhatsApp a mano. Se llega desde el Sorteo confirmado, y *Cargar resultado* y el *Cierre* vuelven a él ([decisión 063](decisiones/063-entrada-al-tablero.md)).
 
-- Partidos jugados, con fecha acordada, y sin coordinar
-- Días restantes del plazo
-- Alertas de partidos en riesgo de vencimiento
-- Tabla de posiciones en vivo con la línea de corte marcada
+**Cada partido está en una situación**, que se calcula en cada consulta y no se guarda ([decisión 060](decisiones/060-partidos-vencidos-calculados.md)): jugado (con resultado, también W.O. y abandono), con fecha (anotada o confirmada, dentro del plazo), sin coordinar, vencido (pasó su fecha límite sin resultado) o esperando (un partido de cuadro sin sus dos jugadores). El estado `VENCIDA` del schema no se usa.
 
-Reemplaza el trabajo actual de revisar el grupo de WhatsApp a mano.
+**Muestra:**
+
+- Una barra por partido, agrupadas por zona, con el color de su situación: se ve qué zona está atrasada sin leer un número
+- Los días que quedan del plazo que corre y cuánto falta jugar
+- **Lo que falta**, ordenado por urgencia: primero los vencidos, del plazo más viejo al más nuevo, y después los sin coordinar. En cada fila, **Escribirles** abre el WhatsApp de cada jugador con un mensaje listo, y en los vencidos, **Resolver** abre *Cargar resultado* con el W.O. elegido ([decisión 062](decisiones/062-acciones-del-tablero.md)). Anotar fecha llega con F14
+- **Zona por zona:** la matriz de resultados de una zona y su tabla, con la misma cuenta que las posiciones, y quién está clasificando a cada cuadro
+- Con todos los partidos de zona resueltos, **cerrar las zonas**, que arma los cuadros (§11)
+
+**En los cuadros**, el tablero muestra lo mismo por ronda de cada cuadro, sin la sección de zonas, y con las finales jugadas ofrece **cerrar el torneo** (§12, [decisión 061](decisiones/061-tablero-en-los-cuadros.md)).
+
+| Endpoint | Qué hace |
+|---|---|
+| `GET /api/organizaciones/:slug/torneos/:id/tablero` | Todo lo del tablero en una respuesta: la situación de cada partido, el plazo, lo que falta, la tabla de cada zona y si se pueden cerrar las zonas o el torneo. Incluye el teléfono de los jugadores, para Escribirles. Solo para quien administra. `409 TABLERO_NO_DISPONIBLE` antes de confirmar el sorteo o con el torneo cancelado |
 
 ---
 

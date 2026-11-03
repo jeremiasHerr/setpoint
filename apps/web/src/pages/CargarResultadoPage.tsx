@@ -1,6 +1,6 @@
 import type { PartidoConResultado } from '@setpoint/shared';
 import { useState, type ReactNode } from 'react';
-import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Link, Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Boton } from '../components/Boton';
 import { Chip } from '../components/Chip';
 import { EncabezadoOrganizador } from '../components/EncabezadoOrganizador';
@@ -57,7 +57,7 @@ function Marco({ sesion, children }: { sesion: Sesion; children: ReactNode }) {
   );
 }
 
-// Hasta que exista el tablero (F15), la edición lleva al Sorteo de zonas, que es desde donde se entra.
+// La edición lleva al tablero, que es la página del torneo mientras se juega (decisión 063).
 function Migas({ torneoId, nombre, ubicacion }: { torneoId: number; nombre: string; ubicacion?: string }) {
   const separador = (
     <span aria-hidden="true" className="text-gris-300">
@@ -66,7 +66,7 @@ function Migas({ torneoId, nombre, ubicacion }: { torneoId: number; nombre: stri
   );
   return (
     <nav aria-label="Migas" className="flex flex-wrap items-center gap-[9px] text-sm">
-      <Link to={`/torneos/${torneoId}/sorteo`} className="text-gris-500 hover:text-negro">
+      <Link to={`/torneos/${torneoId}/tablero`} className="text-gris-500 hover:text-negro">
         <Numero>{nombre}</Numero>
       </Link>
       {ubicacion && (
@@ -211,7 +211,13 @@ function TarjetaDelPartido({ sesion, partido }: { sesion: Sesion; partido: Parti
   useSesionInvalida(guardar.error);
 
   const [eligiendo, setEligiendo] = useState(false);
-  const [carga, setCarga] = useState<Carga>(() => cargaDelPartido(partido));
+  // "Resolver" en el tablero abre un partido vencido con el W.O. elegido (decisión 062). Si ya
+  // tiene resultado, se muestra el que tiene.
+  const [parametros] = useSearchParams();
+  const [carga, setCarga] = useState<Carga>(() => {
+    const cargada = cargaDelPartido(partido);
+    return parametros.get('tipo') === 'walkover' && !tieneResultado(partido) ? { ...cargada, tipo: 'walkover' } : cargada;
+  });
 
   // Un partido de cuadro sin sus dos jugadores, o cancelado, no lleva resultado todavía.
   const sinCarga =
@@ -340,7 +346,7 @@ function TarjetaDelPartido({ sesion, partido }: { sesion: Sesion; partido: Parti
                 </p>
               )}
               <div className="flex shrink-0 gap-2.5">
-                <Boton onClick={() => navegar(`/torneos/${torneoId}/sorteo`)}>{recienGuardado ? 'Volver al sorteo' : 'Cancelar'}</Boton>
+                <Boton onClick={() => navegar(`/torneos/${torneoId}/tablero`)}>{recienGuardado ? 'Volver al tablero' : 'Cancelar'}</Boton>
                 {recienGuardado && siguiente ? (
                   <Boton
                     variante="organizador"

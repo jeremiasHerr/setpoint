@@ -362,10 +362,10 @@ function SorteoDeZonas({ sesion, sorteo }: { sesion: Sesion; sorteo: Sorteo }) {
             Los jugadores tienen <Numero>{sorteo.plazoGruposDias}</Numero> días para jugar la fase de grupos.
           </p>
         </div>
-        {/* Hasta que exista el tablero (F15), los resultados se cargan desde acá (decisión 031). */}
+        {/* Con el sorteo confirmado, el torneo se sigue desde el tablero (decisión 063). */}
         {sorteo.confirmado && (
-          <Boton variante="organizador" grande className="font-semibold" onClick={() => navegar(`/torneos/${sorteo.torneoId}/resultados`)}>
-            Cargar resultados
+          <Boton variante="organizador" grande className="font-semibold" onClick={() => navegar(`/torneos/${sorteo.torneoId}/tablero`)}>
+            Ir al tablero
           </Boton>
         )}
         {!sorteo.confirmado && (

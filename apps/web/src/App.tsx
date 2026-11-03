@@ -20,6 +20,7 @@ import { PagoPage } from './pages/PagoPage';
 import { RevisarVinculacionPage } from './pages/RevisarVinculacionPage';
 import { TorneoPublicoPage } from './pages/TorneoPublicoPage';
 import { SorteoPage } from './pages/SorteoPage';
+import { TableroPage } from './pages/TableroPage';
 import { TuCircuitoPage } from './pages/TuCircuitoPage';
 
 export default function App() {
@@ -44,7 +45,9 @@ export default function App() {
       <Route path="/torneos/:id/sorteo" element={<SorteoPage />} />
       {/* Sin partido, abre el primero que no tiene resultado (decisión 031). */}
       <Route path="/torneos/:id/resultados/:partidoId?" element={<CargarResultadoPage />} />
-      {/* Se llega desde Cargar resultado, con las finales cargadas (decisión 058). */}
+      {/* La página del torneo mientras se juega: se llega desde el Sorteo confirmado (decisión 063). */}
+      <Route path="/torneos/:id/tablero" element={<TableroPage />} />
+      {/* Se llega desde el tablero y desde Cargar resultado, con las finales cargadas (decisión 058). */}
       <Route path="/torneos/:id/cierre" element={<CierrePage />} />
       {/* Pública, sin login: es el enlace que la organización comparte (F09). */}
       <Route path="/c/:slug/ranking" element={<RankingPublicoPage />} />

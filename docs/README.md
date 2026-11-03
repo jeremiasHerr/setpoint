@@ -157,6 +157,10 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 - ~~¿Qué recibe quien pierde en el cuadro principal antes de octavos?~~ **Participación** ([decisión 056](decisiones/056-instancias-fuera-de-la-tabla-de-puntos.md)). La tabla de puntos no tiene dieciseisavos, y agregarla cambiaba la configuración del circuito por un caso que POLENTA no tiene
 - ~~¿Qué hace el cierre en un torneo que no da puntos?~~ **Cierra igual, con las posiciones finales y sin puntos** ([decisión 057](decisiones/057-cierre-sin-ranking.md)). Misma pantalla y misma cuenta; solo no se guardan movimientos
 - ~~¿Por dónde se llega a cerrar el torneo, si el tablero todavía no existe?~~ **Desde Cargar resultado, al cargar el último resultado de los cuadros** ([decisión 058](decisiones/058-como-se-llega-al-cierre.md)). Como con la decisión 031, se reemplaza cuando llegue el tablero (F15)
+- ~~¿Cómo sabe el sistema que un partido está vencido?~~ **Se calcula al consultar: pasó su fecha límite sin resultado** ([decisión 060](decisiones/060-partidos-vencidos-calculados.md)). Como las tablas, sin un estado guardado que se desincronice; el `VENCIDA` del schema queda sin uso
+- ~~¿Qué muestra el tablero cuando el torneo ya está en los cuadros?~~ **Lo mismo, por ronda de cada cuadro** ([decisión 061](decisiones/061-tablero-en-los-cuadros.md)). F15 pide el avance completo del torneo, y los partidos de cuadro también vencen
+- ~~¿Qué acciones tiene el tablero?~~ **Resolver un vencido con el W.O. y Escribirles por WhatsApp** ([decisión 062](decisiones/062-acciones-del-tablero.md)). Es lo que pide F15 sin pantallas nuevas; extender el plazo, el doble W.O. y recordarles quedan afuera, y anotar fecha llega con F14
+- ~~¿Por dónde se llega al tablero?~~ **Desde el Sorteo confirmado, y las otras pantallas del torneo vuelven a él** ([decisión 063](decisiones/063-entrada-al-tablero.md)). Es lo que anunciaban las decisiones 031 y 058; el inicio todavía no muestra los torneos en juego
 
 ---
 
