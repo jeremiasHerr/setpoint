@@ -1,5 +1,6 @@
 // Cuándo juego, en la app del jugador (F11): docs/pantallas/jugador/cuando-juego.html. Sus
 // partidos del torneo en curso, desde su lado: el rival, la fecha, dónde y cómo le fue.
+import type { AccionDeFecha, QuienAnoto } from './coordinacion';
 
 export type RivalDelPartido = {
   nombre: string;
@@ -18,6 +19,11 @@ export type PartidoDelJugador = {
   estado: string;
   fechaAcordada: string | null;
   fechaLimite: string | null;
+  // Quién anotó la fecha que está ahora (F14). Con 'rival' y estado ANOTADA, le toca confirmar.
+  anotadaPor: QuienAnoto | null;
+  // Qué puede hacer con la fecha desde la app: anotarla, cambiarla o reprogramarla. null si no
+  // puede (ya se jugó, venció el plazo, no le quedan reprogramaciones o falta poco).
+  accionDeFecha: AccionDeFecha | null;
   // "Club Alta Barda · cancha 3", o lo que se haya escrito como sede.
   sede: string | null;
   // Con resultado: si ganó y el marcador desde su lado, "6-3 4-6 10-7" o "W.O.".

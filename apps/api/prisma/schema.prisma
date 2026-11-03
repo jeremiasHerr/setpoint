@@ -170,6 +170,14 @@ enum EstadoPartido {
   CANCELADA
 }
 
+// Lo que pasó con la fecha de un partido, para el historial de coordinación (decisión 066).
+enum TipoEventoCoordinacion {
+  ANOTADA
+  CAMBIADA
+  REPROGRAMADA
+  CONFIRMADA
+}
+
 enum Instancia {
   CAMPEON
   FINALISTA
@@ -210,14 +218,15 @@ model Usuario {
   creadoEn      DateTime @default(now())
   actualizadoEn DateTime @updatedAt
 
-  jugadores           Jugador[]           @relation("PerfilDeJugador")
+  jugadores           Jugador[]            @relation("PerfilDeJugador")
   // Perfiles de otras cuentas que esta persona dijo que son suyos (decisión 051).
-  reclamos            Jugador[]           @relation("ReclamoDePerfil")
+  reclamos            Jugador[]            @relation("ReclamoDePerfil")
   inscripciones       Inscripcion[]
   administra          AdminOrganizacion[]
-  partidosAnotados    Partido[]           @relation("PartidoAnotadoPor")
-  partidosConfirmados Partido[]           @relation("PartidoConfirmadoPor")
+  partidosAnotados    Partido[]            @relation("PartidoAnotadoPor")
+  partidosConfirmados Partido[]            @relation("PartidoConfirmadoPor")
   dispositivos        DispositivoAviso[]
+  eventosCoordinacion EventoCoordinacion[]
 
   @@map("usuarios")
 }
@@ -386,7 +395,7 @@ model Cancha {
 
 /// Ficha del jugador en el padrón. Existe SIN cuenta: la crea la organización.
 model Jugador {
-  id             Int     @id @default(autoincrement())
+  id             Int           @id @default(autoincrement())
   organizacionId Int
   categoriaId    Int?
   usuarioId      Int?
@@ -396,7 +405,7 @@ model Jugador {
   telefono       String?
   email          String?
   fotoUrl        String?
-  activo         Boolean @default(true)
+  activo         Boolean       @default(true)
   // Solo los del padrón cuentan para todo lo demás: ver src/lib/padron.ts.
   estado         EstadoJugador @default(PADRON)
 
@@ -405,9 +414,9 @@ model Jugador {
   codigoLink String? @unique
 
   // Cuándo y cómo se vinculó con la persona, para el aviso de vinculaciones nuevas (decisión 051).
-  vinculadoEn  DateTime?
-  vinculadoPor Vinculacion?
-  revision     MotivoRevision?
+  vinculadoEn    DateTime?
+  vinculadoPor   Vinculacion?
+  revision       MotivoRevision?
   // Con revision RECLAMO: quién dice que el perfil es suyo, y cuándo.
   reclamadoPorId Int?
   reclamadoEn    DateTime?
@@ -467,6 +476,10 @@ model Torneo {
   cierreInscripcion DateTime?
   plazoGruposDias   Int       @default(21)
   plazoPorRondaDias Int       @default(7)
+
+  // --- coordinación (02-dominio §8.3) ---
+  reprogramacionesPermitidas Int @default(1)
+  horasAntelacionReprogramar Int @default(24)
 
   // --- formato ---
   cantidadGrupos      Int              @default(8)
@@ -647,6 +660,7 @@ model Partido {
 
   sets         SetPartido[]
   extracciones ExtraccionResultado[]
+  eventos      EventoCoordinacion[]
 
   @@index([torneoId, fase]) // armar zonas y cuadros
   @@index([torneoId, estado]) // tablero de avance
@@ -672,6 +686,29 @@ model SetPartido {
 
   @@unique([partidoId, numero])
   @@map("sets_partido")
+}
+
+// Historial de coordinación de un partido (decisión 066): quién anotó qué fecha, quién la
+// cambió y quién la confirmó. Es lo que ve la organización al resolver un partido que no
+// se jugó (02-dominio §8.4). Solo se agrega, nunca se edita.
+model EventoCoordinacion {
+  id              Int                    @id @default(autoincrement())
+  partidoId       Int
+  tipo            TipoEventoCoordinacion
+  usuarioId       Int?
+  // la organización la cargó en nombre de los jugadores
+  porOrganizacion Boolean                @default(false)
+  // la fecha y la sede como quedaron después del evento
+  fechaAcordada   DateTime?
+  clubId          Int?
+  sedeTexto       String?
+  creadoEn        DateTime               @default(now())
+
+  partido Partido  @relation(fields: [partidoId], references: [id], onDelete: Cascade)
+  usuario Usuario? @relation(fields: [usuarioId], references: [id], onDelete: SetNull)
+
+  @@index([partidoId])
+  @@map("eventos_coordinacion")
 }
 
 // ============================================================================

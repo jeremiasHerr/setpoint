@@ -161,6 +161,10 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 - ~~¿Qué muestra el tablero cuando el torneo ya está en los cuadros?~~ **Lo mismo, por ronda de cada cuadro** ([decisión 061](decisiones/061-tablero-en-los-cuadros.md)). F15 pide el avance completo del torneo, y los partidos de cuadro también vencen
 - ~~¿Qué acciones tiene el tablero?~~ **Resolver un vencido con el W.O. y Escribirles por WhatsApp** ([decisión 062](decisiones/062-acciones-del-tablero.md)). Es lo que pide F15 sin pantallas nuevas; extender el plazo, el doble W.O. y recordarles quedan afuera, y anotar fecha llega con F14
 - ~~¿Por dónde se llega al tablero?~~ **Desde el Sorteo confirmado, y las otras pantallas del torneo vuelven a él** ([decisión 063](decisiones/063-entrada-al-tablero.md)). Es lo que anunciaban las decisiones 031 y 058; el inicio todavía no muestra los torneos en juego
+- ~~¿En qué estado queda la fecha que carga la organización en nombre de los jugadores?~~ **Confirmada, sin el límite de reprogramaciones** ([decisión 064](decisiones/064-la-fecha-de-la-organizacion-queda-confirmada.md)). Es la única forma de que un jugador sin cuenta tenga su partido agendado, y la organización ya es quien resuelve lo que no se coordinó
+- ~~¿Qué hace el rival si no puede el día que le anotaron?~~ **La cambia: cambiar una fecha sin confirmar no es reprogramar** ([decisión 065](decisiones/065-cambiar-una-fecha-sin-confirmar.md)). Una fecha sin confirmar todavía no es un turno pactado, y así no hace falta un ida y vuelta de propuestas en la app
+- ~~¿Se guarda quién propuso qué para resolver un partido no jugado?~~ **Sí, en un historial de coordinación desde F14** ([decisión 066](decisiones/066-historial-de-coordinacion.md)). Lo pide 02 §8.4, y lo que no se guarda ahora no se recupera después
+- ~~¿Dónde se guardan las reprogramaciones permitidas y la antelación?~~ **En el torneo, por ahora sin campo en Nuevo torneo** ([decisión 067](decisiones/067-parametros-de-reprogramacion.md)). Queda parametrizado como dice 07 §2.3, con los valores de POLENTA por defecto
 
 ---
 

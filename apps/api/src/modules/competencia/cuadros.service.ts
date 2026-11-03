@@ -1,4 +1,4 @@
-import { Cuadro, EstadoPartido as EstadoPrisma, EstadoTorneo, FasePartido, type Prisma } from '@prisma/client';
+import { Cuadro, EstadoPartido as EstadoPrisma, EstadoTorneo, FasePartido, ModoSede, type Prisma } from '@prisma/client';
 import type { ClaveCuadro, Cuadros, EstadoPartido } from '@setpoint/shared';
 import { organizacionAdministrada } from '../../lib/permisos';
 import { prisma } from '../../lib/prisma';
@@ -36,7 +36,7 @@ async function torneoDeLaOrganizacion(organizacionId: number, torneoId: number) 
 // ganador ya existe y se conoce su id.
 async function crearCuadro(
   tx: Prisma.TransactionClient,
-  datos: { torneoId: number; cuadro: Cuadro; cierre: Date; plazoPorRondaDias: number },
+  datos: { torneoId: number; cuadro: Cuadro; cierre: Date; plazoPorRondaDias: number; clubId: number | null },
   partidos: PartidoDeCuadro[],
 ) {
   if (partidos.length === 0) return;
@@ -56,6 +56,7 @@ async function crearCuadro(
         jugadorBId: partido.jugadorBId,
         siguientePartidoId: siguiente ? idDe.get(`${siguiente.ronda}-${siguiente.ordenEnRonda}`)! : null,
         fechaLimite: fechaLimiteDeRonda(datos.cierre, datos.plazoPorRondaDias, partido.ronda),
+        clubId: datos.clubId,
       },
       select: { id: true },
     });
@@ -75,7 +76,9 @@ export async function cerrarZonas(slug: string, usuarioId: number, torneoId: num
   if (partidosSinResultado(partidos) > 0) throw new ErrorHttp(409, 'ZONAS_INCOMPLETAS');
 
   const siembras = siembrasDeLosCuadros(inscriptos, partidos, torneo);
-  const datos = { torneoId: torneo.id, cierre: new Date(), plazoPorRondaDias: torneo.plazoPorRondaDias };
+  // Con sede designada, todos los partidos de los cuadros se juegan en el club del torneo (F14).
+  const clubId = torneo.sedeEliminatorias === ModoSede.DESIGNADA ? torneo.clubSedeId : null;
+  const datos = { torneoId: torneo.id, cierre: new Date(), plazoPorRondaDias: torneo.plazoPorRondaDias, clubId };
 
   await prisma.$transaction(async (tx) => {
     // Con el estado como condición, dos cierres simultáneos no generan los cuadros dos veces.

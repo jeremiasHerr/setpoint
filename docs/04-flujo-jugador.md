@@ -324,6 +324,13 @@ pendiente  ->  anotada  ->  confirmada  ->  jugada
 
 **Reprogramación:** la cantidad permitida y la antelación son parámetros del torneo ([07](07-configurabilidad.md) §2.3); en POLENTA, una sola y con 24 horas. Vuelve el partido a `anotada`.
 
+**Implementado en la API** (decisiones [064](decisiones/064-la-fecha-de-la-organizacion-queda-confirmada.md) a [067](decisiones/067-parametros-de-reprogramacion.md)):
+- Cambiar una fecha todavía `anotada` no cuenta como reprogramación: cualquiera de los dos la cambia y el otro confirma.
+- Lo que carga la organización queda `confirmada`, sin el límite de reprogramaciones ni la antelación, pero dentro del plazo.
+- `vencida` no se guarda: un partido vence al pasar el último día del plazo sin resultado, con la misma cuenta que el tablero ([decisión 060](decisiones/060-partidos-vencidos-calculados.md)). Vencido, ya no se le anota fecha: lo resuelve la organización con el resultado.
+- Cada paso queda en el historial de coordinación.
+- La pantalla de la app y la carga desde el tablero llegan en los PR siguientes.
+
 ### 6.5 Nota de implementación
 
 La confirmación se modela **desde el schema**, aunque la interfaz inicial pueda no usarla:

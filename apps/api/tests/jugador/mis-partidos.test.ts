@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { partidosDelJugador, type PartidoLeido } from '../../src/modules/jugador/mis-partidos';
 
-const roa = { nombre: 'Javier', apellido: 'Roa', telefono: '2994000000' };
-const yo = { nombre: 'Martín', apellido: 'Sanhueza', telefono: '2995000000' };
+const roa = { nombre: 'Javier', apellido: 'Roa', telefono: '2994000000', usuarioId: 20 };
+const yo = { nombre: 'Martín', apellido: 'Sanhueza', telefono: '2995000000', usuarioId: 10 };
 
 let proximoId = 1;
 function partido(datos: Partial<PartidoLeido>): PartidoLeido {
@@ -18,6 +18,8 @@ function partido(datos: Partial<PartidoLeido>): PartidoLeido {
     estado: 'PENDIENTE_COORDINACION',
     fechaAcordada: null,
     fechaLimite: null,
+    anotadaPorId: null,
+    reprogramaciones: 0,
     sedeTexto: null,
     club: null,
     cancha: null,
@@ -94,8 +96,41 @@ describe('partidosDelJugador', () => {
   });
 
   it('con el nombre del torneo, la instancia lo lleva adelante', () => {
-    const [conTorneo] = partidosDelJugador(1, [partido({ grupo: 'B' })], 'Copa Confluencia 2026');
+    const [conTorneo] = partidosDelJugador(1, [partido({ grupo: 'B' })], { torneo: 'Copa Confluencia 2026' });
 
     expect(conTorneo.instancia).toBe('Copa Confluencia 2026 · zona B');
+  });
+
+  it('dice quién anotó la fecha, desde su lado (F14)', () => {
+    const fecha = new Date('2026-11-14T13:00:00.000Z');
+    const [mia, delRival, deLaOrganizacion] = partidosDelJugador(1, [
+      partido({ estado: 'ANOTADA', fechaAcordada: fecha, anotadaPorId: 10 }),
+      partido({ estado: 'ANOTADA', fechaAcordada: fecha, anotadaPorId: 20 }),
+      partido({ estado: 'CONFIRMADA', fechaAcordada: fecha, anotadaPorId: 99 }),
+    ]);
+
+    expect(mia.anotadaPor).toBe('yo');
+    expect(delRival.anotadaPor).toBe('rival');
+    expect(deLaOrganizacion.anotadaPor).toBe('organizacion');
+  });
+
+  it('dice qué puede hacer con la fecha según las reglas del torneo', () => {
+    const ahora = new Date('2026-11-10T12:00:00.000Z');
+    const enTresDias = new Date('2026-11-13T12:00:00.000Z');
+    const [sinFecha, confirmada, sinReprogramaciones, jugado] = partidosDelJugador(
+      1,
+      [
+        partido({}),
+        partido({ estado: 'CONFIRMADA', fechaAcordada: enTresDias }),
+        partido({ estado: 'CONFIRMADA', fechaAcordada: enTresDias, reprogramaciones: 1 }),
+        partido({ estado: 'JUGADA', ganadorId: 1, sets: [{ gamesA: 6, gamesB: 1 }, { gamesA: 6, gamesB: 1 }] }),
+      ],
+      { ahora, reglas: { reprogramacionesPermitidas: 1, horasAntelacionReprogramar: 24 } },
+    );
+
+    expect(sinFecha.accionDeFecha).toBe('anotar');
+    expect(confirmada.accionDeFecha).toBe('reprogramar');
+    expect(sinReprogramaciones.accionDeFecha).toBeNull();
+    expect(jugado.accionDeFecha).toBeNull();
   });
 });
