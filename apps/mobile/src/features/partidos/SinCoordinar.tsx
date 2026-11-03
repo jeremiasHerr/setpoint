@@ -1,4 +1,5 @@
 import type { PartidoDelJugador } from '@setpoint/shared';
+import { router } from 'expo-router';
 import { Linking, StyleSheet, Text, View } from 'react-native';
 import { Boton } from '../../components/Boton';
 import { diasHasta } from '../../lib/fechas';
@@ -13,7 +14,7 @@ function plazo(fechaLimite: string) {
 }
 
 // Un partido sin fecha. El rojo aparece una sola vez en la pantalla y solo por vencimiento: en el
-// que vence primero. Anotar la fecha desde la app llega con F14; por ahora, escribirle al rival.
+// que vence primero. Se coordina por WhatsApp ("Escribirle") y se anota en la app (F14).
 export function SinCoordinar({ partido, urgente }: { partido: PartidoDelJugador; urgente: boolean }) {
   const { rival } = partido;
   if (!rival) return null;
@@ -32,16 +33,24 @@ export function SinCoordinar({ partido, urgente }: { partido: PartidoDelJugador;
           )}
         </View>
         <Text style={estilos.texto}>
-          {partido.instancia}. Todavía nadie anotó la fecha: coordinala con {rival.nombre}.
+          {partido.instancia}. Todavía nadie anotó la fecha. La puede cargar cualquiera de los dos.
         </Text>
-        {rival.telefono && (
-          <Boton
-            texto="Escribirle"
-            variante="organizador"
-            accessibilityRole="link"
-            onPress={() => Linking.openURL(enlaceDeWhatsApp(rival.telefono!))}
-          />
-        )}
+        <View style={estilos.botones}>
+          {partido.accionDeFecha && (
+            <View style={estilos.boton}>
+              <Boton
+                texto="Anotar la fecha"
+                variante="organizador"
+                onPress={() => router.push({ pathname: '/partido/[id]/fecha', params: { id: String(partido.id) } })}
+              />
+            </View>
+          )}
+          {rival.telefono && (
+            <View style={estilos.boton}>
+              <Boton texto="Escribirle" accessibilityRole="link" onPress={() => Linking.openURL(enlaceDeWhatsApp(rival.telefono!))} />
+            </View>
+          )}
+        </View>
       </View>
     </View>
   );
@@ -83,6 +92,14 @@ const estilos = StyleSheet.create({
   },
   plazoRojo: {
     color: colores.rojoTexto,
+  },
+  botones: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  boton: {
+    flex: 1,
   },
   texto: {
     fontFamily: fuentes.sans[400],

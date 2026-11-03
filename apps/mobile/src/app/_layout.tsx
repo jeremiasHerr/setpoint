@@ -67,6 +67,8 @@ function Navegacion({ fuentesListas }: { fuentesListas: boolean }) {
           redirectTo={!sesion ? '/ingresar' : sinCircuitos ? '/inscripciones' : '/circuitos'}
         >
           <Stack.Screen name="(pestanas)" />
+          {/* Anotar la fecha de un partido (F14): pide lo mismo que las pestañas. */}
+          <Stack.Screen name="partido/[id]/fecha" />
         </Stack.Protected>
         <Stack.Protected guard={sesion !== null && !sinCircuitos} redirectTo="/">
           <Stack.Screen name="circuitos" />
