@@ -297,7 +297,7 @@ Los jugadores podrán registrar en el sistema la fecha, hora y club acordados pa
 
 **Entrega: 75%**
 
-**Estado:** la API y la pantalla *Anotar la fecha* de la app están implementadas ([04-flujo-jugador.md](04-flujo-jugador.md) §6). Faltan la confirmación en *Cuándo juego* y la carga de la organización desde el tablero.
+**Estado:** la API, la pantalla *Anotar la fecha* de la app y la confirmación en *Cuándo juego* ([decisión 068](decisiones/068-la-confirmacion-en-cuando-juego.md)) están implementadas ([04-flujo-jugador.md](04-flujo-jugador.md) §6). Falta la carga de la organización desde el tablero.
 - El jugador anota, cambia o reprograma con `PUT /api/jugador/:slug/partidos/:id/fecha`, y el rival confirma con `POST .../confirmacion`. Cambiar una fecha sin confirmar no es reprogramar ([decisión 065](decisiones/065-cambiar-una-fecha-sin-confirmar.md)).
 - La organización la carga con `PUT /api/organizaciones/:slug/torneos/:id/partidos/:partidoId/fecha`, y queda confirmada ([decisión 064](decisiones/064-la-fecha-de-la-organizacion-queda-confirmada.md)).
 - Cada paso queda en el historial ([decisión 066](decisiones/066-historial-de-coordinacion.md)). Las reprogramaciones y la antelación son del torneo ([decisión 067](decisiones/067-parametros-de-reprogramacion.md)).

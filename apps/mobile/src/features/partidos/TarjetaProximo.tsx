@@ -1,4 +1,5 @@
 import type { PartidoDelJugador } from '@setpoint/shared';
+import { router } from 'expo-router';
 import { Linking, Pressable, StyleSheet, Text, View } from 'react-native';
 import { diaYHora } from '../../lib/fechas';
 import { colores, fuentes, medidas, radios, tabular } from '../../lib/tokens';
@@ -26,6 +27,10 @@ export function TarjetaProximo({ partido }: { partido: PartidoDelJugador }) {
       <View style={estilos.cuando}>
         <Text style={estilos.fecha}>{diaYHora(partido.fechaAcordada)}</Text>
         {partido.sede && <Text style={estilos.sede}>{partido.sede}</Text>}
+        {/* La anotó él: hasta que el rival confirme, no es un turno pactado (04-flujo-jugador §6.3). */}
+        {partido.estado === 'ANOTADA' && partido.anotadaPor === 'yo' && (
+          <Text style={estilos.pendiente}>Falta que {rival.nombre} confirme</Text>
+        )}
       </View>
       {rival.telefono && (
         <Pressable
@@ -34,6 +39,17 @@ export function TarjetaProximo({ partido }: { partido: PartidoDelJugador }) {
           style={({ pressed }) => [estilos.boton, pressed && estilos.apretado]}
         >
           <Text style={estilos.textoBoton}>Escribirle</Text>
+        </Pressable>
+      )}
+      {/* Sin la acción (menos de 24 horas, sin reprogramaciones) no se ofrece: lo resuelve la organización. */}
+      {(partido.accionDeFecha === 'cambiar' || partido.accionDeFecha === 'reprogramar') && (
+        <Pressable
+          accessibilityRole="button"
+          hitSlop={12}
+          onPress={() => router.push({ pathname: '/partido/[id]/fecha', params: { id: String(partido.id) } })}
+          style={({ pressed }) => [estilos.enlace, pressed && estilos.apretado]}
+        >
+          <Text style={estilos.textoEnlace}>{partido.accionDeFecha === 'cambiar' ? 'Cambiar la fecha' : 'Reprogramar'}</Text>
         </Pressable>
       )}
     </View>
@@ -116,5 +132,20 @@ const estilos = StyleSheet.create({
     fontFamily: fuentes.sans[600],
     fontSize: 17,
     color: colores.negro,
+  },
+  pendiente: {
+    fontFamily: fuentes.sans[500],
+    fontSize: 15,
+    color: colores.gris400,
+  },
+  enlace: {
+    alignSelf: 'center',
+    paddingVertical: 4,
+  },
+  textoEnlace: {
+    fontFamily: fuentes.sans[500],
+    fontSize: 15,
+    color: colores.blanco,
+    textDecorationLine: 'underline',
   },
 });
