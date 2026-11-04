@@ -259,7 +259,8 @@ Pantalla central durante el torneo, en `/torneos/:id/tablero`. Reemplaza el trab
 
 - Una barra por partido, agrupadas por zona, con el color de su situación: se ve qué zona está atrasada sin leer un número
 - Los días que quedan del plazo que corre y cuánto falta jugar
-- **Lo que falta**, ordenado por urgencia: primero los vencidos, del plazo más viejo al más nuevo, y después los sin coordinar. En cada fila, **Escribirles** abre el WhatsApp de cada jugador con un mensaje listo, y en los vencidos, **Resolver** abre *Cargar resultado* con el W.O. elegido ([decisión 062](decisiones/062-acciones-del-tablero.md)). Anotar fecha llega con F14
+- **Lo que falta**, ordenado por urgencia: primero los vencidos, del plazo más viejo al más nuevo, y después los sin coordinar. En cada fila, **Escribirles** abre el WhatsApp de cada jugador con un mensaje listo, y en los vencidos, **Resolver** abre *Cargar resultado* con el W.O. elegido ([decisión 062](decisiones/062-acciones-del-tablero.md)). En los sin coordinar, **Anotar fecha** abre debajo de la fila el día, la hora y la sede: la organización la carga en nombre de los dos y queda confirmada (F14, [decisión 064](decisiones/064-la-fecha-de-la-organizacion-queda-confirmada.md))
+- **Pendiente:** los partidos que ya tienen fecha no están en "Lo que falta", así que desde el tablero no se puede cambiar una fecha existente ni confirmar en nombre de un jugador sin cuenta la que anotó su rival
 - **Zona por zona:** la matriz de resultados de una zona y su tabla, con la misma cuenta que las posiciones, y quién está clasificando a cada cuadro
 - Con todos los partidos de zona resueltos, **cerrar las zonas**, que arma los cuadros (§11)
 
@@ -268,6 +269,8 @@ Pantalla central durante el torneo, en `/torneos/:id/tablero`. Reemplaza el trab
 | Endpoint | Qué hace |
 |---|---|
 | `GET /api/organizaciones/:slug/torneos/:id/tablero` | Todo lo del tablero en una respuesta: la situación de cada partido, el plazo, lo que falta, la tabla de cada zona y si se pueden cerrar las zonas o el torneo. Incluye el teléfono de los jugadores, para Escribirles. Solo para quien administra. `409 TABLERO_NO_DISPONIBLE` antes de confirmar el sorteo o con el torneo cancelado |
+| `GET /api/organizaciones/:slug/torneos/:id/partidos/:partidoId/fecha` | Lo que necesita *Anotar fecha*: los días del plazo, los clubes o la sede designada, y si se puede (F14) |
+| `PUT /api/organizaciones/:slug/torneos/:id/partidos/:partidoId/fecha` | Carga la fecha en nombre de los jugadores: queda confirmada, dentro del plazo, y les avisa a los dos. `409 PLAZO_VENCIDO` en un vencido, que se resuelve con el resultado |
 
 ---
 
