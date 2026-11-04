@@ -329,7 +329,7 @@ pendiente  ->  anotada  ->  confirmada  ->  jugada
 - Lo que carga la organización queda `confirmada`, sin el límite de reprogramaciones ni la antelación, pero dentro del plazo.
 - `vencida` no se guarda: un partido vence al pasar el último día del plazo sin resultado, con la misma cuenta que el tablero ([decisión 060](decisiones/060-partidos-vencidos-calculados.md)). Vencido, ya no se le anota fecha: lo resuelve la organización con el resultado.
 - Cada paso queda en el historial de coordinación.
-- La pantalla de la app y la carga desde el tablero llegan en los PR siguientes.
+- En la app, *Anotar la fecha* ofrece los días que quedan del plazo, la hora cada media hora y los clubes del circuito o escribir otro lugar. La confirmación en *Cuándo juego* y la carga desde el tablero llegan en los PR siguientes.
 
 ### 6.5 Nota de implementación
 
