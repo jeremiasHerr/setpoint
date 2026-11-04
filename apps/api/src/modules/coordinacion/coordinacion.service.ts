@@ -190,7 +190,9 @@ async function guardarFecha(partido: Partido, datos: DatosFechaAcordada, usuario
   );
   if (typeof sede === 'string') throw new ErrorHttp(400, sede, MENSAJE_DE_SEDE[sede]);
 
-  const cambio = cambioDeFecha(accion, partido.reprogramaciones, porOrganizacion);
+  const sinCambios =
+    partido.fechaAcordada?.getTime() === instante.getTime() && partido.clubId === sede.clubId && partido.sedeTexto === sede.sedeTexto;
+  const cambio = cambioDeFecha(accion, partido.reprogramaciones, porOrganizacion, sinCambios);
   await prisma.$transaction(async (tx) => {
     const { count } = await tx.partido.updateMany({
       where: {

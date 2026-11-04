@@ -260,7 +260,7 @@ Pantalla central durante el torneo, en `/torneos/:id/tablero`. Reemplaza el trab
 - Una barra por partido, agrupadas por zona, con el color de su situación: se ve qué zona está atrasada sin leer un número
 - Los días que quedan del plazo que corre y cuánto falta jugar
 - **Lo que falta**, ordenado por urgencia: primero los vencidos, del plazo más viejo al más nuevo, y después los sin coordinar. En cada fila, **Escribirles** abre el WhatsApp de cada jugador con un mensaje listo, y en los vencidos, **Resolver** abre *Cargar resultado* con el W.O. elegido ([decisión 062](decisiones/062-acciones-del-tablero.md)). En los sin coordinar, **Anotar fecha** abre debajo de la fila el día, la hora y la sede: la organización la carga en nombre de los dos y queda confirmada (F14, [decisión 064](decisiones/064-la-fecha-de-la-organizacion-queda-confirmada.md))
-- **Pendiente:** los partidos que ya tienen fecha no están en "Lo que falta", así que desde el tablero no se puede cambiar una fecha existente ni confirmar en nombre de un jugador sin cuenta la que anotó su rival
+- Los partidos **con fecha** se despliegan desde el pie de "Lo que falta", con la fecha y si falta que el rival confirme. **Cambiar fecha** (o **Confirmar o cambiar**, si espera confirmación) abre el mismo formulario con la fecha actual: guardarla sin cambios la confirma por un jugador que no tiene la app, y queda así en el historial
 - **Zona por zona:** la matriz de resultados de una zona y su tabla, con la misma cuenta que las posiciones, y quién está clasificando a cada cuadro
 - Con todos los partidos de zona resueltos, **cerrar las zonas**, que arma los cuadros (§11)
 

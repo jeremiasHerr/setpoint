@@ -174,6 +174,13 @@ describe('cambioDeFecha', () => {
     expect(cambioDeFecha('reprogramar', 0, false)).toEqual({ estado: 'ANOTADA', reprogramaciones: 1, evento: 'REPROGRAMADA' });
   });
 
+  it('si la organización guarda sin cambios lo que anotó un jugador, queda como una confirmación', () => {
+    expect(cambioDeFecha('cambiar', 0, true, true)).toEqual({ estado: 'CONFIRMADA', reprogramaciones: 0, evento: 'CONFIRMADA' });
+    expect(cambioDeFecha('cambiar', 0, true, false).evento).toBe('CAMBIADA');
+    // Un jugador que guarda la misma fecha no se confirma a sí mismo.
+    expect(cambioDeFecha('cambiar', 0, false, true).estado).toBe('ANOTADA');
+  });
+
   it('lo que carga la organización queda confirmado y no gasta reprogramaciones (decisión 064)', () => {
     expect(cambioDeFecha('reprogramar', 1, true)).toEqual({ estado: 'CONFIRMADA', reprogramaciones: 1, evento: 'REPROGRAMADA' });
   });

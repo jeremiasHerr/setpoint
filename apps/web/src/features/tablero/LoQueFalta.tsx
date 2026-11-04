@@ -6,7 +6,7 @@ import { Tarjeta } from '../../components/Tarjeta';
 import { urlDeWhatsApp } from '../padron/linkPersonal';
 import { TextoConNumeros } from '../resultados/AlGuardar';
 import { AnotarFecha } from './AnotarFecha';
-import { dondeSeJuega, mensajeParaCoordinar, nombresDelPartido, textoDeLosDias } from './tablero';
+import { dondeSeJuega, elDiaYHora, mensajeParaCoordinar, nombresDelPartido, partidosConFecha, textoDeLosDias } from './tablero';
 
 const accion = 'inline-flex h-9 items-center rounded-[9px] px-[13px] text-[13px] font-medium';
 
@@ -40,7 +40,15 @@ function Escribirles({ partido, tablero }: { partido: PartidoDelTablero; tablero
 
 type Abierto = 'escribirles' | 'anotar' | null;
 
-function Fila({ slug, partido, tablero, resolver }: { slug: string; partido: PartidoDelTablero; tablero: Tablero; resolver: boolean }) {
+// En qué lista está la fila: los vencidos se resuelven; los sin coordinar y los con fecha se anotan.
+type Lista = 'vencidos' | 'sin_coordinar' | 'con_fecha';
+
+// Anotada por un jugador y sin confirmar: si el rival no tiene la app, la confirma la organización.
+const textoDeAnotar = (lista: Lista, partido: PartidoDelTablero) =>
+  lista === 'sin_coordinar' ? 'Anotar fecha' : partido.estado === 'anotada' ? 'Confirmar o cambiar' : 'Cambiar fecha';
+
+function Fila({ slug, partido, tablero, lista }: { slug: string; partido: PartidoDelTablero; tablero: Tablero; lista: Lista }) {
+  const resolver = lista === 'vencidos';
   // Escribirles y Anotar fecha se abren debajo de la fila, de a uno.
   const [abierto, setAbierto] = useState<Abierto>(null);
   const alternar = (que: Abierto) => setAbierto(abierto === que ? null : que);
@@ -57,7 +65,14 @@ function Fila({ slug, partido, tablero, resolver }: { slug: string; partido: Par
       >
         <Numero className="text-[13px] text-gris-500">{dondeSeJuega(partido, tablero)}</Numero>
         <span className={`text-base ${vencido ? 'font-semibold' : ''}`}>{nombresDelPartido(partido)}</span>
-        <Numero className={`text-sm ${vencido ? 'text-rojo-texto' : 'text-gris-500'}`}>{textoDeLosDias(partido.dias)}</Numero>
+        {lista === 'con_fecha' && partido.fechaAcordada ? (
+          <span className="flex flex-col">
+            <Numero className="text-sm">{elDiaYHora(partido.fechaAcordada)}</Numero>
+            <span className="text-[13px] text-gris-500">{partido.estado === 'anotada' ? 'falta que confirme el rival' : 'confirmada'}</span>
+          </span>
+        ) : (
+          <Numero className={`text-sm ${vencido ? 'text-rojo-texto' : 'text-gris-500'}`}>{textoDeLosDias(partido.dias)}</Numero>
+        )}
         <div className="flex gap-2 md:justify-end">
           <button
             type="button"
@@ -67,7 +82,7 @@ function Fila({ slug, partido, tablero, resolver }: { slug: string; partido: Par
           >
             Escribirles
           </button>
-          {/* Sin coordinar: la organización la carga en nombre de los dos (F14, decisión 062). */}
+          {/* La organización la carga en nombre de los dos y queda confirmada (F14, decisiones 062 y 064). */}
           {!resolver && (
             <button
               type="button"
@@ -75,7 +90,7 @@ function Fila({ slug, partido, tablero, resolver }: { slug: string; partido: Par
               onClick={() => alternar('anotar')}
               className={`${accion} border border-linea hover:bg-fondo`}
             >
-              Anotar fecha
+              {textoDeAnotar(lista, partido)}
             </button>
           )}
           {resolver && (
@@ -115,6 +130,9 @@ function Encabezado({ rojo = false, titulo, cantidad, children }: { rojo?: boole
 export function LoQueFalta({ slug, tablero }: { slug: string; tablero: Tablero }) {
   const { vencidos, sinCoordinar, totales } = tablero;
   const nada = vencidos.length === 0 && sinCoordinar.length === 0;
+  // Los con fecha no son urgentes: se despliegan desde el pie, para cambiarlos o confirmarlos (F14).
+  const [verConFecha, setVerConFecha] = useState(false);
+  const conFecha = partidosConFecha(tablero);
 
   return (
     <section className="flex flex-col gap-3">
@@ -131,7 +149,7 @@ export function LoQueFalta({ slug, tablero }: { slug: string; tablero: Tablero }
             </Encabezado>
             <ul>
               {vencidos.map((partido) => (
-                <Fila key={partido.id} slug={slug} partido={partido} tablero={tablero} resolver />
+                <Fila key={partido.id} slug={slug} partido={partido} tablero={tablero} lista="vencidos" />
               ))}
             </ul>
           </>
@@ -144,7 +162,7 @@ export function LoQueFalta({ slug, tablero }: { slug: string; tablero: Tablero }
             </Encabezado>
             <ul>
               {sinCoordinar.map((partido) => (
-                <Fila key={partido.id} slug={slug} partido={partido} tablero={tablero} resolver={false} />
+                <Fila key={partido.id} slug={slug} partido={partido} tablero={tablero} lista="sin_coordinar" />
               ))}
             </ul>
           </>
@@ -153,15 +171,38 @@ export function LoQueFalta({ slug, tablero }: { slug: string; tablero: Tablero }
         {nada && <p className="px-5 py-5 text-[15px] text-gris-500">No hay partidos vencidos ni sin coordinar.</p>}
 
         {totales.conFecha > 0 && (
-          <p className="border-t border-linea bg-fondo-tabla px-5 py-3.5 text-sm text-gris-500">
-            <TextoConNumeros
-              frase={
-                totales.conFecha === 1
-                  ? ['También hay ', 1, ' partido con fecha acordada que todavía no se jugó.']
-                  : ['También hay ', totales.conFecha, ' partidos con fecha acordada que todavía no se jugaron.']
-              }
-            />
-          </p>
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-linea bg-fondo-tabla px-5 py-3.5">
+            <p className="text-sm text-gris-500">
+              <TextoConNumeros
+                frase={
+                  totales.conFecha === 1
+                    ? ['También hay ', 1, ' partido con fecha acordada que todavía no se jugó.']
+                    : ['También hay ', totales.conFecha, ' partidos con fecha acordada que todavía no se jugaron.']
+                }
+              />
+            </p>
+            <button
+              type="button"
+              aria-expanded={verConFecha}
+              onClick={() => setVerConFecha(!verConFecha)}
+              className={`${accion} border border-linea bg-white hover:bg-fondo`}
+            >
+              {verConFecha ? 'Ocultar' : totales.conFecha === 1 ? 'Verlo' : 'Verlos'}
+            </button>
+          </div>
+        )}
+
+        {verConFecha && conFecha.length > 0 && (
+          <>
+            <Encabezado titulo="Con fecha" cantidad={conFecha.length}>
+              Si uno no tiene la app, confirmala vos
+            </Encabezado>
+            <ul>
+              {conFecha.map((partido) => (
+                <Fila key={partido.id} slug={slug} partido={partido} tablero={tablero} lista="con_fecha" />
+              ))}
+            </ul>
+          </>
         )}
       </Tarjeta>
     </section>

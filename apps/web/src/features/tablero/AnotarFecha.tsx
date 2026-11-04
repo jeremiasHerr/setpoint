@@ -75,11 +75,16 @@ function Formulario({
   onCerrar: () => void;
 }) {
   const anotar = useAnotarFecha(slug, torneoId, coordinacion.partidoId);
-  const { sede, dias, partidoId } = coordinacion;
-  const [dia, setDia] = useState(dias[0] ?? '');
-  const [hora, setHora] = useState('');
-  const [club, setClub] = useState(sede.modo === 'libre' && sede.clubes.length > 0 ? String(sede.clubes[0].id) : OTRO);
-  const [sedeTexto, setSedeTexto] = useState('');
+  const { sede, dias, partidoId, actual } = coordinacion;
+  // Con una fecha ya anotada, el formulario arranca con ella: guardarla tal cual es confirmarla.
+  const [dia, setDia] = useState(actual && dias.includes(actual.dia) ? actual.dia : (dias[0] ?? ''));
+  const [hora, setHora] = useState(actual?.hora ?? '');
+  const [club, setClub] = useState(
+    actual?.clubId ? String(actual.clubId) : !actual?.sedeTexto && sede.modo === 'libre' && sede.clubes.length > 0 ? String(sede.clubes[0].id) : OTRO,
+  );
+  const [sedeTexto, setSedeTexto] = useState(actual?.sedeTexto ?? '');
+  // Anotada por un jugador y sin confirmar: el rival puede no tener la app.
+  const porConfirmar = coordinacion.estado === 'ANOTADA';
 
   if (!coordinacion.accion) {
     return <p className="text-sm text-gris-700">{MENSAJES[coordinacion.bloqueo ?? 'PARTIDO_TERMINADO'] ?? 'Este partido no se puede coordinar.'}</p>;
@@ -171,11 +176,15 @@ function Formulario({
       {mensaje && <p className="text-sm text-rojo-texto">{mensaje}</p>}
 
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-gris-500">Queda confirmada para los dos, y les avisamos a los que tienen la app.</p>
+        <p className="text-sm text-gris-500">
+          {porConfirmar
+            ? 'La anotó un jugador y falta que el otro confirme. Guardala así o cambiala: queda confirmada para los dos.'
+            : 'Queda confirmada para los dos, y les avisamos a los que tienen la app.'}
+        </p>
         <div className="flex gap-2">
           <Boton onClick={onCerrar}>Cancelar</Boton>
           <Boton type="submit" variante="organizador" disabled={!completo || anotar.isPending}>
-            {anotar.isPending ? 'Anotando…' : 'Anotar fecha'}
+            {anotar.isPending ? 'Guardando…' : porConfirmar ? 'Confirmar' : actual ? 'Guardar la fecha' : 'Anotar fecha'}
           </Boton>
         </div>
       </div>
