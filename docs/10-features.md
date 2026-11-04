@@ -207,7 +207,7 @@ Cualquier persona podrá consultar el ranking del circuito desde un enlace, sin 
 
 **Entrega: 50%**
 
-**Estado:** implementada. En la web, para cualquiera con el enlace (`/c/:slug/ranking`, [decisión 033](decisiones/033-ranking-publico.md)), con buscador por apellido. En la app, la pantalla *Ranking* usa la misma ruta y suma tu tarjeta ("Vas 1º de 26", tus puntos y tus casilleros) y tu fila destacada. La tarjeta no muestra cuánto cambió el último torneo ([decisión 043](decisiones/043-ranking-sin-el-cambio-del-ultimo-torneo.md)).
+**Estado:** implementada. En la web, para cualquiera con el enlace (`/c/:slug/ranking`, [decisión 033](decisiones/033-ranking-publico.md)), con buscador por apellido. En la app, la pantalla *Ranking* usa la misma ruta y suma tu tarjeta ("Vas 1º de 26", tus puntos y tus casilleros) y tu fila destacada. La tarjeta no muestra cuánto cambió el último torneo ([decisión 043](decisiones/043-ranking-sin-el-cambio-del-ultimo-torneo.md)). La organización copia el enlace desde el inicio ("Copiar el link del ranking") para pasarlo al grupo.
 
 ---
 
