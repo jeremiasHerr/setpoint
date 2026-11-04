@@ -5,6 +5,7 @@ import { Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
 import { urlDeWhatsApp } from '../padron/linkPersonal';
 import { TextoConNumeros } from '../resultados/AlGuardar';
+import { AnotarFecha } from './AnotarFecha';
 import { dondeSeJuega, mensajeParaCoordinar, nombresDelPartido, textoDeLosDias } from './tablero';
 
 const accion = 'inline-flex h-9 items-center rounded-[9px] px-[13px] text-[13px] font-medium';
@@ -37,8 +38,13 @@ function Escribirles({ partido, tablero }: { partido: PartidoDelTablero; tablero
   );
 }
 
-function Fila({ partido, tablero, resolver }: { partido: PartidoDelTablero; tablero: Tablero; resolver: boolean }) {
-  const [escribiendo, setEscribiendo] = useState(false);
+type Abierto = 'escribirles' | 'anotar' | null;
+
+function Fila({ slug, partido, tablero, resolver }: { slug: string; partido: PartidoDelTablero; tablero: Tablero; resolver: boolean }) {
+  // Escribirles y Anotar fecha se abren debajo de la fila, de a uno.
+  const [abierto, setAbierto] = useState<Abierto>(null);
+  const alternar = (que: Abierto) => setAbierto(abierto === que ? null : que);
+  const sangria = tablero.fase === 'grupos' ? 'md:pl-[98px]' : 'md:pl-[186px]';
   const vencido = partido.situacion === 'vencido';
 
   return (
@@ -55,12 +61,23 @@ function Fila({ partido, tablero, resolver }: { partido: PartidoDelTablero; tabl
         <div className="flex gap-2 md:justify-end">
           <button
             type="button"
-            aria-expanded={escribiendo}
-            onClick={() => setEscribiendo(!escribiendo)}
+            aria-expanded={abierto === 'escribirles'}
+            onClick={() => alternar('escribirles')}
             className={`${accion} border border-linea hover:bg-fondo`}
           >
             Escribirles
           </button>
+          {/* Sin coordinar: la organización la carga en nombre de los dos (F14, decisión 062). */}
+          {!resolver && (
+            <button
+              type="button"
+              aria-expanded={abierto === 'anotar'}
+              onClick={() => alternar('anotar')}
+              className={`${accion} border border-linea hover:bg-fondo`}
+            >
+              Anotar fecha
+            </button>
+          )}
           {resolver && (
             // Resolver es cargarlo como W.O.: la pantalla de carga abre con el W.O. elegido (decisión 062).
             <Link to={`/torneos/${tablero.torneoId}/resultados/${partido.id}?tipo=walkover`} className={`${accion} bg-negro font-semibold text-white`}>
@@ -69,7 +86,10 @@ function Fila({ partido, tablero, resolver }: { partido: PartidoDelTablero; tabl
           )}
         </div>
       </div>
-      {escribiendo && <Escribirles partido={partido} tablero={tablero} />}
+      {abierto === 'escribirles' && <Escribirles partido={partido} tablero={tablero} />}
+      {abierto === 'anotar' && (
+        <AnotarFecha slug={slug} torneoId={tablero.torneoId} partidoId={partido.id} sangria={sangria} onCerrar={() => setAbierto(null)} />
+      )}
     </li>
   );
 }
@@ -92,7 +112,7 @@ function Encabezado({ rojo = false, titulo, cantidad, children }: { rojo?: boole
 
 // La lista de trabajo, ordenada por urgencia: primero los vencidos, que resuelve la organización
 // (02-dominio.md §8.4), y después los que nadie coordinó.
-export function LoQueFalta({ tablero }: { tablero: Tablero }) {
+export function LoQueFalta({ slug, tablero }: { slug: string; tablero: Tablero }) {
   const { vencidos, sinCoordinar, totales } = tablero;
   const nada = vencidos.length === 0 && sinCoordinar.length === 0;
 
@@ -111,7 +131,7 @@ export function LoQueFalta({ tablero }: { tablero: Tablero }) {
             </Encabezado>
             <ul>
               {vencidos.map((partido) => (
-                <Fila key={partido.id} partido={partido} tablero={tablero} resolver />
+                <Fila key={partido.id} slug={slug} partido={partido} tablero={tablero} resolver />
               ))}
             </ul>
           </>
@@ -124,7 +144,7 @@ export function LoQueFalta({ tablero }: { tablero: Tablero }) {
             </Encabezado>
             <ul>
               {sinCoordinar.map((partido) => (
-                <Fila key={partido.id} partido={partido} tablero={tablero} resolver={false} />
+                <Fila key={partido.id} slug={slug} partido={partido} tablero={tablero} resolver={false} />
               ))}
             </ul>
           </>

@@ -297,7 +297,8 @@ Los jugadores podrán registrar en el sistema la fecha, hora y club acordados pa
 
 **Entrega: 75%**
 
-**Estado:** la API, la pantalla *Anotar la fecha* de la app y la confirmación en *Cuándo juego* ([decisión 068](decisiones/068-la-confirmacion-en-cuando-juego.md)) están implementadas ([04-flujo-jugador.md](04-flujo-jugador.md) §6). Falta la carga de la organización desde el tablero.
+**Estado:** la API, la pantalla *Anotar la fecha* de la app y la confirmación en *Cuándo juego* ([decisión 068](decisiones/068-la-confirmacion-en-cuando-juego.md)) están implementadas ([04-flujo-jugador.md](04-flujo-jugador.md) §6), y la organización carga la fecha desde "Anotar fecha" en el tablero.
+- **Pendiente:** desde el tablero no se puede cambiar una fecha que ya está, ni confirmar en nombre de un jugador sin cuenta la que anotó su rival: los partidos con fecha no están en "Lo que falta" ([03-flujo-organizacion.md](03-flujo-organizacion.md) §9).
 - El jugador anota, cambia o reprograma con `PUT /api/jugador/:slug/partidos/:id/fecha`, y el rival confirma con `POST .../confirmacion`. Cambiar una fecha sin confirmar no es reprogramar ([decisión 065](decisiones/065-cambiar-una-fecha-sin-confirmar.md)).
 - La organización la carga con `PUT /api/organizaciones/:slug/torneos/:id/partidos/:partidoId/fecha`, y queda confirmada ([decisión 064](decisiones/064-la-fecha-de-la-organizacion-queda-confirmada.md)).
 - Cada paso queda en el historial ([decisión 066](decisiones/066-historial-de-coordinacion.md)). Las reprogramaciones y la antelación son del torneo ([decisión 067](decisiones/067-parametros-de-reprogramacion.md)).
@@ -321,7 +322,7 @@ La organización dispondrá de una pantalla única donde ver el avance completo 
 - La pantalla *Tablero del torneo* (`/torneos/:id/tablero`) muestra las barras zona por zona, los días que quedan, "Lo que falta" ordenado por urgencia y la tabla de cada zona con su matriz de resultados.
 - Un partido vencido se calcula al consultar: pasó su fecha límite sin resultado ([decisión 060](decisiones/060-partidos-vencidos-calculados.md)).
 - En los cuadros muestra lo mismo por ronda, y ofrece cerrar las zonas y cerrar el torneo cuando corresponde ([decisión 061](decisiones/061-tablero-en-los-cuadros.md)).
-- Resolver carga el W.O. y Escribirles abre el WhatsApp de cada jugador; extender el plazo, el doble W.O. y recordarles no están ([decisión 062](decisiones/062-acciones-del-tablero.md)). Anotar fecha llega con F14.
+- Resolver carga el W.O. y Escribirles abre el WhatsApp de cada jugador; extender el plazo, el doble W.O. y recordarles no están ([decisión 062](decisiones/062-acciones-del-tablero.md)). Anotar fecha, en los sin coordinar, llegó con F14.
 - Se llega desde el Sorteo confirmado; el inicio todavía no muestra los torneos en juego ([decisión 063](decisiones/063-entrada-al-tablero.md)).
 
 ---

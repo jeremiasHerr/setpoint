@@ -163,7 +163,7 @@ function Contenido({ sesion, tablero }: { sesion: Sesion; tablero: Tablero }) {
           <ResumenPlazo tablero={tablero} />
         </div>
 
-        {fase !== 'terminado' && <LoQueFalta tablero={tablero} />}
+        {fase !== 'terminado' && <LoQueFalta slug={slug} tablero={tablero} />}
         {fase === 'grupos' && <ZonaPorZona tablero={tablero} />}
       </div>
     </Marco>

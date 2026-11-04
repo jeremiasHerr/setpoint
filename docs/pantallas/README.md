@@ -39,7 +39,7 @@ Ordenado por entrega.
 | 75% | F13 | [Inscripciones](organizador/inscripciones.html) | Web organizador · dos estados: una vinculación para revisar, y las solicitudes de un torneo con aprobación. Implementadas en la web, en `/torneos/:id/inscripciones`, la barra de lugares, la tabla de inscriptos y las solicitudes, con dos pestañas (Inscriptos y Solicitudes); las de Reservando y Lista de espera, la conciliación y la marca para revisar llegan con F13 completa | 1280 px |
 | 75% | F02 | [Revisar vinculación](organizador/revisar-vinculacion.html) · *nueva* | Web organizador · dos estados: posible homónimo y perfil reclamado por otra cuenta | 1280 px |
 | 75% | F14 | [Anotar la fecha](jugador/anotar-fecha.html) | App jugador. Implementada en la app, en `/partido/:id/fecha`, desde "Anotar la fecha" en *Cuándo juego*. La misma pantalla cambia una fecha sin confirmar y reprograma una confirmada ([decisión 065](../decisiones/065-cambiar-una-fecha-sin-confirmar.md)). La hora y el club se eligen de una lista que sube desde abajo; sin los íconos de reloj e info, que pedirían react-native-svg | 390 px |
-| 75% | F15 | [Tablero del torneo](organizador/tablero.html) | Web organizador | 1280 px |
+| 75% | F15 | [Tablero del torneo](organizador/tablero.html) | Web organizador. Con F14, "Anotar fecha" abre debajo de la fila el día, la hora y la sede, como Escribirles: la referencia no dibuja ese formulario | 1280 px |
 | 75% | F16 | [Cerrar el torneo](organizador/cierre.html) | Web organizador | 1280 px |
 | 75% · 100% | F17, F18 | [Ficha y cara a cara](publico/ficha-y-cara-a-cara.html) | Web pública | 870 px |
 | 100% | F20 | [Qué está en juego](jugador/que-esta-en-juego.html) | App jugador | 390 px |
