@@ -1,4 +1,4 @@
-import type { DatosResultado, PartidoConResultado, PartidosDelTorneo, SimulacionDeResultado } from '@setpoint/shared';
+import type { Cuadros, DatosResultado, PartidoConResultado, PartidosDelTorneo, SimulacionDeResultado } from '@setpoint/shared';
 import { pedir } from '../../lib/api';
 
 // El id es el de un torneo (una categoría): cada categoría tiene sus zonas y sus cuadros.
@@ -20,4 +20,10 @@ export function guardarResultado(slug: string, id: number, partidoId: number, da
 // Cómo quedaría la zona con ese resultado, sin guardarlo (decisión 032).
 export function simularResultado(slug: string, id: number, partidoId: number, datos: DatosResultado) {
   return pedir<SimulacionDeResultado>('POST', `${ruta(slug, id)}/${partidoId}/simulacion`, datos);
+}
+
+// Los cuadros armados, para elegir el partido desde la rama. 409 CUADROS_NO_GENERADOS antes de
+// cerrar las zonas.
+export function obtenerCuadros(slug: string, id: number) {
+  return pedir<Cuadros>('GET', `/api/organizaciones/${slug}/torneos/${id}/cuadros`);
 }

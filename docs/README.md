@@ -166,6 +166,7 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 - ~~¿Se guarda quién propuso qué para resolver un partido no jugado?~~ **Sí, en un historial de coordinación desde F14** ([decisión 066](decisiones/066-historial-de-coordinacion.md)). Lo pide 02 §8.4, y lo que no se guarda ahora no se recupera después
 - ~~¿Dónde se guardan las reprogramaciones permitidas y la antelación?~~ **En el torneo, por ahora sin campo en Nuevo torneo** ([decisión 067](decisiones/067-parametros-de-reprogramacion.md)). Queda parametrizado como dice 07 §2.3, con los valores de POLENTA por defecto
 - ~~¿Dónde confirma el rival la fecha que le anotaron?~~ **En Cuándo juego, arriba de todo** ([decisión 068](decisiones/068-la-confirmacion-en-cuando-juego.md)). El aviso ya abre la app ahí, y funciona igual para quien no recibe avisos
+- ~~¿Cómo se elige el partido en Cargar resultado?~~ **Desde las zonas y el cuadro dibujado como rama, arriba de la carga** ([decisión 070](decisiones/070-elegir-el-partido-desde-el-cuadro.md), que reemplaza la lista de la 031). En un cuadro se busca la llave, no una fila, y se reutiliza el cuadro público
 
 ---
 

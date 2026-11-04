@@ -1,7 +1,7 @@
 import type { CuadroEliminatorio, PartidoDelCuadro } from '@setpoint/shared';
 import { Numero } from '../../components/Numero';
 import { NOMBRE_DEL_CUADRO, destacadoDe, lugaresDeLaRonda, partidosJugados, rotuloDeRonda } from './cuadro';
-import { TarjetaPartido } from './TarjetaPartido';
+import { TarjetaPartido, type Eleccion } from './TarjetaPartido';
 
 // Medidas del cuadro de design.md §6: tarjetas de 190 y, entre columnas, 17 de codo y 17 de conector.
 const ANCHO_TARJETA = 190;
@@ -27,7 +27,8 @@ export function EncabezadoDelCuadro({ cuadro }: { cuadro: CuadroEliminatorio }) 
 // El cuadro completo, una columna por ronda. Las columnas tienen todas la misma altura y cada par
 // de lugares se reparte con space-around: así cada partido queda a la altura de los dos que lo
 // alimentan, y los codos son bordes de 1px (design.md §12).
-export function CuadroCompleto({ cuadro }: { cuadro: CuadroEliminatorio }) {
+// Con eleccion, tocar un partido lo elige (Cargar resultado) en vez de abrir su marcador.
+export function CuadroCompleto({ cuadro, eleccion }: { cuadro: CuadroEliminatorio; eleccion?: Eleccion }) {
   const rondas = Array.from({ length: cuadro.rondas }, (_, i) => i + 1);
   const columnas = { gridTemplateColumns: `repeat(${cuadro.rondas}, ${ANCHO_TARJETA}px)`, columnGap: SEPARACION };
   const alto = Math.max(2 ** (cuadro.rondas - 1) * ALTO_POR_LUGAR, 150);
@@ -50,7 +51,7 @@ export function CuadroCompleto({ cuadro }: { cuadro: CuadroEliminatorio }) {
           if (lugares.length === 1) {
             return (
               <div key={ronda} className="flex flex-col justify-center" style={{ height: alto }}>
-                <Lugar partido={lugares[0]} cuadro={cuadro} />
+                <Lugar partido={lugares[0]} cuadro={cuadro} eleccion={eleccion} />
               </div>
             );
           }
@@ -59,8 +60,8 @@ export function CuadroCompleto({ cuadro }: { cuadro: CuadroEliminatorio }) {
             <div key={ronda} className="flex flex-col" style={{ height: alto }}>
               {pares.map(([arriba, abajo], i) => (
                 <div key={i} className={`relative flex flex-1 flex-col justify-around ${codo(arriba !== null, abajo !== null)}`}>
-                  <Lugar partido={arriba} cuadro={cuadro} />
-                  <Lugar partido={abajo} cuadro={cuadro} />
+                  <Lugar partido={arriba} cuadro={cuadro} eleccion={eleccion} />
+                  <Lugar partido={abajo} cuadro={cuadro} eleccion={eleccion} />
                 </div>
               ))}
             </div>
@@ -83,13 +84,13 @@ function codo(hayArriba: boolean, hayAbajo: boolean) {
 }
 
 // Un lugar del cuadro. Desde la segunda ronda, cada partido lleva el conector que llega del codo.
-function Lugar({ partido, cuadro }: { partido: PartidoDelCuadro | null; cuadro: CuadroEliminatorio }) {
+function Lugar({ partido, cuadro, eleccion }: { partido: PartidoDelCuadro | null; cuadro: CuadroEliminatorio; eleccion?: Eleccion }) {
   if (!partido) return <div className="h-16" aria-hidden />;
   const conector =
     partido.ronda > 1 ? "before:absolute before:top-1/2 before:-left-[17px] before:h-px before:w-[17px] before:bg-linea before:content-['']" : '';
   return (
     <div className={`relative ${conector}`}>
-      <TarjetaPartido partido={partido} destacado={destacadoDe(partido, cuadro)} className="w-full" />
+      <TarjetaPartido partido={partido} destacado={destacadoDe(partido, cuadro)} eleccion={eleccion} className="w-full" />
     </div>
   );
 }

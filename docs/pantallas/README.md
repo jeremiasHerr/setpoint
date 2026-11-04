@@ -23,7 +23,7 @@ Ordenado por entrega.
 | 25% | F03 | [Importar padrón](organizador/importar-padron.html) | Web organizador | 1280 px |
 | 25% | F04 | [Nuevo torneo](organizador/nuevo-torneo.html) | Web organizador | 1280 px |
 | 50% | F05 | [Sorteo de zonas](organizador/sorteo.html) | Web organizador | 1280 px |
-| 50% | F06, F07 | [Cargar resultado](organizador/cargar-resultado.html) | Web organizador | 1280 px |
+| 50% | F06, F07 | [Cargar resultado](organizador/cargar-resultado.html) | Web organizador. Arriba de la carga suma "Elegí el partido", con una pestaña por zona y una por cuadro y los cuadros dibujados como rama, sin referencia ([decisión 070](../decisiones/070-elegir-el-partido-desde-el-cuadro.md)) | 1280 px |
 | 50% | F07, F11 | [Mi zona](jugador/mi-zona.html) | App jugador | 390 px |
 | 50% | F08, F10 | [Los dos cuadros](publico/cuadros.html) | Web pública | 1860 px |
 | 50% | F09 | [Ranking](jugador/ranking.html) | App jugador, y web pública en `/c/:slug/ranking` ([decisión 033](../decisiones/033-ranking-publico.md)). En la app, sin el "+15" ([decisión 043](../decisiones/043-ranking-sin-el-cambio-del-ultimo-torneo.md)) | 390 px |
