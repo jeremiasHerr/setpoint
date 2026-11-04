@@ -25,7 +25,7 @@ Ordenado por entrega.
 | 50% | F05 | [Sorteo de zonas](organizador/sorteo.html) | Web organizador | 1280 px |
 | 50% | F06, F07 | [Cargar resultado](organizador/cargar-resultado.html) | Web organizador | 1280 px |
 | 50% | F07, F11 | [Mi zona](jugador/mi-zona.html) | App jugador | 390 px |
-| 50% | F08, F10 | [Los dos cuadros](publico/cuadros.html) | Web pública | 1860 px |
+| 50% | F08, F10 | [Los dos cuadros](publico/cuadros.html) | Web pública. Es la pestaña Cuadros de *El torneo en vivo* (`/c/:slug/torneos/:id/en-vivo`), que suma las pestañas Zonas y Calendario, sin referencia: armadas con las piezas del tablero ([decisión 069](../decisiones/069-torneo-en-vivo-en-una-pagina.md)) | 1860 px |
 | 50% | F09 | [Ranking](jugador/ranking.html) | App jugador, y web pública en `/c/:slug/ranking` ([decisión 033](../decisiones/033-ranking-publico.md)). En la app, sin el "+15" ([decisión 043](../decisiones/043-ranking-sin-el-cambio-del-ultimo-torneo.md)) | 390 px |
 | 50% | F11 | [Cuándo juego](jugador/cuando-juego.html) | App jugador. Con F14 suma, arriba de todo, "Te falta confirmar" para la fecha que anotó el rival, y "Cambiar la fecha" o "Reprogramar" en el próximo partido ([decisión 068](../decisiones/068-la-confirmacion-en-cuando-juego.md)). Sin referencia: armado con las piezas de la pantalla | 390 px |
 | 50% · 75% | F02, F12 | [Cuenta e ingreso](jugador/cuenta-e-ingreso.html) | App jugador · ingresar con email y código, los errores del código y quien solo administra. Implementado con código (F12) ([decisión 049](../decisiones/049-identidad-e-ingreso-con-codigo.md)) | 1290 px |

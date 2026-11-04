@@ -170,7 +170,7 @@ El sistema ordenará automáticamente la tabla de posiciones de cada grupo aplic
 
 **Entrega: 50%**
 
-**Estado:** implementada en la API. La tabla de cada zona se calcula en cada consulta (`GET .../torneos/:id/posiciones`) con la línea de corte hacia cada cuadro, y cada desempate se explica en una línea (`explicarDesempate()` en `packages/shared`). Lo que el enfrentamiento directo no resuelve lo define el ranking al inicio del torneo ([decisión 017](decisiones/017-empates-que-el-enfrentamiento-directo-no-resuelve.md)); entre zonas de 3 y de 4 se descarta el partido contra el último ([decisión 018](decisiones/018-comparar-zonas-de-distinto-tamano.md)). Por ahora la consulta es solo para la organización ([decisión 019](decisiones/019-acceso-a-las-posiciones.md)). La tabla en pantalla entra con Cargar resultado (F06) y Mi zona (F11).
+**Estado:** implementada en la API. La tabla de cada zona se calcula en cada consulta (`GET .../torneos/:id/posiciones`) con la línea de corte hacia cada cuadro, y cada desempate se explica en una línea (`explicarDesempate()` en `packages/shared`). Lo que el enfrentamiento directo no resuelve lo define el ranking al inicio del torneo ([decisión 017](decisiones/017-empates-que-el-enfrentamiento-directo-no-resuelve.md)); entre zonas de 3 y de 4 se descarta el partido contra el último ([decisión 018](decisiones/018-comparar-zonas-de-distinto-tamano.md)). La organización la consulta en el tablero, y cualquiera en la página pública del torneo en vivo (F10, [decisión 069](decisiones/069-torneo-en-vivo-en-una-pagina.md)). La tabla en pantalla entra con Cargar resultado (F06) y Mi zona (F11).
 
 ---
 
@@ -224,7 +224,11 @@ Cualquier persona podrá seguir el desarrollo de un torneo desde un enlace, sin 
 
 **Entrega: 50%**
 
-**Estado:** en curso. Los cuadros ya se consultan sin cuenta, en la pantalla *Los dos cuadros* (ver F08), con un botón para compartir el enlace. Faltan las tablas de zona y el calendario de partidos.
+**Estado:** implementada (`GET /api/publico/:slug/torneos/:id/en-vivo` y `.../cuadros`, [decisión 069](decisiones/069-torneo-en-vivo-en-una-pagina.md)).
+- La página *El torneo en vivo* (`/c/:slug/torneos/:id/en-vivo`) tiene tres pestañas: Zonas, Cuadros y Calendario, con un botón para compartir el enlace. `/cuadros` abre la pestaña Cuadros.
+- Zonas: la tabla de cada zona con quién clasifica a cada cuadro, y los partidos de la zona con su resultado o su fecha.
+- Calendario: los partidos con fecha, día por día desde hoy, con la hora, la sede y la instancia; los días anteriores, con su resultado. Cuenta los que todavía no tienen fecha.
+- Se llega desde el tablero ("Ver la página pública") y desde la convocatoria cerrada ("Ver el torneo en vivo").
 
 ---
 

@@ -15,6 +15,7 @@ export * from './schemas/cuadros';
 export * from './schemas/resultado';
 export * from './schemas/cierre';
 export * from './schemas/tablero';
+export * from './schemas/en-vivo';
 export * from './schemas/ranking';
 export * from './schemas/mi-zona';
 export * from './schemas/mis-partidos';

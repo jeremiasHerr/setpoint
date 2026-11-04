@@ -80,8 +80,15 @@ export function mensajeParaCoordinar(partido: PartidoDelTablero, aQuien: 'A' | '
   return `Hola ${yo.nombre}, ¿cuándo jugás con ${rival.nombre} ${rival.apellido} (${dondeSeJuega(partido, tablero)}, ${tablero.nombre})?${plazo}`;
 }
 
+// Lo que necesitan el marcador y el cruce. También lo usa la página pública del torneo (F10),
+// que trae los partidos sin el teléfono de los jugadores.
+type PartidoConMarcador = Pick<PartidoDelTablero, 'estado' | 'sets'> & {
+  jugadorA: { jugadorId: number } | null;
+  jugadorB: { jugadorId: number } | null;
+};
+
 // El marcador de un partido de zona desde quien está en la fila: "6-3 6-4", "W.O." o "ab.".
-export function marcadorDesde(partido: PartidoDelTablero, jugadorId: number) {
+export function marcadorDesde(partido: PartidoConMarcador, jugadorId: number) {
   if (partido.estado === 'walkover') return 'W.O.';
   const esA = partido.jugadorA?.jugadorId === jugadorId;
   const sets = partido.sets.map((s) => (esA ? `${s.gamesA}-${s.gamesB}` : `${s.gamesB}-${s.gamesA}`)).join(' ');
@@ -90,7 +97,7 @@ export function marcadorDesde(partido: PartidoDelTablero, jugadorId: number) {
 }
 
 // El partido entre dos de la zona, en cualquier orden.
-export function partidoEntre(partidos: PartidoDelTablero[], a: number, b: number) {
+export function partidoEntre<P extends PartidoConMarcador>(partidos: P[], a: number, b: number) {
   return partidos.find(
     (p) =>
       (p.jugadorA?.jugadorId === a && p.jugadorB?.jugadorId === b) || (p.jugadorA?.jugadorId === b && p.jugadorB?.jugadorId === a),

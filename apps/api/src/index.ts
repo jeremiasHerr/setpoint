@@ -6,6 +6,7 @@ import { hayMercadoPago } from './lib/mercadopago';
 import { manejarErrores } from './middleware/errores';
 import { authRouter } from './modules/auth/auth.routes';
 import { cierreRouter } from './modules/competencia/cierre.routes';
+import { enVivoRouter } from './modules/competencia/en-vivo.routes';
 import { cuadrosPublicoRouter } from './modules/competencia/cuadros-publico.routes';
 import { cuadrosRouter } from './modules/competencia/cuadros.routes';
 import { programarInicioDeGrupos } from './modules/competencia/inicio-de-grupos';
@@ -57,6 +58,7 @@ app.use('/api/organizaciones', organizacionesRouter);
 // Sin login. Nada de acá devuelve datos de contacto.
 app.use('/api/publico/:slug/ranking', rankingPublicoRouter);
 app.use('/api/publico/:slug/torneos/:id/cuadros', cuadrosPublicoRouter);
+app.use('/api/publico/:slug/torneos/:id/en-vivo', enVivoRouter);
 app.use('/api/publico/:slug/torneos/:id/padron', padronPublicoRouter);
 app.use('/api/publico/:slug/torneos/:id', torneoPublicoRouter);
 // Con la sesión del código, todavía sin perfil: encontrarlo y reservar el lugar (F12).
