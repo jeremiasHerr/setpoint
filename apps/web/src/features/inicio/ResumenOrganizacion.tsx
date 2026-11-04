@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { Tarjeta } from '../../components/Tarjeta';
 
 type Variante = 'numero' | 'acento' | 'importe' | 'texto';
@@ -19,10 +20,12 @@ type Props = {
   titulo: string;
   filas: Fila[];
   nota?: string;
+  // Lo que va al pie de la tarjeta, debajo de la nota.
+  pie?: ReactNode;
 };
 
 // La tarjeta negra de la pantalla de inicio: los números de la organización de un vistazo.
-export function ResumenOrganizacion({ titulo, filas, nota }: Props) {
+export function ResumenOrganizacion({ titulo, filas, nota, pie }: Props) {
   return (
     <Tarjeta variante="negra" className="flex flex-col gap-4">
       <h2 className="text-[15px] font-semibold">{titulo}</h2>
@@ -40,6 +43,7 @@ export function ResumenOrganizacion({ titulo, filas, nota }: Props) {
       </dl>
 
       {nota && <p className="text-[13px] leading-[1.45] text-gris-400">{nota}</p>}
+      {pie}
     </Tarjeta>
   );
 }

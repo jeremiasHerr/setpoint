@@ -4,6 +4,7 @@ import { Boton } from '../../components/Boton';
 import { IconoMas } from '../../components/IconoMas';
 import { Numero } from '../../components/Numero';
 import { AvisosAtencion } from './AvisosAtencion';
+import { BotonCopiarLink } from './BotonCopiarLink';
 import { ListaBorradores } from './ListaBorradores';
 import { ResumenOrganizacion } from './ResumenOrganizacion';
 import { TablaTerminados } from './TablaTerminados';
@@ -117,6 +118,10 @@ export function InicioConTorneos({ torneos }: { torneos: TorneosDeInicio }) {
               torneos.usaRanking
                 ? 'Ranking activo. Se actualiza al cerrar cada torneo.'
                 : 'Ranking anual sin activar. Cada torneo termina con su propia tabla de posiciones.'
+            }
+            pie={
+              // El enlace del ranking para el grupo, que hoy recibe la planilla por mensaje (F09).
+              torneos.usaRanking && <BotonCopiarLink ruta="/ranking" variante="principal" texto="Copiar el link del ranking" />
             }
           />
         </aside>

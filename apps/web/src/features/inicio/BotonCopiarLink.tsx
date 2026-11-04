@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import { Boton } from '../../components/Boton';
 import { leerSesion } from '../auth/sesion';
 
-// Copia el link público del torneo, el que la organización comparte en el grupo (F12).
-export function BotonCopiarLink({ torneoId }: { torneoId: number }) {
+// Copia un link público de la organización para compartir en el grupo: el del torneo (F12), o
+// el del ranking (F09). La ruta va después de /c/:slug.
+export function BotonCopiarLink({ ruta, variante, texto = 'Copiar link' }: { ruta: string; variante?: 'principal'; texto?: string }) {
   const [copiado, setCopiado] = useState(false);
 
   useEffect(() => {
@@ -16,7 +17,7 @@ export function BotonCopiarLink({ torneoId }: { torneoId: number }) {
     const slug = leerSesion()?.organizacion.slug;
     if (!slug) return;
     try {
-      await navigator.clipboard.writeText(`${window.location.origin}/c/${slug}/torneos/${torneoId}`);
+      await navigator.clipboard.writeText(`${window.location.origin}/c/${slug}${ruta}`);
       setCopiado(true);
     } catch {
       // Sin permiso para el portapapeles no hay nada que hacer desde acá.
@@ -24,8 +25,8 @@ export function BotonCopiarLink({ torneoId }: { torneoId: number }) {
   }
 
   return (
-    <Boton onClick={copiar} className="h-[38px] px-3.5 text-sm">
-      <span aria-live="polite">{copiado ? 'Copiado' : 'Copiar link'}</span>
+    <Boton onClick={copiar} variante={variante} className="h-[38px] self-start px-3.5 text-sm">
+      <span aria-live="polite">{copiado ? 'Copiado' : texto}</span>
     </Boton>
   );
 }

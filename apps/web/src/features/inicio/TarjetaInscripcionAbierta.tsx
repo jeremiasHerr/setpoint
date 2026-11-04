@@ -30,7 +30,7 @@ export function TarjetaInscripcionAbierta({ torneo }: { torneo: TorneoConInscrip
         <Boton className="grow" onClick={() => navegar(`/torneos/${torneo.id}/inscripciones`)}>
           Inscripciones
         </Boton>
-        <BotonCopiarLink torneoId={torneo.id} />
+        <BotonCopiarLink ruta={`/torneos/${torneo.id}`} />
       </div>
     </Tarjeta>
   );
