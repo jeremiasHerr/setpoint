@@ -110,9 +110,18 @@ function Convocatoria({ torneo }: { torneo: TorneoPublico }) {
           </p>
         </div>
       ) : (
-        <p className="rounded-[12px] bg-fondo px-4 py-3.5 text-[15px] leading-[1.42] text-gris-700">
-          Ya no se puede inscribir nadie. Después del sorteo, las zonas, los cuadros y los resultados se pueden mirar sin cuenta.
-        </p>
+        <div className="flex flex-col gap-3">
+          <p className="rounded-[12px] bg-fondo px-4 py-3.5 text-[15px] leading-[1.42] text-gris-700">
+            Ya no se puede inscribir nadie. Después del sorteo, las zonas, los cuadros y los resultados se pueden mirar sin cuenta.
+          </p>
+          {/* Antes del sorteo, la página en vivo lo dice: no hace falta saber acá si ya se confirmó. */}
+          <Link
+            to={`/c/${torneo.organizacion.slug}/torneos/${torneo.id}/en-vivo`}
+            className="flex h-[52px] items-center justify-center rounded-[12px] border border-linea text-[15px] font-semibold hover:bg-fondo"
+          >
+            Ver el torneo en vivo
+          </Link>
+        </div>
       )}
     </>
   );

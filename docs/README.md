@@ -166,6 +166,7 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 - ~~¿Se guarda quién propuso qué para resolver un partido no jugado?~~ **Sí, en un historial de coordinación desde F14** ([decisión 066](decisiones/066-historial-de-coordinacion.md)). Lo pide 02 §8.4, y lo que no se guarda ahora no se recupera después
 - ~~¿Dónde se guardan las reprogramaciones permitidas y la antelación?~~ **En el torneo, por ahora sin campo en Nuevo torneo** ([decisión 067](decisiones/067-parametros-de-reprogramacion.md)). Queda parametrizado como dice 07 §2.3, con los valores de POLENTA por defecto
 - ~~¿Dónde confirma el rival la fecha que le anotaron?~~ **En Cuándo juego, arriba de todo** ([decisión 068](decisiones/068-la-confirmacion-en-cuando-juego.md)). El aviso ya abre la app ahí, y funciona igual para quien no recibe avisos
+- ~~¿Dónde se ven sin cuenta las zonas y el calendario del torneo?~~ **En una sola página pública, `/c/:slug/torneos/:id/en-vivo`, con pestañas Zonas, Cuadros y Calendario** ([decisión 069](decisiones/069-torneo-en-vivo-en-una-pagina.md)). F10 es el enlace que la organización comparte en el grupo: uno solo, no tres. `/cuadros` abre la pestaña Cuadros
 
 ---
 

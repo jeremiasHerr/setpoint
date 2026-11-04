@@ -111,7 +111,7 @@ function Contenido({ sesion, tablero }: { sesion: Sesion; tablero: Tablero }) {
   const navegar = useNavigate();
   const cerrarZonas = useCerrarZonas(slug, torneoId);
   useSesionInvalida(cerrarZonas.error);
-  const cuadrosPublicos = `/c/${slug}/torneos/${torneoId}/cuadros`;
+  const enVivo = `/c/${slug}/torneos/${torneoId}/en-vivo`;
 
   const titulo = fase === 'grupos' ? 'Fase de grupos' : fase === 'cuadros' ? 'Cuadros' : 'Torneo cerrado';
 
@@ -124,7 +124,7 @@ function Contenido({ sesion, tablero }: { sesion: Sesion; tablero: Tablero }) {
           <p className="text-[15px] text-gris-500">{bajada(tablero)}</p>
         </div>
         <div className="flex flex-wrap gap-[9px]">
-          {fase !== 'grupos' && <Boton onClick={() => navegar(cuadrosPublicos)}>Ver cuadros</Boton>}
+          <Boton onClick={() => navegar(enVivo)}>Ver la página pública</Boton>
           {fase === 'terminado' ? (
             <Boton variante="organizador" className="font-semibold" onClick={() => navegar(`/torneos/${torneoId}/cierre`)}>
               Ver el cierre

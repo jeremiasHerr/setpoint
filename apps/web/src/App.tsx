@@ -2,7 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 import { Catalogo } from './Catalogo';
 import { CargarResultadoPage } from './pages/CargarResultadoPage';
 import { CierrePage } from './pages/CierrePage';
-import { CuadrosPublicoPage } from './pages/CuadrosPublicoPage';
+import { EnVivoPage } from './pages/EnVivoPage';
 import { ImportarPadronPage } from './pages/ImportarPadronPage';
 import { IngresoPage } from './pages/IngresoPage';
 import { InscripcionesPage } from './pages/InscripcionesPage';
@@ -56,7 +56,8 @@ export default function App() {
       <Route path="/c/:slug/torneos/:id/inscripcion" element={<InscripcionPage />} />
       <Route path="/c/:slug/inscripciones/:id" element={<PagoPage />} />
       <Route path="/i/:codigo" element={<LinkPersonalPage />} />
-      <Route path="/c/:slug/torneos/:id/cuadros" element={<CuadrosPublicoPage />} />
+      <Route path="/c/:slug/torneos/:id/en-vivo" element={<EnVivoPage />} />
+      <Route path="/c/:slug/torneos/:id/cuadros" element={<EnVivoPage pestanaInicial="cuadros" />} />
     </Routes>
   );
 }
