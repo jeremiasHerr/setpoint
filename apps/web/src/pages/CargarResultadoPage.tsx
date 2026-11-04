@@ -27,7 +27,7 @@ import {
   type SetEscrito,
   type TipoDeResultado,
 } from '../features/resultados/resultado';
-import { SelectorDePartido } from '../features/resultados/SelectorDePartido';
+import { ElegirPartido } from '../features/resultados/ElegirPartido';
 import { useGuardarResultado, usePartido, usePartidos, useSimulacion } from '../features/resultados/useResultado';
 
 // Sin partido en la ruta, se abre el primero que no tiene resultado (decisión 031).
@@ -51,7 +51,7 @@ function Marco({ sesion, children }: { sesion: Sesion; children: ReactNode }) {
         alSalir={cerrarSesion}
       />
       <div className="flex justify-center px-7 pt-[34px] pb-10">
-        <div className="flex w-full max-w-[720px] flex-col gap-4">{children}</div>
+        <div className="flex w-full max-w-[1240px] flex-col gap-4">{children}</div>
       </div>
     </div>
   );
@@ -117,7 +117,7 @@ function PrimeroSinResultado({ sesion, torneoId }: { sesion: Sesion; torneoId: n
               </Boton>
             )}
           </div>
-          <SelectorDePartido slug={slug} torneoId={torneoId} />
+          <ElegirPartido slug={slug} torneoId={torneoId} />
         </Tarjeta>
       </Marco>
     );
@@ -210,7 +210,6 @@ function TarjetaDelPartido({ sesion, partido }: { sesion: Sesion; partido: Parti
   const partidos = usePartidos(slug, torneoId);
   useSesionInvalida(guardar.error);
 
-  const [eligiendo, setEligiendo] = useState(false);
   // "Resolver" en el tablero abre un partido vencido con el W.O. elegido (decisión 062). Si ya
   // tiene resultado, se muestra el que tiene.
   const [parametros] = useSearchParams();
@@ -261,22 +260,21 @@ function TarjetaDelPartido({ sesion, partido }: { sesion: Sesion; partido: Parti
     <Marco sesion={sesion}>
       <Migas torneoId={torneoId} nombre={partido.nombre} ubicacion={ubicacionDelPartido(partido)} />
 
+      {/* Arriba, las zonas y los cuadros para elegir el partido; abajo, la carga (decisión 070). */}
       <Tarjeta className="overflow-hidden">
-        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-linea px-6 py-5">
-          <div className="flex flex-col gap-[5px]">
-            <h1 className="text-[22px] font-semibold tracking-[-0.03em]">
-              {nombres[0]} · {nombres[1]}
-            </h1>
-            <p className="font-mono text-[13px] text-gris-500">{rotuloDelPartido(partido)}</p>
-          </div>
-          <Boton aria-expanded={eligiendo} onClick={() => setEligiendo(!eligiendo)}>
-            {eligiendo ? 'Volver al partido' : 'Cambiar partido'}
-          </Boton>
+        <h2 className="border-b border-linea px-6 py-4 text-[15px] font-semibold">Elegí el partido</h2>
+        <ElegirPartido slug={slug} torneoId={torneoId} actual={partido.id} />
+      </Tarjeta>
+
+      <Tarjeta className="w-full max-w-[720px] self-center overflow-hidden">
+        <div className="flex flex-col gap-[5px] border-b border-linea px-6 py-5">
+          <h1 className="text-[22px] font-semibold tracking-[-0.03em]">
+            {nombres[0]} · {nombres[1]}
+          </h1>
+          <p className="font-mono text-[13px] text-gris-500">{rotuloDelPartido(partido)}</p>
         </div>
 
-        {eligiendo ? (
-          <SelectorDePartido slug={slug} torneoId={torneoId} actual={partido.id} />
-        ) : sinCarga ? (
+        {sinCarga ? (
           <p className="px-6 py-5 text-[15px] text-gris-500">{sinCarga}</p>
         ) : (
           <>

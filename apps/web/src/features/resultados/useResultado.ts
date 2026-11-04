@@ -1,7 +1,7 @@
 import type { DatosResultado } from '@setpoint/shared';
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
-import { guardarResultado, obtenerPartido, obtenerPartidos, simularResultado } from './api';
+import { guardarResultado, obtenerCuadros, obtenerPartido, obtenerPartidos, simularResultado } from './api';
 
 // La lista y cada partido comparten el comienzo de la clave: invalidar la lista refresca todo.
 const clavePartidos = (slug: string, id: number) => ['partidos', slug, id];
@@ -63,5 +63,16 @@ export function useGuardarResultado(slug: string, id: number, partidoId: number)
       // Cambian la lista, la vista previa y, en un cuadro, el partido siguiente, que tiene un jugador nuevo.
       void queryClient.invalidateQueries({ queryKey: clavePartidos(slug, id) });
     },
+  });
+}
+
+// Bajo la clave de los partidos: al guardar un resultado se refresca también la rama, que hace
+// avanzar al ganador. Se pide solo con las zonas cerradas.
+export function useCuadros(slug: string, id: number, hayCuadros: boolean) {
+  return useQuery({
+    queryKey: [...clavePartidos(slug, id), 'cuadros'],
+    queryFn: () => obtenerCuadros(slug, id),
+    enabled: hayCuadros,
+    retry: false,
   });
 }

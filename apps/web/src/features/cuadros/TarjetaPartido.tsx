@@ -3,24 +3,43 @@ import { useState } from 'react';
 import { Numero } from '../../components/Numero';
 import { cuandoSeJuega, marcadorDelLado, tieneResultado, type Destacado } from './cuadro';
 
+// Para elegir un partido desde el cuadro (Cargar resultado): tocarlo lo elige en vez de abrirlo.
+export type Eleccion = {
+  elegido?: number;
+  alElegir: (partido: PartidoDelCuadro) => void;
+};
+
 type Props = {
   partido: PartidoDelCuadro;
   destacado?: Destacado;
+  eleccion?: Eleccion;
   className?: string;
 };
 
 // Un partido del cuadro: dos filas con el resultado en sets (design.md §6). Al tocarlo, cada fila
 // muestra los games de cada set.
-export function TarjetaPartido({ partido, destacado, className = '' }: Props) {
+export function TarjetaPartido({ partido, destacado, eleccion, className = '' }: Props) {
   const [abierta, setAbierta] = useState(false);
-  const borde = destacado === 'principal' ? 'border-2 border-negro rounded-[10px]' : destacado ? 'border border-gris-300 rounded-[10px]' : 'border border-linea rounded-lg';
+  const elegido = eleccion?.elegido === partido.id;
+  // Uno que espera a los ganadores de la ronda anterior todavía no se puede elegir.
+  const sinJugadores = partido.jugadorA === null || partido.jugadorB === null;
+  const borde = elegido
+    ? 'border-2 border-negro rounded-[10px] ring-2 ring-lima'
+    : destacado === 'principal'
+      ? 'border-2 border-negro rounded-[10px]'
+      : destacado
+        ? 'border border-gris-300 rounded-[10px]'
+        : 'border border-linea rounded-lg';
+  const elegible = eleccion !== undefined && !sinJugadores;
 
   return (
     <button
       type="button"
-      aria-expanded={abierta}
-      onClick={() => setAbierta(!abierta)}
-      className={`flex flex-col overflow-hidden bg-white text-left ${borde} ${className}`}
+      aria-expanded={eleccion ? undefined : abierta}
+      aria-current={elegido ? 'true' : undefined}
+      disabled={eleccion !== undefined && sinJugadores}
+      onClick={() => (eleccion ? eleccion.alElegir(partido) : setAbierta(!abierta))}
+      className={`flex flex-col overflow-hidden bg-white text-left disabled:cursor-default ${elegible ? 'hover:border-gris-500' : ''} ${borde} ${className}`}
     >
       {destacado && (
         <Numero
