@@ -178,6 +178,10 @@ async function main() {
       puntajes: {
         create: PUNTAJES.map(([instancia, puntos]) => ({ instancia, puntos })),
       },
+      // Donde se juegan las zonas: los jugadores eligen entre estos al anotar la fecha (F14).
+      clubes: {
+        create: [{ nombre: 'Club Alta Barda' }, { nombre: 'Club Independiente' }, { nombre: 'Neuquén Tenis Club' }],
+      },
     },
     include: { categorias: true, etapas: true },
   });
@@ -507,7 +511,7 @@ async function crearCopaAltaBarda(organizacionId: number, categoriaId: number, u
     await guardarResultado('polenta', usuarioId, torneo.id, partido.id, datos);
   }
 
-  // La coordinación (F14) todavía no existe: la fecha y la sede de la final se anotan acá.
+  // La fecha y la sede de la final se anotan directo, como si las hubiera cargado la organización (F14).
   const fechaFinal = diasAdelante(5);
   fechaFinal.setHours(11, 0, 0, 0);
   await prisma.partido.update({

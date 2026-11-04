@@ -18,6 +18,7 @@ export * from './schemas/tablero';
 export * from './schemas/ranking';
 export * from './schemas/mi-zona';
 export * from './schemas/mis-partidos';
+export * from './schemas/coordinacion';
 export * from './schemas/avisos';
 export * from './schemas/salud';
 export * from './formato';

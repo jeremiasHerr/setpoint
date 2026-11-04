@@ -14,7 +14,41 @@ export function avisosDeFixture(torneo: string, inscriptos: InscriptoConZona[]):
   );
 }
 
-type Ticket = { status: 'ok' } | { status: 'error'; details?: { error?: string } };
+type Persona = { usuarioId: number | null; nombre: string };
+
+// Un jugador anotó, cambió o reprogramó la fecha (F14): el rival confirma con un toque
+// (04-flujo-jugador §6.2). Sin cuenta, no hay a quién avisar.
+export function avisoDeFechaAnotada(quien: Persona, rival: Persona, cuando: string, cambio: boolean): Aviso[] {
+  if (rival.usuarioId === null) return [];
+  return [
+    {
+      usuarioId: rival.usuarioId,
+      titulo: cambio ? `${quien.nombre} cambió la fecha` : `${quien.nombre} anotó la fecha`,
+      cuerpo: `${cuando}. Confirmala en la app para que quede agendado para los dos.`,
+    },
+  ];
+}
+
+// El rival confirmó: le avisa a quien la anotó.
+export function avisoDeFechaConfirmada(quien: Persona, anoto: Persona, cuando: string): Aviso[] {
+  if (anoto.usuarioId === null) return [];
+  return [{ usuarioId: anoto.usuarioId, titulo: `${quien.nombre} confirmó el partido`, cuerpo: `Quedó agendado: ${cuando}.` }];
+}
+
+// La organización cargó la fecha en nombre de los dos: queda confirmada (decisión 064) y se les
+// avisa a ambos, cada uno con el nombre del otro.
+export function avisosDeFechaDeLaOrganizacion(a: Persona, b: Persona, cuando: string): Aviso[] {
+  return [
+    [a, b],
+    [b, a],
+  ].flatMap(([jugador, rival]) =>
+    jugador.usuarioId === null
+      ? []
+      : [{ usuarioId: jugador.usuarioId, titulo: `Tu partido con ${rival.nombre} quedó agendado`, cuerpo: `Lo anotó la organización: ${cuando}.` }],
+  );
+}
+
+type Ticket ={ status: 'ok' } | { status: 'error'; details?: { error?: string } };
 
 // Los tokens que el servicio de Expo dice que ya no sirven: la app se desinstaló o se le quitó
 // el permiso. Los tickets vuelven en el mismo orden que los mensajes.

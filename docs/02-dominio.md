@@ -288,7 +288,7 @@ Se admite **una sola reprogramación** por partido, avisando con al menos **24 h
 
 Si se avisa con menos de 24 horas, o si el otro jugador no puede reprogramar, **quien no puede cumplir debe dar W.O.**
 
-**En la plataforma:** los plazos, la cantidad de reprogramaciones y la antelación son parámetros del torneo ([07](07-configurabilidad.md) §2.3).
+**En la plataforma:** los plazos, la cantidad de reprogramaciones y la antelación son parámetros del torneo ([07](07-configurabilidad.md) §2.3). Reprogramar es cambiar una fecha que ya confirmaron los dos; cambiar una que el rival todavía no confirmó no cuenta ([decisión 065](decisiones/065-cambiar-una-fecha-sin-confirmar.md)).
 
 ### 8.4 Partidos no coordinados
 

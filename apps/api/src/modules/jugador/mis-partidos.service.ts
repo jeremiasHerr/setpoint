@@ -6,7 +6,7 @@ import { partidosDelJugador } from './mis-partidos';
 
 const EN_JUEGO = [EstadoTorneo.ZONAS_GENERADAS, EstadoTorneo.GRUPOS_EN_CURSO, EstadoTorneo.ELIMINATORIAS];
 
-const JUGADOR = { select: { nombre: true, apellido: true, telefono: true } };
+const JUGADOR = { select: { nombre: true, apellido: true, telefono: true, usuarioId: true } };
 
 // Los partidos del jugador que pregunta en todos sus torneos en juego (F11): pueden ser dos,
 // las eliminatorias de uno y las zonas del siguiente. El teléfono solo sale de los rivales de un
@@ -22,7 +22,7 @@ export async function misPartidos(slug: string, usuarioId: number): Promise<Resp
       inscripciones: { some: { jugadorId, grupo: { not: null } } },
     },
     orderBy: { id: 'asc' },
-    select: { id: true, nombre: true, edicion: true },
+    select: { id: true, nombre: true, edicion: true, reprogramacionesPermitidas: true, horasAntelacionReprogramar: true },
   });
   if (torneos.length === 0) return { partidos: null };
 
@@ -42,6 +42,8 @@ export async function misPartidos(slug: string, usuarioId: number): Promise<Resp
       estado: true,
       fechaAcordada: true,
       fechaLimite: true,
+      anotadaPorId: true,
+      reprogramaciones: true,
       sedeTexto: true,
       club: { select: { nombre: true } },
       cancha: { select: { nombre: true } },
@@ -52,15 +54,16 @@ export async function misPartidos(slug: string, usuarioId: number): Promise<Resp
   });
 
   const nombres = torneos.map((t) => t.edicion ?? t.nombre);
+  const ahora = new Date();
   return {
     partidos: {
       torneos: nombres,
-      // Con más de un torneo, cada partido dice de cuál es.
       partidos: torneos.flatMap((t, i) =>
         partidosDelJugador(
           jugadorId,
           partidos.filter((p) => p.torneoId === t.id),
-          torneos.length > 1 ? nombres[i] : undefined,
+          // Con más de un torneo, cada partido dice de cuál es.
+          { torneo: torneos.length > 1 ? nombres[i] : undefined, reglas: t, ahora },
         ),
       ),
     },

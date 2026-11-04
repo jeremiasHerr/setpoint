@@ -110,6 +110,8 @@ Estos parámetros solo afectan la **validación** al cargar un resultado y el c�
 | Reprogramaciones permitidas por partido | 1 |
 | Antelación mínima para reprogramar | 24 horas |
 
+Las dos de reprogramación están en el torneo, con los valores de POLENTA por defecto, y todavía no tienen campo en *Nuevo torneo* ([decisión 067](decisiones/067-parametros-de-reprogramacion.md)).
+
 ### 2.4 Sedes y costos
 
 | Parámetro | Valores | POLENTA |
