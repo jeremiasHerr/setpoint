@@ -11,6 +11,7 @@ import { useSesion } from '../../features/auth/SesionProvider';
 import { programarRecordatorios } from '../../features/avisos/recordatorios';
 import { agruparPartidos } from '../../features/partidos/agrupar';
 import { OtrosPartidos } from '../../features/partidos/OtrosPartidos';
+import { PorConfirmar } from '../../features/partidos/PorConfirmar';
 import { SinCoordinar } from '../../features/partidos/SinCoordinar';
 import { TarjetaProximo } from '../../features/partidos/TarjetaProximo';
 import { useMisPartidos } from '../../features/partidos/useMisPartidos';
@@ -68,10 +69,23 @@ export default function CuandoJuego() {
 }
 
 function Contenido({ datos }: { datos: MisPartidos }) {
-  const { proximo, sinCoordinar, resto, porJugar } = agruparPartidos(datos.partidos);
+  const { porConfirmar, proximo, sinCoordinar, resto, porJugar } = agruparPartidos(datos.partidos);
 
   return (
     <>
+      {/* Lo que le pide una acción va primero: confirmar la fecha que anotó el rival (decisión 068). */}
+      {porConfirmar.length > 0 && (
+        <>
+          <View style={estilos.subtitulo}>
+            <Text style={estilos.textoSubtitulo}>Te falta confirmar</Text>
+            <Text style={estilos.cantidad}>{porConfirmar.length}</Text>
+          </View>
+          {porConfirmar.map((p) => (
+            <PorConfirmar key={p.id} partido={p} />
+          ))}
+        </>
+      )}
+
       {proximo ? (
         <TarjetaProximo partido={proximo} />
       ) : (
