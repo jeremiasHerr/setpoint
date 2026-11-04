@@ -16,6 +16,23 @@ export function elDiaCorto(fechaHora: string) {
   return diaCorto.format(new Date(fechaHora)).replace('.', '').replace(',', '');
 }
 
+const hora = new Intl.DateTimeFormat('es-AR', { hour: '2-digit', minute: '2-digit', hourCycle: 'h23', timeZone: 'America/Argentina/Buenos_Aires' });
+
+// "sáb 14 · 10:00", como en la app.
+export function elDiaYHora(fechaHora: string) {
+  return `${elDiaCorto(fechaHora)} · ${hora.format(new Date(fechaHora))}`;
+}
+
+// Los partidos con fecha acordada que todavía no se jugaron, del más cercano al más lejano. No
+// están en "Lo que falta", pero la organización puede cambiarles la fecha o confirmarla por un
+// jugador sin la app (F14).
+export function partidosConFecha(tablero: Tablero) {
+  return tablero.bloques
+    .flatMap((b) => b.partidos)
+    .filter((p) => p.situacion === 'con_fecha')
+    .sort((a, b) => (a.fechaAcordada ?? '').localeCompare(b.fechaAcordada ?? ''));
+}
+
 // Cómo se nombra cada barra: la zona, o el cuadro y la ronda ("Campeonato · semis").
 export function nombreDelBloque(bloque: BloqueDelTablero, tablero: Tablero) {
   if (bloque.grupo) return bloque.grupo;

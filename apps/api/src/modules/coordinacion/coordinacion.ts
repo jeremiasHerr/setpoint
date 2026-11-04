@@ -103,15 +103,23 @@ export function problemaDeFecha(instante: Date, ultimoDia: string | null, ahora:
 export type CambioDeFecha = {
   estado: 'ANOTADA' | 'CONFIRMADA';
   reprogramaciones: number;
-  evento: 'ANOTADA' | 'CAMBIADA' | 'REPROGRAMADA';
+  evento: 'ANOTADA' | 'CAMBIADA' | 'REPROGRAMADA' | 'CONFIRMADA';
 };
 
 // Cómo queda el partido después de anotar. Lo que anota un jugador espera la confirmación del
 // rival; lo que carga la organización queda confirmado, porque ella es el registro que hoy es el
-// grupo de WhatsApp (decisión 064), y no gasta reprogramaciones.
-export function cambioDeFecha(accion: AccionDeFecha, reprogramaciones: number, porOrganizacion: boolean): CambioDeFecha {
+// grupo de WhatsApp (decisión 064), y no gasta reprogramaciones. Si la organización guarda sin
+// cambios la fecha que anotó un jugador, la está confirmando por el rival: así queda en el historial.
+export function cambioDeFecha(
+  accion: AccionDeFecha,
+  reprogramaciones: number,
+  porOrganizacion: boolean,
+  sinCambios = false,
+): CambioDeFecha {
   const evento = ({ anotar: 'ANOTADA', cambiar: 'CAMBIADA', reprogramar: 'REPROGRAMADA' } as const)[accion];
-  if (porOrganizacion) return { estado: 'CONFIRMADA', reprogramaciones, evento };
+  if (porOrganizacion) {
+    return { estado: 'CONFIRMADA', reprogramaciones, evento: accion === 'cambiar' && sinCambios ? 'CONFIRMADA' : evento };
+  }
   return {
     estado: 'ANOTADA',
     reprogramaciones: accion === 'reprogramar' ? reprogramaciones + 1 : reprogramaciones,
