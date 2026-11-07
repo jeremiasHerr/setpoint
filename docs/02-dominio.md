@@ -304,6 +304,8 @@ En la práctica actual se flexibiliza: agregan días o acomodan la fecha.
 
 **Abandono.** Si un jugador abandona un partido empezado, se computa igual que un W.O.: 6-0 6-0 a favor del que siguió. Se carga igual que un W.O., eligiendo quién siguió, y no se guarda el marcador hasta el abandono. El reglamento no lo define: es una decisión nuestra ([decisión 059](decisiones/059-abandono-sin-sets.md), que reemplaza a la [027](decisiones/027-abandono.md)).
 
+**En la ficha del jugador** (F17), el W.O. no cuenta como partido jugado, porque no se jugó; el abandono sí, como en la ATP. Las tablas de zona no cambian: los dos siguen computando 6-0 6-0 ([decisión 073](decisiones/073-el-wo-no-cuenta-en-la-ficha.md)).
+
 ---
 
 ## 9. Sedes y costos de cancha

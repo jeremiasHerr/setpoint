@@ -207,7 +207,7 @@ Cualquier persona podrá consultar el ranking del circuito desde un enlace, sin 
 
 **Entrega: 50%**
 
-**Estado:** implementada. En la web, para cualquiera con el enlace (`/c/:slug/ranking`, [decisión 033](decisiones/033-ranking-publico.md)), con buscador por apellido. En la app, la pantalla *Ranking* usa la misma ruta y suma tu tarjeta ("Vas 1º de 26", tus puntos y tus casilleros) y tu fila destacada. La tarjeta no muestra cuánto cambió el último torneo ([decisión 043](decisiones/043-ranking-sin-el-cambio-del-ultimo-torneo.md)). La organización copia el enlace desde el inicio ("Copiar el link del ranking") para pasarlo al grupo.
+**Estado:** implementada. En la web, para cualquiera con el enlace (`/c/:slug/ranking`, [decisión 033](decisiones/033-ranking-publico.md)), con buscador por apellido. En la app, la pantalla *Ranking* usa la misma ruta y suma tu tarjeta ("Vas 1º de 26", tus puntos y tus casilleros) y tu fila destacada. La tarjeta no muestra cuánto cambió el último torneo ([decisión 043](decisiones/043-ranking-sin-el-cambio-del-ultimo-torneo.md)). La organización copia el enlace desde el inicio ("Copiar el link del ranking") para pasarlo al grupo. En la web, la fila abierta lleva a la ficha del jugador (F17).
 
 ---
 
@@ -226,7 +226,7 @@ Cualquier persona podrá seguir el desarrollo de un torneo desde un enlace, sin 
 
 **Estado:** implementada (`GET /api/publico/:slug/torneos/:id/en-vivo` y `.../cuadros`, [decisión 069](decisiones/069-torneo-en-vivo-en-una-pagina.md)).
 - La página *El torneo en vivo* (`/c/:slug/torneos/:id/en-vivo`) tiene tres pestañas: Zonas, Cuadros y Calendario, con un botón para compartir el enlace. `/cuadros` abre la pestaña Cuadros.
-- Zonas: la tabla de cada zona con quién clasifica a cada cuadro, y los partidos de la zona con su resultado o su fecha.
+- Zonas: la tabla de cada zona con quién clasifica a cada cuadro, y los partidos de la zona con su resultado o su fecha. Cada nombre de la tabla lleva a la ficha del jugador (F17).
 - Calendario: los partidos con fecha, día por día desde hoy, con la hora, la sede y la instancia; los días anteriores, con su resultado. Cuenta los que todavía no tienen fecha.
 - Se llega desde el tablero ("Ver la página pública") y desde la convocatoria cerrada ("Ver el torneo en vivo").
 
@@ -364,6 +364,13 @@ Cada jugador tendrá una ficha con su historial completo: todos los partidos que
 - Es de acceso público, sin necesidad de cuenta.
 
 **Entrega: 75%**
+
+**Estado:** implementada en la web (`GET /api/publico/:slug/jugadores/:id`).
+- La página *Ficha del jugador* (`/c/:slug/jugadores/:id`) muestra jugados, ganados y perdidos, los puntos de cada torneo del calendario en barras, los torneos que jugó y sus partidos con resultado. Ningún dato de contacto.
+- Los torneos van con la instancia que alcanzó y los puntos que le dio el cierre; es la sección que la referencia no dibuja ([decisión 071](decisiones/071-la-ficha-suma-los-torneos.md)). La instancia se calcula con sus partidos de cuadro, así que sirve también para torneos sin ranking y en juego ([decisión 072](decisiones/072-la-instancia-se-calcula-con-los-partidos.md)).
+- El W.O. figura en la lista pero no cuenta como jugado; el abandono sí ([decisión 073](decisiones/073-el-wo-no-cuenta-en-la-ficha.md)).
+- Se llega desde la fila abierta del ranking ("Ver la ficha") y desde los nombres de las zonas del torneo en vivo ([decisión 074](decisiones/074-entrada-a-la-ficha.md)).
+- La ficha en la app y el botón "Comparar con otro jugador", que abre el cara a cara (F18), quedan pendientes.
 
 ---
 

@@ -15,6 +15,7 @@ import { resultadosRouter } from './modules/competencia/resultados.routes';
 import { sorteoRouter } from './modules/competencia/sorteo.routes';
 import { tableroRouter } from './modules/competencia/tablero.routes';
 import { coordinacionRouter } from './modules/coordinacion/coordinacion.routes';
+import { fichaPublicaRouter } from './modules/ficha/ficha-publica.routes';
 import { inscripcionesRouter } from './modules/inscripciones/inscripciones.routes';
 import { inscripcionRouter } from './modules/inscripcion/inscripcion.routes';
 import { padronPublicoRouter } from './modules/inscripcion/padron-publico.routes';
@@ -57,6 +58,7 @@ app.use('/api/organizaciones/:slug/revisiones', revisionesRouter);
 app.use('/api/organizaciones', organizacionesRouter);
 // Sin login. Nada de acá devuelve datos de contacto.
 app.use('/api/publico/:slug/ranking', rankingPublicoRouter);
+app.use('/api/publico/:slug/jugadores/:id', fichaPublicaRouter);
 app.use('/api/publico/:slug/torneos/:id/cuadros', cuadrosPublicoRouter);
 app.use('/api/publico/:slug/torneos/:id/en-vivo', enVivoRouter);
 app.use('/api/publico/:slug/torneos/:id/padron', padronPublicoRouter);

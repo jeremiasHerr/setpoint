@@ -1,8 +1,10 @@
 import type { FilaDeRanking, TorneoDelCalendario } from '@setpoint/shared';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Numero } from '../../components/Numero';
 
 type Props = {
+  slug: string;
   filas: FilaDeRanking[];
   torneosDelCalendario: TorneoDelCalendario[];
 };
@@ -13,8 +15,8 @@ function rotuloDeCasillero(nombre: string, anio: number) {
 }
 
 // Puesto, nombre y total, sin scroll horizontal. Al tocar una fila se abre el desglose
-// por torneo del calendario, como en la planilla.
-export function TablaRanking({ filas, torneosDelCalendario }: Props) {
+// por torneo del calendario, como en la planilla, y el enlace a la ficha (decisión 074).
+export function TablaRanking({ slug, filas, torneosDelCalendario }: Props) {
   const [abierta, setAbierta] = useState<number | null>(null);
 
   return (
@@ -35,7 +37,17 @@ export function TablaRanking({ filas, torneosDelCalendario }: Props) {
               </span>
               <Numero className="text-right text-lg font-medium">{fila.puntos}</Numero>
             </button>
-            {estaAbierta && <Casilleros fila={fila} torneosDelCalendario={torneosDelCalendario} />}
+            {estaAbierta && (
+              <div className="mb-3 flex flex-col gap-2.5">
+                <Casilleros fila={fila} torneosDelCalendario={torneosDelCalendario} />
+                <Link
+                  to={`/c/${slug}/jugadores/${fila.jugadorId}`}
+                  className="self-start text-sm font-medium text-negro underline underline-offset-[3px] hover:text-gris-500"
+                >
+                  Ver la ficha
+                </Link>
+              </div>
+            )}
           </li>
         );
       })}
@@ -46,7 +58,7 @@ export function TablaRanking({ filas, torneosDelCalendario }: Props) {
 function Casilleros({ fila, torneosDelCalendario }: { fila: FilaDeRanking; torneosDelCalendario: TorneoDelCalendario[] }) {
   return (
     <div
-      className="mb-3 grid gap-[5px]"
+      className="grid gap-[5px]"
       style={{ gridTemplateColumns: `repeat(${Math.max(torneosDelCalendario.length, 1)}, minmax(0, 1fr))` }}
     >
       {torneosDelCalendario.map((torneo) => {

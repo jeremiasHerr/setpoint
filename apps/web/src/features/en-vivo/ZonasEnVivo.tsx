@@ -1,4 +1,5 @@
 import type { PartidoEnVivo, TorneoEnVivo, ZonaEnVivo } from '@setpoint/shared';
+import { Link } from 'react-router-dom';
 import { Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
 import { NOMBRE_DEL_CUADRO } from '../cuadros/cuadro';
@@ -8,8 +9,9 @@ import { laHora, elDia, tieneResultado } from './enVivo';
 const rotulo = 'font-mono text-[11px] text-gris-500';
 
 // La tabla de una zona: quién clasifica a cada cuadro se ve con el punto lima y la negrita,
-// como en el tablero y en Mi zona. Debajo, los partidos de la zona con su resultado o su fecha.
-function TablaDeZona({ zona }: { zona: ZonaEnVivo }) {
+// como en el tablero y en Mi zona. Cada nombre lleva a la ficha del jugador (decisión 074).
+// Debajo, los partidos de la zona con su resultado o su fecha.
+function TablaDeZona({ zona, slug }: { zona: ZonaEnVivo; slug: string }) {
   const grilla = 'grid grid-cols-[minmax(0,1fr)_36px_52px_64px] items-center';
   return (
     <Tarjeta className="overflow-hidden">
@@ -33,9 +35,12 @@ function TablaDeZona({ zona }: { zona: ZonaEnVivo }) {
             <div className="flex min-w-0 items-center gap-2.5 px-4">
               <Numero className={`text-xs ${clasifica ? 'text-gris-500' : 'text-gris-400'}`}>{fila.posicion}</Numero>
               <span className={`size-1.5 shrink-0 rounded-full ${clasifica ? 'bg-lima' : 'bg-linea'}`} />
-              <span className={`truncate text-[15px] ${clasifica ? 'font-semibold' : 'font-medium text-gris-700'}`}>
+              <Link
+                to={`/c/${slug}/jugadores/${fila.jugadorId}`}
+                className={`truncate text-[15px] hover:underline ${clasifica ? 'font-semibold' : 'font-medium text-gris-700'}`}
+              >
                 {fila.nombre} {fila.apellido}
-              </span>
+              </Link>
             </div>
             <Numero className={`text-center text-[15px] font-semibold ${clasifica ? '' : 'text-gris-700'}`}>{fila.partidosGanados}</Numero>
             <Numero className="text-center text-[13px] text-gris-500">
@@ -96,7 +101,7 @@ function PartidoDeZona({ partido }: { partido: PartidoEnVivo }) {
 }
 
 // Todas las zonas, una debajo de la otra en el celular y en columnas en escritorio.
-export function ZonasEnVivo({ torneo }: { torneo: TorneoEnVivo }) {
+export function ZonasEnVivo({ torneo, slug }: { torneo: TorneoEnVivo; slug: string }) {
   const consuelo = torneo.tieneComplementaria ? ` y el resto al ${NOMBRE_DEL_CUADRO.complementaria.toLowerCase()}` : '';
   const primeros = torneo.clasificanPorGrupo === 1 ? 'El primero de cada zona va' : `Los ${torneo.clasificanPorGrupo} primeros de cada zona van`;
   return (
@@ -107,7 +112,7 @@ export function ZonasEnVivo({ torneo }: { torneo: TorneoEnVivo }) {
       </p>
       <div className="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
         {torneo.zonas.map((zona) => (
-          <TablaDeZona key={zona.grupo} zona={zona} />
+          <TablaDeZona key={zona.grupo} zona={zona} slug={slug} />
         ))}
       </div>
     </section>

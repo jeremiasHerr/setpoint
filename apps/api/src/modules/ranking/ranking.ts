@@ -18,9 +18,10 @@ function esMasReciente(a: MovimientoDeRanking, b: MovimientoDeRanking) {
 }
 
 // El movimiento vigente de cada casillero: por cada jugador y etapa, el más reciente.
-// Los movimientos sin etapa (ajustes manuales) no ocupan casillero y no se devuelven.
-export function casillerosVigentes(movimientos: MovimientoDeRanking[]): MovimientoDeRanking[] {
-  const casilleros = new Map<string, MovimientoDeRanking>();
+// Los movimientos sin etapa (ajustes manuales) no ocupan casillero y no se devuelven. Devuelve los
+// mismos objetos que recibe, con todos sus campos: la ficha (F17) lee la instancia de cada uno.
+export function casillerosVigentes<M extends MovimientoDeRanking>(movimientos: M[]): M[] {
+  const casilleros = new Map<string, M>();
   for (const movimiento of movimientos) {
     if (movimiento.etapaId === null) continue;
     const clave = `${movimiento.jugadorId}:${movimiento.etapaId}`;

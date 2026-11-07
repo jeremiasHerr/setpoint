@@ -43,8 +43,8 @@ export function instancia(p: Pick<PartidoLeido, 'fase' | 'grupo' | 'cuadro' | 'r
 }
 
 // El marcador desde el lado del jugador. El W.O. y el abandono no guardan sets (decisiones 016 y
-// 059); un abandono de antes de la 059 puede traer lo que se jugó.
-function marcador(p: PartidoLeido, esA: boolean) {
+// 059); un abandono de antes de la 059 puede traer lo que se jugó. También lo usa la ficha (F17).
+export function marcador(p: Pick<PartidoLeido, 'estado' | 'sets'>, esA: boolean) {
   if (p.estado === 'WALKOVER') return 'W.O.';
   const sets = p.sets.map((s) => (esA ? `${s.gamesA}-${s.gamesB}` : `${s.gamesB}-${s.gamesA}`)).join(' ');
   if (p.estado === 'ABANDONO') return sets ? `${sets} ab.` : 'ab.';
