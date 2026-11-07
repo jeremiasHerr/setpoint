@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="x-apple-disable-message-reformatting">
+  <title>SetPoint · Se liberó un lugar</title>
+  <!-- Pantalla de referencia: Se liberó un lugar, por email · F13 · entrega 75% · 600 px -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+</head>
+<body style="margin: 0; padding: 0; background: #F6F7F8;">
+<!--
+NOTA DE DISEÑO
+Nuevo · el aviso al primero de la lista de espera cuando se libera un lugar (F13): una baja antes del sorteo, o una reserva que venció sin pagar.
+
+- El lugar ya está reservado a su nombre por 24 horas desde que sale este email (decisión 076). Por eso el asunto y el título lo dicen como algo que ya es suyo, con la hora límite.
+- El botón lleva a la página de su inscripción (inscripcion-y-pago.html, estado 6). Si la abre en otro navegador, le pide el código como siempre.
+- Dice qué pasa si no paga: el lugar pasa al siguiente y no se le cobra nada.
+
+"Recordarle", desde Inscripciones, usa el mismo email con otro título ("Te falta pagar tu lugar") y la hora en que vence la reserva.
+
+Es HTML para email, con las mismas reglas que comprobante.html: tablas, estilos en línea, colores de los tokens en hex y fuentes con respaldo.
+Todos los nombres de personas son ficticios.
+-->
+
+<table role="presentation" width="660" cellpadding="0" cellspacing="0" border="0" style="background: #F6F7F8;">
+  <tr>
+    <td style="padding: 30px 30px 40px 30px;">
+
+      <div style="display: none; max-height: 0; overflow: hidden;">Primavera 26 · Tercera. Es tuyo hasta el sábado 20 a las 18:40.</div>
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width: 600px; background: #FFFFFF; border: 1px solid #E6E8EB; border-radius: 14px; border-collapse: separate; overflow: hidden;">
+        <tr>
+          <td style="background: #0A0B0D; padding: 18px 28px; border-radius: 14px 14px 0 0;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td width="24" style="width: 24px; height: 24px; background: #CDF546; border-radius: 7px; text-align: center; vertical-align: middle; font-size: 0; line-height: 0;">
+                  <span style="display: inline-block; width: 8px; height: 8px; border-radius: 999px; background: #0A0B0D;"></span>
+                </td>
+                <td style="padding-left: 10px; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 600; color: #FFFFFF;">Polenta Team Tenis</td>
+                <td align="right" style="font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 14px; color: #9BA1A9;">con SetPoint</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 32px 28px 8px 28px; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; color: #0A0B0D;">
+            <div style="font-size: 14px; font-weight: 600; color: #6A7079;">Lista de espera</div>
+            <div style="font-size: 28px; font-weight: 600; letter-spacing: -0.03em; line-height: 1.15; padding-top: 8px;">Se liberó un lugar para vos en Primavera 26 · Tercera</div>
+            <div style="font-size: 16px; line-height: 1.5; color: #3F4348; padding-top: 12px;">Hola Julián, eras el primero de la lista de espera. El lugar ya está guardado a tu nombre: para quedarte con él, pagá la inscripción antes de que se cumplan las 24 horas.</div>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 20px 28px 4px 28px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border: 1px solid #E6E8EB; border-radius: 12px; border-collapse: separate;">
+              <tr>
+                <td style="padding: 13px 16px; border-bottom: 1px solid #F1F2F4; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; color: #6A7079;">Jugador</td>
+                <td align="right" style="padding: 13px 16px; border-bottom: 1px solid #F1F2F4; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 600; color: #0A0B0D;">Julián Ojeda</td>
+              </tr>
+              <tr>
+                <td style="padding: 13px 16px; border-bottom: 1px solid #F1F2F4; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; color: #6A7079;">Torneo</td>
+                <td align="right" style="padding: 13px 16px; border-bottom: 1px solid #F1F2F4; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; color: #0A0B0D;">Primavera 26</td>
+              </tr>
+              <tr>
+                <td style="padding: 13px 16px; border-bottom: 1px solid #F1F2F4; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; color: #6A7079;">Categoría</td>
+                <td align="right" style="padding: 13px 16px; border-bottom: 1px solid #F1F2F4; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; color: #0A0B0D;">Tercera</td>
+              </tr>
+              <tr>
+                <td style="padding: 13px 16px; border-bottom: 1px solid #F1F2F4; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; color: #6A7079;">Inscripción</td>
+                <td align="right" style="padding: 13px 16px; border-bottom: 1px solid #F1F2F4; font-family: 'Geist Mono', Menlo, Consolas, 'Courier New', monospace; font-size: 15px; font-weight: 500; color: #0A0B0D;">$45.000</td>
+              </tr>
+              <tr>
+                <td style="padding: 13px 16px; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; color: #6A7079;">Es tuyo hasta</td>
+                <td align="right" style="padding: 13px 16px; font-family: 'Geist Mono', Menlo, Consolas, 'Courier New', monospace; font-size: 15px; font-weight: 500; color: #0A0B0D;">sáb 20 sep · 18:40</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 20px 28px 0 28px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td style="background: #CDF546; border-radius: 10px; padding: 14px 26px; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 600; color: #0A0B0D;">
+                  <a href="#" style="color: #0A0B0D; text-decoration: none;">Pagar mi lugar</a>
+                </td>
+              </tr>
+            </table>
+            <div style="font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.5; color: #6A7079; padding-top: 14px;">Si no pagás antes del sábado 20 a las 18:40, el lugar pasa al siguiente de la lista y no se te cobra nada.</div>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 26px 28px 28px 28px;">
+            <div style="border-top: 1px solid #E6E8EB; padding-top: 18px; font-family: 'Instrument Sans', Helvetica, Arial, sans-serif; font-size: 13px; line-height: 1.5; color: #6A7079;">Te llega este email porque te anotaste en la lista de espera de un torneo de Polenta Team Tenis con julian.ojeda@gmail.com. SetPoint · setpoint.com.ar</div>
+          </td>
+        </tr>
+      </table>
+
+    </td>
+  </tr>
+</table>
+</body>
+</html>

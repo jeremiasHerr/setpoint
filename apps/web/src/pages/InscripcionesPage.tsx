@@ -8,8 +8,15 @@ import { leerSesion, type Sesion } from '../features/auth/sesion';
 import { useCerrarSesion } from '../features/auth/useCerrarSesion';
 import { useSesionInvalida } from '../features/auth/useSesionInvalida';
 import { BarraDeLugares } from '../features/inscripciones/BarraDeLugares';
+import { Conciliacion } from '../features/inscripciones/Conciliacion';
+import { Devoluciones } from '../features/inscripciones/Devoluciones';
+import { InscribirAMano } from '../features/inscripciones/InscribirAMano';
+import { ResumenListaDeEspera } from '../features/inscripciones/ResumenListaDeEspera';
+import { TablaBajas } from '../features/inscripciones/TablaBajas';
 import { TablaInscriptos } from '../features/inscripciones/TablaInscriptos';
+import { TablaListaDeEspera } from '../features/inscripciones/TablaListaDeEspera';
 import { TablaSolicitudes } from '../features/inscripciones/TablaSolicitudes';
+import { normalizar } from '../features/inscripciones/texto';
 import { useCerrarInscripcion, useInscripciones } from '../features/inscripciones/useInscripciones';
 import { iniciales, navegacionOrganizador } from '../features/organizador/encabezado';
 import { diaConSemana } from '../features/torneos/texto';
@@ -18,8 +25,9 @@ import { ErrorApi } from '../lib/api';
 // El mismo mínimo que usa el sorteo: con menos de 3 por zona no se sortea (decisión 015).
 const MINIMO_POR_ZONA = 3;
 
-// Versión mínima de F13: ver quiénes ocupan el cupo y cerrar la inscripción. Inscribir a mano,
-// dar de baja, recordar el pago, la lista de espera y la conciliación llegan con F13 completa.
+// Inscripciones de una categoría (F13): quiénes ocupan el cupo, la lista de espera, las bajas y la
+// conciliación; cerrar la inscripción, dar de baja, inscribir a mano y recordar el pago.
+// docs/pantallas/organizador/inscripciones.html
 export function InscripcionesPage() {
   const sesion = leerSesion();
   const { id } = useParams();
@@ -166,20 +174,34 @@ function Pestana({ activa, onClick, children }: { activa: boolean; onClick: () =
   );
 }
 
+type Pestana = 'confirmados' | 'reservando' | 'espera' | 'bajas' | 'solicitudes';
+
+// Si tiene apellido parecido a lo que se busca. Sin búsqueda, todos.
+const coincide = (termino: string) => (fila: { apellido: string }) => !termino || normalizar(fila.apellido).includes(termino);
+
 function Inscripciones({ sesion, datos }: { sesion: Sesion; datos: InscripcionesDelTorneo }) {
-  const cerrar = useCerrarInscripcion(sesion.organizacion.slug, datos.torneoId);
+  const slug = sesion.organizacion.slug;
+  const cerrar = useCerrarInscripcion(slug, datos.torneoId);
   useSesionInvalida(cerrar.error);
   const navegar = useNavigate();
 
   // Con aprobación, las solicitudes van en su propia pestaña; abre en ella si hay alguna para resolver.
   const conAprobacion = datos.modoInscripcion === 'con_aprobacion';
-  const [pestana, setPestana] = useState<'inscriptos' | 'solicitudes'>(() =>
-    datos.solicitudes.some((s) => s.estado === 'solicitada') ? 'solicitudes' : 'inscriptos',
+  const [pestana, setPestana] = useState<Pestana>(() =>
+    datos.solicitudes.some((s) => s.estado === 'solicitada') ? 'solicitudes' : 'confirmados',
   );
+  const [busqueda, setBusqueda] = useState('');
+  const [aMano, setAMano] = useState(false);
 
-  const pagados = datos.inscripciones.filter((i) => i.estado === 'pagada').length;
-  const reservando = datos.inscripciones.length - pagados;
+  const confirmados = datos.inscripciones.filter((i) => i.estado === 'pagada');
+  const reservas = datos.inscripciones.filter((i) => i.estado === 'reservando');
+  const pagados = confirmados.length;
+  const reservando = reservas.length;
   const irAlSorteo = () => navegar(`/torneos/${datos.torneoId}/sorteo`);
+  const termino = normalizar(busqueda);
+  const primeroEnEspera = datos.listaDeEspera[0] ?? null;
+  // Sin lugares no se inscribe a mano: la organización no se pasa del cupo (decisión 079).
+  const sinLugares = datos.libres === 0;
 
   return (
     <div className="flex min-h-screen flex-col bg-white text-negro">
@@ -194,22 +216,34 @@ function Inscripciones({ sesion, datos }: { sesion: Sesion; datos: Inscripciones
           </p>
         </div>
 
-        {datos.estado === 'publicado' && (
-          <Boton
-            variante="organizador"
-            className="font-semibold"
-            disabled={!datos.alcanzanParaLasZonas || cerrar.isPending}
-            onClick={() => cerrar.mutate()}
-          >
-            {cerrar.isPending ? 'Cerrando…' : 'Cerrar inscripciones'}
-          </Boton>
-        )}
-        {datos.estado === 'inscripciones_cerradas' && !datos.sorteoConfirmado && (
-          <Boton variante="organizador" className="font-semibold" onClick={irAlSorteo}>
-            Sortear zonas
-          </Boton>
-        )}
-        {datos.sorteoConfirmado && <Boton onClick={irAlSorteo}>Ver zonas</Boton>}
+        <div className="flex flex-col items-end gap-1.5">
+          <div className="flex flex-wrap gap-[9px]">
+            {datos.sePuedeModificar && (
+              <Boton onClick={() => setAMano(true)} disabled={sinLugares || aMano} className="text-sm">
+                Inscribir a mano
+              </Boton>
+            )}
+            {datos.estado === 'publicado' && (
+              <Boton
+                variante="organizador"
+                className="font-semibold"
+                disabled={!datos.alcanzanParaLasZonas || cerrar.isPending}
+                onClick={() => cerrar.mutate()}
+              >
+                {cerrar.isPending ? 'Cerrando…' : 'Cerrar inscripciones'}
+              </Boton>
+            )}
+            {datos.estado === 'inscripciones_cerradas' && !datos.sorteoConfirmado && (
+              <Boton variante="organizador" className="font-semibold" onClick={irAlSorteo}>
+                Sortear zonas
+              </Boton>
+            )}
+            {datos.sorteoConfirmado && <Boton onClick={irAlSorteo}>Ver zonas</Boton>}
+          </div>
+          {datos.sePuedeModificar && sinLugares && (
+            <p className="text-[13px] text-gris-500">No quedan lugares para inscribir a mano.</p>
+          )}
+        </div>
       </div>
 
       <main className="flex flex-col gap-[22px] px-7 pb-7">
@@ -219,35 +253,122 @@ function Inscripciones({ sesion, datos }: { sesion: Sesion; datos: Inscripciones
             pagados={pagados}
             reservando={reservando}
             solicitudes={conAprobacion ? datos.solicitudes.length : undefined}
+            enEspera={datos.tieneListaEspera ? datos.listaDeEspera.length : undefined}
           />
           <QuePasaAlCerrar datos={datos} pagados={pagados} reservando={reservando} />
           {cerrar.error && <p className="text-sm text-rojo-texto">{textoDeError(cerrar.error)}</p>}
         </section>
 
-        {conAprobacion ? (
-          <section className="flex flex-col gap-3">
-            <div role="tablist" aria-label="Inscripciones y solicitudes" className="flex flex-wrap items-center gap-1.5">
-              <Pestana activa={pestana === 'inscriptos'} onClick={() => setPestana('inscriptos')}>
-                Inscriptos <Numero>{datos.inscripciones.length}</Numero>
-              </Pestana>
-              <Pestana activa={pestana === 'solicitudes'} onClick={() => setPestana('solicitudes')}>
-                Solicitudes <Numero>{datos.solicitudes.length}</Numero>
-              </Pestana>
+        {/* La columna de la derecha va al costado desde 1280, como en la referencia: en una notebook de
+            1024 la tabla necesita el ancho para los nombres. */}
+        <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_320px]">
+          <section className="flex min-w-0 flex-col gap-3">
+            <div className="flex flex-wrap items-center gap-1.5">
+              <div role="tablist" aria-label="Inscripciones" className="flex flex-wrap items-center gap-1.5">
+                <Pestana activa={pestana === 'confirmados'} onClick={() => setPestana('confirmados')}>
+                  Confirmados <Numero>{pagados}</Numero>
+                </Pestana>
+                <Pestana activa={pestana === 'reservando'} onClick={() => setPestana('reservando')}>
+                  Reservando <Numero>{reservando}</Numero>
+                </Pestana>
+                {conAprobacion && (
+                  <Pestana activa={pestana === 'solicitudes'} onClick={() => setPestana('solicitudes')}>
+                    Solicitudes <Numero>{datos.solicitudes.length}</Numero>
+                  </Pestana>
+                )}
+                {datos.tieneListaEspera && (
+                  <Pestana activa={pestana === 'espera'} onClick={() => setPestana('espera')}>
+                    Lista de espera <Numero>{datos.listaDeEspera.length}</Numero>
+                  </Pestana>
+                )}
+                <Pestana activa={pestana === 'bajas'} onClick={() => setPestana('bajas')}>
+                  Bajas <Numero>{datos.bajas.length}</Numero>
+                </Pestana>
+              </div>
+              <label className="ml-auto flex h-9 items-center gap-2 rounded-[9px] border border-linea px-[13px] text-sm text-gris-500 focus-within:border-negro">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" aria-hidden>
+                  <circle cx="11" cy="11" r="6.5" />
+                  <path d="M16 16l4.5 4.5" />
+                </svg>
+                <input
+                  type="search"
+                  aria-label="Buscar por apellido"
+                  placeholder="Buscar por apellido"
+                  autoComplete="off"
+                  value={busqueda}
+                  onChange={(e) => setBusqueda(e.target.value)}
+                  className="w-40 bg-transparent text-negro outline-none placeholder:text-gris-500"
+                />
+              </label>
             </div>
-            {pestana === 'inscriptos' ? (
-              <TablaInscriptos inscripciones={datos.inscripciones} />
-            ) : (
-              <TablaSolicitudes
-                slug={sesion.organizacion.slug}
+
+            {pestana === 'confirmados' && (
+              <TablaInscriptos
+                slug={slug}
                 torneoId={datos.torneoId}
-                solicitudes={datos.solicitudes}
+                inscripciones={confirmados.filter(coincide(termino))}
+                sePuedeDarDeBaja={datos.sePuedeModificar}
+                primeroEnEspera={primeroEnEspera}
+                horasReserva={datos.horasReservaListaEspera}
+                vacio={termino ? 'Nadie con ese apellido.' : 'Todavía no pagó nadie.'}
+                pie={
+                  datos.sePuedeModificar
+                    ? 'Se puede dar de baja hasta que se confirma el sorteo de zonas. Después, quien no juega pierde sus partidos por W.O. desde el tablero.'
+                    : undefined
+                }
+              />
+            )}
+            {pestana === 'reservando' && (
+              <TablaInscriptos
+                slug={slug}
+                torneoId={datos.torneoId}
+                inscripciones={reservas.filter(coincide(termino))}
+                sePuedeDarDeBaja={false}
+                primeroEnEspera={primeroEnEspera}
+                horasReserva={datos.horasReservaListaEspera}
+                vacio={termino ? 'Nadie con ese apellido.' : 'Nadie está pagando ahora.'}
+                pie={'"Recordarle" le manda otra vez el link para pagar. Si la reserva vence, el lugar pasa al primero de la lista de espera.'}
+              />
+            )}
+            {pestana === 'solicitudes' && (
+              <TablaSolicitudes
+                slug={slug}
+                torneoId={datos.torneoId}
+                solicitudes={datos.solicitudes.filter(coincide(termino))}
                 abierta={datos.estado === 'publicado'}
               />
             )}
+            {pestana === 'espera' && (
+              <TablaListaDeEspera
+                listaDeEspera={datos.listaDeEspera.filter(coincide(termino))}
+                horasReserva={datos.horasReservaListaEspera}
+              />
+            )}
+            {pestana === 'bajas' && (
+              <TablaBajas slug={slug} torneoId={datos.torneoId} bajas={datos.bajas.filter(coincide(termino))} />
+            )}
           </section>
-        ) : (
-          <TablaInscriptos inscripciones={datos.inscripciones} />
-        )}
+
+          <aside className="flex flex-col gap-4">
+            {aMano && !sinLugares && (
+              <InscribirAMano
+                slug={slug}
+                torneoId={datos.torneoId}
+                categoria={datos.categoria}
+                precio={datos.precio}
+                libres={datos.libres}
+                inscripciones={datos.inscripciones}
+                bajas={datos.bajas}
+                alCerrar={() => setAMano(false)}
+              />
+            )}
+            {datos.tieneListaEspera && !(aMano && !sinLugares) && (
+              <ResumenListaDeEspera listaDeEspera={datos.listaDeEspera} horasReserva={datos.horasReservaListaEspera} />
+            )}
+            <Devoluciones slug={slug} torneoId={datos.torneoId} bajas={datos.bajas} />
+            <Conciliacion conciliacion={datos.conciliacion} />
+          </aside>
+        </div>
       </main>
     </div>
   );

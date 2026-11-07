@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SetPoint · El torneo</title>
-  <!-- Pantalla de referencia: El torneo · F12 · entrega 75% · 1290 px · tres estados de 390 px -->
+  <!-- Pantalla de referencia: El torneo · F12 · entrega 75% · 1290 px · cuatro estados de 390 px -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
     <style>
       body { margin: 0; font-family: "Instrument Sans", system-ui, "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; background: #F6F7F8; }
@@ -42,7 +42,10 @@ Lo que incluye la inscripción está al mismo peso que el precio, porque es lo q
 
 3 · Inscripción cerrada. El link sigue circulando en el grupo después del cierre: la pantalla lo dice y ofrece lo que sí se puede hacer, mirar.
 
-Con el cupo completo, el botón pasa a ser "Anotarme en la lista de espera". Ese estado se diseña con F13 completa.
+4 · Cupo completo (F13). El botón pasa a ser "Anotarme en la lista de espera", sigue en lima porque es lo que se puede hacer, y lleva al mismo camino que inscribirse: el email y el código, o directo con la sesión iniciada (identificacion.html). Al final, en lugar de "Reservar y pagar", el botón dice "Anotarme en la lista de espera" y no cobra nada.
+- La barra está llena: no se muestran las reservas en curso aparte, porque para quien llega es lo mismo, no hay lugar.
+- Se explica antes cómo funciona la lista: por orden de llegada, y con 24 horas para pagar cuando se libera un lugar (decisión 076).
+- Si el torneo no tiene lista de espera (07 §2.6), el botón no está y la caja dice que no quedan lugares.
 Usa los términos de la interfaz: la edición es "Primavera 26", con la categoría al lado.
 Todos los nombres de personas son ficticios.
 -->
@@ -207,6 +210,58 @@ Todos los nombres de personas son ficticios.
 
       <div style="display: flex; flex-direction: column; gap: 12px; margin-top: auto;">
         <div style="height: 52px; border-radius: 12px; border: 1px solid #E6E8EB; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 500;">Ver el ranking de Tercera</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 4 -->
+  <div class="estado">
+    <div class="rotulo"><span class="mono">4</span><span>Cupo completo, con lista de espera</span></div>
+    <div class="tel">
+      <div class="cab">
+        <div style="display: flex; align-items: center; gap: 9px;">
+          <div class="logo"><div></div></div>
+          <div style="font-size: 16px; font-weight: 600; letter-spacing: -0.015em;">Polenta Team Tenis</div>
+        </div>
+        <div class="mono" style="font-size: 14px; font-weight: 500; color: #6A7079; padding: 6px 10px; border: 1px solid #E6E8EB; border-radius: 999px;">Tercera</div>
+      </div>
+
+      <div class="negra">
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 7px; height: 7px; border-radius: 999px; background: #CDF546;"></div>
+            <div style="font-size: 15px; font-weight: 500; color: #CDF546;">Inscripción abierta</div>
+          </div>
+          <div style="font-size: 32px; font-weight: 600; line-height: 1.08; letter-spacing: -0.032em; color: #FFFFFF;">Primavera 26</div>
+        </div>
+        <div style="height: 1px; background: #23262B;"></div>
+        <div style="display: flex; flex-direction: column; gap: 13px;">
+          <div class="linea"><div class="r">Cierra</div><div class="v mono">viernes 26 de septiembre</div></div>
+          <div class="linea"><div class="r">Arranca</div><div class="v mono">lunes 6 de octubre</div></div>
+          <div class="linea"><div class="r">Formato</div><div class="v mono">8 zonas de 4 · dos cuadros</div></div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 9px;">
+          <div class="linea"><div class="r">Lugares</div><div class="v mono">32 de 32</div></div>
+          <div style="display: flex; gap: 3px;">
+            <div style="flex-grow: 32; height: 8px; border-radius: 2px; background: #CDF546;"></div>
+          </div>
+          <div style="font-size: 15px; color: #9BA1A9;">No quedan lugares. Hay <span class="mono" style="color: #FFFFFF;">5</span> en la lista de espera.</div>
+        </div>
+      </div>
+
+      <div class="caja">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6A7079" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 11v5.5M12 8h.01"></path></svg>
+        <div>Si alguien se baja o no termina de pagar, el lugar es del primero de la lista: le llega un email y tiene <span class="mono">24</span> horas para pagar. Si no paga, pasa al siguiente.</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px; margin-top: auto;">
+        <div class="linea" style="padding: 0 4px;">
+          <div style="font-size: 16px; color: #6A7079;">Inscripción</div>
+          <div class="mono" style="font-size: 26px; font-weight: 500; letter-spacing: -0.02em;">$45.000</div>
+        </div>
+        <div style="height: 60px; border-radius: 12px; background: #CDF546; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 600;">Anotarme en la lista de espera</div>
+        <div style="font-size: 15px; line-height: 1.42; color: #6A7079; padding: 0 4px;">No pagás nada ahora. Te anotás con tu email, con el mismo código que para inscribirte.</div>
       </div>
     </div>
   </div>

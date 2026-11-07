@@ -39,7 +39,7 @@ borrador → publicado → inscripciones_cerradas → zonas_generadas
 |---|---|---|
 | `borrador` | Se crea el torneo | Editar todo. No visible |
 | `publicado` | La organización lo publica | Inscripciones abiertas. Se sigue editando, salvo las categorías |
-| `inscripciones_cerradas` | La organización cierra la inscripción de la categoría (§7). Hoy no se cierra sola al llenarse el cupo ni al vencer la fecha | Sortear las zonas. Con F13 completa, además, resolver la lista de espera |
+| `inscripciones_cerradas` | La organización cierra la inscripción de la categoría (§7). Hoy no se cierra sola al llenarse el cupo ni al vencer la fecha | Sortear las zonas. Hasta el sorteo, dar de baja e inscribir a mano, y la lista de espera sigue cubriendo lugares ([decisión 077](decisiones/077-baja-hasta-el-sorteo.md)) |
 | `zonas_generadas` | Se confirma el sorteo, antes de la fecha de inicio | Comunicar grupos y plazos. Cargar los partidos que se adelanten |
 | `grupos_en_curso` | Llega la fecha de inicio: arranca el plazo de 3 semanas. Lo cambia una tarea de la API que revisa cada hora; si el sorteo se confirma después de esa fecha, entra directo ([decisión 029](decisiones/029-grupos-en-curso.md)) | Cargar resultados de zona |
 | `eliminatorias` | Cierran todas las zonas | El cuadro principal y, si hay, el consuelo en juego, con el plazo por ronda del torneo. En la interfaz: "cuadros" |
@@ -215,12 +215,30 @@ Funciones:
 
 La lista de espera se ordena **por orden de llegada** y cubre deserciones, replicando la regla actual del reglamento.
 
-**Lo que existe hoy** es una versión mínima, que es el camino al sorteo. Se llega desde la tarjeta de la categoría en el inicio (§3). La pantalla Inscripciones es de una categoría (`/torneos/:id/inscripciones`, con el id del `Torneo`, no el de la convocatoria): muestra los lugares del cupo (pagados, reservando y libres) y la lista de inscriptos con su estado. Con la inscripción abierta, el botón es "Cerrar inscripciones": el torneo pasa a `inscripciones_cerradas` y el botón pasa a "Sortear zonas", que lleva al sorteo. Cada categoría se cierra aparte, y cerrar no se deshace.
+**La pantalla Inscripciones** es de una categoría (`/torneos/:id/inscripciones`, con el id del `Torneo`, no el de la convocatoria) y se llega desde la tarjeta de la categoría en el inicio (§3). Arriba, los lugares del cupo (pagados, reservando y libres) y cuántos esperan en la lista. Debajo, las pestañas Confirmados, Reservando, Lista de espera, Bajas y, en los torneos con aprobación, Solicitudes, con un buscador por apellido. Al costado, los primeros de la lista de espera, las devoluciones pendientes y la conciliación.
 
-- **Las reservas sin pagar no se tocan al cerrar** ([decisión 024](decisiones/024-reservas-sin-pagar-al-cerrar.md)): no entran al sorteo, que toma solo las pagadas, y se resuelven cuando exista F13 completa. La pantalla lo avisa antes de cerrar.
+- **Cerrar inscripciones:** el torneo pasa a `inscripciones_cerradas` y el botón pasa a "Sortear zonas", que lleva al sorteo. Cada categoría se cierra aparte, y cerrar no se deshace.
+- **Las reservas sin pagar no se tocan al cerrar** ([decisión 024](decisiones/024-reservas-sin-pagar-al-cerrar.md)): no entran al sorteo, que toma solo las pagadas. La pantalla lo avisa antes de cerrar.
 - **No se puede cerrar si los que pagaron no alcanzan para las zonas**, al menos 3 por zona ([decisión 025](decisiones/025-no-se-cierra-sin-inscriptos-para-las-zonas.md)). La pantalla dice cuántos hacen falta y enlaza al torneo para bajar la cantidad de zonas.
+- **Dar de baja** a quien pagó abre, debajo de la fila, si le corresponde la devolución. El sistema solo lo anota: la devolución la hace la organización, por fuera, y la marca con "Ya se lo devolví" ([decisión 075](decisiones/075-la-devolucion-se-anota.md)). Su lugar pasa al primero de la lista de espera, que lo tiene reservado 24 horas y recibe un email ([decisión 076](decisiones/076-lista-de-espera-24-horas.md)). Si había un borrador del sorteo, se descarta.
+- **Inscribir a mano** a quien pagó en efectivo o por transferencia, buscándolo en el padrón de la categoría. Si estaba reservando, se confirma su reserva; si no, necesita un lugar libre ([decisión 079](decisiones/079-inscribir-a-mano-sin-pasarse-del-cupo.md)). No le llega comprobante: el pago lo recibió la organización.
+- **Dar de baja e inscribir a mano** se puede hasta que se confirma el sorteo ([decisión 077](decisiones/077-baja-hasta-el-sorteo.md)).
+- **Recordarle**, en una reserva sin pagar, le manda otra vez el link para pagar.
+- **Un lugar que se libera pasa a la lista de espera** también cuando vence una reserva, cuando MercadoPago rechaza un pago y cuando la organización sube el cupo del torneo.
+- **La conciliación** dice lo cobrado por MercadoPago, la comisión del 5% de la plataforma sobre eso, lo que le corresponde a la organización, lo cobrado por fuera y lo que falta devolver ([decisión 078](decisiones/078-comision-de-la-plataforma.md)).
 
-Inscribir a mano, dar de baja, recordar el pago, la lista de espera, la conciliación y la marca de las vinculaciones para revisar todavía no están.
+| Endpoint | Qué hace |
+|---|---|
+| `GET .../torneos/:id/inscripciones` | Las que ocupan lugar, la lista de espera, las bajas, las solicitudes y la conciliación |
+| `POST .../inscripciones/cerrar` | Cierra la inscripción de la categoría |
+| `POST .../inscripciones/:inscripcionId/baja` | Da de baja a quien pagó, con `{ devolucion }` |
+| `POST .../inscripciones/:inscripcionId/devolucion` | Marca la devolución como hecha |
+| `POST .../inscripciones/:inscripcionId/recordatorio` | Le manda otra vez el link para pagar a una reserva |
+| `POST .../inscripciones/manual` | Inscribe a mano, con `{ jugadorId, medio, monto }` |
+
+Todos devuelven las inscripciones como quedaron, y responden `409 SORTEO_CONFIRMADO`, `SIN_LUGARES`, `YA_INSCRIPTO` o `DADO_DE_BAJA` cuando no se puede.
+
+Faltan anotarse en la lista de espera desde el link del torneo, que llega con el lado del jugador de F13, y la marca de las vinculaciones para revisar.
 
 ---
 

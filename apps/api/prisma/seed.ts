@@ -254,12 +254,20 @@ async function main() {
   // --- un torneo con el cupo lleno, listo para cerrar la inscripción y sortear (F13, F05) ---
   // Es la forma de probar de punta a punta: Inscripciones -> cerrar -> sortear. Suelto, para no
   // tocar el ranking, pero se siembra con él. 24 pagados en 6 zonas de 4; varios con 0 puntos,
-  // así se ve el azar entre empatados.
+  // así se ve el azar entre empatados. La mayoría pagó por MercadoPago, y algunos en mano.
+  // Sanhueza, que tiene cuenta, es el primero de la lista de espera: dando de baja a cualquiera,
+  // el lugar pasa a él y el aviso llega a Mailpit (decisión 076).
   const inscriptosCopa = await prisma.jugador.findMany({
-    where: { organizacionId: org.id, categoriaId: tercera.id },
+    where: { organizacionId: org.id, categoriaId: tercera.id, id: { not: sanhueza.id } },
     orderBy: { id: 'asc' },
     take: 24,
   });
+  const enEsperaCopa = await prisma.jugador.findMany({
+    where: { organizacionId: org.id, categoriaId: tercera.id, id: { notIn: inscriptosCopa.map((j) => j.id) } },
+    orderBy: { id: 'asc' },
+  });
+  const cuentaSanhueza = await prisma.usuario.findUniqueOrThrow({ where: { email: EMAIL_JUGADOR } });
+  const medioDelPago = (i: number) => (i === 0 ? MedioPago.EFECTIVO : i < 3 ? MedioPago.TRANSFERENCIA : MedioPago.MERCADOPAGO);
   const copa = await prisma.torneo.create({
     data: {
       organizacionId: org.id,
@@ -276,11 +284,20 @@ async function main() {
       cierreInscripcion: diasAdelante(3),
       fechaInicio: diasAdelante(6),
       inscripciones: {
-        create: inscriptosCopa.map((j) => ({
-          jugadorId: j.id,
-          estado: EstadoInscripcion.PAGADA,
-          pago: { create: { medio: MedioPago.TRANSFERENCIA, estado: EstadoPago.APROBADO, monto: 45000 } },
-        })),
+        create: [
+          ...inscriptosCopa.map((j, i) => ({
+            jugadorId: j.id,
+            estado: EstadoInscripcion.PAGADA,
+            pago: { create: { medio: medioDelPago(i), estado: EstadoPago.APROBADO, monto: 45000 } },
+          })),
+          ...enEsperaCopa.map((j, i) => ({
+            jugadorId: j.id,
+            estado: EstadoInscripcion.EN_LISTA_ESPERA,
+            ordenListaEspera: i + 1,
+            // Con su cuenta, como si se hubiera anotado desde el link: a ella le llega el aviso.
+            usuarioId: j.id === sanhueza.id ? cuentaSanhueza.id : null,
+          })),
+        ],
       },
     },
   });
@@ -317,7 +334,8 @@ async function main() {
     );
   }
   console.log('Ranking verificado: el primero suma 165 y el último 0.\n');
-  console.log(`Inscripción lista para cerrar y sortear en /torneos/${copa.id}/inscripciones (Copa Confluencia · Tercera)\n`);
+  console.log(`Inscripción lista para cerrar y sortear en /torneos/${copa.id}/inscripciones (Copa Confluencia · Tercera)`);
+  console.log(`  con ${enEsperaCopa.length} en la lista de espera: dando de baja a alguien, el lugar pasa a Sanhueza\n`);
 
   await crearLigaDelValle();
 

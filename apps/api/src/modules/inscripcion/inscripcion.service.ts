@@ -193,6 +193,8 @@ export async function reservar(slug: string, torneoId: number, usuarioId: number
           usuarioId,
           // Si el perfil ya era suyo, no hay nada que vincular.
           vinculaPor: propio ? null : VINCULA_POR[datos.vinculaPor ?? 'busqueda'],
+          // Una reserva nueva no viene de la lista de espera, aunque antes haya estado en ella.
+          ordenListaEspera: null,
         };
 
         // Una reserva vencida o un pago rechazado dejan la fila: se reusa, porque hay una sola

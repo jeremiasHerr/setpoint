@@ -7,15 +7,17 @@ type Props = {
   reservando: number;
   // En un torneo con aprobación: van solo en la leyenda, porque no ocupan lugar hasta que pagan.
   solicitudes?: number;
+  // Con lista de espera: también solo en la leyenda, porque esperan un lugar.
+  enEspera?: number;
 };
 
 // La barra de marcas de design.md §6: una marca por lugar del cupo.
-export function BarraDeLugares({ cupo, pagados, reservando, solicitudes }: Props) {
+export function BarraDeLugares({ cupo, pagados, reservando, solicitudes, enEspera }: Props) {
   const libres = Math.max(0, cupo - pagados - reservando);
   const tramos = [
-    { cantidad: pagados, rotulo: 'pagados', color: 'bg-negro' },
+    { cantidad: pagados, rotulo: pagados === 1 ? 'pagado' : 'pagados', color: 'bg-negro' },
     { cantidad: reservando, rotulo: 'reservando', color: 'bg-gris-400' },
-    { cantidad: libres, rotulo: 'libres', color: 'bg-linea' },
+    { cantidad: libres, rotulo: libres === 1 ? 'libre' : 'libres', color: 'bg-linea' },
   ];
 
   return (
@@ -39,6 +41,13 @@ export function BarraDeLugares({ cupo, pagados, reservando, solicitudes }: Props
               <span className="text-[13px] text-gris-500">
                 {solicitudes === 1 ? 'solicitud' : 'solicitudes'}, sin lugar todavía
               </span>
+            </li>
+          )}
+          {enEspera !== undefined && (
+            <li className="flex items-center gap-[7px]">
+              <span className="size-[9px] rounded-[2px] bg-lima" />
+              <Numero className="text-[13px]">{enEspera}</Numero>
+              <span className="text-[13px] text-gris-500">en lista de espera</span>
             </li>
           )}
         </ul>

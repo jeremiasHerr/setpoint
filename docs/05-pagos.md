@@ -16,6 +16,8 @@ Toda la recaudación entra a una sola cuenta de MercadoPago (la de la plataforma
 
 La transferencia efectiva a la organización queda **fuera del alcance del sistema**.
 
+**La comisión es del 5%, solo sobre lo cobrado por MercadoPago**, y la conciliación se calcula al consultar, con los pagos del torneo ([decisión 078](decisiones/078-comision-de-la-plataforma.md)). Lo cobrado en efectivo o por transferencia ya lo tiene la organización.
+
 ### Por qué no Marketplace
 
 Marketplace (que la plata vaya directo a la cuenta de cada organización) requiere OAuth con MercadoPago, almacenamiento y refresh de tokens de terceros, manejo de revocación y testeo con dos cuentas de prueba. Son 3 a 5 días de trabajo en un área con documentación floja.
@@ -103,10 +105,12 @@ aprobada   → pendiente_pago (abrió el link para pagar: corre la reserva)
            → expirada       (cerró la inscripción sin que pagara)
 pendiente_pago de una aprobada → aprobada (venció la reserva: puede volver a abrir el link)
 
-en_lista_espera → pendiente_pago   (se liberó un cupo)
+pagada → cancelada   (baja de la organización, hasta el sorteo; el pago sigue aprobado y se anota si corresponde devolución)
+
+en_lista_espera → pendiente_pago   (se liberó un cupo: reserva de 24 horas desde el aviso)
 ```
 
-Un job periódico expira las reservas vencidas, libera el cupo y **notifica al primero de la lista de espera**. Al expirar, también se descarta la vinculación pendiente, y el perfil vuelve a aparecer en la búsqueda ([decisión 051](decisiones/051-vinculacion-con-el-padron.md)). Si el perfil era pendiente (alguien que no estaba en el padrón), queda descartado ([decisión 054](decisiones/054-perfil-pendiente.md)); lo mismo al rechazarse el pago.
+Un job periódico expira las reservas vencidas, libera el cupo y **notifica al primero de la lista de espera**, que lo tiene reservado 24 horas ([decisión 076](decisiones/076-lista-de-espera-24-horas.md)). Al expirar, también se descarta la vinculación pendiente, y el perfil vuelve a aparecer en la búsqueda ([decisión 051](decisiones/051-vinculacion-con-el-padron.md)). Si el perfil era pendiente (alguien que no estaba en el padrón), queda descartado ([decisión 054](decisiones/054-perfil-pendiente.md)); lo mismo al rechazarse el pago.
 
 **Solicitudes** (torneos `con_aprobacion`, [decisión 054](decisiones/054-perfil-pendiente.md)). Quien no está en el padrón deja una solicitud (`solicitada`), con un perfil pendiente, que no reserva lugar ni cobra. Si la organización la aprueba, recibe un email con el link para pagar: al abrirlo (con la sesión, o con un código si lo abre en otro navegador) y tocar "Reservar y pagar", la inscripción pasa a `pendiente_pago`, con la reserva de siempre (`POST /api/inscripcion/:slug/inscripciones/:id/reservar`). Entra al padrón al confirmarse el pago.
 
@@ -120,10 +124,14 @@ También aplica al cierre de inscripciones: si hay inscriptos que no pagaron, se
 
 Hoy esto se lleva a mano. Modelarlo es una mejora directa sobre el proceso actual.
 
+**Cómo funciona** ([decisión 076](decisiones/076-lista-de-espera-24-horas.md)). Cuando se libera un lugar (una baja, una reserva que vence, un pago rechazado o un cupo más grande), el primero de la lista pasa a `pendiente_pago` con una reserva de 24 horas desde el aviso, y le llega un email con el link para pagar. Si no paga, la reserva vence y el lugar pasa al siguiente. Las horas están en el torneo (`horasReservaListaEspera`). La lista termina cuando se confirma el sorteo ([decisión 077](decisiones/077-baja-hasta-el-sorteo.md)).
+
+**Las bajas** ([decisión 075](decisiones/075-la-devolucion-se-anota.md)). La organización da de baja a quien pagó y dice si le corresponde la devolución. El sistema lo anota en `Pago.requiereDevolucion`; la devolución la hace la organización, por fuera, y la marca como hecha (`devueltoEn`, estado `devuelto`).
+
 ---
 
 ## 8. Inscripción manual
 
-La organización puede inscribir a alguien que pagó por fuera del sistema — efectivo o transferencia — sin pasar por MercadoPago. La inscripción queda `pagada` con `medio_pago = manual`, y se refleja en la conciliación del torneo.
+La organización puede inscribir a alguien que pagó por fuera del sistema — efectivo o transferencia — sin pasar por MercadoPago. La inscripción queda `pagada` con el medio que eligió (efectivo, transferencia u otro) y el monto que cobró, y se refleja en la conciliación del torneo como cobrado por fuera. Si estaba reservando, se confirma su reserva; si no, necesita un lugar libre: no se puede pasar del cupo ([decisión 079](decisiones/079-inscribir-a-mano-sin-pasarse-del-cupo.md)).
 
 Necesario durante la transición: no todos los jugadores van a adoptar el pago digital de entrada.
