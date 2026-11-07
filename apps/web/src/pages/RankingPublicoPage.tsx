@@ -32,7 +32,7 @@ export function RankingPublicoPage() {
       {ranking.error && <p className="text-[15px] text-gris-700">{mensajeDeError(ranking.error)}</p>}
       {ranking.data &&
         (ranking.data.usaRanking ? (
-          <Ranking ranking={ranking.data} />
+          <Ranking ranking={ranking.data} slug={slug} />
         ) : (
           <p className="text-[15px] text-gris-700">Este circuito no lleva ranking.</p>
         ))}
@@ -40,7 +40,7 @@ export function RankingPublicoPage() {
   );
 }
 
-function Ranking({ ranking }: { ranking: RankingPublico }) {
+function Ranking({ ranking, slug }: { ranking: RankingPublico; slug: string }) {
   // Abre en la primera categoría que tiene jugadores: una vacía no dice nada a quien llega del enlace.
   const [categoriaId, setCategoriaId] = useState(
     (ranking.categorias.find((c) => c.filas.length > 0) ?? ranking.categorias[0])?.id,
@@ -88,10 +88,10 @@ function Ranking({ ranking }: { ranking: RankingPublico }) {
       ) : filas.length === 0 ? (
         <p className="text-[15px] text-gris-500">Nadie en {categoria.nombre} tiene ese apellido.</p>
       ) : (
-        <TablaRanking filas={filas} torneosDelCalendario={ranking.torneosDelCalendario} />
+        <TablaRanking slug={slug} filas={filas} torneosDelCalendario={ranking.torneosDelCalendario} />
       )}
 
-      <p className="text-[13px] text-gris-500">Tocá a cualquiera para ver los puntos de cada torneo del calendario.</p>
+      <p className="text-[13px] text-gris-500">Tocá a cualquiera para ver los puntos de cada torneo del calendario y su ficha.</p>
     </>
   );
 }

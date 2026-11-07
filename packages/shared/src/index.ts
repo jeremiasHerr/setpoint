@@ -17,6 +17,7 @@ export * from './schemas/cierre';
 export * from './schemas/tablero';
 export * from './schemas/en-vivo';
 export * from './schemas/ranking';
+export * from './schemas/ficha';
 export * from './schemas/mi-zona';
 export * from './schemas/mis-partidos';
 export * from './schemas/coordinacion';

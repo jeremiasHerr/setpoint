@@ -41,7 +41,7 @@ Ordenado por entrega.
 | 75% | F14 | [Anotar la fecha](jugador/anotar-fecha.html) | App jugador. Implementada en la app, en `/partido/:id/fecha`, desde "Anotar la fecha" en *Cuándo juego*. La misma pantalla cambia una fecha sin confirmar y reprograma una confirmada ([decisión 065](../decisiones/065-cambiar-una-fecha-sin-confirmar.md)). La hora y el club se eligen de una lista que sube desde abajo; sin los íconos de reloj e info, que pedirían react-native-svg | 390 px |
 | 75% | F15 | [Tablero del torneo](organizador/tablero.html) | Web organizador. Con F14, "Anotar fecha" abre debajo de la fila el día, la hora y la sede, como Escribirles: la referencia no dibuja ese formulario. Los partidos con fecha se despliegan desde el pie de "Lo que falta", para cambiarlos o confirmarlos | 1280 px |
 | 75% | F16 | [Cerrar el torneo](organizador/cierre.html) | Web organizador | 1280 px |
-| 75% · 100% | F17, F18 | [Ficha y cara a cara](publico/ficha-y-cara-a-cara.html) | Web pública | 870 px |
+| 75% · 100% | F17, F18 | [Ficha y cara a cara](publico/ficha-y-cara-a-cara.html) | Web pública. La ficha está implementada en `/c/:slug/jugadores/:id`, con una sección Torneos que la referencia no dibuja, armada con las piezas de *Partidos* ([decisión 071](../decisiones/071-la-ficha-suma-los-torneos.md)), y todos los partidos detrás de "Ver los N partidos". "Compartir" va con texto, como en las otras páginas públicas, y "Comparar con otro jugador" llega con el cara a cara (F18) | 870 px |
 | 100% | F20 | [Qué está en juego](jugador/que-esta-en-juego.html) | App jugador | 390 px |
 | — | — | [Landing](publico/landing.html) | Web pública | 1280 px |
 
@@ -69,7 +69,7 @@ Desde la devolución del 25% ([../devolucion-25.md](../devolucion-25.md)) la int
 | [Tablero del torneo](organizador/tablero.html) | "Complementaria" | Explicación de la línea de corte | Sin implementar |
 | [Cerrar el torneo](organizador/cierre.html) | "complementaria" | Rótulo de cuadro | Sin implementar |
 | [Los dos cuadros](publico/cuadros.html) | "Complementaria" | Título del segundo cuadro y bajada | Actualizado (`NOMBRE_DEL_CUADRO` y `bajada()` en `features/cuadros/cuadro.ts`), salvo "Campeonato": decisión abierta 16 |
-| [Ficha y cara a cara](publico/ficha-y-cara-a-cara.html) | "Puntos por etapa" | Título de la sección de casilleros | Sin implementar |
+| [Ficha y cara a cara](publico/ficha-y-cara-a-cara.html) | "Puntos por etapa" | Título de la sección de casilleros | Actualizado: "Puntos por torneo del calendario" (`PuntosPorTorneo`) |
 | [Landing](publico/landing.html) | "Campeonato y Complementaria", "cada etapa tiene su casillero" | Bloques de funcionalidades | Actualizado (`LandingPage`) |
 
 "Campeonato" sigue en *Tu circuito* (tabla de puntos) y *Nuevo torneo* hasta cerrar la decisión abierta 16 del [README](../README.md). "Cuadro consuelo" está escrito fijo: que salga del nombre configurado por la organización llega con ese campo ([07](../07-configurabilidad.md) §1.2).

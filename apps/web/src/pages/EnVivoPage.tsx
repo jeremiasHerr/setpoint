@@ -70,7 +70,7 @@ function Contenido({ torneo, slug, id, pestanaInicial }: { torneo: TorneoEnVivo;
         ))}
       </div>
 
-      {pestana === 'zonas' && <ZonasEnVivo torneo={torneo} />}
+      {pestana === 'zonas' && <ZonasEnVivo torneo={torneo} slug={slug} />}
       {pestana === 'cuadros' &&
         (torneo.hayCuadros ? (
           <LosCuadros slug={slug} torneoId={id} />

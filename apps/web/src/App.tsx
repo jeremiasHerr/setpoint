@@ -3,6 +3,7 @@ import { Catalogo } from './Catalogo';
 import { CargarResultadoPage } from './pages/CargarResultadoPage';
 import { CierrePage } from './pages/CierrePage';
 import { EnVivoPage } from './pages/EnVivoPage';
+import { FichaPublicaPage } from './pages/FichaPublicaPage';
 import { ImportarPadronPage } from './pages/ImportarPadronPage';
 import { IngresoPage } from './pages/IngresoPage';
 import { InscripcionesPage } from './pages/InscripcionesPage';
@@ -51,6 +52,8 @@ export default function App() {
       <Route path="/torneos/:id/cierre" element={<CierrePage />} />
       {/* Pública, sin login: es el enlace que la organización comparte (F09). */}
       <Route path="/c/:slug/ranking" element={<RankingPublicoPage />} />
+      {/* Pública, sin login: la ficha del jugador, desde el ranking y las zonas (F17). */}
+      <Route path="/c/:slug/jugadores/:id" element={<FichaPublicaPage />} />
       {/* Pública, sin login: los cuadros de un torneo (una categoría), para compartir (F08, F10). */}
       <Route path="/c/:slug/torneos/:id" element={<TorneoPublicoPage />} />
       <Route path="/c/:slug/torneos/:id/inscripcion" element={<InscripcionPage />} />
