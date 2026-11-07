@@ -135,7 +135,7 @@ Las dos de reprogramación están en el torneo, con los valores de POLENTA por d
 |---|---|---|
 | Política de reembolso | Texto informativo | a confirmar |
 
-**El movimiento de dinero queda fuera del sistema.** Ante una baja, la plataforma registra la cancelación y marca si corresponde devolución, para que aparezca en la conciliación del torneo. La transferencia la realiza la organización.
+**El movimiento de dinero queda fuera del sistema.** Ante una baja, la plataforma registra la cancelación y marca si corresponde devolución, para que aparezca en la conciliación del torneo. La transferencia la realiza la organización, y la marca como hecha. No hay una política por torneo: la organización lo decide en cada baja ([decisión 075](decisiones/075-la-devolucion-se-anota.md)).
 
 Que un circuito devuelva o no cuando alguien se baja después del sorteo es **regla del circuito, no de la plataforma** — mismo criterio que la obligación de enviar foto (§4). Muchos circuitos amateur no devuelven una vez cerrada la inscripción, porque las pelotas ya se compraron y las canchas ya se reservaron.
 
@@ -148,6 +148,9 @@ Que un circuito devuelva o no cuando alguien se baja después del sorteo es **re
 | Importe | Monto | $45.000 ARS |
 | ¿Hay lista de espera? | `sí` \| `no` | Sí |
 | Minutos de reserva de cupo | Número | 15 |
+| Horas de reserva para el primero de la lista de espera | Número | 24 |
+
+Las horas de la lista de espera están en el torneo, con 24 por defecto, y todavía no tienen campo en *Nuevo torneo* ([decisión 076](decisiones/076-lista-de-espera-24-horas.md)).
 
 **`modo_inscripcion`** — quién puede anotarse a un torneo:
 

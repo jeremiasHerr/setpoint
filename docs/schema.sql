@@ -230,6 +230,8 @@ CREATE TABLE torneos (
     modo_inscripcion       modo_inscripcion NOT NULL DEFAULT 'CERRADA',
     minutos_reserva_cupo   INTEGER          NOT NULL DEFAULT 15,
     tiene_lista_espera     BOOLEAN          NOT NULL DEFAULT TRUE,
+    -- Horas que se le guarda el lugar al primero de la lista de espera (decisión 076)
+    horas_reserva_lista_espera INTEGER      NOT NULL DEFAULT 24,
 
     -- fechas
     fecha_inicio           DATE,
@@ -269,6 +271,7 @@ CREATE TABLE torneos (
     CONSTRAINT ck_torneo_grupos     CHECK (cantidad_grupos > 0),
     CONSTRAINT ck_torneo_clasifican CHECK (clasifican_por_grupo > 0),
     CONSTRAINT ck_torneo_reserva    CHECK (minutos_reserva_cupo > 0),
+    CONSTRAINT ck_torneo_lista_espera CHECK (horas_reserva_lista_espera > 0),
     CONSTRAINT ck_torneo_fechas     CHECK (fecha_fin IS NULL OR fecha_inicio IS NULL OR fecha_fin >= fecha_inicio)
 );
 CREATE INDEX ix_torneos_org_estado ON torneos (organizacion_id, estado); -- listar publicados

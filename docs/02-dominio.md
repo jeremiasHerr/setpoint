@@ -361,7 +361,7 @@ El circuito de "transferir → sacar foto del comprobante → mandarlo → esper
 
 También se modela la **lista de espera**, que hoy se lleva a mano.
 
-**En la plataforma:** quién puede inscribirse, el importe, la lista de espera y los minutos de reserva son parámetros del torneo ([07](07-configurabilidad.md) §2.6).
+**En la plataforma:** quién puede inscribirse, el importe, la lista de espera y los minutos de reserva son parámetros del torneo ([07](07-configurabilidad.md) §2.6). Cuando se libera un lugar, el primero de la lista lo tiene reservado 24 horas para pagar; si no paga, pasa al siguiente ([decisión 076](decisiones/076-lista-de-espera-24-horas.md)). El reglamento no dice el plazo: es una decisión nuestra.
 
 ---
 

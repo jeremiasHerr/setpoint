@@ -16,6 +16,7 @@ import { hoy } from '../../lib/fechas';
 import { organizacionAdministrada } from '../../lib/permisos';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
+import { avisarLugaresLiberados, promoverListaDeEspera } from '../inscripciones/lista-de-espera.service';
 
 // Las claves del contrato son los valores de los enums de Prisma en minúscula.
 const aEnum = <T extends string>(valor: string) => valor.toUpperCase() as T;
@@ -267,9 +268,17 @@ async function editarPublicada(torneos: TorneoConRelaciones[], datos: DatosConvo
   const { etapaId, clubSedeId } = await resolverNombres(torneos[0].organizacionId, datos);
   const compartidas = columnasCompartidas(datos, etapaId, clubSedeId);
 
-  await prisma.$transaction(
-    torneos.map((t) => prisma.torneo.update({ where: { id: t.id }, data: { ...compartidas, cupo: cupoDe(t) } })),
-  );
+  // Con más cupo, los lugares nuevos son de la lista de espera, no del próximo que entre al link
+  // (decisión 076).
+  const liberados = await prisma.$transaction(async (tx) => {
+    const todos = [];
+    for (const t of torneos) {
+      await tx.torneo.update({ where: { id: t.id }, data: { ...compartidas, cupo: cupoDe(t) } });
+      todos.push(...(await promoverListaDeEspera(tx, t.id)));
+    }
+    return todos;
+  });
+  await avisarLugaresLiberados(liberados);
 }
 
 // Publicar abre la inscripción: el torneo se vuelve visible para los jugadores.

@@ -9,6 +9,7 @@ import { esPosibleHomonimo } from '../inscripcion/busqueda';
 import { estadoDe } from '../inscripcion/estados';
 import { ocupanCupo } from '../inscripcion/inscripcion.service';
 import { descartarPerfil, entrarAlPadron } from '../inscripcion/perfil-pendiente';
+import { avisarLugaresLiberados, promoverListaDeEspera } from '../inscripciones/lista-de-espera.service';
 import { comprobante } from './comprobante';
 
 // El pago de la inscripción (F12, 05-pagos.md): iniciar el checkout, confirmar con el webhook y
@@ -231,22 +232,28 @@ async function vincularAlPagar(tx: Prisma.TransactionClient, inscripcion: Inscri
   }
 }
 
+// Con el pago rechazado, el lugar se libera y pasa al primero de la lista de espera (decisión 076).
 export async function rechazarPago(inscripcionId: number, pago: Omit<PagoRecibido, 'medio'>) {
-  await prisma.$transaction(async (tx) => {
+  const liberados = await prisma.$transaction(async (tx) => {
     const { count } = await tx.inscripcion.updateMany({
       where: { id: inscripcionId, estado: EstadoInscripcion.PENDIENTE_PAGO },
       data: { estado: EstadoInscripcion.RECHAZADA, resueltaEn: new Date() },
     });
-    if (count === 0) return;
+    if (count === 0) return [];
     await tx.pago.upsert({
       where: { inscripcionId },
       create: { inscripcionId, estado: EstadoPago.RECHAZADO, monto: pago.monto, mpPaymentId: pago.mpPaymentId, payloadCrudo: pago.payload },
       update: { estado: EstadoPago.RECHAZADO, mpPaymentId: pago.mpPaymentId, payloadCrudo: pago.payload },
     });
     // Un perfil pendiente se descarta, como al vencer la reserva. Si vuelve a intentar, se crea otro.
-    const { jugadorId } = await tx.inscripcion.findUniqueOrThrow({ where: { id: inscripcionId }, select: { jugadorId: true } });
+    const { jugadorId, torneoId } = await tx.inscripcion.findUniqueOrThrow({
+      where: { id: inscripcionId },
+      select: { jugadorId: true, torneoId: true },
+    });
     await descartarPerfil(tx, jugadorId);
+    return promoverListaDeEspera(tx, torneoId);
   });
+  await avisarLugaresLiberados(liberados);
 }
 
 // Lo que avisa MercadoPago: se consulta el pago y se confirma o se rechaza la inscripción.

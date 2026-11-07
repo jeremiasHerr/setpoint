@@ -469,6 +469,9 @@ model Torneo {
   modoInscripcion    ModoInscripcion @default(CERRADA)
   minutosReservaCupo Int             @default(15)
   tieneListaEspera   Boolean         @default(true)
+  // Cuánto se le guarda el lugar al primero de la lista de espera cuando se libera uno, desde el
+  // aviso (decisión 076). Todavía sin campo en Nuevo torneo, como las reprogramaciones (decisión 067).
+  horasReservaListaEspera Int @default(24)
 
   // --- fechas ---
   fechaInicio       DateTime?
