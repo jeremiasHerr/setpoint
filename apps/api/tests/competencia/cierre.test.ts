@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   cuadrosTerminados,
+  finalDelCuadro,
   instanciasDelTorneo,
   ordenarFilas,
   puntosDeLaInstancia,
@@ -55,6 +56,18 @@ describe('cuadrosTerminados', () => {
 
   it('sin cuadros, no: las zonas todavía no se cerraron', () => {
     expect(cuadrosTerminados([])).toBe(false);
+  });
+});
+
+describe('finalDelCuadro', () => {
+  it('es el partido de la última ronda de ese cuadro, y su ganador es el campeón', () => {
+    const partidos = [...cuadroJugado('CAMPEONATO', desde(1, 8)), ...cuadroJugado('COMPLEMENTARIA', desde(11, 4))];
+    expect(finalDelCuadro(partidos, 'CAMPEONATO')).toMatchObject({ ronda: 3, ganadorId: 1 });
+    expect(finalDelCuadro(partidos, 'COMPLEMENTARIA')).toMatchObject({ ronda: 2, ganadorId: 11 });
+  });
+
+  it('sin partidos de ese cuadro, no hay final', () => {
+    expect(finalDelCuadro(cuadroJugado('CAMPEONATO', desde(1, 4)), 'COMPLEMENTARIA')).toBeUndefined();
   });
 });
 

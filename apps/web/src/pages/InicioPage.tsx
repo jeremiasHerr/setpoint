@@ -31,8 +31,8 @@ function Inicio({ sesion }: { sesion: Sesion }) {
   const sesionInvalida = useSesionInvalida(error);
   const cerrarSesion = useCerrarSesion();
 
-  // /inicio?ejemplo=1 muestra la pantalla con torneos en juego y terminados, que todavía no
-  // pueden existir de verdad. Se borra cuando estén el sorteo y el cierre.
+  // /inicio?ejemplo=1 muestra la pantalla completa, con los avisos de «Necesita tu atención», que
+  // todavía no se calculan. Se borra cuando estén.
   const verEjemplo = parametros.has('ejemplo');
 
   return (

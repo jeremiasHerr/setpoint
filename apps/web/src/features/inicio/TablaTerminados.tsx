@@ -1,14 +1,18 @@
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
 import type { TorneoTerminado } from './torneosEjemplo';
 
-type Props = {
-  torneos: TorneoTerminado[];
-  // Cuántos terminados hay en total; la tabla muestra solo los últimos.
-  total: number;
-};
+// Cuántos se ven antes de desplegar el resto.
+const VISIBLES = 5;
 
-export function TablaTerminados({ torneos, total }: Props) {
+// Los torneos cerrados, del último al primero. Cada uno lleva a su cierre, con los campeones y los
+// puntos (decisión 080). Sin un listado aparte, el resto se despliega en la misma tabla.
+export function TablaTerminados({ torneos }: { torneos: TorneoTerminado[] }) {
+  const [todos, setTodos] = useState(false);
+  const visibles = todos ? torneos : torneos.slice(0, VISIBLES);
+
   return (
     <Tarjeta className="overflow-hidden">
       <table className="w-full table-fixed text-left text-[15px]">
@@ -21,13 +25,17 @@ export function TablaTerminados({ torneos, total }: Props) {
           </tr>
         </thead>
         <tbody>
-          {torneos.map((torneo) => (
+          {visibles.map((torneo) => (
             <tr key={torneo.id} className="border-t border-linea-suave">
-              <td className="truncate py-[13px] pr-2 pl-5 font-medium">{torneo.nombre}</td>
-              <td className="px-2 py-[13px]">
-                <Numero className="text-sm text-gris-500">{torneo.termino}</Numero>
+              <td className="truncate py-[13px] pr-2 pl-5 font-medium">
+                <Link to={`/torneos/${torneo.id}/cierre`} className="hover:text-gris-500">
+                  {torneo.nombre}
+                </Link>
               </td>
-              <td className="truncate px-2 py-[13px]">{torneo.campeon}</td>
+              <td className="px-2 py-[13px]">
+                <Numero className="text-sm text-gris-500">{torneo.termino ?? '—'}</Numero>
+              </td>
+              <td className="truncate px-2 py-[13px]">{torneo.campeon ?? '—'}</td>
               <td className="py-[13px] pr-5 pl-2 text-right">
                 <Numero className="text-sm">{torneo.jugadores}</Numero>
               </td>
@@ -36,11 +44,10 @@ export function TablaTerminados({ torneos, total }: Props) {
         </tbody>
       </table>
 
-      {total > torneos.length && (
+      {!todos && torneos.length > VISIBLES && (
         <div className="border-t border-linea-suave px-5 py-[13px]">
-          {/* Se conecta cuando exista el listado de torneos. */}
-          <button type="button" className="text-sm font-medium hover:text-gris-500">
-            Ver los <Numero>{total}</Numero> torneos terminados →
+          <button type="button" onClick={() => setTodos(true)} className="text-sm font-medium hover:text-gris-500">
+            Ver los <Numero>{torneos.length}</Numero> torneos terminados →
           </button>
         </div>
       )}

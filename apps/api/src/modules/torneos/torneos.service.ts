@@ -1,5 +1,7 @@
 import {
+  Cuadro,
   EstadoInscripcion,
+  EstadoPartido,
   EstadoTorneo,
   type ModoInscripcion,
   type ModoSede,
@@ -7,15 +9,18 @@ import {
   type TerceroSet,
 } from '@prisma/client';
 import type {
+  AvanceDelTorneo,
   Convocatoria,
   DatosConvocatoria,
   EstadoTorneo as ClaveEstado,
   ResumenConvocatoria,
 } from '@setpoint/shared';
-import { hoy } from '../../lib/fechas';
+import { diaEnArgentina, hoy } from '../../lib/fechas';
 import { organizacionAdministrada } from '../../lib/permisos';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
+import { finalDelCuadro } from '../competencia/cierre';
+import { avanceDelTorneo } from '../competencia/tablero';
 import { avisarLugaresLiberados, promoverListaDeEspera } from '../inscripciones/lista-de-espera.service';
 
 // Las claves del contrato son los valores de los enums de Prisma en minúscula.
@@ -303,6 +308,38 @@ export async function publicarConvocatoria(slug: string, usuarioId: number, torn
   return obtenerConvocatoria(slug, usuarioId, torneos[0].id);
 }
 
+// Desde el sorteo confirmado hasta el cierre: los que el inicio muestra en juego (decisión 080).
+const EN_JUEGO: EstadoTorneo[] = [EstadoTorneo.ZONAS_GENERADAS, EstadoTorneo.GRUPOS_EN_CURSO, EstadoTorneo.ELIMINATORIAS];
+
+const PARA_EL_INICIO = {
+  torneoId: true,
+  cuadro: true,
+  ronda: true,
+  estado: true,
+  jugadorAId: true,
+  jugadorBId: true,
+  fechaLimite: true,
+  fechaAcordada: true,
+  ganador: { select: { nombre: true, apellido: true } },
+} satisfies Prisma.PartidoSelect;
+
+// Los partidos que necesita el inicio, por torneo, en una sola consulta: todos los de los torneos
+// en juego, para su avance, y los del cuadro principal de los cerrados, para el campeón.
+async function partidosParaElInicio(enJuego: number[], cerrados: number[]) {
+  const porTorneo = new Map<number, Prisma.PartidoGetPayload<{ select: typeof PARA_EL_INICIO }>[]>();
+  if (enJuego.length === 0 && cerrados.length === 0) return porTorneo;
+
+  const partidos = await prisma.partido.findMany({
+    where: {
+      estado: { not: EstadoPartido.CANCELADA },
+      OR: [{ torneoId: { in: enJuego } }, { torneoId: { in: cerrados }, cuadro: Cuadro.CAMPEONATO }],
+    },
+    select: PARA_EL_INICIO,
+  });
+  for (const p of partidos) porTorneo.set(p.torneoId, [...(porTorneo.get(p.torneoId) ?? []), p]);
+  return porTorneo;
+}
+
 // Una fila por convocatoria, de la más nueva a la más vieja.
 export async function listarConvocatorias(slug: string, usuarioId: number): Promise<ResumenConvocatoria[]> {
   const organizacionId = await organizacionAdministrada(slug, usuarioId);
@@ -323,6 +360,24 @@ export async function listarConvocatorias(slug: string, usuarioId: number): Prom
     porEdicion.set(clave, [...(porEdicion.get(clave) ?? []), t]);
   }
 
+  const partidos = await partidosParaElInicio(
+    torneos.filter((t) => EN_JUEGO.includes(t.estado)).map((t) => t.id),
+    torneos.filter((t) => t.estado === EstadoTorneo.FINALIZADO).map((t) => t.id),
+  );
+  const dia = hoy();
+
+  const avance = (t: (typeof torneos)[number]): AvanceDelTorneo | null =>
+    EN_JUEGO.includes(t.estado)
+      ? { fase: t.estado === EstadoTorneo.ELIMINATORIAS ? 'cuadros' : 'zonas', ...avanceDelTorneo(partidos.get(t.id) ?? [], dia) }
+      : null;
+  const terminado = (t: (typeof torneos)[number]) =>
+    t.estado === EstadoTorneo.FINALIZADO
+      ? {
+          cerradoEl: t.cerradoEn && diaEnArgentina(t.cerradoEn),
+          campeon: finalDelCuadro(partidos.get(t.id) ?? [], Cuadro.CAMPEONATO)?.ganador ?? null,
+        }
+      : null;
+
   return [...porEdicion.values()]
     .map((grupo) => {
       const c = aConvocatoria(grupo);
@@ -336,6 +391,8 @@ export async function listarConvocatorias(slug: string, usuarioId: number): Prom
           estado: aClave<ClaveEstado>(t.estado),
           cupo: t.cupo,
           inscriptos: t._count.inscripciones,
+          avance: avance(t),
+          terminado: terminado(t),
         })),
         cierreInscripcion: c.cierreInscripcion,
         fechaInicio: c.fechaInicio,

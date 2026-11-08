@@ -1,6 +1,6 @@
 // Los tipos de la pantalla de inicio y datos de ejemplo para verla completa (/inicio?ejemplo=1).
-// Los datos reales salen de torneosDeInicio.ts, que hoy solo puede llenar borradores e
-// inscripciones abiertas: el ejemplo muestra cómo se ve con torneos en juego y terminados.
+// Los datos reales salen de torneosDeInicio.ts, que todavía no calcula los avisos de «Necesita tu
+// atención»: el ejemplo muestra cómo se ven.
 // Todos los nombres de personas son ficticios.
 
 export type TorneoEnBorrador = {
@@ -40,8 +40,9 @@ export type TorneoParaSortear = {
 export type TorneoTerminado = {
   id: number;
   nombre: string;
-  termino: string;
-  campeon: string;
+  // '05/09/2026'. null si se cerró antes de que se guardara la fecha.
+  termino: string | null;
+  campeon: string | null;
   jugadores: number;
 };
 
@@ -54,9 +55,8 @@ export type TorneosDeInicio = {
   enJuego: TorneoEnJuego[];
   conInscripcionAbierta: TorneoConInscripcionAbierta[];
   paraSortear: TorneoParaSortear[];
+  // Todos, del último que terminó al primero. La tabla muestra los últimos y despliega el resto.
   terminados: TorneoTerminado[];
-  // La tabla muestra solo los últimos; este es el total.
-  totalTerminados: number;
   avisos: Aviso[];
   jugadores: number;
   categorias: number;
@@ -86,8 +86,10 @@ export const torneosEjemplo: TorneosDeInicio = {
     { id: 4, nombre: 'Invierno 26 · Tercera', termino: '05/09/2026', campeon: 'Lucas Ferreyra', jugadores: 32 },
     { id: 5, nombre: 'Otoño 26 · Segunda', termino: '27/06/2026', campeon: 'Nicolás Arrieta', jugadores: 32 },
     { id: 6, nombre: 'Otoño 26 · Tercera', termino: '20/06/2026', campeon: 'Martín Sanhueza', jugadores: 28 },
+    { id: 7, nombre: 'Pretemporada 26 · Segunda', termino: '04/04/2026', campeon: 'Ezequiel Pomar', jugadores: 30 },
+    { id: 8, nombre: 'Pretemporada 26 · Tercera', termino: '28/03/2026', campeon: 'Ignacio Saldías', jugadores: 32 },
+    { id: 9, nombre: 'Verano 25/26 · Segunda', termino: '14/02/2026', campeon: 'Nicolás Arrieta', jugadores: 26 },
   ],
-  totalTerminados: 9,
   avisos: [
     { tipo: 'partidos-vencidos', categoria: 'Segunda', partidos: 3 },
     { tipo: 'pocos-inscriptos', torneo: 'Primavera 26 · Segunda', pagaron: 9, cupo: 32, cierraEn: 'tres semanas' },

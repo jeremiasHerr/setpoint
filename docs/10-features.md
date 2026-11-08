@@ -334,7 +334,7 @@ La organización dispondrá de una pantalla única donde ver el avance completo 
 - Un partido vencido se calcula al consultar: pasó su fecha límite sin resultado ([decisión 060](decisiones/060-partidos-vencidos-calculados.md)).
 - En los cuadros muestra lo mismo por ronda, y ofrece cerrar las zonas y cerrar el torneo cuando corresponde ([decisión 061](decisiones/061-tablero-en-los-cuadros.md)).
 - Resolver carga el W.O. y Escribirles abre el WhatsApp de cada jugador; extender el plazo, el doble W.O. y recordarles no están ([decisión 062](decisiones/062-acciones-del-tablero.md)). Anotar fecha, en los sin coordinar, llegó con F14.
-- Se llega desde el Sorteo confirmado; el inicio todavía no muestra los torneos en juego ([decisión 063](decisiones/063-entrada-al-tablero.md)).
+- Se llega desde la tarjeta del torneo en "En juego" del inicio, con los partidos jugados y los vencidos ([decisión 080](decisiones/080-torneos-en-juego-y-terminados-en-el-inicio.md)), y desde el Sorteo confirmado ([decisión 063](decisiones/063-entrada-al-tablero.md)).
 
 ---
 
@@ -356,6 +356,7 @@ Al definirse los campeones, la organización cerrará el torneo y el sistema oto
 - La instancia sale del cuadro principal; el cuadro consuelo y quien pierde antes de octavos reciben participación ([decisión 056](decisiones/056-instancias-fuera-de-la-tabla-de-puntos.md)).
 - Un torneo suelto, o de una organización sin ranking, se cierra con sus posiciones finales y sin puntos ([decisión 057](decisiones/057-cierre-sin-ranking.md)).
 - Corregir un resultado después del cierre recalcula los puntos de quien cambia de instancia ([decisión 055](decisiones/055-correccion-despues-del-cierre.md)).
+- Cerrado, el torneo pasa a "Terminados" en el inicio, con la fecha del cierre y el campeón, y desde ahí se vuelve a esta pantalla ([decisión 080](decisiones/080-torneos-en-juego-y-terminados-en-el-inicio.md)).
 - De qué torneo salió cada punto ya se ve en el ranking, en el casillero de cada torneo del calendario (F09). El historial por torneo llega con la ficha del jugador (F17).
 
 ---

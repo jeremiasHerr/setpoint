@@ -479,6 +479,9 @@ model Torneo {
   cierreInscripcion DateTime?
   plazoGruposDias   Int       @default(21)
   plazoPorRondaDias Int       @default(7)
+  // Cuándo lo cerró la organización (F16), para "Terminó" en el inicio (decisión 080). null antes
+  // del cierre, y en los cerrados antes de que existiera la columna.
+  cerradoEn         DateTime?
 
   // --- coordinación (02-dominio §8.3) ---
   reprogramacionesPermitidas Int @default(1)

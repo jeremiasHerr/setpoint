@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import {
+  avanceDelTorneo,
   diasHasta,
   plazoQueCorre,
   porUrgencia,
   situacionDelPartido,
+  type PartidoDelAvance,
   type PartidoParaElTablero,
 } from '../../src/modules/competencia/tablero';
 
@@ -109,5 +111,62 @@ describe('porUrgencia', () => {
       { id: 3, dias: 6 },
     ]);
     expect(ordenados.map((p) => p.id)).toEqual([1, 2, 3]);
+  });
+});
+
+describe('avanceDelTorneo', () => {
+  const deZona = (cambios: Partial<PartidoParaElTablero> = {}): PartidoDelAvance => ({ ...partido(cambios), cuadro: null, ronda: null });
+  const deCuadro = (cuadro: PartidoDelAvance['cuadro'], ronda: number, cambios: Partial<PartidoParaElTablero> = {}): PartidoDelAvance => ({
+    ...partido(cambios),
+    cuadro,
+    ronda,
+  });
+
+  it('cuenta los partidos del torneo entero, los jugados y los vencidos, como el tablero', () => {
+    const avance = avanceDelTorneo(
+      [
+        deZona({ estado: 'JUGADA' }),
+        deZona({ estado: 'WALKOVER' }),
+        deZona({ fechaLimite: limite('2026-10-29') }),
+        deZona({ estado: 'ANOTADA' }),
+      ],
+      HOY,
+    );
+    expect(avance).toMatchObject({ partidos: 4, jugados: 2, vencidos: 1 });
+  });
+
+  it('en las zonas, el plazo es el de la fase de grupos y no hay ronda', () => {
+    const avance = avanceDelTorneo([deZona({ estado: 'JUGADA' }), deZona()], HOY);
+    expect(avance.plazo).toEqual({ fechaLimite: '2026-11-05', dias: 6 });
+    expect(avance.ronda).toBeNull();
+  });
+
+  it('en los cuadros, la ronda es la del partido pendiente que vence primero: la más atrasada', () => {
+    const avance = avanceDelTorneo(
+      [
+        // El principal ya está en la final; al consuelo le falta una semifinal, que vence antes.
+        deCuadro('CAMPEONATO', 1, { estado: 'JUGADA', fechaLimite: limite('2026-10-22') }),
+        deCuadro('CAMPEONATO', 2, { estado: 'JUGADA', fechaLimite: limite('2026-10-29') }),
+        deCuadro('CAMPEONATO', 3, { fechaLimite: limite('2026-11-05') }),
+        deCuadro('COMPLEMENTARIA', 1, { estado: 'JUGADA', fechaLimite: limite('2026-10-29') }),
+        deCuadro('COMPLEMENTARIA', 2, { fechaLimite: limite('2026-11-01') }),
+      ],
+      HOY,
+    );
+    expect(avance.plazo).toEqual({ fechaLimite: '2026-11-01', dias: 2 });
+    expect(avance.ronda).toEqual({ ronda: 2, rondas: 2 });
+  });
+
+  it('un partido que espera a sus jugadores no marca la ronda', () => {
+    const avance = avanceDelTorneo(
+      [deCuadro('CAMPEONATO', 1, { fechaLimite: limite('2026-11-05') }), deCuadro('CAMPEONATO', 2, { jugadorAId: null, fechaLimite: limite('2026-11-01') })],
+      HOY,
+    );
+    expect(avance.ronda).toEqual({ ronda: 1, rondas: 2 });
+  });
+
+  it('con todo jugado no hay plazo ni ronda', () => {
+    const avance = avanceDelTorneo([deCuadro('CAMPEONATO', 1, { estado: 'JUGADA' })], HOY);
+    expect(avance).toEqual({ partidos: 1, jugados: 1, vencidos: 0, plazo: null, ronda: null });
   });
 });
