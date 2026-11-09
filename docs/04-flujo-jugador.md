@@ -220,7 +220,7 @@ En el padrón, al lado de cada jugador, la organización tiene "Compartir link":
 
 Si el pago se rechaza, el lugar se libera y puede intentar de nuevo. Si la reserva vence antes de pagar, también: vuelve a la convocatoria y, si quedan lugares, reserva otra vez.
 
-**Reserva de cupo y lista de espera.** La reserva dura los minutos que configure el torneo (por defecto, 15). Si el cupo está lleno, puede sumarse a la **lista de espera**; si se libera un lugar, al primero se le avisa por email y tiene 24 horas para pagar ([decisión 076](decisiones/076-lista-de-espera-24-horas.md)). Detalle en [05-pagos.md](05-pagos.md).
+**Reserva de cupo y lista de espera.** La reserva dura los minutos que configure el torneo (por defecto, 15). Si el cupo está lleno, puede sumarse a la **lista de espera** por el mismo camino, sin pagar nada, si tiene perfil en el padrón ([decisión 081](decisiones/081-anotarse-en-la-lista-de-espera.md)); si se libera un lugar, al primero se le avisa por email y tiene 24 horas para pagar ([decisión 076](decisiones/076-lista-de-espera-24-horas.md)). La lista termina con el sorteo ([decisión 082](decisiones/082-la-lista-termina-con-el-sorteo.md)). Detalle en [05-pagos.md](05-pagos.md).
 
 ### 5.9 Lo que revisa la organización
 

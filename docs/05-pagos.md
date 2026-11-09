@@ -107,8 +107,11 @@ pendiente_pago de una aprobada → aprobada (venció la reserva: puede volver a 
 
 pagada → cancelada   (baja de la organización, hasta el sorteo; el pago sigue aprobado y se anota si corresponde devolución)
 
+(nueva)         → en_lista_espera  (el cupo estaba lleno: se anotó desde el link, sin pagar)
 en_lista_espera → pendiente_pago   (se liberó un cupo: reserva de 24 horas desde el aviso)
 ```
+
+Quien sigue en `en_lista_espera` cuando se confirma el sorteo no cambia de estado: la pantalla muestra que la lista terminó, calculado con el sorteo del torneo ([decisión 082](decisiones/082-la-lista-termina-con-el-sorteo.md)).
 
 Un job periódico expira las reservas vencidas, libera el cupo y **notifica al primero de la lista de espera**, que lo tiene reservado 24 horas ([decisión 076](decisiones/076-lista-de-espera-24-horas.md)). Al expirar, también se descarta la vinculación pendiente, y el perfil vuelve a aparecer en la búsqueda ([decisión 051](decisiones/051-vinculacion-con-el-padron.md)). Si el perfil era pendiente (alguien que no estaba en el padrón), queda descartado ([decisión 054](decisiones/054-perfil-pendiente.md)); lo mismo al rechazarse el pago.
 
@@ -123,6 +126,8 @@ Si el torneo tiene lista de espera (parámetro del torneo, [07](07-configurabili
 También aplica al cierre de inscripciones: si hay inscriptos que no pagaron, se los consulta con un plazo y, si no cumplen, se pasa al siguiente de la lista.
 
 Hoy esto se lleva a mano. Modelarlo es una mejora directa sobre el proceso actual.
+
+**Cómo se anota** ([decisión 081](decisiones/081-anotarse-en-la-lista-de-espera.md)). Con el cupo lleno, el link del torneo ofrece "Anotarme en la lista de espera" y sigue el mismo camino que la inscripción: el email, el código y el perfil. Al final no se cobra nada (`POST /api/inscripcion/:slug/torneos/:id/lista-de-espera`). Se anota quien tiene perfil en el padrón; el perfil queda apartado mientras espera y se vincula al pagar, como en una reserva.
 
 **Cómo funciona** ([decisión 076](decisiones/076-lista-de-espera-24-horas.md)). Cuando se libera un lugar (una baja, una reserva que vence, un pago rechazado o un cupo más grande), el primero de la lista pasa a `pendiente_pago` con una reserva de 24 horas desde el aviso, y le llega un email con el link para pagar. Si no paga, la reserva vence y el lugar pasa al siguiente. Las horas están en el torneo (`horasReservaListaEspera`). La lista termina cuando se confirma el sorteo ([decisión 077](decisiones/077-baja-hasta-el-sorteo.md)).
 

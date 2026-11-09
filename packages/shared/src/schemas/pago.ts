@@ -3,10 +3,13 @@ import { z } from 'zod';
 // El pago de la inscripción (F12, 05-pagos.md).
 
 // solicitada, aprobada y no_aprobada son de los torneos con aprobación (decisión 054).
+// lista_terminada: seguía en la lista de espera cuando se confirmó el sorteo (decisión 082).
 export type EstadoDeLaInscripcion =
   | 'solicitada'
   | 'aprobada'
   | 'no_aprobada'
+  | 'en_lista_espera'
+  | 'lista_terminada'
   | 'reservando'
   | 'pagada'
   | 'vencida'
@@ -25,6 +28,9 @@ export type InscripcionParaPagar = {
   email: string;
   // Sin credenciales de MercadoPago, la pantalla ofrece un pago simulado (decisión 053).
   pagoSimulado: boolean;
+  // Si se anotó en la lista de espera (F13): las horas que tiene para pagar cuando le toca un lugar
+  // (decisión 076) y, mientras espera, en qué puesto está y cómo está el cupo. null si nunca estuvo.
+  listaDeEspera: { horas: number; espera: { posicion: number; ocupados: number; cupo: number } | null } | null;
 };
 
 // El link del checkout de MercadoPago. null si el pago es simulado o si el torneo es gratis.

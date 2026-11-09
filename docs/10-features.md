@@ -281,14 +281,15 @@ La organización podrá seguir el estado de las inscripciones de cada torneo en 
 - En los torneos con aprobación, muestra las **solicitudes** de quienes no están en el padrón, para aprobarlas o rechazarlas. Al aprobar, el jugador recibe el link para pagar, y entra al padrón cuando paga.
 - Marca las inscripciones cuya vinculación quedó para revisar (un posible homónimo, o un perfil que reclama otra cuenta) y lleva a revisarla (F02).
 
-**Estado:** implementada del lado de la organización (`/torneos/:id/inscripciones`, [03-flujo-organizacion.md](03-flujo-organizacion.md) §7).
+**Estado:** implementada (`/torneos/:id/inscripciones`, [03-flujo-organizacion.md](03-flujo-organizacion.md) §7), y del lado del jugador, anotarse en la lista de espera desde el link del torneo.
 - Pestañas Confirmados, Reservando, Lista de espera, Bajas y, con aprobación, Solicitudes, con un buscador por apellido. Al costado, la lista de espera, las devoluciones pendientes y la conciliación.
 - Dar de baja a quien pagó, diciendo si le corresponde la devolución; el sistema la anota y la organización la hace por fuera ([decisión 075](decisiones/075-la-devolucion-se-anota.md)). Se puede hasta que se confirma el sorteo ([decisión 077](decisiones/077-baja-hasta-el-sorteo.md)).
 - Un lugar que se libera (baja, reserva vencida, pago rechazado o cupo más grande) pasa al primero de la lista de espera, con 24 horas para pagar y un email; si no paga, pasa al siguiente ([decisión 076](decisiones/076-lista-de-espera-24-horas.md)).
 - Inscribir a mano a quien pagó por fuera, sin pasarse del cupo ([decisión 079](decisiones/079-inscribir-a-mano-sin-pasarse-del-cupo.md)), y "Recordarle" el pago a una reserva.
 - La conciliación cobra el 5% de la plataforma solo sobre lo cobrado por MercadoPago ([decisión 078](decisiones/078-comision-de-la-plataforma.md)).
 - Al cerrar, las reservas sin pagar no se tocan y no entran al sorteo ([decisión 024](decisiones/024-reservas-sin-pagar-al-cerrar.md)), y no se puede cerrar si los que pagaron no alcanzan para las zonas ([decisión 025](decisiones/025-no-se-cierra-sin-inscriptos-para-las-zonas.md)).
-- Faltan anotarse en la lista de espera desde el link del torneo y sus pantallas del jugador (dibujadas en *El torneo* e *Inscripción y pago*), y la marca de las vinculaciones para revisar. En el seed, la Copa Confluencia tiene a Sanhueza primero en la lista.
+- Con el cupo lleno, el link del torneo lleva a "Anotarme en la lista de espera", por el mismo camino que inscribirse y sin pagar. Se anota quien tiene perfil en el padrón ([decisión 081](decisiones/081-anotarse-en-la-lista-de-espera.md)). La pantalla de pago muestra su puesto en la lista, el lugar que le tocó con hasta cuándo es suyo, y que la lista terminó si se sorteó sin que le tocara ([decisión 082](decisiones/082-la-lista-termina-con-el-sorteo.md)). En el seed, la Copa Confluencia tiene a Sanhueza primero en la lista.
+- Faltan la lista de espera desde el link personal y en la app, y la marca de las vinculaciones para revisar.
 
 **Entrega: 75%**
 

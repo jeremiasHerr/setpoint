@@ -1,12 +1,17 @@
 import { ErrorApi } from '../../lib/api';
 
-// Por qué no se pudo reservar el lugar, desde el link del torneo o desde el link personal.
+// Por qué no se pudo reservar el lugar o anotarse en la lista de espera, desde el link del torneo o
+// desde el link personal.
 export function mensajeReserva(error: Error | null): string | null {
   if (!error) return null;
   if (!(error instanceof ErrorApi)) return 'Algo salió mal. Probá de nuevo.';
   switch (error.codigo) {
     case 'SIN_LUGARES':
       return 'Ya no quedan lugares en este torneo.';
+    case 'HAY_LUGARES':
+      return 'Se liberó un lugar: ya podés inscribirte y pagar.';
+    case 'SIN_LISTA_DE_ESPERA':
+      return 'Este torneo no tiene lista de espera.';
     case 'PERFIL_RESERVADO':
       return 'Alguien está pagando con ese perfil en este momento. Si es el tuyo, avisale a la organización.';
     case 'PERFIL_VINCULADO':

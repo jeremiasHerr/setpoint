@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { inscribirComoNuevoSchema, reservarSchema } from '@setpoint/shared';
 import { autenticar } from '../../middleware/autenticar';
 import { validar } from '../../middleware/validar';
-import { inscribirComoNuevo, reservar, situacionEnElTorneo } from './inscripcion.service';
+import { anotarEnListaDeEspera, inscribirComoNuevo, reservar, situacionEnElTorneo } from './inscripcion.service';
 
 // Se monta en /api/inscripcion/:slug/torneos/:id. Pide la sesión que deja el código (decisión
 // 049), pero no un perfil en la organización: es justo lo que se está por vincular.
@@ -18,6 +18,12 @@ inscripcionRouter.get('/', async (req, res) => {
 inscripcionRouter.post('/', validar(reservarSchema), async (req, res) => {
   const { slug, id } = req.params as { slug: string; id: string };
   res.status(201).json(await reservar(slug, Number(id), res.locals.usuarioId, req.body));
+});
+
+// Con el cupo lleno, el mismo perfil que se reservaría se anota en la lista de espera (decisión 081).
+inscripcionRouter.post('/lista-de-espera', validar(reservarSchema), async (req, res) => {
+  const { slug, id } = req.params as { slug: string; id: string };
+  res.status(201).json(await anotarEnListaDeEspera(slug, Number(id), res.locals.usuarioId, req.body));
 });
 
 // Quien no está en el padrón, si el torneo es con aprobación o abierto (decisión 054).

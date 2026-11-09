@@ -150,7 +150,7 @@ Que un circuito devuelva o no cuando alguien se baja después del sorteo es **re
 | Minutos de reserva de cupo | Número | 15 |
 | Horas de reserva para el primero de la lista de espera | Número | 24 |
 
-Las horas de la lista de espera están en el torneo, con 24 por defecto, y todavía no tienen campo en *Nuevo torneo* ([decisión 076](decisiones/076-lista-de-espera-24-horas.md)).
+Las horas de la lista de espera están en el torneo, con 24 por defecto, y todavía no tienen campo en *Nuevo torneo* ([decisión 076](decisiones/076-lista-de-espera-24-horas.md)). En la lista se anota quien tiene perfil en el padrón, en cualquier modo: en los modos con aprobación y abierto, quien no está en el padrón no tiene lista de espera ([decisión 081](decisiones/081-anotarse-en-la-lista-de-espera.md)).
 
 **`modo_inscripcion`** — quién puede anotarse a un torneo:
 

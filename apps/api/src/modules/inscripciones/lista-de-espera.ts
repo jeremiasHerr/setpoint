@@ -31,5 +31,14 @@ export function aQuienesLesToca<E extends EnEspera>(espera: E[], libres: number)
   return [...espera].sort(ordenDeLlegada).slice(0, Math.max(0, libres));
 }
 
+// En qué puesto de la lista está una inscripción: 1 es la próxima a la que le toca un lugar.
+export function puestoEnLaLista(espera: EnEspera[], inscripcionId: number) {
+  return [...espera].sort(ordenDeLlegada).findIndex((e) => e.id === inscripcionId) + 1;
+}
+
+// El número de quien se anota: después de todos los que se anotaron antes, aunque ya les haya tocado
+// un lugar o se hayan bajado.
+export const siguienteEnLaLista = (ultimo: number | null) => (ultimo ?? 0) + 1;
+
 // Hasta cuándo es suyo el lugar: las horas del torneo desde el aviso (decisión 076).
 export const venceLaReserva = (ahora: Date, horas: number) => new Date(ahora.getTime() + horas * 3_600_000);

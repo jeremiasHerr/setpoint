@@ -2,8 +2,10 @@ import { describe, expect, it } from 'vitest';
 import {
   aQuienesLesToca,
   lugaresLibres,
+  puestoEnLaLista,
   seAsignanLugares,
   sePuedeModificar,
+  siguienteEnLaLista,
   venceLaReserva,
 } from '../../src/modules/inscripciones/lista-de-espera';
 
@@ -53,6 +55,28 @@ describe('aQuienesLesToca', () => {
     const antes = { id: 20, ordenListaEspera: 4, creadoEn: dia(18) };
     const despues = { id: 21, ordenListaEspera: 4, creadoEn: dia(21) };
     expect(aQuienesLesToca([despues, antes], 1)).toEqual([antes]);
+  });
+});
+
+describe('puestoEnLaLista', () => {
+  const ojeda = { id: 10, ordenListaEspera: 1, creadoEn: dia(19) };
+  const rivas = { id: 11, ordenListaEspera: 2, creadoEn: dia(19) };
+  const lagos = { id: 12, ordenListaEspera: 3, creadoEn: dia(20) };
+
+  it('por orden de llegada: el primero es al que le toca el próximo lugar', () => {
+    expect(puestoEnLaLista([lagos, ojeda, rivas], 10)).toBe(1);
+    expect(puestoEnLaLista([lagos, ojeda, rivas], 12)).toBe(3);
+  });
+
+  it('sube cuando a los de adelante les toca un lugar', () => {
+    expect(puestoEnLaLista([lagos, rivas], 12)).toBe(2);
+  });
+});
+
+describe('siguienteEnLaLista', () => {
+  it('después del último número, y el 1 en una lista vacía', () => {
+    expect(siguienteEnLaLista(5)).toBe(6);
+    expect(siguienteEnLaLista(null)).toBe(1);
   });
 });
 

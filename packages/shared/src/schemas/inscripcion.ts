@@ -17,9 +17,14 @@ export type BusquedaEnElPadron = { perfiles: PerfilEncontrado[] };
 export type SituacionEnElTorneo = {
   // Su perfil en esta organización, si ya tiene.
   perfil: { jugadorId: number; nombre: string; apellido: string; categoria: string | null } | null;
-  // Su inscripción en este torneo: pagada, o una reserva que todavía no venció.
-  // En los torneos con aprobación, también la solicitud o la aprobada que falta pagar (decisión 054).
-  inscripcion: { id: number; estado: 'pagada' | 'reservando' | 'solicitada' | 'aprobada'; reservaVence: string | null } | null;
+  // Su inscripción en este torneo: pagada, una reserva que todavía no venció o su lugar en la lista
+  // de espera. En los torneos con aprobación, también la solicitud o la aprobada que falta pagar
+  // (decisión 054).
+  inscripcion: {
+    id: number;
+    estado: 'pagada' | 'reservando' | 'solicitada' | 'aprobada' | 'en_lista_espera';
+    reservaVence: string | null;
+  } | null;
   // Si ya juega en otro circuito y es nuevo en este: los perfiles con su apellido en la categoría,
   // para el "¿Sos…?". Vacío si no hay o si ya tiene perfil acá.
   propuestas: PerfilEncontrado[];
@@ -43,6 +48,9 @@ export type Reserva = {
   // Hasta cuándo se guarda el lugar, en ISO.
   reservaVence: string;
 };
+
+// Con el cupo lleno, el mismo perfil se anota en la lista de espera, sin pagar (F13, decisión 081).
+export type AnotadoEnLaLista = { inscripcionId: number };
 
 // Quien no está en el padrón, en un torneo con aprobación o abierto (decisión 054): deja su nombre y
 // apellido. Con aprobación queda como solicitud; abierto, reserva el lugar y sigue al pago.

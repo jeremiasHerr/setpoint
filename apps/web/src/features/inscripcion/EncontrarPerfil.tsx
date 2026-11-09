@@ -1,8 +1,10 @@
 import type { PerfilEncontrado, SituacionEnElTorneo, TorneoPublico } from '@setpoint/shared';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { lugaresLibres } from '../torneo-publico/convocatoria';
 import {
   Aviso,
+  AvisoLista,
   AvisoReserva,
   Ayuda,
   BotonPrincipal,
@@ -16,7 +18,7 @@ import {
 import { AvisarALaOrganizacion, AvisoEnviado } from './AvisarALaOrganizacion';
 import { InscribirmeComoNuevo } from './InscribirmeComoNuevo';
 import { mensajeReserva } from './mensajeReserva';
-import { useBusqueda, useReservar } from './useInscripcion';
+import { useAnotarEnListaDeEspera, useBusqueda, useReservar } from './useInscripcion';
 
 type Props = {
   torneo: TorneoPublico;
@@ -30,25 +32,42 @@ type Props = {
 };
 
 // Después del código: pasos 3 a 13 de docs/pantallas/jugador/identificacion.html (decisiones 051 y 054).
+// Con el cupo lleno, el mismo camino termina en la lista de espera, sin pagar (decisión 081).
 export function EncontrarPerfil({ torneo, token, email, nombre, situacion, onReservado }: Props) {
   const reservar = useReservar(torneo.organizacion.slug, String(torneo.id), token);
+  const anotar = useAnotarEnListaDeEspera(torneo.organizacion.slug, String(torneo.id), token);
   const [modo, setModo] = useState<'propuesta' | 'buscar' | 'vinculado' | 'no-esta'>(
     situacion.propuestas.length > 0 ? 'propuesta' : 'buscar',
   );
   const [elegido, setElegido] = useState<PerfilEncontrado | null>(null);
 
-  const pagar = (jugadorId: number, vinculaPor?: 'busqueda' | 'propuesta') =>
-    reservar.mutate({ jugadorId, vinculaPor }, { onSuccess: (reserva) => onReservado(reserva.inscripcionId) });
+  // La lista de espera, si no quedan lugares y el torneo tiene.
+  const lista = lugaresLibres(torneo) === 0 ? torneo.listaDeEspera : null;
+  const enCurso = reservar.isPending || anotar.isPending;
+  const error = reservar.error ?? anotar.error;
+  const reiniciar = () => {
+    reservar.reset();
+    anotar.reset();
+  };
+
+  const seguir = (jugadorId: number, vinculaPor?: 'busqueda' | 'propuesta') => {
+    const alTerminar = { onSuccess: ({ inscripcionId }: { inscripcionId: number }) => onReservado(inscripcionId) };
+    reiniciar();
+    if (lista) anotar.mutate({ jugadorId, vinculaPor }, alTerminar);
+    else reservar.mutate({ jugadorId, vinculaPor }, alTerminar);
+  };
+  const textoDelBoton = (pagar: string) =>
+    enCurso ? (lista ? 'Anotándote…' : 'Reservando…') : lista ? 'Anotarme en la lista de espera' : pagar;
 
   const pie = (texto: string, jugadorId: number, vinculaPor?: 'busqueda' | 'propuesta', consentimiento = true) => (
     <div className="mt-auto flex flex-col gap-3">
-      {consentimiento && <Consentimiento organizacion={torneo.organizacion.nombre} />}
-      <Aviso mensaje={mensajeReserva(reservar.error)} />
+      {consentimiento && <Consentimiento organizacion={torneo.organizacion.nombre} al={lista ? 'Al anotarte' : undefined} />}
+      <Aviso mensaje={mensajeReserva(error)} />
       <Monto precio={torneo.precio} />
-      <BotonPrincipal onClick={() => pagar(jugadorId, vinculaPor)} disabled={reservar.isPending}>
-        {reservar.isPending ? 'Reservando…' : texto}
+      <BotonPrincipal onClick={() => seguir(jugadorId, vinculaPor)} disabled={enCurso}>
+        {textoDelBoton(texto)}
       </BotonPrincipal>
-      <AvisoReserva minutos={torneo.minutosReserva} />
+      {lista ? <AvisoLista horas={lista.horas} /> : <AvisoReserva minutos={torneo.minutosReserva} />}
     </div>
   );
 
@@ -106,22 +125,23 @@ export function EncontrarPerfil({ torneo, token, email, nombre, situacion, onRes
           </div>
         )}
         <div className="mt-auto flex flex-col gap-3">
-          <Consentimiento organizacion={torneo.organizacion.nombre} />
-          <Aviso mensaje={mensajeReserva(reservar.error)} />
+          <Consentimiento organizacion={torneo.organizacion.nombre} al={lista ? 'Al anotarte' : undefined} />
+          <Aviso mensaje={mensajeReserva(error)} />
           <Monto precio={torneo.precio} />
           <BotonPrincipal
             onClick={() => {
               const perfilElegido = unico ?? elegido;
-              if (perfilElegido) pagar(perfilElegido.jugadorId, 'propuesta');
+              if (perfilElegido) seguir(perfilElegido.jugadorId, 'propuesta');
             }}
-            disabled={reservar.isPending || (!unico && !elegido)}
+            disabled={enCurso || (!unico && !elegido)}
           >
-            {reservar.isPending ? 'Reservando…' : 'Soy yo: inscribirme y pagar'}
+            {lista && !enCurso ? 'Soy yo: anotarme en la lista de espera' : textoDelBoton('Soy yo: inscribirme y pagar')}
           </BotonPrincipal>
+          {lista && <AvisoLista horas={lista.horas} />}
           <BotonSecundario
             onClick={() => {
               setElegido(null);
-              reservar.reset();
+              reiniciar();
               setModo('buscar');
             }}
           >
@@ -212,7 +232,7 @@ export function EncontrarPerfil({ torneo, token, email, nombre, situacion, onRes
       torneo={torneo}
       elegido={elegido}
       onElegir={(perfilElegido) => {
-        reservar.reset();
+        reiniciar();
         setElegido(perfilElegido);
         if (perfilElegido?.vinculado) setModo('vinculado');
       }}

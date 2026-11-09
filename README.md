@@ -168,6 +168,8 @@ npm test
 
 La lógica de competencia (sorteo, tablas de posiciones, cascada de desempates) es lógica pura sin acceso a base de datos y está cubierta por tests. Es la parte del sistema donde un error es silencioso y difícil de detectar a ojo.
 
+Los tests que terminan en `.base.test.ts` corren contra el Postgres del `docker compose` (`docker compose up -d db`) y se saltean si no está. Corren de a uno (`apps/api/vitest.config.ts`): las inscripciones se escriben en transacciones serializables, y en paralelo Postgres cortaba una de dos con `CONFLICTO` aunque fueran de organizaciones distintas.
+
 ---
 
 ## Contribuir

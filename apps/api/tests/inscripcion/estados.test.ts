@@ -29,6 +29,11 @@ describe('estados de la inscripción', () => {
     expect(estadoDe(inscripcion(EstadoInscripcion.NO_APROBADA), AHORA)).toBe('no_aprobada');
   });
 
+  it('en la lista de espera hasta que se confirma el sorteo, y después la lista terminó (decisión 082)', () => {
+    expect(estadoDe(inscripcion(EstadoInscripcion.EN_LISTA_ESPERA), AHORA)).toBe('en_lista_espera');
+    expect(estadoDe(inscripcion(EstadoInscripcion.EN_LISTA_ESPERA), AHORA, true)).toBe('lista_terminada');
+  });
+
   it('una reserva vencida se ve vencida antes de que corra la tarea', () => {
     expect(estadoDe(inscripcion(EstadoInscripcion.PENDIENTE_PAGO, { reservaVence: EN_10_MINUTOS }), AHORA)).toBe('reservando');
     expect(estadoDe(inscripcion(EstadoInscripcion.PENDIENTE_PAGO, { reservaVence: HACE_10_MINUTOS }), AHORA)).toBe('vencida');
