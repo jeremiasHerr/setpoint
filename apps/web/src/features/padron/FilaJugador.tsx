@@ -2,9 +2,9 @@ import type { JugadorPadron } from '@setpoint/shared';
 import { Link } from 'react-router-dom';
 import { Numero } from '../../components/Numero';
 import { MenuJugador } from './MenuJugador';
+import { diasDesde } from './vinculacion';
 
 const DIAS_COMO_NUEVO = 7;
-const MS_POR_DIA = 24 * 60 * 60 * 1000;
 
 type Props = {
   jugador: JugadorPadron;
@@ -20,11 +20,6 @@ type Props = {
 
 function iniciales({ nombre, apellido }: JugadorPadron) {
   return `${nombre[0] ?? ''}${apellido[0] ?? ''}`.toUpperCase();
-}
-
-function diasDesde(fecha: string, hoy = new Date()) {
-  const inicioDelDia = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
-  return Math.round((inicioDelDia(hoy) - inicioDelDia(new Date(fecha))) / MS_POR_DIA);
 }
 
 // Tres letras en minúscula, como las etapas abreviadas (design.md §8). toLocaleDateString da "sept".

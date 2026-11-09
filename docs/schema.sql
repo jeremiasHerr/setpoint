@@ -124,6 +124,8 @@ CREATE TABLE admins_organizacion (
     usuario_id      INTEGER NOT NULL REFERENCES usuarios(id)       ON DELETE CASCADE,
     organizacion_id INTEGER NOT NULL REFERENCES organizaciones(id) ON DELETE CASCADE,
     creado_en       TIMESTAMPTZ NOT NULL DEFAULT now(),
+    -- La última vez que abrió el padrón: "Nuevas" son las vinculaciones de después (decisión 083).
+    padron_visto_en TIMESTAMPTZ,
     CONSTRAINT uq_admin_org UNIQUE (usuario_id, organizacion_id)
 );
 -- organizacion_id no es la primera columna del unique -> índice propio

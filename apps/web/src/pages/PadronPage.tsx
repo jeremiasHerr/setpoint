@@ -11,7 +11,7 @@ import { useCircuito } from '../features/circuito/useCircuito';
 import { iniciales, navegacionOrganizador } from '../features/organizador/encabezado';
 import { PanelJugador, type ErroresJugador } from '../features/padron/PanelJugador';
 import { TablaPadron } from '../features/padron/TablaPadron';
-import { useCrearJugador, useDesvincularCuenta, useEditarJugador, usePadron } from '../features/padron/usePadron';
+import { useCrearJugador, useDesvincularCuenta, useEditarJugador, usePadron, useVisitaPadron } from '../features/padron/usePadron';
 import { ErrorApi } from '../lib/api';
 
 function erroresDe(error: Error | null): ErroresJugador {
@@ -42,6 +42,8 @@ function Padron({ sesion }: { sesion: Sesion }) {
   const { slug } = sesion.organizacion;
   const circuito = useCircuito(slug);
   const padron = usePadron(slug);
+  // Si no se pudo guardar la visita, el padrón anda igual, sin el filtro "Nuevas".
+  const visita = useVisitaPadron(slug);
   const crear = useCrearJugador(slug);
   const editar = useEditarJugador(slug);
   const desvincular = useDesvincularCuenta(slug);
@@ -155,6 +157,7 @@ function Padron({ sesion }: { sesion: Sesion }) {
             categorias={circuito.data.categorias}
             conRanking={circuito.data.usaRanking}
             seleccionadoId={editando?.id ?? null}
+            anterior={visita.data?.anterior}
             slug={slug}
             organizacion={circuito.data.nombre}
             alEditar={elegir}

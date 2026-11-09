@@ -1,7 +1,6 @@
-import { EstadoInscripcion, EstadoTorneo, MotivoRevision, Prisma, Vinculacion } from '@prisma/client';
+import { EstadoInscripcion, MotivoRevision, Prisma, Vinculacion } from '@prisma/client';
 import type {
   CasoDeRevision,
-  ComoSeVinculo,
   InscripcionEnRevision,
   JugadorPadron,
   PerfilEnRevision,
@@ -11,6 +10,7 @@ import type {
 import { DEL_PADRON_ACTIVOS } from '../../lib/padron';
 import { organizacionAdministrada } from '../../lib/permisos';
 import { prisma } from '../../lib/prisma';
+import { COMO_SE_VINCULO, inscripcionesVigentes } from '../../lib/vinculacion';
 import { ErrorHttp } from '../../middleware/errores';
 import { homonimosDe } from '../inscripcion/busqueda';
 import { padronDe, SIN_VINCULAR } from '../jugadores/jugadores.service';
@@ -18,25 +18,6 @@ import { padronDe, SIN_VINCULAR } from '../jugadores/jugadores.service';
 // Revisar vinculación (04-flujo-jugador §5.9, decisión 051): los dos casos que el sistema no
 // resuelve solo. Ninguna acción cambia el email ni la cuenta de nadie: la organización decide de
 // quién es cada perfil de su padrón, y qué pasa con sus inscripciones.
-
-const COMO: Record<Vinculacion, ComoSeVinculo> = {
-  LINK_PERSONAL: 'link_personal',
-  BUSQUEDA: 'busqueda',
-  PROPUESTA: 'propuesta',
-  ORGANIZACION: 'organizacion',
-};
-
-// Las inscripciones que todavía cuentan: las pagadas y las reservas vigentes, de torneos que no
-// terminaron.
-function vigentes(ahora: Date): Prisma.InscripcionWhereInput {
-  return {
-    torneo: { estado: { notIn: [EstadoTorneo.FINALIZADO, EstadoTorneo.CANCELADO] } },
-    OR: [
-      { estado: EstadoInscripcion.PAGADA },
-      { estado: EstadoInscripcion.PENDIENTE_PAGO, OR: [{ reservaVence: null }, { reservaVence: { gt: ahora } }] },
-    ],
-  };
-}
 
 const CON_TORNEO = { torneo: { select: { nombre: true, edicion: true } }, pago: true } satisfies Prisma.InscripcionInclude;
 
@@ -122,7 +103,7 @@ export async function casoDeRevision(slug: string, usuarioId: number, jugadorId:
       motivo: 'homonimo',
       jugadorId: jugador.id,
       cuenta: jugador.usuario.email,
-      vinculadoPor: jugador.vinculadoPor && COMO[jugador.vinculadoPor],
+      vinculadoPor: jugador.vinculadoPor && COMO_SE_VINCULO[jugador.vinculadoPor],
       inscripcion: inscripcion && aInscripcion(inscripcion),
       elegido: aPerfil(fila),
       otros: homonimosDe(fila, companeros).map(aPerfil),
@@ -132,7 +113,7 @@ export async function casoDeRevision(slug: string, usuarioId: number, jugadorId:
   const ahora = new Date();
   const [inscripciones, otroPerfil] = await Promise.all([
     prisma.inscripcion.findMany({
-      where: { jugadorId: jugador.id, ...vigentes(ahora) },
+      where: { jugadorId: jugador.id, ...inscripcionesVigentes(ahora) },
       include: CON_TORNEO,
       orderBy: { creadoEn: 'asc' },
     }),
@@ -147,7 +128,7 @@ export async function casoDeRevision(slug: string, usuarioId: number, jugadorId:
     titular: {
       email: jugador.usuario.email,
       vinculadoEn: jugador.vinculadoEn?.toISOString() ?? null,
-      vinculadoPor: jugador.vinculadoPor && COMO[jugador.vinculadoPor],
+      vinculadoPor: jugador.vinculadoPor && COMO_SE_VINCULO[jugador.vinculadoPor],
       inscripciones: inscripciones.map(aInscripcion),
     },
     reclamante: {
@@ -196,7 +177,7 @@ export async function resolverRevision(slug: string, usuarioId: number, jugadorI
         if (datos.inscripciones === 'baja') {
           // Las que pagó la cuenta que lo tenía. La devolución, si corresponde, va por fuera del sistema.
           await tx.inscripcion.updateMany({
-            where: { jugadorId: jugador.id, usuarioId: jugador.usuario.id, ...vigentes(new Date()) },
+            where: { jugadorId: jugador.id, usuarioId: jugador.usuario.id, ...inscripcionesVigentes(new Date()) },
             data: { estado: EstadoInscripcion.CANCELADA, reservaVence: null },
           });
         }
