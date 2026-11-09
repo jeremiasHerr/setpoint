@@ -25,7 +25,7 @@ function Grupo({ titulo, children }: { titulo: string; children: ReactNode }) {
 // Con torneos: agrupados por momento (en juego, para sortear, con inscripción abierta, en borrador,
 // terminados), y a la derecha lo que pide atención.
 export function InicioConTorneos({ torneos }: { torneos: TorneosDeInicio }) {
-  const { borradores, enJuego, conInscripcionAbierta, paraSortear, terminados, totalTerminados, avisos } = torneos;
+  const { borradores, enJuego, conInscripcionAbierta, paraSortear, terminados, avisos } = torneos;
   const navegar = useNavigate();
 
   return (
@@ -95,7 +95,7 @@ export function InicioConTorneos({ torneos }: { torneos: TorneosDeInicio }) {
 
           {terminados.length > 0 && (
             <Grupo titulo="Terminados">
-              <TablaTerminados torneos={terminados} total={totalTerminados} />
+              <TablaTerminados torneos={terminados} />
             </Grupo>
           )}
         </div>

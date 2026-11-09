@@ -239,6 +239,8 @@ CREATE TABLE torneos (
     cierre_inscripcion     TIMESTAMPTZ,
     plazo_grupos_dias      INTEGER NOT NULL DEFAULT 21,
     plazo_por_ronda_dias   INTEGER NOT NULL DEFAULT 7,
+    -- Cuándo lo cerró la organización, para "Terminó" en el inicio (decisión 080)
+    cerrado_en             TIMESTAMPTZ,
 
     -- formato
     cantidad_grupos        INTEGER           NOT NULL DEFAULT 8,

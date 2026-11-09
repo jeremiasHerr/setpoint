@@ -47,6 +47,35 @@ export function plazoQueCorre(partidos: PartidoParaElTablero[], hoy: string) {
   return { fechaLimite: dia(masCercana), dias: diasHasta(masCercana, hoy) };
 }
 
+// Un partido para la tarjeta del inicio: el del tablero, más dónde va en los cuadros. Los de zona
+// no tienen cuadro ni ronda.
+export type PartidoDelAvance = PartidoParaElTablero & { cuadro: 'CAMPEONATO' | 'COMPLEMENTARIA' | null; ronda: number | null };
+
+// Cómo viene el torneo, para su tarjeta en el inicio (decisión 080). Con las mismas cuentas que el
+// tablero: un vencido o el plazo que corre son lo mismo en las dos pantallas.
+export function avanceDelTorneo(partidos: PartidoDelAvance[], hoy: string) {
+  const situaciones = partidos.map((p) => situacionDelPartido(p, hoy));
+  const cuantos = (situacion: SituacionDelPartido) => situaciones.filter((s) => s === situacion).length;
+  const plazo = plazoQueCorre(partidos, hoy);
+
+  // La ronda que marca el plazo: la del partido de cuadro pendiente que vence primero.
+  const marca = plazo
+    ? partidos.find(
+        (p, i) =>
+          p.cuadro !== null &&
+          p.fechaLimite !== null &&
+          dia(p.fechaLimite) === plazo.fechaLimite &&
+          situaciones[i] !== 'jugado' &&
+          situaciones[i] !== 'esperando',
+      )
+    : undefined;
+  const ronda = marca
+    ? { ronda: marca.ronda!, rondas: Math.max(...partidos.filter((p) => p.cuadro === marca.cuadro).map((p) => p.ronda!)) }
+    : null;
+
+  return { partidos: partidos.length, jugados: cuantos('jugado'), vencidos: cuantos('vencido'), plazo, ronda };
+}
+
 // Lo que falta, del plazo más viejo al más nuevo: un vencido hace más días va primero. Sin fecha
 // límite, al final. Con el mismo plazo, se respeta el orden en que llegaron (zona, cuadro y ronda).
 export function porUrgencia<P extends { dias: number | null }>(partidos: P[]): P[] {

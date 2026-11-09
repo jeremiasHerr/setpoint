@@ -135,6 +135,31 @@ export type ResumenTorneo = {
   cupo: number;
   // Los que ya pagaron.
   inscriptos: number;
+  // Cómo viene, para su tarjeta en el inicio: desde que se confirma el sorteo hasta el cierre
+  // (decisión 080). null en los demás estados.
+  avance: AvanceDelTorneo | null;
+  // Solo con el torneo cerrado. null en los demás estados.
+  terminado: {
+    // 'AAAA-MM-DD', en Argentina. null si se cerró antes de que se guardara la fecha.
+    cerradoEl: string | null;
+    // El ganador de la final del cuadro principal.
+    campeon: { nombre: string; apellido: string } | null;
+  } | null;
+};
+
+export type AvanceDelTorneo = {
+  // zonas: desde el sorteo confirmado hasta que se cierran las zonas. cuadros: después.
+  fase: 'zonas' | 'cuadros';
+  // Del torneo entero: los de las zonas y, desde que se cierran, también los de los cuadros. Sin
+  // cancelados. Vencido es lo mismo que en el tablero (decisión 060).
+  partidos: number;
+  jugados: number;
+  vencidos: number;
+  // El plazo que corre, como en el tablero. null si no queda nada pendiente con fecha límite.
+  plazo: { fechaLimite: string; dias: number } | null;
+  // En los cuadros, la ronda del partido que marca el plazo, para nombrarla ("cuartos de final").
+  // null en las zonas o sin plazo.
+  ronda: { ronda: number; rondas: number } | null;
 };
 
 // Una fila del listado de torneos de la organización: una por convocatoria, no por categoría.

@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { BarraProgreso } from '../../components/BarraProgreso';
 import { Boton } from '../../components/Boton';
 import { Etiqueta } from '../../components/Etiqueta';
@@ -5,7 +6,9 @@ import { Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
 import type { TorneoEnJuego } from './torneosEjemplo';
 
+// Desde el sorteo confirmado hasta el cierre: lleva al tablero, que es donde se sigue el torneo (decisión 080).
 export function TarjetaTorneoEnJuego({ torneo }: { torneo: TorneoEnJuego }) {
+  const navegar = useNavigate();
   return (
     <Tarjeta className="grid items-center gap-4 p-5 xl:grid-cols-[minmax(0,1fr)_260px_120px] xl:gap-6">
       <div className="flex flex-col gap-1.5">
@@ -31,8 +34,7 @@ export function TarjetaTorneoEnJuego({ torneo }: { torneo: TorneoEnJuego }) {
         )}
       </div>
 
-      {/* Se conecta cuando exista el tablero del torneo. */}
-      <Boton>Ver tablero</Boton>
+      <Boton onClick={() => navegar(`/torneos/${torneo.id}/tablero`)}>Ver tablero</Boton>
     </Tarjeta>
   );
 }

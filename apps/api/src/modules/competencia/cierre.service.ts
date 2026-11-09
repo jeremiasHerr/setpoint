@@ -15,6 +15,7 @@ import { ErrorHttp } from '../../middleware/errores';
 import type { MovimientoDeRanking } from '../ranking/ranking';
 import {
   cuadrosTerminados,
+  finalDelCuadro,
   instanciasDelTorneo,
   ordenarFilas,
   puntosDeLaInstancia,
@@ -111,8 +112,7 @@ function movimientosDelCierre(torneo: TorneoDelCierre, etapaId: number, fecha: D
 // El campeón de cada cuadro: el ganador de su última ronda. Sin final, no hay campeón.
 function campeones(torneo: TorneoDelCierre): CampeonDelCuadro[] {
   return [Cuadro.CAMPEONATO, Cuadro.COMPLEMENTARIA].flatMap((cuadro) => {
-    const delCuadro = torneo.partidos.filter((p) => p.cuadro === cuadro);
-    const final = delCuadro.find((p) => p.ronda === Math.max(...delCuadro.map((q) => q.ronda!)));
+    const final = finalDelCuadro(torneo.partidos, cuadro);
     if (!final?.ganadorId || !final.jugadorA || !final.jugadorB) return [];
 
     const ganoA = final.ganadorId === final.jugadorA.id;
@@ -218,11 +218,13 @@ export async function cerrarTorneo(slug: string, usuarioId: number, torneoId: nu
   await torneoDeLaOrganizacion(prisma, organizacionId, torneoId);
 
   await prisma.$transaction(async (tx) => {
+    // La misma fecha para el cierre y para los movimientos que agrega.
+    const ahora = new Date();
     // Con el estado como condición, dos cierres simultáneos no dan los puntos dos veces. Además
     // bloquea el torneo: una corrección que llega mientras tanto espera, y después recalcula.
     const { count } = await tx.torneo.updateMany({
       where: { id: torneoId, organizacionId, estado: EstadoTorneo.ELIMINATORIAS },
-      data: { estado: EstadoTorneo.FINALIZADO },
+      data: { estado: EstadoTorneo.FINALIZADO, cerradoEn: ahora },
     });
     if (count === 0) throw new ErrorHttp(409, 'TORNEO_NO_CERRABLE');
 
@@ -230,7 +232,7 @@ export async function cerrarTorneo(slug: string, usuarioId: number, torneoId: nu
     if (!cuadrosTerminados(partidosDelCierre(torneo))) throw new ErrorHttp(409, 'CUADROS_INCOMPLETOS');
 
     const etapa = casilleroDelTorneo(torneo);
-    if (etapa) await tx.movimientoRanking.createMany({ data: movimientosDelCierre(torneo, etapa.id, new Date()) });
+    if (etapa) await tx.movimientoRanking.createMany({ data: movimientosDelCierre(torneo, etapa.id, ahora) });
   });
 
   return obtenerCierre(slug, usuarioId, torneoId);

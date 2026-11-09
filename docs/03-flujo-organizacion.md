@@ -78,7 +78,9 @@ La respuesta incluye un token de sesión (JWT), así la organización queda ingr
 
 - Las categorías con la inscripción abierta llevan a su pantalla Inscripciones (§7).
 - Las que cerraron y todavía no se sortearon van en "Para sortear", con "Sortear zonas" como acción principal. No van en "Necesita tu atención": ese bloque es rojo, y el rojo solo significa vencimiento.
-- Una categoría con el sorteo confirmado deja de verse hasta que el inicio lea los partidos, que es lo que llena "En juego". El tablero (F15) ya existe, pero por ahora se llega desde el Sorteo ([decisión 063](decisiones/063-entrada-al-tablero.md)).
+- Con el sorteo confirmado, y hasta que se cierra, la categoría va en "En juego": la fase, los partidos jugados y los vencidos, qué se está jugando y hasta cuándo, y "Ver tablero" (F15). Los vencidos y el plazo salen de la misma cuenta que el tablero ([decisión 080](decisiones/080-torneos-en-juego-y-terminados-en-el-inicio.md)).
+- Cerrado el torneo (F16), va en "Terminados", de la que se cerró último a la primera, con la fecha del cierre, el campeón del cuadro principal y los jugadores. Cada fila lleva al cierre. Se ven las últimas 5 y el resto se despliega en la misma tabla.
+- "Necesita tu atención" todavía no se calcula.
 
 Después del alta, y en cualquier momento, se configura:
 
@@ -269,7 +271,7 @@ El sistema genera los grupos y los partidos de zona. La organización puede revi
 
 ## 9. Seguimiento: tablero de avance
 
-Pantalla central durante el torneo, en `/torneos/:id/tablero`. Reemplaza el trabajo actual de revisar el grupo de WhatsApp a mano. Se llega desde el Sorteo confirmado, y *Cargar resultado* y el *Cierre* vuelven a él ([decisión 063](decisiones/063-entrada-al-tablero.md)).
+Pantalla central durante el torneo, en `/torneos/:id/tablero`. Reemplaza el trabajo actual de revisar el grupo de WhatsApp a mano. Se llega desde la tarjeta del torneo en "En juego" del inicio ([decisión 080](decisiones/080-torneos-en-juego-y-terminados-en-el-inicio.md)) y desde el Sorteo confirmado, y *Cargar resultado* y el *Cierre* vuelven a él ([decisión 063](decisiones/063-entrada-al-tablero.md)).
 
 **Cada partido está en una situación**, que se calcula en cada consulta y no se guarda ([decisión 060](decisiones/060-partidos-vencidos-calculados.md)): jugado (con resultado, también W.O. y abandono), con fecha (anotada o confirmada, dentro del plazo), sin coordinar, vencido (pasó su fecha límite sin resultado) o esperando (un partido de cuadro sin sus dos jugadores). El estado `VENCIDA` del schema no se usa.
 

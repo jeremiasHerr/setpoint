@@ -25,6 +25,13 @@ export function cuadrosTerminados(partidos: PartidoDelCierre[]) {
   );
 }
 
+// La final de un cuadro: su última ronda. undefined si el cuadro no tiene partidos.
+export function finalDelCuadro<P extends { cuadro: string | null; ronda: number | null }>(partidos: P[], cuadro: P['cuadro']) {
+  const delCuadro = partidos.filter((p) => p.cuadro === cuadro);
+  const ultima = Math.max(...delCuadro.map((p) => p.ronda!));
+  return delCuadro.find((p) => p.ronda === ultima);
+}
+
 // La instancia de quien pierde, según cuántas rondas le faltaban para la final.
 const POR_RONDAS_A_LA_FINAL: Instancia[] = ['finalista', 'semifinalista', 'cuartos', 'octavos'];
 
