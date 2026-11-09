@@ -1,4 +1,5 @@
 import type {
+  AnotadoEnLaLista,
   BusquedaEnElPadron,
   DatosInscribirComoNuevo,
   DatosPedirCodigo,
@@ -10,8 +11,8 @@ import type {
   RespuestaCodigo,
   SituacionEnElTorneo,
 } from '@setpoint/shared';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { pedir } from '../../lib/api';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { ErrorApi, pedir } from '../../lib/api';
 
 // Los pedidos de la inscripción desde el link (F12). Las rutas de /api/inscripcion piden la sesión
 // del código; la búsqueda es pública.
@@ -48,9 +49,32 @@ export function useBusqueda(slug: string, torneoId: string, consulta: string) {
   });
 }
 
+// Si el cupo cambió mientras elegía su perfil, se vuelve a leer el torneo: el botón pasa de pagar a
+// la lista de espera, o al revés.
+function useRefrescarElCupo(slug: string, torneoId: string) {
+  const queryClient = useQueryClient();
+  return (error: Error) => {
+    if (error instanceof ErrorApi && (error.codigo === 'SIN_LUGARES' || error.codigo === 'HAY_LUGARES')) {
+      void queryClient.invalidateQueries({ queryKey: ['torneo-publico', slug, torneoId] });
+    }
+  };
+}
+
 export function useReservar(slug: string, torneoId: string, token: string | undefined) {
+  const refrescarElCupo = useRefrescarElCupo(slug, torneoId);
   return useMutation({
     mutationFn: (datos: DatosReservar) => pedir<Reserva>('POST', `/api/inscripcion/${slug}/torneos/${torneoId}`, datos, token),
+    onError: refrescarElCupo,
+  });
+}
+
+// Con el cupo lleno, el mismo perfil se anota en la lista de espera, sin pagar (decisión 081).
+export function useAnotarEnListaDeEspera(slug: string, torneoId: string, token: string | undefined) {
+  const refrescarElCupo = useRefrescarElCupo(slug, torneoId);
+  return useMutation({
+    mutationFn: (datos: DatosReservar) =>
+      pedir<AnotadoEnLaLista>('POST', `/api/inscripcion/${slug}/torneos/${torneoId}/lista-de-espera`, datos, token),
+    onError: refrescarElCupo,
   });
 }
 

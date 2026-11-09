@@ -15,8 +15,9 @@ type Props = {
 export function EstadoInscripcion({ torneo, perfil, inscripcion, email }: Props) {
   const resta = useCuentaRegresiva(inscripcion.reservaVence);
 
-  // La solicitud en revisión o aprobada se ve en la página de la inscripción, como desde el email.
-  if (inscripcion.estado === 'solicitada' || inscripcion.estado === 'aprobada') {
+  // La solicitud en revisión o aprobada, y el lugar en la lista de espera, se ven en la página de la
+  // inscripción, como desde el email.
+  if (inscripcion.estado === 'solicitada' || inscripcion.estado === 'aprobada' || inscripcion.estado === 'en_lista_espera') {
     return <Navigate to={`/c/${torneo.organizacion.slug}/inscripciones/${inscripcion.id}`} replace />;
   }
 

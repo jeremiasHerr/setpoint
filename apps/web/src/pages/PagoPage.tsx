@@ -6,12 +6,15 @@ import { Aviso, BotonPrincipal, BotonSecundario, Caja, Monto } from '../features
 import { leerSesionJugador } from '../features/inscripcion/sesionJugador';
 import { useCuentaRegresiva } from '../features/inscripcion/useCuentaRegresiva';
 import { mensajeReserva } from '../features/inscripcion/mensajeReserva';
+import { cuandoVence } from '../features/inscripciones/texto';
+import { hastaCuando } from '../features/pago/texto';
 import { useIniciarPago, useInscripcionParaPagar, useReservarAprobada, useSimularPago } from '../features/pago/usePago';
 import { importe } from '../features/torneo-publico/convocatoria';
 import { ErrorApi } from '../lib/api';
 
 // El pago de la inscripción, de la reserva al final (F12, docs/pantallas/jugador/inscripcion-y-pago.html).
-// MercadoPago vuelve acá; la confirmación llega por el webhook, así que la pantalla espera.
+// MercadoPago vuelve acá; la confirmación llega por el webhook, así que la pantalla espera. También
+// la lista de espera: el lugar en ella y el lugar que le tocó (F13, estados 5 y 6).
 export function PagoPage() {
   const { slug = '', id = '' } = useParams();
   const [parametros] = useSearchParams();
@@ -56,13 +59,23 @@ function Estado({ datos, volviendo, token }: { datos: InscripcionParaPagar; volv
   if (datos.estado === 'pagada') return <Listo datos={datos} />;
   if (datos.estado === 'rechazada') return <Rechazado datos={datos} />;
   if (datos.estado === 'vencida') return <Vencida datos={datos} />;
+  if (datos.estado === 'en_lista_espera' && datos.listaDeEspera?.espera) {
+    return <EnLaLista datos={datos} horas={datos.listaDeEspera.horas} espera={datos.listaDeEspera.espera} />;
+  }
+  if (datos.estado === 'lista_terminada') return <ListaTerminada datos={datos} />;
   if (datos.estado === 'solicitada') return <EnRevision datos={datos} />;
   if (datos.estado === 'aprobada') return <Aprobada datos={datos} token={token} />;
   if (datos.estado === 'no_aprobada') return <NoAprobada datos={datos} />;
   if (datos.estado === 'cancelada') {
     return <p className="text-[15px] text-gris-700">Esta inscripción se dio de baja. Si es un error, hablá con la organización.</p>;
   }
-  return volviendo ? <Confirmando datos={datos} /> : <Pagar datos={datos} token={token} />;
+  if (volviendo) return <Confirmando datos={datos} />;
+  // El lugar que le tocó de la lista de espera es suyo por horas, no por minutos (decisión 076).
+  return datos.listaDeEspera && datos.reservaVence ? (
+    <LugarLiberado datos={datos} reservaVence={datos.reservaVence} token={token} />
+  ) : (
+    <Pagar datos={datos} token={token} />
+  );
 }
 
 const linkInscripcion = (datos: InscripcionParaPagar) => `/c/${datos.torneo.organizacion.slug}/torneos/${datos.torneo.id}/inscripcion`;
@@ -94,19 +107,44 @@ function Resumen({ datos }: { datos: InscripcionParaPagar }) {
   );
 }
 
-// La reserva vigente, antes de ir a MercadoPago.
-function Pagar({ datos, token }: { datos: InscripcionParaPagar; token: string }) {
+// Ir al checkout de MercadoPago, o simular el pago en una instalación sin credenciales (decisión 053).
+function usePagar(datos: InscripcionParaPagar, token: string) {
   const slug = datos.torneo.organizacion.slug;
   const iniciar = useIniciarPago(slug, String(datos.id), token);
   const simular = useSimularPago(slug, String(datos.id), token);
-  const resta = useCuentaRegresiva(datos.reservaVence);
-
   const pagar = () =>
     iniciar.mutate(undefined, {
       onSuccess: ({ url }) => {
         if (url) window.location.assign(url);
       },
     });
+  const error = iniciar.error || simular.error ? 'No pudimos seguir con el pago. Probá de nuevo en unos minutos.' : null;
+  return { pagar, iniciar, simular, error };
+}
+
+// Sin credenciales de MercadoPago (decisión 053). Ningún jugador real ve esto.
+function PagoSimulado({ datos, simular }: { datos: InscripcionParaPagar; simular: ReturnType<typeof usePagar>['simular'] }) {
+  return (
+    <>
+      <Caja>
+        <strong className="mb-1 block font-semibold text-negro">Pago simulado</strong>
+        Esta instalación no tiene credenciales de MercadoPago. Elegí cómo termina el pago para seguir el flujo.
+      </Caja>
+      <Monto precio={datos.precio} />
+      <BotonPrincipal onClick={() => simular.mutate({ resultado: 'aprobado' })} disabled={simular.isPending}>
+        Simular pago aprobado
+      </BotonPrincipal>
+      <BotonSecundario onClick={() => simular.mutate({ resultado: 'rechazado' })} disabled={simular.isPending}>
+        Simular pago rechazado
+      </BotonSecundario>
+    </>
+  );
+}
+
+// La reserva vigente, antes de ir a MercadoPago.
+function Pagar({ datos, token }: { datos: InscripcionParaPagar; token: string }) {
+  const { pagar, iniciar, simular, error } = usePagar(datos, token);
+  const resta = useCuentaRegresiva(datos.reservaVence);
 
   return (
     <>
@@ -117,31 +155,135 @@ function Pagar({ datos, token }: { datos: InscripcionParaPagar; token: string })
         </p>
       </div>
       <Resumen datos={datos} />
-      <Aviso mensaje={iniciar.error || simular.error ? 'No pudimos seguir con el pago. Probá de nuevo en unos minutos.' : null} />
+      <Aviso mensaje={error} />
 
-      {datos.pagoSimulado ? (
-        <div className="mt-auto flex flex-col gap-3">
-          {/* Sin credenciales de MercadoPago (decisión 053). Ningún jugador real ve esto. */}
-          <Caja>
-            <strong className="mb-1 block font-semibold text-negro">Pago simulado</strong>
-            Esta instalación no tiene credenciales de MercadoPago. Elegí cómo termina el pago para seguir el flujo.
-          </Caja>
-          <Monto precio={datos.precio} />
-          <BotonPrincipal onClick={() => simular.mutate({ resultado: 'aprobado' })} disabled={simular.isPending}>
-            Simular pago aprobado
-          </BotonPrincipal>
-          <BotonSecundario onClick={() => simular.mutate({ resultado: 'rechazado' })} disabled={simular.isPending}>
-            Simular pago rechazado
-          </BotonSecundario>
+      <div className="mt-auto flex flex-col gap-3">
+        {datos.pagoSimulado ? (
+          <PagoSimulado datos={datos} simular={simular} />
+        ) : (
+          <>
+            <Monto precio={datos.precio} />
+            <BotonPrincipal onClick={pagar} disabled={iniciar.isPending}>
+              {iniciar.isPending ? 'Abriendo MercadoPago…' : 'Ir a pagar con MercadoPago'}
+            </BotonPrincipal>
+          </>
+        )}
+      </div>
+    </>
+  );
+}
+
+// 5 · En la lista de espera: todavía no hay lugar, así que no hay nada para pagar. El puesto va
+// arriba porque es lo que va a querer mirar cada vez que vuelva.
+function EnLaLista({
+  datos,
+  horas,
+  espera,
+}: {
+  datos: InscripcionParaPagar;
+  horas: number;
+  espera: { posicion: number; ocupados: number; cupo: number };
+}) {
+  return (
+    <>
+      <div className="flex flex-col gap-4 pt-10">
+        <Numero className="self-start rounded-full border border-linea px-3 py-1.5 text-[15px] font-medium">
+          {espera.posicion}º en la lista de espera
+        </Numero>
+        <h1 className="text-[28px] leading-[1.12] font-semibold tracking-[-0.032em]">Estás en la lista de espera</h1>
+        <p className="text-base leading-[1.45] text-gris-500">
+          Si se libera un lugar y te toca, te llega un email a {datos.email} y tenés <Numero className="text-negro">{horas}</Numero> horas
+          para pagar. Hasta entonces no pagás nada.
+        </p>
+      </div>
+      <dl className="flex flex-col gap-3 rounded-tarjeta border border-linea p-4">
+        <Dato rotulo={`${datos.torneo.nombre} · ${datos.torneo.categoria}`} valor={`${espera.ocupados} de ${espera.cupo}`} />
+        <Dato rotulo="Antes que vos" valor={String(espera.posicion - 1)} />
+        <Dato rotulo="Inscripción" valor={importe(datos.precio)} />
+      </dl>
+      <Caja>La lista termina cuando se sortean las zonas. Si para entonces no te tocó un lugar, no quedás inscripto y no se te cobra nada.</Caja>
+      <VolverAlTorneo datos={datos} />
+    </>
+  );
+}
+
+function Dato({ rotulo, valor }: { rotulo: string; valor: string }) {
+  return (
+    <div className="flex items-center justify-between gap-3">
+      <dt className="text-[15px] text-gris-500">{rotulo}</dt>
+      <dd>
+        <Numero className="text-[15px]">{valor}</Numero>
+      </dd>
+    </div>
+  );
+}
+
+// 6 · Se liberó un lugar: es suyo por las horas del torneo desde el aviso (decisión 076), así que se
+// dice como algo que ya tiene, en lima sobre negro, como "Listo".
+function LugarLiberado({ datos, reservaVence, token }: { datos: InscripcionParaPagar; reservaVence: string; token: string }) {
+  const { pagar, iniciar, simular, error } = usePagar(datos, token);
+
+  return (
+    <div className="-mx-4 flex grow flex-col">
+      <div className="flex flex-col gap-4 bg-negro px-5 pt-[30px] pb-[26px]">
+        <Numero className="self-start rounded-full bg-lima px-3 py-1.5 text-[15px] font-medium text-negro">
+          es tuyo hasta {cuandoVence(reservaVence).texto}
+        </Numero>
+        <div className="flex flex-col gap-2">
+          <h1 className="text-[30px] leading-[1.1] font-semibold tracking-[-0.032em] text-white">Se liberó un lugar para vos</h1>
+          <p className="text-base text-gris-400">
+            {datos.torneo.nombre} · {datos.torneo.categoria}
+          </p>
         </div>
-      ) : (
-        <div className="mt-auto flex flex-col gap-3">
-          <Monto precio={datos.precio} />
-          <BotonPrincipal onClick={pagar} disabled={iniciar.isPending}>
-            {iniciar.isPending ? 'Abriendo MercadoPago…' : 'Ir a pagar con MercadoPago'}
-          </BotonPrincipal>
+      </div>
+      <dl className="flex flex-col gap-[13px] border-b border-linea px-[18px] py-5">
+        <div className="flex justify-between gap-3">
+          <dt className="text-[15px] text-gris-500">Inscripción</dt>
+          <dd>
+            <Numero className="text-base font-medium">{importe(datos.precio)}</Numero>
+          </dd>
         </div>
-      )}
+        <div className="flex justify-between gap-3">
+          <dt className="text-[15px] text-gris-500">Tenés para pagar hasta</dt>
+          <dd>
+            <Numero className="text-base">{hastaCuando(reservaVence)}</Numero>
+          </dd>
+        </div>
+        <p className="pt-1 text-[15px] leading-[1.42] text-gris-500">
+          Eras el primero de la lista de espera. Si no pagás a tiempo, el lugar pasa al siguiente y no se te cobra nada.
+        </p>
+      </dl>
+      <div className="mt-auto flex flex-col gap-3 border-t border-linea px-[18px] pt-[18px]">
+        <Aviso mensaje={error} />
+        {datos.pagoSimulado ? (
+          <PagoSimulado datos={datos} simular={simular} />
+        ) : (
+          <>
+            <BotonPrincipal onClick={pagar} disabled={iniciar.isPending}>
+              {iniciar.isPending ? 'Abriendo MercadoPago…' : `Pagar ${importe(datos.precio)}`}
+            </BotonPrincipal>
+            <p className="text-center text-[15px] leading-[1.42] text-gris-500">
+              Pagás con MercadoPago. Tu lugar sigue guardado mientras pagás.
+            </p>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// Seguía en la lista cuando se confirmó el sorteo (decisión 082). No es un vencimiento: sin rojo.
+function ListaTerminada({ datos }: { datos: InscripcionParaPagar }) {
+  return (
+    <>
+      <div className="flex flex-col gap-4 pt-10">
+        <h1 className="text-[28px] leading-[1.12] font-semibold tracking-[-0.032em]">La lista de espera terminó</h1>
+        <p className="text-base leading-[1.45] text-gris-500">
+          Ya se sortearon las zonas y no se liberó un lugar para vos. No quedaste inscripto y no se te cobró nada.
+        </p>
+      </div>
+      <Resumen datos={datos} />
+      <VolverAlTorneo datos={datos} />
     </>
   );
 }
@@ -209,7 +351,9 @@ function NoAprobada({ datos }: { datos: InscripcionParaPagar }) {
 
 // 1 · Volviendo de MercadoPago: la espera hasta que llega el webhook.
 function Confirmando({ datos }: { datos: InscripcionParaPagar }) {
-  const resta = useCuentaRegresiva(datos.reservaVence);
+  const cuenta = useCuentaRegresiva(datos.reservaVence);
+  // El de la lista de espera tiene horas: "mañana 18:40" se lee mejor que una cuenta de minutos.
+  const resta = datos.listaDeEspera && datos.reservaVence ? `hasta ${cuandoVence(datos.reservaVence).texto}` : cuenta;
   return (
     <>
       <div className="flex grow flex-col items-center justify-center gap-6 text-center">
@@ -302,23 +446,35 @@ function Rechazado({ datos }: { datos: InscripcionParaPagar }) {
   );
 }
 
-// 4 · Reserva vencida: el único rojo de la pantalla, porque es un vencimiento.
+// 4 · Reserva vencida: el único rojo de la pantalla, porque es un vencimiento. Si el lugar le había
+// tocado de la lista de espera, ya pasó al siguiente: no hay que ofrecerle reservar otra vez.
 function Vencida({ datos }: { datos: InscripcionParaPagar }) {
+  const lista = datos.listaDeEspera;
   return (
     <>
       <div className="flex flex-col gap-4 pt-10">
         <span className="self-start rounded-full border border-rojo-linea bg-rojo-fondo px-3 py-1.5 font-mono text-[15px] font-medium text-rojo-texto">
           venció la reserva
         </span>
-        <h1 className="text-[28px] leading-[1.12] font-semibold tracking-[-0.032em]">Pasaron los 15 minutos</h1>
-        <p className="text-base leading-[1.45] text-gris-500">El lugar volvió a quedar libre y no se te cobró nada. Si todavía hay lugares, podés reservar otra vez.</p>
+        <h1 className="text-[28px] leading-[1.12] font-semibold tracking-[-0.032em]">
+          {lista ? `Pasaron las ${lista.horas} horas` : 'Pasaron los 15 minutos'}
+        </h1>
+        <p className="text-base leading-[1.45] text-gris-500">
+          {lista
+            ? 'El lugar pasó al siguiente de la lista y no se te cobró nada.'
+            : 'El lugar volvió a quedar libre y no se te cobró nada. Si todavía hay lugares, podés reservar otra vez.'}
+        </p>
       </div>
       <Resumen datos={datos} />
-      <div className="mt-auto flex flex-col gap-3">
-        <Link to={linkInscripcion(datos)} className="flex h-14 items-center justify-center rounded-[12px] bg-lima text-[17px] font-semibold">
-          Reservar otra vez y pagar
-        </Link>
-      </div>
+      {lista ? (
+        <VolverAlTorneo datos={datos} />
+      ) : (
+        <div className="mt-auto flex flex-col gap-3">
+          <Link to={linkInscripcion(datos)} className="flex h-14 items-center justify-center rounded-[12px] bg-lima text-[17px] font-semibold">
+            Reservar otra vez y pagar
+          </Link>
+        </div>
+      )}
     </>
   );
 }

@@ -13,9 +13,12 @@ export function reservaVigente(inscripcion: Inscripcion, ahora: Date) {
 }
 
 // Cómo se ve cada estado en la pantalla de pago y en la app. La tarea que vence las reservas corre
-// cada minuto: mientras tanto, una vencida se calcula.
-export function estadoDe(inscripcion: Inscripcion, ahora = new Date()): EstadoDeLaInscripcion {
+// cada minuto: mientras tanto, una vencida se calcula. La lista de espera termina con el sorteo, y
+// quien seguía en ella también se calcula: no se guarda nada al sortear (decisión 082).
+export function estadoDe(inscripcion: Inscripcion, ahora = new Date(), sorteoConfirmado = false): EstadoDeLaInscripcion {
   switch (inscripcion.estado) {
+    case EstadoInscripcion.EN_LISTA_ESPERA:
+      return sorteoConfirmado ? 'lista_terminada' : 'en_lista_espera';
     case EstadoInscripcion.PAGADA:
       return 'pagada';
     case EstadoInscripcion.RECHAZADA:

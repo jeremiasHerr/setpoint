@@ -22,6 +22,9 @@ export type TorneoPublico = {
   precio: number;
   // Lo que dura la reserva del lugar mientras se paga.
   minutosReserva: number;
+  // Con el cupo lleno, quien llega se anota acá (F13). Las horas son las que tiene para pagar cuando
+  // le toca un lugar (decisión 076). null si el torneo no tiene lista de espera.
+  listaDeEspera: { personas: number; horas: number } | null;
   // Lo que escribió la organización al crear el torneo, por ejemplo qué incluye la inscripción.
   descripcion: string | null;
 };

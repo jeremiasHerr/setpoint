@@ -9,6 +9,7 @@ import { esPosibleHomonimo } from '../inscripcion/busqueda';
 import { estadoDe } from '../inscripcion/estados';
 import { ocupanCupo } from '../inscripcion/inscripcion.service';
 import { descartarPerfil, entrarAlPadron } from '../inscripcion/perfil-pendiente';
+import { puestoEnLaLista } from '../inscripciones/lista-de-espera';
 import { avisarLugaresLiberados, promoverListaDeEspera } from '../inscripciones/lista-de-espera.service';
 import { comprobante } from './comprobante';
 
@@ -48,7 +49,7 @@ export async function inscripcionParaPagar(slug: string, inscripcionId: number, 
   const { torneo } = inscripcion;
   return {
     id: inscripcion.id,
-    estado: estadoDe(inscripcion),
+    estado: estadoDe(inscripcion, new Date(), torneo.sorteoConfirmado),
     reservaVence: inscripcion.reservaVence?.toISOString() ?? null,
     torneo: {
       id: torneo.id,
@@ -60,7 +61,28 @@ export async function inscripcionParaPagar(slug: string, inscripcionId: number, 
     precio: torneo.precio.toNumber(),
     email: usuario.email,
     pagoSimulado: !hayMercadoPago(),
+    listaDeEspera: await listaDeEsperaDe(inscripcion),
   };
+}
+
+// Si se anotó en la lista de espera: las horas que tiene para pagar cuando le toca un lugar y,
+// mientras espera, su puesto. El número de la lista queda aunque ya le haya tocado: así la pantalla
+// sabe que el lugar vino de la lista (decisión 076).
+async function listaDeEsperaDe(inscripcion: InscripcionConTorneo): Promise<InscripcionParaPagar['listaDeEspera']> {
+  if (inscripcion.ordenListaEspera === null) return null;
+  const { torneo } = inscripcion;
+  const horas = torneo.horasReservaListaEspera;
+  // Con el sorteo confirmado la lista terminó (decisión 082): ya no hay puesto que mostrar.
+  if (inscripcion.estado !== EstadoInscripcion.EN_LISTA_ESPERA || torneo.sorteoConfirmado) return { horas, espera: null };
+
+  const [espera, ocupados] = await Promise.all([
+    prisma.inscripcion.findMany({
+      where: { torneoId: torneo.id, estado: EstadoInscripcion.EN_LISTA_ESPERA },
+      select: { id: true, ordenListaEspera: true, creadoEn: true },
+    }),
+    prisma.inscripcion.count({ where: { torneoId: torneo.id, ...ocupanCupo(new Date()) } }),
+  ]);
+  return { horas, espera: { posicion: puestoEnLaLista(espera, inscripcion.id), ocupados, cupo: torneo.cupo } };
 }
 
 // La solicitud aprobada reserva el lugar recién cuando se abre el link para pagar (07 §2.6): la
