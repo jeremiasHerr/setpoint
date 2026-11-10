@@ -189,7 +189,7 @@ Al terminar la fase de grupos, el sistema armará automáticamente los cuadros e
 **Estado:** implementada, salvo el nombre configurable del cuadro consuelo.
 - La organización cierra las zonas (`POST .../torneos/:id/cuadros`) y en ese momento se arman los dos cuadros completos ([decisión 026](decisiones/026-cierre-de-zonas.md)). Dónde va cada uno sale de una siembra única de los clasificados ([decisión 022](decisiones/022-ubicacion-en-el-cuadro.md)), y los byes no generan partido ([decisión 023](decisiones/023-byes-sin-partido.md)). El ganador avanza al cargarse cada resultado de cuadro (F06), con `avanzarGanador()`.
 - `GET .../torneos/:id/cuadros` los devuelve a la organización, y `GET /api/publico/:slug/torneos/:id/cuadros`, a cualquiera ([decisión 019](decisiones/019-acceso-a-las-posiciones.md), [decisión 033](decisiones/033-ranking-publico.md)).
-- La pantalla *Los dos cuadros* es pública, en `/c/:slug/torneos/:id/cuadros` (`CuadrosPublicoPage`). En escritorio muestra los cuadros completos; en el celular, una ronda a la vez ([decisión 038](decisiones/038-cuadros-en-el-celular.md)).
+- La pantalla *Los dos cuadros* es pública, en `/c/:slug/torneos/:id/cuadros` (`CuadrosPublicoPage`). En escritorio muestra los cuadros completos; en el celular, una ronda a la vez ([decisión 038](decisiones/038-cuadros-en-el-celular.md)). En las dos, quien pasa directo por un bye tiene su tarjeta en el lugar vacío de la primera ronda ([decisión 083](decisiones/083-el-bye-se-ve-en-el-cuadro.md)).
 - El segundo cuadro dice "Cuadro consuelo" fijo hasta que exista el nombre configurable ([07](07-configurabilidad.md) §1.2).
 - Las zonas se cierran desde el tablero (F15), cuando todos sus partidos tienen resultado.
 

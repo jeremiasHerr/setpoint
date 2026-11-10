@@ -1,7 +1,15 @@
-import type { CuadroEliminatorio, PartidoDelCuadro } from '@setpoint/shared';
+import type { CuadroEliminatorio } from '@setpoint/shared';
 import { Numero } from '../../components/Numero';
-import { NOMBRE_DEL_CUADRO, destacadoDe, lugaresDeLaRonda, partidosJugados, rotuloDeRonda } from './cuadro';
-import { TarjetaPartido, type Eleccion } from './TarjetaPartido';
+import {
+  NOMBRE_DEL_CUADRO,
+  destacadoDe,
+  lugaresDeLaRonda,
+  partidosJugados,
+  rotuloDeRonda,
+  rotuloDelPaseDirecto,
+  type LugarDelCuadro,
+} from './cuadro';
+import { TarjetaPaseDirecto, TarjetaPartido, type Eleccion } from './TarjetaPartido';
 
 // Medidas del cuadro de design.md §6: tarjetas de 190 y, entre columnas, 17 de codo y 17 de conector.
 const ANCHO_TARJETA = 190;
@@ -51,7 +59,7 @@ export function CuadroCompleto({ cuadro, eleccion }: { cuadro: CuadroEliminatori
           if (lugares.length === 1) {
             return (
               <div key={ronda} className="flex flex-col justify-center" style={{ height: alto }}>
-                <Lugar partido={lugares[0]} cuadro={cuadro} eleccion={eleccion} />
+                <Lugar lugar={lugares[0]} ronda={ronda} cuadro={cuadro} eleccion={eleccion} />
               </div>
             );
           }
@@ -60,8 +68,8 @@ export function CuadroCompleto({ cuadro, eleccion }: { cuadro: CuadroEliminatori
             <div key={ronda} className="flex flex-col" style={{ height: alto }}>
               {pares.map(([arriba, abajo], i) => (
                 <div key={i} className={`relative flex flex-1 flex-col justify-around ${codo(arriba !== null, abajo !== null)}`}>
-                  <Lugar partido={arriba} cuadro={cuadro} eleccion={eleccion} />
-                  <Lugar partido={abajo} cuadro={cuadro} eleccion={eleccion} />
+                  <Lugar lugar={arriba} ronda={ronda} cuadro={cuadro} eleccion={eleccion} />
+                  <Lugar lugar={abajo} ronda={ronda} cuadro={cuadro} eleccion={eleccion} />
                 </div>
               ))}
             </div>
@@ -74,8 +82,8 @@ export function CuadroCompleto({ cuadro, eleccion }: { cuadro: CuadroEliminatori
 
 const CODO = "after:absolute after:-right-[17px] after:w-[17px] after:border-linea after:content-['']";
 
-// El codo que une un par con el partido siguiente. Si un lugar quedó vacío por un bye, el codo
-// sale solo del partido que hay.
+// El codo que une un par con el partido siguiente. Un bye también tiene su tarjeta, así que el codo
+// sale de un solo lado únicamente si no se supo quién pasó directo.
 function codo(hayArriba: boolean, hayAbajo: boolean) {
   if (hayArriba && hayAbajo) return `${CODO} after:inset-y-1/4 after:rounded-r-lg after:border-y after:border-r`;
   if (hayArriba) return `${CODO} after:top-1/4 after:bottom-1/2 after:rounded-tr-lg after:border-t after:border-r`;
@@ -83,14 +91,18 @@ function codo(hayArriba: boolean, hayAbajo: boolean) {
   return '';
 }
 
-// Un lugar del cuadro. Desde la segunda ronda, cada partido lleva el conector que llega del codo.
-function Lugar({ partido, cuadro, eleccion }: { partido: PartidoDelCuadro | null; cuadro: CuadroEliminatorio; eleccion?: Eleccion }) {
-  if (!partido) return <div className="h-16" aria-hidden />;
+type PropsLugar = { lugar: LugarDelCuadro; ronda: number; cuadro: CuadroEliminatorio; eleccion?: Eleccion };
+
+// Un lugar del cuadro: un partido o quien pasa directo. Desde la segunda ronda, cada partido lleva
+// el conector que llega del codo.
+function Lugar({ lugar, ronda, cuadro, eleccion }: PropsLugar) {
+  if (!lugar) return <div className="h-16" aria-hidden />;
+  if (lugar.tipo === 'pase') return <TarjetaPaseDirecto jugador={lugar.jugador} rotulo={rotuloDelPaseDirecto(cuadro.rondas)} className="w-full" />;
   const conector =
-    partido.ronda > 1 ? "before:absolute before:top-1/2 before:-left-[17px] before:h-px before:w-[17px] before:bg-linea before:content-['']" : '';
+    ronda > 1 ? "before:absolute before:top-1/2 before:-left-[17px] before:h-px before:w-[17px] before:bg-linea before:content-['']" : '';
   return (
     <div className={`relative ${conector}`}>
-      <TarjetaPartido partido={partido} destacado={destacadoDe(partido, cuadro)} eleccion={eleccion} className="w-full" />
+      <TarjetaPartido partido={lugar.partido} destacado={destacadoDe(lugar.partido, cuadro)} eleccion={eleccion} className="w-full" />
     </div>
   );
 }

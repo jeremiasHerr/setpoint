@@ -1,12 +1,11 @@
 import { Cuadro, EstadoPartido as EstadoPrisma, EstadoTorneo, FasePartido, ModoSede, type Prisma } from '@prisma/client';
-import type { ClaveCuadro, Cuadros, EstadoPartido } from '@setpoint/shared';
+import { lugarSiguiente, type ClaveCuadro, type Cuadros, type EstadoPartido } from '@setpoint/shared';
 import { organizacionAdministrada } from '../../lib/permisos';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
 import {
   armarCuadro,
   fechaLimiteDeRonda,
-  lugarSiguiente,
   partidoSiguiente,
   partidosSinResultado,
   siembrasDeLosCuadros,

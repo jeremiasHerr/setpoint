@@ -1,4 +1,11 @@
-import type { ClaveCuadro, CuadroEliminatorio, EstadoPartido, PartidoDelCuadro } from '@setpoint/shared';
+import {
+  lugarSiguiente,
+  type ClaveCuadro,
+  type CuadroEliminatorio,
+  type EstadoPartido,
+  type JugadorDelCuadro,
+  type PartidoDelCuadro,
+} from '@setpoint/shared';
 
 // "Cuadro consuelo" va fijo hasta que la organización pueda configurar su nombre (07 §1.2).
 // "Campeonato" sigue así hasta cerrar la decisión abierta 16.
@@ -20,15 +27,36 @@ export function tieneResultado(partido: PartidoDelCuadro) {
   return CON_RESULTADO.includes(partido.estado);
 }
 
+// Lo que va en un lugar del cuadro: un partido, o quien pasa directo donde hubo un bye. null si no
+// se sabe quién, que no debería pasar.
+export type LugarDelCuadro = { tipo: 'partido'; partido: PartidoDelCuadro } | { tipo: 'pase'; jugador: JugadorDelCuadro } | null;
+
 // Los lugares de una ronda, de arriba hacia abajo: la ronda tiene la mitad que la anterior y la
-// final, uno. Donde hubo un bye no hay partido (decisión 023) y el lugar queda vacío, para que
-// cada partido siga a la altura de los dos que lo alimentan.
-export function lugaresDeLaRonda(cuadro: CuadroEliminatorio, ronda: number): (PartidoDelCuadro | null)[] {
+// final, uno. Donde hubo un bye no hay partido (decisión 023), y el lugar lleva a quien pasa
+// directo (decisión 083), para que cada partido siga a la altura de los dos que lo alimentan.
+export function lugaresDeLaRonda(cuadro: CuadroEliminatorio, ronda: number): LugarDelCuadro[] {
   const lugares = 2 ** (cuadro.rondas - ronda);
-  return Array.from(
-    { length: lugares },
-    (_, i) => cuadro.partidos.find((p) => p.ronda === ronda && p.ordenEnRonda === i + 1) ?? null,
-  );
+  return Array.from({ length: lugares }, (_, i) => {
+    const partido = cuadro.partidos.find((p) => p.ronda === ronda && p.ordenEnRonda === i + 1);
+    if (partido) return { tipo: 'partido', partido };
+    // Solo la primera ronda tiene lugares sin partido.
+    const jugador = ronda === 1 ? quienPasaDirecto(cuadro, i + 1) : null;
+    return jugador ? { tipo: 'pase', jugador } : null;
+  });
+}
+
+// Quien tuvo bye en el lugar `orden` de la primera ronda: ya está en el partido de la segunda al
+// que lleva ese lugar, del lado que le toca.
+function quienPasaDirecto(cuadro: CuadroEliminatorio, orden: number): JugadorDelCuadro | null {
+  const { ordenEnRonda, lado } = lugarSiguiente(orden);
+  const siguiente = cuadro.partidos.find((p) => p.ronda === 2 && p.ordenEnRonda === ordenEnRonda);
+  return (lado === 'A' ? siguiente?.jugadorA : siguiente?.jugadorB) ?? null;
+}
+
+// "pasa directo a semis", "pasa directo a la final".
+export function rotuloDelPaseDirecto(rondas: number) {
+  const destino = rotuloDeRonda(2, rondas);
+  return `pasa directo a ${destino === 'final' || destino.startsWith('ronda') ? 'la ' : ''}${destino}`;
 }
 
 export function partidosJugados(cuadro: CuadroEliminatorio) {
