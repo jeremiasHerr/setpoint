@@ -1,5 +1,5 @@
 import type { TorneoEnVivo } from '@setpoint/shared';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { Chip } from '../components/Chip';
 import { EncabezadoPublico } from '../components/EncabezadoPublico';
 import { BotonCompartir } from '../features/cuadros/BotonCompartir';
@@ -57,9 +57,15 @@ function Contenido({ torneo, slug, id, pestanaInicial }: { torneo: TorneoEnVivo;
         <EncabezadoPublico organizacion={torneo.organizacion} detalle={torneo.nombre} />
       </header>
 
-      <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3 xl:pt-2">
-        <h1 className="text-[30px] font-semibold tracking-[-0.035em]">El torneo en vivo</h1>
-        <BotonCompartir titulo={`${torneo.nombre} · ${torneo.organizacion}`} />
+      <div className="flex flex-col gap-1.5 xl:pt-2">
+        {/* Las páginas públicas no tienen menú: esta vuelve a la del torneo, que enlaza acá (decisión 084). */}
+        <Link to={`/c/${slug}/torneos/${id}`} className="self-start py-1 text-sm text-gris-500 hover:text-negro">
+          ← El torneo
+        </Link>
+        <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
+          <h1 className="text-[30px] font-semibold tracking-[-0.035em]">El torneo en vivo</h1>
+          <BotonCompartir titulo={`${torneo.nombre} · ${torneo.organizacion}`} />
+        </div>
       </div>
 
       <div role="group" aria-label="Qué ver" className="flex flex-wrap gap-1.5">

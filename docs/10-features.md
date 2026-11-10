@@ -228,7 +228,7 @@ Cualquier persona podrá seguir el desarrollo de un torneo desde un enlace, sin 
 - La página *El torneo en vivo* (`/c/:slug/torneos/:id/en-vivo`) tiene tres pestañas: Zonas, Cuadros y Calendario, con un botón para compartir el enlace. `/cuadros` abre la pestaña Cuadros.
 - Zonas: la tabla de cada zona con quién clasifica a cada cuadro, y los partidos de la zona con su resultado o su fecha. Cada nombre de la tabla lleva a la ficha del jugador (F17).
 - Calendario: los partidos con fecha, día por día desde hoy, con la hora, la sede y la instancia; los días anteriores, con su resultado. Cuenta los que todavía no tienen fecha.
-- Se llega desde el tablero ("Ver la página pública") y desde la convocatoria cerrada ("Ver el torneo en vivo").
+- Se llega desde el tablero ("Ver la página pública", que la abre en otra pestaña, y "Copiar link" para compartirla) y desde la convocatoria cerrada ("Ver el torneo en vivo"). La página vuelve a la convocatoria con "← El torneo" ([decisión 084](decisiones/084-ida-y-vuelta-a-la-pagina-en-vivo.md)).
 
 ---
 
