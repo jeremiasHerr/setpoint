@@ -120,22 +120,23 @@ En el caso de validación, el padrón de POLENTA tiene 77 jugadores en 2 categor
 
 **Link personal** ([decisión 050](decisiones/050-link-personal-de-inscripcion.md)). En el menú de cada fila, "Compartir link" abre WhatsApp con el mensaje armado (*"Hola Lucas, inscribite al Primavera 26 desde acá: …"*): en el chat del jugador si tiene teléfono, o para elegir el contacto si no. También "Copiar link" y "Generar link nuevo", que deja sin efecto el anterior. Quien entra por su link verifica su email con un código y queda vinculado sin buscarse. Es lo que cierra el hueco de la primera vez: el perfil lo elige la organización. Para POLENTA, conviene mandarlos antes del primer torneo.
 
-**Vinculaciones** ([decisión 051](decisiones/051-vinculacion-con-el-padron.md), *pendiente de código*). El jugador verifica su email con un código y vincula su perfil al inscribirse por primera vez, sin pasar por la organización. **La organización no toca la identidad de nadie** (el email y el nombre de la persona son de ella); decide sobre su padrón: de qué persona es cada perfil.
+**Vinculaciones** ([decisión 051](decisiones/051-vinculacion-con-el-padron.md)). El jugador verifica su email con un código y vincula su perfil al inscribirse por primera vez, sin pasar por la organización. **La organización no toca la identidad de nadie** (el email y el nombre de la persona son de ella); decide sobre su padrón: de qué persona es cada perfil.
 
-- **Vinculaciones nuevas:** el padrón las muestra desde la última visita, con cómo se hizo cada una (link personal, búsqueda o "¿Sos…?"). No frenan nada.
-- **Para revisar** quedan dos casos, y en los dos la inscripción sigue en pie. *Posible homónimo:* alguien eligió un perfil con otro igual o parecido en la categoría; desde *Revisar vinculación* la organización confirma, pasa la inscripción al otro perfil o da de alta a la persona como jugador nuevo. *Perfil reclamado:* otra cuenta tocó "Avisarle a la organización" sobre un perfil vinculado; la organización decide de quién es el perfil y qué pasa con las inscripciones que pagó la cuenta que lo tenía. Cada caso aparece en el padrón con la marca "para revisar", que lleva a *Revisar vinculación*.
-- **Desvincular:** el panel de cada jugador muestra el email de su cuenta y cuándo y cómo se vinculó, y permite desvincularlo. El perfil queda libre para que lo reclame su dueño; no se toca el email ni la cuenta de nadie. Ya existe ([decisión 007](decisiones/007-vinculacion-de-cuentas-en-f02.md)).
+- **Vinculaciones nuevas:** el filtro "Nuevas" del padrón las junta desde la última visita de cada administrador, con cómo se hizo cada una (link personal, búsqueda o "¿Sos…?") y cuándo. No frenan nada. La visita se guarda en la base al abrir el padrón ([decisión 083](decisiones/083-ultima-visita-al-padron.md)).
+- **Para revisar** quedan dos casos, y en los dos la inscripción sigue en pie. *Posible homónimo:* alguien eligió un perfil con otro igual o parecido en la categoría; desde *Revisar vinculación* la organización confirma, pasa la inscripción al otro perfil o da de alta a la persona como jugador nuevo. *Perfil reclamado:* otra cuenta tocó "Avisarle a la organización" sobre un perfil vinculado; la organización decide de quién es el perfil y qué pasa con las inscripciones que pagó la cuenta que lo tenía. Cada caso aparece en el padrón con la marca "para revisar", que lleva a *Revisar vinculación*, y el filtro "Para revisar" los junta. *Pendiente:* la marca en el Inicio y en Inscripciones.
+- **Desvincular:** la sección Vinculación del panel de cada jugador muestra el email de su cuenta, cuándo y cómo se vinculó y sus inscripciones en curso, y permite desvincularlo. El perfil queda libre para que lo reclame su dueño; no se toca el email ni la cuenta de nadie ([decisión 007](decisiones/007-vinculacion-de-cuentas-en-f02.md)).
 - **El DNI** puede quedar como dato opcional del perfil, si la organización lo necesita por otro motivo (un seguro, por ejemplo). No identifica a nadie ni se usa en la inscripción ([decisión 049](decisiones/049-identidad-e-ingreso-con-codigo.md)).
 
 ### API del padrón
 
-Los tres endpoints exigen sesión y solo responden a administradores de esa organización.
+Todos exigen sesión y solo responden a administradores de esa organización.
 
 | Endpoint | Qué hace |
 |---|---|
 | `GET /api/organizaciones/:slug/jugadores` | Devuelve el padrón completo, ordenado por apellido. Cada fila trae categoría, puntos, puesto y partidos jugados |
 | `POST /api/organizaciones/:slug/jugadores` | Alta manual: nombre, apellido, categoría y teléfono opcional |
 | `PATCH /api/organizaciones/:slug/jugadores/:id` | Edita solo los campos que llegan. Sirve también para reasignar la categoría y para la baja |
+| `POST /api/organizaciones/:slug/jugadores/visita` | Guarda que el administrador abrió el padrón y devuelve su visita anterior, para "Nuevas" ([decisión 083](decisiones/083-ultima-visita-al-padron.md)) |
 
 **El padrón viaja entero.** Filtrar por categoría y buscar por apellido se resuelve en la pantalla: con padrones de decenas de jugadores no se justifica paginar.
 

@@ -4,6 +4,8 @@ import { Boton } from '../../components/Boton';
 import { Campo } from '../../components/Campo';
 import { Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
+import { Dato } from '../revisiones/piezas';
+import { vinculadoEl } from './vinculacion';
 
 export type ErroresJugador = {
   campos?: Partial<Record<keyof DatosCrearJugador, string>>;
@@ -176,18 +178,30 @@ export function PanelJugador({
               </p>
 
               {jugador.cuenta && (
-                <div className="flex flex-col gap-2.5 border-t border-linea pt-4">
-                  <h3 className="text-sm font-semibold">Cuenta vinculada</h3>
-                  <div className="flex flex-col gap-0.5">
-                    <span className="text-[15px]">{jugador.cuenta.nombre}</span>
-                    <span className="truncate font-mono text-[13px] text-gris-500">{jugador.cuenta.email}</span>
+                <div className="flex flex-col gap-3 border-t border-linea pt-4">
+                  <h3 className="text-[15px] font-semibold">Vinculación</h3>
+                  <Dato rotulo="Cuenta">
+                    <span className="break-all">{jugador.cuenta.email}</span>
+                  </Dato>
+                  <Dato rotulo="Vinculado">{vinculadoEl(jugador)}</Dato>
+                  <Dato rotulo="Inscripciones">
+                    {jugador.inscripciones.length === 0
+                      ? 'ninguna en curso'
+                      : jugador.inscripciones.map((i) => (
+                          // Una por renglón, para que el estado no quede cortado del torneo.
+                          <span key={i.torneo} className="block">
+                            {i.torneo} · {i.estado}
+                          </span>
+                        ))}
+                  </Dato>
+                  <div className="flex flex-col gap-2 pt-1">
+                    <Boton className="self-start" disabled={enviando} onClick={alDesvincular}>
+                      Desvincular
+                    </Boton>
+                    <p className="text-[13px] leading-[1.45] text-gris-500">
+                      El perfil queda libre para que lo reclame su dueño. No cambia el email de nadie, y las inscripciones quedan en el perfil.
+                    </p>
                   </div>
-                  <Boton className="w-full" disabled={enviando} onClick={alDesvincular}>
-                    Desvincular cuenta
-                  </Boton>
-                  <p className="text-[13px] leading-[1.45] text-gris-500">
-                    Sus puntos y partidos no cambian. El jugador podrá vincular su cuenta de nuevo.
-                  </p>
                 </div>
               )}
               <button

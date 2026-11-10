@@ -1,8 +1,9 @@
-import { EstadoPartido, EstadoTorneo, MotivoRevision, type Prisma } from '@prisma/client';
-import type { DatosCrearJugador, DatosEditarJugador, JugadorPadron } from '@setpoint/shared';
+import { EstadoInscripcion, EstadoPartido, EstadoTorneo, MotivoRevision, type Prisma } from '@prisma/client';
+import type { DatosCrearJugador, DatosEditarJugador, JugadorPadron, VisitaPadron } from '@setpoint/shared';
 import { DEL_PADRON } from '../../lib/padron';
 import { organizacionAdministrada } from '../../lib/permisos';
 import { prisma } from '../../lib/prisma';
+import { COMO_SE_VINCULO, inscripcionesVigentes } from '../../lib/vinculacion';
 import { ErrorHttp } from '../../middleware/errores';
 import { nuevoCodigoDeLink } from '../link-personal/codigo';
 import { asignarPuestos, puntosVigentes } from '../ranking/ranking';
@@ -12,6 +13,7 @@ const PARTIDO_JUGADO = { estado: { in: [EstadoPartido.JUGADA, EstadoPartido.WALK
 
 // También lo usa la revisión de vinculaciones: los puntos y el puesto salen de la misma cuenta.
 export async function padronDe(organizacionId: number): Promise<JugadorPadron[]> {
+  const ahora = new Date();
   const [jugadores, movimientos, abiertos] = await Promise.all([
     prisma.jugador.findMany({
       where: { organizacionId, ...DEL_PADRON },
@@ -19,6 +21,11 @@ export async function padronDe(organizacionId: number): Promise<JugadorPadron[]>
       include: {
         categoria: { select: { nombre: true } },
         usuario: { select: { nombre: true, apellido: true, email: true } },
+        inscripciones: {
+          where: inscripcionesVigentes(ahora),
+          orderBy: { creadoEn: 'asc' },
+          select: { estado: true, torneo: { select: { nombre: true, edicion: true } } },
+        },
         _count: { select: { partidosComoA: { where: PARTIDO_JUGADO }, partidosComoB: { where: PARTIDO_JUGADO } } },
       },
     }),
@@ -68,6 +75,14 @@ export async function padronDe(organizacionId: number): Promise<JugadorPadron[]>
     codigoLink: j.codigoLink,
     edicionAbierta: edicionAbierta(j.categoriaId),
     revision: j.revision === MotivoRevision.RECLAMO ? 'reclamo' : j.revision === MotivoRevision.HOMONIMO ? 'homonimo' : null,
+    vinculadoEn: j.usuario ? (j.vinculadoEn?.toISOString() ?? null) : null,
+    vinculadoPor: j.usuario && j.vinculadoPor ? COMO_SE_VINCULO[j.vinculadoPor] : null,
+    inscripciones: j.usuario
+      ? j.inscripciones.map((i) => ({
+          torneo: i.torneo.edicion ?? i.torneo.nombre,
+          estado: i.estado === EstadoInscripcion.PAGADA ? 'pagada' : 'reservando',
+        }))
+      : [],
   }));
 }
 
@@ -90,6 +105,18 @@ async function idDeCategoria(organizacionId: number, nombre: string | null) {
 
 export async function listarPadron(slug: string, usuarioId: number) {
   return padronDe(await organizacionAdministrada(slug, usuarioId));
+}
+
+// Guarda que el administrador abrió el padrón y devuelve su visita anterior: "Nuevas" son las
+// vinculaciones de después. Cada administrador tiene la suya (decisión 083).
+export async function registrarVisita(slug: string, usuarioId: number): Promise<VisitaPadron> {
+  const organizacionId = await organizacionAdministrada(slug, usuarioId);
+  const admin = { usuarioId_organizacionId: { usuarioId, organizacionId } };
+  const [antes] = await prisma.$transaction([
+    prisma.adminOrganizacion.findUniqueOrThrow({ where: admin, select: { padronVistoEn: true } }),
+    prisma.adminOrganizacion.update({ where: admin, data: { padronVistoEn: new Date() } }),
+  ]);
+  return { anterior: antes.padronVistoEn?.toISOString() ?? null };
 }
 
 // No se le crea ningún movimiento de ranking: entra con 0 puntos y sube al jugar.

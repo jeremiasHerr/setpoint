@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { crearJugadorSchema, editarJugadorSchema } from '@setpoint/shared';
 import { autenticar } from '../../middleware/autenticar';
 import { validar } from '../../middleware/validar';
-import { crearJugador, desvincularCuenta, editarJugador, generarLink, listarPadron } from './jugadores.service';
+import { crearJugador, desvincularCuenta, editarJugador, generarLink, listarPadron, registrarVisita } from './jugadores.service';
 
 // Se monta en /api/organizaciones/:slug/jugadores: mergeParams trae el slug del padre.
 export const jugadoresRouter = Router({ mergeParams: true });
@@ -12,6 +12,12 @@ jugadoresRouter.use(autenticar);
 jugadoresRouter.get('/', async (req, res) => {
   const { slug } = req.params as { slug: string };
   res.json(await listarPadron(slug, res.locals.usuarioId));
+});
+
+// Abrir el padrón: guarda la visita y devuelve la anterior, para el filtro "Nuevas" (decisión 083).
+jugadoresRouter.post('/visita', async (req, res) => {
+  const { slug } = req.params as { slug: string };
+  res.json(await registrarVisita(slug, res.locals.usuarioId));
 });
 
 jugadoresRouter.post('/', validar(crearJugadorSchema), async (req, res) => {

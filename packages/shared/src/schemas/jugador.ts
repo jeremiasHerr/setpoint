@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { ComoSeVinculo } from './revision';
 
 const nombre = z.string({ error: 'Escribí el nombre' }).trim().min(1, 'Escribí el nombre').max(60);
 const apellido = z.string({ error: 'Escribí el apellido' }).trim().min(1, 'Escribí el apellido').max(60);
@@ -50,4 +51,13 @@ export type JugadorPadron = {
   edicionAbierta: string | null;
   // Si su vinculación quedó para revisar (decisión 051): posible homónimo o reclamada por otra cuenta.
   revision: 'homonimo' | 'reclamo' | null;
+  // Cuándo y cómo se vinculó la cuenta. null sin cuenta, o en una vinculación anterior a guardarlos.
+  vinculadoEn: string | null;
+  vinculadoPor: ComoSeVinculo | null;
+  // Con cuenta: sus inscripciones que todavía cuentan, pagadas o reservando, para el panel.
+  inscripciones: { torneo: string; estado: 'pagada' | 'reservando' }[];
 };
+
+// La visita al padrón que se acaba de guardar devuelve la anterior: "Nuevas" son las vinculaciones
+// de después (decisión 083). null la primera vez.
+export type VisitaPadron = { anterior: string | null };

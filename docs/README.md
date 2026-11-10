@@ -180,6 +180,7 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 - ~~¿De dónde sale la instancia que alcanzó en cada torneo?~~ **Se calcula con sus partidos de cuadro, al consultar** ([decisión 072](decisiones/072-la-instancia-se-calcula-con-los-partidos.md)). La del movimiento de ranking solo existe en torneos con ranking ya cerrados, y llama participación a todo el cuadro consuelo
 - ~~¿El W.O. y el abandono cuentan en jugados, ganados y perdidos de la ficha?~~ **El W.O. no, porque no se jugó; el abandono sí** ([decisión 073](decisiones/073-el-wo-no-cuenta-en-la-ficha.md)). Es el criterio de la ATP; las tablas de zona siguen computando los dos 6-0 6-0
 - ~~¿Por dónde se llega a la ficha del jugador?~~ **Desde la fila abierta del ranking y desde los nombres de las zonas del torneo en vivo** ([decisión 074](decisiones/074-entrada-a-la-ficha.md)). Así llegan también los circuitos sin ranking
+- ~~¿Desde cuándo son "nuevas" las vinculaciones del padrón?~~ **Desde la última visita de cada administrador, guardada en la base al abrir el padrón** ([decisión 083](decisiones/083-ultima-visita-al-padron.md)). Es lo que dice la referencia y funciona en cualquier compu; en el navegador se perdía al cambiar de equipo, y una ventana fija de días no es "desde tu última visita"
 
 ---
 

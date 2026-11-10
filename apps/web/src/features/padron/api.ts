@@ -1,4 +1,4 @@
-import type { DatosCrearJugador, DatosEditarJugador, JugadorPadron } from '@setpoint/shared';
+import type { DatosCrearJugador, DatosEditarJugador, JugadorPadron, VisitaPadron } from '@setpoint/shared';
 import { pedir } from '../../lib/api';
 
 export function listarPadron(slug: string) {
@@ -19,4 +19,9 @@ export function desvincularCuenta(slug: string, id: number) {
 
 export function generarLink(slug: string, id: number) {
   return pedir<JugadorPadron>('POST', `/api/organizaciones/${slug}/jugadores/${id}/link`);
+}
+
+// Guarda que se abrió el padrón y devuelve la visita anterior (decisión 083).
+export function registrarVisita(slug: string) {
+  return pedir<VisitaPadron>('POST', `/api/organizaciones/${slug}/jugadores/visita`);
 }

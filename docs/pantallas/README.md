@@ -19,7 +19,7 @@ Ordenado por entrega.
 | 25% | F01 | [Registrar la organización](organizador/registro.html) | Web organizador | 870 px |
 | 25% | F01 | [Inicio del organizador](organizador/home.html) | Web organizador | 1280 px |
 | 25% | F01 | [Tu circuito](organizador/tu-circuito.html) | Web organizador | 1280 px |
-| 25% · 75% | F02 | [Padrón](organizador/padron.html) | Web organizador · dos estados: compartir el link personal, y las vinculaciones nuevas con "Desvincular" (75%) | 1280 px |
+| 25% · 75% | F02 | [Padrón](organizador/padron.html) | Web organizador · dos estados: compartir el link personal, y las vinculaciones nuevas con "Desvincular" (75%). Implementada con los dos estados: el filtro "Nuevas" cuenta desde la última visita de cada administrador ([decisión 083](../decisiones/083-ultima-visita-al-padron.md)) | 1280 px |
 | 25% | F03 | [Importar padrón](organizador/importar-padron.html) | Web organizador | 1280 px |
 | 25% | F04 | [Nuevo torneo](organizador/nuevo-torneo.html) | Web organizador | 1280 px |
 | 50% | F05 | [Sorteo de zonas](organizador/sorteo.html) | Web organizador | 1280 px |

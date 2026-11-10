@@ -1,6 +1,6 @@
 import type { DatosCrearJugador, DatosEditarJugador } from '@setpoint/shared';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { crearJugador, desvincularCuenta, editarJugador, generarLink, listarPadron } from './api';
+import { crearJugador, desvincularCuenta, editarJugador, generarLink, listarPadron, registrarVisita } from './api';
 
 export function usePadron(slug: string) {
   return useQuery({
@@ -50,5 +50,18 @@ export function useGenerarLink(slug: string) {
   return useMutation({
     mutationFn: (id: number) => generarLink(slug, id),
     onSuccess: refrescar,
+  });
+}
+
+// La visita anterior al padrón, para "Nuevas" (decisión 083). Se guarda una vez al abrir la
+// pantalla y no se vuelve a pedir mientras está abierta: si se refrescara, las nuevas se irían
+// apenas se miran. Al volver después de unos minutos, cuenta como otra visita.
+export function useVisitaPadron(slug: string) {
+  return useQuery({
+    queryKey: ['visita-padron', slug],
+    queryFn: () => registrarVisita(slug),
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
+    retry: false,
   });
 }
