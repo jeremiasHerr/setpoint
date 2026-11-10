@@ -179,7 +179,7 @@ Fila de 52–60. Punto de 7px a la izquierda del nombre: lima si clasifica, `--l
 
 ### Cuadro eliminatorio
 
-Columnas por ronda con rótulo en mono minúscula. Tarjeta de 190×62 con dos filas de 31; el ganador con fondo `--lima-tenue` y peso 600. **En las tarjetas va el resultado en sets (2-0, 2-1), no el marcador completo** — es lo que hace legible un cuadro de 16. Las llaves se dibujan con codos de 1px `--linea`. El partido pendiente destacado lleva borde 2px `--negro` y franja lima con fecha y hora.
+Columnas por ronda con rótulo en mono minúscula. Tarjeta de 190×62 con dos filas de 31; el ganador con fondo `--lima-tenue` y peso 600. **En las tarjetas va el resultado en sets (2-0, 2-1), no el marcador completo** — es lo que hace legible un cuadro de 16. Las llaves se dibujan con codos de 1px `--linea`. El partido pendiente destacado lleva borde 2px `--negro` y franja lima con fecha y hora. Donde hubo un bye no hay partido: el lugar lleva una tarjeta del mismo alto, sin fondo, con el apellido de quien pasa directo en `--gris-500` y el rótulo mono "pasa directo a semis" en `--gris-400` ([decisión 083](decisiones/083-el-bye-se-ve-en-el-cuadro.md)).
 
 ---
 

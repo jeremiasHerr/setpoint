@@ -1,6 +1,6 @@
 # 038 — Cómo se ven los cuadros en el celular
 
-**Estado:** aceptada — 19 de octubre de 2026
+**Estado:** aceptada — 19 de octubre de 2026. **Modificada en parte** por la [decisión 083](083-el-bye-se-ve-en-el-cuadro.md): los byes sí aparecen en la primera ronda, con una tarjeta propia.
 
 ## Contexto
 

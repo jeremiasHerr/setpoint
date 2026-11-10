@@ -1,5 +1,6 @@
 // Cuadros eliminatorios (02-dominio.md §3.2).
 // Lógica pura: recibe las zonas terminadas, devuelve los partidos de cada cuadro. No toca la base.
+import { lugarSiguiente } from '@setpoint/shared';
 import { compararEntreZonas, conElResultado, tieneResultado, type ZonaConPartidos } from './clasificacion';
 import type { InscriptoEnZona, PartidoEnZona } from './posiciones';
 
@@ -143,12 +144,6 @@ export function ubicarEnElCuadro(siembra: Clasificado[]): (Clasificado | null)[]
   });
 
   return cuadro;
-}
-
-// A dónde va el ganador: el partido k de una ronda alimenta al ⌈k/2⌉ de la siguiente,
-// como jugador A si k es impar y como B si es par.
-export function lugarSiguiente(ordenEnRonda: number) {
-  return { ordenEnRonda: Math.ceil(ordenEnRonda / 2), lado: ordenEnRonda % 2 === 1 ? 'A' : 'B' } as const;
 }
 
 // El partido al que avanza el ganador. null en la final.

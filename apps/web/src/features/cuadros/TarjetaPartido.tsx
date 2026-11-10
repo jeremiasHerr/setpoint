@@ -61,6 +61,20 @@ export function TarjetaPartido({ partido, destacado, eleccion, className = '' }:
   );
 }
 
+// Donde hubo un bye no hay partido (decisión 023): el lugar lleva a quien pasa directo, en una
+// tarjeta del mismo alto que la de un partido, sin fondo y en gris (decisión 083). Con el mismo alto,
+// los codos del cuadro siguen saliendo de la mitad de cada tarjeta. No se toca: no hay nada que abrir.
+export function TarjetaPaseDirecto({ jugador, rotulo, className = '' }: { jugador: JugadorDelCuadro; rotulo: string; className?: string }) {
+  return (
+    <div className={`flex h-16 flex-col justify-center gap-1 rounded-lg border border-linea px-2.5 ${className}`}>
+      <span className="truncate text-[13px] text-gris-500" title={`${jugador.nombre} ${jugador.apellido}`}>
+        {jugador.apellido}
+      </span>
+      <span className="truncate font-mono text-[11px] text-gris-400">{rotulo}</span>
+    </div>
+  );
+}
+
 type PropsFila = { partido: PartidoDelCuadro; lado: 'A' | 'B'; abierta: boolean; destacado: boolean };
 
 function Fila({ partido, lado, abierta, destacado }: PropsFila) {

@@ -48,6 +48,13 @@ export type CuadroEliminatorio = {
   partidos: PartidoDelCuadro[];
 };
 
+// A dónde va el ganador: el partido k de una ronda alimenta al ⌈k/2⌉ de la siguiente, como
+// jugador A si k es impar y como B si es par. La API arma el cuadro con esta regla, y la web la
+// usa para saber quién pasa directo donde hubo un bye (decisión 083).
+export function lugarSiguiente(ordenEnRonda: number) {
+  return { ordenEnRonda: Math.ceil(ordenEnRonda / 2), lado: ordenEnRonda % 2 === 1 ? 'A' : 'B' } as const;
+}
+
 export type Cuadros = {
   torneoId: number;
   // Nombre de la organización, para el encabezado de la página pública.

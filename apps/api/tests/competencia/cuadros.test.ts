@@ -1,3 +1,4 @@
+import { lugarSiguiente } from '@setpoint/shared';
 import { describe, expect, it } from 'vitest';
 import type { EstadoPartido, PartidoDeLaTabla, ZonaConPartidos } from '../../src/modules/competencia/clasificacion';
 import type { PartidoEnZona } from '../../src/modules/competencia/posiciones';
@@ -6,7 +7,6 @@ import {
   armarCuadro,
   correccionCambiaLosCuadros,
   fechaLimiteDeRonda,
-  lugarSiguiente,
   ordenDeSiembra,
   partidoSiguiente,
   partidosSinResultado,
