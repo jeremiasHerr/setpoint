@@ -234,14 +234,15 @@ async function main() {
   });
 
   // --- un torneo publicado, con las inscripciones abiertas ---
+  // El que sigue al Primavera 26, que se está terminando (crearPrimavera26).
   await prisma.torneo.create({
     data: {
       organizacionId: org.id,
       categoriaId: tercera.id,
-      etapaId: etapas[0].id, // Primavera
+      etapaId: etapas[1].id, // Verano
       // Como una convocatoria creada desde la web: el nombre es la edición, sin la categoría.
-      nombre: 'Primavera 26',
-      edicion: 'Primavera 26',
+      nombre: 'Verano 26/27',
+      edicion: 'Verano 26/27',
       estado: EstadoTorneo.PUBLICADO,
       cupo: 32,
       precio: 45000,
@@ -305,6 +306,7 @@ async function main() {
   await crearCopaDelLimay(org.id, tercera.id);
   const organizador = await prisma.usuario.findUniqueOrThrow({ where: { email: 'organizador@polenta.example' } });
   await crearCopaAltaBarda(org.id, tercera.id, organizador.id);
+  await crearPrimavera26(org.id, tercera.id, etapas[0].id, organizador.id);
 
   // --- verificación ---
   // Suma simple: vale porque en el seed hay un solo movimiento por etapa.
@@ -380,14 +382,17 @@ type TorneoConZonas = {
   semilla: number;
   // Cuántos días hace que empezaron las zonas, que duran 3 semanas.
   inicioHaceDias: number;
+  // El torneo del calendario. Sin él, el torneo es suelto y al cerrarlo no da puntos.
+  etapaId?: number;
   // Índices de los partidos que quedan sin jugar, sobre la lista de grupos de cada partido.
   sinJugar?: (grupos: string[]) => Set<number>;
 };
 
-// Un torneo suelto, para no tocar el ranking pero sembrado con él, con las zonas sorteadas por
-// las funciones reales y sus partidos cargados. Entre los cargados hay un W.O. y un abandono.
+// Un torneo sembrado con el ranking, con las zonas sorteadas por las funciones reales y sus
+// partidos cargados. Entre los cargados hay un W.O. y un abandono. Suelto salvo que se le pase
+// el torneo del calendario.
 async function crearTorneoConZonas(organizacionId: number, categoriaId: number, opciones: TorneoConZonas) {
-  const { nombre, desde, cantidad, cantidadGrupos, semilla, inicioHaceDias, sinJugar } = opciones;
+  const { nombre, desde, cantidad, cantidadGrupos, semilla, inicioHaceDias, sinJugar, etapaId = null } = opciones;
   const jugadores = await prisma.jugador.findMany({
     where: { organizacionId, categoriaId },
     orderBy: { id: 'asc' },
@@ -405,7 +410,7 @@ async function crearTorneoConZonas(organizacionId: number, categoriaId: number, 
     data: {
       organizacionId,
       categoriaId,
-      etapaId: null,
+      etapaId,
       nombre,
       edicion: nombre,
       estado: EstadoTorneo.GRUPOS_EN_CURSO,
@@ -538,6 +543,32 @@ async function crearCopaAltaBarda(organizacionId: number, categoriaId: number, u
   });
 
   console.log(`Cuadros en juego en /c/polenta/torneos/${torneo.id}/cuadros (Copa Alta Barda · Tercera)
+`);
+}
+
+// --- un torneo del calendario con las dos finales por jugarse ---
+// Para mostrar que el ranking se actualiza: cargando las dos finales se cierra el torneo, y los
+// puntos de cada uno reemplazan a los de su Primavera 25. 8 jugadores en 2 zonas de 4, con
+// Llancafilo entre ellos; cada cuadro tiene 4, así que quedan las semis jugadas y la final.
+async function crearPrimavera26(organizacionId: number, categoriaId: number, etapaId: number, usuarioId: number) {
+  const { torneo } = await crearTorneoConZonas(organizacionId, categoriaId, {
+    nombre: 'Primavera 26',
+    desde: 8,
+    cantidad: 8,
+    cantidadGrupos: 2,
+    semilla: 14,
+    inicioHaceDias: 30,
+    etapaId,
+  });
+
+  const { cuadros } = await cerrarZonas('polenta', usuarioId, torneo.id);
+  const semis = cuadros.flatMap((c) => c.partidos.filter((p) => p.ronda === 1));
+  for (const [i, partido] of semis.entries()) {
+    const datos = resultadoDelTorneoSchema(SISTEMA_POLENTA).parse(RESULTADOS_DE_ZONA[i % RESULTADOS_DE_ZONA.length]);
+    await guardarResultado('polenta', usuarioId, torneo.id, partido.id, datos);
+  }
+
+  console.log(`Finales por jugar en /torneos/${torneo.id}/tablero (Primavera 26 · Tercera): al cerrarlo, el ranking se actualiza
 `);
 }
 
