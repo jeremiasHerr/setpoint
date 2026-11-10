@@ -1,5 +1,6 @@
 import type { EnListaDeEspera, InscripcionDelTorneo } from '@setpoint/shared';
 import { Fragment, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
 import { diaCorto } from '../torneos/texto';
@@ -73,9 +74,19 @@ export function TablaInscriptos({ slug, torneoId, inscripciones, sePuedeDarDeBaj
                     <div className="flex min-w-0 items-center gap-2.5">
                       <span className={`size-[7px] shrink-0 rounded-full ${pagada ? 'bg-lima' : 'bg-gris-400'}`} />
                       <div className="flex min-w-0 flex-col gap-0.5">
-                        <span className={`truncate text-[15px] ${pagada ? 'font-medium' : ''}`}>
-                          {inscripcion.nombre} {inscripcion.apellido}
-                        </span>
+                        <div className="flex min-w-0 items-center gap-2">
+                          <span className={`truncate text-[15px] ${pagada ? 'font-medium' : ''}`}>
+                            {inscripcion.nombre} {inscripcion.apellido}
+                          </span>
+                          {inscripcion.revision && (
+                            <Link
+                              to={`/padron/revisar/${inscripcion.jugadorId}`}
+                              className="shrink-0 rounded-full border border-negro px-[7px] py-px font-mono text-[11px] whitespace-nowrap hover:bg-negro hover:text-white"
+                            >
+                              para revisar
+                            </Link>
+                          )}
+                        </div>
                         {inscripcion.deLaListaDeEspera && (
                           <span className="truncate font-mono text-xs text-gris-500">de la lista de espera</span>
                         )}
@@ -89,7 +100,16 @@ export function TablaInscriptos({ slug, torneoId, inscripciones, sePuedeDarDeBaj
                       {fecha.texto}
                     </Numero>
                     <div className="col-span-full flex justify-end pt-1 md:col-span-1 md:pt-0">
-                      {pagada && sePuedeDarDeBaja && (
+                      {/* Con la vinculación para revisar, la acción es revisarla: el lugar es suyo igual (decisión 051). */}
+                      {inscripcion.revision && (
+                        <Link
+                          to={`/padron/revisar/${inscripcion.jugadorId}`}
+                          className="flex h-8 shrink-0 items-center rounded-lg border border-negro px-3 text-[13px] font-semibold whitespace-nowrap hover:bg-fondo"
+                        >
+                          Revisar
+                        </Link>
+                      )}
+                      {!inscripcion.revision && pagada && sePuedeDarDeBaja && (
                         <BotonAccion
                           onClick={() => setEnBaja(abierta ? null : inscripcion.id)}
                           aria-expanded={abierta}
@@ -99,7 +119,7 @@ export function TablaInscriptos({ slug, torneoId, inscripciones, sePuedeDarDeBaj
                         </BotonAccion>
                       )}
                       {/* Una reserva vencida se libera sola en menos de un minuto: no hay nada que recordar. */}
-                      {!pagada && !vencida(inscripcion) && (
+                      {!inscripcion.revision && !pagada && !vencida(inscripcion) && (
                         <BotonAccion
                           onClick={() =>
                             recordar.mutate(inscripcion.id, {

@@ -66,7 +66,7 @@ export function InicioConTorneos({ torneos }: { torneos: TorneosDeInicio }) {
             </Grupo>
           )}
 
-          {/* Fuera de «Necesita tu atención»: ese bloque es rojo, y el rojo solo significa vencimiento. */}
+          {/* Fuera de «Necesita tu atención»: ese bloque puede ir en rojo, y el rojo solo significa vencimiento. */}
           {paraSortear.length > 0 && (
             <Grupo titulo="Para sortear">
               <div className="grid gap-3.5 md:grid-cols-2">

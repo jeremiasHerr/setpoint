@@ -11,6 +11,7 @@ import { aTorneosDeInicio } from '../features/inicio/torneosDeInicio';
 import { torneosEjemplo } from '../features/inicio/torneosEjemplo';
 import { useTorneos } from '../features/inicio/useTorneos';
 import { iniciales, navegacionOrganizador } from '../features/organizador/encabezado';
+import { useRevisiones } from '../features/revisiones/useRevisiones';
 
 function primerNombre(nombre: string) {
   return nombre.trim().split(/\s+/)[0];
@@ -27,11 +28,13 @@ function Inicio({ sesion }: { sesion: Sesion }) {
   const { slug } = sesion.organizacion;
   const circuito = useCircuito(slug);
   const torneos = useTorneos(slug);
+  // Si no llegan, el inicio se muestra igual, sin esos avisos.
+  const revisiones = useRevisiones(slug);
   const error = circuito.error ?? torneos.error;
   const sesionInvalida = useSesionInvalida(error);
   const cerrarSesion = useCerrarSesion();
 
-  // /inicio?ejemplo=1 muestra la pantalla completa, con los avisos de «Necesita tu atención», que
+  // /inicio?ejemplo=1 muestra la pantalla completa, con los avisos de «Necesita tu atención» que
   // todavía no se calculan. Se borra cuando estén.
   const verEjemplo = parametros.has('ejemplo');
 
@@ -66,7 +69,7 @@ function Inicio({ sesion }: { sesion: Sesion }) {
       ) : verEjemplo ? (
         <InicioConTorneos torneos={torneosEjemplo} />
       ) : torneos.data.length > 0 ? (
-        <InicioConTorneos torneos={aTorneosDeInicio(torneos.data, circuito.data)} />
+        <InicioConTorneos torneos={aTorneosDeInicio(torneos.data, circuito.data, revisiones.data?.casos ?? [])} />
       ) : (
         <InicioSinTorneos
           nombre={primerNombre(sesion.usuario.nombre)}

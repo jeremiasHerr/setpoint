@@ -1,9 +1,9 @@
-import { EstadoInscripcion, EstadoPartido, EstadoTorneo, MotivoRevision, type Prisma } from '@prisma/client';
+import { EstadoInscripcion, EstadoPartido, EstadoTorneo, type Prisma } from '@prisma/client';
 import type { DatosCrearJugador, DatosEditarJugador, JugadorPadron, VisitaPadron } from '@setpoint/shared';
 import { DEL_PADRON } from '../../lib/padron';
 import { organizacionAdministrada } from '../../lib/permisos';
 import { prisma } from '../../lib/prisma';
-import { COMO_SE_VINCULO, inscripcionesVigentes } from '../../lib/vinculacion';
+import { COMO_SE_VINCULO, inscripcionesVigentes, MOTIVO_DE_REVISION } from '../../lib/vinculacion';
 import { ErrorHttp } from '../../middleware/errores';
 import { nuevoCodigoDeLink } from '../link-personal/codigo';
 import { asignarPuestos, puntosVigentes } from '../ranking/ranking';
@@ -74,7 +74,7 @@ export async function padronDe(organizacionId: number): Promise<JugadorPadron[]>
     cuenta: j.usuario ? { nombre: `${j.usuario.nombre} ${j.usuario.apellido}`, email: j.usuario.email } : null,
     codigoLink: j.codigoLink,
     edicionAbierta: edicionAbierta(j.categoriaId),
-    revision: j.revision === MotivoRevision.RECLAMO ? 'reclamo' : j.revision === MotivoRevision.HOMONIMO ? 'homonimo' : null,
+    revision: j.revision ? MOTIVO_DE_REVISION[j.revision] : null,
     vinculadoEn: j.usuario ? (j.vinculadoEn?.toISOString() ?? null) : null,
     vinculadoPor: j.usuario && j.vinculadoPor ? COMO_SE_VINCULO[j.vinculadoPor] : null,
     inscripciones: j.usuario

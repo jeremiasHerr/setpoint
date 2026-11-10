@@ -1,4 +1,4 @@
-import type { AvanceDelTorneo, Circuito, EstadoTorneo, ResumenConvocatoria, ResumenTorneo } from '@setpoint/shared';
+import type { AvanceDelTorneo, Circuito, EstadoTorneo, ResumenConvocatoria, ResumenTorneo, Revisiones } from '@setpoint/shared';
 import { nombreDeRonda } from '../resultados/resultado';
 import { diaConSemana, diaCorto } from '../torneos/texto';
 import type { TorneosDeInicio } from './torneosEjemplo';
@@ -48,9 +48,13 @@ const fechaCompleta = (dia: string) => dia.split('-').reverse().join('/');
 const porCierre = (a: ResumenTorneo, b: ResumenTorneo) =>
   (b.terminado?.cerradoEl ?? '').localeCompare(a.terminado?.cerradoEl ?? '');
 
-// Arma la pantalla de inicio con lo que sabe la API. Los avisos de «Necesita tu atención»
-// todavía no se calculan.
-export function aTorneosDeInicio(convocatorias: ResumenConvocatoria[], circuito: Circuito): TorneosDeInicio {
+// Arma la pantalla de inicio con lo que sabe la API. De los avisos de «Necesita tu atención»,
+// por ahora solo se calculan las vinculaciones para revisar.
+export function aTorneosDeInicio(
+  convocatorias: ResumenConvocatoria[],
+  circuito: Circuito,
+  paraRevisar: Revisiones['casos'],
+): TorneosDeInicio {
   const borradores = convocatorias.filter((c) => c.estado === 'borrador');
   const abiertas = categoriasEn(convocatorias, ['publicado']);
   // Confirmar el sorteo pasa el torneo a zonas_generadas: con la inscripción cerrada, todavía no se sorteó.
@@ -99,7 +103,13 @@ export function aTorneosDeInicio(convocatorias: ResumenConvocatoria[], circuito:
       campeon: torneo.terminado?.campeon ? `${torneo.terminado.campeon.nombre} ${torneo.terminado.campeon.apellido}` : null,
       jugadores: torneo.inscriptos,
     })),
-    avisos: [],
+    avisos: paraRevisar.map((caso) => ({
+      tipo: 'vinculacion',
+      jugadorId: caso.jugadorId,
+      nombre: `${caso.nombre} ${caso.apellido}`,
+      categoria: caso.categoria,
+      motivo: caso.motivo,
+    })),
     jugadores: circuito.jugadores,
     categorias: circuito.categorias.length,
     recaudadoEnInscripcionesAbiertas: abiertas.reduce((suma, { convocatoria, torneo }) => suma + torneo.inscriptos * convocatoria.precio, 0),

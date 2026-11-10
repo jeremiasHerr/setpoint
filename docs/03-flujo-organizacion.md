@@ -77,10 +77,10 @@ La respuesta incluye un token de sesión (JWT), así la organización queda ingr
 **El inicio con torneos.** Agrupa los torneos por momento: en juego, para sortear, con la inscripción abierta, en borrador y terminados. Desde que se publica, cada categoría tiene su propia tarjeta ([decisión 026](decisiones/026-una-tarjeta-por-categoria-en-el-inicio.md)), porque cierra la inscripción y se sortea por separado; los borradores van uno por convocatoria.
 
 - Las categorías con la inscripción abierta llevan a su pantalla Inscripciones (§7).
-- Las que cerraron y todavía no se sortearon van en "Para sortear", con "Sortear zonas" como acción principal. No van en "Necesita tu atención": ese bloque es rojo, y el rojo solo significa vencimiento.
+- Las que cerraron y todavía no se sortearon van en "Para sortear", con "Sortear zonas" como acción principal. No van en "Necesita tu atención": ese bloque puede ir en rojo, y el rojo solo significa vencimiento.
 - Con el sorteo confirmado, y hasta que se cierra, la categoría va en "En juego": la fase, los partidos jugados y los vencidos, qué se está jugando y hasta cuándo, y "Ver tablero" (F15). Los vencidos y el plazo salen de la misma cuenta que el tablero ([decisión 080](decisiones/080-torneos-en-juego-y-terminados-en-el-inicio.md)).
 - Cerrado el torneo (F16), va en "Terminados", de la que se cerró último a la primera, con la fecha del cierre, el campeón del cuadro principal y los jugadores. Cada fila lleva al cierre. Se ven las últimas 5 y el resto se despliega en la misma tabla.
-- "Necesita tu atención" todavía no se calcula.
+- "Necesita tu atención" muestra las vinculaciones para revisar (§5), con punto negro y "Revisar", que lleva a *Revisar vinculación*. El recuadro va en rojo solo si algún aviso es de vencimiento; con solo vinculaciones queda neutro ([decisión 084](decisiones/084-necesita-tu-atencion-rojo-solo-con-vencimientos.md)). Los partidos vencidos y los torneos con pocos inscriptos todavía no se calculan.
 
 Después del alta, y en cualquier momento, se configura:
 
@@ -123,7 +123,7 @@ En el caso de validación, el padrón de POLENTA tiene 77 jugadores en 2 categor
 **Vinculaciones** ([decisión 051](decisiones/051-vinculacion-con-el-padron.md)). El jugador verifica su email con un código y vincula su perfil al inscribirse por primera vez, sin pasar por la organización. **La organización no toca la identidad de nadie** (el email y el nombre de la persona son de ella); decide sobre su padrón: de qué persona es cada perfil.
 
 - **Vinculaciones nuevas:** el filtro "Nuevas" del padrón las junta desde la última visita de cada administrador, con cómo se hizo cada una (link personal, búsqueda o "¿Sos…?") y cuándo. No frenan nada. La visita se guarda en la base al abrir el padrón ([decisión 083](decisiones/083-ultima-visita-al-padron.md)).
-- **Para revisar** quedan dos casos, y en los dos la inscripción sigue en pie. *Posible homónimo:* alguien eligió un perfil con otro igual o parecido en la categoría; desde *Revisar vinculación* la organización confirma, pasa la inscripción al otro perfil o da de alta a la persona como jugador nuevo. *Perfil reclamado:* otra cuenta tocó "Avisarle a la organización" sobre un perfil vinculado; la organización decide de quién es el perfil y qué pasa con las inscripciones que pagó la cuenta que lo tenía. Cada caso aparece en el padrón con la marca "para revisar", que lleva a *Revisar vinculación*, y el filtro "Para revisar" los junta. *Pendiente:* la marca en el Inicio y en Inscripciones.
+- **Para revisar** quedan dos casos, y en los dos la inscripción sigue en pie. *Posible homónimo:* alguien eligió un perfil con otro igual o parecido en la categoría; desde *Revisar vinculación* la organización confirma, pasa la inscripción al otro perfil o da de alta a la persona como jugador nuevo. *Perfil reclamado:* otra cuenta tocó "Avisarle a la organización" sobre un perfil vinculado; la organización decide de quién es el perfil y qué pasa con las inscripciones que pagó la cuenta que lo tenía. Cada caso aparece en el padrón con la marca "para revisar", que lleva a *Revisar vinculación*, y el filtro "Para revisar" los junta. También están en "Necesita tu atención" del Inicio, y en Inscripciones (§7) la fila lleva la marca y la acción "Revisar".
 - **Desvincular:** la sección Vinculación del panel de cada jugador muestra el email de su cuenta, cuándo y cómo se vinculó y sus inscripciones en curso, y permite desvincularlo. El perfil queda libre para que lo reclame su dueño; no se toca el email ni la cuenta de nadie ([decisión 007](decisiones/007-vinculacion-de-cuentas-en-f02.md)).
 - **El DNI** puede quedar como dato opcional del perfil, si la organización lo necesita por otro motivo (un seguro, por ejemplo). No identifica a nadie ni se usa en la inscripción ([decisión 049](decisiones/049-identidad-e-ingreso-con-codigo.md)).
 
@@ -241,7 +241,7 @@ La lista de espera se ordena **por orden de llegada** y cubre deserciones, repli
 
 Todos devuelven las inscripciones como quedaron, y responden `409 SORTEO_CONFIRMADO`, `SIN_LUGARES`, `YA_INSCRIPTO` o `DADO_DE_BAJA` cuando no se puede.
 
-Faltan anotarse en la lista de espera desde el link del torneo, que llega con el lado del jugador de F13, y la marca de las vinculaciones para revisar.
+La inscripción cuya vinculación quedó para revisar lleva la marca "para revisar", y su acción pasa a ser "Revisar", que lleva a *Revisar vinculación*; el lugar sigue siendo suyo. Del lado del jugador faltan la lista de espera desde el link personal y en la app.
 
 ---
 

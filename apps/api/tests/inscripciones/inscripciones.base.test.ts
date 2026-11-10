@@ -41,6 +41,7 @@ describe.skipIf(!process.env.DATABASE_URL)('inscripciones (F13), contra la base'
     await prisma.adminOrganizacion.create({ data: { organizacionId, usuarioId: admin } });
 
     // Dos lugares, los dos pagados, y dos en la lista de espera. Ojeda tiene cuenta: a él le llega el aviso.
+    // La vinculación de Vera quedó para revisar.
     torneoId = (
       await prisma.torneo.create({
         data: { organizacionId, categoriaId: categoria.id, nombre: 'Copa de prueba', cupo: 2, precio: 45000, estado: 'PUBLICADO' },
@@ -49,7 +50,14 @@ describe.skipIf(!process.env.DATABASE_URL)('inscripciones (F13), contra la base'
     const ojeda = await usuario('ojeda');
     for (const apellido of ['Bravo', 'Vera', 'Ojeda', 'Rivas', 'Lagos']) {
       const jugador = await prisma.jugador.create({
-        data: { organizacionId, categoriaId: categoria.id, nombre: 'Jugador', apellido, usuarioId: apellido === 'Ojeda' ? ojeda.id : null },
+        data: {
+          organizacionId,
+          categoriaId: categoria.id,
+          nombre: 'Jugador',
+          apellido,
+          usuarioId: apellido === 'Ojeda' ? ojeda.id : null,
+          revision: apellido === 'Vera' ? 'HOMONIMO' : null,
+        },
       });
       id[apellido] = jugador.id;
     }
@@ -84,6 +92,12 @@ describe.skipIf(!process.env.DATABASE_URL)('inscripciones (F13), contra la base'
       ['Rivas', 2],
     ]);
     expect(conciliacion).toMatchObject({ mercadoPago: 45000, comision: 2250, teCorresponde: 42750, porFuera: 45000 });
+  });
+
+  it('marca la inscripción cuya vinculación quedó para revisar', async () => {
+    const { inscripciones } = await obtenerInscripciones(slug, admin, torneoId);
+
+    expect(Object.fromEntries(inscripciones.map((i) => [i.apellido, i.revision]))).toEqual({ Bravo: null, Vera: 'homonimo' });
   });
 
   it('dar de baja anota la devolución y le da el lugar al primero de la lista por 24 horas', async () => {

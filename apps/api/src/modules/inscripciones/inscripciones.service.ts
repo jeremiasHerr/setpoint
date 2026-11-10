@@ -15,6 +15,7 @@ import { diaEnArgentina } from '../../lib/fechas';
 import { DEL_PADRON_ACTIVOS } from '../../lib/padron';
 import { organizacionAdministrada } from '../../lib/permisos';
 import { prisma } from '../../lib/prisma';
+import { MOTIVO_DE_REVISION } from '../../lib/vinculacion';
 import { ErrorHttp } from '../../middleware/errores';
 import { alcanzanParaLasZonas } from '../competencia/sorteo';
 import { alCerrarLaInscripcion } from '../inscripcion/estados';
@@ -53,7 +54,7 @@ const CON_INSCRIPCIONES = {
       ordenListaEspera: true,
       creadoEn: true,
       resueltaEn: true,
-      jugador: { select: { nombre: true, apellido: true } },
+      jugador: { select: { nombre: true, apellido: true, revision: true } },
       pago: { select: { medio: true, estado: true, monto: true, requiereDevolucion: true, devueltoEn: true } },
     },
   },
@@ -133,6 +134,7 @@ function aInscripcion(i: InscripcionLeida): InscripcionDelTorneo {
     reservaVence: pagada ? null : (i.reservaVence?.toISOString() ?? null),
     // El número de la lista queda en la inscripción: con él se sabe de dónde vino la reserva.
     deLaListaDeEspera: !pagada && i.ordenListaEspera !== null,
+    revision: i.jugador.revision ? MOTIVO_DE_REVISION[i.jugador.revision] : null,
   };
 }
 

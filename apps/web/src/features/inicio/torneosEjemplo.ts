@@ -1,7 +1,9 @@
 // Los tipos de la pantalla de inicio y datos de ejemplo para verla completa (/inicio?ejemplo=1).
-// Los datos reales salen de torneosDeInicio.ts, que todavía no calcula los avisos de «Necesita tu
-// atención»: el ejemplo muestra cómo se ven.
+// Los datos reales salen de torneosDeInicio.ts, que de los avisos de «Necesita tu atención» todavía
+// calcula solo las vinculaciones para revisar: el ejemplo muestra cómo se ven todos.
 // Todos los nombres de personas son ficticios.
+
+import type { MotivoDeRevision } from '@setpoint/shared';
 
 export type TorneoEnBorrador = {
   id: number;
@@ -48,7 +50,9 @@ export type TorneoTerminado = {
 
 export type Aviso =
   | { tipo: 'partidos-vencidos'; categoria: string; partidos: number }
-  | { tipo: 'pocos-inscriptos'; torneo: string; pagaron: number; cupo: number; cierraEn: string };
+  | { tipo: 'pocos-inscriptos'; torneo: string; pagaron: number; cupo: number; cierraEn: string }
+  // Una vinculación para revisar (decisión 051). No venció nada: va con punto negro.
+  | { tipo: 'vinculacion'; jugadorId: number; nombre: string; categoria: string | null; motivo: MotivoDeRevision };
 
 export type TorneosDeInicio = {
   borradores: TorneoEnBorrador[];
@@ -93,6 +97,8 @@ export const torneosEjemplo: TorneosDeInicio = {
   avisos: [
     { tipo: 'partidos-vencidos', categoria: 'Segunda', partidos: 3 },
     { tipo: 'pocos-inscriptos', torneo: 'Primavera 26 · Segunda', pagaron: 9, cupo: 32, cierraEn: 'tres semanas' },
+    { tipo: 'vinculacion', jugadorId: 1, nombre: 'Juan Pérez', categoria: 'Tercera', motivo: 'homonimo' },
+    { tipo: 'vinculacion', jugadorId: 2, nombre: 'Lucas Bravo', categoria: 'Segunda', motivo: 'reclamo' },
   ],
   jugadores: 77,
   categorias: 2,

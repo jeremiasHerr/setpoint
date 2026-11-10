@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { MotivoDeRevision } from './revision';
 import type { EstadoTorneo } from './torneo';
 
 // Inscripciones de un torneo, es decir, de una categoría (F13): quiénes ocupan el cupo, la lista de
@@ -24,6 +25,8 @@ export type InscripcionDelTorneo = {
   reservaVence: string | null;
   // Reserva el lugar que se liberó porque era el primero de la lista de espera (decisión 076).
   deLaListaDeEspera: boolean;
+  // Si la vinculación de su perfil quedó para revisar (decisión 051). No frena nada: el lugar es suyo.
+  revision: MotivoDeRevision | null;
 };
 
 // Quienes esperan un lugar, en el orden en que lo van a recibir.
