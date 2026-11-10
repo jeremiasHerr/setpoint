@@ -9,6 +9,7 @@ import { leerSesion, type Sesion } from '../features/auth/sesion';
 import { useCerrarSesion } from '../features/auth/useCerrarSesion';
 import { useSesionInvalida } from '../features/auth/useSesionInvalida';
 import { NOMBRE_DEL_CUADRO } from '../features/cuadros/cuadro';
+import { BotonCopiarLink } from '../features/inicio/BotonCopiarLink';
 import { iniciales, navegacionOrganizador } from '../features/organizador/encabezado';
 import { BarrasDelTorneo } from '../features/tablero/BarrasDelTorneo';
 import { LoQueFalta } from '../features/tablero/LoQueFalta';
@@ -124,7 +125,9 @@ function Contenido({ sesion, tablero }: { sesion: Sesion; tablero: Tablero }) {
           <p className="text-[15px] text-gris-500">{bajada(tablero)}</p>
         </div>
         <div className="flex flex-wrap gap-[9px]">
-          <Boton onClick={() => navegar(enVivo)}>Ver la página pública</Boton>
+          <BotonCopiarLink ruta={`/torneos/${torneoId}/en-vivo`} className="" />
+          {/* En otra pestaña: la página pública no tiene menú, y así se vuelve al tablero cerrándola (decisión 084). */}
+          <Boton onClick={() => window.open(enVivo, '_blank', 'noopener')}>Ver la página pública</Boton>
           {fase === 'terminado' ? (
             <Boton variante="organizador" className="font-semibold" onClick={() => navegar(`/torneos/${torneoId}/cierre`)}>
               Ver el cierre

@@ -2,9 +2,12 @@ import { useEffect, useState } from 'react';
 import { Boton } from '../../components/Boton';
 import { leerSesion } from '../auth/sesion';
 
-// Copia un link público de la organización para compartir en el grupo: el del torneo (F12), o
-// el del ranking (F09). La ruta va después de /c/:slug.
-export function BotonCopiarLink({ ruta, variante, texto = 'Copiar link' }: { ruta: string; variante?: 'principal'; texto?: string }) {
+// Copia un link público de la organización para compartir en el grupo: el del torneo (F12), el
+// del ranking (F09) o el del torneo en vivo (F10). La ruta va después de /c/:slug. Sin className,
+// tiene el tamaño chico de las tarjetas del inicio.
+type Props = { ruta: string; variante?: 'principal'; texto?: string; className?: string };
+
+export function BotonCopiarLink({ ruta, variante, texto = 'Copiar link', className = 'h-[38px] self-start px-3.5 text-sm' }: Props) {
   const [copiado, setCopiado] = useState(false);
 
   useEffect(() => {
@@ -25,7 +28,7 @@ export function BotonCopiarLink({ ruta, variante, texto = 'Copiar link' }: { rut
   }
 
   return (
-    <Boton onClick={copiar} variante={variante} className="h-[38px] self-start px-3.5 text-sm">
+    <Boton onClick={copiar} variante={variante} className={className}>
       <span aria-live="polite">{copiado ? 'Copiado' : texto}</span>
     </Boton>
   );
