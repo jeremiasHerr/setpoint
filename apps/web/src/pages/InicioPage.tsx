@@ -1,4 +1,4 @@
-import { Navigate, useSearchParams } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { Boton } from '../components/Boton';
 import { EncabezadoOrganizador } from '../components/EncabezadoOrganizador';
 import { leerSesion, type Sesion } from '../features/auth/sesion';
@@ -8,7 +8,6 @@ import { useCircuito } from '../features/circuito/useCircuito';
 import { InicioConTorneos } from '../features/inicio/InicioConTorneos';
 import { InicioSinTorneos } from '../features/inicio/InicioSinTorneos';
 import { aTorneosDeInicio } from '../features/inicio/torneosDeInicio';
-import { torneosEjemplo } from '../features/inicio/torneosEjemplo';
 import { useTorneos } from '../features/inicio/useTorneos';
 import { iniciales, navegacionOrganizador } from '../features/organizador/encabezado';
 
@@ -23,17 +22,12 @@ export function InicioPage() {
 }
 
 function Inicio({ sesion }: { sesion: Sesion }) {
-  const [parametros] = useSearchParams();
   const { slug } = sesion.organizacion;
   const circuito = useCircuito(slug);
   const torneos = useTorneos(slug);
   const error = circuito.error ?? torneos.error;
   const sesionInvalida = useSesionInvalida(error);
   const cerrarSesion = useCerrarSesion();
-
-  // /inicio?ejemplo=1 muestra la pantalla completa, con los avisos de «Necesita tu atención», que
-  // todavía no se calculan. Se borra cuando estén.
-  const verEjemplo = parametros.has('ejemplo');
 
   return (
     <div className="min-h-screen bg-white text-negro">
@@ -63,8 +57,6 @@ function Inicio({ sesion }: { sesion: Sesion }) {
             <p className="text-[15px] text-gris-500">Cargando tu organización…</p>
           )}
         </div>
-      ) : verEjemplo ? (
-        <InicioConTorneos torneos={torneosEjemplo} />
       ) : torneos.data.length > 0 ? (
         <InicioConTorneos torneos={aTorneosDeInicio(torneos.data, circuito.data)} />
       ) : (

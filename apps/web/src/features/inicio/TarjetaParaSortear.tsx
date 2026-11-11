@@ -3,7 +3,7 @@ import { BarraProgreso } from '../../components/BarraProgreso';
 import { Boton } from '../../components/Boton';
 import { Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
-import type { TorneoParaSortear } from './torneosEjemplo';
+import type { TorneoParaSortear } from './tiposDeInicio';
 
 // La inscripción cerró y falta el sorteo: es lo próximo que hay que hacer con esta categoría.
 export function TarjetaParaSortear({ torneo }: { torneo: TorneoParaSortear }) {

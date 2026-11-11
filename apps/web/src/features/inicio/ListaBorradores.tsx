@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Tarjeta } from '../../components/Tarjeta';
-import type { TorneoEnBorrador } from './torneosEjemplo';
+import type { TorneoEnBorrador } from './tiposDeInicio';
 
 // Los borradores no los ve ningún jugador: lo único que se puede hacer con ellos es terminarlos.
 export function ListaBorradores({ torneos }: { torneos: TorneoEnBorrador[] }) {
