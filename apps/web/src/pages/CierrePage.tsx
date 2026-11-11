@@ -158,8 +158,9 @@ function VistaDelCierre({ sesion, cierre }: { sesion: Sesion; cierre: CierreDelT
           {cierre.resumen && <ResumenCierre resumen={cierre.resumen} cerrado={cierre.cerrado} />}
           {cierre.cerrado ? (
             <div className="flex flex-col gap-2.5">
+              {/* En otra pestaña: la página pública no tiene menú para volver (decisión 084). */}
               {conRanking && (
-                <Boton variante="organizador" grande onClick={() => navegar(`/c/${slug}/ranking`)}>
+                <Boton variante="organizador" grande onClick={() => window.open(`/c/${slug}/ranking`, '_blank', 'noopener')}>
                   Ver el ranking
                 </Boton>
               )}
