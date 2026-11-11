@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
-import type { TorneoTerminado } from './torneosEjemplo';
+import type { TorneoTerminado } from './tiposDeInicio';
 
 // Cuántos se ven antes de desplegar el resto.
 const VISIBLES = 5;

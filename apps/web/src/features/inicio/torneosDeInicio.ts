@@ -1,7 +1,7 @@
 import type { AvanceDelTorneo, Circuito, EstadoTorneo, ResumenConvocatoria, ResumenTorneo } from '@setpoint/shared';
 import { nombreDeRonda } from '../resultados/resultado';
 import { diaConSemana, diaCorto } from '../torneos/texto';
-import type { TorneosDeInicio } from './torneosEjemplo';
+import type { TorneosDeInicio } from './tiposDeInicio';
 
 // "Primavera 26 · Tercera y Segunda": el borrador es uno solo aunque tenga varias categorías.
 function nombreDelBorrador({ nombre, torneos }: ResumenConvocatoria) {
@@ -48,8 +48,8 @@ const fechaCompleta = (dia: string) => dia.split('-').reverse().join('/');
 const porCierre = (a: ResumenTorneo, b: ResumenTorneo) =>
   (b.terminado?.cerradoEl ?? '').localeCompare(a.terminado?.cerradoEl ?? '');
 
-// Arma la pantalla de inicio con lo que sabe la API. Los avisos de «Necesita tu atención»
-// todavía no se calculan.
+// Arma la pantalla de inicio con lo que sabe la API. De los avisos de «Necesita tu atención»
+// solo se calculan los partidos vencidos.
 export function aTorneosDeInicio(convocatorias: ResumenConvocatoria[], circuito: Circuito): TorneosDeInicio {
   const borradores = convocatorias.filter((c) => c.estado === 'borrador');
   const abiertas = categoriasEn(convocatorias, ['publicado']);
@@ -99,7 +99,11 @@ export function aTorneosDeInicio(convocatorias: ResumenConvocatoria[], circuito:
       campeon: torneo.terminado?.campeon ? `${torneo.terminado.campeon.nombre} ${torneo.terminado.campeon.apellido}` : null,
       jugadores: torneo.inscriptos,
     })),
-    avisos: [],
+    avisos: enJuego.flatMap(({ torneo, nombre }) =>
+      torneo.avance && torneo.avance.vencidos > 0
+        ? [{ tipo: 'partidos-vencidos' as const, torneoId: torneo.id, categoria: nombre, partidos: torneo.avance.vencidos }]
+        : [],
+    ),
     jugadores: circuito.jugadores,
     categorias: circuito.categorias.length,
     recaudadoEnInscripcionesAbiertas: abiertas.reduce((suma, { convocatoria, torneo }) => suma + torneo.inscriptos * convocatoria.precio, 0),

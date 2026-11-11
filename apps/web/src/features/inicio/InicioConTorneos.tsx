@@ -11,7 +11,7 @@ import { TablaTerminados } from './TablaTerminados';
 import { TarjetaInscripcionAbierta } from './TarjetaInscripcionAbierta';
 import { TarjetaParaSortear } from './TarjetaParaSortear';
 import { TarjetaTorneoEnJuego } from './TarjetaTorneoEnJuego';
-import type { TorneosDeInicio } from './torneosEjemplo';
+import type { TorneosDeInicio } from './tiposDeInicio';
 
 function Grupo({ titulo, children }: { titulo: string; children: ReactNode }) {
   return (

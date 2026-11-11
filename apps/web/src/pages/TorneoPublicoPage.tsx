@@ -36,6 +36,7 @@ function Convocatoria({ torneo }: { torneo: TorneoPublico }) {
 
   return (
     <>
+      <title>{`${torneo.nombre} · ${torneo.categoria} · ${torneo.organizacion.nombre}`}</title>
       <div className="flex items-center justify-between gap-3">
         <EncabezadoPublico organizacion={torneo.organizacion.nombre} />
         <Numero className="rounded-full border border-linea px-2.5 py-1.5 text-[14px] font-medium text-gris-500">

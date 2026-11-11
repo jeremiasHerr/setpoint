@@ -4,7 +4,7 @@ import { Boton } from '../../components/Boton';
 import { Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
 import { BotonCopiarLink } from './BotonCopiarLink';
-import type { TorneoConInscripcionAbierta } from './torneosEjemplo';
+import type { TorneoConInscripcionAbierta } from './tiposDeInicio';
 
 export function TarjetaInscripcionAbierta({ torneo }: { torneo: TorneoConInscripcionAbierta }) {
   const navegar = useNavigate();

@@ -53,7 +53,6 @@ export function Catalogo() {
             <Boton variante="organizador" onClick={() => navegar('/inicio')}>
               Inicio
             </Boton>
-            <Boton onClick={() => navegar('/inicio?ejemplo=1')}>Inicio con torneos de ejemplo</Boton>
             <Boton onClick={() => navegar('/circuito')}>Tu circuito</Boton>
           </div>
         </Seccion>

@@ -29,13 +29,26 @@ export function TablaRanking({ slug, filas, torneosDelCalendario }: Props) {
               type="button"
               aria-expanded={estaAbierta}
               onClick={() => setAbierta(estaAbierta ? null : fila.jugadorId)}
-              className="grid h-14 w-full grid-cols-[26px_minmax(0,1fr)_58px] items-center gap-x-2.5 text-left"
+              className="grid h-14 w-full grid-cols-[26px_minmax(0,1fr)_58px_16px] items-center gap-x-2.5 text-left"
             >
               <Numero className="text-sm text-gris-500">{fila.puesto}</Numero>
               <span className="truncate text-lg font-medium">
                 {fila.nombre} {fila.apellido}
               </span>
               <Numero className="text-right text-lg font-medium">{fila.puntos}</Numero>
+              {/* Lo único que dice que la fila se abre. */}
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className={`size-4 text-gris-500 transition-transform ${estaAbierta ? 'rotate-180' : ''}`}
+                aria-hidden="true"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
             </button>
             {estaAbierta && (
               <div className="mb-3 flex flex-col gap-2.5">

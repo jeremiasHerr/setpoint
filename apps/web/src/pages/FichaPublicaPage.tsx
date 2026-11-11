@@ -41,6 +41,7 @@ function Ficha({ ficha }: { ficha: FichaDelJugador }) {
 
   return (
     <>
+      <title>{`${nombre} · ${ficha.organizacion}`}</title>
       {/* Compartir arriba, en la línea de la organización, como en la referencia: el nombre ocupa todo el ancho. */}
       <header className="flex flex-wrap items-center justify-between gap-3">
         <EncabezadoPublico organizacion={ficha.organizacion} />

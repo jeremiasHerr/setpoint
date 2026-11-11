@@ -4,7 +4,7 @@ import { Boton } from '../../components/Boton';
 import { Etiqueta } from '../../components/Etiqueta';
 import { Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
-import type { TorneoEnJuego } from './torneosEjemplo';
+import type { TorneoEnJuego } from './tiposDeInicio';
 
 // Desde el sorteo confirmado hasta el cierre: lleva al tablero, que es donde se sigue el torneo (decisión 080).
 export function TarjetaTorneoEnJuego({ torneo }: { torneo: TorneoEnJuego }) {

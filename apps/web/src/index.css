@@ -43,3 +43,12 @@
 body {
   @apply bg-white text-negro font-sans antialiased;
 }
+
+/* Tailwind 4 les quita la manito a los botones, y los enlaces con forma de botón la tienen:
+   dos botones que se ven iguales se comportarían distinto. */
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}

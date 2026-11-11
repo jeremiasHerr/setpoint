@@ -195,7 +195,10 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
 
       <div className="flex flex-wrap items-end justify-between gap-6 px-7 pt-[26px] pb-5">
         <div className="flex flex-col gap-[7px]">
-          <h1 className="text-[30px] font-semibold tracking-[-0.035em]">Nuevo torneo</h1>
+          {/* Publicado, ya no es nuevo: se edita uno que tiene nombre. */}
+          <h1 className="text-[30px] font-semibold tracking-[-0.035em]">
+            {enBorrador || !datos.nombre.trim() ? 'Nuevo torneo' : datos.nombre}
+          </h1>
           <p className="text-[15px] text-gris-500">
             Los valores vienen de la configuración de tu circuito. Cambiá solo lo que sea distinto esta vez.
           </p>
@@ -262,7 +265,8 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
           />
         </div>
 
-        <aside className="flex flex-col gap-3.5">
+        {/* Fijo al bajar: muestra el efecto de cada cambio de las seis secciones. */}
+        <aside className="flex flex-col gap-3.5 lg:sticky lg:top-4">
           <PanelComoQueda
             formato={formato}
             tieneComplementaria={datos.tieneComplementaria}
