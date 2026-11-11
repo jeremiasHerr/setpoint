@@ -27,6 +27,8 @@ export function RankingPublicoPage() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-[480px] flex-col gap-[18px] px-4 pt-5 pb-7">
+      {/* Las páginas que se comparten por link dicen en la pestaña qué son. React lo sube al <head>. */}
+      {ranking.data && <title>{`Ranking · ${ranking.data.organizacion}`}</title>}
       {ranking.data && <EncabezadoPublico organizacion={ranking.data.organizacion} />}
       {ranking.isPending && <p className="text-[15px] text-gris-500">Cargando el ranking…</p>}
       {ranking.error && <p className="text-[15px] text-gris-700">{mensajeDeError(ranking.error)}</p>}

@@ -54,6 +54,7 @@ function Contenido({ torneo, slug, id, pestanaInicial }: { torneo: TorneoEnVivo;
 
   return (
     <>
+      <title>{`${torneo.nombre} · en vivo · ${torneo.organizacion}`}</title>
       <header className="xl:-mx-[30px] xl:flex xl:h-[58px] xl:items-center xl:border-b xl:border-linea xl:px-[30px]">
         <EncabezadoPublico organizacion={torneo.organizacion} detalle={torneo.nombre} />
       </header>
