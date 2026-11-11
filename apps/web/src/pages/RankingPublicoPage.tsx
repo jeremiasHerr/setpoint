@@ -83,6 +83,9 @@ function Ranking({ ranking, slug }: { ranking: RankingPublico; slug: string }) {
         </Numero>
       </div>
 
+      {/* Arriba de la tabla: al pie quedaba después de todas las filas, y nadie lo veía. */}
+      {filas.length > 0 && <p className="text-[15px] text-gris-500">Tocá un jugador para ver sus puntos por torneo y su ficha.</p>}
+
       {categoria.filas.length === 0 ? (
         <p className="text-[15px] text-gris-500">Todavía no hay jugadores en esta categoría.</p>
       ) : filas.length === 0 ? (
@@ -90,8 +93,6 @@ function Ranking({ ranking, slug }: { ranking: RankingPublico; slug: string }) {
       ) : (
         <TablaRanking slug={slug} filas={filas} torneosDelCalendario={ranking.torneosDelCalendario} />
       )}
-
-      <p className="text-[13px] text-gris-500">Tocá a cualquiera para ver los puntos de cada torneo del calendario y su ficha.</p>
     </>
   );
 }
