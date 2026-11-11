@@ -37,7 +37,8 @@ export function EnVivoPage({ pestanaInicial }: { pestanaInicial?: Pestana }) {
   return (
     <main className="mx-auto flex min-h-screen max-w-[480px] flex-col gap-[18px] px-4 pt-5 pb-7 xl:max-w-none xl:px-[30px]">
       {torneo.isPending && <p className="text-[15px] text-gris-500">Cargando el torneo…</p>}
-      {torneo.error && <p className="text-[15px] text-gris-700">{mensajeDeError(torneo.error)}</p>}
+      {/* Si falla una actualización, queda lo último que se cargó. */}
+      {torneo.error && !torneo.data && <p className="text-[15px] text-gris-700">{mensajeDeError(torneo.error)}</p>}
       {torneo.data && <Contenido torneo={torneo.data} slug={slug} id={id} pestanaInicial={pestanaInicial} />}
     </main>
   );
