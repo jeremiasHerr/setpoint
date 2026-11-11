@@ -7,12 +7,13 @@ import { InstrumentSans_400Regular } from '@expo-google-fonts/instrument-sans/40
 import { InstrumentSans_500Medium } from '@expo-google-fonts/instrument-sans/500Medium';
 import { InstrumentSans_600SemiBold } from '@expo-google-fonts/instrument-sans/600SemiBold';
 import { InstrumentSans_700Bold } from '@expo-google-fonts/instrument-sans/700Bold';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { focusManager, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
+import { AppState } from 'react-native';
 import { SesionProvider, useSesion } from '../features/auth/SesionProvider';
 
 // La splash queda hasta que están las fuentes y se leyó la sesión guardada: así ningún texto aparece
@@ -32,6 +33,13 @@ export default function RootLayout() {
     GeistMono_500Medium,
     GeistMono_600SemiBold,
   });
+
+  // React Native no tiene el foco de la ventana: sin esto, lo que está en pantalla queda viejo al
+  // volver de WhatsApp, que es justo el flujo central (escribirle al rival y volver a la app).
+  useEffect(() => {
+    const suscripcion = AppState.addEventListener('change', (estado) => focusManager.setFocused(estado === 'active'));
+    return () => suscripcion.remove();
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
