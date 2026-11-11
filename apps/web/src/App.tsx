@@ -9,6 +9,7 @@ import { IngresoPage } from './pages/IngresoPage';
 import { InscripcionesPage } from './pages/InscripcionesPage';
 import { InicioPage } from './pages/InicioPage';
 import { LandingPage } from './pages/LandingPage';
+import { NoEncontradaPage } from './pages/NoEncontradaPage';
 import { NuevoTorneoPage } from './pages/NuevoTorneoPage';
 import { PadronPage } from './pages/PadronPage';
 import { RecuperarContrasenaPage } from './pages/RecuperarContrasenaPage';
@@ -61,6 +62,7 @@ export default function App() {
       <Route path="/i/:codigo" element={<LinkPersonalPage />} />
       <Route path="/c/:slug/torneos/:id/en-vivo" element={<EnVivoPage />} />
       <Route path="/c/:slug/torneos/:id/cuadros" element={<EnVivoPage pestanaInicial="cuadros" />} />
+      <Route path="*" element={<NoEncontradaPage />} />
     </Routes>
   );
 }
