@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import { verificarCodigoSchema } from '@setpoint/shared';
+import { confirmarRegistroSchema, verificarCodigoSchema } from '@setpoint/shared';
 
 // hashDeCodigo usa el secreto de la API.
 let codigo: typeof import('../../src/modules/auth/codigo');
@@ -86,5 +86,17 @@ describe('verificarCodigoSchema', () => {
   it('rechaza lo que no son 6 números', () => {
     expect(verificarCodigoSchema.safeParse({ email: 'a@x.com', codigo: '48291' }).success).toBe(false);
     expect(verificarCodigoSchema.safeParse({ email: 'a@x.com', codigo: '48291a' }).success).toBe(false);
+  });
+});
+
+describe('confirmarRegistroSchema', () => {
+  const datos = { organizacion: 'POLENTA', nombre: 'Ana', email: 'ana@polenta.ar', contrasena: 'bien-larga' };
+
+  it('sin el código no se crea la organización', () => {
+    expect(confirmarRegistroSchema.safeParse(datos).success).toBe(false);
+  });
+
+  it('acepta el código con el espacio del email', () => {
+    expect(confirmarRegistroSchema.parse({ ...datos, codigo: '482 913' }).codigo).toBe('482913');
   });
 });

@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import {
+  confirmarRegistroSchema,
   ingresoSchema,
   pedirCodigoSchema,
   recuperarContrasenaSchema,
@@ -13,6 +14,7 @@ import { validar } from '../../middleware/validar';
 import {
   ingresar,
   pedirCodigo,
+  pedirCodigoDeRegistro,
   pedirRecuperacion,
   registrarOrganizacion,
   restablecerContrasena,
@@ -22,7 +24,14 @@ import { cuentaDe } from './cuenta.service';
 
 export const authRouter = Router();
 
-authRouter.post('/registro', validar(registroOrganizacionSchema), async (req, res) => {
+// La organización se crea con el código que llega al email (decisión 087): primero se pide, con los
+// datos del formulario, y después se confirma con el código.
+authRouter.post('/registro/codigo', limitePorIp, validar(registroOrganizacionSchema), async (req, res) => {
+  await pedirCodigoDeRegistro(req.body);
+  res.status(204).end();
+});
+
+authRouter.post('/registro', limitePorIp, validar(confirmarRegistroSchema), async (req, res) => {
   const respuesta = await registrarOrganizacion(req.body);
   res.status(201).json(respuesta);
 });

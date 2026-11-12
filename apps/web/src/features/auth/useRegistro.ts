@@ -1,7 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { registrarOrganizacion } from './api';
+import { pedirCodigoDeRegistro, registrarOrganizacion } from './api';
 import { guardarSesion } from './sesion';
+
+export function usePedirCodigoDeRegistro() {
+  return useMutation({ mutationFn: pedirCodigoDeRegistro });
+}
 
 export function useRegistro() {
   const navegar = useNavigate();

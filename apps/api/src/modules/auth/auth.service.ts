@@ -3,6 +3,7 @@ import type {
   DatosIngreso,
   DatosPedirCodigo,
   DatosRecuperarContrasena,
+  DatosConfirmarRegistro,
   DatosRegistroOrganizacion,
   DatosRestablecerContrasena,
   DatosVerificarCodigo,
@@ -25,7 +26,21 @@ import { codigoParaLeer, generarCodigo, hashDeCodigo, INTENTOS_MAXIMOS, MINUTOS_
 
 const COSTO_BCRYPT = 10;
 
-export async function registrarOrganizacion(datos: DatosRegistroOrganizacion): Promise<RespuestaRegistro> {
+async function rechazarEmailConCuenta(email: string) {
+  const existente = await prisma.usuario.findUnique({ where: { email } });
+  if (existente) throw new ErrorHttp(409, 'EMAIL_EN_USO');
+}
+
+// Solo se registra quien prueba que el email es suyo (decisión 087). Un email con cuenta se avisa
+// acá, antes de mandar el código, y no después de escribirlo.
+export async function pedirCodigoDeRegistro(datos: DatosRegistroOrganizacion) {
+  await rechazarEmailConCuenta(datos.email);
+  await mandarCodigo(datos.email, 'registro');
+}
+
+export async function registrarOrganizacion(datos: DatosConfirmarRegistro): Promise<RespuestaRegistro> {
+  await rechazarEmailConCuenta(datos.email);
+  await consumirCodigo(datos.email, datos.codigo);
   const passwordHash = await bcrypt.hash(datos.contrasena, COSTO_BCRYPT);
 
   const organizacion = await prisma.$transaction(async (tx) => {
@@ -127,6 +142,15 @@ const PEDIDOS_POR_EMAIL = 5;
 // El jugador entra sin contraseña (decisión 049). No dice si el email existe: la cuenta es el email
 // verificado, y si no existía se crea al verificar el código.
 export async function pedirCodigo({ email }: DatosPedirCodigo) {
+  await mandarCodigo(email, 'ingreso');
+}
+
+const PARA_QUE = {
+  ingreso: { asunto: 'para entrar a SetPoint', sinElCodigo: 'nadie puede entrar con tu email' },
+  registro: { asunto: 'para crear tu organización en SetPoint', sinElCodigo: 'nadie puede crear una cuenta con tu email' },
+};
+
+async function mandarCodigo(email: string, para: keyof typeof PARA_QUE) {
   const ventana = new Date(Date.now() - MINUTOS_DE_VALIDEZ * 60_000);
   const recientes = await prisma.codigoIngreso.count({ where: { email, creadoEn: { gte: ventana } } });
   if (recientes >= PEDIDOS_POR_EMAIL) throw new ErrorHttp(429, 'DEMASIADOS_PEDIDOS');
@@ -143,18 +167,36 @@ export async function pedirCodigo({ email }: DatosPedirCodigo) {
   // El código va en el asunto: muchos lo leen desde la notificación, sin abrir el email.
   void enviarCorreo({
     para: email,
-    asunto: `${codigoParaLeer(codigo)} es tu código para entrar a SetPoint`,
+    asunto: `${codigoParaLeer(codigo)} es tu código ${PARA_QUE[para].asunto}`,
     texto: [
       `Tu código es ${codigoParaLeer(codigo)}.`,
       '',
       `Escribilo en la pantalla donde lo pediste. Vence en ${MINUTOS_DE_VALIDEZ} minutos, y si pediste varios, solo sirve el último.`,
       '',
-      '¿No lo pediste vos? Ignorá este email: sin el código, nadie puede entrar con tu email.',
+      `¿No lo pediste vos? Ignorá este email: sin el código, ${PARA_QUE[para].sinElCodigo}.`,
     ].join('\n'),
   }).catch((error) => console.error('No se pudo mandar el código', error));
 }
 
 export async function verificarCodigo({ email, codigo }: DatosVerificarCodigo): Promise<RespuestaCodigo> {
+  await consumirCodigo(email, codigo);
+
+  // La cuenta es el email verificado. El nombre llega con el primer perfil que vincula.
+  const usuario = await prisma.usuario.upsert({
+    where: { email },
+    update: {},
+    create: { email, nombre: '', apellido: '' },
+  });
+
+  return {
+    token: firmarToken(usuario.id),
+    usuario: { id: usuario.id, email: usuario.email, nombre: usuario.nombre },
+    perfiles: await perfilesDe(usuario.id),
+  };
+}
+
+// Revisa el código y lo deja usado. Lo comparten el ingreso del jugador y el registro de la organización.
+async function consumirCodigo(email: string, codigo: string) {
   // Vale solo el último: pedir uno nuevo deja sin efecto los anteriores.
   const guardado = await prisma.codigoIngreso.findFirst({ where: { email }, orderBy: { creadoEn: 'desc' } });
   const resultado = revisarIntento(guardado, codigo);
@@ -175,19 +217,6 @@ export async function verificarCodigo({ email, codigo }: DatosVerificarCodigo): 
     data: { usadoEn: new Date() },
   });
   if (usado.count === 0) throw new ErrorHttp(400, 'CODIGO_VENCIDO');
-
-  // La cuenta es el email verificado. El nombre llega con el primer perfil que vincula.
-  const usuario = await prisma.usuario.upsert({
-    where: { email },
-    update: {},
-    create: { email, nombre: '', apellido: '' },
-  });
-
-  return {
-    token: firmarToken(usuario.id),
-    usuario: { id: usuario.id, email: usuario.email, nombre: usuario.nombre },
-    perfiles: await perfilesDe(usuario.id),
-  };
 }
 
 const WEB_URL = process.env.WEB_URL ?? 'http://localhost:5173';

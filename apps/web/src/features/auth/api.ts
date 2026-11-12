@@ -1,4 +1,5 @@
 import type {
+  DatosConfirmarRegistro,
   DatosIngreso,
   DatosRegistroOrganizacion,
   DatosRestablecerContrasena,
@@ -6,7 +7,12 @@ import type {
 } from '@setpoint/shared';
 import { pedir } from '../../lib/api';
 
-export function registrarOrganizacion(datos: DatosRegistroOrganizacion) {
+// La organización se crea con el código que llega al email (decisión 087).
+export function pedirCodigoDeRegistro(datos: DatosRegistroOrganizacion) {
+  return pedir<null>('POST', '/api/auth/registro/codigo', datos);
+}
+
+export function registrarOrganizacion(datos: DatosConfirmarRegistro) {
   return pedir<RespuestaRegistro>('POST', '/api/auth/registro', datos);
 }
 

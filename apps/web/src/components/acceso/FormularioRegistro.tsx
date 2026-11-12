@@ -2,19 +2,30 @@ import { useState, type FormEvent, type ReactNode } from 'react';
 import type { DatosRegistroOrganizacion } from '@setpoint/shared';
 import { Boton } from '../Boton';
 import { Campo } from '../Campo';
+import { CampoCodigo } from '../CampoCodigo';
 import { CampoContrasena } from '../CampoContrasena';
+import { Numero } from '../Numero';
 import { Tarjeta } from '../Tarjeta';
 
 export type DatosRegistro = DatosRegistroOrganizacion;
 
 export type ErroresRegistro = {
   campos?: Partial<Record<keyof DatosRegistro, ReactNode>>;
+  // El del código que se escribió: incorrecto, vencido o agotado.
+  codigo?: ReactNode;
   general?: string;
 };
 
 type Props = {
+  // La organización se crea con el código que llega al email (decisión 087): primero los datos,
+  // después el código, en la misma tarjeta.
+  paso?: 'datos' | 'codigo';
   alEnviar?: (datos: DatosRegistro) => void;
+  alConfirmar?: (codigo: string) => void;
+  alReenviar?: () => void;
+  alCambiarEmail?: () => void;
   enviando?: boolean;
+  reenviando?: boolean;
   errores?: ErroresRegistro;
 };
 
@@ -39,9 +50,87 @@ function MensajeError({ id, children }: { id: string; children?: ReactNode }) {
   );
 }
 
-export function FormularioRegistro({ alEnviar, enviando = false, errores = {} }: Props) {
+function ErrorGeneral({ children }: { children?: ReactNode }) {
+  if (!children) return null;
+  return (
+    <p role="alert" className="rounded-control border border-rojo-linea bg-rojo-fondo px-3.5 py-2.5 text-sm text-rojo-texto">
+      {children}
+    </p>
+  );
+}
+
+type PropsPasoCodigo = Pick<Props, 'alConfirmar' | 'alReenviar' | 'alCambiarEmail' | 'enviando' | 'reenviando'> & {
+  email: string;
+  errores: ErroresRegistro;
+};
+
+function PasoCodigo({ email, alConfirmar, alReenviar, alCambiarEmail, enviando, reenviando, errores }: PropsPasoCodigo) {
+  const [codigo, setCodigo] = useState('');
+
+  function manejarEnvio(evento: FormEvent<HTMLFormElement>) {
+    evento.preventDefault();
+    alConfirmar?.(codigo);
+  }
+
+  function reenviar() {
+    setCodigo('');
+    alReenviar?.();
+  }
+
+  return (
+    <form onSubmit={manejarEnvio} className="flex flex-col gap-5">
+      <div className="flex flex-col gap-1.5">
+        <h1 className="text-2xl font-semibold tracking-[-0.03em]">Revisá tu email</h1>
+        <p className="text-[15px] text-gris-500">
+          Te mandamos un código de <Numero>6</Numero> dígitos a <span className="font-medium text-negro">{email}</span>.
+          Escribilo para crear la organización.
+        </p>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <CampoCodigo valor={codigo} onChange={setCodigo} onCompleto={(valor) => alConfirmar?.(valor)} apagado={enviando} />
+        {errores.codigo ? (
+          <p role="alert" className="text-[13px] text-rojo-texto">
+            {errores.codigo}
+          </p>
+        ) : (
+          <p className="text-xs text-gris-500">
+            Vence en <Numero>10</Numero> minutos. ¿No te llegó? Fijate en spam o en correo no deseado.
+          </p>
+        )}
+      </div>
+
+      <div className="flex flex-col gap-[11px]">
+        <ErrorGeneral>{errores.general}</ErrorGeneral>
+        <Boton type="submit" variante="organizador" grande className="w-full" disabled={enviando || codigo.length < 6}>
+          {enviando ? 'Creando la organización…' : 'Crear la organización'}
+        </Boton>
+        <div className="flex items-center justify-between gap-3 text-sm">
+          <button type="button" onClick={reenviar} disabled={reenviando} className="font-medium underline underline-offset-[3px]">
+            {reenviando ? 'Mandando…' : 'Reenviar el código'}
+          </button>
+          <button type="button" onClick={alCambiarEmail} className="font-medium text-gris-500 underline underline-offset-[3px]">
+            Cambiar el email
+          </button>
+        </div>
+      </div>
+    </form>
+  );
+}
+
+export function FormularioRegistro({
+  paso = 'datos',
+  alEnviar,
+  alConfirmar,
+  alReenviar,
+  alCambiarEmail,
+  enviando = false,
+  reenviando = false,
+  errores = {},
+}: Props) {
   const campos = errores.campos ?? {};
 
+  // Vive acá y no en cada paso: al volver con "Cambiar el email" los datos siguen escritos.
   const [datos, setDatos] = useState<DatosRegistro>({ organizacion: '', nombre: '', email: '', contrasena: '' });
 
   function cambiar(campo: keyof DatosRegistro, valor: string) {
@@ -51,6 +140,22 @@ export function FormularioRegistro({ alEnviar, enviando = false, errores = {} }:
   function manejarEnvio(evento: FormEvent<HTMLFormElement>) {
     evento.preventDefault();
     alEnviar?.(datos);
+  }
+
+  if (paso === 'codigo') {
+    return (
+      <Tarjeta className="p-6">
+        <PasoCodigo
+          email={datos.email.trim().toLowerCase()}
+          alConfirmar={alConfirmar}
+          alReenviar={alReenviar}
+          alCambiarEmail={alCambiarEmail}
+          enviando={enviando}
+          reenviando={reenviando}
+          errores={errores}
+        />
+      </Tarjeta>
+    );
   }
 
   return (
@@ -131,13 +236,9 @@ export function FormularioRegistro({ alEnviar, enviando = false, errores = {} }:
         </div>
 
         <div className="flex flex-col gap-[11px]">
-          {errores.general && (
-            <p role="alert" className="rounded-control border border-rojo-linea bg-rojo-fondo px-3.5 py-2.5 text-sm text-rojo-texto">
-              {errores.general}
-            </p>
-          )}
+          <ErrorGeneral>{errores.general}</ErrorGeneral>
           <Boton type="submit" variante="organizador" grande className="w-full" disabled={enviando}>
-            {enviando ? 'Creando la organización…' : 'Crear la organización'}
+            {enviando ? 'Mandando el código…' : 'Continuar'}
           </Boton>
           <p className="text-center text-[13px] leading-[1.45] text-gris-500">Al continuar aceptás los términos del servicio.</p>
         </div>
