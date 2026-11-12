@@ -42,20 +42,39 @@ Monorepo con workspaces de npm.
 
 ## Levantar el proyecto
 
+Solo hace falta Docker:
+
 ```bash
 git clone https://github.com/jeremiasHerr/setpoint.git
 cd setpoint
-npm install
-docker compose up -d db mailpit      # Postgres y el servidor de mail de prueba
-cp apps/api/.env.example apps/api/.env
-npm run db:migrate -w apps/api       # crea las tablas
-npm run db:seed -w apps/api          # datos de prueba
-npm run dev -w apps/api              # API en http://localhost:3000
+docker compose up --build
 ```
 
-> Por ahora Docker levanta solo la base de datos y Mailpit. El `docker compose up` completo, con API y web, llega en la etapa 4.
+| | |
+|---|---|
+| Web | http://localhost:8080 |
+| API | http://localhost:3000 (la que usa la app del celular) |
+| Mails | http://localhost:8025 |
 
-Los mails que manda la API (por ahora, el link para recuperar la contraseña) no salen a internet: los atrapa Mailpit y se leen en http://localhost:8025. Sin `SMTP_HOST` en el `.env`, se imprimen en la consola de la API.
+La primera vez tarda unos minutos: arma las imágenes, crea las tablas y carga los datos de prueba. Las veces siguientes los datos no se vuelven a cargar, así que lo que se haga en la demo queda. Para empezar de cero: `docker compose down -v` ([decisión 085](docs/decisiones/085-entrega-dockerizada.md)).
+
+**Cuentas de prueba.** Organizadores, con la contraseña `organizador-de-prueba`: `organizador@polenta.example` y `organizador@valle.example`. Jugador, para la app: `martin.sanhueza@example.com`, que entra con un código.
+
+Los mails que manda la API (los códigos de ingreso, los comprobantes, la recuperación de la contraseña) no salen a internet: los atrapa Mailpit y se leen en http://localhost:8025.
+
+Funciona sin configurar nada. Con un `.env` en la raíz (ver `.env.example`) se suman MercadoPago y la IA: sin `MERCADOPAGO_ACCESS_TOKEN` el pago es simulado ([decisión 053](docs/decisiones/053-pago-sin-credenciales.md)), y sin `ANTHROPIC_API_KEY` la importación del padrón termina en error con el motivo.
+
+### Para desarrollar
+
+```bash
+npm install
+cp apps/api/.env.example apps/api/.env
+npm run db:migrate -w apps/api       # crea las tablas (levanta antes Postgres y Mailpit)
+npm run db:seed -w apps/api          # datos de prueba
+npm run dev                          # API en http://localhost:3000 y web en http://localhost:5173
+```
+
+`npm run dev` levanta solo `db` y `mailpit` del compose. Si quedó corriendo el compose completo, la API y la web del contenedor ocupan los puertos: `docker compose stop api web`. Sin `SMTP_HOST` en el `.env`, los mails se imprimen en la consola de la API.
 
 ### App móvil
 

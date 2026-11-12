@@ -1,0 +1,10 @@
+**/node_modules
+**/dist
+**/.env
+**/.expo
+**/*.log
+.git
+docs
+# La app no se dockeriza, pero npm ci necesita el package.json de cada workspace del lockfile.
+apps/mobile/*
+!apps/mobile/package.json

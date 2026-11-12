@@ -6,6 +6,7 @@
     "dev": "tsx watch --env-file=.env src/index.ts",
     "build": "tsc -p tsconfig.build.json",
     "start": "node dist/index.js",
+    "start:contenedor": "prisma migrate deploy && tsx scripts/sembrar-si-vacia.ts && tsx src/index.ts",
     "test": "vitest run",
     "eval:importacion": "tsx --env-file=.env scripts/eval-importacion.ts",
     "db:migrate": "prisma migrate dev",
