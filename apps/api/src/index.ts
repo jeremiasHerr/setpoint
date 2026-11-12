@@ -34,7 +34,12 @@ import { torneoPublicoRouter } from './modules/torneos/torneo-publico.routes';
 import { torneosRouter } from './modules/torneos/torneos.routes';
 
 const app = express();
-app.use(cors());
+// Detrás del proxy (nginx en el compose, el de Railway en la versión publicada), la IP del que pide
+// viene en X-Forwarded-For. Sin esto, el límite por IP vería a todos como el proxy (decisión 086).
+app.set('trust proxy', 1);
+// La versión publicada sirve la web desde otro dominio: solo ella puede llamar a la API desde el
+// navegador. La app del celular no pasa por CORS.
+app.use(cors(process.env.WEB_URL ? { origin: process.env.WEB_URL } : undefined));
 app.use(express.json());
 
 app.get('/api/salud', (_req, res) => {

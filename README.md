@@ -42,20 +42,39 @@ Monorepo con workspaces de npm.
 
 ## Levantar el proyecto
 
+Solo hace falta Docker:
+
 ```bash
 git clone https://github.com/jeremiasHerr/setpoint.git
 cd setpoint
-npm install
-docker compose up -d db mailpit      # Postgres y el servidor de mail de prueba
-cp apps/api/.env.example apps/api/.env
-npm run db:migrate -w apps/api       # crea las tablas
-npm run db:seed -w apps/api          # datos de prueba
-npm run dev -w apps/api              # API en http://localhost:3000
+docker compose up --build
 ```
 
-> Por ahora Docker levanta solo la base de datos y Mailpit. El `docker compose up` completo, con API y web, llega en la etapa 4.
+| | |
+|---|---|
+| Web | http://localhost:8080 |
+| API | http://localhost:3000 (la que usa la app del celular) |
+| Mails | http://localhost:8025 |
 
-Los mails que manda la API (por ahora, el link para recuperar la contraseña) no salen a internet: los atrapa Mailpit y se leen en http://localhost:8025. Sin `SMTP_HOST` en el `.env`, se imprimen en la consola de la API.
+La primera vez tarda unos minutos: arma las imágenes, crea las tablas y carga los datos de prueba. Las veces siguientes los datos no se vuelven a cargar, así que lo que se haga en la demo queda. Para empezar de cero: `docker compose down -v` ([decisión 085](docs/decisiones/085-entrega-dockerizada.md)).
+
+**Cuentas de prueba.** Organizadores, con la contraseña `organizador-de-prueba`: `organizador@polenta.example` y `organizador@valle.example`. Jugador, para la app: `martin.sanhueza@example.com`, que entra con un código.
+
+Los mails que manda la API (los códigos de ingreso, los comprobantes, la recuperación de la contraseña) no salen a internet: los atrapa Mailpit y se leen en http://localhost:8025.
+
+Funciona sin configurar nada. Con un `.env` en la raíz (ver `.env.example`) se suman MercadoPago y la IA: sin `MERCADOPAGO_ACCESS_TOKEN` el pago es simulado ([decisión 053](docs/decisiones/053-pago-sin-credenciales.md)), y sin `ANTHROPIC_API_KEY` la importación del padrón termina en error con el motivo.
+
+### Para desarrollar
+
+```bash
+npm install
+cp apps/api/.env.example apps/api/.env
+npm run db:migrate -w apps/api       # crea las tablas (levanta antes Postgres y Mailpit)
+npm run db:seed -w apps/api          # datos de prueba
+npm run dev                          # API en http://localhost:3000 y web en http://localhost:5173
+```
+
+`npm run dev` levanta solo `db` y `mailpit` del compose. Si quedó corriendo el compose completo, la API y la web del contenedor ocupan los puertos: `docker compose stop api web`. Sin `SMTP_HOST` en el `.env`, los mails se imprimen en la consola de la API.
 
 ### App móvil
 
@@ -104,6 +123,9 @@ Copiar `.env.example` a `.env` y completar:
 | `MERCADOPAGO_ACCESS_TOKEN` | Credencial de **prueba** de MercadoPago. Vacía, el pago es simulado ([decisión 053](docs/decisiones/053-pago-sin-credenciales.md)) |
 | `API_URL_PUBLICA` | Dirección pública de la API, para que llegue el webhook de MercadoPago (en desarrollo, ngrok) |
 | `ANTHROPIC_API_KEY` | Funcionalidades de IA |
+| `WEB_URL` | Dirección de la web: los links de los mails, la vuelta de MercadoPago y el único origen que acepta CORS |
+| `SMTP_HOST`, `SMTP_PORT` | Servidor de mail. Mailpit en desarrollo; vacío, los mails se imprimen en la consola |
+| `SMTP_USER`, `SMTP_PASS`, `CORREO_REMITENTE` | Solo para un SMTP real, como Resend en la versión publicada |
 
 > Nunca commitear el `.env`. Usar credenciales de prueba de MercadoPago durante todo el desarrollo.
 
@@ -114,6 +136,54 @@ Copiar `.env.example` a `.env` y completar:
 3. Pagar con un usuario comprador de prueba, creado en el mismo panel, no con una cuenta real. Si el token empieza con `TEST-` se abre el checkout del sandbox; si empieza con `APP_USR-`, el checkout normal con los usuarios de prueba.
 
 Con `WEB_URL` en `http://localhost`, MercadoPago no acepta la vuelta automática después de pagar: el jugador vuelve con el botón "Volver al sitio" del checkout. Con una dirección `https`, vuelve solo.
+
+---
+
+## Publicar
+
+La versión publicada está separada en tres servicios ([decisión 086](docs/decisiones/086-version-publicada.md)):
+
+| | Dónde | Dirección |
+|---|---|---|
+| Web | Cloudflare Pages | https://setpoint.com.ar |
+| API | Railway, con `apps/api/Dockerfile` | https://api.setpoint.com.ar |
+| Base | Neon | — |
+| Mails | Resend | `no-responder@setpoint.com.ar` |
+
+Arranca sin datos de prueba: cada circuito se registra desde `/registro`. Railway y Cloudflare publican solos cada push a `main`.
+
+Se configura una sola vez, en este orden:
+
+1. **DNS en Cloudflare.** En Cloudflare, agregar el dominio `setpoint.com.ar` (plan Free) y copiar los dos servidores de nombres que da. En NIC.ar, en la delegación del dominio, reemplazar los servidores por esos dos. Puede tardar unas horas: Cloudflare avisa cuando el dominio queda activo.
+2. **Base en Neon.** Crear el proyecto en la región AWS US East (la más cerca de Railway). Copiar la dirección de conexión **sin** *connection pooling*: la API es un solo proceso siempre prendido y no lo necesita.
+3. **Mails en Resend.** En *Domains*, agregar `setpoint.com.ar` y cargar en Cloudflare los registros que pide (Resend puede cargarlos solo). Cuando el dominio figure verificado, crear una API key con permiso de envío.
+4. **API en Railway.** *New project → Deploy from GitHub repo*, y elegir `setpoint`. En *Settings*: región US East, una sola réplica (el límite de pedidos vive en memoria, [decisión 052](docs/decisiones/052-limite-de-pedidos.md)) y *Healthcheck path* `/api/salud`. En *Variables*:
+
+   | Variable | Valor |
+   |---|---|
+   | `RAILWAY_DOCKERFILE_PATH` | `apps/api/Dockerfile` |
+   | `DATABASE_URL` | La de Neon, del paso 2 |
+   | `JWT_SECRET` | Una clave larga al azar: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"` |
+   | `WEB_URL` | `https://setpoint.com.ar` |
+   | `API_URL_PUBLICA` | `https://api.setpoint.com.ar` |
+   | `SMTP_HOST` | `smtp.resend.com` |
+   | `SMTP_PORT` | `465` |
+   | `SMTP_USER` | `resend` |
+   | `SMTP_PASS` | La API key de Resend, del paso 3 |
+   | `CORREO_REMITENTE` | `SetPoint <no-responder@setpoint.com.ar>` |
+   | `MERCADOPAGO_ACCESS_TOKEN` | La de prueba. Vacía, el pago es simulado |
+   | `ANTHROPIC_API_KEY` | Para la importación del padrón |
+
+   En *Networking → Custom domain*, agregar `api.setpoint.com.ar`, y en Cloudflare cargar el registro CNAME que indica Railway, con el proxy apagado (nube gris).
+5. **Web en Cloudflare Pages.** *Workers & Pages → Create → Pages → Connect to Git*, y elegir `setpoint`:
+   - *Build command:* `npm ci -w apps/web -w packages/shared --ignore-scripts && npm run build -w apps/web`
+   - *Build output directory:* `apps/web/dist`
+   - *Variables:* `VITE_API_URL` = `https://api.setpoint.com.ar`, `NODE_VERSION` = `22` y `SKIP_DEPENDENCY_INSTALL` = `1` (el comando instala solo lo de la web, como el Dockerfile).
+
+   En *Custom domains*, agregar `setpoint.com.ar`.
+6. **APK.** Desde `apps/mobile`: `npx eas-cli env:set --name EXPO_PUBLIC_API_URL --value https://api.setpoint.com.ar --environment production --visibility plaintext`, y para los avisos, el mismo `GOOGLE_SERVICES_JSON` del perfil de prueba con `--environment production`. Después, `npx eas-cli build -p android --profile production`. Este APK no acepta http ([decisión 048](docs/decisiones/048-http-en-el-apk-de-prueba.md)).
+
+**Para comprobar:** abrir https://setpoint.com.ar, registrar una organización y, desde la app, pedir un código con un email real.
 
 ---
 

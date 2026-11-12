@@ -1,3 +1,11 @@
+# docker compose up levanta todo en una máquina limpia, sin cuentas externas (decisión 085):
+#   web      http://localhost:8080
+#   api      http://localhost:3000  (la que usa la app del celular)
+#   mailpit  http://localhost:8025  (los mails que manda la API)
+# Opcional: un .env en la raíz con MERCADOPAGO_ACCESS_TOKEN, API_URL_PUBLICA y ANTHROPIC_API_KEY.
+# Sin ellos el pago es simulado y la importación del padrón termina en error.
+#
+# En desarrollo se levantan solo db y mailpit (npm run dev lo hace solo).
 services:
   db:
     image: postgres:16
@@ -10,15 +18,54 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U setpoint -d setpoint"]
+      interval: 2s
+      timeout: 5s
+      retries: 15
 
   # Servidor de mail de prueba: atrapa lo que manda la API y lo muestra en http://localhost:8025.
-  # Así recuperar la contraseña funciona sin depender de una cuenta externa.
+  # Así los códigos de ingreso y la recuperación de la contraseña funcionan sin una cuenta externa.
   mailpit:
-    image: axllent/mailpit:latest
+    image: axllent/mailpit:v1.27
     container_name: setpoint-mailpit
     ports:
       - "1025:1025"
       - "8025:8025"
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: setpoint-api
+    environment:
+      DATABASE_URL: postgresql://setpoint:setpoint@db:5432/setpoint
+      JWT_SECRET: ${JWT_SECRET:-solo-para-la-demo-local}
+      SMTP_HOST: mailpit
+      SMTP_PORT: 1025
+      WEB_URL: http://localhost:8080
+      # Carga el seed la primera vez, con la base vacía.
+      SEMBRAR: si-vacia
+      MERCADOPAGO_ACCESS_TOKEN: ${MERCADOPAGO_ACCESS_TOKEN:-}
+      API_URL_PUBLICA: ${API_URL_PUBLICA:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: setpoint-web
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
 
 volumes:
   pgdata:
