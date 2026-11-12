@@ -125,7 +125,9 @@ Copiar `.env.example` a `.env` y completar:
 | `ANTHROPIC_API_KEY` | Funcionalidades de IA |
 | `WEB_URL` | Dirección de la web: los links de los mails, la vuelta de MercadoPago y el único origen que acepta CORS |
 | `SMTP_HOST`, `SMTP_PORT` | Servidor de mail. Mailpit en desarrollo; vacío, los mails se imprimen en la consola |
-| `SMTP_USER`, `SMTP_PASS`, `CORREO_REMITENTE` | Solo para un SMTP real, como Resend en la versión publicada |
+| `SMTP_USER`, `SMTP_PASS` | Solo para un SMTP real con usuario y contraseña |
+| `RESEND_API_KEY` | Manda los mails por la API HTTP de Resend, en lugar del SMTP. Es lo que usa la versión publicada |
+| `CORREO_REMITENTE` | Quién figura como remitente |
 
 > Nunca commitear el `.env`. Usar credenciales de prueba de MercadoPago durante todo el desarrollo.
 
@@ -166,13 +168,12 @@ Se configura una sola vez, en este orden:
    | `JWT_SECRET` | Una clave larga al azar: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"` |
    | `WEB_URL` | `https://setpoint.com.ar` |
    | `API_URL_PUBLICA` | `https://api.setpoint.com.ar` |
-   | `SMTP_HOST` | `smtp.resend.com` |
-   | `SMTP_PORT` | `465` |
-   | `SMTP_USER` | `resend` |
-   | `SMTP_PASS` | La API key de Resend, del paso 3 |
+   | `RESEND_API_KEY` | La API key de Resend, del paso 3 |
    | `CORREO_REMITENTE` | `SetPoint <no-responder@setpoint.com.ar>` |
    | `MERCADOPAGO_ACCESS_TOKEN` | La de prueba. Vacía, el pago es simulado |
    | `ANTHROPIC_API_KEY` | Para la importación del padrón |
+
+   Sin variables `SMTP_*`: Railway bloquea el SMTP saliente en su plan Hobby, y los mails salen por la API HTTP de Resend.
 
    En *Networking → Custom domain*, agregar `api.setpoint.com.ar`, y en Cloudflare cargar el registro CNAME que indica Railway, con el proxy apagado (nube gris).
 5. **Web en Cloudflare Pages.** *Workers & Pages → Create → Pages → Connect to Git*, y elegir `setpoint`:
