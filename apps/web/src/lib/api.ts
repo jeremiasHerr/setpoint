@@ -13,6 +13,10 @@ export class ErrorApi extends Error {
 
 type Metodo = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
+// En la versión publicada la API está en otro dominio (decisión 086). En desarrollo y en el
+// docker-compose va vacía: /api lo pasa a la API el proxy de Vite o nginx.
+const API_URL = import.meta.env.VITE_API_URL ?? '';
+
 // Llama a la API con el token de la sesión, si hay. Los errores llegan como ErrorApi con el código de la API.
 // Un FormData viaja como multipart: el navegador arma el Content-Type con su separador.
 // `tokenDelJugador` es la sesión que deja el código al inscribirse, distinta de la del administrador.
@@ -21,7 +25,7 @@ export async function pedir<T>(metodo: Metodo, ruta: string, cuerpo?: unknown, t
   const esFormulario = cuerpo instanceof FormData;
   let respuesta: Response;
   try {
-    respuesta = await fetch(ruta, {
+    respuesta = await fetch(`${API_URL}${ruta}`, {
       method: metodo,
       headers: {
         ...(cuerpo !== undefined && !esFormulario && { 'Content-Type': 'application/json' }),

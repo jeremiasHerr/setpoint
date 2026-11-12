@@ -99,7 +99,7 @@ tp-torneos/
 
 ### El modelo: `main` + ramas cortas
 
-**Nada de Gitflow.** Con tres personas y sin despliegues a producción, una rama `develop` solo agrega un merge de por medio sin aportar nada.
+**Nada de Gitflow.** Con tres personas, una rama `develop` solo agrega un merge de por medio sin aportar nada. Desde que hay versión publicada ([decisión 086](decisiones/086-version-publicada.md)), cada push a `main` se publica solo: es una razón más para que `main` siempre funcione.
 
 ```
 main ──●────●────●────●────●────●──▶
@@ -277,4 +277,4 @@ Es la entrada más suave a Docker y deja el concepto de `compose` aprendido ante
 
 - **La app móvil no se dockeriza.** Expo compila un APK, no un contenedor. El entregable dockerizado es API + web + base.
 - El `docker compose up` final **no puede depender de Neon**. Si el docente lo levanta en una máquina limpia sin acceso a la cuenta del equipo, tiene que funcionar igual.
-- Neon queda para desarrollo compartido y demo; Postgres local para el entregable. Misma `schema.prisma`, distinta `DATABASE_URL`.
+- Neon queda para la versión publicada; Postgres local para el entregable. Misma `schema.prisma`, distinta `DATABASE_URL` ([decisiones 085](decisiones/085-entrega-dockerizada.md) y [086](decisiones/086-version-publicada.md)).
