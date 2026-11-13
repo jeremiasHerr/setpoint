@@ -44,7 +44,7 @@ Ordenado por entrega.
 | 75% | F16 | [Cerrar el torneo](organizador/cierre.html) | Web organizador | 1280 px |
 | 75% · 100% | F17, F18 | [Ficha y cara a cara](publico/ficha-y-cara-a-cara.html) | Web pública. La ficha está implementada en `/c/:slug/jugadores/:id`, con una sección Torneos que la referencia no dibuja, armada con las piezas de *Partidos* ([decisión 071](../decisiones/071-la-ficha-suma-los-torneos.md)), y todos los partidos detrás de "Ver los N partidos". "Compartir" va con texto, como en las otras páginas públicas, y "Comparar con otro jugador" llega con el cara a cara (F18) | 870 px |
 | 100% | F20 | [Qué está en juego](jugador/que-esta-en-juego.html) | App jugador | 390 px |
-| — | — | [Landing](publico/landing.html) | Web pública | 1280 px |
+| — | — | [Landing](publico/landing.html) | Web pública, en `/`. Sin "Ver un torneo de ejemplo" ni contacto hasta que haya un torneo publicado y un email que reciba consultas | 1280 px |
 
 Sin pantalla: **F19** (resultados desde mensajes), condicionada al tiempo y a confirmar con el profesor.
 

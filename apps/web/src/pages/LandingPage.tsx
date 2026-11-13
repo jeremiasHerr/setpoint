@@ -1,317 +1,573 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
+import { IconoMas } from '../components/IconoMas';
 import { Logo } from '../components/Logo';
 import { Numero } from '../components/Numero';
-import { Tarjeta } from '../components/Tarjeta';
 
-type EstadoPartido = 'jugado' | 'coordinado' | 'pendiente' | 'vencido';
+// El margen de los costados de cada sección: 16 px en el celular, hasta 40 en el escritorio.
+const margen = 'px-[clamp(16px,4vw,40px)]';
+const tituloDeSeccion = 'text-[clamp(30px,3.8vw,44px)] leading-[1.08] font-semibold tracking-[-0.04em]';
+
+// Una barra por partido: jugado, con fecha, sin coordinar o vencido. Suman 31 de 48.
+type EstadoPartido = 'j' | 'f' | 's' | 'v';
 
 const colorPartido: Record<EstadoPartido, string> = {
-  jugado: 'bg-lima',
-  coordinado: 'bg-gris-700',
-  pendiente: 'bg-borde-oscuro',
-  vencido: 'bg-rojo',
+  j: 'bg-negro',
+  f: 'bg-gris-400',
+  s: 'bg-linea',
+  v: 'bg-rojo',
 };
 
-const zonas: { nombre: string; partidos: EstadoPartido[] }[] = [
-  { nombre: 'A', partidos: ['jugado', 'jugado', 'jugado', 'coordinado', 'pendiente', 'pendiente'] },
-  { nombre: 'B', partidos: ['jugado', 'jugado', 'jugado', 'jugado', 'jugado', 'coordinado'] },
-  { nombre: 'C', partidos: ['jugado', 'jugado', 'jugado', 'jugado', 'coordinado', 'pendiente'] },
-  { nombre: 'D', partidos: ['jugado', 'jugado', 'jugado', 'coordinado', 'pendiente', 'vencido'] },
+const zonas: [string, string][] = [
+  ['A', 'jjjfss'],
+  ['B', 'jjjjjf'],
+  ['C', 'jjjjfs'],
+  ['D', 'jjjfsv'],
+  ['E', 'jjjjjj'],
+  ['F', 'jjjjfs'],
+  ['G', 'jjffss'],
+  ['H', 'jjjjfs'],
 ];
 
-const comparaciones = [
+const preguntas = [
   {
-    hoy: 'El ranking vive en un Excel que actualiza una sola persona',
-    conSetPoint: 'Se actualiza solo al cerrar cada torneo, con cada punto trazable al partido que lo generó',
+    pregunta: '¿Mis jugadores tienen que instalar algo?',
+    respuesta:
+      'Para mirar el ranking, las zonas o los cuadros, no: es un link. Para anotar fechas y recibir avisos está la app para Android, que entra con el email, sin contraseña.',
   },
   {
-    hoy: 'Los 78 resultados de cada torneo se leen del grupo y se anotan a mano',
-    conSetPoint: 'Se cargan una vez y recalculan tabla, desempates y cuadro en el momento',
+    pregunta: 'Ya tengo un ranking en Excel. ¿Lo pierdo?',
+    respuesta:
+      'No. Subís la planilla y entran los jugadores con sus puntos, las categorías y los torneos del calendario. Lo que no cierra, lo revisás antes de guardar.',
   },
   {
-    hoy: 'Cuando dos empatan en la zona hay que ir al reglamento y contar sets y games',
-    conSetPoint: 'El desempate lo resuelve la cascada del reglamento, escrita de antemano',
+    pregunta: '¿Sirve si mi circuito no lleva ranking?',
+    respuesta:
+      'Sí. Empezás con un torneo suelto, sin configurar nada, y cada torneo da sus posiciones finales. Si después querés ranking anual, lo activás.',
   },
   {
-    hoy: 'Las inscripciones se cobran por transferencia, con comprobante y verificación manual',
-    conSetPoint: 'Checkout que confirma solo, con reserva de cupo y lista de espera',
+    pregunta: '¿Y si alguien me paga en efectivo?',
+    respuesta: 'Lo inscribís a mano, mientras haya lugar.',
   },
   {
-    hoy: 'Para saber cuándo juega, el jugador le pregunta al organizador',
-    conSetPoint: 'Lo ve en su teléfono, y le avisa una notificación cuando cambia algo',
-  },
-];
-
-const funciones: { titulo: string; texto: string; icono: ReactNode }[] = [
-  {
-    titulo: 'Zonas con siembra por ranking',
-    texto:
-      'Serpentina, directa o por bombos. Con 32 inscriptos arma 8 zonas de 4 y los 48 partidos, y todas las zonas suman el mismo ranking acumulado.',
-    icono: (
-      <>
-        <rect x="3" y="4" width="18" height="16" rx="2" />
-        <path d="M3 10h18M9 10v10M15 10v10" />
-      </>
-    ),
-  },
-  {
-    titulo: 'Dos cuadros en paralelo',
-    texto:
-      'Los que clasifican y los que no siguen jugando en dos cuadros a la vez, y cada uno define su campeón. Nadie queda afuera después de la fase de grupos.',
-    icono: <path d="M4 6h5v12H4M15 4h5v6h-5M15 14h5v6h-5M9 12h6" />,
-  },
-  {
-    titulo: 'Coordinación entre jugadores',
-    texto:
-      'Siguen arreglando por WhatsApp, pero la fecha queda anotada y confirmada por los dos. El organizador ve qué falta sin revisar el scroll del grupo.',
-    icono: (
-      <>
-        <rect x="3" y="5" width="18" height="16" rx="2" />
-        <path d="M3 10h18M8 3v4M16 3v4" />
-      </>
-    ),
-  },
-  {
-    titulo: 'Cobro con MercadoPago',
-    texto:
-      'El lugar se reserva quince minutos mientras el jugador paga, y la inscripción se confirma sola. Con lista de espera y conciliación por torneo.',
-    icono: (
-      <>
-        <rect x="2.5" y="6" width="19" height="12" rx="2" />
-        <path d="M2.5 10h19" />
-      </>
-    ),
-  },
-  {
-    titulo: 'Ranking por casilleros',
-    texto:
-      'El mismo mecanismo que usa la ATP: cada torneo del calendario tiene su casillero y los puntos nuevos reemplazan a los del año anterior. Configurable por circuito.',
-    icono: <path d="M4 19V9M10 19V5M16 19v-7M4 19h16" />,
-  },
-  {
-    titulo: 'Importación de tu planilla',
-    texto:
-      'Subís el Excel que ya usás. Reconoce a los jugadores aunque el nombre esté escrito distinto y te muestra qué va a pasar antes de guardar nada.',
-    icono: <path d="M5 4h14v16l-7-4-7 4z" />,
+    pregunta: '¿Puede anotarse cualquiera?',
+    respuesta: 'Lo decidís vos: solo los de tu padrón, cualquiera con tu aprobación, o inscripción abierta.',
   },
 ];
 
-function BarraZonas() {
+function Encabezado() {
+  const seccion =
+    'flex min-h-12 items-center text-linea hover:text-white hover:shadow-[inset_0_-2px_0_var(--color-lima)]';
   return (
-    <div className="flex flex-col gap-4 rounded-2xl border border-borde-oscuro bg-carbon p-5">
-      <div className="flex items-center justify-between gap-3">
-        <span className="text-sm font-semibold text-white">Fase de grupos</span>
-        <Numero className="text-xs text-gris-400">31 de 48</Numero>
+    <header className="mx-auto flex max-w-[1180px] flex-wrap items-center gap-x-8 gap-y-2 border-b border-borde-oscuro py-4">
+      <Link to="/" className="mr-auto flex min-h-11 items-center">
+        <Logo sobreNegro grande />
+      </Link>
+      <nav className="flex flex-wrap items-center gap-x-8 gap-y-1 text-[17px] font-medium">
+        <a href="#producto" className={seccion}>
+          Producto
+        </a>
+        <a href="#funciones" className={seccion}>
+          Funciones
+        </a>
+        <a href="#preguntas" className={seccion}>
+          Preguntas
+        </a>
+      </nav>
+      <div className="flex flex-wrap items-center gap-2.5">
+        <Link
+          to="/ingresar"
+          className="flex h-[46px] items-center rounded-[11px] border border-gris-700 px-[18px] text-base font-medium text-white"
+        >
+          Ingresar
+        </Link>
+        <Link
+          to="/registro"
+          className="flex h-[46px] items-center rounded-[11px] bg-lima px-5 text-base font-semibold text-negro"
+        >
+          Crear mi circuito
+        </Link>
       </div>
-      <div className="grid grid-cols-4 gap-3">
-        {zonas.map(({ nombre, partidos }) => (
-          <div key={nombre} className="flex flex-col gap-[7px]">
-            <div className="flex gap-0.5">
-              {partidos.map((estado, i) => (
-                <div key={i} className={`h-[30px] grow rounded-[2px] ${colorPartido[estado]}`} />
+    </header>
+  );
+}
+
+function Portada() {
+  return (
+    <section className={`bg-negro pb-[300px] ${margen}`}>
+      <Encabezado />
+      <div className="mx-auto flex max-w-[860px] flex-col items-center gap-6 pt-[88px] text-center">
+        <span className="flex h-[34px] items-center gap-[9px] rounded-full border border-borde-oscuro px-3.5 text-sm text-gris-400">
+          <span className="size-[7px] rounded-full bg-lima" />
+          Torneos, ranking e inscripciones
+        </span>
+        <h1 className="text-[clamp(40px,6vw,72px)] leading-[1.02] font-semibold tracking-[-0.045em] text-balance text-white">
+          Tu circuito de tenis, en un solo lugar.
+        </h1>
+        <p className="max-w-[640px] text-[clamp(17px,1.6vw,20px)] leading-normal text-gris-400">
+          Inscripciones con MercadoPago, zonas, cuadros y ranking que se calculan solos. Vos cargás los resultados; tus
+          jugadores lo ven en el celular.
+        </p>
+        <Link
+          to="/registro"
+          className="mt-1.5 flex h-[52px] items-center rounded-xl bg-lima px-6 text-base font-semibold text-negro"
+        >
+          Crear mi circuito
+        </Link>
+        <span className="text-sm text-gris-400">
+          Web para la organización · App para los jugadores · Link público para todos
+        </span>
+      </div>
+    </section>
+  );
+}
+
+function FilaDelTablero({
+  zona,
+  partido,
+  estado,
+  accion,
+  vencido = false,
+}: {
+  zona: string;
+  partido: string;
+  estado: string;
+  accion: string;
+  vencido?: boolean;
+}) {
+  return (
+    <div
+      className={`flex flex-wrap items-center gap-x-3.5 gap-y-2 px-[18px] py-[11px] ${
+        vencido ? 'border-b border-rojo-linea bg-rojo-fondo' : 'border-b border-linea-suave last:border-b-0'
+      }`}
+    >
+      <Numero className={`text-xs ${vencido ? 'text-rojo-texto' : 'text-gris-500'}`}>{zona}</Numero>
+      <span className={`flex-[1_1_160px] text-[15px] ${vencido ? 'font-semibold' : ''}`}>{partido}</span>
+      <Numero className={`text-[13px] ${vencido ? 'text-rojo-texto' : 'text-gris-500'}`}>{estado}</Numero>
+      <span
+        className={`flex h-8 items-center rounded-lg px-3 text-[13px] ${
+          vencido ? 'bg-negro font-semibold text-white' : 'border border-linea font-medium'
+        }`}
+      >
+        {accion}
+      </span>
+    </div>
+  );
+}
+
+// Una captura del tablero dibujada con HTML: es ilustración, así que no la lee el lector de pantalla.
+function TableroDeEjemplo() {
+  return (
+    <div
+      aria-hidden
+      className="min-w-0 flex-[1_1_640px] overflow-hidden rounded-2xl border border-borde-oscuro bg-carbon"
+    >
+      <div className="flex h-10 items-center gap-3.5 px-4">
+        <span className="flex gap-1.5">
+          <span className="size-2.5 rounded-full bg-borde-oscuro" />
+          <span className="size-2.5 rounded-full bg-borde-oscuro" />
+          <span className="size-2.5 rounded-full bg-borde-oscuro" />
+        </span>
+        <Numero className="min-w-0 flex-1 truncate text-center text-xs text-gris-400">Tablero · Primavera 26 · Tercera</Numero>
+        <span className="w-[42px]" />
+      </div>
+      <div className="flex flex-col bg-white">
+        <div className="flex flex-wrap items-center gap-x-[18px] gap-y-1.5 border-b border-linea px-[22px] py-3 text-[13px] text-gris-500">
+          <span className="flex items-center gap-[7px] font-semibold text-negro">
+            <span className="flex size-[18px] items-center justify-center rounded-[5px] bg-lima">
+              <span className="size-1.5 rounded-full bg-negro" />
+            </span>
+            Polenta Team Tenis
+          </span>
+          <span className="ml-auto">Inicio</span>
+          <span>Circuito</span>
+          <span>Padrón</span>
+        </div>
+        <div className="flex flex-col gap-5 p-[22px]">
+          <div className="flex flex-wrap items-end justify-between gap-x-5 gap-y-2.5">
+            <div className="flex flex-col gap-1">
+              <Numero className="text-xs text-gris-500">grupos en curso</Numero>
+              <span className="text-[26px] leading-[1.1] font-semibold tracking-[-0.035em]">Fase de grupos</span>
+              <span className="text-sm text-gris-500">8 zonas de 4 · terminan el sábado 20</span>
+            </div>
+            <span className="flex h-[38px] items-center rounded-control bg-negro px-3.5 text-sm font-semibold text-white">
+              Cargar resultado
+            </span>
+          </div>
+          <div className="flex flex-col gap-3 rounded-tarjeta border border-linea px-[18px] py-4">
+            <div className="flex items-baseline justify-between gap-2.5">
+              <span className="text-sm font-semibold">Partidos de la fase de grupos</span>
+              <Numero className="text-sm">
+                31 <span className="text-gris-500">/ 48</span>
+              </Numero>
+            </div>
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(76px,1fr))] gap-3.5">
+              {zonas.map(([nombre, partidos]) => (
+                <div key={nombre} className="flex flex-col gap-[7px]">
+                  <div className="flex gap-[3px]">
+                    {[...partidos].map((estado, i) => (
+                      <div key={i} className={`h-9 flex-1 rounded-[3px] ${colorPartido[estado as EstadoPartido]}`} />
+                    ))}
+                  </div>
+                  <Numero className="text-xs text-gris-500">
+                    {nombre} · {partidos.split('j').length - 1}/6
+                  </Numero>
+                </div>
               ))}
             </div>
-            <Numero className="text-[11px] text-gris-500">
-              {nombre} · {partidos.filter((p) => p === 'jugado').length}/{partidos.length}
-            </Numero>
           </div>
-        ))}
-      </div>
-      <div className="h-px bg-borde-oscuro" />
-      <div className="flex flex-col gap-[9px]">
-        <div className="flex items-center justify-between gap-2.5">
-          <span className="text-[13px] text-white">Curihual · Nieva</span>
-          <Numero className="text-xs text-rojo">venció ayer</Numero>
-        </div>
-        <div className="flex items-center justify-between gap-2.5">
-          <span className="text-[13px] text-white">Roa · Peralta</span>
-          <Numero className="text-xs text-gris-400">sin coordinar</Numero>
+          <div className="overflow-hidden rounded-tarjeta border border-linea">
+            <FilaDelTablero zona="zona D" partido="Curihual · Nieva" estado="venció ayer" accion="Resolver" vencido />
+            <FilaDelTablero zona="zona A" partido="Roa · Peralta" estado="sin coordinar · quedan 6 días" accion="Escribirles" />
+            <FilaDelTablero zona="zona G" partido="Bustos · Millán" estado="sáb 14 · 10:00" accion="Cargar" />
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
-function FilaComparacion({ hoy, conSetPoint }: { hoy: string; conSetPoint: string }) {
+function CelularDeEjemplo() {
   return (
-    <div className="grid border-b border-linea-suave last:border-b-0 sm:grid-cols-[minmax(0,1fr)_44px_minmax(0,1fr)] sm:items-center">
-      <p className="px-[22px] pt-4 text-base text-gris-500 sm:py-[18px]">{hoy}</p>
-      <div className="hidden items-center justify-center sm:flex">
-        <div className="size-1.5 rounded-full bg-lima" />
+    <div aria-hidden className="flex-[0_1_300px] rounded-[40px] border border-borde-oscuro bg-carbon p-2.5">
+      <div className="flex flex-col gap-3.5 rounded-[31px] bg-white px-4 pt-[26px] pb-[18px]">
+        <span className="text-[26px] leading-[1.1] font-semibold tracking-[-0.032em]">Cuándo juego</span>
+        <div className="flex flex-col gap-2.5 rounded-2xl bg-negro px-4 py-[18px]">
+          <span className="text-[15px] font-medium text-gris-400">Tu próximo partido</span>
+          <span className="text-[26px] leading-[1.08] font-semibold tracking-[-0.032em] text-white">
+            Marcelo Sanhueza
+          </span>
+          <Numero className="text-lg font-medium text-lima">sáb 14 · 10:00</Numero>
+          <span className="text-[15px] text-gris-400">Club Alta Barda · cancha 3</span>
+          <span className="mt-1 flex h-12 items-center justify-center rounded-xl bg-lima text-base font-semibold text-negro">
+            Escribirle
+          </span>
+        </div>
+        <span className="text-[17px] font-semibold tracking-[-0.02em]">Te falta coordinar</span>
+        <div className="flex items-center justify-between gap-2 rounded-xl border border-linea px-3.5 py-3">
+          <span className="text-base font-medium">Diego Roa</span>
+          <Numero className="text-[15px] text-gris-500">6 días</Numero>
+        </div>
       </div>
-      <p className="px-[22px] pt-1.5 pb-4 text-base font-medium sm:py-[18px]">{conSetPoint}</p>
     </div>
   );
 }
 
-function TarjetaFuncion({ titulo, texto, icono }: { titulo: string; texto: string; icono: ReactNode }) {
+function Producto() {
   return (
-    <Tarjeta className="flex flex-col gap-2.5 p-[22px]">
-      <svg
-        width="22"
-        height="22"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.7"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden
-      >
-        {icono}
-      </svg>
-      <h3 className="text-[17px] font-semibold">{titulo}</h3>
-      <p className="text-[15px] leading-[1.45] text-gris-500">{texto}</p>
-    </Tarjeta>
+    <section id="producto" className={`-mt-[240px] scroll-mt-6 ${margen}`}>
+      <div className="mx-auto flex max-w-[1180px] flex-wrap items-end justify-center gap-6">
+        <TableroDeEjemplo />
+        <CelularDeEjemplo />
+      </div>
+    </section>
+  );
+}
+
+function QuienLoUsa() {
+  return (
+    <section className={`pt-10 ${margen}`}>
+      <div className="mx-auto flex max-w-[1180px] flex-wrap items-center justify-center gap-x-7 gap-y-2 text-[15px] text-gris-500">
+        <span>
+          Lo usa <span className="font-semibold text-negro">Polenta Team Tenis</span>, de Neuquén
+        </span>
+        <Numero>77 jugadores</Numero>
+        <Numero>2 categorías</Numero>
+        <Numero>5 torneos por año</Numero>
+      </div>
+    </section>
+  );
+}
+
+function Pantalla({ superficie, titulo, texto, children }: { superficie: string; titulo: string; texto: string; children: ReactNode }) {
+  return (
+    <div className="flex flex-[1_1_320px] flex-col gap-[18px] rounded-superficie border border-linea p-6">
+      <Numero className="text-[13px] text-gris-500">{superficie}</Numero>
+      <div className="flex flex-col gap-2">
+        <h3 className="text-[22px] leading-[1.15] font-semibold tracking-[-0.03em]">{titulo}</h3>
+        <p className="text-[15px] text-gris-500">{texto}</p>
+      </div>
+      <div aria-hidden className="mt-auto">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function FilaDeEjemplo({ children, ultima = false }: { children: ReactNode; ultima?: boolean }) {
+  return (
+    <div className={`flex justify-between gap-2.5 px-3.5 py-[11px] ${ultima ? '' : 'border-b border-linea-suave'}`}>
+      {children}
+    </div>
+  );
+}
+
+function PuestoDeEjemplo({ puesto, nombre, puntos, ultimo = false }: { puesto: number; nombre: string; puntos: number; ultimo?: boolean }) {
+  return (
+    <div
+      className={`grid grid-cols-[22px_minmax(0,1fr)_auto] gap-2 px-3.5 py-2.5 ${ultimo ? '' : 'border-b border-linea-suave'}`}
+    >
+      <Numero className="text-gris-500">{puesto}</Numero>
+      <span className="font-medium">{nombre}</span>
+      <Numero>{puntos}</Numero>
+    </div>
+  );
+}
+
+function TresPantallas() {
+  return (
+    <section className={`pt-28 ${margen}`}>
+      <div className="mx-auto flex max-w-[1180px] flex-col gap-10">
+        <div className="flex flex-col items-center gap-3.5 text-center">
+          <Numero className="text-[13px] text-gris-500">un torneo, tres pantallas</Numero>
+          <h2 className={`max-w-[720px] text-balance ${tituloDeSeccion}`}>Cada uno ve lo que necesita, siempre al día</h2>
+        </div>
+        <div className="flex flex-wrap gap-[18px]">
+          <Pantalla
+            superficie="web · la organización"
+            titulo="Todo el torneo desde la compu"
+            texto="Inscripciones, sorteo, resultados y cierre. El tablero dice qué partidos faltan y a quién apurar."
+          >
+            <div className="flex flex-col rounded-xl border border-linea text-sm">
+              <FilaDeEjemplo>
+                <span>Inscripciones</span>
+                <Numero>28 / 32</Numero>
+              </FilaDeEjemplo>
+              <FilaDeEjemplo>
+                <span>Sorteo</span>
+                <Numero className="text-gris-500">confirmado</Numero>
+              </FilaDeEjemplo>
+              <FilaDeEjemplo ultima>
+                <span>Resultados</span>
+                <Numero>31 / 48</Numero>
+              </FilaDeEjemplo>
+            </div>
+          </Pantalla>
+          <Pantalla
+            superficie="app android · los jugadores"
+            titulo="Cuándo juega, contra quién y dónde"
+            texto="Anota la fecha que arregló, el rival la confirma con un toque y le llega un aviso antes del partido."
+          >
+            <div className="flex flex-col gap-1.5 rounded-tarjeta bg-negro p-4">
+              <span className="text-sm text-gris-400">Tu próximo partido</span>
+              <span className="text-xl font-semibold tracking-[-0.03em] text-white">Marcelo Sanhueza</span>
+              <Numero className="text-[15px] text-lima">sáb 14 · 10:00</Numero>
+            </div>
+          </Pantalla>
+          <Pantalla
+            superficie="link · cualquiera"
+            titulo="El ranking y los cuadros, sin cuenta"
+            texto="Un link que compartís en el grupo y se abre en cualquier celular, sin instalar nada."
+          >
+            <div className="flex flex-col rounded-xl border border-linea text-[15px]">
+              <PuestoDeEjemplo puesto={1} nombre="M. Sanhueza" puntos={165} />
+              <PuestoDeEjemplo puesto={2} nombre="P. Curihual" puntos={110} />
+              <PuestoDeEjemplo puesto={3} nombre="D. Roa" puntos={100} ultimo />
+            </div>
+          </Pantalla>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Funcion({ titulo, texto, oscura = false, children }: { titulo: string; texto: string; oscura?: boolean; children: ReactNode }) {
+  return (
+    <div className={`flex flex-col gap-[18px] rounded-superficie p-6 ${oscura ? 'bg-negro' : 'border border-linea'}`}>
+      <div className="flex flex-col gap-2">
+        <h3 className={`text-xl leading-[1.15] font-semibold tracking-[-0.03em] ${oscura ? 'text-white' : ''}`}>{titulo}</h3>
+        <p className={`text-[15px] ${oscura ? 'text-gris-400' : 'text-gris-500'}`}>{texto}</p>
+      </div>
+      <div aria-hidden className="mt-auto">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+const casilleros = [
+  { etapa: 'prim', puntos: 10 },
+  { etapa: 'ver', puntos: 15 },
+  { etapa: 'pre', puntos: 50 },
+  { etapa: 'oto', puntos: 15 },
+  { etapa: 'inv', puntos: 75, nuevo: true },
+];
+
+function Funciones() {
+  return (
+    <section id="funciones" className={`scroll-mt-6 pt-28 ${margen}`}>
+      <div className="mx-auto flex max-w-[1180px] flex-col gap-9">
+        <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-4">
+          <h2 className={`max-w-[620px] ${tituloDeSeccion}`}>Lo que antes llevaba una planilla y cien mensajes</h2>
+          <p className="max-w-[380px] text-[17px] text-gris-500">Pensado con el reglamento de un circuito real.</p>
+        </div>
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-4">
+          <Funcion
+            titulo="Traés tu planilla"
+            texto="Jugadores, puntos y categorías entran solos. Revisás solo lo dudoso."
+          >
+            <div className="flex flex-col gap-2 rounded-xl border border-linea bg-white p-3.5 text-sm">
+              <Numero className="text-xs text-gris-500">ranking-tercera-2026.xlsx</Numero>
+              <div className="flex justify-between gap-2.5">
+                <span>Importados</span>
+                <Numero className="font-medium">74</Numero>
+              </div>
+              <div className="flex justify-between gap-2.5">
+                <span>Para revisar</span>
+                <Numero className="font-medium">3</Numero>
+              </div>
+            </div>
+          </Funcion>
+          <Funcion
+            titulo="Inscripciones que se cobran solas"
+            texto="Pagan con MercadoPago desde el link. Si se llena, hay lista de espera."
+            oscura
+          >
+            <div className="flex flex-col gap-2.5">
+              <div className="flex items-baseline justify-between gap-2.5">
+                <span className="text-sm text-gris-400">Pagaron</span>
+                <Numero className="text-lg font-medium text-white">
+                  28 <span className="text-gris-400">/ 32</span>
+                </Numero>
+              </div>
+              {/* El cupo: 28 pagados, 1 reservando, 3 libres. */}
+              <div className="flex gap-0.5">
+                {Array.from({ length: 32 }, (_, i) => (
+                  <div
+                    key={i}
+                    className={`h-6 flex-1 rounded-[2px] ${i < 28 ? 'bg-lima' : i === 28 ? 'bg-gris-400' : 'bg-borde-oscuro'}`}
+                  />
+                ))}
+              </div>
+            </div>
+          </Funcion>
+          <Funcion
+            titulo="Zonas y cuadros sin cuentas"
+            texto="Sorteo sembrado por ranking, desempates del reglamento, cuadro principal y consuelo."
+          >
+            <div className="flex flex-wrap gap-1.5 text-sm font-medium">
+              <span className="flex h-8 items-center rounded-full bg-negro px-3 text-white">Serpentina</span>
+              <span className="flex h-8 items-center rounded-full border border-linea px-3">Directa</span>
+              <span className="flex h-8 items-center rounded-full border border-linea px-3">Bombos</span>
+            </div>
+          </Funcion>
+          <Funcion titulo="Ranking al día" texto="Como en la ATP: cada torneo reemplaza los puntos del año anterior.">
+            <div className="grid grid-cols-5 gap-1">
+              {casilleros.map(({ etapa, puntos, nuevo }) => (
+                <div
+                  key={etapa}
+                  className={`flex flex-col items-center gap-0.5 rounded-[7px] py-[7px] ${nuevo ? 'bg-lima' : 'bg-fondo'}`}
+                >
+                  <Numero className={`text-[11px] ${nuevo ? '' : 'text-gris-500'}`}>{etapa}</Numero>
+                  <Numero className="text-[15px] font-medium">{puntos}</Numero>
+                </div>
+              ))}
+            </div>
+          </Funcion>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Preguntas() {
+  return (
+    <section id="preguntas" className={`scroll-mt-6 pt-28 ${margen}`}>
+      <div className="mx-auto flex max-w-[1180px] flex-wrap gap-x-14 gap-y-8">
+        <h2 className={`flex-[1_1_300px] ${tituloDeSeccion}`}>Preguntas frecuentes</h2>
+        {/* Cerradas al principio: se abren con un clic o con el teclado, sin estado en React. */}
+        <div className="flex flex-[2_1_560px] flex-col border-b border-linea">
+          {preguntas.map(({ pregunta, respuesta }) => (
+            <details key={pregunta} className="group border-t border-linea">
+              <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 py-2 text-lg font-semibold tracking-[-0.02em] [&::-webkit-details-marker]:hidden">
+                {pregunta}
+                <span className="flex size-8 flex-none items-center justify-center rounded-full border border-linea transition-transform group-open:rotate-45">
+                  <IconoMas className="size-3.5 stroke-[1.8]" />
+                </span>
+              </summary>
+              <p className="pr-12 pb-[22px] text-base text-gris-700">{respuesta}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Llamado() {
+  return (
+    <section className={`pt-28 pb-20 ${margen}`}>
+      <div className="mx-auto flex max-w-[1180px] flex-col items-center gap-5 rounded-3xl bg-negro px-[clamp(20px,4vw,48px)] py-[clamp(40px,6vw,72px)] text-center">
+        <h2 className="max-w-[680px] text-[clamp(30px,4vw,48px)] leading-[1.06] font-semibold tracking-[-0.04em] text-balance text-white">
+          Tu próximo torneo, sin Excel ni comprobantes
+        </h2>
+        <p className="max-w-[520px] text-[17px] leading-normal text-gris-400">
+          Creá tu circuito y publicá un torneo suelto. Si llevás ranking, lo activás después, sin rehacer nada.
+        </p>
+        <Link
+          to="/registro"
+          className="mt-1.5 flex h-[52px] items-center rounded-xl bg-lima px-[26px] text-base font-semibold text-negro"
+        >
+          Crear mi circuito
+        </Link>
+      </div>
+    </section>
+  );
+}
+
+function Pie() {
+  const enlace = 'flex min-h-10 items-center text-gris-700 hover:text-negro';
+  return (
+    <footer className={`mt-auto ${margen}`}>
+      <div className="mx-auto flex max-w-[1180px] flex-col gap-14 border-t border-linea pt-[72px] pb-8">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-x-12 gap-y-10 text-[15px]">
+          <div className="flex flex-col gap-3.5">
+            <Logo grande />
+            <span className="max-w-[240px] text-gris-500">Torneos, ranking e inscripciones para circuitos de tenis.</span>
+            <Numero className="text-[13px] text-gris-500">Neuquén, Argentina</Numero>
+          </div>
+          <nav aria-label="Producto" className="flex flex-col gap-0.5">
+            <Numero className="pb-2.5 text-[13px] text-gris-500">producto</Numero>
+            <a href="#producto" className={enlace}>
+              Cómo se ve
+            </a>
+            <a href="#funciones" className={enlace}>
+              Funciones
+            </a>
+            <a href="#preguntas" className={enlace}>
+              Preguntas
+            </a>
+          </nav>
+          <nav aria-label="Cuenta" className="flex flex-col gap-0.5">
+            <Numero className="pb-2.5 text-[13px] text-gris-500">cuenta</Numero>
+            <Link to="/ingresar" className={enlace}>
+              Ingresar
+            </Link>
+            <Link to="/registro" className={enlace}>
+              Crear mi circuito
+            </Link>
+          </nav>
+        </div>
+        <div className="flex flex-wrap justify-between gap-x-6 gap-y-2 border-t border-linea-suave pt-6 text-sm text-gris-500">
+          <span>© {new Date().getFullYear()} SetPoint</span>
+          <span>Pensado con el reglamento de un circuito real</span>
+        </div>
+      </div>
+    </footer>
   );
 }
 
 export function LandingPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-white text-negro">
-      <header className="flex h-[68px] items-center justify-between gap-6 border-b border-linea px-4 sm:px-10">
-        <Logo />
-        <nav className="flex items-center gap-2">
-          <a href="#como-funciona" className="hidden h-9 items-center px-[13px] text-sm text-gris-700 hover:text-negro md:flex">
-            Cómo funciona
-          </a>
-          <a href="#para-jugadores" className="hidden h-9 items-center px-[13px] text-sm text-gris-700 hover:text-negro md:flex">
-            Para jugadores
-          </a>
-          <Link to="/ingresar" className="flex h-9 items-center px-[13px] text-sm text-gris-700 hover:text-negro">
-            Ingresar
-          </Link>
-          <Link
-            to="/registro"
-            className="flex h-10 items-center rounded-control bg-negro px-[17px] text-sm font-semibold text-white"
-          >
-            Crear mi circuito
-          </Link>
-        </nav>
-      </header>
-
-      <section className="flex flex-col gap-11 bg-negro px-4 pt-14 pb-[68px] sm:px-10 sm:pt-[76px]">
-        <div className="grid items-center gap-[60px] lg:grid-cols-[minmax(0,1fr)_420px]">
-          <div className="flex flex-col gap-[26px]">
-            <div className="flex items-center gap-[9px]">
-              <div className="size-[7px] rounded-full bg-lima" />
-              <span className="font-mono text-[13px] text-lima">para circuitos de tenis amateur</span>
-            </div>
-            <h1 className="text-[40px] leading-[1.03] font-semibold tracking-[-0.042em] text-pretty text-white sm:text-[60px]">
-              El cuadro, los horarios y el ranking dejan de perderse en el grupo.
-            </h1>
-            <p className="max-w-[620px] text-[17px] leading-normal text-gris-400 sm:text-[19px]">
-              Un link siempre actualizado en lugar de veinte mensajes y una planilla que actualiza una sola persona. Los
-              jugadores entran desde el celular y ven cuándo juegan, contra quién y dónde.
-            </p>
-            <div className="flex flex-wrap items-center gap-3">
-              <Link
-                to="/registro"
-                className="flex h-[52px] items-center rounded-xl bg-lima px-[22px] text-base font-semibold text-negro"
-              >
-                Crear mi circuito
-              </Link>
-              <button
-                type="button"
-                className="flex h-[52px] items-center rounded-xl border border-borde-oscuro px-[22px] text-base font-medium text-white"
-              >
-                Ver un torneo de ejemplo
-              </button>
-            </div>
-            <p className="text-[15px] text-gris-500">
-              Publicar un torneo no cuesta nada. El sistema cobra las inscripciones de los jugadores.
-            </p>
-          </div>
-
-          <BarraZonas />
-        </div>
-
-        <div className="flex flex-wrap items-center gap-x-[26px] gap-y-2 border-t border-borde-oscuro pt-3.5">
-          <span className="text-sm text-gris-500">Hecho con</span>
-          <span className="text-[15px] font-semibold text-white">Polenta Team Tenis</span>
-          <div className="hidden h-3.5 w-px bg-borde-oscuro sm:block" />
-          <Numero className="text-sm text-gris-400">77 jugadores</Numero>
-          <Numero className="text-sm text-gris-400">2 categorías</Numero>
-          <Numero className="text-sm text-gris-400">5 torneos por año</Numero>
-        </div>
-      </section>
-
-      <section id="como-funciona" className="flex flex-col gap-[34px] px-4 pt-[72px] pb-[60px] sm:px-10">
-        <div className="flex max-w-[640px] flex-col gap-3">
-          <h2 className="text-[30px] leading-[1.1] font-semibold tracking-[-0.035em] sm:text-[38px]">
-            Lo que hoy se hace a mano
-          </h2>
-          <p className="text-[17px] leading-normal text-gris-500">
-            No inventamos el problema. Es el circuito completo de un torneo, tal como funciona hoy en la mayoría de los
-            circuitos amateur.
-          </p>
-        </div>
-
-        <div className="overflow-hidden rounded-2xl border border-linea">
-          <div className="hidden grid-cols-[minmax(0,1fr)_44px_minmax(0,1fr)] border-b border-linea bg-fondo-tabla sm:grid">
-            <span className="px-[22px] py-3 text-[13px] font-semibold text-gris-500">Hoy</span>
-            <span />
-            <span className="px-[22px] py-3 text-[13px] font-semibold">Con SetPoint</span>
-          </div>
-          {comparaciones.map((fila) => (
-            <FilaComparacion key={fila.hoy} {...fila} />
-          ))}
-        </div>
-      </section>
-
-      <section className="flex flex-col gap-[26px] px-4 pt-3 pb-[72px] sm:px-10">
-        <h2 className="text-2xl font-semibold tracking-[-0.03em]">Lo que trae adentro</h2>
-        <div className="grid gap-[18px] md:grid-cols-2 lg:grid-cols-3">
-          {funciones.map((funcion) => (
-            <TarjetaFuncion key={funcion.titulo} {...funcion} />
-          ))}
-        </div>
-      </section>
-
-      <section id="para-jugadores" className="px-4 pb-[72px] sm:px-10">
-        <div className="grid items-center gap-12 rounded-[20px] bg-fondo p-6 sm:p-11 lg:grid-cols-[minmax(0,1fr)_320px]">
-          <div className="flex flex-col gap-4">
-            <h2 className="text-[28px] leading-[1.12] font-semibold tracking-[-0.035em] sm:text-[32px]">
-              Para el jugador, una app en el teléfono
-            </h2>
-            <p className="text-[17px] leading-normal text-gris-700">
-              Ve su próximo partido con rival, club, día y hora. Anota la fecha que arregló y su rival la confirma con un
-              toque. Y por primera vez tiene su historial: cuántos ganó, contra quién, y si alguna vez le ganó al que le
-              toca el sábado.
-            </p>
-            <p className="text-base text-gris-500">
-              Para mirar el ranking, los cuadros o una ficha no hace falta cuenta ni instalar nada: es un link.
-            </p>
-          </div>
-          <div className="flex flex-col gap-3.5 rounded-2xl bg-negro p-5">
-            <span className="text-[13px] text-gris-400">Tu próximo partido</span>
-            <span className="text-[26px] leading-[1.1] font-semibold tracking-[-0.03em] text-white">Marcelo Sanhueza</span>
-            <Numero className="text-[17px] text-lima">sáb 14 · 10:00</Numero>
-            <span className="text-sm text-gris-400">Club Alta Barda · cancha 3</span>
-          </div>
-        </div>
-      </section>
-
-      <section className="flex flex-col items-center gap-[22px] px-4 pb-[76px] text-center sm:px-10">
-        <h2 className="max-w-[620px] text-[28px] leading-[1.12] font-semibold tracking-[-0.035em] sm:text-[34px]">
-          Empezá con un torneo suelto, sin configurar nada
-        </h2>
-        <p className="max-w-[560px] text-[17px] leading-normal text-gris-500">
-          Si tu circuito lleva ranking anual, lo activás después. Publicar no cuesta nada.
-        </p>
-        <Link
-          to="/registro"
-          className="flex h-[52px] items-center rounded-xl bg-negro px-6 text-base font-semibold text-white"
-        >
-          Crear mi circuito
-        </Link>
-      </section>
-
-      <footer className="mt-auto flex items-center justify-between gap-5 border-t border-linea px-4 py-[26px] sm:px-10">
-        <Logo />
-        <span className="font-mono text-[13px] text-gris-500">Neuquén, Argentina</span>
-      </footer>
+    <div className="flex min-h-screen flex-col bg-white leading-[1.45] text-negro">
+      <Portada />
+      <Producto />
+      <QuienLoUsa />
+      <TresPantallas />
+      <Funciones />
+      <Preguntas />
+      <Llamado />
+      <Pie />
     </div>
   );
 }
