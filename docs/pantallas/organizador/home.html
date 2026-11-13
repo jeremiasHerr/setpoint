@@ -33,7 +33,7 @@ El login es uno solo para todos; el rol decide el destino. Esta es la pantalla d
 
 Estado 1 · primera vez. No obliga a elegir entre torneo suelto y circuito: el camino principal es crear un torneo, que no pide ninguna configuración previa. El circuito con ranking aparece como segunda opción, explicado en una línea, y sigue disponible desde "Circuito" en la barra.
 
-Estado 2 · con torneos. La misma pantalla, ya con contenido: lo que pide atención arriba a la derecha, los torneos agrupados por momento (en juego, con inscripción abierta, terminados). Cada tarjeta lleva al tablero o a las inscripciones de ese torneo.
+Estado 2 · con torneos (decisión 094). Arriba, en una franja negra, el circuito: su nombre, sus torneos del calendario con la última edición de cada uno y sus cifras. Abajo, los torneos en cuatro columnas por momento (en preparación, inscripción, en juego, terminados), que llegan hasta abajo de la pantalla. Cada tarjeta dice a qué torneo del calendario pertenece, o si es suelto, y lleva al tablero, a las inscripciones o al sorteo. Con partidos vencidos, "Necesita tu atención" va en una franja roja arriba de las columnas.
 
 "Necesita tu atención" suma las vinculaciones para revisar (decisión 051): los posibles homónimos y los perfiles que reclama otra cuenta. Llevan a revisar-vinculacion.html, con punto negro y no rojo: no venció nada. Las vinculaciones nuevas sin problemas no van acá: se ven en el padrón.
 
@@ -157,190 +157,393 @@ Todos los nombres de personas son ficticios.
 
   </div>
 
-  <div class="estado" style="padding-top: 40px;">Estado 2 · con torneos en marcha</div>
+  <div class="estado" style="padding-top: 40px;">Estado 2 · con torneos: el circuito arriba y los torneos en columnas (decisión 094)</div>
 
-  <div class="pantalla" style="min-height: 900px;">
+  <div class="pantalla" style="min-height: 900px; background: #FFFFFF; font-size: 15px; line-height: 1.45">
 
-    <div style="background: #0A0B0D; height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 28px;">
-      <div style="display: flex; align-items: center; gap: 14px;">
-        <div style="display: flex; align-items: center; gap: 9px;">
-          <div style="width: 24px; height: 24px; border-radius: 7px; background: #CDF546; display: flex; align-items: center; justify-content: center;">
-            <div style="width: 8px; height: 8px; border-radius: 999px; background: #0A0B0D;"></div>
-          </div>
-          <div style="font-size: 16px; font-weight: 600; color: #FFFFFF; letter-spacing: -0.02em;">SetPoint</div>
+  <header style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; min-height: 56px; padding: 0 clamp(16px, 3vw, 32px); background: #0A0B0D">
+    <a href="#" style="display: flex; align-items: center; gap: 9px; min-height: 44px; text-decoration: none; color: #FFFFFF">
+      <span style="display: flex; width: 24px; height: 24px; border-radius: 7px; background: #CDF546; align-items: center; justify-content: center"><span style="width: 8px; height: 8px; border-radius: 50%; background: #0A0B0D"></span></span>
+      <span style="font-size: 16px; font-weight: 600; letter-spacing: -0.02em">SetPoint</span>
+    </a>
+    <nav style="margin-left: auto; display: flex; flex-wrap: wrap; align-items: center; gap: 4px">
+      <a href="#" style="display: inline-flex; align-items: center; height: 36px; padding: 0 13px; border-radius: 9px; background: #17191D; color: #FFFFFF; font-size: 14px; font-weight: 600; text-decoration: none">Inicio</a>
+      <a href="#" style="display: inline-flex; align-items: center; height: 36px; padding: 0 13px; color: #9BA1A9; font-size: 14px; text-decoration: none">Circuito</a>
+      <a href="#" style="display: inline-flex; align-items: center; height: 36px; padding: 0 13px; color: #9BA1A9; font-size: 14px; text-decoration: none">Padrón</a>
+      <span class="mono" style="display: flex; width: 32px; height: 32px; margin-left: 8px; border-radius: 50%; border: 1px solid #2C3037; align-items: center; justify-content: center; color: #FFFFFF; font-size: 12px">MG</span>
+      <a href="#" style="display: inline-flex; align-items: center; height: 36px; padding: 0 13px; color: #9BA1A9; font-size: 14px; text-decoration: none">Salir</a>
+    </nav>
+  </header>
+
+  <div style="background: #0A0B0D; padding: 0 clamp(16px, 3vw, 32px) 26px">
+    <div style="max-width: 1376px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px 40px; padding-top: 18px; border-top: 1px solid #2C3037">
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <span class="mono" style="font-size: 12px; color: #9BA1A9">tu circuito</span>
+        <h1 style="margin: 0; font-size: 32px; line-height: 1.05; letter-spacing: -0.04em; font-weight: 600; color: #FFFFFF">Polenta Team Tenis</h1>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-top: 2px">
+          
+            <span style="display: inline-flex; align-items: center; gap: 7px; height: 30px; padding: 0 11px; border-radius: 999px; border: 1px solid #2C3037; font-size: 13px; color: #FFFFFF"><span style="width: 7px; height: 7px; border-radius: 50%; background: #CDF546; border: none"></span>Primavera 26 · inscripción</span>
+          
+            <span style="display: inline-flex; align-items: center; gap: 7px; height: 30px; padding: 0 11px; border-radius: 999px; border: 1px solid #2C3037; font-size: 13px; color: #FFFFFF"><span style="width: 7px; height: 7px; border-radius: 50%; background: transparent; border: 1px dashed #9BA1A9"></span>Verano 26/27 · en preparación</span>
+          
+            <span style="display: inline-flex; align-items: center; gap: 7px; height: 30px; padding: 0 11px; border-radius: 999px; border: 1px solid #2C3037; font-size: 13px; color: #FFFFFF"><span style="width: 7px; height: 7px; border-radius: 50%; background: #6A7079; border: none"></span>Pretemporada 26 · terminado</span>
+          
+            <span style="display: inline-flex; align-items: center; gap: 7px; height: 30px; padding: 0 11px; border-radius: 999px; border: 1px solid #2C3037; font-size: 13px; color: #FFFFFF"><span style="width: 7px; height: 7px; border-radius: 50%; background: #6A7079; border: none"></span>Otoño 26 · terminado</span>
+          
+            <span style="display: inline-flex; align-items: center; gap: 7px; height: 30px; padding: 0 11px; border-radius: 999px; border: 1px solid #2C3037; font-size: 13px; color: #FFFFFF"><span style="width: 7px; height: 7px; border-radius: 50%; background: #6A7079; border: none"></span>Invierno 26 · terminado</span>
+          
         </div>
-        <div style="width: 1px; height: 18px; background: #2C3037;"></div>
-        <div style="font-size: 14px; color: #9BA1A9;">Polenta Team Tenis</div>
       </div>
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <div class="nav nav-on">Inicio</div>
-        <div class="nav">Padrón</div>
-        <div class="nav">Ranking</div>
-        <div class="nav">Circuito</div>
-        <div style="width: 12px;"></div>
-        <div style="width: 32px; height: 32px; border-radius: 999px; background: #1B1E23; border: 1px solid #2C3037; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: #FFFFFF;">GH</div>
+      <div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 28px">
+        
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 13px; color: #9BA1A9">Jugadores</span>
+            <span class="mono" style="font-size: 26px; font-weight: 500; color: #FFFFFF">77</span>
+          </div>
+        
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 13px; color: #9BA1A9">Categorías</span>
+            <span class="mono" style="font-size: 26px; font-weight: 500; color: #FFFFFF">2</span>
+          </div>
+        
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 13px; color: #9BA1A9">Recaudado en inscripciones abiertas</span>
+            <span class="mono" style="font-size: 26px; font-weight: 500; color: #CDF546">$1.260.000</span>
+          </div>
+        
+        <a href="#" style="display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 18px; border-radius: 10px; background: #CDF546; color: #0A0B0D; font-size: 14px; font-weight: 600; text-decoration: none"><span style="font-size: 18px; line-height: 1">+</span>Nuevo torneo</a>
       </div>
     </div>
+  </div>
 
-    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding: 26px 28px 22px 28px;">
-      <div style="display: flex; flex-direction: column; gap: 7px;">
-        <div style="font-size: 30px; font-weight: 600; letter-spacing: -0.035em;">Torneos</div>
-        <div style="font-size: 15px; color: #6A7079;">Uno en juego y dos con la inscripción abierta.</div>
-      </div>
-      <div class="btn-neg" style="height: 40px; font-size: 14px; font-weight: 600; padding: 0 16px;">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
-        Nuevo torneo
-      </div>
-    </div>
-
-    <div style="padding: 0 28px 28px 28px; display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 22px; align-items: start;">
-
-      <div style="display: flex; flex-direction: column; gap: 22px;">
-
-        <div style="display: flex; flex-direction: column; gap: 11px;">
-          <div class="rot">En juego</div>
-          <div style="border: 1px solid #E6E8EB; border-radius: 14px; padding: 20px; display: grid; grid-template-columns: minmax(0, 1fr) 260px 120px; gap: 24px; align-items: center;">
-            <div style="display: flex; flex-direction: column; gap: 6px;">
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <div style="font-size: 18px; font-weight: 600; letter-spacing: -0.02em;">Invierno 26 · Segunda</div>
-                <div class="etiqueta" style="background: #0A0B0D; color: #FFFFFF;">Cuadros</div>
-              </div>
-              <div style="font-size: 14px; color: #6A7079;">32 jugadores · cuartos de final hasta el sábado 3</div>
-            </div>
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-              <div style="display: flex; align-items: baseline; justify-content: space-between;">
-                <div style="font-size: 13px; color: #6A7079;">Partidos jugados</div>
-                <div class="mono" style="font-size: 14px; font-weight: 500;">58 <span style="color: #9BA1A9;">/ 78</span></div>
-              </div>
-              <div class="barra"><div style="width: 74.4%; height: 100%; background: #0A0B0D;"></div></div>
-              <div style="font-size: 13px; color: #C62A2F;"><span class="mono">3</span> vencidos sin resultado</div>
-            </div>
-            <div class="btn-sec" style="height: 40px; font-size: 14px;">Ver tablero</div>
+  <main style="width: 100%; max-width: 1376px; margin: 0 auto; padding: 24px clamp(16px, 3vw, 32px) 48px; box-sizing: border-box">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; align-items: start">
+      
+        <section style="display: flex; flex-direction: column; gap: 10px; min-height: 640px; padding: 12px; border-radius: 18px; background: #F1F2F4">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 4px 6px 2px">
+            <h2 style="margin: 0; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600"><span style="width: 10px; height: 10px; border-radius: 3px; background: #FFFFFF; border: 1.5px dashed #6A7079"></span>En preparación</h2>
+            <span class="mono" style="display: inline-flex; align-items: center; justify-content: center; min-width: 24px; height: 24px; padding: 0 6px; border-radius: 999px; background: #FFFFFF; font-size: 12px">1</span>
           </div>
-        </div>
-
-        <div style="display: flex; flex-direction: column; gap: 11px;">
-          <div class="rot">Inscripción abierta</div>
-          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px;">
-
-            <div style="border: 1px solid #E6E8EB; border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 16px;">
-              <div style="display: flex; flex-direction: column; gap: 5px;">
-                <div style="font-size: 17px; font-weight: 600; letter-spacing: -0.02em;">Primavera 26 · Tercera</div>
-                <div style="font-size: 14px; color: #6A7079;">Cierra el viernes 9 · sorteo el sábado 10</div>
+          <span style="padding: 0 6px; font-size: 13px; color: #6A7079">Borradores: todavía no los ve nadie</span>
+          
+            <article style="display: flex; flex-direction: column; gap: 12px; padding: 16px; border-radius: 14px; background: #FFFFFF; border: 1px solid #D5D9DE">
+              <div style="display: flex; flex-wrap: wrap; gap: 6px">
+                <span class="mono" style="display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border-radius: 6px; background: #F1F2F4; font-size: 12px; color: #3F4348">verano</span>
               </div>
-              <div style="display: flex; flex-direction: column; gap: 8px;">
-                <div style="display: flex; align-items: baseline; justify-content: space-between;">
-                  <div style="font-size: 13px; color: #6A7079;">Inscriptos que pagaron</div>
-                  <div class="mono" style="font-size: 14px; font-weight: 500;">24 <span style="color: #9BA1A9;">/ 32</span></div>
+              <div style="display: flex; flex-direction: column; gap: 2px">
+                <span style="font-size: 17px; font-weight: 600; letter-spacing: -0.02em">Verano 26/27 · Segunda y Tercera</span>
+                <span style="font-size: 13px; color: #6A7079">Sin fechas todavía</span>
+              </div>
+              
+              <a href="#" style="display: inline-flex; align-items: center; justify-content: center; height: 40px; border-radius: 10px; background: #FFFFFF; color: #0A0B0D; border: 1px solid #D5D9DE; font-size: 14px; font-weight: 600; text-decoration: none">Seguir editando</a>
+            </article>
+          
+          
+            <a href="#" style="display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 84px; border-radius: 14px; border: 1.5px dashed #B5BBC3; color: #3F4348; font-size: 14px; font-weight: 500; text-decoration: none"><span style="font-size: 18px; line-height: 1">+</span>Armar el próximo torneo</a>
+          
+        </section>
+      
+        <section style="display: flex; flex-direction: column; gap: 10px; min-height: 640px; padding: 12px; border-radius: 18px; background: #F1F2F4">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 4px 6px 2px">
+            <h2 style="margin: 0; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600"><span style="width: 10px; height: 10px; border-radius: 3px; background: #CDF546; border: none"></span>Inscripción</h2>
+            <span class="mono" style="display: inline-flex; align-items: center; justify-content: center; min-width: 24px; height: 24px; padding: 0 6px; border-radius: 999px; background: #FFFFFF; font-size: 12px">2</span>
+          </div>
+          <span style="padding: 0 6px; font-size: 13px; color: #6A7079">Se cobra desde el link de cada una</span>
+          
+            <article style="display: flex; flex-direction: column; gap: 12px; padding: 16px; border-radius: 14px; background: #FFFFFF; border: 1px solid #D5D9DE">
+              <div style="display: flex; flex-wrap: wrap; gap: 6px">
+                <span class="mono" style="display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border-radius: 6px; background: #F1F2F4; font-size: 12px; color: #3F4348">primavera</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 2px">
+                <span style="font-size: 17px; font-weight: 600; letter-spacing: -0.02em">Primavera 26 · Segunda</span>
+                <span style="font-size: 13px; color: #6A7079">Inscripción cerrada · empieza el 20 nov</span>
+              </div>
+              
+                <div style="display: flex; flex-direction: column; gap: 6px">
+                  <div style="display: flex; justify-content: space-between; gap: 8px; font-size: 13px"><span style="color: #3F4348">Pagaron</span><span class="mono">32 / 32</span></div>
+                  <div style="display: flex; gap: 2px">
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                  </div>
                 </div>
-                <div class="barra"><div style="width: 75%; height: 100%; background: #CDF546;"></div></div>
+              
+              <a href="#" style="display: inline-flex; align-items: center; justify-content: center; height: 40px; border-radius: 10px; background: #0A0B0D; color: #FFFFFF; border: none; font-size: 14px; font-weight: 600; text-decoration: none">Sortear las zonas</a>
+            </article>
+          
+            <article style="display: flex; flex-direction: column; gap: 12px; padding: 16px; border-radius: 14px; background: #FFFFFF; border: 1px solid #D5D9DE">
+              <div style="display: flex; flex-wrap: wrap; gap: 6px">
+                <span class="mono" style="display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border-radius: 6px; background: #F1F2F4; font-size: 12px; color: #3F4348">primavera</span>
               </div>
-              <div style="display: flex; gap: 9px;">
-                <div class="btn-sec" style="height: 38px; font-size: 14px; flex-grow: 1;">Inscripciones</div>
-                <div class="btn-sec" style="height: 38px; font-size: 14px; padding: 0 14px;">Copiar link</div>
+              <div style="display: flex; flex-direction: column; gap: 2px">
+                <span style="font-size: 17px; font-weight: 600; letter-spacing: -0.02em">Primavera 26 · Tercera</span>
+                <span style="font-size: 13px; color: #6A7079">Cierra el 19 nov · empieza el 20 nov</span>
               </div>
-            </div>
-
-            <div style="border: 1px solid #E6E8EB; border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 16px;">
-              <div style="display: flex; flex-direction: column; gap: 5px;">
-                <div style="font-size: 17px; font-weight: 600; letter-spacing: -0.02em;">Primavera 26 · Segunda</div>
-                <div style="font-size: 14px; color: #6A7079;">Cierra el viernes 23 · sorteo el sábado 24</div>
-              </div>
-              <div style="display: flex; flex-direction: column; gap: 8px;">
-                <div style="display: flex; align-items: baseline; justify-content: space-between;">
-                  <div style="font-size: 13px; color: #6A7079;">Inscriptos que pagaron</div>
-                  <div class="mono" style="font-size: 14px; font-weight: 500;">9 <span style="color: #9BA1A9;">/ 32</span></div>
+              
+                <div style="display: flex; flex-direction: column; gap: 6px">
+                  <div style="display: flex; justify-content: space-between; gap: 8px; font-size: 13px"><span style="color: #3F4348">Pagaron</span><span class="mono">28 / 32</span></div>
+                  <div style="display: flex; gap: 2px">
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #D5D9DE"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #D5D9DE"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #D5D9DE"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #D5D9DE"></div>
+                    
+                  </div>
                 </div>
-                <div class="barra"><div style="width: 28.1%; height: 100%; background: #CDF546;"></div></div>
+              
+              <a href="#" style="display: inline-flex; align-items: center; justify-content: center; height: 40px; border-radius: 10px; background: #FFFFFF; color: #0A0B0D; border: 1px solid #D5D9DE; font-size: 14px; font-weight: 600; text-decoration: none">Inscripciones</a>
+            </article>
+          
+          
+        </section>
+      
+        <section style="display: flex; flex-direction: column; gap: 10px; min-height: 640px; padding: 12px; border-radius: 18px; background: #F1F2F4">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 4px 6px 2px">
+            <h2 style="margin: 0; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600"><span style="width: 10px; height: 10px; border-radius: 3px; background: #0A0B0D; border: none"></span>En juego</h2>
+            <span class="mono" style="display: inline-flex; align-items: center; justify-content: center; min-width: 24px; height: 24px; padding: 0 6px; border-radius: 999px; background: #FFFFFF; font-size: 12px">1</span>
+          </div>
+          <span style="padding: 0 6px; font-size: 13px; color: #6A7079">Del sorteo al cierre</span>
+          
+            <article style="display: flex; flex-direction: column; gap: 12px; padding: 16px; border-radius: 14px; background: #FFFFFF; border: 1px solid #D5D9DE">
+              <div style="display: flex; flex-wrap: wrap; gap: 6px">
+                <span class="mono" style="display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border-radius: 6px; background: #F1F2F4; font-size: 12px; color: #3F4348">torneo suelto</span>
               </div>
-              <div style="display: flex; gap: 9px;">
-                <div class="btn-sec" style="height: 38px; font-size: 14px; flex-grow: 1;">Inscripciones</div>
-                <div class="btn-sec" style="height: 38px; font-size: 14px; padding: 0 14px;">Copiar link</div>
+              <div style="display: flex; flex-direction: column; gap: 2px">
+                <span style="font-size: 17px; font-weight: 600; letter-spacing: -0.02em">Abierto de primavera · Libre</span>
+                <span style="font-size: 13px; color: #6A7079">16 jugadores · zonas hasta el sábado 22</span>
               </div>
-            </div>
-
+              
+                <div style="display: flex; flex-direction: column; gap: 6px">
+                  <div style="display: flex; justify-content: space-between; gap: 8px; font-size: 13px"><span style="color: #3F4348">Partidos jugados</span><span class="mono">16 / 24</span></div>
+                  <div style="display: flex; gap: 2px">
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #0A0B0D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #E5484D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #E5484D"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #D5D9DE"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #D5D9DE"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #D5D9DE"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #D5D9DE"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #D5D9DE"></div>
+                    
+                      <div style="flex: 1; height: 18px; border-radius: 2px; background: #D5D9DE"></div>
+                    
+                  </div>
+                </div>
+              
+              <a href="#" style="display: inline-flex; align-items: center; justify-content: center; height: 40px; border-radius: 10px; background: #0A0B0D; color: #FFFFFF; border: none; font-size: 14px; font-weight: 600; text-decoration: none">Ver el tablero</a>
+            </article>
+          
+          
+        </section>
+      
+        <section style="display: flex; flex-direction: column; gap: 10px; min-height: 640px; padding: 12px; border-radius: 18px; background: #F1F2F4">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 4px 6px 2px">
+            <h2 style="margin: 0; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600"><span style="width: 10px; height: 10px; border-radius: 3px; background: #6A7079; border: none"></span>Terminados</h2>
+            <span class="mono" style="display: inline-flex; align-items: center; justify-content: center; min-width: 24px; height: 24px; padding: 0 6px; border-radius: 999px; background: #FFFFFF; font-size: 12px">3</span>
           </div>
-        </div>
-
-        <div style="display: flex; flex-direction: column; gap: 11px;">
-          <div class="rot">Terminados</div>
-          <div style="border: 1px solid #E6E8EB; border-radius: 14px; overflow: hidden;">
-            <div class="fila" style="border-top: none; background: #FAFBFC; font-size: 13px; font-weight: 600; color: #6A7079; padding-top: 11px; padding-bottom: 11px;">
-              <div>Torneo</div><div>Terminó</div><div>Campeón</div><div style="text-align: right;">Jugadores</div>
-            </div>
-            <div class="fila">
-              <div style="font-weight: 500;">Invierno 26 · Tercera</div>
-              <div class="mono" style="font-size: 14px; color: #6A7079;">05/09/2026</div>
-              <div>Lucas Ferreyra</div>
-              <div class="mono" style="font-size: 14px; text-align: right;">32</div>
-            </div>
-            <div class="fila">
-              <div style="font-weight: 500;">Otoño 26 · Segunda</div>
-              <div class="mono" style="font-size: 14px; color: #6A7079;">27/06/2026</div>
-              <div>Nicolás Arrieta</div>
-              <div class="mono" style="font-size: 14px; text-align: right;">32</div>
-            </div>
-            <div class="fila">
-              <div style="font-weight: 500;">Otoño 26 · Tercera</div>
-              <div class="mono" style="font-size: 14px; color: #6A7079;">20/06/2026</div>
-              <div>Martín Sanhueza</div>
-              <div class="mono" style="font-size: 14px; text-align: right;">28</div>
-            </div>
-            <div style="padding: 13px 20px; border-top: 1px solid #F1F2F4; font-size: 14px; font-weight: 500;">Ver los 9 torneos terminados →</div>
-          </div>
-        </div>
-
-      </div>
-
-      <div style="display: flex; flex-direction: column; gap: 16px;">
-
-        <div style="border: 1px solid #F3D3D4; background: #FEF6F6; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 12px;">
-          <div style="font-size: 15px; font-weight: 600;">Necesita tu atención</div>
-          <div style="display: flex; flex-direction: column; gap: 10px;">
-            <div style="display: flex; align-items: flex-start; gap: 10px;">
-              <div style="width: 7px; height: 7px; border-radius: 999px; background: #E5484D; margin-top: 7px; flex-shrink: 0;"></div>
-              <div style="font-size: 14px; line-height: 1.45;"><span class="mono">3</span> partidos de Segunda vencieron sin resultado. <span style="font-weight: 500; text-decoration: underline;">Resolver</span></div>
-            </div>
-            <div style="display: flex; align-items: flex-start; gap: 10px;">
-              <div style="width: 7px; height: 7px; border-radius: 999px; background: #E5484D; margin-top: 7px; flex-shrink: 0;"></div>
-              <div style="font-size: 14px; line-height: 1.45;">Primavera 26 · Segunda tiene <span class="mono">9</span> de <span class="mono">32</span> inscriptos y cierra en tres semanas. <span style="font-weight: 500; text-decoration: underline;">Copiar link</span></div>
-            </div>
-            <div style="display: flex; align-items: flex-start; gap: 10px;">
-              <div style="width: 7px; height: 7px; border-radius: 999px; background: #0A0B0D; margin-top: 7px; flex-shrink: 0;"></div>
-              <div style="font-size: 14px; line-height: 1.45;">Una vinculación de Primavera 26 · Tercera quedó para revisar: hay dos Juan Pérez. <span style="font-weight: 500; text-decoration: underline;">Revisar</span></div>
-            </div>
-            <div style="display: flex; align-items: flex-start; gap: 10px;">
-              <div style="width: 7px; height: 7px; border-radius: 999px; background: #0A0B0D; margin-top: 7px; flex-shrink: 0;"></div>
-              <div style="font-size: 14px; line-height: 1.45;">Otra cuenta dice que el perfil de Lucas Bravo es suyo. <span style="font-weight: 500; text-decoration: underline;">Revisar</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div style="background: #0A0B0D; border-radius: 18px; padding: 22px; display: flex; flex-direction: column; gap: 16px;">
-          <div style="font-size: 15px; font-weight: 600; color: #FFFFFF;">Tu circuito</div>
-          <div style="display: flex; flex-direction: column; gap: 13px;">
-            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
-              <div style="font-size: 14px; color: #9BA1A9;">Jugadores</div>
-              <div class="mono" style="font-size: 24px; font-weight: 500; color: #FFFFFF; letter-spacing: -0.02em;">77</div>
-            </div>
-            <div style="height: 1px; background: #2C3037;"></div>
-            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
-              <div style="font-size: 14px; color: #9BA1A9;">Categorías</div>
-              <div class="mono" style="font-size: 24px; font-weight: 500; color: #CDF546; letter-spacing: -0.02em;">2</div>
-            </div>
-            <div style="height: 1px; background: #2C3037;"></div>
-            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
-              <div style="font-size: 14px; color: #9BA1A9;">Recaudado en inscripciones abiertas</div>
-              <div class="mono" style="font-size: 18px; font-weight: 500; color: #FFFFFF; letter-spacing: -0.02em;">$1.485.000</div>
-            </div>
-          </div>
-          <div style="font-size: 13px; color: #9BA1A9; line-height: 1.45;">Ranking activo. Se actualiza al cerrar cada torneo.</div>
-        </div>
-
-      </div>
-
+          <span style="padding: 0 6px; font-size: 13px; color: #6A7079">Sus puntos ya están en el ranking</span>
+          
+            <article style="display: flex; flex-direction: column; gap: 12px; padding: 16px; border-radius: 14px; background: #FFFFFF; border: 1px solid #D5D9DE">
+              <div style="display: flex; flex-wrap: wrap; gap: 6px">
+                <span class="mono" style="display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border-radius: 6px; background: #F1F2F4; font-size: 12px; color: #3F4348">invierno</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 2px">
+                <span style="font-size: 17px; font-weight: 600; letter-spacing: -0.02em">Invierno 26 · Segunda</span>
+                <span style="font-size: 13px; color: #6A7079">Campeón: Diego Roa</span>
+              </div>
+              
+              <a href="#" style="display: inline-flex; align-items: center; justify-content: center; height: 40px; border-radius: 10px; background: #FFFFFF; color: #0A0B0D; border: 1px solid #D5D9DE; font-size: 14px; font-weight: 600; text-decoration: none">Ver</a>
+            </article>
+          
+            <article style="display: flex; flex-direction: column; gap: 12px; padding: 16px; border-radius: 14px; background: #FFFFFF; border: 1px solid #D5D9DE">
+              <div style="display: flex; flex-wrap: wrap; gap: 6px">
+                <span class="mono" style="display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border-radius: 6px; background: #F1F2F4; font-size: 12px; color: #3F4348">invierno</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 2px">
+                <span style="font-size: 17px; font-weight: 600; letter-spacing: -0.02em">Invierno 26 · Tercera</span>
+                <span style="font-size: 13px; color: #6A7079">Campeón: Pablo Curihual</span>
+              </div>
+              
+              <a href="#" style="display: inline-flex; align-items: center; justify-content: center; height: 40px; border-radius: 10px; background: #FFFFFF; color: #0A0B0D; border: 1px solid #D5D9DE; font-size: 14px; font-weight: 600; text-decoration: none">Ver</a>
+            </article>
+          
+            <article style="display: flex; flex-direction: column; gap: 12px; padding: 16px; border-radius: 14px; background: #FFFFFF; border: 1px solid #D5D9DE">
+              <div style="display: flex; flex-wrap: wrap; gap: 6px">
+                <span class="mono" style="display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border-radius: 6px; background: #F1F2F4; font-size: 12px; color: #3F4348">otoño</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 2px">
+                <span style="font-size: 17px; font-weight: 600; letter-spacing: -0.02em">Otoño 26 · Segunda</span>
+                <span style="font-size: 13px; color: #6A7079">Campeón: Marcelo Sanhueza</span>
+              </div>
+              
+              <a href="#" style="display: inline-flex; align-items: center; justify-content: center; height: 40px; border-radius: 10px; background: #FFFFFF; color: #0A0B0D; border: 1px solid #D5D9DE; font-size: 14px; font-weight: 600; text-decoration: none">Ver</a>
+            </article>
+          
+          
+        </section>
+      
     </div>
-
+  </main>
   </div>
 
 </div>

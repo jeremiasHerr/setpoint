@@ -1,40 +1,49 @@
 import { useNavigate } from 'react-router-dom';
-import { BarraProgreso } from '../../components/BarraProgreso';
+import { BarraDeMarcas } from '../../components/BarraDeMarcas';
 import { Boton } from '../../components/Boton';
 import { Etiqueta } from '../../components/Etiqueta';
 import { Numero } from '../../components/Numero';
-import { Tarjeta } from '../../components/Tarjeta';
+import { TarjetaDeColumna } from './TarjetaDeColumna';
 import type { TorneoEnJuego } from './tiposDeInicio';
 
 // Desde el sorteo confirmado hasta el cierre: lleva al tablero, que es donde se sigue el torneo (decisión 080).
 export function TarjetaTorneoEnJuego({ torneo }: { torneo: TorneoEnJuego }) {
   const navegar = useNavigate();
-  return (
-    <Tarjeta className="grid items-center gap-4 p-5 xl:grid-cols-[minmax(0,1fr)_260px_120px] xl:gap-6">
-      <div className="flex flex-col gap-1.5">
-        <div className="flex flex-wrap items-center gap-2.5">
-          <h3 className="text-lg font-semibold tracking-[-0.02em]">{torneo.nombre}</h3>
-          <Etiqueta variante="negra">{torneo.fase}</Etiqueta>
-        </div>
-        <p className="text-sm text-gris-500">{torneo.detalle}</p>
-      </div>
+  const { partidosJugados: jugados, partidosVencidos: vencidos, partidosTotales: total } = torneo;
 
-      <div className="flex flex-col gap-2">
-        <div className="flex items-baseline justify-between">
-          <span className="text-[13px] text-gris-500">Partidos jugados</span>
+  return (
+    <TarjetaDeColumna
+      calendario={torneo.calendario}
+      nombre={torneo.nombre}
+      detalle={torneo.detalle}
+      etiqueta={<Etiqueta variante="negra">{torneo.fase}</Etiqueta>}
+      acciones={
+        <Boton variante="organizador" className="grow font-semibold" onClick={() => navegar(`/torneos/${torneo.id}/tablero`)}>
+          Ver el tablero
+        </Boton>
+      }
+    >
+      <div className="flex flex-col gap-1.5">
+        <div className="flex items-baseline justify-between gap-2 text-[13px]">
+          <span className="text-gris-700">Partidos jugados</span>
           <Numero className="text-sm font-medium">
-            {torneo.partidosJugados} <span className="text-gris-400">/ {torneo.partidosTotales}</span>
+            {jugados} <span className="text-gris-400">/ {total}</span>
           </Numero>
         </div>
-        <BarraProgreso valor={torneo.partidosJugados} total={torneo.partidosTotales} rotulo="Partidos jugados" />
-        {torneo.partidosVencidos > 0 && (
+        <BarraDeMarcas
+          rotulo={`${jugados} de ${total} partidos jugados${vencidos > 0 ? `, ${vencidos} vencidos` : ''}`}
+          tramos={[
+            { cantidad: jugados, color: 'negro' },
+            { cantidad: vencidos, color: 'rojo' },
+            { cantidad: total - jugados - vencidos, color: 'linea' },
+          ]}
+        />
+        {vencidos > 0 && (
           <p className="text-[13px] text-rojo-texto">
-            <Numero>{torneo.partidosVencidos}</Numero> vencidos sin resultado
+            <Numero>{vencidos}</Numero> {vencidos === 1 ? 'vencido' : 'vencidos'} sin resultado
           </p>
         )}
       </div>
-
-      <Boton onClick={() => navegar(`/torneos/${torneo.id}/tablero`)}>Ver tablero</Boton>
-    </Tarjeta>
+    </TarjetaDeColumna>
   );
 }

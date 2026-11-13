@@ -175,6 +175,10 @@ export type ResumenConvocatoria = {
   nombre: string;
   // El del primer torneo: borrador y publicado son de toda la convocatoria a la vez.
   estado: EstadoTorneo;
+  // El torneo del calendario, para la etiqueta de su tarjeta en el inicio. null si no tiene.
+  etapa: string | null;
+  // Ajeno al circuito (decisión 089).
+  suelto: boolean;
   torneos: ResumenTorneo[];
   cierreInscripcion: string | null;
   fechaInicio: string | null;

@@ -32,18 +32,20 @@ describe.skipIf(!process.env.DATABASE_URL)('el inicio con torneos en juego y ter
     if (!conectada) return;
     const { id: organizacionId } = await prisma.organizacion.create({ data: { nombre: 'Circuito de prueba', slug } });
     const { id: categoriaId } = await prisma.categoria.create({ data: { organizacionId, nombre: 'Tercera', orden: 1 } });
+    const { id: etapaId } = await prisma.etapa.create({ data: { organizacionId, nombre: 'Primavera', orden: 1 } });
     admin = (await prisma.usuario.create({ data: { email: `admin.${marca}@example.com`, nombre: 'Admin', apellido: '' } })).id;
     await prisma.adminOrganizacion.create({ data: { organizacionId, usuarioId: admin } });
 
     const jugador = async (apellido: string) =>
       (await prisma.jugador.create({ data: { organizacionId, categoriaId, nombre: 'Jugador', apellido } })).id;
     const [bravo, vera, ojeda, rivas] = [await jugador('Bravo'), await jugador('Vera'), await jugador('Ojeda'), await jugador('Rivas')];
-    const torneo = async (nombre: string, estado: 'GRUPOS_EN_CURSO' | 'ELIMINATORIAS', jugadores: number[]) =>
+    const torneo = async (nombre: string, estado: 'GRUPOS_EN_CURSO' | 'ELIMINATORIAS', jugadores: number[], etapa?: number) =>
       (
         await prisma.torneo.create({
           data: {
             organizacionId,
             categoriaId,
+            etapaId: etapa,
             nombre,
             cupo: 4,
             estado,
@@ -55,7 +57,7 @@ describe.skipIf(!process.env.DATABASE_URL)('el inicio con torneos en juego y ter
       ).id;
 
     // En las zonas: uno jugado y uno que venció sin resultado.
-    enJuegoId = await torneo('Copa en juego', 'GRUPOS_EN_CURSO', [bravo, vera, ojeda, rivas]);
+    enJuegoId = await torneo('Copa en juego', 'GRUPOS_EN_CURSO', [bravo, vera, ojeda, rivas], etapaId);
     await prisma.partido.createMany({
       data: [
         { torneoId: enJuegoId, fase: 'GRUPOS', grupo: 'A', jugadorAId: bravo, jugadorBId: vera, ganadorId: bravo, estado: 'JUGADA' },
@@ -85,6 +87,13 @@ describe.skipIf(!process.env.DATABASE_URL)('el inicio con torneos en juego y ter
     const torneo = await delListado(enJuegoId);
     expect(torneo.avance).toMatchObject({ fase: 'zonas', partidos: 2, jugados: 1, vencidos: 1, ronda: null });
     expect(torneo.terminado).toBeNull();
+  });
+
+  it('cada convocatoria dice su torneo del calendario, para la etiqueta de su tarjeta', async () => {
+    const convocatorias = await listarConvocatorias(slug, admin);
+    const de = (torneoId: number) => convocatorias.find((c) => c.torneos.some((t) => t.id === torneoId))!;
+    expect(de(enJuegoId)).toMatchObject({ etapa: 'Primavera', suelto: false });
+    expect(de(aCerrarId)).toMatchObject({ etapa: null, suelto: false });
   });
 
   it('al cerrar, guarda la fecha, y el listado lo trae terminado con el campeón del cuadro principal', async () => {

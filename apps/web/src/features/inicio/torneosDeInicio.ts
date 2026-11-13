@@ -1,7 +1,35 @@
 import type { AvanceDelTorneo, Circuito, EstadoTorneo, ResumenConvocatoria, ResumenTorneo } from '@setpoint/shared';
 import { nombreDeRonda } from '../resultados/resultado';
 import { diaConSemana, diaCorto } from '../torneos/texto';
-import type { TorneosDeInicio } from './tiposDeInicio';
+import type { EtapaDelCircuito, MomentoDeEtapa, TorneosDeInicio } from './tiposDeInicio';
+
+// La etiqueta de arriba de cada tarjeta: a qué pertenece el torneo (decisión 094).
+function calendarioDe({ etapa, suelto }: ResumenConvocatoria) {
+  if (suelto) return 'torneo suelto';
+  return etapa ? etapa.toLocaleLowerCase('es') : 'del circuito';
+}
+
+const EN_JUEGO: EstadoTorneo[] = ['zonas_generadas', 'grupos_en_curso', 'eliminatorias'];
+const EN_INSCRIPCION: EstadoTorneo[] = ['publicado', 'inscripciones_cerradas'];
+
+// Lo más adelantado entre sus categorías: si una ya se juega, la convocatoria está en juego.
+function momentoDe({ estado, torneos }: ResumenConvocatoria): MomentoDeEtapa {
+  if (estado === 'borrador') return 'borrador';
+  if (torneos.some((t) => EN_JUEGO.includes(t.estado))) return 'en-juego';
+  if (torneos.some((t) => EN_INSCRIPCION.includes(t.estado))) return 'inscripcion';
+  return 'terminado';
+}
+
+// Cada torneo del calendario con su última edición. Las convocatorias vienen de la más nueva a la más vieja.
+function etapasDelCircuito(convocatorias: ResumenConvocatoria[], circuito: Circuito): EtapaDelCircuito[] {
+  if (!circuito.usaRanking) return [];
+  return circuito.etapas.map((nombre) => {
+    const ultima = convocatorias.find((c) => !c.suelto && c.etapa === nombre);
+    return ultima
+      ? { nombre, edicion: ultima.nombre, momento: momentoDe(ultima) }
+      : { nombre, edicion: nombre, momento: 'sin-edicion' };
+  });
+}
 
 // "Primavera 26 · Tercera y Segunda": el borrador es uno solo aunque tenga varias categorías.
 function nombreDelBorrador({ nombre, torneos }: ResumenConvocatoria) {
@@ -22,7 +50,12 @@ function categoriasEn(convocatorias: ResumenConvocatoria[], estados: EstadoTorne
   return convocatorias.flatMap((convocatoria) =>
     convocatoria.torneos
       .filter((t) => estados.includes(t.estado))
-      .map((torneo) => ({ convocatoria, torneo, nombre: `${convocatoria.nombre} · ${torneo.categoria}` })),
+      .map((torneo) => ({
+        convocatoria,
+        torneo,
+        nombre: `${convocatoria.nombre} · ${torneo.categoria}`,
+        calendario: calendarioDe(convocatoria),
+      })),
   );
 }
 
@@ -56,20 +89,27 @@ export function aTorneosDeInicio(convocatorias: ResumenConvocatoria[], circuito:
   // Confirmar el sorteo pasa el torneo a zonas_generadas: con la inscripción cerrada, todavía no se sorteó.
   const paraSortear = categoriasEn(convocatorias, ['inscripciones_cerradas']);
   // Desde el sorteo confirmado hasta el cierre (decisión 080).
-  const enJuego = categoriasEn(convocatorias, ['zonas_generadas', 'grupos_en_curso', 'eliminatorias']);
+  const enJuego = categoriasEn(convocatorias, EN_JUEGO);
   const terminados = categoriasEn(convocatorias, ['finalizado']).sort((a, b) => porCierre(a.torneo, b.torneo));
 
   return {
-    borradores: borradores.map((c) => ({ id: c.id, nombre: nombreDelBorrador(c), detalle: detalleDeFechas(c) })),
-    conInscripcionAbierta: abiertas.map(({ convocatoria, torneo, nombre }) => ({
+    borradores: borradores.map((c) => ({
+      id: c.id,
+      calendario: calendarioDe(c),
+      nombre: nombreDelBorrador(c),
+      detalle: detalleDeFechas(c),
+    })),
+    conInscripcionAbierta: abiertas.map(({ convocatoria, torneo, nombre, calendario }) => ({
       id: torneo.id,
+      calendario,
       nombre,
       detalle: detalleDeFechas(convocatoria),
       pagaron: torneo.inscriptos,
       cupo: torneo.cupo,
     })),
-    paraSortear: paraSortear.map(({ convocatoria, torneo, nombre }) => ({
+    paraSortear: paraSortear.map(({ convocatoria, torneo, nombre, calendario }) => ({
       id: torneo.id,
+      calendario,
       nombre,
       detalle: convocatoria.fechaInicio
         ? `Inscripción cerrada · empieza el ${diaCorto(convocatoria.fechaInicio)}`
@@ -77,11 +117,12 @@ export function aTorneosDeInicio(convocatorias: ResumenConvocatoria[], circuito:
       pagaron: torneo.inscriptos,
       cupo: torneo.cupo,
     })),
-    enJuego: enJuego.flatMap(({ convocatoria, torneo, nombre }) =>
+    enJuego: enJuego.flatMap(({ convocatoria, torneo, nombre, calendario }) =>
       torneo.avance
         ? [
             {
               id: torneo.id,
+              calendario,
               nombre,
               fase: torneo.avance.fase === 'zonas' ? 'Zonas' : 'Cuadros',
               detalle: detalleEnJuego(convocatoria, torneo, torneo.avance),
@@ -92,8 +133,9 @@ export function aTorneosDeInicio(convocatorias: ResumenConvocatoria[], circuito:
           ]
         : [],
     ),
-    terminados: terminados.map(({ torneo, nombre }) => ({
+    terminados: terminados.map(({ torneo, nombre, calendario }) => ({
       id: torneo.id,
+      calendario,
       nombre,
       termino: torneo.terminado?.cerradoEl ? fechaCompleta(torneo.terminado.cerradoEl) : null,
       campeon: torneo.terminado?.campeon ? `${torneo.terminado.campeon.nombre} ${torneo.terminado.campeon.apellido}` : null,
@@ -104,6 +146,8 @@ export function aTorneosDeInicio(convocatorias: ResumenConvocatoria[], circuito:
         ? [{ tipo: 'partidos-vencidos' as const, torneoId: torneo.id, categoria: nombre, partidos: torneo.avance.vencidos }]
         : [],
     ),
+    organizacion: circuito.nombre,
+    etapas: etapasDelCircuito(convocatorias, circuito),
     jugadores: circuito.jugadores,
     categorias: circuito.categorias.length,
     recaudadoEnInscripcionesAbiertas: abiertas.reduce((suma, { convocatoria, torneo }) => suma + torneo.inscriptos * convocatoria.precio, 0),

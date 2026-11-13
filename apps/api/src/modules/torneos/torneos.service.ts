@@ -413,6 +413,8 @@ export async function listarConvocatorias(slug: string, usuarioId: number): Prom
         id: c.id,
         nombre: c.nombre,
         estado: c.estado,
+        etapa: c.etapa,
+        suelto: c.suelto,
         torneos: grupo.map((t) => ({
           id: t.id,
           categoria: t.categoria.nombre,
