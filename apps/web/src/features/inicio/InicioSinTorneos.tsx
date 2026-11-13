@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Boton } from '../../components/Boton';
 import { Etiqueta } from '../../components/Etiqueta';
@@ -6,11 +7,79 @@ import { Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
 import { ResumenOrganizacion } from './ResumenOrganizacion';
 
-const pasos = [
+// Tres barras de distinta altura: el ranking.
+function IconoRanking({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" aria-hidden="true" className={className}>
+      <path d="M6 20v-6M12 20V6M18 20v-10" />
+    </svg>
+  );
+}
+
+type Paso = { titulo: string; detalle: string };
+
+type PropsCamino = {
+  icono: ReactNode;
+  titulo: string;
+  etiqueta: ReactNode;
+  descripcion: string;
+  pasos: Paso[];
+  boton: string;
+  alElegir: () => void;
+  nota: ReactNode;
+};
+
+// Las dos formas de arrancar se muestran iguales, una al lado de la otra (decisión 088): solo cambia
+// lo que dice cada una.
+function Camino({ icono, titulo, etiqueta, descripcion, pasos, boton, alElegir, nota }: PropsCamino) {
+  return (
+    <section className="flex flex-col gap-[22px] rounded-superficie border border-linea p-7">
+      <div className="flex flex-col gap-4">
+        {icono}
+        <div className="flex flex-col gap-[9px]">
+          <div className="flex flex-wrap items-center gap-2.5">
+            <h2 className="text-[22px] font-semibold tracking-[-0.025em]">{titulo}</h2>
+            {etiqueta}
+          </div>
+          <p className="text-[15px] leading-normal text-gris-500">{descripcion}</p>
+        </div>
+      </div>
+
+      <ol className="flex flex-col gap-2">
+        {pasos.map(({ titulo, detalle }, i) => (
+          <li key={titulo} className="flex items-start gap-3 rounded-xl bg-fondo p-3.5">
+            <Numero className="pt-px text-xs text-gris-500">{i + 1}</Numero>
+            <div className="flex flex-col gap-0.5">
+              <span className="text-sm font-semibold">{titulo}</span>
+              <span className="text-[13px] text-gris-500">{detalle}</span>
+            </div>
+          </li>
+        ))}
+      </ol>
+
+      <div className="mt-auto flex flex-col gap-2.5">
+        <Boton variante="organizador" grande className="w-full" onClick={alElegir}>
+          {boton}
+        </Boton>
+        <span className="text-center text-sm text-gris-500">{nota}</span>
+      </div>
+    </section>
+  );
+}
+
+const pasosTorneo: Paso[] = [
   { titulo: 'Formato', detalle: 'Zonas y cuadros, con cuántos jugadores' },
   { titulo: 'Inscripción', detalle: 'Precio, cupo y hasta cuándo se anotan' },
   { titulo: 'Link', detalle: 'Lo pasás por el grupo y se anotan pagando' },
 ];
+
+const pasosCircuito: Paso[] = [
+  { titulo: 'Categorías', detalle: 'Las que tenga tu circuito, cada una con su ranking' },
+  { titulo: 'Torneos del calendario', detalle: 'Los que se repiten cada año' },
+  { titulo: 'Tabla de puntos', detalle: 'Cuánto suma cada instancia' },
+];
+
+const icono = 'flex size-[52px] shrink-0 items-center justify-center rounded-tarjeta';
 
 type Props = {
   nombre: string;
@@ -18,8 +87,8 @@ type Props = {
   usaRanking: boolean;
 };
 
-// Primera vez: el camino principal es crear un torneo, que no pide configurar nada antes.
-// El circuito con ranking queda como segunda opción.
+// Primera vez: dos caminos con el mismo peso. Un torneo suelto no pide configurar nada antes; el
+// circuito con ranking se configura primero. Cualquiera de los dos deja hacer el otro después.
 export function InicioSinTorneos({ nombre, jugadores, usaRanking }: Props) {
   const navegar = useNavigate();
 
@@ -27,60 +96,43 @@ export function InicioSinTorneos({ nombre, jugadores, usaRanking }: Props) {
     <>
       <div className="flex flex-col gap-[7px] px-7 pt-[26px] pb-[22px]">
         <h1 className="text-[30px] font-semibold tracking-[-0.035em]">Hola, {nombre}</h1>
-        <p className="text-[15px] text-gris-500">Todavía no tenés torneos. Empezá por uno: no hace falta configurar nada antes.</p>
+        <p className="text-[15px] text-gris-500">Todavía no tenés torneos. Elegí cómo arrancar: el otro camino lo podés sumar después.</p>
       </div>
 
       <main className="grid items-start gap-[22px] px-7 pb-7 lg:grid-cols-[minmax(0,1fr)_360px]">
-        <div className="flex flex-col gap-4">
-          <section className="flex flex-col gap-[22px] rounded-superficie border-2 border-negro p-7">
-            <div className="flex items-start justify-between gap-5">
-              <div className="flex flex-col gap-[9px]">
-                <div className="flex flex-wrap items-center gap-2.5">
-                  <h2 className="text-[22px] font-semibold tracking-[-0.025em]">Crear un torneo</h2>
-                  <Etiqueta>Lo más rápido</Etiqueta>
-                </div>
-                <p className="max-w-[520px] text-[15px] leading-normal text-gris-500">
-                  Elegís el formato, la fecha y el precio, y compartís el link de inscripción. Al terminar tenés la tabla de
-                  posiciones del torneo.
-                </p>
-              </div>
-              <div className="flex size-[52px] shrink-0 items-center justify-center rounded-tarjeta bg-lima">
+        <div className="grid gap-4 md:grid-cols-2">
+          <Camino
+            icono={
+              <div className={`${icono} bg-lima text-negro`}>
                 <IconoMas className="size-[22px] stroke-[2.4]" />
               </div>
-            </div>
-
-            <ol className="grid gap-3 sm:grid-cols-3">
-              {pasos.map(({ titulo, detalle }, i) => (
-                <li key={titulo} className="flex flex-col gap-1.5 rounded-xl bg-fondo p-3.5">
-                  <Numero className="text-xs text-gris-500">{i + 1}</Numero>
-                  <span className="text-sm font-semibold">{titulo}</span>
-                  <span className="text-[13px] text-gris-500">{detalle}</span>
-                </li>
-              ))}
-            </ol>
-
-            <div className="flex flex-wrap items-center gap-3.5">
-              <Boton variante="organizador" grande onClick={() => navegar('/torneos/nuevo')}>
-                Crear mi primer torneo
-              </Boton>
-              <span className="text-sm text-gris-500">
-                Te lleva <Numero>2 minutos</Numero>
-              </span>
-            </div>
-          </section>
-
-          <Tarjeta className="flex flex-col gap-4 p-5 md:flex-row md:items-center md:justify-between md:gap-6">
-            <div className="flex flex-col gap-1.5">
-              <h2 className="text-[17px] font-semibold">¿Organizás un circuito con ranking anual?</h2>
-              <p className="max-w-[560px] text-sm leading-normal text-gris-500">
-                Cargá tus categorías, los torneos de tu calendario y la tabla de puntos. Los torneos van sumando y el ranking se arma solo. Podés
-                hacerlo ahora o después de tu primer torneo.
-              </p>
-            </div>
-            <Boton className="shrink-0" onClick={() => navegar('/circuito')}>
-              Configurar mi circuito
-            </Boton>
-          </Tarjeta>
+            }
+            titulo="Crear un torneo"
+            etiqueta={<Etiqueta>Lo más rápido</Etiqueta>}
+            descripcion="Elegís el formato, la fecha y el precio, y compartís el link de inscripción. Al terminar tenés la tabla de posiciones."
+            pasos={pasosTorneo}
+            boton="Crear mi primer torneo"
+            alElegir={() => navegar('/torneos/nuevo')}
+            nota={
+              <>
+                Te lleva <Numero>2</Numero> minutos
+              </>
+            }
+          />
+          <Camino
+            icono={
+              <div className={`${icono} bg-negro text-white`}>
+                <IconoRanking className="size-[22px] stroke-[2.4]" />
+              </div>
+            }
+            titulo="Armar un circuito"
+            etiqueta={<Etiqueta variante="negra">Con ranking anual</Etiqueta>}
+            descripcion="Cargás tus categorías, los torneos del calendario y la tabla de puntos. Cada torneo va sumando y el ranking se arma solo."
+            pasos={pasosCircuito}
+            boton="Configurar mi circuito"
+            alElegir={() => navegar('/circuito')}
+            nota="Ahora o después de tu primer torneo"
+          />
         </div>
 
         <aside className="flex flex-col gap-4">
