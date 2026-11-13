@@ -42,7 +42,7 @@ const EN_LA_PANTALLA = [
 const COBRADO: EstadoPago[] = [EstadoPago.APROBADO, EstadoPago.DEVUELTO];
 
 const CON_INSCRIPCIONES = {
-  categoria: { select: { nombre: true } },
+  categoria: { select: { nombre: true, suelta: true } },
   inscripciones: {
     where: { estado: { in: EN_LA_PANTALLA } },
     select: {
@@ -169,6 +169,7 @@ async function aInscripciones(torneo: TorneoConInscripciones): Promise<Inscripci
     convocatoriaId: await idDeLaConvocatoria(torneo),
     nombre: `${torneo.edicion ?? torneo.nombre} · ${torneo.categoria.nombre}`,
     categoria: torneo.categoria.nombre,
+    suelto: torneo.categoria.suelta,
     estado: torneo.estado.toLowerCase() as ClaveEstado,
     modoInscripcion: torneo.modoInscripcion.toLowerCase() as InscripcionesDelTorneo['modoInscripcion'],
     sorteoConfirmado: torneo.sorteoConfirmado,
@@ -418,7 +419,8 @@ export async function inscribirAMano(slug: string, usuarioId: number, torneoId: 
 
   const jugador = await prisma.jugador.findFirst({ where: { id: datos.jugadorId, organizacionId, ...DEL_PADRON_ACTIVOS } });
   if (!jugador) throw new ErrorHttp(404, 'JUGADOR_NO_ENCONTRADO');
-  if (jugador.categoriaId !== torneo.categoriaId) throw new ErrorHttp(409, 'OTRA_CATEGORIA');
+  // A un torneo suelto se anota cualquiera del padrón (decisión 089).
+  if (!torneo.categoria.suelta && jugador.categoriaId !== torneo.categoriaId) throw new ErrorHttp(409, 'OTRA_CATEGORIA');
 
   await enSerie(async (tx) => {
     const ahora = new Date();

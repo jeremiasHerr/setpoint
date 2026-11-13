@@ -268,9 +268,8 @@ model Organizacion {
   nombre      String
   slug        String  @unique
   descripcion String?
-  contacto    String?
 
-  usaRanking           Boolean              @default(true)
+  usaRanking          Boolean              @default(true)
   ventanaRankingMeses  Int                  @default(12)
   soloMejoresN         Int?
   puntosJugadorNuevo   Int                  @default(0)
@@ -289,8 +288,29 @@ model Organizacion {
   movimientos   MovimientoRanking[]
   cuentaCobro   CuentaCobro?
   importaciones ImportacionPadron[]
+  contactos     ContactoOrganizacion[]
 
   @@map("organizaciones")
+}
+
+enum TipoContacto {
+  WHATSAPP
+  RED_SOCIAL
+}
+
+/// A quién escribirle: se muestra a los jugadores en el link del torneo (decisión 091).
+model ContactoOrganizacion {
+  id             Int          @id @default(autoincrement())
+  organizacionId Int
+  tipo           TipoContacto
+  // El número de WhatsApp, o el usuario o link de la red social.
+  valor          String
+  orden          Int
+
+  organizacion Organizacion @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
+
+  @@index([organizacionId])
+  @@map("contactos_organizacion")
 }
 
 /// Un circuito puede tener varios administradores (el "Comité Organizador").
@@ -318,6 +338,9 @@ model Categoria {
   nombre         String
   orden          Int
   activa         Boolean @default(true)
+  // De un torneo suelto, ajeno al circuito (decisión 089): no aparece en Tu circuito, el ranking
+  // ni el padrón, y no exige que el jugador sea de esta categoría para inscribirse.
+  suelta         Boolean @default(false)
 
   organizacion Organizacion        @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
   jugadores    Jugador[]

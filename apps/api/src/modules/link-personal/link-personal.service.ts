@@ -21,17 +21,19 @@ async function jugadorDelLink(codigo: string) {
   return jugador;
 }
 
-// Sin login: solo su nombre y los torneos abiertos de su categoría, nunca datos de contacto.
+// Sin login: solo su nombre y los torneos abiertos de su categoría, más los sueltos, que son para
+// todo el padrón (decisión 089). Nunca datos de contacto.
 export async function linkPersonal(codigo: string): Promise<LinkPersonal> {
   const jugador = await jugadorDelLink(codigo);
-  const torneos =
-    jugador.categoriaId === null
-      ? []
-      : await prisma.torneo.findMany({
-          where: { organizacionId: jugador.organizacionId, categoriaId: jugador.categoriaId, estado: EstadoTorneo.PUBLICADO },
-          orderBy: [{ cierreInscripcion: 'asc' }, { id: 'asc' }],
-          include: CONVOCATORIA,
-        });
+  const torneos = await prisma.torneo.findMany({
+    where: {
+      organizacionId: jugador.organizacionId,
+      estado: EstadoTorneo.PUBLICADO,
+      OR: [{ categoria: { suelta: true } }, ...(jugador.categoriaId === null ? [] : [{ categoriaId: jugador.categoriaId }])],
+    },
+    orderBy: [{ cierreInscripcion: 'asc' }, { id: 'asc' }],
+    include: CONVOCATORIA,
+  });
 
   return {
     organizacion: jugador.organizacion,

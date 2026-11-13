@@ -110,8 +110,9 @@ function EditorCircuito({ sesion, inicial }: { sesion: Sesion; inicial: Circuito
           <SeccionQuienesSon
             nombre={circuito.nombre}
             slug={circuito.slug}
-            contacto={circuito.contacto}
-            alCambiar={(campo, valor) => cambiar(campo, valor)}
+            contactos={circuito.contactos}
+            alCambiarNombre={(nombre) => cambiar('nombre', nombre)}
+            alCambiarContactos={(contactos) => cambiar('contactos', contactos)}
           />
           <SeccionCategorias categorias={circuito.categorias} alCambiar={(categorias) => cambiar('categorias', categorias)} />
           <SeccionRanking

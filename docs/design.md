@@ -46,8 +46,8 @@ Todo el sistema sale de que hay dos personas usando esto en situaciones opuestas
 | `--gris-700` | `#3F4348` | Texto secundario sobre blanco |
 | `--gris-500` | `#6A7079` | Rótulos, texto de apoyo |
 | `--gris-400` | `#9BA1A9` | Texto sobre negro, datos apagados, perdedor en una tabla |
-| `--gris-300` | `#C9CDD3` | Borde de campo de formulario, celda punteada |
-| `--linea` | `#E6E8EB` | Borde de tarjeta y separador |
+| `--gris-300` | `#B5BBC3` | Borde de campo de formulario, celda punteada |
+| `--linea` | `#D5D9DE` | Borde de tarjeta y separador |
 | `--linea-suave` | `#F1F2F4` | Separador entre filas de tabla |
 | `--fondo` | `#F6F7F8` | Fondo de página secundario, cajas de ayuda |
 | `--fondo-tabla` | `#FAFBFC` | Encabezado de tabla, pie de tarjeta |
@@ -148,6 +148,10 @@ Píldora de radio 999, alto 34–40, borde 1px. Activo: fondo `--negro`, texto b
 ### Campos
 
 Alto 56 en móvil y 48 en escritorio, radio 10–12, borde 1px `--gris-300`. El campo activo lleva borde 2px `--negro`. El valor va en mono si es un número.
+
+### Interruptor
+
+40×24, bolita de 18. **Prendido:** fondo `--lima` con un anillo de 1px `--negro` y la bolita negra. **Apagado:** fondo `--gris-400` y la bolita blanca. Los dos estados tienen que distinguirse de un vistazo, sobre blanco y sobre `--fondo`: el apagado anterior, `--linea` con la bolita blanca, casi no se veía ([decisión 090](decisiones/090-mas-contraste.md)).
 
 ### Tarjeta negra
 
@@ -343,8 +347,8 @@ El canvas tiene **21 pantallas**, en el orden en que se usan. Las **5 del redise
   --gris-700: #3F4348;
   --gris-500: #6A7079;
   --gris-400: #9BA1A9;
-  --gris-300: #C9CDD3;
-  --linea: #E6E8EB;
+  --gris-300: #B5BBC3;
+  --linea: #D5D9DE;
   --linea-suave: #F1F2F4;
   --fondo: #F6F7F8;
   --fondo-tabla: #FAFBFC;
@@ -371,8 +375,8 @@ theme: {
       negro: '#0A0B0D',
       carbon: '#17191D',
       'borde-oscuro': '#2C3037',
-      gris: { 700: '#3F4348', 500: '#6A7079', 400: '#9BA1A9', 300: '#C9CDD3' },
-      linea: { DEFAULT: '#E6E8EB', suave: '#F1F2F4' },
+      gris: { 700: '#3F4348', 500: '#6A7079', 400: '#9BA1A9', 300: '#B5BBC3' },
+      linea: { DEFAULT: '#D5D9DE', suave: '#F1F2F4' },
       rojo: { DEFAULT: '#E5484D', texto: '#C62A2F', fondo: '#FEF6F6', linea: '#F3D3D4' },
     },
     fontFamily: {

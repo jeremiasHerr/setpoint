@@ -7,7 +7,7 @@ type Tx = Prisma.TransactionClient;
 
 export function crearPerfilPendiente(
   tx: Tx,
-  datos: { organizacionId: number; categoriaId: number; usuarioId: number; nombre: string; apellido: string },
+  datos: { organizacionId: number; categoriaId: number | null; usuarioId: number; nombre: string; apellido: string },
 ) {
   return tx.jugador.create({ data: { ...datos, estado: EstadoJugador.PENDIENTE } });
 }

@@ -1,12 +1,16 @@
+import type { Contacto } from './circuito';
+
 // La convocatoria de un torneo para cualquiera con el link, sin cuenta: la pantalla El torneo
 // (F12, docs/pantallas/jugador/el-torneo.html). Sin datos de los inscriptos.
 export type TorneoPublico = {
   id: number;
-  // El contacto lo carga la organización en Tu circuito; puede no estar.
-  organizacion: { nombre: string; slug: string; contacto: string | null };
+  // Los contactos los carga la organización en Tu circuito; puede no haber ninguno (decisión 091).
+  organizacion: { nombre: string; slug: string; contactos: Contacto[] };
   // La edición, o el nombre si es un torneo suelto: "Primavera 2026".
   nombre: string;
   categoria: string;
+  // Ajeno al circuito: se anota cualquiera del padrón, sin importar su categoría (decisión 089).
+  suelto: boolean;
   // Abierta mientras el torneo está publicado; después ya no se inscribe nadie.
   inscripcion: 'abierta' | 'cerrada';
   // Quién puede inscribirse: solo el padrón, con aprobación o cualquiera (07 §2.6).

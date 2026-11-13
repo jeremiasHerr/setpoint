@@ -63,9 +63,19 @@ const clubSchema = z.object({
 export type Club = z.infer<typeof clubSchema>;
 export type Cancha = z.infer<typeof canchaSchema>;
 
+// A quién escribirle (decisión 091). El WhatsApp se abre como chat en las páginas públicas.
+export const tiposContacto = ['whatsapp', 'red_social'] as const;
+
+export const contactoSchema = z.object({
+  tipo: z.enum(tiposContacto),
+  valor: z.string({ error: 'Escribí el contacto' }).trim().min(1, 'Escribí el contacto').max(100),
+});
+
+export type Contacto = z.infer<typeof contactoSchema>;
+
 export const configuracionCircuitoSchema = z.object({
   nombre: z.string({ error: 'Escribí el nombre del circuito' }).trim().min(2, 'Escribí el nombre del circuito').max(80),
-  contacto: z.string().trim().max(200),
+  contactos: z.array(contactoSchema).max(10, 'Como máximo 10 contactos').default([]),
   usaRanking: z.boolean(),
   categorias: listaDeNombres('Hay categorías repetidas'),
   etapas: listaDeNombres('Hay torneos del calendario repetidos'),

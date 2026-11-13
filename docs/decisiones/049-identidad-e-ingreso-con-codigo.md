@@ -59,7 +59,7 @@ Email verificado con un código, sin DNI. Los administradores siguen con contras
 - **El Jugador sigue siendo uno por organización**, con su categoría, sus puntos y su historial, y apunta a un Usuario. Un Usuario tiene como mucho un Jugador en cada organización. Cómo se vincula está en la [decisión 051](051-vinculacion-con-el-padron.md).
 - **El DNI sale del flujo.** Puede quedar como campo opcional del padrón, si una organización lo necesita por otro motivo (un seguro, por ejemplo), pero no se pide en la inscripción ni identifica a nadie.
 - **La organización no toca la identidad de nadie.** El email y los datos de la persona son de ella, que los cambia probando que el email es suyo. La organización decide sobre su padrón: de qué persona es cada perfil, y sus inscripciones. Ve el email de sus jugadores, para contactarlos.
-- **Los administradores siguen con contraseña**, como hoy. Quien administra y juega con el mismo email es la misma persona: entra con contraseña en la web y con código en la app. Con otro email son dos personas, y es correcto: el sistema no tiene forma de saber que son el mismo humano.
+- **Los administradores siguen con contraseña**, como hoy. Desde la [decisión 087](087-verificar-el-email-al-registrarse.md), además, verifican el email con un código al registrar la organización. Quien administra y juega con el mismo email es la misma persona: entra con contraseña en la web y con código en la app. Con otro email son dos personas, y es correcto: el sistema no tiene forma de saber que son el mismo humano.
 
 ## Por qué
 

@@ -1,13 +1,17 @@
-import { Instancia, type Prisma, type Superficie } from '@prisma/client';
+import { Instancia, type Prisma, type Superficie, type TipoContacto } from '@prisma/client';
 import type {
   Circuito,
   ConfiguracionCircuito,
+  Contacto,
   Instancia as ClaveInstancia,
   Superficie as ClaveSuperficie,
 } from '@setpoint/shared';
+import { DEL_PADRON_ACTIVOS } from '../../lib/padron';
 import { organizacionAdministrada } from '../../lib/permisos';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
+
+const aEnumContacto = (tipo: Contacto['tipo']) => tipo.toUpperCase() as TipoContacto;
 
 const INSTANCIAS: Record<ClaveInstancia, Instancia> = {
   campeon: Instancia.CAMPEON,
@@ -24,11 +28,13 @@ export async function obtenerCircuito(slug: string, usuarioId: number): Promise<
   const organizacion = await prisma.organizacion.findUniqueOrThrow({
     where: { id },
     include: {
-      categorias: { where: { activa: true }, orderBy: { orden: 'asc' } },
+      categorias: { where: { activa: true, suelta: false }, orderBy: { orden: 'asc' } },
       etapas: { where: { activa: true }, orderBy: { orden: 'asc' } },
       puntajes: true,
       clubes: { orderBy: { id: 'asc' }, include: { canchas: { orderBy: { id: 'asc' } } } },
-      _count: { select: { jugadores: true } },
+      contactos: { orderBy: { orden: 'asc' } },
+      // Los que se pueden inscribir: sin perfiles pendientes ni dados de baja.
+      _count: { select: { jugadores: { where: DEL_PADRON_ACTIVOS } } },
     },
   });
 
@@ -43,7 +49,7 @@ export async function obtenerCircuito(slug: string, usuarioId: number): Promise<
   return {
     nombre: organizacion.nombre,
     slug: organizacion.slug,
-    contacto: organizacion.contacto ?? '',
+    contactos: organizacion.contactos.map((c) => ({ tipo: c.tipo.toLowerCase() as Contacto['tipo'], valor: c.valor })),
     usaRanking: organizacion.usaRanking,
     categorias: organizacion.categorias.map((c) => c.nombre),
     etapas: organizacion.etapas.map((e) => e.nombre),
@@ -139,18 +145,21 @@ async function sincronizarLista(
   const delegado = (modelo === 'categoria' ? tx.categoria : tx.etapa) as Prisma.CategoriaDelegate;
   const existentes = await delegado.findMany({ where: { organizacionId } });
   const porNombre = new Map(existentes.map((fila) => [fila.nombre.toLowerCase(), fila]));
+  // Las de los torneos sueltos no son del circuito: no salen de él (decisión 089). Si el circuito
+  // suma una con el mismo nombre, pasa a ser del circuito, porque el nombre es único.
+  const delCircuito = modelo === 'categoria' ? { suelta: false } : {};
 
   for (const [orden, nombre] of nombres.entries()) {
     const existente = porNombre.get(nombre.toLowerCase());
     if (existente) {
-      await delegado.update({ where: { id: existente.id }, data: { nombre, orden, activa: true } });
+      await delegado.update({ where: { id: existente.id }, data: { nombre, orden, activa: true, ...delCircuito } });
     } else {
       await delegado.create({ data: { organizacionId, nombre, orden } });
     }
   }
 
   const quedan = new Set(nombres.map((n) => n.toLowerCase()));
-  const salen = existentes.filter((fila) => fila.activa && !quedan.has(fila.nombre.toLowerCase()));
+  const salen = existentes.filter((fila) => fila.activa && !fila.suelta && !quedan.has(fila.nombre.toLowerCase()));
   if (salen.length > 0) {
     await delegado.updateMany({ where: { id: { in: salen.map((f) => f.id) } }, data: { activa: false } });
   }
@@ -162,7 +171,13 @@ export async function guardarCircuito(slug: string, usuarioId: number, datos: Co
   await prisma.$transaction(async (tx) => {
     await tx.organizacion.update({
       where: { id: organizacionId },
-      data: { nombre: datos.nombre, contacto: datos.contacto || null, usaRanking: datos.usaRanking },
+      data: { nombre: datos.nombre, usaRanking: datos.usaRanking },
+    });
+
+    // Son pocos y no tienen nada colgando: se reemplazan enteros, en el orden de la pantalla.
+    await tx.contactoOrganizacion.deleteMany({ where: { organizacionId } });
+    await tx.contactoOrganizacion.createMany({
+      data: datos.contactos.map((c, orden) => ({ organizacionId, tipo: aEnumContacto(c.tipo), valor: c.valor, orden })),
     });
 
     await sincronizarLista(tx, 'categoria', organizacionId, datos.categorias);

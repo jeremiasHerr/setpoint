@@ -1,9 +1,10 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FormularioRegistro, type ErroresRegistro } from '../components/acceso/FormularioRegistro';
+import { FormularioRegistro, type DatosRegistro, type ErroresRegistro } from '../components/acceso/FormularioRegistro';
 import { PantallaAcceso } from '../components/acceso/PantallaAcceso';
 import { Tarjeta } from '../components/Tarjeta';
 import { ErrorApi } from '../lib/api';
-import { useRegistro } from '../features/auth/useRegistro';
+import { usePedirCodigoDeRegistro, useRegistro } from '../features/auth/useRegistro';
 
 const pasos = [
   { titulo: 'Elegís cómo arrancar', detalle: 'Un torneo suelto o un circuito con ranking' },
@@ -42,6 +43,8 @@ function erroresDe(error: Error | null): ErroresRegistro {
           ),
         },
       };
+    case 'DEMASIADOS_PEDIDOS':
+      return { general: 'Pediste muchos códigos seguidos. Esperá unos minutos y probá de nuevo.' };
     case 'SIN_CONEXION':
       return { general: 'No pudimos conectarnos. Revisá tu conexión y probá de nuevo.' };
     default:
@@ -49,16 +52,67 @@ function erroresDe(error: Error | null): ErroresRegistro {
   }
 }
 
+// Los del paso del código. Un email que se registró mientras tanto se avisa como en el primer paso.
+function erroresDelCodigo(error: Error | null): ErroresRegistro {
+  if (!(error instanceof ErrorApi)) return erroresDe(error);
+
+  switch (error.codigo) {
+    case 'CODIGO_INCORRECTO':
+      return { codigo: `Ese código no es. ${error.campos.codigo}.` };
+    case 'CODIGO_VENCIDO':
+      return { codigo: 'Este código ya no sirve: los códigos duran 10 minutos. Pedí uno nuevo.' };
+    case 'DEMASIADOS_INTENTOS':
+      return { codigo: 'Probaste 5 veces y ese código dejó de servir. Pedí uno nuevo.' };
+    case 'EMAIL_EN_USO':
+      return { general: 'Ya hay una cuenta con este email. Ingresá con ella.' };
+    default:
+      return erroresDe(error);
+  }
+}
+
+// Si falla "Reenviar el código", el aviso va abajo, sin tapar el error del código.
+function reenvioFallido(error: Error | null): ErroresRegistro {
+  if (!error) return {};
+  return { general: erroresDe(error).general ?? 'No pudimos mandar el código. Probá de nuevo en unos minutos.' };
+}
+
 export function RegistroPage() {
+  const pedirCodigo = usePedirCodigoDeRegistro();
   const registro = useRegistro();
+  // Los datos con los que se pidió el código: con ellos se crea la organización al confirmarlo.
+  const [datos, setDatos] = useState<DatosRegistro | null>(null);
+
+  const enviarDatos = (nuevos: DatosRegistro) =>
+    pedirCodigo.mutate(nuevos, {
+      onSuccess: () => {
+        registro.reset();
+        setDatos(nuevos);
+      },
+    });
+
+  const reenviar = () => {
+    if (!datos) return;
+    pedirCodigo.mutate(datos, { onSuccess: () => registro.reset() });
+  };
+
+  const cambiarEmail = () => {
+    setDatos(null);
+    registro.reset();
+    pedirCodigo.reset();
+  };
 
   return (
     <PantallaAcceso pregunta="¿Ya tenés cuenta?" enlace={{ texto: 'Ingresar', a: '/ingresar' }}>
       <div className="mx-auto grid max-w-[814px] items-start gap-5 md:grid-cols-[minmax(0,1fr)_300px]">
         <FormularioRegistro
-          alEnviar={(datos) => registro.mutate(datos)}
-          enviando={registro.isPending}
-          errores={erroresDe(registro.error)}
+          paso={datos ? 'codigo' : 'datos'}
+          alEnviar={enviarDatos}
+          alConfirmar={(codigo) => datos && registro.mutate({ ...datos, codigo })}
+          alReenviar={reenviar}
+          alCambiarEmail={cambiarEmail}
+          enviando={datos ? registro.isPending : pedirCodigo.isPending}
+          reenviando={pedirCodigo.isPending}
+          errores={datos ? { ...erroresDelCodigo(registro.error), ...reenvioFallido(pedirCodigo.error) } : erroresDe(pedirCodigo.error)}
         />
 
         <aside className="flex flex-col gap-4">

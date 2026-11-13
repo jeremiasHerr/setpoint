@@ -25,6 +25,18 @@ export const registroOrganizacionSchema = z.object(
 
 export type DatosRegistroOrganizacion = z.infer<typeof registroOrganizacionSchema>;
 
+// Se acepta con espacios ("482 913"), como se escribe en el email.
+const codigoSchema = z
+  .string({ error: 'Escribí el código' })
+  .transform((c) => c.replace(/\s/g, ''))
+  .pipe(z.string().regex(/^\d{6}$/, 'El código tiene 6 números'));
+
+// La organización se crea recién con el código que llegó al email (decisión 087). El código se
+// pide con los mismos datos, sin él: así un email que ya tiene cuenta se avisa antes de mandar nada.
+export const confirmarRegistroSchema = registroOrganizacionSchema.extend({ codigo: codigoSchema });
+
+export type DatosConfirmarRegistro = z.infer<typeof confirmarRegistroSchema>;
+
 export const respuestaRegistroSchema = z.object({
   token: z.string(),
   usuario: z.object({ id: z.number(), email: z.string(), nombre: z.string() }),
@@ -122,11 +134,7 @@ export const verificarCodigoSchema = z.object(
       .trim()
       .toLowerCase()
       .pipe(z.email('El email no es válido')),
-    // Se acepta con espacios ("482 913"), como se escribe en el email.
-    codigo: z
-      .string({ error: 'Escribí el código' })
-      .transform((c) => c.replace(/\s/g, ''))
-      .pipe(z.string().regex(/^\d{6}$/, 'El código tiene 6 números')),
+    codigo: codigoSchema,
   },
   { error: 'Faltan el email y el código' },
 );

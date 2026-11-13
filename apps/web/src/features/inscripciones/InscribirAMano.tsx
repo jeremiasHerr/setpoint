@@ -24,6 +24,7 @@ type Props = {
   slug: string;
   torneoId: number;
   categoria: string;
+  suelto: boolean;
   precio: number;
   libres: number;
   inscripciones: InscripcionDelTorneo[];
@@ -32,9 +33,10 @@ type Props = {
 };
 
 // Inscribir a mano a quien pagó por fuera del sistema (estado 5 de inscripciones.html, 05-pagos §8).
-// Busca en el padrón de la categoría. Si estaba reservando, se confirma su reserva; si no, ocupa un
-// lugar libre, y sin lugares no se abre: la organización no se pasa del cupo (decisión 079).
-export function InscribirAMano({ slug, torneoId, categoria, precio, libres, inscripciones, bajas, alCerrar }: Props) {
+// Busca en el padrón de la categoría, o en todo si el torneo es suelto (decisión 089). Si estaba
+// reservando, se confirma su reserva; si no, ocupa un lugar libre, y sin lugares no se abre: la
+// organización no se pasa del cupo (decisión 079).
+export function InscribirAMano({ slug, torneoId, categoria, suelto, precio, libres, inscripciones, bajas, alCerrar }: Props) {
   const padron = usePadron(slug);
   const inscribir = useInscribirAMano(slug, torneoId);
   const [busqueda, setBusqueda] = useState('');
@@ -53,7 +55,7 @@ export function InscribirAMano({ slug, torneoId, categoria, precio, libres, insc
     termino.length < 2
       ? []
       : (padron.data ?? [])
-          .filter((j) => j.activo && j.categoria === categoria && normalizar(j.apellido).includes(termino))
+          .filter((j) => j.activo && (suelto || j.categoria === categoria) && normalizar(j.apellido).includes(termino))
           .slice(0, RESULTADOS);
 
   const montoElegido = Number(monto.replace(/\D/g, ''));

@@ -34,6 +34,9 @@ import {
 } from '../features/torneos/useConvocatoria';
 import { ErrorApi } from '../lib/api';
 
+// Con la que arranca un torneo suelto: quien no divide por nivel no tiene que escribir nada.
+const CATEGORIA_SUELTA = 'General';
+
 const textoEstado: Record<EstadoGuardado, string> = {
   'sin-cambios': 'se guarda solo',
   pendiente: 'guardando…',
@@ -119,7 +122,17 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
   const slug = sesion.organizacion.slug;
   // Solo se lee al montar: después manda lo que hay en pantalla. Si viene de la API trae además
   // id, estado y torneos; el schema los descarta al guardar.
-  const [datos, setDatos] = useState<DatosConvocatoria>(() => inicial ?? convocatoriaInicial(circuito.categorias));
+  // Sin categorías en el circuito, el torneo es suelto y arranca con una sola (decisión 089). Con el
+  // padrón vacío, se anota cualquiera: "solo el padrón" dejaría el torneo sin nadie (decisión 092).
+  const [datos, setDatos] = useState<DatosConvocatoria>(() => {
+    if (inicial) return inicial;
+    const nueva =
+      circuito.categorias.length > 0
+        ? convocatoriaInicial(circuito.categorias)
+        : { ...convocatoriaInicial([CATEGORIA_SUELTA]), suelto: true };
+    return circuito.jugadores === 0 ? { ...nueva, modoInscripcion: 'abierta' } : nueva;
+  }
+  );
   const [erroresPublicar, setErroresPublicar] = useState<ErroresConvocatoria>({});
   const [errorGeneral, setErrorGeneral] = useState<string | null>(null);
   const [ocupado, setOcupado] = useState(false);
@@ -154,6 +167,17 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
         categorias: anterior.categorias.map((c) => (c.cupo === cupoAnterior ? { ...c, cupo } : c)),
       };
     });
+  }
+
+  // Cambiar de tipo cambia de qué lista salen las categorías: se arranca de nuevo con las de ese tipo.
+  function cambiarSuelto(suelto: boolean) {
+    setDatos((anterior) => {
+      const cupo = anterior.cantidadGrupos * JUGADORES_POR_GRUPO;
+      const nombres = suelto ? [CATEGORIA_SUELTA] : circuito.categorias;
+      return { ...anterior, suelto, etapa: null, categorias: nombres.map((categoria) => ({ categoria, cupo })) };
+    });
+    setErroresPublicar({});
+    setErrorGeneral(null);
   }
 
   async function publicar() {
@@ -214,14 +238,17 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
         <div className="flex flex-col gap-4">
           <SeccionBasico
             nombre={datos.nombre}
+            suelto={datos.suelto}
             etapa={datos.etapa}
             categorias={datos.categorias}
             usaRanking={circuito.usaRanking}
             etapasDelCircuito={circuito.etapas}
             categoriasDelCircuito={circuito.categorias}
             cupoPorDefecto={datos.cantidadGrupos * JUGADORES_POR_GRUPO}
+            categoriasFijas={!enBorrador}
             errores={errores}
             alCambiarNombre={(nombre) => cambiar('nombre', nombre)}
+            alCambiarSuelto={cambiarSuelto}
             alCambiarEtapa={(etapa) => cambiar('etapa', etapa)}
             alCambiarCategorias={(categorias) => cambiar('categorias', categorias)}
           />
@@ -255,6 +282,7 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
             cierreInscripcion={datos.cierreInscripcion}
             modoInscripcion={datos.modoInscripcion}
             cantidadGrupos={datos.cantidadGrupos}
+            padronVacio={circuito.jugadores === 0}
             errores={errores}
             alCambiar={(campo, valor) => cambiar(campo, valor)}
           />

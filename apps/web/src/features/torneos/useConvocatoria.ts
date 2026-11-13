@@ -78,6 +78,9 @@ export function useAutoguardadoConvocatoria(
         if (error instanceof ErrorApi && error.codigo === 'NOMBRE_REPETIDO') {
           setErrores({ nombre: 'Ya tenés un torneo con ese nombre' });
           setEstado('incompleto');
+        } else if (error instanceof ErrorApi && error.codigo === 'CATEGORIA_DEL_CIRCUITO') {
+          setErrores({ categorias: 'Esa ya es una categoría de tu circuito: usá otro nombre' });
+          setEstado('incompleto');
         } else if (error instanceof ErrorApi && error.codigo === 'DATOS_INVALIDOS') {
           setErrores(error.campos);
           setEstado('incompleto');

@@ -39,24 +39,22 @@ function Inicio({ sesion }: { sesion: Sesion }) {
         alSalir={cerrarSesion}
       />
 
+      {/* Mientras carga se ve solo el encabezado: dura poco y un aviso solo parpadea. */}
       {!circuito.data || !torneos.data ? (
-        <div className="flex flex-col items-start gap-3 px-7 pt-[26px]">
-          {error && !sesionInvalida ? (
-            <>
-              <p className="text-[15px] text-gris-500">No pudimos cargar tu organización.</p>
-              <Boton
-                onClick={() => {
-                  void circuito.refetch();
-                  void torneos.refetch();
-                }}
-              >
-                Probar de nuevo
-              </Boton>
-            </>
-          ) : (
-            <p className="text-[15px] text-gris-500">Cargando tu organización…</p>
-          )}
-        </div>
+        error &&
+        !sesionInvalida && (
+          <div className="flex flex-col items-start gap-3 px-7 pt-[26px]">
+            <p className="text-[15px] text-gris-500">No pudimos cargar tu organización.</p>
+            <Boton
+              onClick={() => {
+                void circuito.refetch();
+                void torneos.refetch();
+              }}
+            >
+              Probar de nuevo
+            </Boton>
+          </div>
+        )
       ) : torneos.data.length > 0 ? (
         <InicioConTorneos torneos={aTorneosDeInicio(torneos.data, circuito.data)} />
       ) : (

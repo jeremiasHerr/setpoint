@@ -1,4 +1,5 @@
 import { JUGADORES_POR_GRUPO, type DatosConvocatoria } from '@setpoint/shared';
+import { Link } from 'react-router-dom';
 import { Campo } from '../../components/Campo';
 import { Chip } from '../../components/Chip';
 import { Tarjeta } from '../../components/Tarjeta';
@@ -20,6 +21,7 @@ type Inscripcion = Pick<DatosConvocatoria, 'precio' | 'categorias' | 'cierreInsc
 
 type Props = Inscripcion & {
   cantidadGrupos: number;
+  padronVacio: boolean;
   errores: ErroresConvocatoria;
   alCambiar: <K extends keyof Inscripcion>(campo: K, valor: DatosConvocatoria[K]) => void;
 };
@@ -30,6 +32,7 @@ export function SeccionInscripcion({
   cierreInscripcion,
   modoInscripcion,
   cantidadGrupos,
+  padronVacio,
   errores,
   alCambiar,
 }: Props) {
@@ -101,11 +104,32 @@ export function SeccionInscripcion({
         <h3 className="text-[13px] font-semibold text-gris-500">Quién se puede inscribir</h3>
         <div className="flex flex-wrap gap-2">
           {MODOS.map(({ valor, etiqueta }) => (
-            <Chip key={valor} activo={modoInscripcion === valor} onClick={() => alCambiar('modoInscripcion', valor)}>
+            <Chip
+              key={valor}
+              activo={modoInscripcion === valor}
+              // Con el padrón vacío no se podría anotar nadie (decisión 092).
+              disabled={padronVacio && valor === 'cerrada' && modoInscripcion !== 'cerrada'}
+              className="disabled:cursor-not-allowed disabled:opacity-40"
+              onClick={() => alCambiar('modoInscripcion', valor)}
+            >
               {etiqueta}
             </Chip>
           ))}
         </div>
+        {padronVacio && (
+          <p className={`text-[13px] leading-[1.45] ${modoInscripcion === 'cerrada' ? 'text-rojo-texto' : 'text-gris-500'}`}>
+            {modoInscripcion === 'cerrada' ? 'Con el padrón vacío no se puede anotar nadie. ' : 'Tu padrón está vacío. '}
+            Para usar "Solo el padrón",{' '}
+            <Link to="/padron/importar" className="font-medium text-negro underline">
+              importá tu planilla
+            </Link>{' '}
+            o{' '}
+            <Link to="/padron" className="font-medium text-negro underline">
+              cargá tus jugadores
+            </Link>
+            .
+          </p>
+        )}
       </div>
     </Tarjeta>
   );

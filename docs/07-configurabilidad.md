@@ -33,6 +33,8 @@ Se definen una vez, al dar de alta el circuito.
 
 **Por qué las categorías no dependen de `usa_ranking`.** Un torneo suelto también divide a sus jugadores por nivel, y en el schema `Torneo.categoria_id` es obligatorio mientras que `Torneo.etapa_id` es opcional. Por eso en la pantalla *Tu circuito* las categorías van en una sección propia, y apagar el ranking solo oculta las etapas y la tabla de puntos.
 
+**El torneo suelto es ajeno al circuito** ([decisión 089](decisiones/089-torneo-suelto-ajeno-al-circuito.md)). Al crear un torneo se elige si es *del circuito* (sus categorías y, con ranking, su torneo del calendario) o *suelto*. Las categorías del suelto se escriben en el torneo, arranca con "General", y no aparecen en *Tu circuito*. No suma al ranking y se anota cualquiera del padrón, sin importar su categoría. Sin categorías en el circuito, todo torneo es suelto: es lo que permite crear el primero sin configurar nada.
+
 **Apagar el ranking no borra nada.** Las etapas y los puntos ya cargados quedan guardados y vuelven al reactivarlo. Es lo que permite empezar con un torneo suelto y activar el ranking más adelante sin rehacer la configuración.
 
 > Es la puerta de entrada al producto: una organización puede probar la plataforma creando un torneo suelto en dos minutos, y activar el ranking más adelante sin rehacer nada.

@@ -51,7 +51,7 @@ borrador → publicado → inscripciones_cerradas → zonas_generadas
 
 ## 3. Alta de la organización
 
-Registro con email y contraseña (`POST /api/auth/registro`). En una sola transacción se crean:
+Registro con email y contraseña, en dos pasos ([decisión 087](decisiones/087-verificar-el-email-al-registrarse.md)): con los datos del formulario, `POST /api/auth/registro/codigo` manda un código de 6 dígitos al email, o responde `EMAIL_EN_USO` si ya tiene cuenta; con los mismos datos y el código, `POST /api/auth/registro` crea la organización. Sin el código no se crea nada. En una sola transacción se crean:
 
 - La **organización**, con un slug único derivado de su nombre (`polenta`, `polenta-2`, …) y con `usa_ranking` apagado
 - El **usuario administrador**, que guarda el email y la contraseña. La organización no tiene credenciales propias: se accede a ella a través de sus administradores (`AdminOrganizacion`), lo que permite sumar más adelante a otros miembros del comité sin compartir una contraseña

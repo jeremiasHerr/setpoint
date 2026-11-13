@@ -96,7 +96,7 @@ async function filaDe(organizacionId: number, jugadorId: number) {
 async function idDeCategoria(organizacionId: number, nombre: string | null) {
   if (nombre === null) return null;
   const categoria = await prisma.categoria.findFirst({
-    where: { organizacionId, activa: true, nombre: { equals: nombre, mode: 'insensitive' } },
+    where: { organizacionId, activa: true, suelta: false, nombre: { equals: nombre, mode: 'insensitive' } },
     select: { id: true },
   });
   if (!categoria) throw new ErrorHttp(400, 'CATEGORIA_NO_ENCONTRADA');

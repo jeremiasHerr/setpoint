@@ -3,7 +3,7 @@ import { configuracionCircuitoSchema } from '@setpoint/shared';
 
 const minima = {
   nombre: 'POLENTA Team Tenis',
-  contacto: '',
+  contactos: [],
   usaRanking: false,
   categorias: ['Segunda', 'Tercera'],
   etapas: [],

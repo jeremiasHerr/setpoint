@@ -32,7 +32,7 @@ const aFecha = (dia: string | null) => (dia === null ? null : new Date(`${dia}T0
 const aDia = (fecha: Date | null) => (fecha === null ? null : fecha.toISOString().slice(0, 10));
 
 const CON_RELACIONES = {
-  categoria: { select: { nombre: true } },
+  categoria: { select: { nombre: true, suelta: true } },
   etapa: { select: { nombre: true } },
   clubSede: { select: { nombre: true } },
 } satisfies Prisma.TorneoInclude;
@@ -67,6 +67,7 @@ function aConvocatoria(torneos: TorneoConRelaciones[]): Convocatoria {
 
     nombre: t.nombre,
     descripcion: t.descripcion ?? '',
+    suelto: t.categoria.suelta,
     etapa: t.etapa?.nombre ?? null,
     categorias: torneos.map((x) => ({ categoria: x.categoria.nombre, cupo: x.cupo })),
 
@@ -96,26 +97,50 @@ function aConvocatoria(torneos: TorneoConRelaciones[]): Convocatoria {
   };
 }
 
-// Traduce los nombres que llegan (categorías, etapa, club) a ids de la organización.
-async function resolverNombres(organizacionId: number, datos: DatosConvocatoria) {
-  const organizacion = await prisma.organizacion.findUniqueOrThrow({
+const buscar = (filas: { id: number; nombre: string }[], nombre: string) =>
+  filas.find((f) => f.nombre.toLowerCase() === nombre.toLowerCase())?.id;
+
+// Las de un torneo del circuito tienen que existir en Tu circuito. Las de un torneo suelto se
+// escriben en el torneo: se reutiliza la suelta del mismo nombre o se crea, y nunca puede ser una
+// del circuito, que lo ataría a su padrón y su ranking (decisión 089).
+async function idsDeCategorias(
+  tx: Prisma.TransactionClient,
+  organizacionId: number,
+  datos: DatosConvocatoria,
+  categorias: { id: number; nombre: string; activa: boolean; suelta: boolean }[],
+) {
+  const ids: number[] = [];
+  for (const { categoria } of datos.categorias) {
+    const existente = categorias.find((c) => c.nombre.toLowerCase() === categoria.toLowerCase());
+
+    if (!datos.suelto) {
+      if (!existente || !existente.activa || existente.suelta) throw new ErrorHttp(400, 'CATEGORIA_NO_ENCONTRADA');
+      ids.push(existente.id);
+    } else if (existente) {
+      if (!existente.suelta) throw new ErrorHttp(409, 'CATEGORIA_DEL_CIRCUITO', { categorias: 'Ya es una categoría de tu circuito: usá otro nombre' });
+      ids.push(existente.id);
+    } else {
+      const creada = await tx.categoria.create({ data: { organizacionId, nombre: categoria, orden: 0, suelta: true }, select: { id: true } });
+      ids.push(creada.id);
+    }
+  }
+  return ids;
+}
+
+// Traduce los nombres que llegan (categorías, etapa, club) a ids de la organización. Va dentro de
+// la transacción que guarda el torneo: las categorías de un torneo suelto se crean con él.
+async function resolverNombres(tx: Prisma.TransactionClient, organizacionId: number, datos: DatosConvocatoria) {
+  const organizacion = await tx.organizacion.findUniqueOrThrow({
     where: { id: organizacionId },
     select: {
       usaRanking: true,
-      categorias: { where: { activa: true }, select: { id: true, nombre: true } },
+      categorias: { select: { id: true, nombre: true, activa: true, suelta: true } },
       etapas: { where: { activa: true }, select: { id: true, nombre: true } },
       clubes: { select: { id: true, nombre: true } },
     },
   });
 
-  const buscar = (filas: { id: number; nombre: string }[], nombre: string) =>
-    filas.find((f) => f.nombre.toLowerCase() === nombre.toLowerCase())?.id;
-
-  const categoriaIds = datos.categorias.map((c) => {
-    const id = buscar(organizacion.categorias, c.categoria);
-    if (id === undefined) throw new ErrorHttp(400, 'CATEGORIA_NO_ENCONTRADA');
-    return id;
-  });
+  const categoriaIds = await idsDeCategorias(tx, organizacionId, datos, organizacion.categorias);
 
   let etapaId: number | null = null;
   if (datos.etapa !== null) {
@@ -189,19 +214,21 @@ export async function obtenerConvocatoria(slug: string, usuarioId: number, torne
 export async function crearConvocatoria(slug: string, usuarioId: number, datos: DatosConvocatoria) {
   const organizacionId = await organizacionAdministrada(slug, usuarioId);
   await verificarNombreLibre(organizacionId, datos.nombre);
-  const { categoriaIds, etapaId, clubSedeId } = await resolverNombres(organizacionId, datos);
-  const compartidas = columnasCompartidas(datos, etapaId, clubSedeId);
 
-  const ids = await prisma.$transaction((tx) =>
-    Promise.all(
-      datos.categorias.map((c, i) =>
-        tx.torneo.create({
+  const ids = await prisma.$transaction(async (tx) => {
+    const { categoriaIds, etapaId, clubSedeId } = await resolverNombres(tx, organizacionId, datos);
+    const compartidas = columnasCompartidas(datos, etapaId, clubSedeId);
+    const creados: { id: number }[] = [];
+    for (const [i, c] of datos.categorias.entries()) {
+      creados.push(
+        await tx.torneo.create({
           data: { ...compartidas, organizacionId, categoriaId: categoriaIds[i], cupo: c.cupo },
           select: { id: true },
         }),
-      ),
-    ),
-  );
+      );
+    }
+    return creados;
+  });
 
   return obtenerConvocatoria(slug, usuarioId, Math.min(...ids.map((t) => t.id)));
 }
@@ -223,12 +250,11 @@ export async function editarConvocatoria(slug: string, usuarioId: number, torneo
     return obtenerConvocatoria(slug, usuarioId, principal.id);
   }
 
-  const { categoriaIds, etapaId, clubSedeId } = await resolverNombres(organizacionId, datos);
-  const compartidas = columnasCompartidas(datos, etapaId, clubSedeId);
-
   // En borrador los torneos no tienen inscripciones ni partidos: cambiar las categorías es
   // borrar los demás y recrearlos. El principal se conserva para que el id de la URL no cambie.
   await prisma.$transaction(async (tx) => {
+    const { categoriaIds, etapaId, clubSedeId } = await resolverNombres(tx, organizacionId, datos);
+    const compartidas = columnasCompartidas(datos, etapaId, clubSedeId);
     if (resto.length > 0) await tx.torneo.deleteMany({ where: { id: { in: resto.map((t) => t.id) } } });
 
     const [primera, ...demas] = datos.categorias;
@@ -257,7 +283,8 @@ async function editarPublicada(torneos: TorneoConRelaciones[], datos: DatosConvo
   const mismasCategorias =
     cupoPorCategoria.size === torneos.length &&
     torneos.every((t) => cupoPorCategoria.has(t.categoria.nombre.toLowerCase()));
-  if (!mismasCategorias) throw new ErrorHttp(409, 'CATEGORIAS_BLOQUEADAS');
+  // Pasar de suelto a del circuito cambiaría quién se puede inscribir: queda fijo, como las categorías.
+  if (!mismasCategorias || datos.suelto !== torneos[0].categoria.suelta) throw new ErrorHttp(409, 'CATEGORIAS_BLOQUEADAS');
 
   const ocupados = await prisma.inscripcion.groupBy({
     by: ['torneoId'],
@@ -270,7 +297,8 @@ async function editarPublicada(torneos: TorneoConRelaciones[], datos: DatosConvo
     if (cupoDe(t) < inscriptos) throw new ErrorHttp(409, 'CUPO_MENOR_A_INSCRIPTOS');
   }
 
-  const { etapaId, clubSedeId } = await resolverNombres(torneos[0].organizacionId, datos);
+  // Con las mismas categorías no se crea ninguna: no hace falta una transacción.
+  const { etapaId, clubSedeId } = await resolverNombres(prisma, torneos[0].organizacionId, datos);
   const compartidas = columnasCompartidas(datos, etapaId, clubSedeId);
 
   // Con más cupo, los lugares nuevos son de la lista de espera, no del próximo que entre al link
