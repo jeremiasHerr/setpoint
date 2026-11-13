@@ -74,7 +74,8 @@ export function EncontrarPerfil({ torneo, token, email, nombre, situacion, onRes
   // Ya tiene perfil en este circuito: se ve su nombre, que es de acá, y paga.
   const { perfil } = situacion;
   if (perfil) {
-    if (perfil.categoria !== torneo.categoria) {
+    // A un torneo suelto se anota cualquiera del padrón (decisión 089).
+    if (!torneo.suelto && perfil.categoria !== torneo.categoria) {
       return (
         <div className="flex flex-col gap-2">
           <Titulo>Tu perfil es de {perfil.categoria ?? 'otra categoría'}</Titulo>

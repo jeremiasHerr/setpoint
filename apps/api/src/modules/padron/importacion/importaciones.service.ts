@@ -62,7 +62,7 @@ async function importacionDe(organizacionId: number, id: number) {
 
 async function idDeCategoria(organizacionId: number, nombre: string) {
   const categoria = await prisma.categoria.findFirst({
-    where: { organizacionId, activa: true, nombre: { equals: nombre, mode: 'insensitive' } },
+    where: { organizacionId, activa: true, suelta: false, nombre: { equals: nombre, mode: 'insensitive' } },
     select: { id: true },
   });
   if (!categoria) throw new ErrorHttp(400, 'CATEGORIA_NO_ENCONTRADA');
@@ -161,7 +161,7 @@ export async function confirmarImportacion(
   if (!categoriaId) throw new ErrorHttp(409, 'IMPORTACION_NO_PENDIENTE');
 
   // La categoría pudo darse de baja entre la subida y la confirmación.
-  const categoria = await prisma.categoria.findFirst({ where: { id: categoriaId, organizacionId, activa: true } });
+  const categoria = await prisma.categoria.findFirst({ where: { id: categoriaId, organizacionId, activa: true, suelta: false } });
   if (!categoria) throw new ErrorHttp(409, 'CATEGORIA_NO_ENCONTRADA');
 
   const [jugadores, etapas] = await Promise.all([

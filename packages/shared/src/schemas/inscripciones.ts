@@ -80,6 +80,8 @@ export type InscripcionesDelTorneo = {
   nombre: string;
   // "Tercera": para buscar en el padrón a quien se inscribe a mano.
   categoria: string;
+  // Ajeno al circuito: a mano se busca en todo el padrón (decisión 089).
+  suelto: boolean;
   estado: EstadoTorneo;
   // Con aprobación, la pantalla muestra las solicitudes aunque todavía no haya ninguna.
   modoInscripcion: 'cerrada' | 'con_aprobacion' | 'abierta';

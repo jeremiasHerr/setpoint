@@ -11,7 +11,7 @@ const NO_PUBLICOS: EstadoTorneo[] = [EstadoTorneo.BORRADOR, EstadoTorneo.CANCELA
 // Lo que hace falta leer de cada torneo para mostrar su convocatoria.
 export const CONVOCATORIA = {
   organizacion: { select: { nombre: true, slug: true, contacto: true } },
-  categoria: { select: { nombre: true } },
+  categoria: { select: { nombre: true, suelta: true } },
   _count: { select: { inscripciones: { where: { estado: { in: OCUPAN_CUPO } } } } },
   // Los de la lista de espera, para contarlos: _count admite un solo filtro por relación.
   inscripciones: { where: { estado: EstadoInscripcion.EN_LISTA_ESPERA }, select: { id: true } },
@@ -25,6 +25,7 @@ export function aTorneoPublico(torneo: TorneoConConvocatoria): TorneoPublico {
     organizacion: torneo.organizacion,
     nombre: torneo.edicion ?? torneo.nombre,
     categoria: torneo.categoria.nombre,
+    suelto: torneo.categoria.suelta,
     inscripcion: torneo.estado === EstadoTorneo.PUBLICADO ? 'abierta' : 'cerrada',
     modoInscripcion: torneo.modoInscripcion.toLowerCase() as TorneoPublico['modoInscripcion'],
     cierreInscripcion: torneo.cierreInscripcion?.toISOString().slice(0, 10) ?? null,

@@ -138,6 +138,8 @@ CREATE TABLE categorias (
     nombre          VARCHAR(80) NOT NULL,
     orden           INTEGER     NOT NULL,
     activa          BOOLEAN     NOT NULL DEFAULT TRUE,
+    -- de un torneo suelto, ajeno al circuito (decisión 089)
+    suelta          BOOLEAN     NOT NULL DEFAULT FALSE,
     -- este unique ya indexa organizacion_id
     CONSTRAINT uq_categoria_org UNIQUE (organizacion_id, nombre)
 );

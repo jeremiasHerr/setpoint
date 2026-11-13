@@ -43,7 +43,10 @@ export function ocupanCupo(ahora: Date): Prisma.InscripcionWhereInput {
 // El torneo por el slug de su organización: el id solo no alcanza para el aislamiento.
 async function torneoPublicado(slug: string, torneoId: number) {
   if (!Number.isInteger(torneoId)) throw new ErrorHttp(404, 'TORNEO_NO_ENCONTRADO');
-  const torneo = await prisma.torneo.findFirst({ where: { id: torneoId, organizacion: { slug } } });
+  const torneo = await prisma.torneo.findFirst({
+    where: { id: torneoId, organizacion: { slug } },
+    include: { categoria: { select: { suelta: true } } },
+  });
   if (!torneo || torneo.estado === EstadoTorneo.BORRADOR || torneo.estado === EstadoTorneo.CANCELADO) {
     throw new ErrorHttp(404, 'TORNEO_NO_ENCONTRADO');
   }
@@ -52,12 +55,13 @@ async function torneoPublicado(slug: string, torneoId: number) {
 
 // Los perfiles de la categoría que se pueden buscar. Los apartados por otra inscripción en curso, o
 // en la lista de espera, no aparecen: así dos personas no eligen el mismo a la vez (decisión 051).
-async function padronDeLaCategoria(organizacionId: number, categoriaId: number) {
+// En un torneo suelto, todo el padrón: su categoría no es la de nadie (decisión 089).
+async function padronDelTorneo({ organizacionId, categoriaId, categoria }: TorneoDelLink) {
   const ahora = new Date();
   return prisma.jugador.findMany({
     where: {
       organizacionId,
-      categoriaId,
+      ...(categoria.suelta ? {} : { categoriaId }),
       ...DEL_PADRON_ACTIVOS,
       NOT: { usuarioId: null, inscripciones: { some: apartado(ahora) } },
     },
@@ -73,7 +77,7 @@ function aEncontrado(j: { id: number; nombre: string; apellido: string; usuarioI
 // del torneo, y nada hasta 3 letras.
 export async function buscarEnElPadron(slug: string, torneoId: number, consulta: string): Promise<BusquedaEnElPadron> {
   const torneo = await torneoPublicado(slug, torneoId);
-  const padron = await padronDeLaCategoria(torneo.organizacionId, torneo.categoriaId);
+  const padron = await padronDelTorneo(torneo);
   return { perfiles: buscar(padron, consulta).map(aEncontrado) };
 }
 
@@ -120,7 +124,7 @@ export async function situacionEnElTorneo(slug: string, torneoId: number, usuari
   // vinculados a otra cuenta no se proponen.
   const propuestas =
     !perfil && usuario.apellido
-      ? buscar(await padronDeLaCategoria(torneo.organizacionId, torneo.categoriaId), usuario.apellido)
+      ? buscar(await padronDelTorneo(torneo), usuario.apellido)
           .filter((j) => j.usuarioId === null)
           .map(aEncontrado)
       : [];
@@ -185,7 +189,7 @@ async function perfilElegido(
   });
   if (!jugador) throw new ErrorHttp(404, 'JUGADOR_NO_ENCONTRADO');
   if (jugador.usuarioId !== null && jugador.usuarioId !== usuarioId) throw new ErrorHttp(409, 'PERFIL_VINCULADO');
-  if (jugador.categoriaId !== torneo.categoriaId) throw new ErrorHttp(409, 'OTRA_CATEGORIA');
+  if (!torneo.categoria.suelta && jugador.categoriaId !== torneo.categoriaId) throw new ErrorHttp(409, 'OTRA_CATEGORIA');
   // Con el link personal no hay revisión de homónimo: el código tiene que ser el del perfil, y
   // uno regenerado ya no sirve (decisión 050).
   if (datos.vinculaPor === 'link_personal' && (!jugador.codigoLink || jugador.codigoLink !== datos.codigoLink)) {
@@ -364,7 +368,8 @@ export async function inscribirComoNuevo(
 
         const jugador = await crearPerfilPendiente(tx, {
           organizacionId: torneo.organizacionId,
-          categoriaId: torneo.categoriaId,
+          // Quien entra por un torneo suelto queda en el padrón sin categoría: la del torneo no es del circuito.
+          categoriaId: torneo.categoria.suelta ? null : torneo.categoriaId,
           usuarioId,
           nombre: datos.nombre,
           apellido: datos.apellido,

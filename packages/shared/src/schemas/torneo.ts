@@ -42,7 +42,10 @@ export const convocatoriaSchema = z
     // --- lo básico ---
     nombre: z.string({ error: 'Escribí el nombre del torneo' }).trim().min(2, 'Escribí el nombre del torneo').max(80),
     descripcion: z.string().trim().max(500).default(''),
-    // null = torneo suelto, no actualiza ningún casillero del ranking.
+    // Ajeno al circuito (decisión 089): sus categorías se escriben en el torneo y no son las del
+    // circuito, no da puntos y se anota cualquiera del padrón.
+    suelto: z.boolean().default(false),
+    // null = no actualiza ningún casillero del ranking. Un torneo suelto nunca tiene.
     etapa: z.string().trim().min(1).max(40).nullable().default(null),
     categorias: z
       .array(categoriaConCupo)
@@ -85,6 +88,10 @@ export const convocatoriaSchema = z
     clubSede: z.string().trim().min(1).max(80).nullable().default(null),
   })
   .superRefine((datos, ctx) => {
+    if (datos.suelto && datos.etapa !== null) {
+      ctx.addIssue({ code: 'custom', path: ['etapa'], message: 'Un torneo suelto no suma al ranking del circuito' });
+    }
+
     const lugares = datos.cantidadGrupos * JUGADORES_POR_GRUPO;
     datos.categorias.forEach((c, i) => {
       if (c.cupo > lugares) {

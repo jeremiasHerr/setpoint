@@ -318,6 +318,9 @@ model Categoria {
   nombre         String
   orden          Int
   activa         Boolean @default(true)
+  // De un torneo suelto, ajeno al circuito (decisión 089): no aparece en Tu circuito, el ranking
+  // ni el padrón, y no exige que el jugador sea de esta categoría para inscribirse.
+  suelta         Boolean @default(false)
 
   organizacion Organizacion        @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
   jugadores    Jugador[]

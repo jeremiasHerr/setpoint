@@ -24,7 +24,7 @@ export async function obtenerCircuito(slug: string, usuarioId: number): Promise<
   const organizacion = await prisma.organizacion.findUniqueOrThrow({
     where: { id },
     include: {
-      categorias: { where: { activa: true }, orderBy: { orden: 'asc' } },
+      categorias: { where: { activa: true, suelta: false }, orderBy: { orden: 'asc' } },
       etapas: { where: { activa: true }, orderBy: { orden: 'asc' } },
       puntajes: true,
       clubes: { orderBy: { id: 'asc' }, include: { canchas: { orderBy: { id: 'asc' } } } },
@@ -139,18 +139,21 @@ async function sincronizarLista(
   const delegado = (modelo === 'categoria' ? tx.categoria : tx.etapa) as Prisma.CategoriaDelegate;
   const existentes = await delegado.findMany({ where: { organizacionId } });
   const porNombre = new Map(existentes.map((fila) => [fila.nombre.toLowerCase(), fila]));
+  // Las de los torneos sueltos no son del circuito: no salen de él (decisión 089). Si el circuito
+  // suma una con el mismo nombre, pasa a ser del circuito, porque el nombre es único.
+  const delCircuito = modelo === 'categoria' ? { suelta: false } : {};
 
   for (const [orden, nombre] of nombres.entries()) {
     const existente = porNombre.get(nombre.toLowerCase());
     if (existente) {
-      await delegado.update({ where: { id: existente.id }, data: { nombre, orden, activa: true } });
+      await delegado.update({ where: { id: existente.id }, data: { nombre, orden, activa: true, ...delCircuito } });
     } else {
       await delegado.create({ data: { organizacionId, nombre, orden } });
     }
   }
 
   const quedan = new Set(nombres.map((n) => n.toLowerCase()));
-  const salen = existentes.filter((fila) => fila.activa && !quedan.has(fila.nombre.toLowerCase()));
+  const salen = existentes.filter((fila) => fila.activa && !fila.suelta && !quedan.has(fila.nombre.toLowerCase()));
   if (salen.length > 0) {
     await delegado.updateMany({ where: { id: { in: salen.map((f) => f.id) } }, data: { activa: false } });
   }

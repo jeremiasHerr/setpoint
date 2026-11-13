@@ -20,7 +20,7 @@ export async function rankingPublico(slug: string): Promise<RankingPublico> {
   const organizacionId = organizacion.id;
   const [etapas, categorias, jugadores, movimientos] = await Promise.all([
     prisma.etapa.findMany({ where: { organizacionId, activa: true }, orderBy: { orden: 'asc' }, select: { id: true, nombre: true } }),
-    prisma.categoria.findMany({ where: { organizacionId, activa: true }, orderBy: { orden: 'asc' }, select: { id: true, nombre: true } }),
+    prisma.categoria.findMany({ where: { organizacionId, activa: true, suelta: false }, orderBy: { orden: 'asc' }, select: { id: true, nombre: true } }),
     prisma.jugador.findMany({
       where: { organizacionId, ...DEL_PADRON_ACTIVOS, categoriaId: { not: null } },
       select: { id: true, nombre: true, apellido: true, categoriaId: true },

@@ -355,6 +355,7 @@ function Inscripciones({ sesion, datos }: { sesion: Sesion; datos: Inscripciones
                 slug={slug}
                 torneoId={datos.torneoId}
                 categoria={datos.categoria}
+                suelto={datos.suelto}
                 precio={datos.precio}
                 libres={datos.libres}
                 inscripciones={datos.inscripciones}
