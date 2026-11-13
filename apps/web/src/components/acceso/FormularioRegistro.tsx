@@ -132,13 +132,22 @@ export function FormularioRegistro({
 
   // Vive acá y no en cada paso: al volver con "Cambiar el email" los datos siguen escritos.
   const [datos, setDatos] = useState<DatosRegistro>({ organizacion: '', nombre: '', email: '', contrasena: '' });
+  // La repetición no viaja a la API: solo evita crear la cuenta con una contraseña mal tipeada.
+  const [repetida, setRepetida] = useState('');
+  const [noCoinciden, setNoCoinciden] = useState(false);
 
   function cambiar(campo: keyof DatosRegistro, valor: string) {
     setDatos({ ...datos, [campo]: valor });
+    if (campo === 'contrasena') setNoCoinciden(false);
   }
 
   function manejarEnvio(evento: FormEvent<HTMLFormElement>) {
     evento.preventDefault();
+    if (datos.contrasena !== repetida) {
+      setNoCoinciden(true);
+      document.getElementById('registro-repetir')?.focus();
+      return;
+    }
     alEnviar?.(datos);
   }
 
@@ -232,6 +241,23 @@ export function FormularioRegistro({
             <p className="text-xs text-gris-500">
               Al menos <span className="font-mono tabular-nums">{LARGO_MINIMO_CONTRASENA}</span> caracteres.
             </p>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <CampoContrasena
+              id="registro-repetir"
+              rotulo="Confirmá la contraseña"
+              autoComplete="new-password"
+              required
+              value={repetida}
+              onChange={(e) => {
+                setRepetida(e.target.value);
+                setNoCoinciden(false);
+              }}
+              aria-invalid={noCoinciden ? true : undefined}
+              aria-describedby={noCoinciden ? 'registro-repetir-error' : undefined}
+            />
+            <MensajeError id="registro-repetir-error">{noCoinciden && 'Las contraseñas no coinciden.'}</MensajeError>
           </div>
         </div>
 
