@@ -29,6 +29,7 @@ import {
 } from '../features/resultados/resultado';
 import { ElegirPartido } from '../features/resultados/ElegirPartido';
 import { useGuardarResultado, usePartido, usePartidos, useSimulacion } from '../features/resultados/useResultado';
+import { Esqueleto } from '../components/Esqueleto';
 
 // Sin partido en la ruta, se abre el primero que no tiene resultado (decisión 031).
 export function CargarResultadoPage() {
@@ -137,7 +138,7 @@ function PrimeroSinResultado({ sesion, torneoId }: { sesion: Sesion; torneoId: n
             <Boton onClick={() => void partidos.refetch()}>Probar de nuevo</Boton>
           </>
         ) : (
-          <p className="text-[15px] text-gris-500">Cargando…</p>
+          <Esqueleto forma="pagina" />
         )}
       </Estado>
     </Marco>
@@ -166,7 +167,7 @@ function CargarResultado({ sesion, torneoId, partidoId }: { sesion: Sesion; torn
             <Boton onClick={() => void partido.refetch()}>Probar de nuevo</Boton>
           </>
         ) : (
-          <p className="text-[15px] text-gris-500">Cargando…</p>
+          <Esqueleto forma="pagina" />
         )}
       </Estado>
     </Marco>

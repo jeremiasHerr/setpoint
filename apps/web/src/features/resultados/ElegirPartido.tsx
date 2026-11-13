@@ -8,6 +8,7 @@ import { CuadroCompleto } from '../cuadros/CuadroCompleto';
 import { CuadroPorRonda } from '../cuadros/CuadroPorRonda';
 import { nombresDelPartido, seccionesDeLaLista, type FilaDeLaLista, type Situacion } from './resultado';
 import { useCuadros, usePartidos } from './useResultado';
+import { Esqueleto } from '../../components/Esqueleto';
 
 type Props = {
   slug: string;
@@ -47,7 +48,7 @@ export function ElegirPartido({ slug, torneoId, actual }: Props) {
             <Boton onClick={() => void (partidos.error ? partidos.refetch() : cuadros.refetch())}>Probar de nuevo</Boton>
           </>
         ) : (
-          <p className="text-[15px] text-gris-500">Cargando…</p>
+          <Esqueleto forma="bloque" />
         )}
       </div>
     );

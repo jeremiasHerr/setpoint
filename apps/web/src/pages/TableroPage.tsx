@@ -17,6 +17,7 @@ import { ResumenPlazo } from '../features/tablero/ResumenPlazo';
 import { elDia } from '../features/tablero/tablero';
 import { useCerrarZonas, useTablero } from '../features/tablero/useTablero';
 import { ZonaPorZona } from '../features/tablero/ZonaPorZona';
+import { Esqueleto } from '../components/Esqueleto';
 
 // Tablero del torneo (F15). Es la página del torneo mientras se juega: se llega desde el Sorteo
 // confirmado, y Cargar resultado y el Cierre vuelven acá (decisión 063).
@@ -71,7 +72,7 @@ function TableroDelTorneo({ sesion, torneoId }: { sesion: Sesion; torneoId: numb
             )}
           </>
         ) : (
-          <p className="text-[15px] text-gris-500">Cargando…</p>
+          <Esqueleto forma="pagina" />
         )}
       </div>
     </Marco>

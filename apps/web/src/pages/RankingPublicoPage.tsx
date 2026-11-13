@@ -8,6 +8,7 @@ import { Numero } from '../components/Numero';
 import { TablaRanking } from '../features/ranking/TablaRanking';
 import { useRankingPublico } from '../features/ranking/useRankingPublico';
 import { ErrorApi } from '../lib/api';
+import { Esqueleto } from '../components/Esqueleto';
 
 // Para buscar "fernandez" y encontrar a Fernández.
 function normalizar(texto: string) {
@@ -30,7 +31,7 @@ export function RankingPublicoPage() {
       {/* Las páginas que se comparten por link dicen en la pestaña qué son. React lo sube al <head>. */}
       {ranking.data && <title>{`Ranking · ${ranking.data.organizacion}`}</title>}
       {ranking.data && <EncabezadoPublico organizacion={ranking.data.organizacion} />}
-      {ranking.isPending && <p className="text-[15px] text-gris-500">Cargando el ranking…</p>}
+      {ranking.isPending && <Esqueleto forma="lista" />}
       {ranking.error && <p className="text-[15px] text-gris-700">{mensajeDeError(ranking.error)}</p>}
       {ranking.data &&
         (ranking.data.usaRanking ? (

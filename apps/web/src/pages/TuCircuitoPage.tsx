@@ -15,6 +15,7 @@ import { SeccionQuienesSon } from '../features/circuito/SeccionQuienesSon';
 import { SeccionRanking } from '../features/circuito/SeccionRanking';
 import { TablaPuntos } from '../features/circuito/TablaPuntos';
 import { iniciales, navegacionOrganizador } from '../features/organizador/encabezado';
+import { Esqueleto } from '../components/Esqueleto';
 
 const textoEstado: Record<EstadoGuardado, string> = {
   'sin-cambios': 'se guarda solo',
@@ -65,7 +66,7 @@ function CargarCircuito({ sesion }: { sesion: Sesion }) {
             <Boton onClick={() => void refetch()}>Probar de nuevo</Boton>
           </>
         ) : (
-          <p className="text-[15px] text-gris-500">Cargando tu circuito…</p>
+          <Esqueleto forma="pagina" />
         )}
       </div>
     </div>

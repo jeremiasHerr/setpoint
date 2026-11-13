@@ -15,6 +15,7 @@ import { VerificarEmail } from '../features/inscripcion/VerificarEmail';
 import { ElegirTorneo } from '../features/link-personal/ElegirTorneo';
 import { useLinkPersonal, useSituacionDelLink } from '../features/link-personal/useLinkPersonal';
 import { ErrorApi } from '../lib/api';
+import { Esqueleto } from '../components/Esqueleto';
 
 // El link personal que la organización le manda a cada jugador por WhatsApp (F12,
 // docs/pantallas/jugador/link-personal.html, decisión 050): se saltea la búsqueda.
@@ -25,7 +26,7 @@ export function LinkPersonalPage() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-[480px] flex-col gap-5 px-4 pt-5 pb-7">
-      {link.isPending && <p className="text-[15px] text-gris-500">Cargando…</p>}
+      {link.isPending && <Esqueleto forma="lista" />}
       {noAnda && <LinkQueNoAnda />}
       {link.error && !noAnda && (
         <p className="text-[15px] text-gris-700">

@@ -1,6 +1,7 @@
 import { Navigate } from 'react-router-dom';
 import { Boton } from '../components/Boton';
 import { EncabezadoOrganizador } from '../components/EncabezadoOrganizador';
+import { Esqueleto } from '../components/Esqueleto';
 import { leerSesion, type Sesion } from '../features/auth/sesion';
 import { useCerrarSesion } from '../features/auth/useCerrarSesion';
 import { useSesionInvalida } from '../features/auth/useSesionInvalida';
@@ -39,20 +40,25 @@ function Inicio({ sesion }: { sesion: Sesion }) {
         alSalir={cerrarSesion}
       />
 
-      {/* Mientras carga se ve solo el encabezado: dura poco y un aviso solo parpadea. */}
+      {/* Mientras carga, el esqueleto: aparece solo si tarda, así que no parpadea (decisión 093). */}
       {!circuito.data || !torneos.data ? (
-        error &&
-        !sesionInvalida && (
-          <div className="flex flex-col items-start gap-3 px-7 pt-[26px]">
-            <p className="text-[15px] text-gris-500">No pudimos cargar tu organización.</p>
-            <Boton
-              onClick={() => {
-                void circuito.refetch();
-                void torneos.refetch();
-              }}
-            >
-              Probar de nuevo
-            </Boton>
+        error ? (
+          !sesionInvalida && (
+            <div className="flex flex-col items-start gap-3 px-7 pt-[26px]">
+              <p className="text-[15px] text-gris-500">No pudimos cargar tu organización.</p>
+              <Boton
+                onClick={() => {
+                  void circuito.refetch();
+                  void torneos.refetch();
+                }}
+              >
+                Probar de nuevo
+              </Boton>
+            </div>
+          )
+        ) : (
+          <div className="px-7 pt-[26px]">
+            <Esqueleto />
           </div>
         )
       ) : torneos.data.length > 0 ? (

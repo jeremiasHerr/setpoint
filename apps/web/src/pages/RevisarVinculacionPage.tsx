@@ -16,6 +16,7 @@ import { MarcaParaRevisar } from '../features/revisiones/piezas';
 import { diaCorto } from '../features/revisiones/textos';
 import { useCasoDeRevision, useResolverRevision, useRevisiones } from '../features/revisiones/useRevisiones';
 import { ErrorApi } from '../lib/api';
+import { Esqueleto } from '../components/Esqueleto';
 
 function mensajeDeError(error: Error | null) {
   if (!error) return null;
@@ -112,7 +113,7 @@ function Revisar({ sesion }: { sesion: Sesion }) {
 
       <div className="grid items-start gap-[22px] px-7 pb-7 lg:grid-cols-[minmax(0,1fr)_320px]">
         <main className="flex min-w-0 flex-col gap-[18px]">
-          {caso.isPending && <p className="text-[15px] text-gris-500">Cargando el caso…</p>}
+          {caso.isPending && <Esqueleto forma="pagina" />}
           {caso.error && !sesionInvalida && (
             <div className="flex flex-col items-start gap-3">
               <p className="text-[15px] text-gris-500">

@@ -7,6 +7,7 @@ import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Boton } from '../components/Boton';
 import { Logo } from '../components/Logo';
+import { Esqueleto } from '../components/Esqueleto';
 import { ErrorDeCarga } from '../features/auth/ErrorDeCarga';
 import { useSesion } from '../features/auth/SesionProvider';
 import { Marca, Reloj, Vence } from '../features/cuenta/piezas';
@@ -31,7 +32,7 @@ export default function Inscripciones() {
           <Text style={estilos.nombreMarca}>SetPoint</Text>
         </View>
 
-        {cuenta.isPending && <Text style={estilos.texto}>Cargando tus inscripciones…</Text>}
+        {cuenta.isPending && <Esqueleto forma="tarjeta" />}
         {cuenta.error && !cuenta.data && <ErrorDeCarga error={cuenta.error} que="tus inscripciones" />}
 
         {cuenta.data &&

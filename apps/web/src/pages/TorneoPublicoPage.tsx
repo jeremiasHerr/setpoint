@@ -5,6 +5,7 @@ import { Numero } from '../components/Numero';
 import { diaLargo, formato, importe, lugaresLibres } from '../features/torneo-publico/convocatoria';
 import { useTorneoPublico } from '../features/torneo-publico/useTorneoPublico';
 import { ErrorApi } from '../lib/api';
+import { Esqueleto } from '../components/Esqueleto';
 
 function mensajeDeError(error: Error) {
   if (error instanceof ErrorApi && error.codigo === 'TORNEO_NO_ENCONTRADO') return 'No encontramos ese torneo. Revisá el enlace.';
@@ -21,7 +22,7 @@ export function TorneoPublicoPage() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-[480px] flex-col gap-5 px-4 pt-5 pb-7">
-      {torneo.isPending && <p className="text-[15px] text-gris-500">Cargando el torneo…</p>}
+      {torneo.isPending && <Esqueleto forma="lista" />}
       {torneo.error && <p className="text-[15px] text-gris-700">{mensajeDeError(torneo.error)}</p>}
       {torneo.data && <Convocatoria torneo={torneo.data} />}
     </main>

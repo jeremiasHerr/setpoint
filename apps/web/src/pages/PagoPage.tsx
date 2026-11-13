@@ -11,6 +11,7 @@ import { hastaCuando } from '../features/pago/texto';
 import { useIniciarPago, useInscripcionParaPagar, useReservarAprobada, useSimularPago } from '../features/pago/usePago';
 import { importe } from '../features/torneo-publico/convocatoria';
 import { ErrorApi } from '../lib/api';
+import { Esqueleto } from '../components/Esqueleto';
 
 // El pago de la inscripción, de la reserva al final (F12, docs/pantallas/jugador/inscripcion-y-pago.html).
 // MercadoPago vuelve acá; la confirmación llega por el webhook, así que la pantalla espera. También
@@ -33,7 +34,7 @@ export function PagoPage() {
 
   return (
     <Marco organizacion={inscripcion.data?.torneo.organizacion.nombre}>
-      {inscripcion.isPending && <p className="text-[15px] text-gris-500">Cargando tu inscripción…</p>}
+      {inscripcion.isPending && <Esqueleto forma="lista" />}
       {inscripcion.error && (
         <p className="text-[15px] text-gris-700">
           {inscripcion.error instanceof ErrorApi && inscripcion.error.codigo === 'INSCRIPCION_NO_ENCONTRADA'

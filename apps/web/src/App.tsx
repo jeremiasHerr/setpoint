@@ -35,7 +35,7 @@ const Catalogo = import.meta.env.DEV ? lazy(() => import('./Catalogo').then((m) 
 
 export default function App() {
   return (
-    // Sin fallback: la página tarda un instante y cada una muestra su propio «Cargando…».
+    // Sin fallback: la página tarda un instante y cada una muestra su propio esqueleto (decisión 093).
     <Suspense fallback={null}>
       <Routes>
         <Route path="/" element={<LandingPage />} />

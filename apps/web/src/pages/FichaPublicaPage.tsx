@@ -10,6 +10,7 @@ import { PuntosPorTorneo } from '../features/ficha/PuntosPorTorneo';
 import { TorneosDeLaFicha } from '../features/ficha/TorneosDeLaFicha';
 import { useFichaPublica } from '../features/ficha/useFichaPublica';
 import { ErrorApi } from '../lib/api';
+import { Esqueleto } from '../components/Esqueleto';
 
 function mensajeDeError(error: Error) {
   if (error instanceof ErrorApi && (error.codigo === 'ORGANIZACION_NO_ENCONTRADA' || error.codigo === 'JUGADOR_NO_ENCONTRADO')) {
@@ -28,7 +29,7 @@ export function FichaPublicaPage() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-[480px] flex-col gap-[22px] px-4 pt-5 pb-7">
-      {ficha.isPending && <p className="text-[15px] text-gris-500">Cargando la ficha…</p>}
+      {ficha.isPending && <Esqueleto forma="lista" />}
       {ficha.error && <p className="text-[15px] text-gris-700">{mensajeDeError(ficha.error)}</p>}
       {ficha.data && <Ficha ficha={ficha.data} />}
     </main>

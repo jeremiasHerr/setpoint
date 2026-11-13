@@ -6,6 +6,7 @@ import { NOMBRE_DEL_CUADRO, bajada } from './cuadro';
 import { CuadroCompleto } from './CuadroCompleto';
 import { CuadroPorRonda } from './CuadroPorRonda';
 import { useCuadrosPublicos } from './useCuadrosPublicos';
+import { Esqueleto } from '../../components/Esqueleto';
 
 function mensajeDeError(error: Error) {
   if (error instanceof ErrorApi && error.codigo === 'CUADROS_NO_GENERADOS') {
@@ -19,7 +20,7 @@ function mensajeDeError(error: Error) {
 // lado; en el celular, un cuadro y una ronda a la vez (decisión 038).
 export function LosCuadros({ slug, torneoId }: { slug: string; torneoId: string }) {
   const cuadros = useCuadrosPublicos(slug, torneoId);
-  if (cuadros.isPending) return <p className="text-[15px] text-gris-500">Cargando los cuadros…</p>;
+  if (cuadros.isPending) return <Esqueleto forma="bloque" />;
   if (cuadros.error) return <p className="text-[15px] text-gris-700">{mensajeDeError(cuadros.error)}</p>;
   return <Contenido datos={cuadros.data} />;
 }

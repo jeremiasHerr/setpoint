@@ -190,6 +190,7 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 - ~~¿Cómo se arreglan los problemas de contraste?~~ **Con bordes más oscuros en los tokens y un interruptor lima o gris** ([decisión 090](decisiones/090-mas-contraste.md)). El interruptor apagado casi no se veía
 - ~~¿Cómo se cargan los contactos de la organización?~~ **Como una lista, de a uno, cada uno WhatsApp o red social** ([decisión 091](decisiones/091-contactos-de-la-organizacion.md)). Era un solo texto libre, y el WhatsApp no se podía abrir como chat
 - ~~¿Qué pasa con "Solo el padrón" si el padrón está vacío?~~ **El torneo nuevo arranca en "Cualquiera" y "Solo el padrón" se deshabilita, con los links para cargarlo** ([decisión 092](decisiones/092-inscripcion-con-el-padron-vacio.md)). Si no, se publicaba un torneo al que no se podía anotar nadie
+- ~~¿Qué se ve mientras una pantalla espera a la API?~~ **Un esqueleto común, que aparece recién a los 200 ms, en la web y en la app** ([decisión 093](decisiones/093-esqueleto-de-carga.md)). El "Cargando…" de cada pantalla parpadeaba en todas al recargar, aunque la API contestara enseguida
 - ~~Dónde guarda la web el token de sesión (abierta 13)~~ **Sigue en `localStorage`** ([decisión 086](decisiones/086-version-publicada.md)). La cookie `httpOnly` obliga a configurar CORS con credenciales y protección CSRF, con la web y la API en dominios distintos; la web no inserta HTML ajeno, que es por donde entraría un script
 
 ---

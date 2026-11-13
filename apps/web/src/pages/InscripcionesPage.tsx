@@ -21,6 +21,7 @@ import { useCerrarInscripcion, useInscripciones } from '../features/inscripcione
 import { iniciales, navegacionOrganizador } from '../features/organizador/encabezado';
 import { diaConSemana } from '../features/torneos/texto';
 import { ErrorApi } from '../lib/api';
+import { Esqueleto } from '../components/Esqueleto';
 
 // El mismo mínimo que usa el sorteo: con menos de 3 por zona no se sortea (decisión 015).
 const MINIMO_POR_ZONA = 3;
@@ -71,7 +72,7 @@ function CargarInscripciones({ sesion, id }: { sesion: Sesion; id: number }) {
             <Boton onClick={() => void inscripciones.refetch()}>Probar de nuevo</Boton>
           </>
         ) : (
-          <p className="text-[15px] text-gris-500">Cargando…</p>
+          <Esqueleto forma="pagina" />
         )}
       </div>
     </div>

@@ -33,6 +33,7 @@ import {
   type EstadoGuardado,
 } from '../features/torneos/useConvocatoria';
 import { ErrorApi } from '../lib/api';
+import { Esqueleto } from '../components/Esqueleto';
 
 // Con la que arranca un torneo suelto: quien no divide por nivel no tiene que escribir nada.
 const CATEGORIA_SUELTA = 'General';
@@ -104,7 +105,7 @@ function CargarTorneo({ sesion, id }: { sesion: Sesion; id: number | null }) {
             </Boton>
           </>
         ) : (
-          <p className="text-[15px] text-gris-500">Cargando…</p>
+          <Esqueleto forma="pagina" />
         )}
       </div>
     </div>

@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AvisoInscripcion } from '../../components/AvisoInscripcion';
+import { Esqueleto } from '../../components/Esqueleto';
 import { EncabezadoCircuito } from '../../features/auth/EncabezadoCircuito';
 import { ErrorDeCarga } from '../../features/auth/ErrorDeCarga';
 import { useSesion } from '../../features/auth/SesionProvider';
@@ -53,7 +54,7 @@ export default function CuandoJuego() {
         </View>
         {/* Las inscripciones en curso en otro circuito, sin tapar el partido que viene (decisión 054). */}
         <AvisoInscripcion />
-        {consulta.isPending && <Text style={estilos.aviso}>Cargando tus partidos…</Text>}
+        {consulta.isPending && <Esqueleto forma="tarjeta" />}
         {consulta.error && <ErrorDeCarga error={consulta.error} que="tus partidos" />}
         {consulta.data &&
           (consulta.data.partidos ? (
