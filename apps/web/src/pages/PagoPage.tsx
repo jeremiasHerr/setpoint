@@ -358,7 +358,7 @@ function Confirmando({ datos }: { datos: InscripcionParaPagar }) {
     <>
       <div className="flex grow flex-col items-center justify-center gap-6 text-center">
         <svg className="animate-spin" width="52" height="52" viewBox="0 0 52 52" fill="none" aria-hidden>
-          <circle cx="26" cy="26" r="22" stroke="#E6E8EB" strokeWidth="5" />
+          <circle cx="26" cy="26" r="22" stroke="var(--color-linea)" strokeWidth="5" />
           <path d="M26 4a22 22 0 0 1 22 22" stroke="#0A0B0D" strokeWidth="5" strokeLinecap="round" />
         </svg>
         <div className="flex flex-col gap-2.5">
