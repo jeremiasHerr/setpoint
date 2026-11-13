@@ -3,6 +3,7 @@
 import type { MiZona } from '@setpoint/shared';
 import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Esqueleto } from '../../components/Esqueleto';
 import { EncabezadoCircuito } from '../../features/auth/EncabezadoCircuito';
 import { ErrorDeCarga } from '../../features/auth/ErrorDeCarga';
 import { useSesion } from '../../features/auth/SesionProvider';
@@ -33,7 +34,7 @@ export default function Zona() {
         }
       >
         <EncabezadoCircuito />
-        {consulta.isPending && <Text style={estilos.aviso}>Cargando tu zona…</Text>}
+        {consulta.isPending && <Esqueleto forma="lista" />}
         {consulta.error && <ErrorDeCarga error={consulta.error} que="tu zona" />}
         {consulta.data &&
           (consulta.data.zona ? (

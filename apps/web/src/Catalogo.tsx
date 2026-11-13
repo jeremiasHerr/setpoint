@@ -4,6 +4,7 @@ import { Boton } from './components/Boton';
 import { Campo } from './components/Campo';
 import { Chip } from './components/Chip';
 import { EncabezadoOrganizador } from './components/EncabezadoOrganizador';
+import { Esqueleto } from './components/Esqueleto';
 import { Numero } from './components/Numero';
 import { Tarjeta } from './components/Tarjeta';
 
@@ -109,6 +110,14 @@ export function Catalogo() {
             <Numero>sáb 14 · 10:00</Numero>
             <Numero>6-4 3-6 10-8</Numero>
             <Numero className="text-gris-500">quedan 6 días</Numero>
+          </div>
+        </Seccion>
+
+        <Seccion titulo="esqueleto · pagina, lista y bloque">
+          <div className="grid items-start gap-8 lg:grid-cols-3">
+            <Esqueleto forma="pagina" />
+            <Esqueleto forma="lista" />
+            <Esqueleto forma="bloque" />
           </div>
         </Seccion>
       </main>

@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Chip } from '../../components/Chip';
+import { Esqueleto } from '../../components/Esqueleto';
 import { EncabezadoCircuito } from '../../features/auth/EncabezadoCircuito';
 import { useSesion } from '../../features/auth/SesionProvider';
 import { FilaRanking } from '../../features/ranking/FilaRanking';
@@ -37,7 +38,7 @@ export default function Ranking() {
         }
       >
         <EncabezadoCircuito />
-        {ranking.isPending && <Text style={estilos.aviso}>Cargando el ranking…</Text>}
+        {ranking.isPending && <Esqueleto forma="lista" />}
         {ranking.error && <Text style={estilos.aviso}>{mensajeDeError(ranking.error)}</Text>}
         {ranking.data &&
           (ranking.data.usaRanking ? (

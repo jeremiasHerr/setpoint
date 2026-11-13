@@ -8,6 +8,7 @@ import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Boton } from '../../../components/Boton';
 import { Campo } from '../../../components/Campo';
+import { Esqueleto } from '../../../components/Esqueleto';
 import { ErrorDeCarga } from '../../../features/auth/ErrorDeCarga';
 import { Desplegable } from '../../../features/coordinacion/Desplegable';
 import { ElegirDia } from '../../../features/coordinacion/ElegirDia';
@@ -49,7 +50,7 @@ export default function AnotarFecha() {
             <Text style={estilos.titulo}>{tituloDeLaPantalla(coordinacion?.accion ?? 'anotar')}</Text>
           </View>
 
-          {consulta.isPending && <Text style={estilos.texto}>Cargando el partido…</Text>}
+          {consulta.isPending && <Esqueleto forma="tarjeta" />}
           {consulta.error && !coordinacion && <ErrorDeCarga error={consulta.error} que="el partido" />}
           {coordinacion && <Contenido coordinacion={coordinacion} recargar={() => void consulta.refetch()} />}
         </ScrollView>

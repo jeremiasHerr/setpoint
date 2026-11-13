@@ -5,6 +5,7 @@ import { Campo } from '../../components/Campo';
 import { Selector } from '../../components/Selector';
 import { ErrorApi } from '../../lib/api';
 import { useAnotarFecha, useCoordinacion } from './useTablero';
+import { Esqueleto } from '../../components/Esqueleto';
 
 const OTRO = 'otro';
 
@@ -53,7 +54,7 @@ export function AnotarFecha({ slug, torneoId, partidoId, sangria, onCerrar }: Pr
   return (
     <div className={`px-5 pb-4 ${sangria}`}>
       <div className="rounded-control border border-linea bg-fondo-tabla p-4">
-        {coordinacion.isPending && <p className="text-sm text-gris-500">Cargando…</p>}
+        {coordinacion.isPending && <Esqueleto forma="bloque" />}
         {coordinacion.error && <p className="text-sm text-rojo-texto">No pudimos cargar el partido. Probá de nuevo.</p>}
         {coordinacion.data && (
           <Formulario slug={slug} torneoId={torneoId} coordinacion={coordinacion.data} onCerrar={onCerrar} />

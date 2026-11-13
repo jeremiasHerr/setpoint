@@ -12,6 +12,7 @@ import { TablaPuntosAOtorgar } from '../features/cierre/TablaPuntosAOtorgar';
 import { TarjetaCampeon } from '../features/cierre/TarjetaCampeon';
 import { useCerrarTorneo, useCierre } from '../features/cierre/useCierre';
 import { iniciales, navegacionOrganizador } from '../features/organizador/encabezado';
+import { Esqueleto } from '../components/Esqueleto';
 
 // Cerrar el torneo (F16). Se llega desde el tablero y desde Cargar resultado, con las finales cargadas
 // (decisiones 058 y 063).
@@ -68,7 +69,7 @@ function Cierre({ sesion, torneoId }: { sesion: Sesion; torneoId: number }) {
             )}
           </>
         ) : (
-          <p className="text-[15px] text-gris-500">Cargando…</p>
+          <Esqueleto forma="pagina" />
         )}
       </div>
     </Marco>

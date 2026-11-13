@@ -28,6 +28,7 @@ import {
 } from '../features/competencia/zonas';
 import { iniciales, navegacionOrganizador } from '../features/organizador/encabezado';
 import { ErrorApi } from '../lib/api';
+import { Esqueleto } from '../components/Esqueleto';
 
 const distribuciones: { valor: ModoDistribucion; etiqueta: string }[] = [
   { valor: 'serpentina', etiqueta: 'Serpentina' },
@@ -96,7 +97,7 @@ function CargarSorteo({ sesion, id }: { sesion: Sesion; id: number }) {
             <Boton onClick={() => void sorteo.refetch()}>Probar de nuevo</Boton>
           </>
         ) : (
-          <p className="text-[15px] text-gris-500">Cargando…</p>
+          <Esqueleto forma="pagina" />
         )}
       </div>
     </div>

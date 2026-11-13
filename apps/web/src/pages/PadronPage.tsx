@@ -13,6 +13,7 @@ import { PanelJugador, type ErroresJugador } from '../features/padron/PanelJugad
 import { TablaPadron } from '../features/padron/TablaPadron';
 import { useCrearJugador, useDesvincularCuenta, useEditarJugador, usePadron, useVisitaPadron } from '../features/padron/usePadron';
 import { ErrorApi } from '../lib/api';
+import { Esqueleto } from '../components/Esqueleto';
 
 function erroresDe(error: Error | null): ErroresJugador {
   if (!error) return {};
@@ -147,7 +148,7 @@ function Padron({ sesion }: { sesion: Sesion }) {
               </Boton>
             </>
           ) : (
-            <p className="text-[15px] text-gris-500">Cargando el padrón…</p>
+            <Esqueleto forma="pagina" />
           )}
         </div>
       ) : (

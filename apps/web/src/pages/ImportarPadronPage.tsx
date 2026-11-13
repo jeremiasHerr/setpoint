@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 import { Link, Navigate, useSearchParams } from 'react-router-dom';
 import { Boton } from '../components/Boton';
 import { EncabezadoOrganizador } from '../components/EncabezadoOrganizador';
+import { Esqueleto } from '../components/Esqueleto';
 import { Numero } from '../components/Numero';
 import { Tarjeta } from '../components/Tarjeta';
 import { leerSesion, type Sesion } from '../features/auth/sesion';
@@ -171,9 +172,13 @@ function ImportarPadron({ sesion }: { sesion: Sesion }) {
 
 function Cargando({ error }: { error: boolean }) {
   return (
-    <p className="px-7 text-[15px] text-gris-500">
-      {error ? 'No pudimos cargar la importación. Recargá la página.' : 'Cargando…'}
-    </p>
+    <div className="px-7">
+      {error ? (
+        <p className="text-[15px] text-gris-500">No pudimos cargar la importación. Recargá la página.</p>
+      ) : (
+        <Esqueleto />
+      )}
+    </div>
   );
 }
 

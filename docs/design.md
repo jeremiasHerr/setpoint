@@ -185,6 +185,10 @@ Fila de 52–60. Punto de 7px a la izquierda del nombre: lima si clasifica, `--l
 
 Columnas por ronda con rótulo en mono minúscula. Tarjeta de 190×62 con dos filas de 31; el ganador con fondo `--lima-tenue` y peso 600. **En las tarjetas va el resultado en sets (2-0, 2-1), no el marcador completo** — es lo que hace legible un cuadro de 16. Las llaves se dibujan con codos de 1px `--linea`. El partido pendiente destacado lleva borde 2px `--negro` y franja lima con fecha y hora. Donde hubo un bye no hay partido: el lugar lleva una tarjeta del mismo alto, sin fondo, con el apellido de quien pasa directo en `--gris-500` y el rótulo mono "pasa directo a semis" en `--gris-400` ([decisión 083](decisiones/083-el-bye-se-ve-en-el-cuadro.md)).
 
+### Esqueleto de carga
+
+Mientras una pantalla espera a la API no se escribe "Cargando…": va un esqueleto de barras `--linea` con radio 6, que late entre opacidad 1 y 0,5 (quieto con "reducir movimiento"). **Aparece recién a los 200 ms**, así que una respuesta rápida no hace parpadear nada. Formas en la web: `pagina`, `lista` y `bloque`; en la app, `tarjeta` y `lista`. Para el lector de pantalla dice "Cargando" ([decisión 093](decisiones/093-esqueleto-de-carga.md)).
+
 ---
 
 ## 7. Vocabulario de estados
