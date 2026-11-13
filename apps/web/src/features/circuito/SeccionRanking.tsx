@@ -17,9 +17,28 @@ export function SeccionRanking({ usaRanking, etapas, alCambiarUsaRanking, alCamb
           <h2 id="ranking-titulo" className="text-[17px] font-semibold">
             Ranking anual
           </h2>
-          <p className="text-sm text-gris-500">Los torneos acumulan puntos y arman una tabla que se actualiza sola.</p>
+          <p className="max-w-[560px] text-sm leading-normal text-gris-500">
+            Cada torneo del calendario (Primavera, Verano…) da puntos según hasta dónde llegó cada jugador, y la tabla suma los de todos.
+            Cuando el torneo vuelve al año siguiente, sus puntos nuevos reemplazan a los viejos: el ranking siempre refleja los últimos{' '}
+            <span className="font-mono tabular-nums">12</span> meses.
+          </p>
         </div>
         <Interruptor encendido={usaRanking} alCambiar={alCambiarUsaRanking} aria-labelledby="ranking-titulo" />
+      </div>
+
+      {/* El reemplazo es lo que menos se entiende: un ejemplo lo dice mejor que la regla. */}
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-control bg-fondo px-3.5 py-2.5 font-mono text-[13px] text-gris-500 tabular-nums">
+        <span>
+          Primavera 25: <span className="text-negro">50</span>
+        </span>
+        <span aria-hidden="true">→</span>
+        <span>
+          Primavera 26: <span className="text-negro">100</span>
+        </span>
+        <span className="text-gris-400">·</span>
+        <span>
+          el total sube <span className="text-negro">50</span>
+        </span>
       </div>
 
       {usaRanking && (

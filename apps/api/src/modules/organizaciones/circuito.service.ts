@@ -6,6 +6,7 @@ import type {
   Instancia as ClaveInstancia,
   Superficie as ClaveSuperficie,
 } from '@setpoint/shared';
+import { DEL_PADRON_ACTIVOS } from '../../lib/padron';
 import { organizacionAdministrada } from '../../lib/permisos';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
@@ -32,7 +33,8 @@ export async function obtenerCircuito(slug: string, usuarioId: number): Promise<
       puntajes: true,
       clubes: { orderBy: { id: 'asc' }, include: { canchas: { orderBy: { id: 'asc' } } } },
       contactos: { orderBy: { orden: 'asc' } },
-      _count: { select: { jugadores: true } },
+      // Los que se pueden inscribir: sin perfiles pendientes ni dados de baja.
+      _count: { select: { jugadores: { where: DEL_PADRON_ACTIVOS } } },
     },
   });
 
