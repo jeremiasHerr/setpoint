@@ -12,9 +12,17 @@ type Props = {
 
 export function FormularioRestablecerContrasena({ alEnviar, enviando = false, error }: Props) {
   const [contrasena, setContrasena] = useState('');
+  // La repetición no viaja a la API: solo evita guardar una contraseña mal tipeada.
+  const [repetida, setRepetida] = useState('');
+  const [noCoinciden, setNoCoinciden] = useState(false);
 
   function manejarEnvio(evento: FormEvent<HTMLFormElement>) {
     evento.preventDefault();
+    if (contrasena !== repetida) {
+      setNoCoinciden(true);
+      document.getElementById('restablecer-repetir')?.focus();
+      return;
+    }
     alEnviar?.(contrasena);
   }
 
@@ -34,11 +42,35 @@ export function FormularioRestablecerContrasena({ alEnviar, enviando = false, er
             required
             minLength={LARGO_MINIMO_CONTRASENA}
             value={contrasena}
-            onChange={(e) => setContrasena(e.target.value)}
+            onChange={(e) => {
+              setContrasena(e.target.value);
+              setNoCoinciden(false);
+            }}
           />
           <p className="text-xs text-gris-500">
             Al menos <span className="font-mono tabular-nums">{LARGO_MINIMO_CONTRASENA}</span> caracteres.
           </p>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <CampoContrasena
+            id="restablecer-repetir"
+            rotulo="Repetí la contraseña nueva"
+            autoComplete="new-password"
+            required
+            value={repetida}
+            onChange={(e) => {
+              setRepetida(e.target.value);
+              setNoCoinciden(false);
+            }}
+            aria-invalid={noCoinciden ? true : undefined}
+            aria-describedby={noCoinciden ? 'restablecer-repetir-error' : undefined}
+          />
+          {noCoinciden && (
+            <p id="restablecer-repetir-error" className="text-[13px] text-rojo-texto">
+              Las contraseñas no coinciden.
+            </p>
+          )}
         </div>
 
         <div className="flex flex-col gap-[11px]">
