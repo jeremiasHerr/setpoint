@@ -1,130 +1,111 @@
-import type { ReactNode } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Boton } from '../../components/Boton';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { IconoMas } from '../../components/IconoMas';
 import { Numero } from '../../components/Numero';
 import { AvisosAtencion } from './AvisosAtencion';
-import { BotonCopiarLink } from './BotonCopiarLink';
-import { ListaBorradores } from './ListaBorradores';
-import { ResumenOrganizacion } from './ResumenOrganizacion';
-import { TablaTerminados } from './TablaTerminados';
+import { Columna } from './Columna';
+import { EncabezadoDelCircuito } from './EncabezadoDelCircuito';
+import { TarjetaBorrador } from './TarjetaBorrador';
 import { TarjetaInscripcionAbierta } from './TarjetaInscripcionAbierta';
 import { TarjetaParaSortear } from './TarjetaParaSortear';
+import { TarjetaTerminado } from './TarjetaTerminado';
 import { TarjetaTorneoEnJuego } from './TarjetaTorneoEnJuego';
 import type { TorneosDeInicio } from './tiposDeInicio';
 
-function Grupo({ titulo, children }: { titulo: string; children: ReactNode }) {
-  return (
-    <section className="flex flex-col gap-[11px]">
-      <h2 className="text-[13px] font-semibold text-gris-500">{titulo}</h2>
-      {children}
-    </section>
-  );
-}
+// Cuántos terminados se ven antes de desplegar el resto.
+const TERMINADOS_VISIBLES = 4;
 
-// Con torneos: agrupados por momento (en juego, para sortear, con inscripción abierta, en borrador,
-// terminados), y a la derecha lo que pide atención.
+// Con torneos: arriba el circuito, y abajo sus torneos en cuatro columnas, por el momento en que
+// está cada uno (decisión 094).
 export function InicioConTorneos({ torneos }: { torneos: TorneosDeInicio }) {
   const { borradores, enJuego, conInscripcionAbierta, paraSortear, terminados, avisos } = torneos;
-  const navegar = useNavigate();
+  const [todosLosTerminados, setTodosLosTerminados] = useState(false);
+  const terminadosVisibles = todosLosTerminados ? terminados : terminados.slice(0, TERMINADOS_VISIBLES);
+  const ocultos = terminados.length - terminadosVisibles.length;
 
   return (
     <>
-      <div className="flex flex-wrap items-end justify-between gap-6 px-7 pt-[26px] pb-[22px]">
-        <div className="flex flex-col gap-[7px]">
-          <h1 className="text-[30px] font-semibold tracking-[-0.035em]">Torneos</h1>
-          <p className="text-[15px] text-gris-500">
-            <Numero>{enJuego.length}</Numero> en juego · <Numero>{conInscripcionAbierta.length}</Numero> con la inscripción
-            abierta
-            {paraSortear.length > 0 && (
-              <>
-                {' '}
-                · <Numero>{paraSortear.length}</Numero> para sortear
-              </>
-            )}
-            {borradores.length > 0 && (
-              <>
-                {' '}
-                · <Numero>{borradores.length}</Numero> en borrador
-              </>
-            )}
-          </p>
+      <EncabezadoDelCircuito torneos={torneos} />
+
+      {/* Lo único urgente: en rojo, que en el sistema solo significa vencimiento. */}
+      {avisos.length > 0 && (
+        <div className="px-7 pt-6">
+          <AvisosAtencion avisos={avisos} />
         </div>
-        <Boton variante="organizador" onClick={() => navegar('/torneos/nuevo')}>
-          <IconoMas className="size-[13px] stroke-[2.6]" />
-          Nuevo torneo
-        </Boton>
-      </div>
+      )}
 
-      <main className="grid items-start gap-[22px] px-7 pb-7 lg:grid-cols-[minmax(0,1fr)_320px]">
-        <div className="flex flex-col gap-[22px]">
-          {enJuego.length > 0 && (
-            <Grupo titulo="En juego">
-              {enJuego.map((torneo) => (
-                <TarjetaTorneoEnJuego key={torneo.id} torneo={torneo} />
-              ))}
-            </Grupo>
-          )}
+      <main className="grid items-start gap-3.5 px-7 pt-6 pb-8 md:grid-cols-2 xl:grid-cols-4">
+        <Columna
+          titulo="En preparación"
+          marca="border-[1.5px] border-dashed border-gris-500 bg-white"
+          cantidad={borradores.length}
+          ayuda="Borradores: todavía no los ve nadie"
+          vacia="No hay ninguno a medio armar."
+          pie={
+            <Link
+              to="/torneos/nuevo"
+              className="flex min-h-[72px] items-center justify-center gap-2 rounded-tarjeta border-[1.5px] border-dashed border-gris-300 text-sm font-medium text-gris-700 hover:border-gris-500 hover:text-negro"
+            >
+              <IconoMas className="size-[13px] stroke-[2.4]" />
+              Armar el próximo torneo
+            </Link>
+          }
+        >
+          {borradores.map((torneo) => (
+            <TarjetaBorrador key={torneo.id} torneo={torneo} />
+          ))}
+        </Columna>
 
-          {/* Fuera de «Necesita tu atención»: ese bloque es rojo, y el rojo solo significa vencimiento. */}
-          {paraSortear.length > 0 && (
-            <Grupo titulo="Para sortear">
-              <div className="grid gap-3.5 md:grid-cols-2">
-                {paraSortear.map((torneo) => (
-                  <TarjetaParaSortear key={torneo.id} torneo={torneo} />
-                ))}
-              </div>
-            </Grupo>
-          )}
+        {/* Primero las que ya cerraron: el sorteo es lo próximo que hay que hacer con ellas. */}
+        <Columna
+          titulo="Inscripción"
+          marca="bg-lima"
+          cantidad={paraSortear.length + conInscripcionAbierta.length}
+          ayuda="Se cobra desde el link de cada una"
+          vacia="Cuando publiques un torneo, la inscripción se sigue desde acá."
+        >
+          {paraSortear.map((torneo) => (
+            <TarjetaParaSortear key={torneo.id} torneo={torneo} />
+          ))}
+          {conInscripcionAbierta.map((torneo) => (
+            <TarjetaInscripcionAbierta key={torneo.id} torneo={torneo} />
+          ))}
+        </Columna>
 
-          {conInscripcionAbierta.length > 0 && (
-            <Grupo titulo="Inscripción abierta">
-              <div className="grid gap-3.5 md:grid-cols-2">
-                {conInscripcionAbierta.map((torneo) => (
-                  <TarjetaInscripcionAbierta key={torneo.id} torneo={torneo} />
-                ))}
-              </div>
-            </Grupo>
-          )}
+        <Columna
+          titulo="En juego"
+          marca="bg-negro"
+          cantidad={enJuego.length}
+          ayuda="Del sorteo al cierre"
+          vacia="Cuando confirmes un sorteo, el torneo pasa acá."
+        >
+          {enJuego.map((torneo) => (
+            <TarjetaTorneoEnJuego key={torneo.id} torneo={torneo} />
+          ))}
+        </Columna>
 
-          {borradores.length > 0 && (
-            <Grupo titulo="En borrador">
-              <ListaBorradores torneos={borradores} />
-            </Grupo>
-          )}
-
-          {terminados.length > 0 && (
-            <Grupo titulo="Terminados">
-              <TablaTerminados torneos={terminados} />
-            </Grupo>
-          )}
-        </div>
-
-        <aside className="flex flex-col gap-4">
-          {avisos.length > 0 && <AvisosAtencion avisos={avisos} />}
-
-          <ResumenOrganizacion
-            titulo="Tu circuito"
-            filas={[
-              { rotulo: 'Jugadores', valor: torneos.jugadores },
-              { rotulo: 'Categorías', valor: torneos.categorias, variante: 'acento' },
-              {
-                rotulo: 'Recaudado en inscripciones abiertas',
-                valor: `$${torneos.recaudadoEnInscripcionesAbiertas.toLocaleString('es-AR')}`,
-                variante: 'importe',
-              },
-            ]}
-            nota={
-              torneos.usaRanking
-                ? 'Ranking activo. Se actualiza al cerrar cada torneo.'
-                : 'Ranking anual sin activar. Cada torneo termina con su propia tabla de posiciones.'
-            }
-            pie={
-              // El enlace del ranking para el grupo, que hoy recibe la planilla por mensaje (F09).
-              torneos.usaRanking && <BotonCopiarLink ruta="/ranking" variante="principal" texto="Copiar el link del ranking" />
-            }
-          />
-        </aside>
+        <Columna
+          titulo="Terminados"
+          marca="bg-gris-500"
+          cantidad={terminados.length}
+          ayuda={torneos.usaRanking ? 'Sus puntos ya están en el ranking' : 'Cada uno con sus posiciones finales'}
+          vacia="Todavía no terminó ninguno."
+          pie={
+            ocultos > 0 && (
+              <button
+                type="button"
+                onClick={() => setTodosLosTerminados(true)}
+                className="min-h-11 rounded-tarjeta text-sm font-medium text-gris-700 hover:text-negro"
+              >
+                Ver los <Numero>{ocultos}</Numero> anteriores
+              </button>
+            )
+          }
+        >
+          {terminadosVisibles.map((torneo) => (
+            <TarjetaTerminado key={torneo.id} torneo={torneo} />
+          ))}
+        </Columna>
       </main>
     </>
   );
