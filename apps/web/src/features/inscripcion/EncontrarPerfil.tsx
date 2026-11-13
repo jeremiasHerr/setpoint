@@ -1,6 +1,7 @@
-import type { PerfilEncontrado, SituacionEnElTorneo, TorneoPublico } from '@setpoint/shared';
+import type { Contacto, PerfilEncontrado, SituacionEnElTorneo, TorneoPublico } from '@setpoint/shared';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { urlDeWhatsApp } from '../padron/linkPersonal';
 import { lugaresLibres } from '../torneo-publico/convocatoria';
 import {
   Aviso,
@@ -220,7 +221,7 @@ export function EncontrarPerfil({ torneo, token, email, nombre, situacion, onRes
           <Titulo>No estás en el padrón de {torneo.organizacion.nombre}</Titulo>
           <Ayuda>Este torneo es solo para los jugadores del circuito. Pedile a la organización que te agregue, y después volvé a este link.</Ayuda>
         </div>
-        {torneo.organizacion.contacto && <Contacto contacto={torneo.organizacion.contacto} />}
+        {torneo.organizacion.contactos.length > 0 && <Contactos contactos={torneo.organizacion.contactos} torneo={torneo.nombre} />}
         <div className="mt-auto">
           <BotonSecundario onClick={() => setModo('buscar')}>Volver a buscarme</BotonSecundario>
         </div>
@@ -367,11 +368,37 @@ function MarcaVinculado() {
   return <span className="rounded-full bg-linea-suave px-2 py-[3px] font-mono text-[13px] text-gris-500">vinculado</span>;
 }
 
-function Contacto({ contacto }: { contacto: string }) {
+// Un link de red social se abre; un usuario ("@polenta") se muestra tal cual.
+const esLink = (valor: string) => /^https?:\/\//i.test(valor);
+
+// El WhatsApp abre el chat con el torneo ya escrito (decisión 091).
+function Contactos({ contactos, torneo }: { contactos: Contacto[]; torneo: string }) {
   return (
-    <div className="flex flex-col gap-1 rounded-tarjeta border border-linea p-4">
+    <div className="flex flex-col gap-2.5 rounded-tarjeta border border-linea p-4">
       <span className="text-[15px] text-gris-500">Contacto de la organización</span>
-      <span className="text-[17px] font-semibold break-words">{contacto}</span>
+      <ul className="flex flex-col gap-2">
+        {contactos.map((c) => (
+          <li key={`${c.tipo}-${c.valor}`} className="flex flex-col gap-0.5">
+            <span className="font-mono text-xs text-gris-500">{c.tipo === 'whatsapp' ? 'whatsapp' : 'red social'}</span>
+            {c.tipo === 'whatsapp' ? (
+              <a
+                href={urlDeWhatsApp(c.valor, `Hola, te escribo por el torneo ${torneo}`)}
+                target="_blank"
+                rel="noreferrer"
+                className="font-mono text-[17px] font-semibold tabular-nums underline underline-offset-[3px]"
+              >
+                {c.valor}
+              </a>
+            ) : esLink(c.valor) ? (
+              <a href={c.valor} target="_blank" rel="noreferrer" className="text-[17px] font-semibold break-words underline underline-offset-[3px]">
+                {c.valor}
+              </a>
+            ) : (
+              <span className="text-[17px] font-semibold break-words">{c.valor}</span>
+            )}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

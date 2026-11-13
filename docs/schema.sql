@@ -39,6 +39,7 @@ CREATE TYPE quien_carga_resultados AS ENUM ('ORGANIZACION', 'ORGANIZACION_Y_JUGA
 CREATE TYPE modo_sede              AS ENUM ('LIBRE', 'DESIGNADA');
 CREATE TYPE superficie             AS ENUM ('POLVO_LADRILLO', 'CEMENTO', 'SINTETICO', 'CARPETA', 'OTRA');
 CREATE TYPE tercero_set            AS ENUM ('SET_COMPLETO', 'SUPER_TIEBREAK');
+CREATE TYPE tipo_contacto          AS ENUM ('WHATSAPP', 'RED_SOCIAL');
 
 CREATE TYPE estado_torneo AS ENUM (
     'BORRADOR', 'PUBLICADO', 'INSCRIPCIONES_CERRADAS', 'ZONAS_GENERADAS',
@@ -106,7 +107,6 @@ CREATE TABLE organizaciones (
     nombre                 VARCHAR(150) NOT NULL,
     slug                   VARCHAR(80)  NOT NULL UNIQUE,
     descripcion            TEXT,
-    contacto               VARCHAR(255),
     usa_ranking            BOOLEAN NOT NULL DEFAULT TRUE,
     ventana_ranking_meses  INTEGER NOT NULL DEFAULT 12,
     solo_mejores_n         INTEGER,
@@ -117,6 +117,17 @@ CREATE TABLE organizaciones (
     CONSTRAINT ck_org_ventana CHECK (ventana_ranking_meses > 0),
     CONSTRAINT ck_org_mejores CHECK (solo_mejores_n IS NULL OR solo_mejores_n > 0)
 );
+
+-- A quién escribirle: se muestra a los jugadores en el link del torneo (decisión 091).
+CREATE TABLE contactos_organizacion (
+    id              SERIAL PRIMARY KEY,
+    organizacion_id INTEGER       NOT NULL REFERENCES organizaciones(id) ON DELETE CASCADE,
+    tipo            tipo_contacto NOT NULL,
+    -- el número de WhatsApp, o el usuario o link de la red social
+    valor           VARCHAR(100)  NOT NULL,
+    orden           INTEGER       NOT NULL
+);
+CREATE INDEX idx_contacto_org ON contactos_organizacion(organizacion_id);
 
 -- Un circuito puede tener varios administradores (el "Comité Organizador").
 CREATE TABLE admins_organizacion (

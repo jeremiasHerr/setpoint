@@ -1,13 +1,16 @@
-import { Instancia, type Prisma, type Superficie } from '@prisma/client';
+import { Instancia, type Prisma, type Superficie, type TipoContacto } from '@prisma/client';
 import type {
   Circuito,
   ConfiguracionCircuito,
+  Contacto,
   Instancia as ClaveInstancia,
   Superficie as ClaveSuperficie,
 } from '@setpoint/shared';
 import { organizacionAdministrada } from '../../lib/permisos';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
+
+const aEnumContacto = (tipo: Contacto['tipo']) => tipo.toUpperCase() as TipoContacto;
 
 const INSTANCIAS: Record<ClaveInstancia, Instancia> = {
   campeon: Instancia.CAMPEON,
@@ -28,6 +31,7 @@ export async function obtenerCircuito(slug: string, usuarioId: number): Promise<
       etapas: { where: { activa: true }, orderBy: { orden: 'asc' } },
       puntajes: true,
       clubes: { orderBy: { id: 'asc' }, include: { canchas: { orderBy: { id: 'asc' } } } },
+      contactos: { orderBy: { orden: 'asc' } },
       _count: { select: { jugadores: true } },
     },
   });
@@ -43,7 +47,7 @@ export async function obtenerCircuito(slug: string, usuarioId: number): Promise<
   return {
     nombre: organizacion.nombre,
     slug: organizacion.slug,
-    contacto: organizacion.contacto ?? '',
+    contactos: organizacion.contactos.map((c) => ({ tipo: c.tipo.toLowerCase() as Contacto['tipo'], valor: c.valor })),
     usaRanking: organizacion.usaRanking,
     categorias: organizacion.categorias.map((c) => c.nombre),
     etapas: organizacion.etapas.map((e) => e.nombre),
@@ -165,7 +169,13 @@ export async function guardarCircuito(slug: string, usuarioId: number, datos: Co
   await prisma.$transaction(async (tx) => {
     await tx.organizacion.update({
       where: { id: organizacionId },
-      data: { nombre: datos.nombre, contacto: datos.contacto || null, usaRanking: datos.usaRanking },
+      data: { nombre: datos.nombre, usaRanking: datos.usaRanking },
+    });
+
+    // Son pocos y no tienen nada colgando: se reemplazan enteros, en el orden de la pantalla.
+    await tx.contactoOrganizacion.deleteMany({ where: { organizacionId } });
+    await tx.contactoOrganizacion.createMany({
+      data: datos.contactos.map((c, orden) => ({ organizacionId, tipo: aEnumContacto(c.tipo), valor: c.valor, orden })),
     });
 
     await sincronizarLista(tx, 'categoria', organizacionId, datos.categorias);

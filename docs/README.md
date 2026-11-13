@@ -188,6 +188,7 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 - ~~¿El inicio vacío prioriza el torneo suelto o el circuito?~~ **Ninguno: dos tarjetas iguales, una al lado de la otra** ([decisión 088](decisiones/088-dos-caminos-iguales-en-el-inicio.md)). El circuito con ranking, que es el caso de validación, quedaba como una tarjeta chica que parecía un agregado
 - ~~¿Un torneo suelto necesita las categorías del circuito?~~ **No: es ajeno al circuito, con sus propias categorías, marcadas "sueltas"** ([decisión 089](decisiones/089-torneo-suelto-ajeno-al-circuito.md)). No suma al ranking, se anota cualquiera del padrón y sus categorías no aparecen en Tu circuito. Sin circuito, *Nuevo torneo* mandaba a configurarlo
 - ~~¿Cómo se arreglan los problemas de contraste?~~ **Con bordes más oscuros en los tokens y un interruptor lima o gris** ([decisión 090](decisiones/090-mas-contraste.md)). El interruptor apagado casi no se veía
+- ~~¿Cómo se cargan los contactos de la organización?~~ **Como una lista, de a uno, cada uno WhatsApp o red social** ([decisión 091](decisiones/091-contactos-de-la-organizacion.md)). Era un solo texto libre, y el WhatsApp no se podía abrir como chat
 - ~~Dónde guarda la web el token de sesión (abierta 13)~~ **Sigue en `localStorage`** ([decisión 086](decisiones/086-version-publicada.md)). La cookie `httpOnly` obliga a configurar CORS con credenciales y protección CSRF, con la web y la API en dominios distintos; la web no inserta HTML ajeno, que es por donde entraría un script
 
 ---
