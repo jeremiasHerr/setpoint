@@ -55,7 +55,7 @@ export function FormularioRestablecerContrasena({ alEnviar, enviando = false, er
         <div className="flex flex-col gap-2">
           <CampoContrasena
             id="restablecer-repetir"
-            rotulo="Repetí la contraseña nueva"
+            rotulo="Confirmá la contraseña nueva"
             autoComplete="new-password"
             required
             value={repetida}

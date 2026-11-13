@@ -16,7 +16,7 @@ Ordenado por entrega.
 
 | Entrega | Feature | Pantalla | Superficie | Ancho |
 |---|---|---|---|---|
-| 25% | F01 | [Registrar la organización](organizador/registro.html) | Web organizador. Suma "Repetí la contraseña", que la referencia no tiene, como la pantalla para elegir una contraseña nueva: un error de tipeo dejaba una cuenta con una contraseña que nadie conocía | 870 px |
+| 25% | F01 | [Registrar la organización](organizador/registro.html) | Web organizador. Suma "Confirmá la contraseña", que la referencia no tiene, como la pantalla para elegir una contraseña nueva: un error de tipeo dejaba una cuenta con una contraseña que nadie conocía | 870 px |
 | 25% | F01 | [Inicio del organizador](organizador/home.html) | Web organizador | 1280 px |
 | 25% | F01 | [Tu circuito](organizador/tu-circuito.html) | Web organizador | 1280 px |
 | 25% · 75% | F02 | [Padrón](organizador/padron.html) | Web organizador · dos estados: compartir el link personal, y las vinculaciones nuevas con "Desvincular" (75%). Implementada con los dos estados: el filtro "Nuevas" cuenta desde la última visita de cada administrador ([decisión 083](../decisiones/083-ultima-visita-al-padron.md)) | 1280 px |

@@ -246,7 +246,7 @@ export function FormularioRegistro({
           <div className="flex flex-col gap-2">
             <CampoContrasena
               id="registro-repetir"
-              rotulo="Repetí la contraseña"
+              rotulo="Confirmá la contraseña"
               autoComplete="new-password"
               required
               value={repetida}
