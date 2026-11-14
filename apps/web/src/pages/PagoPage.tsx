@@ -407,14 +407,19 @@ function Listo({ datos }: { datos: InscripcionParaPagar }) {
         </div>
         <p className="pt-1 text-[15px] leading-[1.42] text-gris-500">Te mandamos el comprobante a {datos.email}.</p>
       </dl>
+      {/* La app todavía no está en ninguna tienda: no se la ofrece hasta que se pueda bajar (decisión 097). */}
       <div className="flex flex-col gap-3 px-[18px] py-[22px]">
-        <h2 className="text-xl font-semibold tracking-[-0.025em]">Seguí tus partidos en la app</h2>
-        <p className="text-base leading-[1.45] text-gris-500">
-          Entrás con este mismo email y un código. Ahí ves tu zona cuando se sortee, anotás las fechas que arreglás y te avisamos cuando tu rival confirma.
-        </p>
+        <h2 className="text-xl font-semibold tracking-[-0.025em]">Seguí el torneo desde el link</h2>
+        <p className="text-base leading-[1.45] text-gris-500">Zonas, cuadros y resultados, sin instalar nada.</p>
+        <Link
+          to={`${linkTorneo(datos)}/en-vivo`}
+          className="flex h-14 items-center justify-center rounded-[12px] bg-lima text-[17px] font-semibold"
+        >
+          Ver el torneo en vivo
+        </Link>
       </div>
-      <p className="mt-auto border-t border-linea px-[18px] pt-[18px] text-[15px] leading-[1.42] text-gris-500">
-        Sin la app también podés ver el ranking, las zonas y los cuadros desde el link del torneo.
+      <p className="mx-[18px] mt-auto rounded-tarjeta bg-fondo px-4 py-3.5 text-[15px] leading-[1.42] text-gris-700">
+        La app para Android todavía no está publicada. Cuando esté, entrás con este mismo email.
       </p>
     </div>
   );
