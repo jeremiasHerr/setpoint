@@ -51,4 +51,9 @@ body {
   [role="button"]:not(:disabled) {
     cursor: pointer;
   }
+
+  /* Con una confirmación abierta, la pantalla de atrás no se mueve con la rueda (decisión 096). */
+  html:has(dialog[open]) {
+    overflow: hidden;
+  }
 }
