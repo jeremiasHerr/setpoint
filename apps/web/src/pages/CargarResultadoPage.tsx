@@ -1,5 +1,5 @@
 import type { PartidoConResultado } from '@setpoint/shared';
-import { useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Boton } from '../components/Boton';
 import { Chip } from '../components/Chip';
@@ -205,6 +205,25 @@ function TarjetaDelPartido({ sesion, partido }: { sesion: Sesion; partido: Parti
   const siguiente = primeroSinResultado(partidos.data?.partidos.filter((p) => p.id !== partido.id) ?? []);
   // El último resultado de los cuadros define a los campeones: lo que sigue es cerrar el torneo (decisión 058).
   const paraCerrar = !siguiente && partido.fase === 'eliminatoria';
+  const sePuedeGuardar =
+    lectura.datos !== null && !(corrigiendo && !cambio) && !cambiaLosCuadros && !siguienteYaJugado && !guardar.isPending;
+
+  // Al abrir un partido, la pantalla baja hasta la carga y el foco va al primer casillero: se elige
+  // en el cuadro de arriba y se carga sin buscar con el mouse. Cada partido monta la tarjeta de nuevo.
+  const formulario = useRef<HTMLFormElement>(null);
+  useEffect(() => {
+    formulario.current?.scrollIntoView({ block: 'start' });
+    formulario.current?.querySelector<HTMLInputElement>('input:not(:disabled)')?.focus({ preventScroll: true });
+  }, []);
+
+  // Enter guarda; con el resultado ya guardado, pasa al partido siguiente (o al cierre). Con algo
+  // que no se puede guardar, el botón está deshabilitado y Enter no hace nada.
+  function enviar(evento: FormEvent) {
+    evento.preventDefault();
+    if (recienGuardado && siguiente) return navegar(`/torneos/${torneoId}/resultados/${siguiente.id}`);
+    if (recienGuardado && paraCerrar) return navegar(`/torneos/${torneoId}/cierre`);
+    if (sePuedeGuardar && lectura.datos) guardar.mutate(lectura.datos);
+  }
 
   function cambiar(nueva: Partial<Carga>) {
     guardar.reset();
@@ -229,112 +248,104 @@ function TarjetaDelPartido({ sesion, partido }: { sesion: Sesion; partido: Parti
       </Tarjeta>
 
       <Tarjeta className="w-full max-w-[720px] self-center overflow-hidden">
-        <div className="flex flex-col gap-[5px] border-b border-linea px-6 py-5">
-          <h1 className="text-[22px] font-semibold tracking-[-0.03em]">
-            {nombres[0]} · {nombres[1]}
-          </h1>
-          <p className="font-mono text-[13px] text-gris-500">{rotuloDelPartido(partido)}</p>
-        </div>
+        <form ref={formulario} onSubmit={enviar} className="scroll-mt-4">
+          <div className="flex flex-col gap-[5px] border-b border-linea px-6 py-5">
+            <h1 className="text-[22px] font-semibold tracking-[-0.03em]">
+              {nombres[0]} · {nombres[1]}
+            </h1>
+            <p className="font-mono text-[13px] text-gris-500">{rotuloDelPartido(partido)}</p>
+          </div>
 
-        {sinCarga ? (
-          <p className="px-6 py-5 text-[15px] text-gris-500">{sinCarga}</p>
-        ) : (
-          <>
-            <div className="flex flex-col gap-4 px-6 pt-6 pb-5">
-              {/* En un W.O. o un abandono los casilleros quedan bloqueados: no se cargan sets y
-                  cuenta 6-0 6-0 a favor de quien se elige (decisiones 016 y 059). */}
-              <GrillaDeSets
-                sistema={partido.sistema}
-                nombres={nombres}
-                sets={carga.sets}
-                problemas={lectura.problemas}
-                ganador={lectura.ganador}
-                alCambiar={cambiarSet}
-                bloqueada={carga.tipo !== 'jugado'}
+          {sinCarga ? (
+            <p className="px-6 py-5 text-[15px] text-gris-500">{sinCarga}</p>
+          ) : (
+            <>
+              <div className="flex flex-col gap-4 px-6 pt-6 pb-5">
+                {/* En un W.O. o un abandono los casilleros quedan bloqueados: no se cargan sets y
+                    cuenta 6-0 6-0 a favor de quien se elige (decisiones 016 y 059). */}
+                <GrillaDeSets
+                  sistema={partido.sistema}
+                  nombres={nombres}
+                  sets={carga.sets}
+                  problemas={lectura.problemas}
+                  ganador={lectura.ganador}
+                  alCambiar={cambiarSet}
+                  bloqueada={carga.tipo !== 'jugado'}
+                />
+
+                {carga.tipo !== 'jugado' && (
+                  <ElegirGanador
+                    pregunta={carga.tipo === 'walkover' ? '¿Quién ganó?' : '¿Quién siguió jugando?'}
+                    partido={partido}
+                    elegido={carga.ganadorId}
+                    alElegir={(ganadorId) => cambiar({ ganadorId })}
+                  />
+                )}
+
+                {resumen && (
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-xl bg-lima-tenue px-4 py-3">
+                    <span className="size-2 shrink-0 rounded-full bg-lima" />
+                    <p className="text-[15px] font-semibold">
+                      <TextoConNumeros frase={resumen.titulo} />
+                    </p>
+                    {resumen.detalle && <p className="font-mono text-[13px] text-gris-500">{resumen.detalle}</p>}
+                  </div>
+                )}
+
+                <div role="group" aria-label="Otro tipo de resultado" className="flex flex-wrap gap-[9px]">
+                  <Chip activo={carga.tipo === 'walkover'} onClick={() => alternarTipo('walkover')}>
+                    Fue walkover
+                  </Chip>
+                  <Chip activo={carga.tipo === 'abandono'} onClick={() => alternarTipo('abandono')}>
+                    Hubo abandono
+                  </Chip>
+                </div>
+              </div>
+
+              <AlGuardar
+                partido={partido}
+                datos={lectura.datos}
+                simulacion={simulacion}
+                siguienteYaJugado={siguienteYaJugado}
               />
 
-              {carga.tipo !== 'jugado' && (
-                <ElegirGanador
-                  pregunta={carga.tipo === 'walkover' ? '¿Quién ganó?' : '¿Quién siguió jugando?'}
-                  partido={partido}
-                  elegido={carga.ganadorId}
-                  alElegir={(ganadorId) => cambiar({ ganadorId })}
-                />
-              )}
-
-              {resumen && (
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-xl bg-lima-tenue px-4 py-3">
-                  <span className="size-2 shrink-0 rounded-full bg-lima" />
-                  <p className="text-[15px] font-semibold">
-                    <TextoConNumeros frase={resumen.titulo} />
+              <div className="flex items-center justify-between gap-4 border-t border-linea px-6 py-[18px]">
+                {guardar.error ? (
+                  <p className="min-w-0 flex-1 text-sm text-rojo-texto">{textoDelError(guardar.error)}</p>
+                ) : recienGuardado ? (
+                  <p className="min-w-0 flex-1 text-[15px] font-semibold">
+                    {siguiente
+                      ? 'Resultado guardado.'
+                      : paraCerrar
+                        ? 'Resultado guardado. Los campeones están definidos.'
+                        : 'Resultado guardado. No falta cargar ningún otro.'}
                   </p>
-                  {resumen.detalle && <p className="font-mono text-[13px] text-gris-500">{resumen.detalle}</p>}
-                </div>
-              )}
-
-              <div role="group" aria-label="Otro tipo de resultado" className="flex flex-wrap gap-[9px]">
-                <Chip activo={carga.tipo === 'walkover'} onClick={() => alternarTipo('walkover')}>
-                  Fue walkover
-                </Chip>
-                <Chip activo={carga.tipo === 'abandono'} onClick={() => alternarTipo('abandono')}>
-                  Hubo abandono
-                </Chip>
-              </div>
-            </div>
-
-            <AlGuardar
-              partido={partido}
-              datos={lectura.datos}
-              simulacion={simulacion}
-              siguienteYaJugado={siguienteYaJugado}
-            />
-
-            <div className="flex items-center justify-between gap-4 border-t border-linea px-6 py-[18px]">
-              {guardar.error ? (
-                <p className="min-w-0 flex-1 text-sm text-rojo-texto">{textoDelError(guardar.error)}</p>
-              ) : recienGuardado ? (
-                <p className="min-w-0 flex-1 text-[15px] font-semibold">
-                  {siguiente
-                    ? 'Resultado guardado.'
-                    : paraCerrar
-                      ? 'Resultado guardado. Los campeones están definidos.'
-                      : 'Resultado guardado. No falta cargar ningún otro.'}
-                </p>
-              ) : (
-                <p className="min-w-0 flex-1 text-sm text-gris-500">
-                  Podés corregirlo después, mientras no cambie a quién ya se ubicó en los cuadros.
-                </p>
-              )}
-              <div className="flex shrink-0 gap-2.5">
-                <Boton onClick={() => navegar(`/torneos/${torneoId}/tablero`)}>{recienGuardado ? 'Volver al tablero' : 'Cancelar'}</Boton>
-                {recienGuardado && siguiente ? (
-                  <Boton
-                    variante="organizador"
-                    className="font-semibold"
-                    onClick={() => navegar(`/torneos/${torneoId}/resultados/${siguiente.id}`)}
-                  >
-                    Cargar el siguiente partido
-                  </Boton>
-                ) : recienGuardado && paraCerrar ? (
-                  <Boton variante="organizador" className="font-semibold" onClick={() => navegar(`/torneos/${torneoId}/cierre`)}>
-                    Cerrar el torneo
-                  </Boton>
                 ) : (
-                  <Boton
-                    variante="organizador"
-                    className="font-semibold"
-                    disabled={
-                      lectura.datos === null || (corrigiendo && !cambio) || cambiaLosCuadros || siguienteYaJugado || guardar.isPending
-                    }
-                    onClick={() => lectura.datos && guardar.mutate(lectura.datos)}
-                  >
-                    {guardar.isPending ? 'Guardando…' : corrigiendo ? 'Guardar corrección' : 'Guardar resultado'}
-                  </Boton>
+                  <p className="min-w-0 flex-1 text-sm text-gris-500">
+                    Podés corregirlo después, mientras no cambie a quién ya se ubicó en los cuadros.
+                  </p>
                 )}
+                <div className="flex shrink-0 gap-2.5">
+                  <Boton onClick={() => navegar(`/torneos/${torneoId}/tablero`)}>{recienGuardado ? 'Volver al tablero' : 'Cancelar'}</Boton>
+                  {/* Uno solo a la vez, y es el que dispara Enter. */}
+                  {recienGuardado && siguiente ? (
+                    <Boton type="submit" variante="organizador" className="font-semibold">
+                      Cargar el siguiente partido
+                    </Boton>
+                  ) : recienGuardado && paraCerrar ? (
+                    <Boton type="submit" variante="organizador" className="font-semibold">
+                      Cerrar el torneo
+                    </Boton>
+                  ) : (
+                    <Boton type="submit" variante="organizador" className="font-semibold" disabled={!sePuedeGuardar}>
+                      {guardar.isPending ? 'Guardando…' : corrigiendo ? 'Guardar corrección' : 'Guardar resultado'}
+                    </Boton>
+                  )}
+                </div>
               </div>
-            </div>
-          </>
-        )}
+            </>
+          )}
+        </form>
       </Tarjeta>
     </Marco>
   );
