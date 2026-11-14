@@ -1,4 +1,6 @@
 import type { SolicitudDelTorneo } from '@setpoint/shared';
+import { useState } from 'react';
+import { Confirmacion } from '../../components/Confirmacion';
 import { Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
 import { ErrorApi } from '../../lib/api';
@@ -36,11 +38,12 @@ export function TablaSolicitudes({ slug, torneoId, solicitudes, abierta }: Props
   const aprobar = useAprobarSolicitud(slug, torneoId);
   const rechazar = useRechazarSolicitud(slug, torneoId);
   const enCurso = aprobar.isPending ? aprobar.variables : rechazar.isPending ? rechazar.variables : null;
-  const error = aprobar.error ?? rechazar.error;
+  // Rechazar pide confirmación: le llega un aviso y no se deshace (decisión 096).
+  const [aRechazar, setARechazar] = useState<SolicitudDelTorneo | null>(null);
 
   return (
     <div className="flex flex-col gap-3">
-      {error && <p className="text-sm text-rojo-texto">{textoDeError(error)}</p>}
+      {aprobar.error && <p className="text-sm text-rojo-texto">{textoDeError(aprobar.error)}</p>}
       <Tarjeta className="flex flex-col overflow-hidden">
         <div className={`grid gap-x-1 border-b border-linea bg-fondo-tabla px-[18px] py-[11px] ${COLUMNAS}`}>
           <span className="text-xs text-gris-500">jugador</span>
@@ -81,11 +84,12 @@ export function TablaSolicitudes({ slug, torneoId, solicitudes, abierta }: Props
                       <>
                         <button
                           type="button"
-                          onClick={() => rechazar.mutate(solicitud.id)}
+                          onClick={() => setARechazar(solicitud)}
                           disabled={enCurso !== null}
+                          aria-haspopup="dialog"
                           className="flex h-8 items-center rounded-lg border border-linea px-3 text-[13px] text-gris-700 hover:bg-fondo disabled:opacity-40"
                         >
-                          {enCurso === solicitud.id && rechazar.isPending ? 'Rechazando…' : 'Rechazar'}
+                          Rechazar
                         </button>
                         <button
                           type="button"
@@ -110,6 +114,21 @@ export function TablaSolicitudes({ slug, torneoId, solicitudes, abierta }: Props
           motivo.
         </p>
       </Tarjeta>
+
+      <Confirmacion
+        abierta={aRechazar !== null}
+        titulo={aRechazar && `Rechazar a ${aRechazar.nombre} ${aRechazar.apellido}`}
+        consecuencias={['Le llega un email, sin motivo.', 'No entra al torneo ni al padrón.']}
+        accion="Rechazar"
+        accionEnCurso="Rechazando…"
+        enCurso={rechazar.isPending}
+        error={rechazar.error && textoDeError(rechazar.error)}
+        alCancelar={() => {
+          rechazar.reset();
+          setARechazar(null);
+        }}
+        alConfirmar={() => aRechazar && rechazar.mutate(aRechazar.id, { onSuccess: () => setARechazar(null) })}
+      />
     </div>
   );
 }
