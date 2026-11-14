@@ -4,6 +4,7 @@ import { Link, Navigate, useSearchParams } from 'react-router-dom';
 import { Boton } from '../components/Boton';
 import { Campo } from '../components/Campo';
 import { EncabezadoOrganizador } from '../components/EncabezadoOrganizador';
+import { Migas } from '../components/Migas';
 import { Esqueleto } from '../components/Esqueleto';
 import { Numero } from '../components/Numero';
 import { Tarjeta } from '../components/Tarjeta';
@@ -152,9 +153,7 @@ function ImportarPadron({ sesion }: { sesion: Sesion }) {
       />
 
       <div className="flex flex-col gap-2 px-7 pt-[26px] pb-5">
-        <Link to="/padron" className="text-sm text-gris-500 hover:text-negro">
-          ← Padrón
-        </Link>
+        <Migas anteriores={[{ etiqueta: 'Padrón', ruta: '/padron' }]}>Importar planilla</Migas>
         <h1 className="text-[30px] font-semibold tracking-[-0.035em]">
           {enRevision ? 'Revisá la importación' : 'Importar planilla'}
         </h1>

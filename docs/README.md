@@ -197,6 +197,7 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 - ~~Dónde guarda la web el token de sesión (abierta 13)~~ **Sigue en `localStorage`** ([decisión 086](decisiones/086-version-publicada.md)). La cookie `httpOnly` obliga a configurar CORS con credenciales y protección CSRF, con la web y la API en dominios distintos; la web no inserta HTML ajeno, que es por donde entraría un script
 - ~~¿Importar la planilla enciende el ranking?~~ **Sí, si trae puntos, al confirmar** ([decisión 098](decisiones/098-importar-puntos-enciende-el-ranking.md)). Las organizaciones arrancan con el ranking apagado, y lo que acababan de importar quedaba escondido. La revisión lo dice antes de confirmar
 - ~~¿Los errores de formulario son rojos?~~ **No: el rojo es solo vencimiento, como dice design.md. Los errores van en negro, con un solo componente para toda la web** ([decisión 099](decisiones/099-los-errores-no-son-rojos.md)). La web de la organización los ponía en rojo y el flujo del jugador no; ahora todo usa el mismo aviso
+- ~~¿Cómo se sabe dónde se está y cómo se vuelve en las pantallas internas?~~ **Con migas de pan arriba del título: "Inicio › Primavera 26 · Tercera › Editar", "Padrón › Importar planilla"** ([decisión 100](decisiones/100-migas-de-pan.md)). Editar el torneo solo volvía al inicio, y cada pantalla del padrón volvía a su manera. En la franja del torneo, el nombre es la última miga y la pestaña activa, el nivel siguiente
 
 ---
 
