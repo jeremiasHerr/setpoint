@@ -1,3 +1,4 @@
+import { PORCENTAJE_COMISION } from '@setpoint/shared';
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { IconoMas } from '../components/IconoMas';
@@ -29,7 +30,7 @@ const zonas: [string, string][] = [
   ['H', 'jjjjfs'],
 ];
 
-const preguntas = [
+const preguntas: { pregunta: string; respuesta: ReactNode }[] = [
   {
     pregunta: '¿Mis jugadores tienen que instalar algo?',
     respuesta:
@@ -48,6 +49,15 @@ const preguntas = [
   {
     pregunta: '¿Y si alguien me paga en efectivo?',
     respuesta: 'Lo inscribís a mano, mientras haya lugar.',
+  },
+  {
+    pregunta: '¿Cuánto cuesta?',
+    respuesta: (
+      <>
+        Nada por usarlo. De cada inscripción cobrada por MercadoPago, SetPoint se queda con el{' '}
+        <Numero>{PORCENTAJE_COMISION}%</Numero>. Lo que cobrás en mano no tiene comisión.
+      </>
+    ),
   },
   {
     pregunta: '¿Puede anotarse cualquiera?',

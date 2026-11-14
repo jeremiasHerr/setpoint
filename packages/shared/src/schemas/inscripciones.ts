@@ -141,3 +141,7 @@ export const inscripcionManualSchema = z.object(
   { error: 'Faltan los datos de la inscripción' },
 );
 export type DatosInscripcionManual = z.infer<typeof inscripcionManualSchema>;
+
+// La comisión de la plataforma, en por ciento, solo sobre lo que se cobra por MercadoPago (decisión
+// 078). La usan la conciliación y los textos que la anuncian antes de cobrar: el registro y la landing.
+export const PORCENTAJE_COMISION = 5;

@@ -1,9 +1,9 @@
 // La conciliación del torneo (F13). Lógica pura: recibe los pagos cobrados, ya leídos.
-import type { ConciliacionDelTorneo, DevolucionDeLaBaja } from '@setpoint/shared';
+import { PORCENTAJE_COMISION, type ConciliacionDelTorneo, type DevolucionDeLaBaja } from '@setpoint/shared';
 
 // La comisión de la plataforma, solo sobre lo que cobra por MercadoPago (decisión 078). Lo cobrado
 // por fuera ya lo tiene la organización.
-export const COMISION = 0.05;
+export const COMISION = PORCENTAJE_COMISION / 100;
 
 export type PagoCobrado = {
   medio: 'MERCADOPAGO' | 'EFECTIVO' | 'TRANSFERENCIA' | 'OTRO';
