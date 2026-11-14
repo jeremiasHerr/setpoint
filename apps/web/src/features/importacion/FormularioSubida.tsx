@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Boton } from '../../components/Boton';
 import { Selector } from '../../components/Selector';
 import { Tarjeta } from '../../components/Tarjeta';
@@ -6,27 +7,56 @@ import { MensajeError } from '../torneos/MensajeError';
 
 type Props = {
   categorias: string[];
+  // Cuántos torneos del calendario tiene el circuito: cada columna de puntos va al casillero de uno.
+  torneosDelCalendario: number;
+  usaRanking: boolean;
   enviando: boolean;
   error?: string;
   alSubir: (archivo: File, categoria: string) => void;
 };
 
-export function FormularioSubida({ categorias, enviando, error, alSubir }: Props) {
+// Lo que falta configurar antes de subir. La importación todavía no detecta las categorías ni los
+// torneos del calendario en la planilla (decisión 011, pendiente de código): sin torneos del
+// calendario, la API la corta después de subir el archivo. Se dice antes.
+function loQueFalta(sinCategorias: boolean, sinTorneos: boolean, usaRanking: boolean) {
+  const conRanking = usaRanking ? '' : ', con el ranking activado';
+  if (sinCategorias && sinTorneos) {
+    return {
+      titulo: 'Primero configurá tu circuito',
+      texto: `Cada jugador de la planilla entra en una categoría, y cada columna de puntos va al casillero de un torneo del calendario. Cargá las dos cosas en Tu circuito${conRanking}, y volvé.`,
+    };
+  }
+  if (sinCategorias) {
+    return {
+      titulo: 'Primero cargá las categorías',
+      texto: 'Cada jugador de la planilla entra en una categoría. Cargalas en Tu circuito y volvé.',
+    };
+  }
+  return {
+    titulo: 'Primero cargá los torneos del calendario',
+    texto: `Cada columna de puntos de la planilla va al casillero de un torneo del calendario. Cargalos en Tu circuito${conRanking}, y volvé.`,
+  };
+}
+
+export function FormularioSubida({ categorias, torneosDelCalendario, usaRanking, enviando, error, alSubir }: Props) {
   const [categoria, setCategoria] = useState(categorias[0] ?? '');
   const [archivo, setArchivo] = useState<File | null>(null);
+  const navegar = useNavigate();
 
   function enviar(evento: FormEvent) {
     evento.preventDefault();
     if (archivo && categoria) alSubir(archivo, categoria);
   }
 
-  if (categorias.length === 0) {
+  if (categorias.length === 0 || torneosDelCalendario === 0) {
+    const { titulo, texto } = loQueFalta(categorias.length === 0, torneosDelCalendario === 0, usaRanking);
     return (
-      <Tarjeta className="flex max-w-[560px] flex-col gap-2 p-[22px]">
-        <h2 className="text-[17px] font-semibold">Primero cargá las categorías</h2>
-        <p className="text-[15px] text-gris-500">
-          Cada jugador de la planilla entra en una categoría. Definilas en la configuración del circuito y volvé.
-        </p>
+      <Tarjeta className="flex max-w-[560px] flex-col items-start gap-2 p-[22px]">
+        <h2 className="text-[17px] font-semibold">{titulo}</h2>
+        <p className="text-[15px] text-gris-500">{texto}</p>
+        <Boton variante="organizador" className="mt-2 font-semibold" onClick={() => navegar('/circuito')}>
+          Ir a Tu circuito
+        </Boton>
       </Tarjeta>
     );
   }
