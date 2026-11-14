@@ -54,10 +54,10 @@ describe('fechaDelCasillero', () => {
 
 describe('planificarConfirmacion', () => {
   const decisiones = [
-    { fila: 4, accion: 'vincular' as const, jugadorId: 1 },
-    { fila: 5, accion: 'vincular' as const, jugadorId: 9 },
-    { fila: 6, accion: 'crear' as const },
-    { fila: 7, accion: 'excluir' as const },
+    { hoja: 0, fila: 4, accion: 'vincular' as const, jugadorId: 1 },
+    { hoja: 0, fila: 5, accion: 'vincular' as const, jugadorId: 9 },
+    { hoja: 0, fila: 6, accion: 'crear' as const },
+    { hoja: 0, fila: 7, accion: 'excluir' as const },
   ];
 
   it('arma las altas, las vinculaciones y un movimiento por casillero con puntos', () => {
@@ -82,7 +82,7 @@ describe('planificarConfirmacion', () => {
 
   it('rechaza filas que no están en la importación y decisiones repetidas', () => {
     const campos = camposDelError(() =>
-      planificarConfirmacion(PROPUESTA, [...decisiones, decisiones[3], { fila: 40, accion: 'crear' }], JUGADORES),
+      planificarConfirmacion(PROPUESTA, [...decisiones, decisiones[3], { hoja: 0, fila: 40, accion: 'crear' }], JUGADORES),
     );
     expect(campos).toEqual({
       'fila.7': 'Hay más de una decisión para esta fila',
@@ -95,10 +95,10 @@ describe('planificarConfirmacion', () => {
       planificarConfirmacion(
         PROPUESTA,
         [
-          { fila: 4, accion: 'vincular', jugadorId: 1 },
-          { fila: 5, accion: 'vincular', jugadorId: 1 },
-          { fila: 6, accion: 'vincular', jugadorId: 500 },
-          { fila: 7, accion: 'excluir' },
+          { hoja: 0, fila: 4, accion: 'vincular', jugadorId: 1 },
+          { hoja: 0, fila: 5, accion: 'vincular', jugadorId: 1 },
+          { hoja: 0, fila: 6, accion: 'vincular', jugadorId: 500 },
+          { hoja: 0, fila: 7, accion: 'excluir' },
         ],
         JUGADORES,
       ),

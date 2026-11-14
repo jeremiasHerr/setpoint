@@ -1,0 +1,202 @@
+{
+  "hojas": [
+    {
+      "esPlanillaDeJugadores": true,
+      "categoria": "Segunda",
+      "etapas": [
+        "Primavera",
+        "Verano",
+        "Otoño"
+      ],
+      "jugadores": [
+        {
+          "fila": 2,
+          "casilleros": [
+            {
+              "etapa": "Primavera",
+              "anio": 2025,
+              "puntos": 100
+            },
+            {
+              "etapa": "Verano",
+              "anio": 2026,
+              "puntos": 50
+            },
+            {
+              "etapa": "Otoño",
+              "anio": 2026,
+              "puntos": 25
+            }
+          ],
+          "acumulado": 175,
+          "coincideCon": null
+        },
+        {
+          "fila": 3,
+          "casilleros": [
+            {
+              "etapa": "Primavera",
+              "anio": 2025,
+              "puntos": 25
+            },
+            {
+              "etapa": "Verano",
+              "anio": 2026,
+              "puntos": 75
+            },
+            {
+              "etapa": "Otoño",
+              "anio": 2026,
+              "puntos": 0
+            }
+          ],
+          "acumulado": 100,
+          "coincideCon": null
+        },
+        {
+          "fila": 4,
+          "casilleros": [
+            {
+              "etapa": "Primavera",
+              "anio": 2025,
+              "puntos": 50
+            },
+            {
+              "etapa": "Verano",
+              "anio": 2026,
+              "puntos": 0
+            },
+            {
+              "etapa": "Otoño",
+              "anio": 2026,
+              "puntos": 15
+            }
+          ],
+          "acumulado": 65,
+          "coincideCon": null
+        },
+        {
+          "fila": 5,
+          "casilleros": [
+            {
+              "etapa": "Primavera",
+              "anio": 2025,
+              "puntos": 10
+            },
+            {
+              "etapa": "Verano",
+              "anio": 2026,
+              "puntos": 10
+            },
+            {
+              "etapa": "Otoño",
+              "anio": 2026,
+              "puntos": 10
+            }
+          ],
+          "acumulado": 30,
+          "coincideCon": null
+        }
+      ]
+    },
+    {
+      "esPlanillaDeJugadores": true,
+      "categoria": "Tercera",
+      "etapas": [
+        "Primavera",
+        "Verano",
+        "Otoño"
+      ],
+      "jugadores": [
+        {
+          "fila": 2,
+          "casilleros": [
+            {
+              "etapa": "Primavera",
+              "anio": 2025,
+              "puntos": 75
+            },
+            {
+              "etapa": "Verano",
+              "anio": 2026,
+              "puntos": 100
+            },
+            {
+              "etapa": "Otoño",
+              "anio": 2026,
+              "puntos": 50
+            }
+          ],
+          "acumulado": 225,
+          "coincideCon": null
+        },
+        {
+          "fila": 3,
+          "casilleros": [
+            {
+              "etapa": "Primavera",
+              "anio": 2025,
+              "puntos": 0
+            },
+            {
+              "etapa": "Verano",
+              "anio": 2026,
+              "puntos": 0
+            },
+            {
+              "etapa": "Otoño",
+              "anio": 2026,
+              "puntos": 100
+            }
+          ],
+          "acumulado": 100,
+          "coincideCon": null
+        },
+        {
+          "fila": 4,
+          "casilleros": [
+            {
+              "etapa": "Primavera",
+              "anio": 2025,
+              "puntos": 15
+            },
+            {
+              "etapa": "Verano",
+              "anio": 2026,
+              "puntos": 25
+            },
+            {
+              "etapa": "Otoño",
+              "anio": 2026,
+              "puntos": 10
+            }
+          ],
+          "acumulado": 50,
+          "coincideCon": null
+        },
+        {
+          "fila": 5,
+          "casilleros": [
+            {
+              "etapa": "Primavera",
+              "anio": 2025,
+              "puntos": 0
+            },
+            {
+              "etapa": "Verano",
+              "anio": 2026,
+              "puntos": 15
+            },
+            {
+              "etapa": "Otoño",
+              "anio": 2026,
+              "puntos": 25
+            }
+          ],
+          "acumulado": 40,
+          "coincideCon": null
+        }
+      ]
+    }
+  ]
+}

@@ -6,6 +6,8 @@ export type AccionImportacion = z.infer<typeof accionImportacion>;
 
 export const decisionImportacionSchema = z
   .object({
+    // La hoja de la importación: cada archivo y cada hoja tiene su lista de filas (decisión 012).
+    hoja: z.number().int(),
     fila: z.number().int(),
     accion: accionImportacion,
     jugadorId: z.number().int().positive().optional(),
@@ -18,8 +20,8 @@ export const decisionImportacionSchema = z
 export const confirmarImportacionSchema = z.object(
   {
     decisiones: z.array(decisionImportacionSchema),
-    // Solo si la planilla no decía la categoría y no se eligió al subir (decisión 011).
-    categoria: z.string().trim().min(1).max(40).optional(),
+    // Por id de hoja, solo las que no decían la categoría y no se eligió al subir (decisión 011).
+    categorias: z.record(z.string(), z.string().trim().min(1).max(40)).optional(),
   },
   { error: 'Faltan las decisiones' },
 );
@@ -52,23 +54,37 @@ export type ProblemaImportacion = { fila: number | null; detalle: string };
 
 export type ConteosImportacion = { existentes: number; nuevos: number; dudosos: number; conProblemas: number };
 
-export type Importacion = {
+// Una hoja de un archivo del lote (decisión 012). Una que no se pudo leer queda en ERROR, con el
+// motivo, y no frena a las demás: al confirmar, queda afuera.
+export type HojaImportada = {
   id: number;
   archivoNombre: string;
+  hoja: string;
   estado: EstadoImportacion;
+  error: string | null;
   // La elegida al subir o la que dice la planilla. null si no la dice: se elige al revisar.
   categoria: string | null;
-  // Lo que se crea en el circuito al confirmar (decisiones 011 y 098): la categoría y los torneos
-  // del calendario que la planilla trae y el circuito no tiene, y si se enciende el ranking.
-  crea: { categoria: string | null; etapas: string[]; ranking: boolean };
-  creadoEn: string;
-  confirmadaEn: string | null;
-  // Motivo, si terminó en ERROR.
-  error: string | null;
   // Vacías si terminó en ERROR antes de tener una propuesta.
   propuesta: FilaPropuesta[];
   problemas: ProblemaImportacion[];
   conteos: ConteosImportacion;
+};
+
+export type Importacion = {
+  id: number;
+  // El del archivo, o "3 archivos".
+  archivoNombre: string;
+  estado: EstadoImportacion;
+  creadoEn: string;
+  confirmadaEn: string | null;
+  // Motivo, si terminó en ERROR: no se pudo leer ninguna hoja.
+  error: string | null;
+  hojas: HojaImportada[];
+  // La suma de las hojas leídas.
+  conteos: ConteosImportacion;
+  // Lo que se crea en el circuito al confirmar (decisiones 011 y 098): las categorías y los torneos
+  // del calendario que las planillas traen y el circuito no tiene, y si se enciende el ranking.
+  crea: { categorias: string[]; etapas: string[]; ranking: boolean };
 };
 
 export type ResultadoConfirmacion = {

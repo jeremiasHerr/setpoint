@@ -2,7 +2,8 @@ import { afterAll, beforeAll, describe, expect, it as base } from 'vitest';
 
 // Contra Postgres: una organización recién registrada, sin categorías ni torneos del calendario,
 // confirma la importación de su planilla y queda configurada (decisiones 011 y 098). La importación
-// se arma ya procesada, sin llamar a la IA. Crea organizaciones propias y las borra al terminar.
+// se arma ya procesada, sin llamar a la IA, con la forma de antes de la decisión 012 (la planilla en
+// el resumen del lote): se lee como la hoja 0. Crea organizaciones propias y las borra al terminar.
 
 try {
   process.loadEnvFile('.env');
@@ -30,8 +31,8 @@ describe.skipIf(!process.env.DATABASE_URL)('la importación configura el circuit
     { fila: 5, nombre: 'Ignacio', apellido: 'Vera', casilleros: [{ etapa: 'Primavera', anio: 2025, puntos: 0 }, { etapa: 'Verano', anio: 2026, puntos: 50 }], acumulado: 50, coincideCon: null, confianza: null },
   ];
   const decisiones = [
-    { fila: 4, accion: 'crear' as const },
-    { fila: 5, accion: 'crear' as const },
+    { hoja: 0, fila: 4, accion: 'crear' as const },
+    { hoja: 0, fila: 5, accion: 'crear' as const },
   ];
 
   async function organizacionConImportacion(sufijo: string, categoriaNueva: string | null) {
@@ -73,7 +74,7 @@ describe.skipIf(!process.env.DATABASE_URL)('la importación configura el circuit
     const { slug, organizacionId, id } = await organizacionConImportacion('nueva', 'Tercera');
 
     expect((await obtenerImportacion(slug, admin, id)).crea).toEqual({
-      categoria: 'Tercera',
+      categorias: ['Tercera'],
       etapas: ['Primavera', 'Verano'],
       ranking: true,
     });
@@ -110,7 +111,7 @@ describe.skipIf(!process.env.DATABASE_URL)('la importación configura el circuit
     const { slug, organizacionId, id } = await organizacionConImportacion('sin-categoria', null);
 
     await expect(confirmarImportacion(slug, admin, id, { decisiones })).rejects.toMatchObject({ codigo: 'DATOS_INVALIDOS' });
-    await confirmarImportacion(slug, admin, id, { decisiones, categoria: 'Damas' });
+    await confirmarImportacion(slug, admin, id, { decisiones, categorias: { '0': 'Damas' } });
 
     expect((await prisma.categoria.findMany({ where: { organizacionId } })).map((c) => c.nombre)).toEqual(['Damas']);
   });

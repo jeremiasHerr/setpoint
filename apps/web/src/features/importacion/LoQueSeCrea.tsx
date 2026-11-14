@@ -7,14 +7,15 @@ function enumerar(nombres: string[]) {
   return nombres.length <= 1 ? nombres.join('') : `${nombres.slice(0, -1).join(', ')} y ${nombres.at(-1)}`;
 }
 
-// Lo que la importación crea en el circuito al confirmar, dicho antes (decisiones 011 y 098): la
-// categoría y los torneos del calendario que la planilla trae y el circuito no tiene, y el ranking.
+// Lo que la importación crea en el circuito al confirmar, dicho antes (decisiones 011 y 098): las
+// categorías y los torneos del calendario que las planillas traen y el circuito no tiene, y el ranking.
 export function LoQueSeCrea({ crea }: { crea: Importacion['crea'] }) {
   const partes: ReactNode[] = [];
-  if (crea.categoria) {
+  if (crea.categorias.length > 0) {
     partes.push(
       <>
-        la categoría <span className="font-semibold text-negro">{crea.categoria}</span>
+        {crea.categorias.length === 1 ? 'la categoría' : 'las categorías'}{' '}
+        <span className="font-semibold text-negro">{enumerar(crea.categorias)}</span>
       </>,
     );
   }
