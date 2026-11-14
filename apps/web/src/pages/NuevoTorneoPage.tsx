@@ -9,9 +9,10 @@ import {
 import { Aviso } from '../components/Aviso';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Boton } from '../components/Boton';
 import { EncabezadoOrganizador } from '../components/EncabezadoOrganizador';
+import { Migas, type Miga } from '../components/Migas';
 import { Tarjeta } from '../components/Tarjeta';
 import { leerSesion, type Sesion } from '../features/auth/sesion';
 import { useCerrarSesion } from '../features/auth/useCerrarSesion';
@@ -143,6 +144,8 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
   const [publicada, setPublicada] = useState<Convocatoria | null>(null);
   const navegar = useNavigate();
   const queryClient = useQueryClient();
+  // La categoría desde la que se vino a editar: las migas vuelven a esa (decisión 100).
+  const desde = (useLocation().state as { desde?: number } | null)?.desde;
 
   const guardado = useAutoguardadoConvocatoria(slug, inicial?.id ?? null, datos, (id) =>
     navegar(`/torneos/${id}`, { replace: true }),
@@ -212,10 +215,17 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
   }
 
   // Salir con un cambio sin guardar lo perdería: primero se manda lo pendiente.
-  async function salir() {
+  async function salir(ruta = '/inicio') {
     setOcupado(true);
     await guardado.guardarAhora();
-    navegar('/inicio');
+    navegar(ruta);
+  }
+
+  // Publicado, el torneo ya tiene sus pantallas: se vuelve a la categoría, con el nombre que lleva en ellas.
+  const categoria = inicial?.torneos.find((t) => t.id === desde) ?? inicial?.torneos[0];
+  const migas: Miga[] = [{ etiqueta: 'Inicio', ruta: '/inicio' }];
+  if (!enBorrador && inicial && categoria) {
+    migas.push({ etiqueta: `${datos.nombre.trim() || inicial.nombre} · ${categoria.categoria}`, ruta: `/torneos/${categoria.id}/inscripciones` });
   }
 
   if (publicada) {
@@ -233,6 +243,9 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
 
       <div className="flex flex-wrap items-end justify-between gap-6 px-7 pt-[26px] pb-5">
         <div className="flex flex-col gap-[7px]">
+          <Migas anteriores={migas} alIr={(ruta) => void salir(ruta)}>
+            {enBorrador ? 'Nuevo torneo' : 'Editar'}
+          </Migas>
           {/* Publicado, ya no es nuevo: se edita uno que tiene nombre. */}
           <h1 className="text-[30px] font-semibold tracking-[-0.035em]">
             {enBorrador || !datos.nombre.trim() ? 'Nuevo torneo' : datos.nombre}

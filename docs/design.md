@@ -151,6 +151,10 @@ Píldora de radio 999, alto 34–40, borde 1px. Activo: fondo `--negro`, texto b
 
 Solo en la franja de las pantallas de un torneo, debajo del encabezado del organizador ([decisión 095](decisiones/095-navegacion-del-torneo.md)). Texto de 15, alto 44, sobre la línea `--linea` del borde de la franja. Activa: `--negro`, peso 600 y subrayado de 2px `--negro`. Disponible: `--gris-700`, peso 500. Apagada: `--gris-400`, y al tocarla, una línea debajo de la franja dice por qué. Son distintas de los chips a propósito: los chips filtran dentro de una pantalla (Confirmados, Reservando), las pestañas cambian de pantalla.
 
+### Migas de pan
+
+En las pantallas internas de la organización, las que no están en el menú: las del torneo, *Editar el torneo* e *Importar planilla* y *Revisar vinculación* en el padrón ([decisión 100](decisiones/100-migas-de-pan.md)). Una línea arriba del título: los niveles de arriba como links `--gris-500` (`--negro` al pasar), separados por el chevron del set en `--gris-400`, y el último, donde se está, sin link en `--gris-700`. Texto de 14; en la franja del torneo van en 15, y la última miga es el nombre del torneo con su peso de título. Cada miga lleva siempre al mismo lugar, nunca "atrás" en el historial.
+
 ### Campos
 
 Alto 56 en móvil y 48 en escritorio, radio 10–12, borde 1px `--gris-300`. El campo activo lleva borde 2px `--negro`. El valor va en mono si es un número.

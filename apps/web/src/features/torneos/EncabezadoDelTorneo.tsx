@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Boton } from '../../components/Boton';
 import { EncabezadoOrganizador } from '../../components/EncabezadoOrganizador';
+import { Migas } from '../../components/Migas';
 import { Numero } from '../../components/Numero';
 import type { Sesion } from '../auth/sesion';
 import { useCerrarSesion } from '../auth/useCerrarSesion';
@@ -43,9 +44,9 @@ type Props = {
   actual: PestanaDelTorneo;
 };
 
-// El encabezado de las pantallas de un torneo: el de la organización y, debajo, la franja con el
-// torneo y sus pestañas, igual en las cinco (decisión 095). Las pestañas que todavía no aplican se
-// ven apagadas y, al tocarlas, dicen por qué.
+// El encabezado de las pantallas de un torneo: el de la organización y, debajo, la franja con las
+// migas hasta el torneo (decisión 100) y sus pestañas, igual en las cinco (decisión 095). Las
+// pestañas que todavía no aplican se ven apagadas y, al tocarlas, dicen por qué.
 export function EncabezadoDelTorneo({ sesion, torneoId, actual }: Props) {
   const cerrarSesion = useCerrarSesion();
   const navegacion = useNavegacionDelTorneo(sesion.organizacion.slug, torneoId);
@@ -72,12 +73,18 @@ export function EncabezadoDelTorneo({ sesion, torneoId, actual }: Props) {
             {datos && (
               <>
                 <div className="flex min-w-0 flex-wrap items-center gap-3">
-                  <Numero className="text-[15px] font-semibold">{datos.nombre}</Numero>
+                  {/* El tercer nivel es la pestaña activa, justo debajo. */}
+                  <Migas anteriores={[{ etiqueta: 'Inicio', ruta: '/inicio' }]} className="text-[15px]">
+                    <Numero className="font-semibold text-negro">{datos.nombre}</Numero>
+                  </Migas>
                   <span className="flex h-7 items-center rounded-full border border-linea px-[11px] font-mono text-[13px] text-gris-500">
                     {ESTADO[datos.estado]}
                   </span>
                 </div>
-                {datos.sePuedeEditar && <Boton onClick={() => navegar(`/torneos/${datos.convocatoriaId}`)}>Editar el torneo</Boton>}
+                {/* La edición vuelve, por sus migas, a esta categoría y no a la primera de la convocatoria. */}
+                {datos.sePuedeEditar && (
+                  <Boton onClick={() => navegar(`/torneos/${datos.convocatoriaId}`, { state: { desde: torneoId } })}>Editar el torneo</Boton>
+                )}
               </>
             )}
           </div>
