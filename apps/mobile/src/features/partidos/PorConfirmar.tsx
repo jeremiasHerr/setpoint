@@ -7,6 +7,7 @@ import { diaYHora } from '../../lib/fechas';
 import { colores, fuentes, tabular } from '../../lib/tokens';
 import { useConfirmarFecha } from '../coordinacion/useConfirmarFecha';
 import { enlaceDeWhatsApp } from './agrupar';
+import { SinTelefono } from './SinTelefono';
 
 const MENSAJES: Record<string, string> = {
   PARTIDO_CAMBIO: 'La fecha cambió mientras tanto. Mirá cómo quedó.',
@@ -63,6 +64,7 @@ export function PorConfirmar({ partido }: { partido: PartidoDelJugador }) {
             </View>
           )}
         </View>
+        {!rival.telefono && <SinTelefono nombre={rival.nombre} />}
       </View>
     </View>
   );

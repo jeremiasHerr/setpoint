@@ -5,6 +5,7 @@ import { Boton } from '../../components/Boton';
 import { diasHasta } from '../../lib/fechas';
 import { colores, fuentes, tabular } from '../../lib/tokens';
 import { enlaceDeWhatsApp } from './agrupar';
+import { SinTelefono } from './SinTelefono';
 
 function plazo(fechaLimite: string) {
   const dias = diasHasta(fechaLimite);
@@ -51,6 +52,7 @@ export function SinCoordinar({ partido, urgente }: { partido: PartidoDelJugador;
             </View>
           )}
         </View>
+        {!rival.telefono && <SinTelefono nombre={rival.nombre} />}
       </View>
     </View>
   );
