@@ -1,21 +1,19 @@
 import type { CierreDelTorneo } from '@setpoint/shared';
 import type { ReactNode } from 'react';
-import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Boton } from '../components/Boton';
-import { EncabezadoOrganizador } from '../components/EncabezadoOrganizador';
 import { Numero } from '../components/Numero';
 import { leerSesion, type Sesion } from '../features/auth/sesion';
-import { useCerrarSesion } from '../features/auth/useCerrarSesion';
 import { useSesionInvalida } from '../features/auth/useSesionInvalida';
 import { ResumenCierre } from '../features/cierre/ResumenCierre';
 import { TablaPuntosAOtorgar } from '../features/cierre/TablaPuntosAOtorgar';
 import { TarjetaCampeon } from '../features/cierre/TarjetaCampeon';
 import { useCerrarTorneo, useCierre } from '../features/cierre/useCierre';
-import { iniciales, navegacionOrganizador } from '../features/organizador/encabezado';
+import { EncabezadoDelTorneo } from '../features/torneos/EncabezadoDelTorneo';
 import { Esqueleto } from '../components/Esqueleto';
 
 // Cerrar el torneo (F16). Se llega desde el tablero y desde Cargar resultado, con las finales cargadas
-// (decisiones 058 y 063).
+// (decisiones 058 y 063), y desde la pestaña Cierre de cualquier pantalla del torneo (decisión 095).
 export function CierrePage() {
   const sesion = leerSesion();
   const { id } = useParams();
@@ -23,16 +21,10 @@ export function CierrePage() {
   return <Cierre sesion={sesion} torneoId={Number(id)} />;
 }
 
-function Marco({ sesion, children }: { sesion: Sesion; children: ReactNode }) {
-  const cerrarSesion = useCerrarSesion();
+function Marco({ sesion, torneoId, children }: { sesion: Sesion; torneoId: number; children: ReactNode }) {
   return (
     <div className="min-h-screen bg-white text-negro">
-      <EncabezadoOrganizador
-        organizacion={sesion.organizacion.nombre}
-        navegacion={navegacionOrganizador}
-        iniciales={iniciales(sesion.usuario.nombre)}
-        alSalir={cerrarSesion}
-      />
+      <EncabezadoDelTorneo sesion={sesion} torneoId={torneoId} actual="cierre" />
       {children}
     </div>
   );
@@ -55,7 +47,7 @@ function Cierre({ sesion, torneoId }: { sesion: Sesion; torneoId: number }) {
 
   const codigo = cierre.error?.message ?? '';
   return (
-    <Marco sesion={sesion}>
+    <Marco sesion={sesion} torneoId={torneoId}>
       <div className="flex flex-col items-start gap-3 px-7 pt-[34px]">
         {cierre.error && !sesionInvalida ? (
           <>
@@ -125,19 +117,8 @@ function VistaDelCierre({ sesion, cierre }: { sesion: Sesion; cierre: CierreDelT
   const conRanking = cierre.torneoDelCalendario !== null;
 
   return (
-    <Marco sesion={sesion}>
+    <Marco sesion={sesion} torneoId={torneoId}>
       <div className="flex flex-col gap-[7px] px-7 pt-[26px] pb-5">
-        <nav aria-label="Migas" className="flex flex-wrap items-center gap-[9px] text-sm">
-          <Link to={`/torneos/${torneoId}/tablero`} className="text-gris-500 hover:text-negro">
-            <Numero>{cierre.nombre}</Numero>
-          </Link>
-          <span aria-hidden="true" className="text-gris-300">
-            /
-          </span>
-          <span aria-current="page" className="font-semibold">
-            Cierre
-          </span>
-        </nav>
         <h1 className="text-[30px] font-semibold tracking-[-0.035em]">{cierre.cerrado ? 'Torneo cerrado' : 'Cerrar el torneo'}</h1>
         <p className="text-[15px] text-gris-500">
           <Subtitulo cierre={cierre} />

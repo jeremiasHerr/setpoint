@@ -45,6 +45,8 @@ borrador → publicado → inscripciones_cerradas → zonas_generadas
 | `eliminatorias` | Cierran todas las zonas | El cuadro principal y, si hay, el consuelo en juego, con el plazo por ronda del torneo. En la interfaz: "cuadros" |
 | `finalizado` | La organización cierra el torneo, con ambos campeones definidos (§12) | Se impactan los puntos. Solo se corrigen resultados, y los puntos se recalculan ([decisión 055](decisiones/055-correccion-despues-del-cierre.md)) |
 
+**Las pantallas del torneo comparten una franja** debajo del encabezado, con el nombre de la edición, su estado y las pestañas Inscripciones, Zonas, Tablero, Resultados y Cierre ([decisión 095](decisiones/095-navegacion-del-torneo.md)). Cada pestaña se abre desde el estado en que tiene sentido: Zonas con la inscripción cerrada, Tablero y Resultados desde el sorteo confirmado (también con el torneo cerrado, para corregir), y Cierre con los campeones definidos. Las demás se ven apagadas y dicen por qué. Mientras la convocatoria entera tiene la inscripción abierta, la franja ofrece "Editar el torneo". Lo calcula `GET /api/organizaciones/:slug/torneos/:id/navegacion`.
+
 > **Nota:** a diferencia de versiones anteriores, la organización **no paga** por publicar un torneo. El modelo de ingresos del circuito son las inscripciones de los jugadores.
 
 ---
@@ -218,7 +220,7 @@ Funciones:
 
 La lista de espera se ordena **por orden de llegada** y cubre deserciones, replicando la regla actual del reglamento.
 
-**La pantalla Inscripciones** es de una categoría (`/torneos/:id/inscripciones`, con el id del `Torneo`, no el de la convocatoria) y se llega desde la tarjeta de la categoría en el inicio (§3). Arriba, los lugares del cupo (pagados, reservando y libres) y cuántos esperan en la lista. Debajo, las pestañas Confirmados, Reservando, Lista de espera, Bajas y, en los torneos con aprobación, Solicitudes, con un buscador por apellido. Al costado, los primeros de la lista de espera, las devoluciones pendientes y la conciliación.
+**La pantalla Inscripciones** es de una categoría (`/torneos/:id/inscripciones`, con el id del `Torneo`, no el de la convocatoria) y se llega desde la tarjeta de la categoría en el inicio (§3) y, en cualquier momento del torneo, con la pestaña Inscripciones (§2). Arriba, los lugares del cupo (pagados, reservando y libres) y cuántos esperan en la lista. Debajo, las pestañas Confirmados, Reservando, Lista de espera, Bajas y, en los torneos con aprobación, Solicitudes, con un buscador por apellido. Al costado, los primeros de la lista de espera, las devoluciones pendientes y la conciliación.
 
 - **Cerrar inscripciones:** el torneo pasa a `inscripciones_cerradas` y el botón pasa a "Sortear zonas", que lleva al sorteo. Cada categoría se cierra aparte, y cerrar no se deshace.
 - **Las reservas sin pagar no se tocan al cerrar** ([decisión 024](decisiones/024-reservas-sin-pagar-al-cerrar.md)): no entran al sorteo, que toma solo las pagadas. La pantalla lo avisa antes de cerrar.
@@ -272,7 +274,7 @@ El sistema genera los grupos y los partidos de zona. La organización puede revi
 
 ## 9. Seguimiento: tablero de avance
 
-Pantalla central durante el torneo, en `/torneos/:id/tablero`. Reemplaza el trabajo actual de revisar el grupo de WhatsApp a mano. Se llega desde la tarjeta del torneo en "En juego" del inicio ([decisión 080](decisiones/080-torneos-en-juego-y-terminados-en-el-inicio.md)) y desde el Sorteo confirmado, y *Cargar resultado* y el *Cierre* vuelven a él ([decisión 063](decisiones/063-entrada-al-tablero.md)).
+Pantalla central durante el torneo, en `/torneos/:id/tablero`. Reemplaza el trabajo actual de revisar el grupo de WhatsApp a mano. Se llega desde la tarjeta del torneo en "En juego" del inicio ([decisión 080](decisiones/080-torneos-en-juego-y-terminados-en-el-inicio.md)) y desde el Sorteo confirmado, y *Cargar resultado* y el *Cierre* vuelven a él ([decisión 063](decisiones/063-entrada-al-tablero.md)). Desde cualquier pantalla del torneo, con la pestaña Tablero (§2).
 
 **Cada partido está en una situación**, que se calcula en cada consulta y no se guarda ([decisión 060](decisiones/060-partidos-vencidos-calculados.md)): jugado (con resultado, también W.O. y abandono), con fecha (anotada o confirmada, dentro del plazo), sin coordinar, vencido (pasó su fecha límite sin resultado) o esperando (un partido de cuadro sin sus dos jugadores). El estado `VENCIDA` del schema no se usa.
 
@@ -362,7 +364,7 @@ Con los campeones definidos (uno por cuadro), la organización cierra el torneo.
 
 El torneo pasa a `finalizado`. Cerrar no se deshace, pero un resultado se puede corregir después: si alguien cambia de instancia, su movimiento se actualiza en la misma transacción y conserva la fecha del cierre ([decisión 055](decisiones/055-correccion-despues-del-cierre.md)).
 
-**Antes de confirmar**, la pantalla *Cerrar el torneo* muestra los campeones, los puntos de cada jugador con lo que reemplazan en su casillero, el acumulado y el puesto antes y después, cuántos jugadores de la categoría cambian de puesto y quién queda número uno. Lo calcula la API sin guardar nada, con las mismas funciones del ranking. Se llega desde *Cargar resultado*, al cargar el último resultado de los cuadros ([decisión 058](decisiones/058-como-se-llega-al-cierre.md)).
+**Antes de confirmar**, la pantalla *Cerrar el torneo* muestra los campeones, los puntos de cada jugador con lo que reemplazan en su casillero, el acumulado y el puesto antes y después, cuántos jugadores de la categoría cambian de puesto y quién queda número uno. Lo calcula la API sin guardar nada, con las mismas funciones del ranking. Se llega desde *Cargar resultado*, al cargar el último resultado de los cuadros ([decisión 058](decisiones/058-como-se-llega-al-cierre.md)), desde el tablero y con la pestaña Cierre (§2).
 
 | Endpoint | Qué hace |
 |---|---|

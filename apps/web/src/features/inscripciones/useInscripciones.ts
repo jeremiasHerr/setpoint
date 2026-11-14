@@ -10,6 +10,7 @@ import {
   recordarPago,
   rechazarSolicitud,
 } from './api';
+import { claveNavegacion } from '../torneos/useNavegacionDelTorneo';
 
 const claveInscripciones = (slug: string, id: number) => ['inscripciones', slug, id];
 
@@ -31,6 +32,7 @@ export function useCerrarInscripcion(slug: string, id: number) {
       // El torneo cambió de estado: el inicio y el sorteo tienen que enterarse.
       void queryClient.invalidateQueries({ queryKey: ['torneos', slug] });
       void queryClient.invalidateQueries({ queryKey: ['sorteo', slug, id] });
+      void queryClient.invalidateQueries({ queryKey: claveNavegacion(slug, id) });
     },
     // Si falló, puede que otro la haya cerrado o que haya cambiado quién pagó: se vuelve a pedir.
     onError: () => void queryClient.invalidateQueries({ queryKey: claveInscripciones(slug, id) }),

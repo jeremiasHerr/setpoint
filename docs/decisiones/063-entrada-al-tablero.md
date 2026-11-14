@@ -1,6 +1,6 @@
 # 063 — Al tablero se llega desde el Sorteo, y las otras pantallas del torneo vuelven a él
 
-**Estado:** aceptada — 30 de octubre de 2026
+**Estado:** aceptada — 30 de octubre de 2026. Las migas de *Cargar resultado* y del *Cierre* están reemplazadas por la [decisión 095](095-navegacion-del-torneo.md): las pantallas del torneo comparten una franja con pestañas. "Ir al tablero" y los botones de vuelta al tablero siguen.
 
 ## Contexto
 

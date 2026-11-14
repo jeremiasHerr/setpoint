@@ -2,6 +2,7 @@ import type { DatosResultado } from '@setpoint/shared';
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
 import { guardarResultado, obtenerCuadros, obtenerPartido, obtenerPartidos, simularResultado } from './api';
+import { claveNavegacion } from '../torneos/useNavegacionDelTorneo';
 
 // La lista y cada partido comparten el comienzo de la clave: invalidar la lista refresca todo.
 const clavePartidos = (slug: string, id: number) => ['partidos', slug, id];
@@ -62,6 +63,8 @@ export function useGuardarResultado(slug: string, id: number, partidoId: number)
       queryClient.setQueryData(clavePartido(slug, id, partidoId), partido);
       // Cambian la lista, la vista previa y, en un cuadro, el partido siguiente, que tiene un jugador nuevo.
       void queryClient.invalidateQueries({ queryKey: clavePartidos(slug, id) });
+      // La final define a los campeones: se abre la pestaña Cierre.
+      void queryClient.invalidateQueries({ queryKey: claveNavegacion(slug, id) });
     },
   });
 }

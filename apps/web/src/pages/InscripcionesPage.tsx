@@ -2,10 +2,8 @@ import type { InscripcionesDelTorneo } from '@setpoint/shared';
 import { useState, type ReactNode } from 'react';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Boton } from '../components/Boton';
-import { EncabezadoOrganizador } from '../components/EncabezadoOrganizador';
 import { Numero } from '../components/Numero';
 import { leerSesion, type Sesion } from '../features/auth/sesion';
-import { useCerrarSesion } from '../features/auth/useCerrarSesion';
 import { useSesionInvalida } from '../features/auth/useSesionInvalida';
 import { BarraDeLugares } from '../features/inscripciones/BarraDeLugares';
 import { Conciliacion } from '../features/inscripciones/Conciliacion';
@@ -18,8 +16,8 @@ import { TablaListaDeEspera } from '../features/inscripciones/TablaListaDeEspera
 import { TablaSolicitudes } from '../features/inscripciones/TablaSolicitudes';
 import { normalizar } from '../features/inscripciones/texto';
 import { useCerrarInscripcion, useInscripciones } from '../features/inscripciones/useInscripciones';
-import { iniciales, navegacionOrganizador } from '../features/organizador/encabezado';
 import { diaConSemana } from '../features/torneos/texto';
+import { EncabezadoDelTorneo } from '../features/torneos/EncabezadoDelTorneo';
 import { ErrorApi } from '../lib/api';
 import { Esqueleto } from '../components/Esqueleto';
 
@@ -36,18 +34,6 @@ export function InscripcionesPage() {
   return <CargarInscripciones sesion={sesion} id={Number(id)} />;
 }
 
-function Encabezado({ sesion }: { sesion: Sesion }) {
-  const cerrarSesion = useCerrarSesion();
-  return (
-    <EncabezadoOrganizador
-      organizacion={sesion.organizacion.nombre}
-      navegacion={navegacionOrganizador}
-      iniciales={iniciales(sesion.usuario.nombre)}
-      alSalir={cerrarSesion}
-    />
-  );
-}
-
 function CargarInscripciones({ sesion, id }: { sesion: Sesion; id: number }) {
   const inscripciones = useInscripciones(sesion.organizacion.slug, id);
   const sesionInvalida = useSesionInvalida(inscripciones.error);
@@ -59,7 +45,7 @@ function CargarInscripciones({ sesion, id }: { sesion: Sesion; id: number }) {
 
   return (
     <div className="min-h-screen bg-white text-negro">
-      <Encabezado sesion={sesion} />
+      <EncabezadoDelTorneo sesion={sesion} torneoId={id} actual="inscripciones" />
       <div className="flex flex-col items-start gap-3 px-7 pt-[26px]">
         {noExiste ? (
           <>
@@ -91,6 +77,12 @@ function textoDelCierre({ estado, cierreInscripcion }: InscripcionesDelTorneo) {
   return cierreInscripcion > hoy()
     ? `cierra el ${diaConSemana(cierreInscripcion)}`
     : `la fecha de cierre era el ${diaConSemana(cierreInscripcion)}`;
+}
+
+// "Con aprobación · cierra el viernes 26". El nombre del torneo ya está en la franja de arriba.
+function bajada(datos: InscripcionesDelTorneo) {
+  const texto = [datos.modoInscripcion === 'con_aprobacion' && 'con aprobación', textoDelCierre(datos)].filter(Boolean).join(' · ');
+  return texto.charAt(0).toUpperCase() + texto.slice(1);
 }
 
 // Lo que pasa al cerrar, dicho antes de que pase. Una vez cerrada, quiénes entran al sorteo.
@@ -206,15 +198,12 @@ function Inscripciones({ sesion, datos }: { sesion: Sesion; datos: Inscripciones
 
   return (
     <div className="flex min-h-screen flex-col bg-white text-negro">
-      <Encabezado sesion={sesion} />
+      <EncabezadoDelTorneo sesion={sesion} torneoId={datos.torneoId} actual="inscripciones" />
 
       <div className="flex flex-wrap items-end justify-between gap-6 px-7 pt-[26px] pb-5">
         <div className="flex flex-col gap-[7px]">
           <h1 className="text-[30px] font-semibold tracking-[-0.035em]">Inscripciones</h1>
-          <p className="text-[15px] text-gris-500">
-            {datos.nombre} · {conAprobacion && 'con aprobación · '}
-            {textoDelCierre(datos)}
-          </p>
+          <p className="text-[15px] text-gris-500">{bajada(datos)}</p>
         </div>
 
         <div className="flex flex-col items-end gap-1.5">

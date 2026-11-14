@@ -1,6 +1,7 @@
 import type { DatosCargarZonas, DatosSortearEntrada, Sorteo } from '@setpoint/shared';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { cargarZonas, confirmarSorteo, obtenerSorteo, sortear } from './api';
+import { claveNavegacion } from '../torneos/useNavegacionDelTorneo';
 
 const claveSorteo = (slug: string, id: number) => ['sorteo', slug, id];
 
@@ -42,8 +43,9 @@ export function useConfirmarSorteo(slug: string, id: number) {
     mutationFn: () => confirmarSorteo(slug, id),
     onSuccess: (sorteo) => {
       guardar(sorteo);
-      // El torneo cambió de estado: el listado del inicio tiene que enterarse.
+      // El torneo cambió de estado: el listado del inicio y las pestañas tienen que enterarse.
       void queryClient.invalidateQueries({ queryKey: ['torneos', slug] });
+      void queryClient.invalidateQueries({ queryKey: claveNavegacion(slug, id) });
     },
   });
 }
