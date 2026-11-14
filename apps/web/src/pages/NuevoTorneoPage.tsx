@@ -25,6 +25,7 @@ import { SeccionInscripcion } from '../features/torneos/SeccionInscripcion';
 import { SeccionPlazos } from '../features/torneos/SeccionPlazos';
 import { SeccionSedes } from '../features/torneos/SeccionSedes';
 import { SeccionSistemaJuego } from '../features/torneos/SeccionSistemaJuego';
+import { TorneoPublicado } from '../features/torneos/TorneoPublicado';
 import {
   claveConvocatoria,
   useAutoguardadoConvocatoria,
@@ -137,6 +138,8 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
   const [erroresPublicar, setErroresPublicar] = useState<ErroresConvocatoria>({});
   const [errorGeneral, setErrorGeneral] = useState<string | null>(null);
   const [ocupado, setOcupado] = useState(false);
+  // Publicada, la pantalla pasa a dar el link de cada categoría para compartir.
+  const [publicada, setPublicada] = useState<Convocatoria | null>(null);
   const navegar = useNavigate();
   const queryClient = useQueryClient();
 
@@ -195,7 +198,7 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
     try {
       const publicada = await publicarConvocatoria(slug, id);
       queryClient.setQueryData(claveConvocatoria(slug, id), publicada);
-      navegar('/inicio');
+      setPublicada(publicada);
     } catch (error) {
       if (error instanceof ErrorApi && error.codigo === 'DATOS_INCOMPLETOS') {
         setErroresPublicar(error.campos);
@@ -212,6 +215,15 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
     setOcupado(true);
     await guardado.guardarAhora();
     navegar('/inicio');
+  }
+
+  if (publicada) {
+    return (
+      <div className="min-h-screen bg-white text-negro">
+        <Encabezado sesion={sesion} organizacion={circuito.nombre} />
+        <TorneoPublicado slug={slug} convocatoria={publicada} />
+      </div>
+    );
   }
 
   return (
