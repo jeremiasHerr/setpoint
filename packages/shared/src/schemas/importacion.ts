@@ -16,7 +16,11 @@ export const decisionImportacionSchema = z
   });
 
 export const confirmarImportacionSchema = z.object(
-  { decisiones: z.array(decisionImportacionSchema) },
+  {
+    decisiones: z.array(decisionImportacionSchema),
+    // Solo si la planilla no decía la categoría y no se eligió al subir (decisión 011).
+    categoria: z.string().trim().min(1).max(40).optional(),
+  },
   { error: 'Faltan las decisiones' },
 );
 
@@ -52,7 +56,11 @@ export type Importacion = {
   id: number;
   archivoNombre: string;
   estado: EstadoImportacion;
+  // La elegida al subir o la que dice la planilla. null si no la dice: se elige al revisar.
   categoria: string | null;
+  // Lo que se crea en el circuito al confirmar (decisiones 011 y 098): la categoría y los torneos
+  // del calendario que la planilla trae y el circuito no tiene, y si se enciende el ranking.
+  crea: { categoria: string | null; etapas: string[]; ranking: boolean };
   creadoEn: string;
   confirmadaEn: string | null;
   // Motivo, si terminó en ERROR.

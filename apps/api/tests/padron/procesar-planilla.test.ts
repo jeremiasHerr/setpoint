@@ -15,7 +15,13 @@ const FIXTURES = join(__dirname, '../fixtures');
 const ARCHIVO = readFileSync(join(FIXTURES, '01-polenta-tercera.xlsx'));
 const PADRON = JSON.parse(readFileSync(join(FIXTURES, 'padron.json'), 'utf-8'));
 const ESPERADO = JSON.parse(readFileSync(join(FIXTURES, '01-polenta-tercera.esperado.json'), 'utf-8'));
-const CONTEXTO = { padron: PADRON.jugadores, etapas: PADRON.etapas, hoy: new Date('2026-10-05') };
+const CONTEXTO = {
+  archivo: '01-polenta-tercera.xlsx',
+  padron: PADRON.jugadores,
+  etapas: PADRON.etapas,
+  categorias: ['Segunda', 'Tercera'],
+  hoy: new Date('2026-10-05'),
+};
 
 const TOKENS = { entrada: 1000, salida: 500 };
 
@@ -23,6 +29,8 @@ function correcta(jugadores = ESPERADO.jugadores): ResultadoExtraccion {
   const respuesta = {
     esPlanillaDeJugadores: true,
     motivo: null,
+    categoria: 'Tercera',
+    etapas: PADRON.etapas,
     jugadores: jugadores.map((j: object) => ({ ...j, confianza: 'alta' })),
   };
   return { ok: true, respuesta, crudo: JSON.stringify(respuesta), tokens: TOKENS };
@@ -42,7 +50,7 @@ describe('procesarPlanilla', () => {
     expect(resultado.intentos).toBe(1);
     expect(resultado.tokens).toEqual(TOKENS);
     expect(resultado.modelo).toBe('modelo-de-prueba');
-    expect(resultado.versionPrompt).toBe('importacion-v1.1');
+    expect(resultado.versionPrompt).toBe('importacion-v2');
   });
 
   it('si falla la extracción reintenta con el error y suma los tokens', async () => {

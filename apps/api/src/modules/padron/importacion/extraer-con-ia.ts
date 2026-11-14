@@ -23,11 +23,8 @@ export type ResultadoExtraccion =
       tokens?: { entrada: number; salida: number };
     };
 
-export async function extraerConIA(
-  mensaje: string,
-  etapas: string[],
-): Promise<ResultadoExtraccion> {
-  const schema = armarSchemaRespuesta(etapas);
+export async function extraerConIA(mensaje: string): Promise<ResultadoExtraccion> {
+  const schema = armarSchemaRespuesta();
   const jsonSchema = z.toJSONSchema(schema);
   delete jsonSchema.$schema;
 

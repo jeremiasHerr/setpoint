@@ -1,7 +1,10 @@
 // Eval de la importación: corre las planillas de tests/fixtures contra la API real y
 // compara con su .esperado.json. Cuesta ~$0,10 por corrida.
+// Cada planilla usa el padrón, las etapas y las categorías de padron.json, salvo que tenga su
+// propio <nombre>.contexto.json (por ejemplo, un circuito recién registrado, sin nada cargado).
+// Si el .esperado.json trae categoria y etapas, también se compara lo detectado (decisión 011).
 // Uso: npm run eval:importacion -w apps/api
-import { readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { procesarPlanilla } from '../src/modules/padron/importacion/procesar-planilla';
 
@@ -11,7 +14,10 @@ const HOY = new Date('2026-10-05');
 
 type Casillero = { etapa: string; anio: number; puntos: number };
 type JugadorEsperado = { fila: number; casilleros: Casillero[]; acumulado: number | null; coincideCon: number | null };
-type Esperado = { esPlanillaDeJugadores: boolean; jugadores: JugadorEsperado[] };
+type Esperado = { esPlanillaDeJugadores: boolean; categoria?: string | null; etapas?: string[]; jugadores: JugadorEsperado[] };
+type Contexto = { jugadores: { id: number; nombre: string; apellido: string }[]; etapas: string[]; categorias: string[] };
+
+const CATEGORIAS = ['Segunda', 'Tercera'];
 
 type Comparacion = { aciertos: number; total: number; diferencias: string[] };
 
@@ -27,6 +33,13 @@ function comparar(esperado: Esperado, obtenido: Esperado, etapas: string[]): Com
     esperado.esPlanillaDeJugadores === obtenido.esPlanillaDeJugadores,
     `esPlanillaDeJugadores: esperaba ${esperado.esPlanillaDeJugadores}, vino ${obtenido.esPlanillaDeJugadores}`,
   );
+  if (esperado.categoria !== undefined) {
+    chequear(esperado.categoria === obtenido.categoria, `categoria: esperaba ${esperado.categoria}, vino ${obtenido.categoria}`);
+  }
+  if (esperado.etapas !== undefined) {
+    const texto = (etapas?: string[]) => (etapas ?? []).join(', ');
+    chequear(texto(esperado.etapas) === texto(obtenido.etapas), `etapas: esperaba ${texto(esperado.etapas)}, vino ${texto(obtenido.etapas)}`);
+  }
   chequear(
     esperado.jugadores.length === obtenido.jugadores.length,
     `cantidad de jugadores: esperaba ${esperado.jugadores.length}, vinieron ${obtenido.jugadores.length}`,
@@ -72,17 +85,23 @@ async function main() {
   for (const planilla of planillas) {
     const nombre = planilla.replace(/\.xlsx$/, '');
     const esperado: Esperado = JSON.parse(readFileSync(join(carpeta, `${nombre}.esperado.json`), 'utf-8'));
+    const propio = join(carpeta, `${nombre}.contexto.json`);
+    const contexto: Contexto = existsSync(propio)
+      ? JSON.parse(readFileSync(propio, 'utf-8'))
+      : { jugadores: padron.jugadores, etapas: padron.etapas, categorias: CATEGORIAS };
 
     const inicio = Date.now();
     const resultado = await procesarPlanilla(readFileSync(join(carpeta, planilla)), {
-      padron: padron.jugadores,
-      etapas: padron.etapas,
+      archivo: planilla,
+      padron: contexto.jugadores,
+      etapas: contexto.etapas,
+      categorias: contexto.categorias,
       hoy: HOY,
     });
     const segundos = (Date.now() - inicio) / 1000;
 
     const obtenido: Esperado = resultado.ok ? resultado.respuesta : { esPlanillaDeJugadores: false, jugadores: [] };
-    const c = comparar(esperado, obtenido, padron.etapas);
+    const c = comparar(esperado, obtenido, esperado.etapas ?? contexto.etapas);
 
     total.aciertos += c.aciertos;
     total.total += c.total;

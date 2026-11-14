@@ -178,7 +178,7 @@ Mismas reglas de acceso que el padrón. El diseño de la extracción está en [0
 | Todas las filas esperan una decisión de la organización en `confirmar` | **Automática por excepción.** Las filas seguras se aplican solas al terminar el procesamiento; `confirmar` recibe decisiones solo para las filas a revisar. La pantalla dice *"Importamos 74 jugadores. Revisá estos 3"* |
 | Sin forma de deshacer una importación confirmada | **Deshacer la importación**: borra sus movimientos y los jugadores que creó, si no tienen otra actividad. Requiere vincular cada movimiento con su importación (migración) |
 | `archivo` y `categoria` por nombre, un archivo por subida | Hasta **10 archivos de 2 MB**, cada uno con una o varias hojas. La categoría se detecta por el título de la hoja o el nombre del archivo; si no se puede, se pregunta |
-| Sin etapas configuradas termina en `ERROR` (`SIN_ETAPAS`) | **Detecta los torneos del calendario** en los encabezados y los propone; se crean al confirmar, en la misma transacción |
+| ~~Sin etapas configuradas termina en `ERROR` (`SIN_ETAPAS`)~~ | **Implementado.** Detecta los torneos del calendario en los encabezados y la categoría en la hoja o el nombre del archivo; se crean al confirmar, en la misma transacción, y si hay puntos se enciende el ranking ([decisión 098](decisiones/098-importar-puntos-enciende-el-ranking.md)) |
 | Solo `.xlsx`, `.xls` y `.csv` | Propuesto: PDF con texto, texto pegado e imágenes, en ese orden de prioridad |
 
 ---

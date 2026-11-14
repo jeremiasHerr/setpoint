@@ -1,5 +1,4 @@
 import { useState, type FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Boton } from '../../components/Boton';
 import { Selector } from '../../components/Selector';
 import { Tarjeta } from '../../components/Tarjeta';
@@ -7,58 +6,24 @@ import { MensajeError } from '../torneos/MensajeError';
 
 type Props = {
   categorias: string[];
-  // Cuántos torneos del calendario tiene el circuito: cada columna de puntos va al casillero de uno.
-  torneosDelCalendario: number;
-  usaRanking: boolean;
   enviando: boolean;
   error?: string;
-  alSubir: (archivo: File, categoria: string) => void;
+  // Sin categoría (null), se toma la que diga la planilla (decisión 011).
+  alSubir: (archivo: File, categoria: string | null) => void;
 };
 
-// Lo que falta configurar antes de subir. La importación todavía no detecta las categorías ni los
-// torneos del calendario en la planilla (decisión 011, pendiente de código): sin torneos del
-// calendario, la API la corta después de subir el archivo. Se dice antes.
-function loQueFalta(sinCategorias: boolean, sinTorneos: boolean, usaRanking: boolean) {
-  const conRanking = usaRanking ? '' : ', con el ranking activado';
-  if (sinCategorias && sinTorneos) {
-    return {
-      titulo: 'Primero configurá tu circuito',
-      texto: `Cada jugador de la planilla entra en una categoría, y cada columna de puntos va al casillero de un torneo del calendario. Cargá las dos cosas en Tu circuito${conRanking}, y volvé.`,
-    };
-  }
-  if (sinCategorias) {
-    return {
-      titulo: 'Primero cargá las categorías',
-      texto: 'Cada jugador de la planilla entra en una categoría. Cargalas en Tu circuito y volvé.',
-    };
-  }
-  return {
-    titulo: 'Primero cargá los torneos del calendario',
-    texto: `Cada columna de puntos de la planilla va al casillero de un torneo del calendario. Cargalos en Tu circuito${conRanking}, y volvé.`,
-  };
-}
+// La opción de no elegir: la categoría sale del nombre de la hoja, de un título o del archivo.
+const DE_LA_PLANILLA = '';
 
-export function FormularioSubida({ categorias, torneosDelCalendario, usaRanking, enviando, error, alSubir }: Props) {
-  const [categoria, setCategoria] = useState(categorias[0] ?? '');
+// No hace falta configurar el circuito antes: las categorías y los torneos del calendario que la
+// planilla trae y el circuito no tiene se crean al confirmar (decisión 011).
+export function FormularioSubida({ categorias, enviando, error, alSubir }: Props) {
+  const [categoria, setCategoria] = useState(DE_LA_PLANILLA);
   const [archivo, setArchivo] = useState<File | null>(null);
-  const navegar = useNavigate();
 
   function enviar(evento: FormEvent) {
     evento.preventDefault();
-    if (archivo && categoria) alSubir(archivo, categoria);
-  }
-
-  if (categorias.length === 0 || torneosDelCalendario === 0) {
-    const { titulo, texto } = loQueFalta(categorias.length === 0, torneosDelCalendario === 0, usaRanking);
-    return (
-      <Tarjeta className="flex max-w-[560px] flex-col items-start gap-2 p-[22px]">
-        <h2 className="text-[17px] font-semibold">{titulo}</h2>
-        <p className="text-[15px] text-gris-500">{texto}</p>
-        <Boton variante="organizador" className="mt-2 font-semibold" onClick={() => navegar('/circuito')}>
-          Ir a Tu circuito
-        </Boton>
-      </Tarjeta>
-    );
+    if (archivo) alSubir(archivo, categoria === DE_LA_PLANILLA ? null : categoria);
   }
 
   return (
@@ -68,22 +33,31 @@ export function FormularioSubida({ categorias, torneosDelCalendario, usaRanking,
           <h2 className="text-[17px] font-semibold">Subí la planilla que ya usás</h2>
           <p className="text-[15px] leading-normal text-gris-500">
             Una fila por jugador y una columna por torneo, como el ranking de siempre. No importa el orden de las
-            columnas ni si tiene títulos, totales o notas.
+            columnas ni si tiene títulos, totales o notas. Las categorías y los torneos del calendario que tu circuito
+            no tiene los tomamos de la planilla, y se crean al confirmar.
           </p>
         </div>
 
-        <Selector
-          id="importacion-categoria"
-          rotulo="Categoría de la planilla"
-          value={categoria}
-          onChange={(e) => setCategoria(e.target.value)}
-        >
-          {categorias.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </Selector>
+        {categorias.length > 0 ? (
+          <Selector
+            id="importacion-categoria"
+            rotulo="Categoría de la planilla"
+            value={categoria}
+            onChange={(e) => setCategoria(e.target.value)}
+          >
+            <option value={DE_LA_PLANILLA}>La que diga la planilla</option>
+            {categorias.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </Selector>
+        ) : (
+          <p className="rounded-control bg-fondo px-3.5 py-3 text-sm leading-normal text-gris-700">
+            La categoría la tomamos del nombre de la hoja, de un título o del nombre del archivo, como «Ranking Tercera
+            2026.xlsx». Si no la dice, la elegís al revisar.
+          </p>
+        )}
 
         <div className="flex flex-col gap-2">
           <span className="text-[13px] font-semibold text-gris-500">Archivo</span>

@@ -41,14 +41,14 @@ Se definen una vez, al dar de alta el circuito.
 
 **`quien_carga_resultados`** — si los jugadores pueden reportar el resultado de su partido con confirmación del rival, o si la carga es exclusiva de la organización. POLENTA usa el modo restringido, alineado con el principio de mínima carga.
 
-### 1.1 Configurar el circuito desde la planilla — *pendiente de código*
+### 1.1 Configurar el circuito desde la planilla
 
 Las categorías y los torneos del calendario no hace falta cargarlos a mano: **la importación los detecta en la planilla** que la organización ya usa ([06-ia.md](06-ia.md) §1, [decisión 011](decisiones/011-la-importacion-detecta-el-calendario.md)).
 
 - **Torneos del calendario:** se detectan en los encabezados de las columnas y se proponen en orden. Si la organización ya tiene, se usan esos y una columna que no coincide se propone como nueva.
 - **Categorías:** se detectan por el título de la hoja o el nombre del archivo.
 - Se crean **al confirmar la importación, en la misma transacción**. Si se descarta, no queda nada.
-- *Propuesto:* si la importación trae puntos, al confirmarla se enciende `usa_ranking`. Una organización que importa su ranking tiene un ranking; dejarlo apagado escondería lo que acaba de cargar.
+- Si la importación trae puntos, al confirmarla se enciende `usa_ranking`. Una organización que importa su ranking tiene un ranking; dejarlo apagado escondería lo que acaba de cargar ([decisión 098](decisiones/098-importar-puntos-enciende-el-ranking.md)).
 
 Es lo que cierra la promesa de la puerta de entrada: el circuito nuevo empieza con un torneo suelto sin configurar nada, y **el circuito que ya existe sube su archivo y queda configurado**.
 
