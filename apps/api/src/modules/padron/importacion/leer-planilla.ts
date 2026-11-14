@@ -15,11 +15,18 @@ function limpiarCelda(valor: unknown): Celda {
     return texto === "" ? null : texto;
 }
 
-export function leerPlanilla(archivo: Buffer): FilaPlanilla[]{
+// La primera hoja del libro, con su nombre: muchas veces es la categoría ("Tercera").
+export function leerHoja(archivo: Buffer): { nombre: string; filas: FilaPlanilla[] } {
     const libro = XLSX.read(archivo, {type: "buffer"});
-    const nombreHoja = libro.SheetNames[0];
-    const hoja = libro.Sheets[nombreHoja];
+    const nombre = libro.SheetNames[0];
+    return { nombre, filas: filasDeLaHoja(libro.Sheets[nombre]) };
+}
 
+export function leerPlanilla(archivo: Buffer): FilaPlanilla[] {
+    return leerHoja(archivo).filas;
+}
+
+function filasDeLaHoja(hoja: XLSX.WorkSheet): FilaPlanilla[] {
     const ref = hoja["!ref"];
     if (!ref) return [];
 

@@ -148,8 +148,8 @@ export function InicioSinTorneos({ nombre, jugadores, usaRanking }: Props) {
           <Tarjeta className="flex flex-col gap-[9px] bg-fondo p-[18px]">
             <h2 className="text-sm font-semibold">¿Ya tenés tus jugadores en un Excel?</h2>
             <p className="text-sm leading-normal text-gris-500">
-              Subí una planilla por categoría y cargamos los jugadores al padrón, con sus puntos. Antes, cargá tus categorías y
-              torneos del calendario en Tu circuito.
+              Subí una planilla por categoría y cargamos los jugadores al padrón, con sus puntos. Las categorías y los torneos
+              del calendario que falten se crean solos.
             </p>
             <Link to="/padron/importar" className="mt-0.5 self-start text-sm font-medium hover:text-gris-500">
               Importar padrón →

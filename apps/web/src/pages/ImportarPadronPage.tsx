@@ -2,6 +2,7 @@ import type { DecisionImportacion, Importacion, JugadorPadron, ResultadoConfirma
 import { useMemo, useState } from 'react';
 import { Link, Navigate, useSearchParams } from 'react-router-dom';
 import { Boton } from '../components/Boton';
+import { Campo } from '../components/Campo';
 import { EncabezadoOrganizador } from '../components/EncabezadoOrganizador';
 import { Esqueleto } from '../components/Esqueleto';
 import { Numero } from '../components/Numero';
@@ -20,6 +21,7 @@ import {
 import { EstadoProcesando } from '../features/importacion/EstadoProcesando';
 import { COLUMNAS, FilaImportacion } from '../features/importacion/FilaImportacion';
 import { FormularioSubida } from '../features/importacion/FormularioSubida';
+import { LoQueSeCrea } from '../features/importacion/LoQueSeCrea';
 import { PieConfirmar } from '../features/importacion/PieConfirmar';
 import { ResumenImportacion } from '../features/importacion/ResumenImportacion';
 import {
@@ -85,7 +87,7 @@ function ImportarPadron({ sesion }: { sesion: Sesion }) {
 
   const sesionInvalida = useSesionInvalida(circuito.error ?? padron.error ?? importacion.error ?? subir.error);
 
-  function subirPlanilla(archivo: File, categoria: string) {
+  function subirPlanilla(archivo: File, categoria: string | null) {
     setArchivoSubiendo(archivo.name);
     subir.mutate({ archivo, categoria }, { onSuccess: (nueva) => setParametros({ id: String(nueva.id) }) });
   }
@@ -110,8 +112,6 @@ function ImportarPadron({ sesion }: { sesion: Sesion }) {
       <main className="px-7 pb-7">
         <FormularioSubida
           categorias={circuito.data.categorias}
-          torneosDelCalendario={circuito.data.etapas.length}
-          usaRanking={circuito.data.usaRanking}
           enviando={subir.isPending}
           error={errorDeSubida(subir.error)}
           alSubir={subirPlanilla}
@@ -198,6 +198,9 @@ function Revision({ slug, importacion, padron, alConfirmar, alDescartar }: Props
 
   const problemas = useMemo(() => problemasPorFila(importacion), [importacion]);
   const [decisiones, setDecisiones] = useState<Decisiones>(() => decisionesIniciales(importacion));
+  // Si la planilla no decía la categoría y no se eligió al subir, se elige acá (decisión 011).
+  const pideCategoria = importacion.categoria === null;
+  const [categoria, setCategoria] = useState('');
 
   // Primero lo que hay que mirar, abierto. Después el resto, cerrado.
   const [paraRevisar, resto] = useMemo(() => {
@@ -245,6 +248,24 @@ function Revision({ slug, importacion, padron, alConfirmar, alDescartar }: Props
           jugadores={importacion.propuesta.length}
         />
 
+        {pideCategoria && (
+          <div className="flex max-w-[420px] flex-col gap-1.5">
+            <Campo
+              id="importacion-categoria-revision"
+              rotulo="¿De qué categoría es esta planilla?"
+              autoComplete="off"
+              value={categoria}
+              onChange={(e) => {
+                confirmar.reset();
+                setCategoria(e.target.value);
+              }}
+            />
+            <p className="text-sm text-gris-500">No la encontramos en la planilla ni en el nombre del archivo.</p>
+          </div>
+        )}
+
+        <LoQueSeCrea crea={{ ...importacion.crea, categoria: pideCategoria ? categoria.trim() || null : importacion.crea.categoria }} />
+
         <div className="overflow-x-auto rounded-tarjeta border border-linea">
           <div className={`${COLUMNAS} h-[42px] border-b border-linea bg-fondo-tabla px-[18px] font-mono text-[11px] text-gris-500`}>
             <span>como figura en la planilla</span>
@@ -267,9 +288,12 @@ function Revision({ slug, importacion, padron, alConfirmar, alDescartar }: Props
       <PieConfirmar
         aImportar={aImportar}
         enviando={confirmar.isPending || descartar.isPending}
+        falta={pideCategoria && !categoria.trim()}
         error={errorDeConfirmacion(confirmar.error)}
         alCancelar={() => descartar.mutate(undefined, { onSuccess: alDescartar })}
-        alConfirmar={() => confirmar.mutate({ decisiones: lista }, { onSuccess: alConfirmar })}
+        alConfirmar={() =>
+          confirmar.mutate({ decisiones: lista, ...(pideCategoria && { categoria: categoria.trim() }) }, { onSuccess: alConfirmar })
+        }
       />
     </>
   );

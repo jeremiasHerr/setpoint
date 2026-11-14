@@ -17,7 +17,7 @@ export function useImportacion(slug: string, id: number | null) {
 export function useSubirPlanilla(slug: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ archivo, categoria }: { archivo: File; categoria: string }) => subirPlanilla(slug, archivo, categoria),
+    mutationFn: ({ archivo, categoria }: { archivo: File; categoria: string | null }) => subirPlanilla(slug, archivo, categoria),
     onSuccess: (importacion) => queryClient.setQueryData(clave(slug, importacion.id), importacion),
   });
 }

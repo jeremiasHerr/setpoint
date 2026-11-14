@@ -25,10 +25,6 @@ function fila(numero: number, coincideCon: number | null, confianza: FilaExtraid
 
 const PROPUESTA = [fila(4, 1, 'alta'), fila(5, 2, 'media'), fila(6, null, null), fila(7, 3, 'alta')];
 const JUGADORES = new Set([1, 2, 3, 9]);
-const ETAPAS = new Map([
-  ['Primavera', 11],
-  ['Verano', 12],
-]);
 
 function camposDelError(accion: () => unknown) {
   try {
@@ -65,28 +61,28 @@ describe('planificarConfirmacion', () => {
   ];
 
   it('arma las altas, las vinculaciones y un movimiento por casillero con puntos', () => {
-    const plan = planificarConfirmacion(PROPUESTA, decisiones, JUGADORES, ETAPAS);
+    const plan = planificarConfirmacion(PROPUESTA, decisiones, JUGADORES);
 
     expect(plan.excluidos).toBe(1);
     expect(plan.crear).toEqual([
       {
         nombre: 'Nombre',
         apellido: 'Apellido 6',
-        movimientos: [{ etapaId: 11, puntos: 10, fecha: new Date('2025-01-01'), detalle: 'Planilla: Primavera 2025' }],
+        movimientos: [{ etapa: 'Primavera', puntos: 10, fecha: new Date('2025-01-01'), detalle: 'Planilla: Primavera 2025' }],
       },
     ]);
     expect(plan.vincular.map((v) => v.jugadorId)).toEqual([1, 9]);
   });
 
   it('exige una decisión por cada fila', () => {
-    expect(camposDelError(() => planificarConfirmacion(PROPUESTA, decisiones.slice(0, 3), JUGADORES, ETAPAS))).toEqual({
+    expect(camposDelError(() => planificarConfirmacion(PROPUESTA, decisiones.slice(0, 3), JUGADORES))).toEqual({
       'fila.7': 'Falta decidir qué hacer con esta fila',
     });
   });
 
   it('rechaza filas que no están en la importación y decisiones repetidas', () => {
     const campos = camposDelError(() =>
-      planificarConfirmacion(PROPUESTA, [...decisiones, decisiones[3], { fila: 40, accion: 'crear' }], JUGADORES, ETAPAS),
+      planificarConfirmacion(PROPUESTA, [...decisiones, decisiones[3], { fila: 40, accion: 'crear' }], JUGADORES),
     );
     expect(campos).toEqual({
       'fila.7': 'Hay más de una decisión para esta fila',
@@ -105,7 +101,6 @@ describe('planificarConfirmacion', () => {
           { fila: 7, accion: 'excluir' },
         ],
         JUGADORES,
-        ETAPAS,
       ),
     );
     expect(campos).toEqual({

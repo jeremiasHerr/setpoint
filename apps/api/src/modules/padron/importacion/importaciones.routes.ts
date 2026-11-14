@@ -41,11 +41,9 @@ const recibirArchivo: RequestHandler = (req, res, next) => {
   });
 };
 
-// La categoría viaja por nombre, igual que en el alta de jugadores.
-const subirSchema = z.object(
-  { categoria: z.string({ error: 'Elegí la categoría' }).trim().min(1, 'Elegí la categoría').max(40) },
-  { error: 'Elegí la categoría' },
-);
+// La categoría viaja por nombre, igual que en el alta de jugadores. Vacía, se toma la que diga la
+// planilla (decisión 011).
+const subirSchema = z.object({ categoria: z.string().trim().max(40).optional() });
 
 // Se monta en /api/organizaciones/:slug/importaciones: mergeParams trae el slug del padre.
 export const importacionesRouter = Router({ mergeParams: true });
@@ -70,7 +68,7 @@ importacionesRouter.post(
       slug,
       res.locals.usuarioId,
       { nombre, contenido: archivo.buffer },
-      req.body.categoria,
+      req.body.categoria || null,
     );
     res.status(201).json(importacion);
   },
