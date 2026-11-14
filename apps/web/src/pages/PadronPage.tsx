@@ -1,5 +1,5 @@
 import type { DatosCrearJugador, JugadorPadron } from '@setpoint/shared';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { Boton } from '../components/Boton';
 import { EncabezadoOrganizador } from '../components/EncabezadoOrganizador';
@@ -54,6 +54,13 @@ function Padron({ sesion }: { sesion: Sesion }) {
   const [editando, setEditando] = useState<JugadorPadron | null>(null);
   // Cambia después de cada alta para vaciar el formulario.
   const [altas, setAltas] = useState(0);
+  // Cada clic en «Editar jugador» o «Agregar jugador» lleva el foco a Nombre, ya con el panel
+  // rearmado. En pantallas angostas el panel está debajo de la tabla, y el foco hace bajar la
+  // página hasta él. Guardar no lo pide: no mueve la pantalla.
+  const [pedidosDeFoco, setPedidosDeFoco] = useState(0);
+  useEffect(() => {
+    if (pedidosDeFoco > 0) document.getElementById('jugador-nombre')?.focus();
+  }, [pedidosDeFoco]);
 
   const sesionInvalida = useSesionInvalida(
     circuito.error ?? padron.error ?? crear.error ?? editar.error ?? desvincular.error,
@@ -67,9 +74,14 @@ function Padron({ sesion }: { sesion: Sesion }) {
     setEditando(jugador);
   }
 
+  function editarJugador(jugador: JugadorPadron) {
+    elegir(jugador);
+    setPedidosDeFoco((n) => n + 1);
+  }
+
   function agregarJugador() {
     elegir(null);
-    document.getElementById('jugador-nombre')?.focus();
+    setPedidosDeFoco((n) => n + 1);
   }
 
   function guardar(datos: DatosCrearJugador) {
@@ -161,10 +173,12 @@ function Padron({ sesion }: { sesion: Sesion }) {
             anterior={visita.data?.anterior}
             slug={slug}
             organizacion={circuito.data.nombre}
-            alEditar={elegir}
+            alEditar={editarJugador}
           />
 
-          <aside className="flex flex-col gap-4">
+          {/* Fijo al bajar, como en Nuevo torneo: el jugador que se edita puede estar al final de la
+              tabla. Si el panel no entra en la pantalla, baja por su cuenta. */}
+          <aside className="flex flex-col gap-4 lg:sticky lg:top-4 lg:max-h-[calc(100dvh-32px)] lg:overflow-y-auto">
             <PanelJugador
               key={editando ? `jugador-${editando.id}` : `alta-${altas}`}
               categorias={circuito.data.categorias}
