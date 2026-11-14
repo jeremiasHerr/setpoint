@@ -110,6 +110,8 @@ function ImportarPadron({ sesion }: { sesion: Sesion }) {
       <main className="px-7 pb-7">
         <FormularioSubida
           categorias={circuito.data.categorias}
+          torneosDelCalendario={circuito.data.etapas.length}
+          usaRanking={circuito.data.usaRanking}
           enviando={subir.isPending}
           error={errorDeSubida(subir.error)}
           alSubir={subirPlanilla}
