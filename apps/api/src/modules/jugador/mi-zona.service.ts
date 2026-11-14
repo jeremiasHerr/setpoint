@@ -5,6 +5,9 @@ import { prisma } from '../../lib/prisma';
 import { inscriptosYPartidos, INCLUIR_ZONAS } from '../competencia/posiciones.service';
 import { zonasConPosiciones } from '../competencia/posiciones';
 
+// La web, para el link a los cuadros: como los links de los emails.
+const WEB_URL = process.env.WEB_URL ?? 'http://localhost:5173';
+
 // Mientras el torneo está en estos estados, la zona del jugador se muestra. En eliminatorias
 // ya está cerrada, pero sigue siendo la referencia de cómo llegó a cada cuadro.
 const CON_ZONA_EN_JUEGO = [EstadoTorneo.ZONAS_GENERADAS, EstadoTorneo.GRUPOS_EN_CURSO, EstadoTorneo.ELIMINATORIAS];
@@ -67,6 +70,8 @@ export async function miZona(slug: string, usuarioId: number): Promise<Respuesta
       clasificanPorGrupo: torneo.clasificanPorGrupo,
       tieneComplementaria: torneo.tieneComplementaria,
       vence: limites.length > 0 ? new Date(Math.max(...limites)).toISOString() : null,
+      cerrada: torneo.gruposCerrados,
+      enlaceCuadros: `${WEB_URL}/c/${slug}/torneos/${torneo.id}/cuadros`,
       filas: zona.filas,
       // En la fase de grupos los dos jugadores están siempre: los escribe el sorteo.
       partidos: partidos.map((p) => ({
