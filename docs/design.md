@@ -141,6 +141,8 @@ El mono es lo que da el acabado de producto y lo que hace que las tablas queden 
 
 Nunca hay flechas pegadas al texto del botón. El texto dice la acción completa: "Anotar y avisarle a Pablo", no "Continuar".
 
+**Estados en la web.** Con el mouse, el lima se oscurece un poco, el negro pasa a `--gris-700` y el secundario toma `--fondo`. Al apretar, el botón se achica apenas. Con el teclado, un anillo `--negro` de 2px separado 2px del borde: es un outline, no una sombra. Deshabilitado, opacidad 40% y sin reacción.
+
 ### Chips
 
 Píldora de radio 999, alto 34–40, borde 1px. Activo: fondo `--negro`, texto blanco. Se usan para categorías, filtros, superficies y modos.
