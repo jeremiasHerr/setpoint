@@ -2,6 +2,7 @@ import type { TorneoPublico } from '@setpoint/shared';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { EncabezadoPublico } from '../components/EncabezadoPublico';
+import { LinkDeVuelta } from '../components/LinkDeVuelta';
 import { Numero } from '../components/Numero';
 import { EncontrarPerfil } from '../features/inscripcion/EncontrarPerfil';
 import { EstadoInscripcion } from '../features/inscripcion/EstadoInscripcion';
@@ -63,7 +64,11 @@ function Inscripcion({ torneo }: { torneo: TorneoPublico }) {
         <EncabezadoPublico organizacion={torneo.organizacion.nombre} />
         <Numero className="rounded-full border border-linea px-2.5 py-1.5 text-[14px] font-medium text-gris-500">{torneo.categoria}</Numero>
       </div>
-      <h1 className="text-2xl leading-[1.15] font-semibold tracking-[-0.03em]">{torneo.nombre}</h1>
+      {/* Las páginas públicas no tienen menú: esta vuelve a la del torneo, como la página en vivo (decisión 084). */}
+      <div className="flex flex-col gap-1.5">
+        <LinkDeVuelta ruta={`/c/${torneo.organizacion.slug}/torneos/${torneo.id}`}>El torneo</LinkDeVuelta>
+        <h1 className="text-2xl leading-[1.15] font-semibold tracking-[-0.03em]">{torneo.nombre}</h1>
+      </div>
 
       {torneo.inscripcion === 'cerrada' ? (
         <p className="rounded-[12px] bg-fondo px-4 py-3.5 text-[15px] leading-[1.42] text-gris-700">
