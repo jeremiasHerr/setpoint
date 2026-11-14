@@ -1,6 +1,6 @@
 import type { SistemaDeJuego } from '@setpoint/shared';
 import { Fragment, type InputHTMLAttributes } from 'react';
-import { MensajeError } from '../torneos/MensajeError';
+import { MensajeError } from '../../components/Aviso';
 import { columnasDeLaGrilla, llevaTieBreak, type Problemas, type SetEscrito } from './resultado';
 
 type Props = {

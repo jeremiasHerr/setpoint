@@ -1,4 +1,5 @@
 import type { DatosResultado, PartidoConResultado, SimulacionDeResultado } from '@setpoint/shared';
+import { MensajeError } from '../../components/Aviso';
 import type { ReactNode } from 'react';
 import { Numero } from '../../components/Numero';
 import {
@@ -53,13 +54,13 @@ export function AlGuardar({ partido, datos, simulacion, siguienteYaJugado }: Pro
     contenido = ayuda(deZona ? 'Completá el resultado para ver cómo queda la zona.' : 'Completá el resultado para ver quién avanza.');
   } else if (!deZona) {
     contenido = siguienteYaJugado ? (
-      <p className="text-sm text-rojo-texto">{SIGUIENTE_YA_JUGADO}</p>
+      <MensajeError>{SIGUIENTE_YA_JUGADO}</MensajeError>
     ) : (
       <Lineas lineas={vistaPreviaDelCuadro(datos, partido)} />
     );
   } else if (simulacion.error && !simulacion.desactualizada) {
     contenido = (
-      <p className="text-sm text-rojo-texto">{textoDelError(simulacion.error, 'No pudimos calcular cómo queda la zona. Probá de nuevo.')}</p>
+      <MensajeError>{textoDelError(simulacion.error, 'No pudimos calcular cómo queda la zona. Probá de nuevo.')}</MensajeError>
     );
   } else if (!simulacion.data) {
     contenido = ayuda('Calculando cómo queda la zona…');
@@ -68,7 +69,7 @@ export function AlGuardar({ partido, datos, simulacion, siguienteYaJugado }: Pro
     contenido = (
       <div aria-busy={simulacion.desactualizada} className={`flex flex-col gap-2.5 ${simulacion.desactualizada ? 'opacity-50' : ''}`}>
         <Lineas lineas={vistaPreviaDeLaZona(simulacion.data, datos, partido)} />
-        {simulacion.data.cambiaLosCuadros && <p className="text-sm text-rojo-texto">{CAMBIA_LOS_CUADROS}</p>}
+        {simulacion.data.cambiaLosCuadros && <MensajeError>{CAMBIA_LOS_CUADROS}</MensajeError>}
       </div>
     );
   }

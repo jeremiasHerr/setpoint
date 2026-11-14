@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Aviso as AvisoConTitulo } from '../../components/Aviso';
 import { CampoCodigo } from '../../components/CampoCodigo';
 import { Numero } from '../../components/Numero';
 import { ErrorApi } from '../../lib/api';
@@ -148,10 +149,9 @@ export function VerificarEmail({ onVerificado, desdeLink = false }: Props) {
       <div className="flex flex-col gap-3">
         <CampoCodigo valor={codigo} onChange={setCodigo} onCompleto={confirmar} />
         {error === 'CODIGO_INCORRECTO' ? (
-          <p role="alert" className="rounded-[12px] border border-negro px-3.5 py-3 text-[15px] leading-[1.42]">
-            <strong className="font-semibold">Ese código no es. </strong>
+          <AvisoConTitulo titulo="Ese código no es.">
             {(verificar.error as ErrorApi).campos.codigo}. Revisá que sea el último que te mandamos.
-          </p>
+          </AvisoConTitulo>
         ) : (
           <Ayuda>
             Vence en <Numero>10</Numero> minutos.

@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react';
+import { Aviso } from '../Aviso';
 import { Link } from 'react-router-dom';
 import { Boton } from '../Boton';
 import { Campo } from '../Campo';
@@ -61,9 +62,9 @@ export function FormularioRecuperarContrasena({ alEnviar, enviando = false, envi
 
         <div className="flex flex-col gap-[11px]">
           {error && (
-            <p role="alert" className="rounded-control border border-rojo-linea bg-rojo-fondo px-3.5 py-2.5 text-sm text-rojo-texto">
+            <Aviso>
               {error}
-            </p>
+            </Aviso>
           )}
           <Boton type="submit" variante="organizador" grande className="w-full" disabled={enviando}>
             {enviando ? 'Mandando…' : 'Mandarme el link'}

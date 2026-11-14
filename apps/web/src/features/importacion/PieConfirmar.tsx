@@ -1,5 +1,5 @@
 import { Boton } from '../../components/Boton';
-import { MensajeError } from '../torneos/MensajeError';
+import { MensajeError } from '../../components/Aviso';
 
 type Props = {
   aImportar: number;

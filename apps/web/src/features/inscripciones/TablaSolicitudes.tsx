@@ -1,4 +1,5 @@
 import type { SolicitudDelTorneo } from '@setpoint/shared';
+import { MensajeError } from '../../components/Aviso';
 import { useState } from 'react';
 import { Confirmacion } from '../../components/Confirmacion';
 import { Numero } from '../../components/Numero';
@@ -43,7 +44,7 @@ export function TablaSolicitudes({ slug, torneoId, solicitudes, abierta }: Props
 
   return (
     <div className="flex flex-col gap-3">
-      {aprobar.error && <p className="text-sm text-rojo-texto">{textoDeError(aprobar.error)}</p>}
+      {aprobar.error && <MensajeError>{textoDeError(aprobar.error)}</MensajeError>}
       <Tarjeta className="flex flex-col overflow-hidden">
         <div className={`grid gap-x-1 border-b border-linea bg-fondo-tabla px-[18px] py-[11px] ${COLUMNAS}`}>
           <span className="text-xs text-gris-500">jugador</span>

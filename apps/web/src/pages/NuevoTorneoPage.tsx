@@ -6,6 +6,7 @@ import {
   type Convocatoria,
   type DatosConvocatoria,
 } from '@setpoint/shared';
+import { Aviso } from '../components/Aviso';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
@@ -329,9 +330,9 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
 
           <div className="flex flex-col gap-2.5">
             {errorGeneral && (
-              <p role="alert" className="rounded-control border border-rojo-linea bg-rojo-fondo px-3.5 py-2.5 text-sm text-rojo-texto">
+              <Aviso>
                 {errorGeneral}
-              </p>
+              </Aviso>
             )}
             {enBorrador && (
               <Boton variante="organizador" grande className="w-full" disabled={ocupado} onClick={() => void publicar()}>
