@@ -33,7 +33,7 @@ const preguntas = [
   {
     pregunta: '¿Mis jugadores tienen que instalar algo?',
     respuesta:
-      'Para mirar el ranking, las zonas o los cuadros, no: es un link. Para anotar fechas y recibir avisos está la app para Android, que entra con el email, sin contraseña.',
+      'Para mirar el ranking, las zonas o los cuadros, no: es un link. Para anotar fechas y recibir avisos va a estar la app para Android, que hoy está en prueba y entra con el email, sin contraseña.',
   },
   {
     pregunta: 'Ya tengo un ranking en Excel. ¿Lo pierdo?',
@@ -115,7 +115,7 @@ function Portada() {
           Crear mi circuito
         </Link>
         <span className="text-sm text-gris-400">
-          Web para la organización · App para los jugadores · Link público para todos
+          Web para la organización · App Android, en prueba · Link público para todos
         </span>
       </div>
     </section>
@@ -344,7 +344,7 @@ function TresPantallas() {
             </div>
           </Pantalla>
           <Pantalla
-            superficie="app android · los jugadores"
+            superficie="app android, en prueba · los jugadores"
             titulo="Cuándo juega, contra quién y dónde"
             texto="Anota la fecha que arregló, el rival la confirma con un toque y le llega un aviso antes del partido."
           >
