@@ -1,11 +1,17 @@
-import type { DecisionImportacion, FilaPropuesta, Importacion } from '@setpoint/shared';
+import type { DecisionImportacion, FilaPropuesta, HojaImportada, Importacion } from '@setpoint/shared';
 
-export type Decisiones = Record<number, DecisionImportacion>;
+// Por hoja y fila: cada hoja del lote tiene sus filas (decisión 012).
+export type Decisiones = Record<string, DecisionImportacion>;
 
-// Problemas de la auditoría agrupados por fila. Los globales (fila null) no van a ninguna.
-export function problemasPorFila(importacion: Importacion) {
+export const claveDe = (hoja: number, fila: number) => `${hoja}:${fila}`;
+
+// Las hojas que se pudieron leer: las que tienen propuesta y entran al confirmar.
+export const hojasLeidas = (importacion: Importacion) => importacion.hojas.filter((h) => h.estado !== 'ERROR');
+
+// Problemas de la auditoría de una hoja, agrupados por fila. Los globales (fila null) no van a ninguna.
+export function problemasPorFila(hoja: HojaImportada) {
   const porFila = new Map<number, string[]>();
-  for (const { fila, detalle } of importacion.problemas) {
+  for (const { fila, detalle } of hoja.problemas) {
     if (fila === null) continue;
     porFila.set(fila, [...(porFila.get(fila) ?? []), detalle]);
   }
@@ -20,14 +26,17 @@ export function necesitaRevision(fila: FilaPropuesta, problemas: string[] | unde
 // Lo que propone la pantalla antes de que la organización toque nada. Una fila con
 // problemas arranca excluida: no se carga un número que no está en la planilla sin que alguien lo mire.
 export function decisionesIniciales(importacion: Importacion): Decisiones {
-  const conProblemas = problemasPorFila(importacion);
   const decisiones: Decisiones = {};
-  for (const f of importacion.propuesta) {
-    decisiones[f.fila] = conProblemas.has(f.fila)
-      ? { fila: f.fila, accion: 'excluir' }
-      : f.coincideCon !== null
-        ? { fila: f.fila, accion: 'vincular', jugadorId: f.coincideCon }
-        : { fila: f.fila, accion: 'crear' };
+  for (const hoja of hojasLeidas(importacion)) {
+    const conProblemas = problemasPorFila(hoja);
+    for (const f of hoja.propuesta) {
+      const base = { hoja: hoja.id, fila: f.fila };
+      decisiones[claveDe(hoja.id, f.fila)] = conProblemas.has(f.fila)
+        ? { ...base, accion: 'excluir' }
+        : f.coincideCon !== null
+          ? { ...base, accion: 'vincular', jugadorId: f.coincideCon }
+          : { ...base, accion: 'crear' };
+    }
   }
   return decisiones;
 }

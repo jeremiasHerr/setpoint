@@ -269,7 +269,7 @@ model Organizacion {
   slug        String  @unique
   descripcion String?
 
-  usaRanking          Boolean              @default(true)
+  usaRanking           Boolean              @default(true)
   ventanaRankingMeses  Int                  @default(12)
   soloMejoresN         Int?
   puntosJugadorNuevo   Int                  @default(0)
@@ -315,10 +315,10 @@ model ContactoOrganizacion {
 
 /// Un circuito puede tener varios administradores (el "Comité Organizador").
 model AdminOrganizacion {
-  id             Int      @id @default(autoincrement())
+  id             Int       @id @default(autoincrement())
   usuarioId      Int
   organizacionId Int
-  creadoEn       DateTime @default(now())
+  creadoEn       DateTime  @default(now())
   // La última vez que abrió el padrón: "Nuevas" son las vinculaciones de después (decisión 083).
   padronVistoEn  DateTime?
 
@@ -489,14 +489,14 @@ model Torneo {
   estado EstadoTorneo @default(BORRADOR)
 
   // --- inscripción ---
-  cupo               Int
-  precio             Decimal         @default(0) @db.Decimal(12, 2)
-  modoInscripcion    ModoInscripcion @default(CERRADA)
-  minutosReservaCupo Int             @default(15)
-  tieneListaEspera   Boolean         @default(true)
+  cupo                    Int
+  precio                  Decimal         @default(0) @db.Decimal(12, 2)
+  modoInscripcion         ModoInscripcion @default(CERRADA)
+  minutosReservaCupo      Int             @default(15)
+  tieneListaEspera        Boolean         @default(true)
   // Cuánto se le guarda el lugar al primero de la lista de espera cuando se libera uno, desde el
   // aviso (decisión 076). Todavía sin campo en Nuevo torneo, como las reprogramaciones (decisión 067).
-  horasReservaListaEspera Int @default(24)
+  horasReservaListaEspera Int             @default(24)
 
   // --- fechas ---
   fechaInicio       DateTime?
@@ -797,10 +797,31 @@ model ImportacionPadron {
   confirmadaEn   DateTime?
   creadoEn       DateTime        @default(now())
 
-  organizacion Organizacion @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
+  organizacion Organizacion      @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
+  hojas        HojaImportacion[]
 
   @@index([organizacionId])
   @@map("importaciones_padron")
+}
+
+/// Una hoja de un archivo de la importación (decisión 012). La importación es el lote: se suben
+/// hasta 10 archivos, cada hoja con datos se procesa por separado y el lote se confirma entero.
+/// Las importaciones de antes guardan su única planilla en ImportacionPadron.resumen, sin hojas.
+model HojaImportacion {
+  id             Int             @id @default(autoincrement())
+  importacionId  Int
+  orden          Int
+  archivoNombre  String
+  hoja           String
+  estado         EstadoProcesoIA @default(PENDIENTE)
+  respuestaCruda Json?
+  // La categoría, las etapas, la propuesta, la auditoría, los tokens y el error de esta hoja.
+  resumen        Json?
+
+  importacion ImportacionPadron @relation(fields: [importacionId], references: [id], onDelete: Cascade)
+
+  @@index([importacionId])
+  @@map("hojas_importacion")
 }
 
 /// F19 — Registro de resultados a partir de mensajes.

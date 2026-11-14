@@ -22,6 +22,14 @@ export function leerHoja(archivo: Buffer): { nombre: string; filas: FilaPlanilla
     return { nombre, filas: filasDeLaHoja(libro.Sheets[nombre]) };
 }
 
+// Todas las hojas con datos, en el orden del libro: cada una se procesa por separado (decisión 012).
+export function leerHojas(archivo: Buffer): { nombre: string; filas: FilaPlanilla[] }[] {
+    const libro = XLSX.read(archivo, {type: "buffer"});
+    return libro.SheetNames
+        .map((nombre) => ({ nombre, filas: filasDeLaHoja(libro.Sheets[nombre]) }))
+        .filter((hoja) => hoja.filas.length > 0);
+}
+
 export function leerPlanilla(archivo: Buffer): FilaPlanilla[] {
     return leerHoja(archivo).filas;
 }

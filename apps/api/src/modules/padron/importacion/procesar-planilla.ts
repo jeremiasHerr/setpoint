@@ -2,7 +2,7 @@
 // reintentar una vez con los problemas como feedback. No toca la base.
 import { auditar, type Auditoria } from './auditar';
 import { extraerConIA, MODELO, type ResultadoExtraccion } from './extraer-con-ia';
-import { leerHoja } from './leer-planilla';
+import { leerHoja, type FilaPlanilla } from './leer-planilla';
 import { armarMensaje, VERSION_PROMPT } from './prompt';
 import type { RespuestaImportacion } from './schema-respuesta';
 
@@ -42,11 +42,18 @@ async function intentar(mensaje: string): Promise<ResultadoExtraccion> {
   }
 }
 
-export async function procesarPlanilla(
-  archivo: Buffer,
+// La primera hoja del archivo. Para el eval y los tests; la API procesa cada hoja con procesarHoja.
+export async function procesarPlanilla(archivo: Buffer, contexto: ContextoImportacion): Promise<ResultadoImportacion> {
+  const { nombre, filas } = leerHoja(archivo);
+  return procesarHoja({ nombre, filas }, contexto);
+}
+
+// Una hoja, con su propia llamada, su auditoría y su reintento: una hoja que falla no frena a las
+// demás (decisión 012).
+export async function procesarHoja(
+  { nombre: hoja, filas }: { nombre: string; filas: FilaPlanilla[] },
   { archivo: nombreArchivo, padron, etapas, categorias, hoy }: ContextoImportacion,
 ): Promise<ResultadoImportacion> {
-  const { nombre: hoja, filas } = leerHoja(archivo);
   const mensaje = armarMensaje({ archivo: nombreArchivo, hoja, filas, padron, etapas, categorias, hoy });
   const idsPadron = padron.map((j) => j.id);
 

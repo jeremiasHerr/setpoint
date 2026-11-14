@@ -3,10 +3,13 @@
 // Cada planilla usa el padrón, las etapas y las categorías de padron.json, salvo que tenga su
 // propio <nombre>.contexto.json (por ejemplo, un circuito recién registrado, sin nada cargado).
 // Si el .esperado.json trae categoria y etapas, también se compara lo detectado (decisión 011).
+// Un libro de varias hojas trae { hojas: [...] }, un esperado por hoja en el orden del libro: cada
+// hoja se procesa por separado, como en la API (decisión 012).
 // Uso: npm run eval:importacion -w apps/api
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { procesarPlanilla } from '../src/modules/padron/importacion/procesar-planilla';
+import { leerHojas } from '../src/modules/padron/importacion/leer-planilla';
+import { procesarHoja } from '../src/modules/padron/importacion/procesar-planilla';
 
 // Precio de Haiku 4.5, en dólares por millón de tokens.
 const PRECIO = { entrada: 1, salida: 5 };
@@ -84,14 +87,18 @@ async function main() {
 
   for (const planilla of planillas) {
     const nombre = planilla.replace(/\.xlsx$/, '');
-    const esperado: Esperado = JSON.parse(readFileSync(join(carpeta, `${nombre}.esperado.json`), 'utf-8'));
+    const leido: Esperado | { hojas: Esperado[] } = JSON.parse(readFileSync(join(carpeta, `${nombre}.esperado.json`), 'utf-8'));
+    const esperados = 'hojas' in leido ? leido.hojas : [leido];
     const propio = join(carpeta, `${nombre}.contexto.json`);
     const contexto: Contexto = existsSync(propio)
       ? JSON.parse(readFileSync(propio, 'utf-8'))
       : { jugadores: padron.jugadores, etapas: padron.etapas, categorias: CATEGORIAS };
+    const hojas = leerHojas(readFileSync(join(carpeta, planilla)));
 
+    for (const [i, esperado] of esperados.entries()) {
+    const hoja = hojas[i] ?? { nombre: '(falta la hoja)', filas: [] };
     const inicio = Date.now();
-    const resultado = await procesarPlanilla(readFileSync(join(carpeta, planilla)), {
+    const resultado = await procesarHoja(hoja, {
       archivo: planilla,
       padron: contexto.jugadores,
       etapas: contexto.etapas,
@@ -109,7 +116,7 @@ async function main() {
     total.salida += resultado.tokens.salida;
     total.segundos += segundos;
 
-    console.log(`\n── ${nombre}`);
+    console.log(`\n── ${nombre}${esperados.length > 1 ? ` · ${hoja.nombre}` : ''}`);
     console.table({
       aciertos: `${c.aciertos} / ${c.total}`,
       intentos: resultado.intentos,
@@ -119,6 +126,7 @@ async function main() {
     if (!resultado.ok) console.log(`  ERROR: ${resultado.error}`);
     for (const d of c.diferencias) console.log(`  ≠ ${d}`);
     for (const p of resultado.auditoria?.porFila ?? []) console.log(`  ⚠ auditoría: ${p.detalle}`);
+    }
   }
 
   const costo = (total.entrada * PRECIO.entrada + total.salida * PRECIO.salida) / 1_000_000;

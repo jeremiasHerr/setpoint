@@ -7,6 +7,10 @@ import { casillerosComoTexto } from './decisiones';
 export const COLUMNAS = 'grid grid-cols-[200px_220px_minmax(0,1fr)_170px] items-center gap-x-4';
 
 type Props = {
+  // La hoja del lote a la que pertenece la fila (decisión 012).
+  hoja: number;
+  // En "Para revisar" se mezclan las filas de todas las hojas: la etiqueta dice de qué categoría es.
+  categoria?: string;
   fila: FilaPropuesta;
   decision: DecisionImportacion;
   problemas?: string[];
@@ -26,7 +30,7 @@ function nombreDe(j: { nombre: string; apellido: string }) {
   return `${j.nombre} ${j.apellido}`;
 }
 
-export function FilaImportacion({ fila, decision, problemas, padron, expandida, alCambiar, alExpandir }: Props) {
+export function FilaImportacion({ hoja, categoria, fila, decision, problemas, padron, expandida, alCambiar, alExpandir }: Props) {
   const vinculado = decision.accion === 'vincular' ? padron.find((j) => j.id === decision.jugadorId) : undefined;
   const sugerido = fila.coincideCon !== null ? padron.find((j) => j.id === fila.coincideCon) : undefined;
   const marcada = problemas !== undefined || (fila.coincideCon !== null && fila.confianza !== 'alta');
@@ -35,7 +39,9 @@ export function FilaImportacion({ fila, decision, problemas, padron, expandida, 
     <div className={COLUMNAS}>
       <div className="flex min-w-0 flex-col">
         <span className="truncate font-mono text-sm text-gris-700">{fila.enLaPlanilla || nombreDe(fila)}</span>
-        <span className="font-mono text-xs text-gris-500">fila {fila.fila}</span>
+        <span className="font-mono text-xs text-gris-500">
+          {categoria ? `${categoria.toLowerCase()} · ` : ''}fila {fila.fila}
+        </span>
       </div>
       <JugadorDestino decision={decision} fila={fila} vinculado={vinculado} marcada={marcada} />
       <Numero className="text-[13px] text-gris-500">{casillerosComoTexto(fila)}</Numero>
@@ -86,20 +92,20 @@ export function FilaImportacion({ fila, decision, problemas, padron, expandida, 
         {sugerido && (
           <Opcion
             elegida={decision.accion === 'vincular' && decision.jugadorId === sugerido.id}
-            onClick={() => alCambiar({ fila: fila.fila, accion: 'vincular', jugadorId: sugerido.id })}
+            onClick={() => alCambiar({ hoja, fila: fila.fila, accion: 'vincular', jugadorId: sugerido.id })}
             titulo={nombreDe(sugerido)}
             detalle={descripcion(sugerido)}
           />
         )}
         <Opcion
           elegida={decision.accion === 'crear'}
-          onClick={() => alCambiar({ fila: fila.fila, accion: 'crear' })}
+          onClick={() => alCambiar({ hoja, fila: fila.fila, accion: 'crear' })}
           titulo={sugerido ? 'Es otro, darlo de alta' : 'Darlo de alta'}
           detalle={`como ${nombreDe(fila)}`}
         />
         <Opcion
           elegida={decision.accion === 'excluir'}
-          onClick={() => alCambiar({ fila: fila.fila, accion: 'excluir' })}
+          onClick={() => alCambiar({ hoja, fila: fila.fila, accion: 'excluir' })}
           titulo="No importarlo"
           detalle="la fila queda afuera"
         />
@@ -113,7 +119,7 @@ export function FilaImportacion({ fila, decision, problemas, padron, expandida, 
           value={otroElegido ?? ''}
           onChange={(e) => {
             const jugadorId = Number(e.target.value);
-            if (jugadorId) alCambiar({ fila: fila.fila, accion: 'vincular', jugadorId });
+            if (jugadorId) alCambiar({ hoja, fila: fila.fila, accion: 'vincular', jugadorId });
           }}
         >
           <option value="">Elegí un jugador</option>

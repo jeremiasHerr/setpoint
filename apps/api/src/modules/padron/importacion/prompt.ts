@@ -1,7 +1,8 @@
 import type { FilaPlanilla } from './leer-planilla';
 
 // v2: detecta la categoría y los torneos del calendario de la planilla (decisión 011).
-export const VERSION_PROMPT = 'importacion-v2';
+// v2.1: el nombre de la hoja es la categoría, aunque no diga "Ranking" (libros de varias hojas, decisión 012).
+export const VERSION_PROMPT = 'importacion-v2.1';
 
 export const INSTRUCCIONES = `Extraés rankings de tenis amateur desde planillas.
 
@@ -27,6 +28,7 @@ Etapas:
 
 Categoría:
 - En "categoria" poné la categoría de los jugadores si la planilla la dice: en el nombre de la hoja, en un título o en el nombre del archivo ("Ranking Tercera 2026.xlsx" es "Tercera").
+- Un libro con varias hojas suele tener una hoja por categoría: si la hoja se llama "Segunda", "Tercera" o "Damas", esa es la categoría, aunque no diga "Ranking". Los nombres genéricos ("Hoja1", "Sheet1", "Ranking") no son una categoría.
 - Si es una de las categorías del circuito, usá ese nombre exacto. Si no la dice en ningún lado, null: no la adivines.
 
 Ejemplo:
