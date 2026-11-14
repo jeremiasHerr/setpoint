@@ -38,6 +38,20 @@ export function auditar(
     });
   }
 
+  // Las etapas son texto libre en el schema (decisión 011): que cada casillero use una de la lista
+  // se controla acá. Una etapa fuera de la lista es un error de toda la respuesta, y se reintenta.
+  const etapas = new Set(respuesta.etapas);
+  if (etapas.size < respuesta.etapas.length) {
+    globales.push({ fila: null, detalle: 'La lista de etapas tiene nombres repetidos' });
+  }
+  const desconocidas = new Set(jugadores.flatMap((j) => j.casilleros.map((c) => c.etapa)).filter((e) => !etapas.has(e)));
+  if (desconocidas.size > 0) {
+    globales.push({
+      fila: null,
+      detalle: `Los casilleros usan etapas que no están en la lista de etapas: ${[...desconocidas].join(', ')}`,
+    });
+  }
+
   const filaPorNumero = new Map(filas.map((f) => [f.fila, f]));
   const padron = new Set(idsPadron);
   const vistas = new Set<number>();
@@ -60,6 +74,12 @@ export function auditar(
 
     const numeros = numerosDeFila(fila.celdas);
     const tieneVacias = fila.celdas.some((c) => c === null);
+
+    // Una celda vacía también lleva su casillero: cada jugador tiene uno por etapa.
+    const suyas = new Set(jugador.casilleros.map((c) => c.etapa));
+    for (const etapa of etapas) {
+      if (!suyas.has(etapa)) problema(`no tiene casillero de ${etapa}`);
+    }
 
     for (const { etapa, anio, puntos } of jugador.casilleros) {
       const estaEnLaFila = numeros.includes(puntos) || (puntos === 0 && tieneVacias);

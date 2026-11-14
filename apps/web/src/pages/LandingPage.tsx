@@ -38,7 +38,7 @@ const preguntas = [
   {
     pregunta: 'Ya tengo un ranking en Excel. ¿Lo pierdo?',
     respuesta:
-      'No. Cargás tus categorías y tus torneos del calendario, y subís una planilla por categoría: entran los jugadores con sus puntos. Lo que no cierra, lo revisás antes de guardar.',
+      'No. Subís una planilla por categoría y entran los jugadores con sus puntos. Las categorías y los torneos del calendario que todavía no tenés se crean solos. Lo que no cierra, lo revisás antes de guardar.',
   },
   {
     pregunta: '¿Sirve si mi circuito no lleva ranking?',
@@ -404,7 +404,7 @@ function Funciones() {
         <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-4">
           <Funcion
             titulo="Traés tu planilla"
-            texto="Jugadores y puntos entran solos, una planilla por categoría. Revisás solo lo dudoso."
+            texto="Jugadores, puntos, categorías y torneos del calendario entran solos. Revisás solo lo dudoso."
           >
             <div className="flex flex-col gap-2 rounded-xl border border-linea bg-white p-3.5 text-sm">
               <Numero className="text-xs text-gris-500">ranking-tercera-2026.xlsx</Numero>

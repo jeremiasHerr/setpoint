@@ -24,7 +24,8 @@ export function fechaDelCasillero(anio: number) {
   return new Date(Date.UTC(anio, 0, 1));
 }
 
-export type MovimientoAImportar = { etapaId: number; puntos: number; fecha: Date; detalle: string };
+// Por nombre de etapa: las que la planilla trae nuevas recién tienen id al confirmar (decisión 011).
+export type MovimientoAImportar = { etapa: string; puntos: number; fecha: Date; detalle: string };
 
 export type PlanConfirmacion = {
   crear: { nombre: string; apellido: string; movimientos: MovimientoAImportar[] }[];
@@ -32,15 +33,11 @@ export type PlanConfirmacion = {
   excluidos: number;
 };
 
-function movimientosDe(fila: FilaExtraida, etapaIds: Map<string, number>): MovimientoAImportar[] {
+function movimientosDe(fila: FilaExtraida): MovimientoAImportar[] {
   // Un casillero en 0 no crea movimiento: un jugador sin puntos en una etapa no tiene casillero.
   return fila.casilleros
     .filter((c) => c.puntos > 0)
-    .map((c) => {
-      const etapaId = etapaIds.get(c.etapa);
-      if (etapaId === undefined) throw new ErrorHttp(409, 'ETAPA_NO_ENCONTRADA');
-      return { etapaId, puntos: c.puntos, fecha: fechaDelCasillero(c.anio), detalle: `Planilla: ${c.etapa} ${c.anio}` };
-    });
+    .map((c) => ({ etapa: c.etapa, puntos: c.puntos, fecha: fechaDelCasillero(c.anio), detalle: `Planilla: ${c.etapa} ${c.anio}` }));
 }
 
 // Valida que haya exactamente una decisión por fila de la propuesta y que cada vinculación
@@ -49,7 +46,6 @@ export function planificarConfirmacion(
   propuesta: FilaExtraida[],
   decisiones: DecisionImportacion[],
   idsJugadores: Set<number>,
-  etapaIds: Map<string, number>,
 ): PlanConfirmacion {
   const campos: Record<string, string> = {};
   const porFila = new Map<number, DecisionImportacion>();
@@ -80,9 +76,9 @@ export function planificarConfirmacion(
     const d = porFila.get(fila.fila)!;
     if (d.accion === 'excluir') plan.excluidos++;
     else if (d.accion === 'crear') {
-      plan.crear.push({ nombre: fila.nombre, apellido: fila.apellido, movimientos: movimientosDe(fila, etapaIds) });
+      plan.crear.push({ nombre: fila.nombre, apellido: fila.apellido, movimientos: movimientosDe(fila) });
     } else {
-      plan.vincular.push({ jugadorId: d.jugadorId!, movimientos: movimientosDe(fila, etapaIds) });
+      plan.vincular.push({ jugadorId: d.jugadorId!, movimientos: movimientosDe(fila) });
     }
   }
   return plan;
@@ -91,7 +87,7 @@ export function planificarConfirmacion(
 // Idempotencia: confirmar dos veces la misma planilla no duplica casilleros.
 // Un movimiento existente del jugador para la misma etapa, año y puntos ya es este.
 export function yaExiste(
-  movimiento: MovimientoAImportar,
+  movimiento: { etapaId: number; puntos: number; fecha: Date },
   existentes: { etapaId: number | null; puntos: number; fecha: Date }[],
 ) {
   const anio = movimiento.fecha.getUTCFullYear();

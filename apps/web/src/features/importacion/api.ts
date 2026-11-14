@@ -4,9 +4,10 @@ import { pedir } from '../../lib/api';
 const base = (slug: string) => `/api/organizaciones/${slug}/importaciones`;
 
 // Tarda ~20 s: la API lee la planilla con IA antes de responder.
-export function subirPlanilla(slug: string, archivo: File, categoria: string) {
+// Sin categoría, la API toma la que diga la planilla (decisión 011).
+export function subirPlanilla(slug: string, archivo: File, categoria: string | null) {
   const datos = new FormData();
-  datos.append('categoria', categoria);
+  if (categoria) datos.append('categoria', categoria);
   datos.append('archivo', archivo);
   return pedir<Importacion>('POST', base(slug), datos);
 }

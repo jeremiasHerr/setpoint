@@ -2,14 +2,22 @@
 // reintentar una vez con los problemas como feedback. No toca la base.
 import { auditar, type Auditoria } from './auditar';
 import { extraerConIA, MODELO, type ResultadoExtraccion } from './extraer-con-ia';
-import { leerPlanilla } from './leer-planilla';
+import { leerHoja } from './leer-planilla';
 import { armarMensaje, VERSION_PROMPT } from './prompt';
 import type { RespuestaImportacion } from './schema-respuesta';
 
 type JugadorPadron = { id: number; nombre: string; apellido: string };
 type Tokens = { entrada: number; salida: number };
 
-export type ContextoImportacion = { padron: JugadorPadron[]; etapas: string[]; hoy: Date };
+// Lo que ya tiene el circuito, para que la IA use esos nombres: las etapas y las categorías activas.
+// Pueden estar vacías: la IA las detecta en la planilla (decisión 011).
+export type ContextoImportacion = {
+  archivo: string;
+  padron: JugadorPadron[];
+  etapas: string[];
+  categorias: string[];
+  hoy: Date;
+};
 
 type Comun = {
   crudos: string[];
@@ -26,9 +34,9 @@ export type ResultadoImportacion =
 const MAXIMO_INTENTOS = 2;
 
 // Un error de red o de la API no rompe la importación: es un intento fallido más.
-async function intentar(mensaje: string, etapas: string[]): Promise<ResultadoExtraccion> {
+async function intentar(mensaje: string): Promise<ResultadoExtraccion> {
   try {
-    return await extraerConIA(mensaje, etapas);
+    return await extraerConIA(mensaje);
   } catch (err) {
     return { ok: false, error: `Falló la llamada a la IA: ${err instanceof Error ? err.message : String(err)}` };
   }
@@ -36,10 +44,10 @@ async function intentar(mensaje: string, etapas: string[]): Promise<ResultadoExt
 
 export async function procesarPlanilla(
   archivo: Buffer,
-  { padron, etapas, hoy }: ContextoImportacion,
+  { archivo: nombreArchivo, padron, etapas, categorias, hoy }: ContextoImportacion,
 ): Promise<ResultadoImportacion> {
-  const filas = leerPlanilla(archivo);
-  const mensaje = armarMensaje(filas, padron, etapas, hoy);
+  const { nombre: hoja, filas } = leerHoja(archivo);
+  const mensaje = armarMensaje({ archivo: nombreArchivo, hoja, filas, padron, etapas, categorias, hoy });
   const idsPadron = padron.map((j) => j.id);
 
   const comun: Comun = { crudos: [], modelo: MODELO, versionPrompt: VERSION_PROMPT, tokens: { entrada: 0, salida: 0 }, intentos: 0 };
@@ -51,7 +59,7 @@ export async function procesarPlanilla(
       ? mensaje
       : `${mensaje}\n\nTu respuesta anterior tuvo estos problemas:\n${feedback.map((p) => `- ${p}`).join('\n')}`;
 
-    const resultado = await intentar(conFeedback, etapas);
+    const resultado = await intentar(conFeedback);
     comun.intentos++;
     if (resultado.crudo !== undefined) comun.crudos.push(resultado.crudo);
     if (resultado.tokens) {

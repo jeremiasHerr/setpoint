@@ -41,7 +41,13 @@ const CORRECTOS = [
 ];
 
 function respuesta(jugadores: Jugador[], esPlanillaDeJugadores = true): RespuestaImportacion {
-  return { esPlanillaDeJugadores, motivo: esPlanillaDeJugadores ? null : 'Es otra cosa', jugadores };
+  return {
+    esPlanillaDeJugadores,
+    motivo: esPlanillaDeJugadores ? null : 'Es otra cosa',
+    categoria: esPlanillaDeJugadores ? 'Tercera' : null,
+    etapas: ['Primavera', 'Verano'],
+    jugadores,
+  };
 }
 
 describe('numerosDeFila', () => {
@@ -110,5 +116,27 @@ describe('auditar', () => {
 
   it('no exige jugadores en una planilla que no es de jugadores', () => {
     expect(auditar(respuesta([], false), FILAS, PADRON)).toEqual({ globales: [], porFila: [] });
+  });
+
+  // Las etapas son texto en el schema: la auditoría controla que sean las de la lista (decisión 011).
+  describe('etapas', () => {
+    it('da un problema global si un casillero usa una etapa que no está en la lista', () => {
+      const conOtra = { ...CORRECTOS[0], casilleros: [...CORRECTOS[0].casilleros, { etapa: 'Otoño', anio: 2026, puntos: 0 }] };
+      const { globales } = auditar(respuesta([conOtra, ...CORRECTOS.slice(1)]), FILAS, PADRON);
+      expect(globales.map((p) => p.detalle)).toEqual(['Los casilleros usan etapas que no están en la lista de etapas: Otoño']);
+    });
+
+    it('da un problema global si la lista repite una etapa', () => {
+      const repetida = { ...respuesta(CORRECTOS), etapas: ['Primavera', 'Verano', 'Primavera'] };
+      expect(auditar(repetida, FILAS, PADRON).globales.map((p) => p.detalle)).toEqual(['La lista de etapas tiene nombres repetidos']);
+    });
+
+    it('marca la fila a la que le falta el casillero de una etapa', () => {
+      const sinVerano = { ...CORRECTOS[3], casilleros: CORRECTOS[3].casilleros.filter((c) => c.etapa !== 'Verano') };
+      const { globales, porFila } = auditar(respuesta([...CORRECTOS.slice(0, 3), sinVerano]), FILAS, PADRON);
+      expect(globales).toEqual([]);
+      // Sin ese casillero, además, el acumulado deja de cerrar.
+      expect(porFila).toContainEqual({ fila: 7, detalle: 'Fila 7: no tiene casillero de Verano' });
+    });
   });
 });

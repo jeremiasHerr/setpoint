@@ -1,0 +1,205 @@
+{
+  "esPlanillaDeJugadores": true,
+  "categoria": "Tercera",
+  "etapas": [
+    "Primavera",
+    "Verano",
+    "Pretemporada",
+    "Otoño",
+    "Invierno"
+  ],
+  "jugadores": [
+    {
+      "fila": 4,
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 15
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 50
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 15
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 75
+        }
+      ],
+      "acumulado": 165,
+      "coincideCon": null
+    },
+    {
+      "fila": 5,
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 10
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 15
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 50
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 25
+        }
+      ],
+      "acumulado": 110,
+      "coincideCon": null
+    },
+    {
+      "fila": 6,
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 0
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 100
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 0
+        }
+      ],
+      "acumulado": 100,
+      "coincideCon": null
+    },
+    {
+      "fila": 7,
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 25
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 50
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 10
+        }
+      ],
+      "acumulado": 95,
+      "coincideCon": null
+    },
+    {
+      "fila": 8,
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 50
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 25
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 0
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 15
+        }
+      ],
+      "acumulado": 90,
+      "coincideCon": null
+    },
+    {
+      "fila": 9,
+      "casilleros": [
+        {
+          "etapa": "Primavera",
+          "anio": 2025,
+          "puntos": 10
+        },
+        {
+          "etapa": "Verano",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Pretemporada",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Otoño",
+          "anio": 2026,
+          "puntos": 10
+        },
+        {
+          "etapa": "Invierno",
+          "anio": 2026,
+          "puntos": 10
+        }
+      ],
+      "acumulado": 50,
+      "coincideCon": null
+    }
+  ]
+}
