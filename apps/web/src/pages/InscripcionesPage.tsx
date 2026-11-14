@@ -2,6 +2,7 @@ import type { InscripcionesDelTorneo } from '@setpoint/shared';
 import { useState, type ReactNode } from 'react';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Boton } from '../components/Boton';
+import { Confirmacion } from '../components/Confirmacion';
 import { Numero } from '../components/Numero';
 import { leerSesion, type Sesion } from '../features/auth/sesion';
 import { useSesionInvalida } from '../features/auth/useSesionInvalida';
@@ -137,6 +138,38 @@ function QuePasaAlCerrar({ datos, pagados, reservando }: { datos: InscripcionesD
   return null;
 }
 
+// Lo que dice la confirmación de "Cerrar inscripciones" (decisión 096).
+function alCerrarLaInscripcion(datos: InscripcionesDelTorneo, pagados: number, reservando: number): ReactNode[] {
+  const solicitudes = datos.solicitudes.length;
+  return [
+    pagados === 1 ? (
+      'Entra al sorteo el único que pagó.'
+    ) : (
+      <>
+        Entran al sorteo los <Numero>{pagados}</Numero> que pagaron.
+      </>
+    ),
+    reservando > 0 &&
+      (reservando === 1 ? (
+        'La reserva sin pagar no entra al sorteo.'
+      ) : (
+        <>
+          Las <Numero>{reservando}</Numero> reservas sin pagar no entran al sorteo.
+        </>
+      )),
+    solicitudes > 0 &&
+      (solicitudes === 1 ? (
+        'La solicitud sin aprobar o sin pagar se cierra.'
+      ) : (
+        <>
+          Las <Numero>{solicitudes}</Numero> solicitudes sin aprobar o sin pagar se cierran.
+        </>
+      )),
+    'Nadie más se puede inscribir desde el link.',
+    'El torneo ya no se puede editar.',
+  ].filter(Boolean);
+}
+
 function textoDeError(error: Error): ReactNode {
   const codigo = error instanceof ErrorApi ? error.codigo : '';
   switch (codigo) {
@@ -185,6 +218,7 @@ function Inscripciones({ sesion, datos }: { sesion: Sesion; datos: Inscripciones
   );
   const [busqueda, setBusqueda] = useState('');
   const [aMano, setAMano] = useState(false);
+  const [cerrando, setCerrando] = useState(false);
 
   const confirmados = datos.inscripciones.filter((i) => i.estado === 'pagada');
   const reservas = datos.inscripciones.filter((i) => i.estado === 'reservando');
@@ -217,10 +251,11 @@ function Inscripciones({ sesion, datos }: { sesion: Sesion; datos: Inscripciones
               <Boton
                 variante="organizador"
                 className="font-semibold"
-                disabled={!datos.alcanzanParaLasZonas || cerrar.isPending}
-                onClick={() => cerrar.mutate()}
+                disabled={!datos.alcanzanParaLasZonas}
+                aria-haspopup="dialog"
+                onClick={() => setCerrando(true)}
               >
-                {cerrar.isPending ? 'Cerrando…' : 'Cerrar inscripciones'}
+                Cerrar inscripciones
               </Boton>
             )}
             {datos.estado === 'inscripciones_cerradas' && !datos.sorteoConfirmado && (
@@ -246,7 +281,6 @@ function Inscripciones({ sesion, datos }: { sesion: Sesion; datos: Inscripciones
             enEspera={datos.tieneListaEspera ? datos.listaDeEspera.length : undefined}
           />
           <QuePasaAlCerrar datos={datos} pagados={pagados} reservando={reservando} />
-          {cerrar.error && <p className="text-sm text-rojo-texto">{textoDeError(cerrar.error)}</p>}
         </section>
 
         {/* La columna de la derecha va al costado desde 1280, como en la referencia: en una notebook de
@@ -361,6 +395,21 @@ function Inscripciones({ sesion, datos }: { sesion: Sesion; datos: Inscripciones
           </aside>
         </div>
       </main>
+
+      <Confirmacion
+        abierta={cerrando}
+        titulo={`Cerrar la inscripción de ${datos.categoria}`}
+        consecuencias={alCerrarLaInscripcion(datos, pagados, reservando)}
+        accion="Cerrar inscripciones"
+        accionEnCurso="Cerrando…"
+        enCurso={cerrar.isPending}
+        error={cerrar.error && textoDeError(cerrar.error)}
+        alCancelar={() => {
+          cerrar.reset();
+          setCerrando(false);
+        }}
+        alConfirmar={() => cerrar.mutate(undefined, { onSuccess: () => setCerrando(false) })}
+      />
     </div>
   );
 }

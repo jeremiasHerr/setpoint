@@ -1,7 +1,9 @@
 import type { Tablero } from '@setpoint/shared';
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Boton } from '../components/Boton';
+import { Confirmacion } from '../components/Confirmacion';
+import { Numero } from '../components/Numero';
 import { Tarjeta } from '../components/Tarjeta';
 import { leerSesion, type Sesion } from '../features/auth/sesion';
 import { useSesionInvalida } from '../features/auth/useSesionInvalida';
@@ -85,6 +87,29 @@ function bajada(tablero: Tablero): string {
   return vence ? `${zonas} · terminan el ${vence}` : zonas;
 }
 
+// Lo que dice la confirmación de cerrar las zonas (decisión 096). Como arma la API los cuadros: los
+// primeros de cada zona van al principal, y el resto, al consuelo si el torneo lo tiene.
+function alCerrarLasZonas(tablero: Tablero): ReactNode[] {
+  const { clasificanPorGrupo, tieneComplementaria, zonas } = tablero;
+  const alPrincipal = zonas.reduce((suma, zona) => suma + Math.min(clasificanPorGrupo, zona.filas.length), 0);
+  const alConsuelo = tieneComplementaria
+    ? zonas.reduce((suma, zona) => suma + Math.max(0, zona.filas.length - clasificanPorGrupo), 0)
+    : 0;
+  return [
+    alConsuelo > 0 ? (
+      <>
+        Se arman los cuadros: <Numero>{alPrincipal}</Numero> jugadores van a {NOMBRE_DEL_CUADRO.campeonato} y{' '}
+        <Numero>{alConsuelo}</Numero> al {NOMBRE_DEL_CUADRO.complementaria.toLowerCase()}.
+      </>
+    ) : (
+      <>
+        Se arma el cuadro de {NOMBRE_DEL_CUADRO.campeonato} con <Numero>{alPrincipal}</Numero> jugadores.
+      </>
+    ),
+    'Después, un resultado de zona solo se puede corregir si los cuadros quedan iguales.',
+  ];
+}
+
 // Cuando lo que corresponde es pasar a la etapa siguiente: cerrar las zonas o cerrar el torneo.
 function Siguiente({ titulo, texto, children }: { titulo: string; texto: string; children: ReactNode }) {
   return (
@@ -104,6 +129,7 @@ function Contenido({ sesion, tablero }: { sesion: Sesion; tablero: Tablero }) {
   const navegar = useNavigate();
   const cerrarZonas = useCerrarZonas(slug, torneoId);
   useSesionInvalida(cerrarZonas.error);
+  const [cerrandoZonas, setCerrandoZonas] = useState(false);
   const enVivo = `/c/${slug}/torneos/${torneoId}/en-vivo`;
 
   const titulo = fase === 'grupos' ? 'Fase de grupos' : fase === 'cuadros' ? 'Cuadros' : 'Torneo cerrado';
@@ -137,10 +163,9 @@ function Contenido({ sesion, tablero }: { sesion: Sesion; tablero: Tablero }) {
             titulo="Todas las zonas tienen sus resultados"
             texto="Al cerrarlas se arman los cuadros con estas tablas. No se deshace."
           >
-            <Boton variante="organizador" className="font-semibold" disabled={cerrarZonas.isPending} onClick={() => cerrarZonas.mutate()}>
-              {cerrarZonas.isPending ? 'Cerrando…' : 'Cerrar zonas y armar los cuadros'}
+            <Boton variante="organizador" className="font-semibold" aria-haspopup="dialog" onClick={() => setCerrandoZonas(true)}>
+              Cerrar zonas y armar los cuadros
             </Boton>
-            {cerrarZonas.error && <p className="text-sm text-rojo-texto">No se pudieron cerrar las zonas. Probá de nuevo.</p>}
           </Siguiente>
         )}
 
@@ -160,6 +185,21 @@ function Contenido({ sesion, tablero }: { sesion: Sesion; tablero: Tablero }) {
         {fase !== 'terminado' && <LoQueFalta slug={slug} tablero={tablero} />}
         {fase === 'grupos' && <ZonaPorZona tablero={tablero} />}
       </div>
+
+      <Confirmacion
+        abierta={cerrandoZonas}
+        titulo="Cerrar las zonas"
+        consecuencias={alCerrarLasZonas(tablero)}
+        accion="Cerrar zonas y armar los cuadros"
+        accionEnCurso="Cerrando…"
+        enCurso={cerrarZonas.isPending}
+        error={cerrarZonas.error && 'No se pudieron cerrar las zonas. Probá de nuevo.'}
+        alCancelar={() => {
+          cerrarZonas.reset();
+          setCerrandoZonas(false);
+        }}
+        alConfirmar={() => cerrarZonas.mutate(undefined, { onSuccess: () => setCerrandoZonas(false) })}
+      />
     </Marco>
   );
 }

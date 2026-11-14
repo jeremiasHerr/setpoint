@@ -141,6 +141,8 @@ El mono es lo que da el acabado de producto y lo que hace que las tablas queden 
 
 Nunca hay flechas pegadas al texto del botón. El texto dice la acción completa: "Anotar y avisarle a Pablo", no "Continuar".
 
+**Estados en la web.** Con el mouse, el lima se oscurece un poco, el negro pasa a `--gris-700` y el secundario toma `--fondo`. Al apretar, el botón se achica apenas. Con el teclado, un anillo `--negro` de 2px separado 2px del borde: es un outline, no una sombra. Deshabilitado, opacidad 40% y sin reacción.
+
 ### Chips
 
 Píldora de radio 999, alto 34–40, borde 1px. Activo: fondo `--negro`, texto blanco. Se usan para categorías, filtros, superficies y modos.
@@ -188,6 +190,10 @@ Fila de 52–60. Punto de 7px a la izquierda del nombre: lima si clasifica, `--l
 ### Cuadro eliminatorio
 
 Columnas por ronda con rótulo en mono minúscula. Tarjeta de 190×62 con dos filas de 31; el ganador con fondo `--lima-tenue` y peso 600. **En las tarjetas va el resultado en sets (2-0, 2-1), no el marcador completo** — es lo que hace legible un cuadro de 16. Las llaves se dibujan con codos de 1px `--linea`. El partido pendiente destacado lleva borde 2px `--negro` y franja lima con fecha y hora. Donde hubo un bye no hay partido: el lugar lleva una tarjeta del mismo alto, sin fondo, con el apellido de quien pasa directo en `--gris-500` y el rótulo mono "pasa directo a semis" en `--gris-400` ([decisión 083](decisiones/083-el-bye-se-ve-en-el-cuadro.md)).
+
+### Confirmación
+
+Para lo que no se deshace: cerrar la inscripción, confirmar el sorteo, cerrar las zonas, rechazar una solicitud y dar de baja ([decisión 096](decisiones/096-confirmar-lo-que-no-se-deshace.md)). Un modal de hasta 560 de ancho, radio 18, borde 1px `--linea` y sin sombra, sobre un fondo `--negro` al 40 % desenfocado 4 px. Arriba, el título con la acción y a quién afecta ("Dar de baja a Diego Antileo"); debajo, lo que va a pasar, una línea por consecuencia y con los números del torneo. Al pie, sobre `--fondo-tabla`, Cancelar y la acción en el botón principal del organizador, con el mismo texto que el botón que lo abrió. Se cancela con Escape o con un clic en el fondo, y el foco nunca arranca en la acción.
 
 ### Esqueleto de carga
 

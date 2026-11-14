@@ -9,6 +9,7 @@ import {
 import { useCallback, useState, type ReactNode } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Boton } from '../components/Boton';
+import { Confirmacion } from '../components/Confirmacion';
 import { Numero } from '../components/Numero';
 import { leerSesion, type Sesion } from '../features/auth/sesion';
 import { useSesionInvalida } from '../features/auth/useSesionInvalida';
@@ -186,6 +187,8 @@ function SorteoDeZonas({ sesion, sorteo }: { sesion: Sesion; sorteo: Sorteo }) {
   const enPantalla = ejecutor === 'asistido' && !sorteo.confirmado;
   const sorteadoEnPantalla = sorteo.modoSorteo === 'asistido' && zonas !== null;
   const [proyectando, setProyectando] = useState(false);
+  // La confirmación de «Confirmar y publicar»: no se deshace (decisión 096).
+  const [publicando, setPublicando] = useState(false);
   // Cada sorteo en pantalla es una ronda nueva: la revelación arranca de cero.
   const [ronda, setRonda] = useState(0);
   const zonasVisibles = repartoPendiente || (enPantalla && !sorteadoEnPantalla) ? null : zonas;
@@ -222,11 +225,21 @@ function SorteoDeZonas({ sesion, sorteo }: { sesion: Sesion; sorteo: Sorteo }) {
   function confirmarYPublicar() {
     sortear.reset();
     cargar.reset();
-    if (!cargandoAMano) return confirmar.mutate();
+    const alTerminar = { onSuccess: () => setPublicando(false) };
+    if (!cargandoAMano) return confirmar.mutate(undefined, alTerminar);
     // Lo cargado a mano se guarda como borrador y recién ahí se confirma.
     const datos = { zonas: zonasManuales.map((z) => ({ grupo: z.grupo, jugadorIds: z.integrantes.map((j) => j.jugadorId) })) };
-    cargar.mutate(datos, { onSuccess: () => confirmar.mutate() });
+    cargar.mutate(datos, { onSuccess: () => confirmar.mutate(undefined, alTerminar) });
   }
+
+  function noPublicar() {
+    cargar.reset();
+    confirmar.reset();
+    setPublicando(false);
+  }
+
+  const partidosAGenerar = partidosDeZona(cargandoAMano ? zonasManuales : (zonasVisibles ?? []));
+  const errorAlPublicar = cargar.error ?? confirmar.error;
 
   return (
     <div className="flex min-h-screen flex-col bg-white text-negro">
@@ -338,7 +351,7 @@ function SorteoDeZonas({ sesion, sorteo }: { sesion: Sesion; sorteo: Sorteo }) {
             (zonasVisibles || cargandoAMano) && (
               <p className="text-[15px] font-semibold">
                 {sorteo.confirmado ? 'Se generaron' : 'Al confirmar se generan'}{' '}
-                <Numero>{partidosDeZona(cargandoAMano ? zonasManuales : (zonasVisibles ?? []))}</Numero> partidos de zona
+                <Numero>{partidosAGenerar}</Numero> partidos de zona
               </p>
             )
           )}
@@ -375,9 +388,10 @@ function SorteoDeZonas({ sesion, sorteo }: { sesion: Sesion; sorteo: Sorteo }) {
               grande
               className="font-semibold"
               disabled={!sorteable || ocupado || (cargandoAMano ? !cargaCompleta : zonasVisibles === null)}
-              onClick={confirmarYPublicar}
+              aria-haspopup="dialog"
+              onClick={() => setPublicando(true)}
             >
-              {cargar.isPending || confirmar.isPending ? 'Publicando…' : 'Confirmar y publicar'}
+              Confirmar y publicar
             </Boton>
           </div>
         )}
@@ -394,6 +408,24 @@ function SorteoDeZonas({ sesion, sorteo }: { sesion: Sesion; sorteo: Sorteo }) {
           alCerrar={cerrarProyeccion}
         />
       )}
+
+      <Confirmacion
+        abierta={publicando}
+        titulo="Confirmar y publicar las zonas"
+        consecuencias={[
+          <>
+            Se generan <Numero>{partidosAGenerar}</Numero> partidos de zona.
+          </>,
+          'Los jugadores con la app reciben un aviso con su zona.',
+          'Ya no se puede volver a sortear ni dar de baja a nadie: quien no juegue pierde sus partidos por W.O.',
+        ]}
+        accion="Confirmar y publicar"
+        accionEnCurso="Publicando…"
+        enCurso={cargar.isPending || confirmar.isPending}
+        error={errorAlPublicar && textoDeError(errorAlPublicar, sorteo)}
+        alCancelar={noPublicar}
+        alConfirmar={confirmarYPublicar}
+      />
     </div>
   );
 }

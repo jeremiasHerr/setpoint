@@ -1,3 +1,4 @@
+import { PORCENTAJE_COMISION } from '@setpoint/shared';
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { IconoMas } from '../components/IconoMas';
@@ -29,7 +30,7 @@ const zonas: [string, string][] = [
   ['H', 'jjjjfs'],
 ];
 
-const preguntas = [
+const preguntas: { pregunta: string; respuesta: ReactNode }[] = [
   {
     pregunta: '¿Mis jugadores tienen que instalar algo?',
     respuesta:
@@ -38,7 +39,7 @@ const preguntas = [
   {
     pregunta: 'Ya tengo un ranking en Excel. ¿Lo pierdo?',
     respuesta:
-      'No. Subís la planilla y entran los jugadores con sus puntos, las categorías y los torneos del calendario. Lo que no cierra, lo revisás antes de guardar.',
+      'No. Cargás tus categorías y tus torneos del calendario, y subís una planilla por categoría: entran los jugadores con sus puntos. Lo que no cierra, lo revisás antes de guardar.',
   },
   {
     pregunta: '¿Sirve si mi circuito no lleva ranking?',
@@ -48,6 +49,15 @@ const preguntas = [
   {
     pregunta: '¿Y si alguien me paga en efectivo?',
     respuesta: 'Lo inscribís a mano, mientras haya lugar.',
+  },
+  {
+    pregunta: '¿Cuánto cuesta?',
+    respuesta: (
+      <>
+        Nada por usarlo. De cada inscripción cobrada por MercadoPago, SetPoint se queda con el{' '}
+        <Numero>{PORCENTAJE_COMISION}%</Numero>. Lo que cobrás en mano no tiene comisión.
+      </>
+    ),
   },
   {
     pregunta: '¿Puede anotarse cualquiera?',
@@ -404,7 +414,7 @@ function Funciones() {
         <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-4">
           <Funcion
             titulo="Traés tu planilla"
-            texto="Jugadores, puntos y categorías entran solos. Revisás solo lo dudoso."
+            texto="Jugadores y puntos entran solos, una planilla por categoría. Revisás solo lo dudoso."
           >
             <div className="flex flex-col gap-2 rounded-xl border border-linea bg-white p-3.5 text-sm">
               <Numero className="text-xs text-gris-500">ranking-tercera-2026.xlsx</Numero>
