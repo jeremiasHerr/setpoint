@@ -1,5 +1,5 @@
-import { lazy, Suspense } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { lazy, Suspense, useEffect } from 'react';
+import { Route, Routes, useLocation, useNavigationType } from 'react-router-dom';
 
 // Cada página se descarga cuando se la pide: quien abre el ranking desde el celular no baja también
 // el panel del organizador ni el arrastrar y soltar del sorteo.
@@ -33,10 +33,25 @@ const TuCircuitoPage = lazy(() => import('./pages/TuCircuitoPage').then((m) => (
 // El catálogo de componentes es para desarrollar: no entra en el build de producción.
 const Catalogo = import.meta.env.DEV ? lazy(() => import('./Catalogo').then((m) => ({ default: m.Catalogo }))) : null;
 
+// Al cambiar de pantalla, la nueva abre arriba: en una página de una sola carga el navegador no lo
+// hace solo, y se llegaba al tablero a mitad de página. Volver con el navegador (POP) le deja al
+// navegador el lugar donde estaba.
+function SubirAlCambiarDePantalla() {
+  const { pathname } = useLocation();
+  const tipo = useNavigationType();
+
+  useEffect(() => {
+    if (tipo !== 'POP') window.scrollTo(0, 0);
+  }, [pathname, tipo]);
+
+  return null;
+}
+
 export default function App() {
   return (
     // Sin fallback: la página tarda un instante y cada una muestra su propio esqueleto (decisión 093).
     <Suspense fallback={null}>
+      <SubirAlCambiarDePantalla />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         {Catalogo && <Route path="/catalogo" element={<Catalogo />} />}
