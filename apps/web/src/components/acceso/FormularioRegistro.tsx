@@ -1,5 +1,5 @@
 import { useState, type FormEvent, type ReactNode } from 'react';
-import type { DatosRegistroOrganizacion } from '@setpoint/shared';
+import { PORCENTAJE_COMISION, type DatosRegistroOrganizacion } from '@setpoint/shared';
 import { Boton } from '../Boton';
 import { Campo } from '../Campo';
 import { CampoCodigo } from '../CampoCodigo';
@@ -173,7 +173,9 @@ export function FormularioRegistro({
         <div className="flex flex-col gap-1.5">
           <h1 className="text-2xl font-semibold tracking-[-0.03em]">Registrar tu organización</h1>
           <p className="text-[15px] text-gris-500">
-            Es gratis y no hace falta tarjeta. Después elegís si armás un circuito con ranking o un torneo suelto.
+            Es gratis y no hace falta tarjeta. SetPoint se queda con el <Numero>{PORCENTAJE_COMISION}%</Numero> de lo que cobrás
+            por MercadoPago; lo que cobrás en mano no tiene comisión. Después elegís si armás un circuito con ranking o un torneo
+            suelto.
           </p>
         </div>
 
