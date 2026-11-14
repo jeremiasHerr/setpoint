@@ -9,10 +9,8 @@ import {
 import { useCallback, useState, type ReactNode } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Boton } from '../components/Boton';
-import { EncabezadoOrganizador } from '../components/EncabezadoOrganizador';
 import { Numero } from '../components/Numero';
 import { leerSesion, type Sesion } from '../features/auth/sesion';
-import { useCerrarSesion } from '../features/auth/useCerrarSesion';
 import { useSesionInvalida } from '../features/auth/useSesionInvalida';
 import { CargaManual } from '../features/competencia/CargaManual';
 import { SorteoEnPantalla } from '../features/competencia/SorteoEnPantalla';
@@ -26,7 +24,7 @@ import {
   zonasDeLaAsignacion,
   type Asignacion,
 } from '../features/competencia/zonas';
-import { iniciales, navegacionOrganizador } from '../features/organizador/encabezado';
+import { EncabezadoDelTorneo } from '../features/torneos/EncabezadoDelTorneo';
 import { ErrorApi } from '../lib/api';
 import { Esqueleto } from '../components/Esqueleto';
 
@@ -61,18 +59,6 @@ export function SorteoPage() {
   return <CargarSorteo sesion={sesion} id={Number(id)} />;
 }
 
-function Encabezado({ sesion }: { sesion: Sesion }) {
-  const cerrarSesion = useCerrarSesion();
-  return (
-    <EncabezadoOrganizador
-      organizacion={sesion.organizacion.nombre}
-      navegacion={navegacionOrganizador}
-      iniciales={iniciales(sesion.usuario.nombre)}
-      alSalir={cerrarSesion}
-    />
-  );
-}
-
 function CargarSorteo({ sesion, id }: { sesion: Sesion; id: number }) {
   const sorteo = useSorteo(sesion.organizacion.slug, id);
   const sesionInvalida = useSesionInvalida(sorteo.error);
@@ -84,7 +70,7 @@ function CargarSorteo({ sesion, id }: { sesion: Sesion; id: number }) {
 
   return (
     <div className="min-h-screen bg-white text-negro">
-      <Encabezado sesion={sesion} />
+      <EncabezadoDelTorneo sesion={sesion} torneoId={id} actual="zonas" />
       <div className="flex flex-col items-start gap-3 px-7 pt-[26px]">
         {noExiste ? (
           <>
@@ -244,7 +230,7 @@ function SorteoDeZonas({ sesion, sorteo }: { sesion: Sesion; sorteo: Sorteo }) {
 
   return (
     <div className="flex min-h-screen flex-col bg-white text-negro">
-      <Encabezado sesion={sesion} />
+      <EncabezadoDelTorneo sesion={sesion} torneoId={sorteo.torneoId} actual="zonas" />
 
       <div className="flex flex-wrap items-end justify-between gap-6 px-7 pt-[26px] pb-5">
         <div className="flex flex-col gap-[7px]">
@@ -262,9 +248,6 @@ function SorteoDeZonas({ sesion, sorteo }: { sesion: Sesion; sorteo: Sorteo }) {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2.5">
-          <Numero className="flex h-9 items-center rounded-full border border-linea px-[13px] text-[13px]">
-            {sorteo.nombre}
-          </Numero>
           <span className="flex h-9 items-center rounded-full border border-linea px-[13px] font-mono text-[13px] text-gris-500">
             {sorteo.confirmado ? 'publicado' : 'todavía no publicado'}
           </span>

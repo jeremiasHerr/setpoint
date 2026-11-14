@@ -1,6 +1,6 @@
 # 058 — Al cierre del torneo se llega desde Cargar resultado
 
-**Estado:** aceptada — 27 de octubre de 2026
+**Estado:** aceptada — 27 de octubre de 2026. "La pantalla no tiene pestañas" y sus migas están reemplazados por la [decisión 095](095-navegacion-del-torneo.md): el Cierre tiene la franja del torneo, con su pestaña. La entrada desde *Cargar resultado* sigue.
 
 ## Contexto
 

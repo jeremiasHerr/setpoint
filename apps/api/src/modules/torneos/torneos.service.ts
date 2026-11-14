@@ -22,6 +22,7 @@ import { ErrorHttp } from '../../middleware/errores';
 import { finalDelCuadro } from '../competencia/cierre';
 import { avanceDelTorneo } from '../competencia/tablero';
 import { avisarLugaresLiberados, promoverListaDeEspera } from '../inscripciones/lista-de-espera.service';
+import { convocatoriaEditable } from './navegacion';
 
 // Las claves del contrato son los valores de los enums de Prisma en minúscula.
 const aEnum = <T extends string>(valor: string) => valor.toUpperCase() as T;
@@ -237,10 +238,9 @@ export async function editarConvocatoria(slug: string, usuarioId: number, torneo
   const organizacionId = await organizacionAdministrada(slug, usuarioId);
   const torneos = await torneosDeLaConvocatoria(organizacionId, torneoId);
 
-  // Se edita en borrador y mientras la inscripción está abierta. Después, el sorteo ya usó el formato.
-  const enBorrador = torneos.every((t) => t.estado === EstadoTorneo.BORRADOR);
+  // La misma regla que decide si la navegación del torneo ofrece «Editar el torneo».
+  if (!convocatoriaEditable(torneos.map((t) => t.estado))) throw new ErrorHttp(409, 'TORNEO_NO_EDITABLE');
   const publicado = torneos.every((t) => t.estado === EstadoTorneo.PUBLICADO);
-  if (!enBorrador && !publicado) throw new ErrorHttp(409, 'TORNEO_NO_EDITABLE');
 
   const [principal, ...resto] = torneos;
   await verificarNombreLibre(organizacionId, datos.nombre, principal.edicion ?? principal.nombre);

@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { cerrarTorneo, obtenerCierre } from './api';
+import { claveNavegacion } from '../torneos/useNavegacionDelTorneo';
 
 const claveCierre = (slug: string, id: number) => ['cierre', slug, id];
 
@@ -16,6 +17,9 @@ export function useCerrarTorneo(slug: string, id: number) {
   return useMutation({
     mutationFn: () => cerrarTorneo(slug, id),
     // La respuesta es la vista ya cerrada, con los puntos que se guardaron.
-    onSuccess: (cierre) => queryClient.setQueryData(claveCierre(slug, id), cierre),
+    onSuccess: (cierre) => {
+      queryClient.setQueryData(claveCierre(slug, id), cierre);
+      void queryClient.invalidateQueries({ queryKey: claveNavegacion(slug, id) });
+    },
   });
 }

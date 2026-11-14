@@ -1,4 +1,4 @@
-import type { Convocatoria, DatosConvocatoria } from '@setpoint/shared';
+import type { Convocatoria, DatosConvocatoria, NavegacionDelTorneo } from '@setpoint/shared';
 import { pedir } from '../../lib/api';
 
 // El id es el del primer torneo de la convocatoria (ver docs/decisiones/003).
@@ -18,4 +18,10 @@ export function editarConvocatoria(slug: string, id: number, datos: DatosConvoca
 
 export function publicarConvocatoria(slug: string, id: number) {
   return pedir<Convocatoria>('POST', `${ruta(slug, id)}/publicar`);
+}
+
+// La franja de pestañas de las pantallas del torneo (decisión 095). Acá el id es el de un torneo
+// (una categoría), no el de la convocatoria: cada categoría avanza por separado.
+export function obtenerNavegacion(slug: string, id: number) {
+  return pedir<NavegacionDelTorneo>('GET', `${ruta(slug, id)}/navegacion`);
 }

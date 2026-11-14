@@ -1,6 +1,7 @@
 import type { DatosFechaAcordadaEntrada } from '@setpoint/shared';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { anotarFecha, cerrarZonas, obtenerCoordinacion, obtenerTablero } from './api';
+import { claveNavegacion } from '../torneos/useNavegacionDelTorneo';
 
 const claveTablero = (slug: string, id: number) => ['tablero', slug, id];
 
@@ -16,8 +17,11 @@ export function useCerrarZonas(slug: string, id: number) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: () => cerrarZonas(slug, id),
-    // Con las zonas cerradas, el tablero pasa a mostrar los cuadros.
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: claveTablero(slug, id) }),
+    // Con las zonas cerradas, el tablero pasa a mostrar los cuadros y el torneo, a estar en ellos.
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: claveTablero(slug, id) });
+      void queryClient.invalidateQueries({ queryKey: claveNavegacion(slug, id) });
+    },
   });
 }
 

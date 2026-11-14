@@ -1,15 +1,11 @@
 import type { PartidoConResultado } from '@setpoint/shared';
 import { useState, type ReactNode } from 'react';
-import { Link, Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Boton } from '../components/Boton';
 import { Chip } from '../components/Chip';
-import { EncabezadoOrganizador } from '../components/EncabezadoOrganizador';
-import { Numero } from '../components/Numero';
 import { Tarjeta } from '../components/Tarjeta';
 import { leerSesion, type Sesion } from '../features/auth/sesion';
-import { useCerrarSesion } from '../features/auth/useCerrarSesion';
 import { useSesionInvalida } from '../features/auth/useSesionInvalida';
-import { iniciales, navegacionOrganizador } from '../features/organizador/encabezado';
 import { AlGuardar, TextoConNumeros } from '../features/resultados/AlGuardar';
 import { GrillaDeSets } from '../features/resultados/GrillaDeSets';
 import {
@@ -22,13 +18,13 @@ import {
   rotuloDelPartido,
   tieneResultado,
   textoDelError,
-  ubicacionDelPartido,
   type Carga,
   type SetEscrito,
   type TipoDeResultado,
 } from '../features/resultados/resultado';
 import { ElegirPartido } from '../features/resultados/ElegirPartido';
 import { useGuardarResultado, usePartido, usePartidos, useSimulacion } from '../features/resultados/useResultado';
+import { EncabezadoDelTorneo } from '../features/torneos/EncabezadoDelTorneo';
 import { Esqueleto } from '../components/Esqueleto';
 
 // Sin partido en la ruta, se abre el primero que no tiene resultado (decisión 031).
@@ -41,46 +37,14 @@ export function CargarResultadoPage() {
   return <CargarResultado key={partidoId} sesion={sesion} torneoId={Number(id)} partidoId={Number(partidoId)} />;
 }
 
-function Marco({ sesion, children }: { sesion: Sesion; children: ReactNode }) {
-  const cerrarSesion = useCerrarSesion();
+function Marco({ sesion, torneoId, children }: { sesion: Sesion; torneoId: number; children: ReactNode }) {
   return (
     <div className="min-h-screen bg-fondo-tabla text-negro">
-      <EncabezadoOrganizador
-        organizacion={sesion.organizacion.nombre}
-        navegacion={navegacionOrganizador}
-        iniciales={iniciales(sesion.usuario.nombre)}
-        alSalir={cerrarSesion}
-      />
+      <EncabezadoDelTorneo sesion={sesion} torneoId={torneoId} actual="resultados" />
       <div className="flex justify-center px-7 pt-[34px] pb-10">
         <div className="flex w-full max-w-[1240px] flex-col gap-4">{children}</div>
       </div>
     </div>
-  );
-}
-
-// La edición lleva al tablero, que es la página del torneo mientras se juega (decisión 063).
-function Migas({ torneoId, nombre, ubicacion }: { torneoId: number; nombre: string; ubicacion?: string }) {
-  const separador = (
-    <span aria-hidden="true" className="text-gris-300">
-      /
-    </span>
-  );
-  return (
-    <nav aria-label="Migas" className="flex flex-wrap items-center gap-[9px] text-sm">
-      <Link to={`/torneos/${torneoId}/tablero`} className="text-gris-500 hover:text-negro">
-        <Numero>{nombre}</Numero>
-      </Link>
-      {ubicacion && (
-        <>
-          {separador}
-          <span className="text-gris-500">{ubicacion}</span>
-        </>
-      )}
-      {separador}
-      <span aria-current="page" className="font-semibold">
-        Cargar resultado
-      </span>
-    </nav>
   );
 }
 
@@ -100,8 +64,7 @@ function PrimeroSinResultado({ sesion, torneoId }: { sesion: Sesion; torneoId: n
     // Con los cuadros jugados, están los campeones: el torneo se puede cerrar (decisión 058).
     const conCuadros = partidos.data.partidos.some((p) => p.fase === 'eliminatoria');
     return (
-      <Marco sesion={sesion}>
-        <Migas torneoId={torneoId} nombre={partidos.data.nombre} />
+      <Marco sesion={sesion} torneoId={torneoId}>
         <Tarjeta className="overflow-hidden">
           <div className="flex flex-wrap items-center justify-between gap-4 border-b border-linea px-6 py-5">
             <div className="flex flex-col gap-[5px]">
@@ -125,7 +88,7 @@ function PrimeroSinResultado({ sesion, torneoId }: { sesion: Sesion; torneoId: n
   }
 
   return (
-    <Marco sesion={sesion}>
+    <Marco sesion={sesion} torneoId={torneoId}>
       <Estado>
         {partidos.error?.message === 'TORNEO_NO_ENCONTRADO' ? (
           <>
@@ -154,7 +117,7 @@ function CargarResultado({ sesion, torneoId, partidoId }: { sesion: Sesion; torn
 
   const noExiste = partido.error?.message === 'PARTIDO_NO_ENCONTRADO' || partido.error?.message === 'TORNEO_NO_ENCONTRADO';
   return (
-    <Marco sesion={sesion}>
+    <Marco sesion={sesion} torneoId={torneoId}>
       <Estado>
         {noExiste ? (
           <>
@@ -258,9 +221,7 @@ function TarjetaDelPartido({ sesion, partido }: { sesion: Sesion; partido: Parti
   }
 
   return (
-    <Marco sesion={sesion}>
-      <Migas torneoId={torneoId} nombre={partido.nombre} ubicacion={ubicacionDelPartido(partido)} />
-
+    <Marco sesion={sesion} torneoId={torneoId}>
       {/* Arriba, las zonas y los cuadros para elegir el partido; abajo, la carga (decisión 070). */}
       <Tarjeta className="overflow-hidden">
         <h2 className="border-b border-linea px-6 py-4 text-[15px] font-semibold">Elegí el partido</h2>

@@ -30,6 +30,7 @@ import { webhookRouter } from './modules/pagos/webhook.routes';
 import { importacionesRouter } from './modules/padron/importacion/importaciones.routes';
 import { rankingPublicoRouter } from './modules/ranking/ranking-publico.routes';
 import { revisionesRouter } from './modules/revisiones/revisiones.routes';
+import { navegacionRouter } from './modules/torneos/navegacion.routes';
 import { torneoPublicoRouter } from './modules/torneos/torneo-publico.routes';
 import { torneosRouter } from './modules/torneos/torneos.routes';
 
@@ -57,6 +58,7 @@ app.use('/api/organizaciones/:slug/torneos/:id/partidos/:partidoId/fecha', coord
 app.use('/api/organizaciones/:slug/torneos/:id/partidos', resultadosRouter);
 app.use('/api/organizaciones/:slug/torneos/:id/cierre', cierreRouter);
 app.use('/api/organizaciones/:slug/torneos/:id/tablero', tableroRouter);
+app.use('/api/organizaciones/:slug/torneos/:id/navegacion', navegacionRouter);
 app.use('/api/organizaciones/:slug/torneos', torneosRouter);
 app.use('/api/organizaciones/:slug/importaciones', importacionesRouter);
 app.use('/api/organizaciones/:slug/revisiones', revisionesRouter);

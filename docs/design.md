@@ -145,6 +145,10 @@ Nunca hay flechas pegadas al texto del botón. El texto dice la acción completa
 
 Píldora de radio 999, alto 34–40, borde 1px. Activo: fondo `--negro`, texto blanco. Se usan para categorías, filtros, superficies y modos.
 
+### Pestañas del torneo
+
+Solo en la franja de las pantallas de un torneo, debajo del encabezado del organizador ([decisión 095](decisiones/095-navegacion-del-torneo.md)). Texto de 15, alto 44, sobre la línea `--linea` del borde de la franja. Activa: `--negro`, peso 600 y subrayado de 2px `--negro`. Disponible: `--gris-700`, peso 500. Apagada: `--gris-400`, y al tocarla, una línea debajo de la franja dice por qué. Son distintas de los chips a propósito: los chips filtran dentro de una pantalla (Confirmados, Reservando), las pestañas cambian de pantalla.
+
 ### Campos
 
 Alto 56 en móvil y 48 en escritorio, radio 10–12, borde 1px `--gris-300`. El campo activo lleva borde 2px `--negro`. El valor va en mono si es un número.

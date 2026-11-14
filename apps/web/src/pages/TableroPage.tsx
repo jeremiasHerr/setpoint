@@ -2,20 +2,17 @@ import type { Tablero } from '@setpoint/shared';
 import type { ReactNode } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Boton } from '../components/Boton';
-import { EncabezadoOrganizador } from '../components/EncabezadoOrganizador';
-import { Numero } from '../components/Numero';
 import { Tarjeta } from '../components/Tarjeta';
 import { leerSesion, type Sesion } from '../features/auth/sesion';
-import { useCerrarSesion } from '../features/auth/useCerrarSesion';
 import { useSesionInvalida } from '../features/auth/useSesionInvalida';
 import { NOMBRE_DEL_CUADRO } from '../features/cuadros/cuadro';
 import { BotonCopiarLink } from '../features/inicio/BotonCopiarLink';
-import { iniciales, navegacionOrganizador } from '../features/organizador/encabezado';
 import { BarrasDelTorneo } from '../features/tablero/BarrasDelTorneo';
 import { LoQueFalta } from '../features/tablero/LoQueFalta';
 import { ResumenPlazo } from '../features/tablero/ResumenPlazo';
 import { elDia } from '../features/tablero/tablero';
 import { useCerrarZonas, useTablero } from '../features/tablero/useTablero';
+import { EncabezadoDelTorneo } from '../features/torneos/EncabezadoDelTorneo';
 import { ZonaPorZona } from '../features/tablero/ZonaPorZona';
 import { Esqueleto } from '../components/Esqueleto';
 
@@ -28,16 +25,10 @@ export function TableroPage() {
   return <TableroDelTorneo sesion={sesion} torneoId={Number(id)} />;
 }
 
-function Marco({ sesion, children }: { sesion: Sesion; children: ReactNode }) {
-  const cerrarSesion = useCerrarSesion();
+function Marco({ sesion, torneoId, children }: { sesion: Sesion; torneoId: number; children: ReactNode }) {
   return (
     <div className="min-h-screen bg-white text-negro">
-      <EncabezadoOrganizador
-        organizacion={sesion.organizacion.nombre}
-        navegacion={navegacionOrganizador}
-        iniciales={iniciales(sesion.usuario.nombre)}
-        alSalir={cerrarSesion}
-      />
+      <EncabezadoDelTorneo sesion={sesion} torneoId={torneoId} actual="tablero" />
       {children}
     </div>
   );
@@ -58,7 +49,7 @@ function TableroDelTorneo({ sesion, torneoId }: { sesion: Sesion; torneoId: numb
 
   const codigo = tablero.error?.message ?? '';
   return (
-    <Marco sesion={sesion}>
+    <Marco sesion={sesion} torneoId={torneoId}>
       <div className="flex flex-col items-start gap-3 px-7 pt-[34px]">
         {tablero.error && !sesionInvalida ? (
           <>
@@ -118,10 +109,9 @@ function Contenido({ sesion, tablero }: { sesion: Sesion; tablero: Tablero }) {
   const titulo = fase === 'grupos' ? 'Fase de grupos' : fase === 'cuadros' ? 'Cuadros' : 'Torneo cerrado';
 
   return (
-    <Marco sesion={sesion}>
+    <Marco sesion={sesion} torneoId={torneoId}>
       <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-4 px-7 pt-[26px] pb-5">
         <div className="flex flex-col gap-[7px]">
-          <Numero className="text-sm text-gris-500">{tablero.nombre}</Numero>
           <h1 className="text-[30px] font-semibold tracking-[-0.035em]">{titulo}</h1>
           <p className="text-[15px] text-gris-500">{bajada(tablero)}</p>
         </div>
