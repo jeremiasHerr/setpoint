@@ -92,7 +92,8 @@ describe.skipIf(!process.env.DATABASE_URL)('el inicio con torneos en juego y ter
   it('cada convocatoria dice su torneo del calendario, para la etiqueta de su tarjeta', async () => {
     const convocatorias = await listarConvocatorias(slug, admin);
     const de = (torneoId: number) => convocatorias.find((c) => c.torneos.some((t) => t.id === torneoId))!;
-    expect(de(enJuegoId)).toMatchObject({ etapa: 'Primavera', suelto: false });
+    // Ya sorteado, no tiene el engranaje para editarlo (decisión 101).
+    expect(de(enJuegoId)).toMatchObject({ etapa: 'Primavera', suelto: false, sePuedeEditar: false });
     expect(de(aCerrarId)).toMatchObject({ etapa: null, suelto: false });
   });
 

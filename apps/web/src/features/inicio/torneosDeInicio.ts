@@ -101,6 +101,8 @@ export function aTorneosDeInicio(convocatorias: ResumenConvocatoria[], circuito:
     })),
     conInscripcionAbierta: abiertas.map(({ convocatoria, torneo, nombre, calendario }) => ({
       id: torneo.id,
+      convocatoriaId: convocatoria.id,
+      sePuedeEditar: convocatoria.sePuedeEditar,
       calendario,
       nombre,
       detalle: detalleDeFechas(convocatoria),

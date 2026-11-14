@@ -319,7 +319,9 @@ La interfaz usa términos genéricos, no los del código ni los de un circuito e
 
 ## 10. Iconos
 
-SVG en línea, trazo de 1.7–1.9, grilla de 16/18/20/24, `stroke-linecap: round`. Nunca emoji ni glifos unicode como ícono. El set actual: búsqueda, chevron, reloj, cámara, compartir, mensaje, check, cuadro, calendario, tarjeta, archivo, barras.
+SVG en línea, trazo de 1.7–1.9, grilla de 16/18/20/24, `stroke-linecap: round`. Nunca emoji ni glifos unicode como ícono. El set actual: búsqueda, chevron, reloj, cámara, compartir, mensaje, check, cuadro, calendario, tarjeta, archivo, barras, engranaje.
+
+Un ícono sin texto dice qué hace en `aria-label` y en `title`, y tiene un área de toque de 44 aunque el dibujo sea de 20. El engranaje abre la configuración de algo: hoy, *Editar el torneo* desde su tarjeta en el inicio ([decisión 101](decisiones/101-engranaje-para-editar.md)).
 
 ---
 
