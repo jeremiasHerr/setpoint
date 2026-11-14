@@ -9,15 +9,20 @@ type Props = {
   nombre: string;
   detalle: string;
   etiqueta?: ReactNode;
+  // Arriba a la derecha, en la fila de `calendario`: el engranaje para editar (decisión 101).
+  esquina?: ReactNode;
   children?: ReactNode;
   acciones: ReactNode;
 };
 
 // La forma común de las tarjetas de las columnas del inicio.
-export function TarjetaDeColumna({ calendario, nombre, detalle, etiqueta, children, acciones }: Props) {
+export function TarjetaDeColumna({ calendario, nombre, detalle, etiqueta, esquina, children, acciones }: Props) {
   return (
     <Tarjeta className="flex flex-col gap-3.5 p-4">
-      <span className="self-start rounded-md bg-linea-suave px-2 py-[3px] font-mono text-xs text-gris-700">{calendario}</span>
+      <div className="flex items-start justify-between gap-2">
+        <span className="rounded-md bg-linea-suave px-2 py-[3px] font-mono text-xs text-gris-700">{calendario}</span>
+        {esquina}
+      </div>
       <div className="flex flex-col gap-0.5">
         <div className="flex flex-wrap items-center gap-2">
           <h3 className="text-base font-semibold tracking-[-0.02em]">{nombre}</h3>
