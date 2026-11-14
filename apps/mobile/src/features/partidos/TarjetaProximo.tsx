@@ -4,6 +4,7 @@ import { Linking, Pressable, StyleSheet, Text, View } from 'react-native';
 import { diaYHora } from '../../lib/fechas';
 import { colores, fuentes, medidas, radios, tabular } from '../../lib/tokens';
 import { enlaceDeWhatsApp } from './agrupar';
+import { SinTelefono } from './SinTelefono';
 
 // El partido que viene, en negro, ocupando el tercio de arriba. "Escribirle" abre WhatsApp con el
 // rival: no hay chat en la app (04-flujo-jugador §6.6).
@@ -41,6 +42,7 @@ export function TarjetaProximo({ partido }: { partido: PartidoDelJugador }) {
           <Text style={estilos.textoBoton}>Escribirle</Text>
         </Pressable>
       )}
+      {!rival.telefono && <SinTelefono nombre={rival.nombre} sobreNegro />}
       {/* Sin la acción (menos de 24 horas, sin reprogramaciones) no se ofrece: lo resuelve la organización. */}
       {(partido.accionDeFecha === 'cambiar' || partido.accionDeFecha === 'reprogramar') && (
         <Pressable
