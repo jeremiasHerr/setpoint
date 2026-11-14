@@ -301,6 +301,8 @@ Pantalla central durante el torneo, en `/torneos/:id/tablero`. Reemplaza el trab
 
 **La carga es responsabilidad de la organización.** Los jugadores no cargan resultados ([04-flujo-jugador.md](04-flujo-jugador.md) §2).
 
+**Se carga con el teclado.** Al abrir un partido, la pantalla baja hasta la carga y el foco queda en el primer casillero. Enter guarda; con el resultado ya guardado, Enter pasa al partido siguiente que falta, o al cierre si eran las finales.
+
 Por partido: los sets y, si se conocen, los puntos del tie-break de un 7-6 ([decisión 030](decisiones/030-puntos-del-tie-break-opcionales.md)). Se valida contra el sistema de juego configurado en el torneo ([07-configurabilidad.md](07-configurabilidad.md) §2.2): cómo termina un set, que el super tie-break sea el set decisivo y que no sobren ni falten sets. **El ganador lo calcula el sistema a partir de los sets**; la organización solo lo indica en un W.O. o un abandono.
 
 Hay tres tipos de resultado:
