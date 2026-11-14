@@ -25,6 +25,10 @@ export type MiZona = {
   tieneComplementaria: boolean;
   // Hasta cuándo hay para jugar la zona. null si el torneo no tiene plazo cargado.
   vence: string | null;
+  // Con las zonas cerradas, el destino de cada fila es el cuadro al que pasó, y ya no cambia.
+  cerrada: boolean;
+  // La pestaña Cuadros de la página en vivo, en la web (decisión 069): la app no dibuja los cuadros.
+  enlaceCuadros: string;
   filas: FilaDePosiciones[];
   partidos: PartidoDeMiZona[];
 };

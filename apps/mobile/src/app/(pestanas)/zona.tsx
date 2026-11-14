@@ -1,5 +1,6 @@
 // Mi zona (F07, F11): docs/pantallas/jugador/mi-zona.html. La matriz de todos contra todos y las
-// posiciones con la línea de corte, de la zona del jugador en su torneo en curso.
+// posiciones con la línea de corte, de la zona del jugador en su torneo en curso. Con las zonas
+// cerradas, arriba dice a qué cuadro pasó y lleva a verlo en la página en vivo.
 import type { MiZona } from '@setpoint/shared';
 import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,6 +10,7 @@ import { ErrorDeCarga } from '../../features/auth/ErrorDeCarga';
 import { useSesion } from '../../features/auth/SesionProvider';
 import { LeyendaDeZona, MatrizDeZona } from '../../features/zona/MatrizDeZona';
 import { PosicionesDeZona } from '../../features/zona/PosicionesDeZona';
+import { ResultadoDeLaZona } from '../../features/zona/ResultadoDeLaZona';
 import { useMiZona } from '../../features/zona/useMiZona';
 import { diasHasta } from '../../lib/fechas';
 import { colores, fuentes, medidas, tabular } from '../../lib/tokens';
@@ -55,6 +57,8 @@ function Contenido({ zona, jugadorId }: { zona: MiZona; jugadorId: number }) {
 
   return (
     <>
+      {/* Con las zonas cerradas, primero a qué cuadro pasó; la zona queda abajo, como terminó. */}
+      {zona.cerrada && <ResultadoDeLaZona zona={zona} jugadorId={jugadorId} />}
       <View style={estilos.titulo}>
         <View style={estilos.nombreZona}>
           <Text style={estilos.textoTitulo}>Zona {zona.grupo}</Text>
