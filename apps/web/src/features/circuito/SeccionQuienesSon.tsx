@@ -1,4 +1,5 @@
 import type { Contacto } from '@setpoint/shared';
+import { MensajeError } from '../../components/Aviso';
 import { useState } from 'react';
 import { Boton } from '../../components/Boton';
 import { Campo } from '../../components/Campo';
@@ -148,7 +149,7 @@ function Contactos({ contactos, alCambiar }: { contactos: Contacto[]; alCambiar:
             </Boton>
             <Boton onClick={cerrar}>Cancelar</Boton>
           </div>
-          {problema && <p className="text-[13px] text-rojo-texto">{problema}</p>}
+          {problema && <MensajeError>{problema}</MensajeError>}
         </div>
       ) : (
         contactos.length < MAXIMO_CONTACTOS && (

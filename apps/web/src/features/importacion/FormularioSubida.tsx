@@ -2,7 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { Boton } from '../../components/Boton';
 import { Selector } from '../../components/Selector';
 import { Tarjeta } from '../../components/Tarjeta';
-import { MensajeError } from '../torneos/MensajeError';
+import { MensajeError } from '../../components/Aviso';
 
 type Props = {
   categorias: string[];

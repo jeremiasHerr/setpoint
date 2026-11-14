@@ -1,5 +1,6 @@
 import { useState, type FormEvent, type ReactNode } from 'react';
 import { PORCENTAJE_COMISION, type DatosRegistroOrganizacion } from '@setpoint/shared';
+import { Aviso, MensajeError } from '../Aviso';
 import { Boton } from '../Boton';
 import { Campo } from '../Campo';
 import { CampoCodigo } from '../CampoCodigo';
@@ -41,24 +42,6 @@ function aSlug(texto: string) {
     .replace(/^-+|-+$/g, '');
 }
 
-function MensajeError({ id, children }: { id: string; children?: ReactNode }) {
-  if (!children) return null;
-  return (
-    <p id={id} className="text-[13px] text-rojo-texto">
-      {children}
-    </p>
-  );
-}
-
-function ErrorGeneral({ children }: { children?: ReactNode }) {
-  if (!children) return null;
-  return (
-    <p role="alert" className="rounded-control border border-rojo-linea bg-rojo-fondo px-3.5 py-2.5 text-sm text-rojo-texto">
-      {children}
-    </p>
-  );
-}
-
 type PropsPasoCodigo = Pick<Props, 'alConfirmar' | 'alReenviar' | 'alCambiarEmail' | 'enviando' | 'reenviando'> & {
   email: string;
   errores: ErroresRegistro;
@@ -90,9 +73,9 @@ function PasoCodigo({ email, alConfirmar, alReenviar, alCambiarEmail, enviando, 
       <div className="flex flex-col gap-2">
         <CampoCodigo valor={codigo} onChange={setCodigo} onCompleto={(valor) => alConfirmar?.(valor)} apagado={enviando} />
         {errores.codigo ? (
-          <p role="alert" className="text-[13px] text-rojo-texto">
+          <MensajeError>
             {errores.codigo}
-          </p>
+          </MensajeError>
         ) : (
           <p className="text-xs text-gris-500">
             Vence en <Numero>10</Numero> minutos. ¿No te llegó? Fijate en spam o en correo no deseado.
@@ -101,7 +84,7 @@ function PasoCodigo({ email, alConfirmar, alReenviar, alCambiarEmail, enviando, 
       </div>
 
       <div className="flex flex-col gap-[11px]">
-        <ErrorGeneral>{errores.general}</ErrorGeneral>
+        <Aviso>{errores.general}</Aviso>
         <Boton type="submit" variante="organizador" grande className="w-full" disabled={enviando || codigo.length < 6}>
           {enviando ? 'Creando la organización…' : 'Crear la organización'}
         </Boton>
@@ -264,7 +247,7 @@ export function FormularioRegistro({
         </div>
 
         <div className="flex flex-col gap-[11px]">
-          <ErrorGeneral>{errores.general}</ErrorGeneral>
+          <Aviso>{errores.general}</Aviso>
           <Boton type="submit" variante="organizador" grande className="w-full" disabled={enviando}>
             {enviando ? 'Mandando el código…' : 'Continuar'}
           </Boton>

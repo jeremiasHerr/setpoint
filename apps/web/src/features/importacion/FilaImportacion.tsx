@@ -51,7 +51,7 @@ export function FilaImportacion({ hoja, categoria, fila, decision, problemas, pa
           onClick={alExpandir}
           aria-expanded={expandida}
           className={`text-sm hover:underline ${
-            marcada ? 'text-rojo-texto' : decision.accion === 'crear' ? 'font-medium' : 'text-gris-500'
+            marcada ? 'font-semibold text-negro' : decision.accion === 'crear' ? 'font-medium' : 'text-gris-500'
           }`}
         >
           {marcada && expandida ? 'Elegí qué hacer' : QUE_PASA[decision.accion]}
@@ -69,21 +69,21 @@ export function FilaImportacion({ hoja, categoria, fila, decision, problemas, pa
 
   return (
     <li
-      className={`flex flex-col gap-[13px] border-b border-linea-suave px-[18px] py-4 ${marcada ? 'bg-rojo-fondo' : 'bg-fondo-tabla'}`}
+      className={`flex flex-col gap-[13px] border-b border-linea-suave px-[18px] py-4 ${marcada ? 'bg-fondo' : 'bg-fondo-tabla'}`}
     >
       {resumen}
 
       {problemas && (
         <ul className="flex flex-col gap-1">
           {problemas.map((p) => (
-            <li key={p} className="text-[13px] text-rojo-texto">
+            <li key={p} className="text-[13px] font-medium text-negro">
               {p}
             </li>
           ))}
         </ul>
       )}
       {!problemas && sugerido && fila.confianza !== 'alta' && (
-        <p className="text-[13px] text-rojo-texto">
+        <p className="text-[13px] font-medium text-negro">
           En la planilla dice “{fila.enLaPlanilla}”. Puede ser {nombreDe(sugerido)}, pero el nombre no es exacto.
         </p>
       )}
@@ -156,7 +156,7 @@ function JugadorDestino({
     );
   }
   return (
-    <span className={`truncate text-[15px] ${marcada ? 'font-semibold text-rojo-texto' : 'font-medium'}`}>
+    <span className={`truncate text-[15px] ${marcada ? 'font-semibold text-negro' : 'font-medium'}`}>
       {vinculado ? nombreDe(vinculado) : 'Jugador del padrón'}
     </span>
   );

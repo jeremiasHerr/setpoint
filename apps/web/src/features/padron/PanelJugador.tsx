@@ -1,5 +1,6 @@
 import type { DatosCrearJugador, JugadorPadron } from '@setpoint/shared';
-import { useState, type FormEvent, type ReactNode } from 'react';
+import { useState, type FormEvent } from 'react';
+import { Aviso, MensajeError } from '../../components/Aviso';
 import { Boton } from '../../components/Boton';
 import { Campo } from '../../components/Campo';
 import { Numero } from '../../components/Numero';
@@ -27,15 +28,6 @@ type Props = {
 
 // El select vacío es "sin categoría": la API lo recibe como null.
 const SIN_CATEGORIA = '';
-
-function MensajeError({ id, children }: { id: string; children?: ReactNode }) {
-  if (!children) return null;
-  return (
-    <p id={id} className="text-[13px] text-rojo-texto">
-      {children}
-    </p>
-  );
-}
 
 export function PanelJugador({
   categorias,
@@ -156,9 +148,9 @@ export function PanelJugador({
         )}
 
         {errores.general && (
-          <p role="alert" className="rounded-control border border-rojo-linea bg-rojo-fondo px-3.5 py-2.5 text-sm text-rojo-texto">
+          <Aviso>
             {errores.general}
-          </p>
+          </Aviso>
         )}
 
         <div className="flex flex-col gap-2.5">

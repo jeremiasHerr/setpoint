@@ -3,7 +3,7 @@ import { Campo } from '../../components/Campo';
 import { Interruptor } from '../../components/Interruptor';
 import { Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
-import { MensajeError } from './MensajeError';
+import { MensajeError } from '../../components/Aviso';
 import { aEntero } from './texto';
 import type { ErroresConvocatoria } from './useConvocatoria';
 

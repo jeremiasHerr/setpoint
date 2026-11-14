@@ -5,7 +5,7 @@ import { Campo } from '../../components/Campo';
 import { Chip } from '../../components/Chip';
 import { Selector } from '../../components/Selector';
 import { Tarjeta } from '../../components/Tarjeta';
-import { MensajeError } from './MensajeError';
+import { MensajeError } from '../../components/Aviso';
 import type { ErroresConvocatoria } from './useConvocatoria';
 
 type Props = {

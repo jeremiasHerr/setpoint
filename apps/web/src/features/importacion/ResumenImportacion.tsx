@@ -22,13 +22,14 @@ export function ResumenImportacion({ conteos, categoria, casilleros, jugadores }
         <TarjetaConteo numero={conteos.existentes} titulo="ya están en el padrón" detalle="se les cargan los puntos" />
         <TarjetaConteo numero={conteos.nuevos} titulo="son nuevos" detalle={`se dan de alta en ${categoria ?? 'la categoría'}`} />
         {paraRevisar > 0 ? (
-          <div className="flex items-baseline gap-3 rounded-tarjeta border border-rojo-linea bg-rojo-fondo px-[18px] py-4">
-            <Numero className="text-[30px] font-medium tracking-[-0.03em] text-rojo-texto">{paraRevisar}</Numero>
+          // Lo que hay que decidir no venció nada: borde negro, no rojo (design.md §3, decisión 099).
+          <div className="flex items-baseline gap-3 rounded-tarjeta border-[1.5px] border-negro px-[18px] py-4">
+            <Numero className="text-[30px] font-medium tracking-[-0.03em]">{paraRevisar}</Numero>
             <div className="flex flex-col gap-0.5">
-              <span className="text-[15px] font-semibold text-rojo-texto">
+              <span className="text-[15px] font-semibold">
                 {paraRevisar === 1 ? 'necesita que decidas' : 'necesitan que decidas'}
               </span>
-              <span className="text-[13px] text-rojo-texto">{motivoRevision}</span>
+              <span className="text-[13px] text-gris-700">{motivoRevision}</span>
             </div>
           </div>
         ) : (

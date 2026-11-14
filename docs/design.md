@@ -191,6 +191,15 @@ Fila de 52–60. Punto de 7px a la izquierda del nombre: lima si clasifica, `--l
 
 Columnas por ronda con rótulo en mono minúscula. Tarjeta de 190×62 con dos filas de 31; el ganador con fondo `--lima-tenue` y peso 600. **En las tarjetas va el resultado en sets (2-0, 2-1), no el marcador completo** — es lo que hace legible un cuadro de 16. Las llaves se dibujan con codos de 1px `--linea`. El partido pendiente destacado lleva borde 2px `--negro` y franja lima con fecha y hora. Donde hubo un bye no hay partido: el lugar lleva una tarjeta del mismo alto, sin fondo, con el apellido de quien pasa directo en `--gris-500` y el rótulo mono "pasa directo a semis" en `--gris-400` ([decisión 083](decisiones/083-el-bye-se-ve-en-el-cuadro.md)).
 
+### Errores
+
+El rojo es solo vencimiento: un error no es rojo ([decisión 099](decisiones/099-los-errores-no-son-rojos.md)). Un solo componente para toda la web y el flujo del jugador:
+
+- **Aviso**: bloque con borde 1px `--negro`, radio 10–12, texto 15 `--negro`. Para el error de un formulario entero o de una acción ("No pudimos ingresar"). La primera frase puede ir en negrita: "**Ese código no es.** Revisá que sea el último que te mandamos".
+- **Mensaje de error**: una línea en `--negro`, peso 500, debajo del campo o de la acción que falló. El campo lo nombra en su `aria-describedby`.
+
+Lo que hay que revisar, como una fila de la importación, se marca con borde `--negro`, como la marca "para revisar" de *Revisar vinculación*.
+
 ### Confirmación
 
 Para lo que no se deshace: cerrar la inscripción, confirmar el sorteo, cerrar las zonas, rechazar una solicitud y dar de baja ([decisión 096](decisiones/096-confirmar-lo-que-no-se-deshace.md)). Un modal de hasta 560 de ancho, radio 18, borde 1px `--linea` y sin sombra, sobre un fondo `--negro` al 40 % desenfocado 4 px. Arriba, el título con la acción y a quién afecta ("Dar de baja a Diego Antileo"); debajo, lo que va a pasar, una línea por consecuencia y con los números del torneo. Al pie, sobre `--fondo-tabla`, Cancelar y la acción en el botón principal del organizador, con el mismo texto que el botón que lo abrió. Se cancela con Escape o con un clic en el fondo, y el foco nunca arranca en la acción.

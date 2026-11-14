@@ -1,4 +1,5 @@
 import type { BajaDelTorneo } from '@setpoint/shared';
+import { MensajeError } from '../../components/Aviso';
 import { Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
 import { diaCorto } from '../torneos/texto';
@@ -41,7 +42,7 @@ export function Devoluciones({ slug, torneoId, bajas }: Props) {
           </li>
         ))}
       </ul>
-      {marcar.error && <p className="px-4 pt-3 text-[13px] text-rojo-texto">{textoDelError(marcar.error)}</p>}
+      {marcar.error && <MensajeError className="px-4 pt-3">{textoDelError(marcar.error)}</MensajeError>}
       <p className="bg-fondo-tabla px-4 py-3 text-[13px] leading-[1.45] text-gris-500">
         Las hacés vos, por fuera del sistema. Marcalas cuando las hagas, así no quedan pendientes.
       </p>

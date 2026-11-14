@@ -1,4 +1,5 @@
 import type { BajaDelTorneo, DatosInscripcionManual, InscripcionDelTorneo, JugadorPadron } from '@setpoint/shared';
+import { MensajeError } from '../../components/Aviso';
 import { useState } from 'react';
 import { Boton } from '../../components/Boton';
 import { Campo } from '../../components/Campo';
@@ -144,7 +145,7 @@ export function InscribirAMano({ slug, torneoId, categoria, suelto, precio, libr
         )}
       </p>
 
-      {inscribir.error && <p className="text-[13px] text-rojo-texto">{textoDelError(inscribir.error)}</p>}
+      {inscribir.error && <MensajeError>{textoDelError(inscribir.error)}</MensajeError>}
 
       <Boton
         variante="organizador"

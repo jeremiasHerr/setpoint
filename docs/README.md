@@ -196,6 +196,7 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 - ~~¿Cómo se confirma lo que no se deshace?~~ **Con un modal sobre el fondo desenfocado, que dice lo que va a pasar con los números del torneo** ([decisión 096](decisiones/096-confirmar-lo-que-no-se-deshace.md)). Cerrar la inscripción, confirmar el sorteo, cerrar las zonas y rechazar una solicitud se ejecutaban al primer clic; "Dar de baja" también pasa al modal, para que haya una sola forma
 - ~~Dónde guarda la web el token de sesión (abierta 13)~~ **Sigue en `localStorage`** ([decisión 086](decisiones/086-version-publicada.md)). La cookie `httpOnly` obliga a configurar CORS con credenciales y protección CSRF, con la web y la API en dominios distintos; la web no inserta HTML ajeno, que es por donde entraría un script
 - ~~¿Importar la planilla enciende el ranking?~~ **Sí, si trae puntos, al confirmar** ([decisión 098](decisiones/098-importar-puntos-enciende-el-ranking.md)). Las organizaciones arrancan con el ranking apagado, y lo que acababan de importar quedaba escondido. La revisión lo dice antes de confirmar
+- ~~¿Los errores de formulario son rojos?~~ **No: el rojo es solo vencimiento, como dice design.md. Los errores van en negro, con un solo componente para toda la web** ([decisión 099](decisiones/099-los-errores-no-son-rojos.md)). La web de la organización los ponía en rojo y el flujo del jugador no; ahora todo usa el mismo aviso
 
 ---
 
