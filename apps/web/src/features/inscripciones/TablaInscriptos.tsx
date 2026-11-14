@@ -1,4 +1,5 @@
 import type { EnListaDeEspera, InscripcionDelTorneo } from '@setpoint/shared';
+import { MensajeError } from '../../components/Aviso';
 import { useState } from 'react';
 import { Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
@@ -43,7 +44,7 @@ export function TablaInscriptos({ slug, torneoId, inscripciones, sePuedeDarDeBaj
 
   return (
     <div className="flex flex-col gap-3">
-      {recordar.error && <p className="text-sm text-rojo-texto">{textoDelError(recordar.error)}</p>}
+      {recordar.error && <MensajeError>{textoDelError(recordar.error)}</MensajeError>}
       <Tarjeta className="flex flex-col overflow-hidden">
         <div className={`grid gap-x-1 border-b border-linea bg-fondo-tabla px-[18px] py-[11px] ${COLUMNAS}`}>
           <span className="text-xs text-gris-500">jugador</span>

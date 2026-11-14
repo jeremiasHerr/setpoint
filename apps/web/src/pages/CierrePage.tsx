@@ -1,4 +1,5 @@
 import type { CierreDelTorneo } from '@setpoint/shared';
+import { MensajeError } from '../components/Aviso';
 import type { ReactNode } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Boton } from '../components/Boton';
@@ -151,7 +152,7 @@ function VistaDelCierre({ sesion, cierre }: { sesion: Sesion; cierre: CierreDelT
           ) : (
             <div className="flex flex-col gap-2.5">
               {cerrar.error && (
-                <p className="text-sm text-rojo-texto">{ERRORES[cerrar.error.message] ?? 'No se pudo cerrar el torneo. Probá de nuevo.'}</p>
+                <MensajeError>{ERRORES[cerrar.error.message] ?? 'No se pudo cerrar el torneo. Probá de nuevo.'}</MensajeError>
               )}
               <Boton variante="organizador" grande disabled={cerrar.isPending} onClick={() => cerrar.mutate()}>
                 {cerrar.isPending ? 'Cerrando…' : conRanking ? 'Cerrar y actualizar el ranking' : 'Cerrar el torneo'}

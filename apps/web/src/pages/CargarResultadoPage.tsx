@@ -1,4 +1,5 @@
 import type { PartidoConResultado } from '@setpoint/shared';
+import { MensajeError } from '../components/Aviso';
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Boton } from '../components/Boton';
@@ -311,7 +312,7 @@ function TarjetaDelPartido({ sesion, partido }: { sesion: Sesion; partido: Parti
 
               <div className="flex items-center justify-between gap-4 border-t border-linea px-6 py-[18px]">
                 {guardar.error ? (
-                  <p className="min-w-0 flex-1 text-sm text-rojo-texto">{textoDelError(guardar.error)}</p>
+                  <MensajeError className="min-w-0 flex-1">{textoDelError(guardar.error)}</MensajeError>
                 ) : recienGuardado ? (
                   <p className="min-w-0 flex-1 text-[15px] font-semibold">
                     {siguiente

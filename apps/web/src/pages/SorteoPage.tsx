@@ -6,6 +6,7 @@ import {
   type Sorteo,
   type ZonaSorteada,
 } from '@setpoint/shared';
+import { MensajeError } from '../components/Aviso';
 import { useCallback, useState, type ReactNode } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Boton } from '../components/Boton';
@@ -324,7 +325,7 @@ function SorteoDeZonas({ sesion, sorteo }: { sesion: Sesion; sorteo: Sorteo }) {
             )
           )}
 
-          {error && <p className="text-sm text-rojo-texto">{textoDeError(error, sorteo)}</p>}
+          {error && <MensajeError>{textoDeError(error, sorteo)}</MensajeError>}
 
           {(zonasVisibles || (cargandoAMano && sorteo.jugadores.some((j) => j.posicionSiembra !== null))) && (
             <p className="text-sm text-gris-500">El número es la posición de siembra, según el ranking al momento del sorteo.</p>

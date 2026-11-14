@@ -1,4 +1,5 @@
 import { LARGO_MINIMO_CONTRASENA } from '@setpoint/shared';
+import { Aviso, MensajeError } from '../Aviso';
 import { useState, type FormEvent, type ReactNode } from 'react';
 import { Boton } from '../Boton';
 import { CampoContrasena } from '../CampoContrasena';
@@ -67,17 +68,17 @@ export function FormularioRestablecerContrasena({ alEnviar, enviando = false, er
             aria-describedby={noCoinciden ? 'restablecer-repetir-error' : undefined}
           />
           {noCoinciden && (
-            <p id="restablecer-repetir-error" className="text-[13px] text-rojo-texto">
+            <MensajeError id="restablecer-repetir-error">
               Las contraseñas no coinciden.
-            </p>
+            </MensajeError>
           )}
         </div>
 
         <div className="flex flex-col gap-[11px]">
           {error && (
-            <p role="alert" className="rounded-control border border-rojo-linea bg-rojo-fondo px-3.5 py-2.5 text-sm text-rojo-texto">
+            <Aviso>
               {error}
-            </p>
+            </Aviso>
           )}
           <Boton type="submit" variante="organizador" grande className="w-full" disabled={enviando}>
             {enviando ? 'Guardando…' : 'Guardar la contraseña'}

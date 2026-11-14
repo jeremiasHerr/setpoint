@@ -1,4 +1,5 @@
 import type { CoordinacionDelPartido } from '@setpoint/shared';
+import { MensajeError } from '../../components/Aviso';
 import { useState, type FormEvent } from 'react';
 import { Boton } from '../../components/Boton';
 import { Campo } from '../../components/Campo';
@@ -55,7 +56,7 @@ export function AnotarFecha({ slug, torneoId, partidoId, sangria, onCerrar }: Pr
     <div className={`px-5 pb-4 ${sangria}`}>
       <div className="rounded-control border border-linea bg-fondo-tabla p-4">
         {coordinacion.isPending && <Esqueleto forma="bloque" />}
-        {coordinacion.error && <p className="text-sm text-rojo-texto">No pudimos cargar el partido. Probá de nuevo.</p>}
+        {coordinacion.error && <MensajeError>No pudimos cargar el partido. Probá de nuevo.</MensajeError>}
         {coordinacion.data && (
           <Formulario slug={slug} torneoId={torneoId} coordinacion={coordinacion.data} onCerrar={onCerrar} />
         )}
@@ -172,9 +173,9 @@ function Formulario({
       </div>
 
       {(campos.dia || campos.hora || campos.clubId) && (
-        <p className="text-sm text-rojo-texto">{campos.dia ?? campos.hora ?? campos.clubId}</p>
+        <MensajeError>{campos.dia ?? campos.hora ?? campos.clubId}</MensajeError>
       )}
-      {mensaje && <p className="text-sm text-rojo-texto">{mensaje}</p>}
+      {mensaje && <MensajeError>{mensaje}</MensajeError>}
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="text-sm text-gris-500">

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Campo } from '../../components/Campo';
 import { Chip } from '../../components/Chip';
 import { Tarjeta } from '../../components/Tarjeta';
-import { MensajeError } from './MensajeError';
+import { MensajeError } from '../../components/Aviso';
 import { aEntero } from './texto';
 import type { ErroresConvocatoria } from './useConvocatoria';
 
@@ -117,7 +117,7 @@ export function SeccionInscripcion({
           ))}
         </div>
         {padronVacio && (
-          <p className={`text-[13px] leading-[1.45] ${modoInscripcion === 'cerrada' ? 'text-rojo-texto' : 'text-gris-500'}`}>
+          <p className={`text-[13px] leading-[1.45] ${modoInscripcion === 'cerrada' ? 'font-medium text-negro' : 'text-gris-500'}`}>
             {modoInscripcion === 'cerrada' ? 'Con el padrón vacío no se puede anotar nadie. ' : 'Tu padrón está vacío. '}
             Para usar "Solo el padrón",{' '}
             <Link to="/padron/importar" className="font-medium text-negro underline">

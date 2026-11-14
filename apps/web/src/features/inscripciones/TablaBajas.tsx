@@ -1,4 +1,5 @@
 import type { BajaDelTorneo, DevolucionDeLaBaja } from '@setpoint/shared';
+import { MensajeError } from '../../components/Aviso';
 import { Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
 import { diaCorto } from '../torneos/texto';
@@ -23,7 +24,7 @@ export function TablaBajas({ slug, torneoId, bajas }: Props) {
 
   return (
     <div className="flex flex-col gap-3">
-      {marcar.error && <p className="text-sm text-rojo-texto">{textoDelError(marcar.error)}</p>}
+      {marcar.error && <MensajeError>{textoDelError(marcar.error)}</MensajeError>}
       <Tarjeta className="flex flex-col overflow-hidden">
         <div className={`grid gap-x-1 border-b border-linea bg-fondo-tabla px-[18px] py-[11px] ${COLUMNAS}`}>
           <span className="text-xs text-gris-500">jugador</span>

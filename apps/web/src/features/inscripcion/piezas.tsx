@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { Aviso as AvisoComun } from '../../components/Aviso';
 import { Numero } from '../../components/Numero';
 import { importe } from '../torneo-publico/convocatoria';
 
@@ -16,14 +17,10 @@ export function Caja({ children }: { children: ReactNode }) {
   return <div className="rounded-[12px] bg-fondo px-4 py-3.5 text-[15px] leading-[1.42] text-gris-700">{children}</div>;
 }
 
-// El rojo es solo para vencimientos (design.md §3): los errores van en gris sobre fondo.
+// El rojo es solo para vencimientos (design.md §3): los errores van con el aviso de toda la web
+// (decisión 099).
 export function Aviso({ mensaje }: { mensaje: string | null }) {
-  if (!mensaje) return null;
-  return (
-    <p role="alert" className="rounded-control bg-fondo px-3.5 py-3 text-[15px] font-medium text-gris-700">
-      {mensaje}
-    </p>
-  );
+  return <AvisoComun>{mensaje}</AvisoComun>;
 }
 
 export function BotonPrincipal({ children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) {

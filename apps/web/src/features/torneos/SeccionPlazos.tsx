@@ -2,7 +2,7 @@ import type { DatosConvocatoria, InstanciaCronograma } from '@setpoint/shared';
 import { Campo } from '../../components/Campo';
 import { Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
-import { MensajeError } from './MensajeError';
+import { MensajeError } from '../../components/Aviso';
 import { aEntero, rangoDeDias } from './texto';
 import type { ErroresConvocatoria } from './useConvocatoria';
 

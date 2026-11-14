@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, type ReactNode } from 'react';
+import { MensajeError } from './Aviso';
 import { Boton } from './Boton';
 
 type Props = {
@@ -79,7 +80,7 @@ export function Confirmacion({
                 ))}
               </ul>
             )}
-            {error && <p className="text-sm text-rojo-texto">{error}</p>}
+            {error && <MensajeError>{error}</MensajeError>}
           </div>
           <div className="flex flex-wrap justify-end gap-2.5 border-t border-linea bg-fondo-tabla px-6 py-4">
             <Boton onClick={cancelar} disabled={enCurso}>
