@@ -107,7 +107,7 @@ function QuePasaAlCerrar({ datos, pagados, reservando }: { datos: InscripcionesD
         Para armar <Numero>{datos.cantidadGrupos}</Numero> zonas hacen falta al menos{' '}
         <Numero>{datos.cantidadGrupos * MINIMO_POR_ZONA}</Numero> inscriptos que hayan pagado, y hay <Numero>{pagados}</Numero>.
         Para poder cerrar, esperá a que paguen más o{' '}
-        <Link to={`/torneos/${datos.convocatoriaId}`} className="underline">
+        <Link to={`/torneos/${datos.convocatoriaId}`} state={{ desde: datos.torneoId }} className="underline">
           bajá la cantidad de zonas del torneo
         </Link>
         .

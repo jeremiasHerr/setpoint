@@ -1,7 +1,8 @@
 import type { CasoDeRevision, ResolverRevision } from '@setpoint/shared';
-import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Boton } from '../components/Boton';
 import { EncabezadoOrganizador } from '../components/EncabezadoOrganizador';
+import { Migas } from '../components/Migas';
 import { leerSesion, type Sesion } from '../features/auth/sesion';
 import { useCerrarSesion } from '../features/auth/useCerrarSesion';
 import { useSesionInvalida } from '../features/auth/useSesionInvalida';
@@ -101,9 +102,7 @@ function Revisar({ sesion }: { sesion: Sesion }) {
       />
 
       <div className="flex flex-col gap-[7px] px-7 pt-6 pb-5">
-        <Link to="/padron" className="self-start text-sm text-gris-500 hover:text-negro">
-          Padrón · para revisar
-        </Link>
+        <Migas anteriores={[{ etiqueta: 'Padrón', ruta: '/padron' }]}>Revisar vinculación</Migas>
         <div className="flex flex-wrap items-center gap-3">
           <h1 className="text-[30px] font-semibold tracking-[-0.035em]">Revisar vinculación</h1>
           {caso.data && !resuelto && <MarcaParaRevisar />}
