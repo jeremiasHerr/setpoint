@@ -2,11 +2,14 @@ import type { FilaDeRanking, TorneoDelCalendario } from '@setpoint/shared';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Numero } from '../../components/Numero';
+import { estadoParaLaFicha, type VueltaDeLaFicha } from '../ficha/vuelta';
 
 type Props = {
   slug: string;
   filas: FilaDeRanking[];
   torneosDelCalendario: TorneoDelCalendario[];
+  // A dónde vuelve la ficha: este ranking, en esta categoría (decisión 102).
+  vuelta: VueltaDeLaFicha;
 };
 
 // "pri 25": las tres primeras letras del torneo del calendario y el año de los puntos.
@@ -16,7 +19,7 @@ function rotuloDeCasillero(nombre: string, anio: number) {
 
 // Puesto, nombre y total, sin scroll horizontal. Al tocar una fila se abre el desglose
 // por torneo del calendario, como en la planilla, y el enlace a la ficha (decisión 074).
-export function TablaRanking({ slug, filas, torneosDelCalendario }: Props) {
+export function TablaRanking({ slug, filas, torneosDelCalendario, vuelta }: Props) {
   const [abierta, setAbierta] = useState<number | null>(null);
 
   return (
@@ -55,6 +58,7 @@ export function TablaRanking({ slug, filas, torneosDelCalendario }: Props) {
                 <Casilleros fila={fila} torneosDelCalendario={torneosDelCalendario} />
                 <Link
                   to={`/c/${slug}/jugadores/${fila.jugadorId}`}
+                  state={estadoParaLaFicha(vuelta)}
                   className="self-start text-sm font-medium text-negro underline underline-offset-[3px] hover:text-gris-500"
                 >
                   Ver la ficha

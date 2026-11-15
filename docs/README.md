@@ -199,6 +199,7 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 - ~~¿Los errores de formulario son rojos?~~ **No: el rojo es solo vencimiento, como dice design.md. Los errores van en negro, con un solo componente para toda la web** ([decisión 099](decisiones/099-los-errores-no-son-rojos.md)). La web de la organización los ponía en rojo y el flujo del jugador no; ahora todo usa el mismo aviso
 - ~~¿Cómo se sabe dónde se está y cómo se vuelve en las pantallas internas?~~ **Con migas de pan arriba del título: "Inicio › Primavera 26 · Tercera › Editar", "Padrón › Importar planilla"** ([decisión 100](decisiones/100-migas-de-pan.md)). Editar el torneo solo volvía al inicio, y cada pantalla del padrón volvía a su manera. En la franja del torneo, el nombre es la última miga y la pestaña activa, el nivel siguiente
 - ~~¿Cómo se llega a editar un torneo publicado?~~ **Con un engranaje arriba a la derecha de su tarjeta en el inicio, mientras se pueda editar** ([decisión 101](decisiones/101-engranaje-para-editar.md)). La tarjeta solo abría Inscripciones, y "Editar el torneo" quedaba un paso más adentro. Un tercer botón de texto llenaba la tarjeta
+- ~~¿A dónde vuelve la ficha del jugador?~~ **A la página desde la que se llegó: el ranking, en la misma categoría, o las zonas del torneo en vivo. Desde un link compartido, al ranking** ([decisión 102](decisiones/102-la-ficha-vuelve-a-donde-se-llego.md)). La ficha no tenía vuelta, y lo más común es abrirla desde el torneo en vivo. La inscripción también suma "← El torneo"
 
 ---
 

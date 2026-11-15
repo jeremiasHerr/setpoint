@@ -1,7 +1,8 @@
 import type { TorneoEnVivo } from '@setpoint/shared';
-import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { Chip } from '../components/Chip';
 import { EncabezadoPublico } from '../components/EncabezadoPublico';
+import { LinkDeVuelta } from '../components/LinkDeVuelta';
 import { BotonCompartir } from '../features/cuadros/BotonCompartir';
 import { LosCuadros } from '../features/cuadros/LosCuadros';
 import { CalendarioEnVivo } from '../features/en-vivo/CalendarioEnVivo';
@@ -62,9 +63,7 @@ function Contenido({ torneo, slug, id, pestanaInicial }: { torneo: TorneoEnVivo;
 
       <div className="flex flex-col gap-1.5 xl:pt-2">
         {/* Las páginas públicas no tienen menú: esta vuelve a la del torneo, que enlaza acá (decisión 084). */}
-        <Link to={`/c/${slug}/torneos/${id}`} className="self-start py-1 text-sm text-gris-500 hover:text-negro">
-          ← El torneo
-        </Link>
+        <LinkDeVuelta ruta={`/c/${slug}/torneos/${id}`}>El torneo</LinkDeVuelta>
         <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
           <h1 className="text-[30px] font-semibold tracking-[-0.035em]">El torneo en vivo</h1>
           <BotonCompartir titulo={`${torneo.nombre} · ${torneo.organizacion}`} />

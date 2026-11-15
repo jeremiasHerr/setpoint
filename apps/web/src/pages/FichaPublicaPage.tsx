@@ -1,7 +1,8 @@
 import type { FichaDelJugador, RecordDelJugador } from '@setpoint/shared';
 import type { ReactNode } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { EncabezadoPublico } from '../components/EncabezadoPublico';
+import { LinkDeVuelta } from '../components/LinkDeVuelta';
 import { Numero } from '../components/Numero';
 import { Tarjeta } from '../components/Tarjeta';
 import { BotonCompartir } from '../features/cuadros/BotonCompartir';
@@ -9,6 +10,7 @@ import { PartidosDeLaFicha } from '../features/ficha/PartidosDeLaFicha';
 import { PuntosPorTorneo } from '../features/ficha/PuntosPorTorneo';
 import { TorneosDeLaFicha } from '../features/ficha/TorneosDeLaFicha';
 import { useFichaPublica } from '../features/ficha/useFichaPublica';
+import { vueltaDelEstado } from '../features/ficha/vuelta';
 import { ErrorApi } from '../lib/api';
 import { Esqueleto } from '../components/Esqueleto';
 
@@ -22,7 +24,8 @@ function mensajeDeError(error: Error) {
 
 // La ficha del jugador para cualquiera con el enlace, sin cuenta (F17): sus números, sus puntos por
 // torneo del calendario, los torneos que jugó y sus partidos. Se llega desde el ranking y desde las
-// zonas del torneo en vivo (decisión 074). Ningún dato de contacto.
+// zonas del torneo en vivo (decisión 074), y vuelve a la página desde la que se llegó (decisión 102).
+// Ningún dato de contacto.
 export function FichaPublicaPage() {
   const { slug = '', id = '' } = useParams();
   const ficha = useFichaPublica(slug, id);
@@ -31,14 +34,17 @@ export function FichaPublicaPage() {
     <main className="mx-auto flex min-h-screen max-w-[480px] flex-col gap-[22px] px-4 pt-5 pb-7">
       {ficha.isPending && <Esqueleto forma="lista" />}
       {ficha.error && <p className="text-[15px] text-gris-700">{mensajeDeError(ficha.error)}</p>}
-      {ficha.data && <Ficha ficha={ficha.data} />}
+      {ficha.data && <Ficha ficha={ficha.data} slug={slug} />}
     </main>
   );
 }
 
-function Ficha({ ficha }: { ficha: FichaDelJugador }) {
+function Ficha({ ficha, slug }: { ficha: FichaDelJugador; slug: string }) {
   const nombre = `${ficha.nombre} ${ficha.apellido}`;
   const { ranking } = ficha;
+  // Sin saber de dónde se llegó (un link compartido), vuelve al ranking, si el circuito lo lleva.
+  const vuelta =
+    vueltaDelEstado(useLocation().state) ?? (ranking ? { ruta: `/c/${slug}/ranking`, etiqueta: 'Ranking' } : null);
 
   return (
     <>
@@ -51,6 +57,7 @@ function Ficha({ ficha }: { ficha: FichaDelJugador }) {
 
       <section className="flex flex-col gap-4">
         <div className="flex flex-col gap-1.5">
+          {vuelta && <LinkDeVuelta ruta={vuelta.ruta}>{vuelta.etiqueta}</LinkDeVuelta>}
           <h1 className="text-[30px] leading-[1.1] font-semibold tracking-[-0.035em]">{nombre}</h1>
           {(ficha.categoria || ranking) && (
             <div className="flex flex-wrap items-center gap-[9px]">
