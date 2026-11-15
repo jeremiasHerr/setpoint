@@ -31,7 +31,7 @@ export function Catalogo() {
 
   return (
     <div className="min-h-screen bg-white">
-      <EncabezadoOrganizador organizacion="Polenta Team Tenis" navegacion={navegacion} activo="Padrón" />
+      <EncabezadoOrganizador organizacion="Liga Amateur del Valle" navegacion={navegacion} activo="Padrón" />
 
       <main className="mx-auto flex max-w-4xl flex-col gap-10 px-7 py-8">
         <div className="flex flex-col gap-2">
@@ -71,7 +71,7 @@ export function Catalogo() {
 
         <Seccion titulo="campo">
           <div className="grid grid-cols-2 gap-3.5">
-            <Campo id="catalogo-nombre" rotulo="Nombre del circuito o grupo" placeholder="Polenta Team Tenis" />
+            <Campo id="catalogo-nombre" rotulo="Nombre del circuito o grupo" placeholder="Liga Amateur del Valle" />
             <Campo id="catalogo-importe" rotulo="Importe" numerico defaultValue="$45.000" />
           </div>
         </Seccion>

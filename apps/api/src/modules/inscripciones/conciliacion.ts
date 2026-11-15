@@ -1,9 +1,7 @@
 // La conciliación del torneo (F13). Lógica pura: recibe los pagos cobrados, ya leídos.
-import { PORCENTAJE_COMISION, type ConciliacionDelTorneo, type DevolucionDeLaBaja } from '@setpoint/shared';
-
-// La comisión de la plataforma, solo sobre lo que cobra por MercadoPago (decisión 078). Lo cobrado
-// por fuera ya lo tiene la organización.
-export const COMISION = PORCENTAJE_COMISION / 100;
+// SetPoint no se queda con un porcentaje de lo cobrado: cobra un cargo por jugador inscripto (decisión
+// 103, que reemplaza la comisión de la 078).
+import type { ConciliacionDelTorneo, DevolucionDeLaBaja } from '@setpoint/shared';
 
 export type PagoCobrado = {
   medio: 'MERCADOPAGO' | 'EFECTIVO' | 'TRANSFERENCIA' | 'OTRO';
@@ -21,18 +19,13 @@ export function conciliacion(pagos: PagoCobrado[]): ConciliacionDelTorneo {
   const cobrados = pagos.filter((p) => p.monto > 0);
   const porMercadoPago = cobrados.filter((p) => p.medio === 'MERCADOPAGO');
   const porFuera = cobrados.filter((p) => p.medio !== 'MERCADOPAGO');
-  // La devolución la hace la organización, por fuera (decisión 075): no se resta de lo que le
-  // corresponde, se dice aparte.
+  // La devolución la hace la organización, por fuera (decisión 075): no se resta de lo cobrado, se
+  // dice aparte.
   const pendientes = cobrados.filter((p) => p.requiereDevolucion && p.devueltoEn === null);
 
-  const mercadoPago = suma(porMercadoPago);
-  const comision = centavos(mercadoPago * COMISION);
   return {
-    mercadoPago,
+    mercadoPago: suma(porMercadoPago),
     pagosMercadoPago: porMercadoPago.length,
-    porcentajeComision: COMISION * 100,
-    comision,
-    teCorresponde: centavos(mercadoPago - comision),
     porFuera: suma(porFuera),
     pagosPorFuera: porFuera.length,
     aDevolver: suma(pendientes),

@@ -10,7 +10,7 @@ const pago = (datos: Partial<PagoCobrado>): PagoCobrado => ({
 });
 
 describe('conciliacion', () => {
-  it('la comisión del 5% es solo sobre lo cobrado por MercadoPago (decisión 078)', () => {
+  it('separa lo cobrado por MercadoPago de lo cobrado por fuera, sin comisión (decisión 103)', () => {
     const resultado = conciliacion([
       ...Array.from({ length: 29 }, () => pago({})),
       pago({ medio: 'EFECTIVO' }),
@@ -19,9 +19,6 @@ describe('conciliacion', () => {
     expect(resultado).toEqual({
       mercadoPago: 1305000,
       pagosMercadoPago: 29,
-      porcentajeComision: 5,
-      comision: 65250,
-      teCorresponde: 1239750,
       porFuera: 45000,
       pagosPorFuera: 1,
       aDevolver: 0,
@@ -29,10 +26,10 @@ describe('conciliacion', () => {
     });
   });
 
-  it('una devolución pendiente se dice aparte y no resta de lo que corresponde (decisión 075)', () => {
+  it('una devolución pendiente se dice aparte y no resta de lo cobrado (decisión 075)', () => {
     const resultado = conciliacion([pago({}), pago({ requiereDevolucion: true })]);
 
-    expect(resultado.teCorresponde).toBe(85500);
+    expect(resultado.mercadoPago).toBe(90000);
     expect(resultado.aDevolver).toBe(45000);
     expect(resultado.devolucionesPendientes).toBe(1);
   });
@@ -51,8 +48,8 @@ describe('conciliacion', () => {
     expect(resultado.porFuera).toBe(0);
   });
 
-  it('redondea la comisión a los centavos', () => {
-    expect(conciliacion([pago({ monto: 33333 })]).comision).toBe(1666.65);
+  it('suma a los centavos', () => {
+    expect(conciliacion([pago({ monto: 33333.33 }), pago({ monto: 0.34 })]).mercadoPago).toBe(33333.67);
   });
 });
 

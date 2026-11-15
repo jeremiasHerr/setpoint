@@ -1,6 +1,6 @@
 # 078 — La conciliación cobra una comisión del 5% sobre lo cobrado por MercadoPago
 
-**Estado:** aceptada — 7 de noviembre de 2026
+**Estado:** reemplazada por la [decisión 103](103-cargo-por-jugador-inscripto.md) — aceptada el 7 de noviembre de 2026
 
 ## Contexto
 
