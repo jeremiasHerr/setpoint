@@ -230,7 +230,7 @@ La lista de espera se ordena **por orden de llegada** y cubre deserciones, repli
 - **Dar de baja e inscribir a mano** se puede hasta que se confirma el sorteo ([decisión 077](decisiones/077-baja-hasta-el-sorteo.md)).
 - **Recordarle**, en una reserva sin pagar, le manda otra vez el link para pagar.
 - **Un lugar que se libera pasa a la lista de espera** también cuando vence una reserva, cuando MercadoPago rechaza un pago y cuando la organización sube el cupo del torneo.
-- **La conciliación** dice lo cobrado por MercadoPago, la comisión del 5% de la plataforma sobre eso, lo que le corresponde a la organización, lo cobrado por fuera y lo que falta devolver ([decisión 078](decisiones/078-comision-de-la-plataforma.md)).
+- **La conciliación** dice lo cobrado por MercadoPago, lo cobrado por fuera y lo que falta devolver. No hay comisión: SetPoint cobra un cargo por jugador inscripto ([decisión 103](decisiones/103-cargo-por-jugador-inscripto.md)).
 
 | Endpoint | Qué hace |
 |---|---|

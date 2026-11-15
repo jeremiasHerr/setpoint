@@ -1,4 +1,3 @@
-import { PORCENTAJE_COMISION } from '@setpoint/shared';
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { IconoMas } from '../components/IconoMas';
@@ -52,12 +51,9 @@ const preguntas: { pregunta: string; respuesta: ReactNode }[] = [
   },
   {
     pregunta: '¿Cuánto cuesta?',
-    respuesta: (
-      <>
-        Nada por usarlo. De cada inscripción cobrada por MercadoPago, SetPoint se queda con el{' '}
-        <Numero>{PORCENTAJE_COMISION}%</Numero>. Lo que cobrás en mano no tiene comisión.
-      </>
-    ),
+    // El cargo por jugador inscripto (decisión 103). El monto todavía no está definido.
+    respuesta:
+      'El primer torneo es gratis. Desde el segundo, pagás un monto fijo por cada jugador inscripto, al cerrar la inscripción. Da lo mismo si te pagó por MercadoPago o en mano.',
   },
   {
     pregunta: '¿Puede anotarse cualquiera?',
@@ -187,7 +183,7 @@ function TableroDeEjemplo() {
             <span className="flex size-[18px] items-center justify-center rounded-[5px] bg-lima">
               <span className="size-1.5 rounded-full bg-negro" />
             </span>
-            Polenta Team Tenis
+            Liga Amateur del Valle
           </span>
           <span className="ml-auto">Inicio</span>
           <span>Circuito</span>
@@ -269,21 +265,6 @@ function Producto() {
       <div className="mx-auto flex max-w-[1180px] flex-wrap items-end justify-center gap-6">
         <TableroDeEjemplo />
         <CelularDeEjemplo />
-      </div>
-    </section>
-  );
-}
-
-function QuienLoUsa() {
-  return (
-    <section className={`pt-10 ${margen}`}>
-      <div className="mx-auto flex max-w-[1180px] flex-wrap items-center justify-center gap-x-7 gap-y-2 text-[15px] text-gris-500">
-        <span>
-          Lo usa <span className="font-semibold text-negro">Polenta Team Tenis</span>, de Neuquén
-        </span>
-        <Numero>77 jugadores</Numero>
-        <Numero>2 categorías</Numero>
-        <Numero>5 torneos por año</Numero>
       </div>
     </section>
   );
@@ -572,7 +553,6 @@ export function LandingPage() {
     <div className="flex min-h-screen flex-col bg-white leading-[1.45] text-negro">
       <Portada />
       <Producto />
-      <QuienLoUsa />
       <TresPantallas />
       <Funciones />
       <Preguntas />

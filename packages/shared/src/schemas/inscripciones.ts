@@ -54,16 +54,12 @@ export type BajaDelTorneo = {
   devolucion: DevolucionDeLaBaja;
 };
 
-// Se calcula al consultar, con los pagos del torneo (decisión 078).
+// Se calcula al consultar, con los pagos del torneo (decisión 078). Sin comisión (decisión 103).
 export type ConciliacionDelTorneo = {
-  // Lo cobrado por MercadoPago, también lo que después hay que devolver: ya se cobró.
+  // Lo cobrado por MercadoPago, también lo que después hay que devolver: ya se cobró. Le corresponde
+  // entero a la organización, y la plataforma se lo transfiere por fuera del sistema (05-pagos §2).
   mercadoPago: number;
   pagosMercadoPago: number;
-  // La comisión de la plataforma, solo sobre lo cobrado por MercadoPago.
-  porcentajeComision: number;
-  comision: number;
-  // Lo que la plataforma le transfiere a la organización, por fuera del sistema (05-pagos §2).
-  teCorresponde: number;
   // Lo que la organización cobró en mano o por transferencia: ya lo tiene.
   porFuera: number;
   pagosPorFuera: number;
@@ -141,7 +137,3 @@ export const inscripcionManualSchema = z.object(
   { error: 'Faltan los datos de la inscripción' },
 );
 export type DatosInscripcionManual = z.infer<typeof inscripcionManualSchema>;
-
-// La comisión de la plataforma, en por ciento, solo sobre lo que se cobra por MercadoPago (decisión
-// 078). La usan la conciliación y los textos que la anuncian antes de cobrar: el registro y la landing.
-export const PORCENTAJE_COMISION = 5;

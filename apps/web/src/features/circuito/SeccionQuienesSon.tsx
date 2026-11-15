@@ -19,7 +19,7 @@ const MAXIMO_CONTACTOS = 10;
 
 const TIPOS: Record<Contacto['tipo'], { rotulo: string; ejemplo: string }> = {
   whatsapp: { rotulo: 'WhatsApp', ejemplo: '299 412 3456' },
-  red_social: { rotulo: 'Red social', ejemplo: '@polentatenis o un link' },
+  red_social: { rotulo: 'Red social', ejemplo: '@ligadelvalle o un link' },
 };
 
 function IconoQuitar({ className = '' }: { className?: string }) {

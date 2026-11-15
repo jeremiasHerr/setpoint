@@ -16,7 +16,9 @@ Toda la recaudación entra a una sola cuenta de MercadoPago (la de la plataforma
 
 La transferencia efectiva a la organización queda **fuera del alcance del sistema**.
 
-**La comisión es del 5%, solo sobre lo cobrado por MercadoPago**, y la conciliación se calcula al consultar, con los pagos del torneo ([decisión 078](decisiones/078-comision-de-la-plataforma.md)). Lo cobrado en efectivo o por transferencia ya lo tiene la organización.
+**SetPoint no se queda con una comisión de lo cobrado:** cobra un cargo fijo por jugador inscripto, que la organización paga al cerrar la inscripción, y el primer torneo es gratis ([decisión 103](decisiones/103-cargo-por-jugador-inscripto.md), que reemplaza el 5% de la [078](decisiones/078-comision-de-la-plataforma.md)). El cargo todavía no se cobra en el sistema. La conciliación se calcula al consultar, con los pagos del torneo: lo cobrado por MercadoPago le corresponde entero a la organización, y lo cobrado en efectivo o por transferencia ya lo tiene.
+
+> **Este modelo no queda así fuera de la demo.** Que la plata de las inscripciones pase por la cuenta de SetPoint no es aceptable para el grupo: tiene que llegar a la de cada organización. Es la decisión abierta 19 del [README](README.md).
 
 ### Por qué no Marketplace
 

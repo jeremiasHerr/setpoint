@@ -83,7 +83,8 @@ describe.skipIf(!process.env.DATABASE_URL)('inscripciones (F13), contra la base'
       ['Ojeda', 1],
       ['Rivas', 2],
     ]);
-    expect(conciliacion).toMatchObject({ mercadoPago: 45000, comision: 2250, teCorresponde: 42750, porFuera: 45000 });
+    expect(conciliacion).toEqual(expect.objectContaining({ mercadoPago: 45000, porFuera: 45000 }));
+    expect(conciliacion).not.toHaveProperty('comision');
   });
 
   it('dar de baja anota la devolución y le da el lugar al primero de la lista por 24 horas', async () => {
