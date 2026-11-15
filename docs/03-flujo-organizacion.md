@@ -78,7 +78,7 @@ La respuesta incluye un token de sesión (JWT), así la organización queda ingr
 
 **El inicio con torneos.** Agrupa los torneos por momento: en juego, para sortear, con la inscripción abierta, en borrador y terminados. Desde que se publica, cada categoría tiene su propia tarjeta ([decisión 026](decisiones/026-una-tarjeta-por-categoria-en-el-inicio.md)), porque cierra la inscripción y se sortea por separado; los borradores van uno por convocatoria.
 
-- Las categorías con la inscripción abierta llevan a su pantalla Inscripciones (§7).
+- Las categorías con la inscripción abierta llevan a su pantalla Inscripciones (§7). Mientras toda la convocatoria tiene la inscripción abierta, un engranaje arriba a la derecha abre *Editar el torneo* ([decisión 101](decisiones/101-engranaje-para-editar.md)).
 - Las que cerraron y todavía no se sortearon van en "Para sortear", con "Sortear zonas" como acción principal. No van en "Necesita tu atención": ese bloque es rojo, y el rojo solo significa vencimiento.
 - Con el sorteo confirmado, y hasta que se cierra, la categoría va en "En juego": la fase, los partidos jugados y los vencidos, qué se está jugando y hasta cuándo, y "Ver tablero" (F15). Los vencidos y el plazo salen de la misma cuenta que el tablero ([decisión 080](decisiones/080-torneos-en-juego-y-terminados-en-el-inicio.md)).
 - Cerrado el torneo (F16), va en "Terminados", de la que se cerró último a la primera, con la fecha del cierre, el campeón del cuadro principal y los jugadores. Cada fila lleva al cierre. Se ven las últimas 5 y el resto se despliega en la misma tabla.

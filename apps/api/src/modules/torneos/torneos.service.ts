@@ -415,6 +415,7 @@ export async function listarConvocatorias(slug: string, usuarioId: number): Prom
         estado: c.estado,
         etapa: c.etapa,
         suelto: c.suelto,
+        sePuedeEditar: convocatoriaEditable(grupo.map((t) => t.estado)),
         torneos: grupo.map((t) => ({
           id: t.id,
           categoria: t.categoria.nombre,

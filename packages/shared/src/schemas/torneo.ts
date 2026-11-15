@@ -179,6 +179,8 @@ export type ResumenConvocatoria = {
   etapa: string | null;
   // Ajeno al circuito (decisión 089).
   suelto: boolean;
+  // La misma regla que "Editar el torneo" en la franja: el engranaje de su tarjeta (decisión 101).
+  sePuedeEditar: boolean;
   torneos: ResumenTorneo[];
   cierreInscripcion: string | null;
   fechaInicio: string | null;

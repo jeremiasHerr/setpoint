@@ -24,6 +24,9 @@ export type TorneoEnJuego = {
 // Una categoría con la inscripción abierta. `id` es el del torneo, no el de la convocatoria.
 export type TorneoConInscripcionAbierta = {
   id: number;
+  // La que abre el engranaje, mientras se pueda editar (decisión 101).
+  convocatoriaId: number;
+  sePuedeEditar: boolean;
   calendario: string;
   nombre: string;
   detalle: string;
