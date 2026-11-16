@@ -9,10 +9,11 @@ type Props = InputHTMLAttributes<HTMLInputElement> & {
 };
 
 export function Campo({ id, rotulo, numerico = false, sufijo, className = '', ...props }: Props) {
+  // Inválido, el borde pasa a negro y grueso como con el foco: en negro y no en rojo (decisión 099).
   const input = (
     <input
       id={id}
-      className={`h-12 rounded-control border border-gris-300 px-3.5 text-[15px] text-negro outline-none placeholder:text-gris-400 focus:border-2 focus:border-negro focus:px-[13px] ${numerico ? 'font-mono tabular-nums' : ''}`}
+      className={`h-12 rounded-control border border-gris-300 px-3.5 text-[15px] text-negro outline-none placeholder:text-gris-400 focus:border-2 focus:border-negro focus:px-[13px] aria-invalid:border-2 aria-invalid:border-negro aria-invalid:px-[13px] ${numerico ? 'font-mono tabular-nums' : ''}`}
       {...props}
     />
   );

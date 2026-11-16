@@ -67,7 +67,8 @@ export function SeccionBasico({
         <Campo
           id="torneo-nombre"
           rotulo="Nombre"
-          placeholder={suelto ? 'Torneo de fin de año' : 'Torneo Primavera 26'}
+          // Con "Ej.:" para que no se lea como un nombre ya cargado.
+          placeholder={suelto ? 'Ej.: Torneo de fin de año' : 'Ej.: Torneo Primavera 26'}
           maxLength={80}
           value={nombre}
           onChange={(e) => alCambiarNombre(e.target.value)}

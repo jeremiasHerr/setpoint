@@ -8,7 +8,7 @@ import {
 } from '@setpoint/shared';
 import { Aviso } from '../components/Aviso';
 import { useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Boton } from '../components/Boton';
 import { EncabezadoOrganizador } from '../components/EncabezadoOrganizador';
@@ -49,6 +49,45 @@ const textoEstado: Record<EstadoGuardado, string> = {
   incompleto: 'sin guardar',
   error: 'no se pudo guardar',
 };
+
+// Los campos que muestran su error debajo. 'categorias.N.cupo' es el cupo de cualquier categoría.
+const CON_MENSAJE = new Set([
+  'nombre',
+  'categorias',
+  'categorias.N.cupo',
+  'cantidadGrupos',
+  'clasificanPorGrupo',
+  'plazoGruposDias',
+  'plazoPorRondaDias',
+  'fechaInicio',
+  'precio',
+  'cierreInscripcion',
+]);
+
+// Dónde está, en la pantalla, un dato que no tiene lugar para mostrar su error.
+const SECCION_DEL_CAMPO: Record<string, string> = {
+  etapa: 'Torneo del calendario',
+  'categorias.N.categoria': 'Categorías',
+  modoInscripcion: 'Quién se puede inscribir',
+  setsPorPartido: 'Sistema de juego',
+  puntoDeOro: 'Sistema de juego',
+  terceroSet: 'Sistema de juego',
+  gamesPorSet: 'Sistema de juego',
+  puntosTieBreak: 'Sistema de juego',
+  puntosSuperTieBreak: 'Sistema de juego',
+  sedeGrupos: 'Dónde se juega',
+  sedeEliminatorias: 'Dónde se juega',
+  clubSede: 'Dónde se juega',
+};
+
+const sinIndice = (campo: string) => campo.replace(/\.\d+(\.|$)/, '.N$1');
+
+// Los errores que ningún campo muestra: sin esto, el aviso pide revisar lo marcado y no hay nada marcado.
+function erroresSinLugar(errores: ErroresConvocatoria) {
+  return Object.entries(errores)
+    .filter(([campo]) => !CON_MENSAJE.has(sinIndice(campo)))
+    .map(([campo, mensaje]) => `${SECCION_DEL_CAMPO[sinIndice(campo)] ?? 'Otro dato'}: ${mensaje}`);
+}
 
 export function NuevoTorneoPage() {
   const sesion = leerSesion();
@@ -151,6 +190,17 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
     navegar(`/torneos/${id}`, { replace: true }),
   );
   const errores = { ...erroresPublicar, ...guardado.errores };
+  const sinLugar = erroresSinLugar(errores);
+
+  // Si publicar falla, se va al primer campo marcado: el aviso queda abajo a la derecha y el campo
+  // puede estar arriba de todo, fuera de la vista.
+  useEffect(() => {
+    if (!errorGeneral) return;
+    const campo = document.querySelector<HTMLElement>('main [aria-invalid="true"]');
+    if (!campo) return;
+    campo.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    campo.focus({ preventScroll: true });
+  }, [errorGeneral]);
 
   // La API también deja editar con la inscripción abierta; publicar, solo el borrador.
   const estadoTorneo = inicial?.estado ?? 'borrador';
@@ -345,6 +395,11 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
             {errorGeneral && (
               <Aviso>
                 {errorGeneral}
+                {sinLugar.map((linea) => (
+                  <span key={linea} className="mt-1 block">
+                    {linea}
+                  </span>
+                ))}
               </Aviso>
             )}
             {enBorrador && (
