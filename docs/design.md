@@ -59,7 +59,7 @@ Todo el sistema sale de que hay dos personas usando esto en situaciones opuestas
 
 ### Reglas
 
-- **El lima nunca es texto sobre blanco.** No llega al contraste mínimo. Sobre negro sí (17:1), y ahí es donde vive: números grandes, chips, el punto del logo.
+- **El lima nunca es texto sobre blanco.** No llega al contraste mínimo. Sobre negro sí (17:1), y ahí es donde vive: números grandes, chips, la marca en juego del logo.
 - **El rojo solo significa vencimiento.** No se usa para "error de formulario" ni para eliminar. Un partido que venció sin jugarse es lo único urgente del sistema.
 - **La derrota se dibuja en gris, no en rojo.** En tablas y matrices, el ganador va en `--negro` con peso 600 y el perdedor en `--gris-400`.
 - **Contrastes verificados:** negro sobre blanco 19:1, `--gris-500` sobre blanco 5.3:1, blanco sobre negro 19:1, `--gris-400` sobre negro 7.4:1, negro sobre lima 17:1.
@@ -174,6 +174,18 @@ El objeto gráfico central del sistema. Una fila de rectángulos de 3px de radio
 Colores: `--negro` hecho · `--gris-400` en curso · `--linea` pendiente · `--rojo` vencido.
 
 Aparece en el tablero (48 partidos en 8 bloques de 6, con la letra de zona debajo), en inscripciones (32 lugares) y en la landing. **Es siempre el mismo objeto.**
+
+### Logo
+
+Cuatro marcas de la barra: tres hechas y la que está en juego, en `--lima` y levantada ([decisión 104](decisiones/104-logo-marcas.md)). En una grilla de 120, cada marca mide 16 × 50 con radio 4, van separadas por 4, y la última sube 12.
+
+- **Sobre claro o sobre lima:** dentro de un recuadro `--negro` de radio 28, con las tres primeras en blanco.
+- **Sobre negro:** sueltas, del alto de la mayúscula y apoyadas en la línea de base de la palabra.
+- **En una tinta:** igual; la última se distingue por la posición.
+
+La palabra "SetPoint" va al lado, en Instrument Sans 600 con tracking −0.03em. Es lo único del sistema donde una marca en juego es lima: en la barra de marcas, en curso sigue siendo `--gris-400`.
+
+Los archivos están en `docs/logos/`: `marcas.svg`, `marcas-logo.svg` y `marcas-logo-sobre-negro.svg`. En la web es el componente `Logo`; en la app, `Logo` y los íconos de `apps/mobile/assets/`.
 
 ### Matriz de zona
 
