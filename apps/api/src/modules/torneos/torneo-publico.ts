@@ -6,7 +6,7 @@ import { ErrorHttp } from '../../middleware/errores';
 const OCUPAN_CUPO = [EstadoInscripcion.PAGADA, EstadoInscripcion.PENDIENTE_PAGO];
 
 // Un borrador o un torneo cancelado no se publican: para el link es como si no existieran.
-const NO_PUBLICOS: EstadoTorneo[] = [EstadoTorneo.BORRADOR, EstadoTorneo.CANCELADO];
+export const NO_PUBLICOS: EstadoTorneo[] = [EstadoTorneo.BORRADOR, EstadoTorneo.CANCELADO];
 
 // Lo que hace falta leer de cada torneo para mostrar su convocatoria.
 export const CONVOCATORIA = {
