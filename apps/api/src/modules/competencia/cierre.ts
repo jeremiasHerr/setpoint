@@ -35,6 +35,12 @@ export function finalDelCuadro<P extends { cuadro: string | null; ronda: number 
 // La instancia de quien pierde, según cuántas rondas le faltaban para la final.
 const POR_RONDAS_A_LA_FINAL: Instancia[] = ['finalista', 'semifinalista', 'cuartos', 'octavos'];
 
+// La instancia de quien pierde en una ronda del cuadro principal. Antes de octavos es
+// participación, porque la tabla de puntos no tiene esa instancia (decisión 056).
+export function instanciaDelPerdedor(rondas: number, ronda: number): Instancia {
+  return POR_RONDAS_A_LA_FINAL[rondas - ronda] ?? 'participacion';
+}
+
 // Hasta dónde llegó cada jugador de las zonas (02-dominio.md §7.4). Solo cuenta el cuadro
 // principal: el resto, incluido el campeón del cuadro consuelo, es participación. También quien
 // pierde antes de octavos, porque la tabla de puntos no tiene esa instancia (decisión 056).
@@ -48,8 +54,7 @@ export function instanciasDelTorneo(jugadores: number[], partidos: PartidoDelCie
   for (const partido of delPrincipal) {
     if (partido.ganadorId === null) continue;
     const perdedor = partido.ganadorId === partido.jugadorAId ? partido.jugadorBId : partido.jugadorAId;
-    const instancia = POR_RONDAS_A_LA_FINAL[rondas - partido.ronda];
-    if (perdedor !== null && instancia) alcanzada.set(perdedor, instancia);
+    if (perdedor !== null) alcanzada.set(perdedor, instanciaDelPerdedor(rondas, partido.ronda));
     if (partido.ronda === rondas) alcanzada.set(partido.ganadorId, 'campeon');
   }
   return alcanzada;

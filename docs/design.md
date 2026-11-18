@@ -1,6 +1,6 @@
 # Diseño
 
-Sistema visual de SetPoint: **Última luz** ([decisión 104](decisiones/104-sistema-visual-ultima-luz.md)). Esta es la fuente de verdad para todo lo que se dibuje en la web y en la app: si algo no está acá, se resuelve con los tokens y componentes que sí están, no inventando uno nuevo.
+Sistema visual de SetPoint: **Última luz** ([decisión 105](decisiones/105-sistema-visual-ultima-luz.md)). Esta es la fuente de verdad para todo lo que se dibuje en la web y en la app: si algo no está acá, se resuelve con los tokens y componentes que sí están, no inventando uno nuevo.
 
 El sistema está dibujado en el artifact **Última luz v2** (la landing, el Tablero, Cargar resultado y Cuándo juego). Las pantallas de referencia de cada flujo están en [pantallas/](pantallas/README.md) y en el canvas **SetPoint — Verde pelota**, con el sistema anterior: de ahí se toma la estructura de cada pantalla, no los colores.
 
@@ -158,13 +158,13 @@ El mono es lo que da el acabado de producto y lo que hace que las tablas queden 
 
 ### Logo
 
-Las marcas de una zona: tres barras de partido jugado y la cuarta, levantada, que es el set point. Al lado, "SetPoint" en Display 600 con tracking −0.02em, separado 0,4em.
+Las marcas de una zona: tres barras de partido jugado y la cuarta, levantada, que es el set point ([decisión 104](decisiones/104-logo-marcas.md), con el dibujo de la [105](decisiones/105-sistema-visual-ultima-luz.md)). Al lado, "SetPoint" en Display 600 con tracking −0.02em, separado 0,4em.
 
 - **Sobre noche:** las barras en blanco y la levantada en `pelota`.
 - **Sobre claro:** las barras en `noche` y la levantada en `lona`, porque la pelota no se ve sobre papel.
 - **Ícono** (favicon, app): un cuadrado `noche-900` con radio 14/64 y la marca adentro, con la versión sobre noche.
 
-La marca del circuito en las páginas públicas y en la app es otra cosa: un cuadrado `noche` con un punto `pelota`, al lado del nombre de la organización.
+En la app es el mismo dibujo, con cuatro `View` para no sumar `react-native-svg` por un logo, y sin la palabra: va al lado del nombre del circuito. La marca de la organización en las páginas públicas de la web es otra cosa: un cuadrado `noche` con un punto `pelota`, al lado de su nombre.
 
 ### Encabezado del organizador
 
@@ -492,4 +492,4 @@ La app tiene su copia de los tokens en `apps/mobile/src/lib/tokens.ts`, con los 
 
 - La matriz de zona está pensada para grupos de 4. Un circuito que arme zonas de 5 o 6 necesita otro tratamiento de esa tabla.
 - Falta la versión móvil del tablero del organizador. Hoy es solo escritorio, que es lo que el reparto web/móvil define, pero conviene revisarlo con el organizador real.
-- El ícono de la app instalable todavía es el de Expo. Falta generarlo con el ícono del logo (§6).
+- Los íconos del APK (`apps/mobile/assets/`) y los archivos de `docs/logos/` tienen el dibujo de la [decisión 104](decisiones/104-logo-marcas.md). Falta regenerarlos con el del logo de §6.
