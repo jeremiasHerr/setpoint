@@ -40,6 +40,51 @@ El resto de los documentos (`01-vision`, `03-flujo-organizacion`, `04-flujo-juga
 - Colores y tipografías siempre desde los tokens de `design.md`. Nunca hex sueltos en un componente.
 - Los números van en Geist Mono con `tabular-nums`. Toda la interfaz en español rioplatense, en sentence case.
 
+### Diseño frontend
+
+<diseño_frontend>
+Tendés a converger en elecciones genéricas "de promedio", y eso produce el
+estilo que la gente reconoce como hecho por IA. Quiero lo contrario: un diseño
+con punto de vista propio, pensado para ESTE proyecto y no para cualquiera.
+
+Antes de escribir código:
+1. Identificá el tema: qué es, para quién y cuál es la tarea principal del
+   usuario. Sacá las ideas visuales del mundo de ese tema (materiales, objetos,
+   jerga, cultura), no de tendencias de diseño.
+2. Armá un plan corto: 4–6 colores con nombre y hex, 1–2 tipografías con su
+   rol, el layout en una frase más un wireframe ASCII, y 2–3 principios.
+3. Revisá el plan: si alguna parte es lo que harías para cualquier página
+   parecida, cambiala y decime por qué.
+
+Evitá estos defaults salvo que yo los pida:
+- Inter, Roboto, Arial, system-ui o Space Grotesk como cara principal.
+- Gradiente violeta/índigo; crema + serif + terracota; negro + un acento neón.
+- Todo en tarjetas redondeadas iguales con la misma sombra gris.
+- Etiquetas en MAYÚSCULAS espaciadas sobre cada título, "A · B · C", "→" en
+  cada botón, 01/02/03 si el contenido no es una secuencia, una sola palabra
+  del título resaltada.
+- Fade + slide-up en cada sección y efecto hover en cada tarjeta.
+
+Sí quiero:
+- La tipografía como protagonista: escala clara, contraste fuerte de pesos y
+  tamaños, líneas de menos de 80 caracteres.
+- Una paleta comprometida: un color dominante con acentos marcados, en
+  variables CSS.
+- Fondos con atmósfera (capas, texturas, patrones ligados al tema) cuando sumen.
+- Un solo momento de animación orquestado (por ejemplo, la carga de la página
+  con entradas escalonadas). El resto de la animación, solo como respuesta a
+  acciones del usuario.
+- Textos reales y específicos, en voz activa: los botones dicen lo que hacen.
+- Arriesgar en UN elemento memorable y que todo lo demás sea sobrio. Antes de
+  terminar, sacá un adorno.
+
+Piso de calidad, sin anunciarlo: responsive, foco visible con teclado,
+prefers-reduced-motion y contraste accesible.
+
+Al terminar, si podés, sacá una captura, criticala como un director de arte
+exigente y corregí.
+</diseño_frontend>
+
 ## Restricciones de la cátedra
 
 - La app móvil instalable (APK) es **obligatoria**: el grupo es de 3. No vale una web responsive.
