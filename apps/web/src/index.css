@@ -63,6 +63,68 @@
       transform: none;
     }
   }
+
+  /* La única sombra del sistema: la ventana del demo de la landing sobre la pintura. */
+  --shadow-demo: 0 40px 100px -30px color-mix(in srgb, var(--color-noche-900) 70%, transparent);
+
+  /* Los movimientos del demo de la landing (design.md, Hero de la landing). */
+  --animate-toque: toque 450ms ease-out forwards;
+  @keyframes toque {
+    0% {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+    30% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: scale(1.2);
+    }
+  }
+  --animate-marca-sube: marca-sube 420ms;
+  @keyframes marca-sube {
+    0%,
+    100% {
+      transform: scaleY(1);
+    }
+    50% {
+      transform: scaleY(1.2);
+    }
+  }
+
+  /* El logo con el mouse encima: el set point recorre las cuatro barras, de a una, cada 200 ms. Las
+     tres primeras se levantan y toman el acento en su turno (picos a los 160, 360 y 560 ms); la
+     última espera abajo y llega en el suyo, a los 760. El retardo va dentro de cada animación: el
+     atajo `animation` pisaría un `animation-delay` aparte. 12 es lo que la última barra está
+     levantada en el dibujo. */
+  --animate-logo-1: logo-pasa 400ms ease-out;
+  --animate-logo-2: logo-pasa 400ms ease-out 200ms;
+  --animate-logo-3: logo-pasa 400ms ease-out 400ms;
+  --animate-logo-4: logo-llega 800ms ease-out;
+  @keyframes logo-pasa {
+    0%,
+    100% {
+      transform: translateY(0);
+      fill: currentColor;
+    }
+    40% {
+      transform: translateY(-12px);
+      fill: var(--logo-acento);
+    }
+  }
+  @keyframes logo-llega {
+    0%,
+    75% {
+      transform: translateY(12px);
+      fill: currentColor;
+    }
+    95%,
+    100% {
+      transform: translateY(0);
+      fill: var(--logo-acento);
+    }
+  }
 }
 
 body {
