@@ -158,7 +158,7 @@ El mono es lo que da el acabado de producto y lo que hace que las tablas queden 
 
 ### Logo
 
-Las marcas de una zona: tres barras de partido jugado y la cuarta, levantada, que es el set point. Al lado, "Setpoint" en Display 600 con tracking −0.02em. El ícono es un poco más alto que las mayúsculas (1,1em): 18px de texto en el producto y 24 en la landing.
+Las marcas de una zona: tres barras de partido jugado y la cuarta, levantada, que es el set point ([decisión 104](decisiones/104-logo-marcas.md), con el dibujo de la [105](decisiones/105-sistema-visual-ultima-luz.md)). Al lado, "Setpoint" en Display 600 con tracking −0.02em. El ícono es un poco más alto que las mayúsculas (1,1em): 18px de texto en el producto y 24 en la landing.
 
 - **Sobre noche:** las barras en blanco y la levantada en `pelota`.
 - **Sobre claro:** las barras en `noche` y la levantada en `lona`, porque la pelota no se ve sobre papel.
