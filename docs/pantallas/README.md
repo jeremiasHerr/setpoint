@@ -2,7 +2,7 @@
 
 Una pantalla por archivo, en HTML autónomo: se abre con doble clic en el navegador y es exactamente lo que está en el canvas **SetPoint — Verde pelota**, salvo las del rediseño de la inscripción, que están solo acá. Si una pantalla tiene varios estados, van en el mismo archivo, rotulados. El sistema visual (colores, tipografía, componentes, voz) está en [../design.md](../design.md).
 
-**Los colores y las tipografías de estos archivos son los del sistema anterior.** Desde la [decisión 104](../decisiones/104-sistema-visual-ultima-luz.md) el sistema es *Última luz*: de cada pantalla valen la estructura, las medidas y los textos; los colores y las fuentes salen de design.md. Los archivos no se rehacen. Para leerlos:
+**Los colores y las tipografías de estos archivos son los del sistema anterior.** Desde la [decisión 105](../decisiones/105-sistema-visual-ultima-luz.md) el sistema es *Última luz*: de cada pantalla valen la estructura, las medidas y los textos; los colores y las fuentes salen de design.md. Los archivos no se rehacen. Para leerlos:
 
 | En estos archivos | En design.md |
 |---|---|

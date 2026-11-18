@@ -1,6 +1,6 @@
-# 104 — Sistema visual: Última luz
+# 105 — Sistema visual: Última luz
 
-**Estado:** aceptada — 18 de noviembre de 2026. Reemplaza la [decisión 090](090-mas-contraste.md).
+**Estado:** aceptada — 18 de noviembre de 2026. Reemplaza la [decisión 090](090-mas-contraste.md), y el dibujo del logo de la [104](104-logo-marcas.md).
 
 ## Contexto
 
@@ -40,7 +40,7 @@ Dirección 1, Última luz, en su segunda vuelta, con los tokens renombrados en u
 - **El lima se parte en dos.** La **lona** (`#62BB78`), un verde medio, es la acción del jugador, lo ganado y lo que clasifica, con sus versiones de fondo y de texto. La **pelota** (el lima de antes) queda solo para el logo y para una pelota dibujada.
 - **Cada estado tiene su color.** Con fecha es azul; sin coordinar, punteado; vencido, rojo. El cuadro principal va en ámbar y el consuelo en petróleo.
 - **Funnel Display** para los títulos del producto y de la landing. **Newsreader** solo en el titular del hero. Instrument Sans y Geist Mono siguen.
-- **El logo son las marcas de una zona:** tres partidos jugados y el último, levantado, que es el set point.
+- **El logo son las marcas de una zona:** tres partidos jugados y el último, levantado, que es el set point. La idea es la de la [decisión 104](104-logo-marcas.md), que se tomó en paralelo; cambia el dibujo. Las marcas van sueltas también sobre claro, en noche y con la levantada en lona, sin el recuadro negro que el lima necesitaba sobre blanco, y la palabra va en Funnel Display, como los títulos.
 
 ## Por qué
 
@@ -56,4 +56,5 @@ Dirección 1, Última luz, en su segunda vuelta, con los tokens renombrados en u
 - **Un cambio grande a dos semanas de la entrega.** Toca casi todos los archivos de la web y de la app, y hay que generar otro APK.
 - **El lima deja de ser el rasgo de marca del producto.** Queda en el logo.
 - **Dos fuentes más en la web, y una en la app.**
+- **Los íconos del APK, el favicon de la 104 y `docs/logos/` quedan con el dibujo de la 104** hasta regenerarlos con el de esta decisión. El favicon de la web ya usa el nuevo.
 - **Las referencias de `docs/pantallas/` y el canvas *Verde pelota* quedan con el sistema anterior.** No se reescriben: mandan los tokens y design.md.

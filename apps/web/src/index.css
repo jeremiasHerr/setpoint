@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Tokens de docs/design.md §3 (Última luz, decisión 104). Los mismos valores están en
+/* Tokens de docs/design.md §3 (Última luz, decisión 105). Los mismos valores están en
    apps/mobile/src/lib/tokens.ts: si cambia uno, cambia en los dos (decisión 034). */
 @theme {
   /* La noche: superficies oscuras, el texto principal y el botón del organizador. */
