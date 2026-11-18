@@ -21,7 +21,7 @@ export function Devoluciones({ slug, torneoId, bajas }: Props) {
     <Tarjeta className="flex flex-col overflow-hidden">
       <div className="flex items-center justify-between gap-2.5 border-b border-linea px-4 py-3.5">
         <h2 className="text-[15px] font-semibold">Devoluciones</h2>
-        <Numero className="text-[13px] text-gris-500">
+        <Numero className="text-[13px] text-pizarra-500">
           {pendientes.length} {pendientes.length === 1 ? 'pendiente' : 'pendientes'}
         </Numero>
       </div>
@@ -32,7 +32,7 @@ export function Devoluciones({ slug, torneoId, bajas }: Props) {
               <span className="truncate text-sm font-medium">
                 {baja.nombre} {baja.apellido}
               </span>
-              <Numero className="text-xs text-gris-500">
+              <Numero className="text-xs text-pizarra-500">
                 {plata(baja.monto)} · {diaCorto(baja.fecha)}
               </Numero>
             </div>
@@ -43,7 +43,7 @@ export function Devoluciones({ slug, torneoId, bajas }: Props) {
         ))}
       </ul>
       {marcar.error && <MensajeError className="px-4 pt-3">{textoDelError(marcar.error)}</MensajeError>}
-      <p className="bg-fondo-tabla px-4 py-3 text-[13px] leading-[1.45] text-gris-500">
+      <p className="bg-niebla px-4 py-3 text-[13px] leading-[1.45] text-pizarra-500">
         Las hacés vos, por fuera del sistema. Marcalas cuando las hagas, así no quedan pendientes.
       </p>
     </Tarjeta>

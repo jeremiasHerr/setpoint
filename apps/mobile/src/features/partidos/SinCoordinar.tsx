@@ -61,6 +61,7 @@ export function SinCoordinar({ partido, urgente }: { partido: PartidoDelJugador;
 const estilos = StyleSheet.create({
   tarjeta: {
     borderWidth: 1,
+    backgroundColor: colores.papel,
     borderColor: colores.linea,
     borderRadius: 16,
     overflow: 'hidden',
@@ -84,12 +85,12 @@ const estilos = StyleSheet.create({
     fontFamily: fuentes.sans[600],
     fontSize: 22,
     letterSpacing: -0.55,
-    color: colores.negro,
+    color: colores.noche,
   },
   plazo: {
     fontFamily: fuentes.mono[500],
     fontSize: 14,
-    color: colores.gris500,
+    color: colores.pizarra500,
     ...tabular,
   },
   plazoRojo: {
@@ -107,6 +108,6 @@ const estilos = StyleSheet.create({
     fontFamily: fuentes.sans[400],
     fontSize: 16,
     lineHeight: 22,
-    color: colores.gris500,
+    color: colores.pizarra500,
   },
 });

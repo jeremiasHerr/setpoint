@@ -27,7 +27,7 @@ function CampoNumerico({ alCambiar, className = '', ...props }: InputHTMLAttribu
       autoComplete="off"
       maxLength={2}
       onChange={(e) => alCambiar(soloDigitos(e.target.value))}
-      className={`min-w-0 border border-gris-300 bg-white text-center font-mono font-medium tabular-nums outline-none focus:border-2 focus:border-negro disabled:cursor-not-allowed disabled:border-linea disabled:bg-fondo ${className}`}
+      className={`min-w-0 border border-borde-campo bg-papel text-center font-mono font-medium tabular-nums outline-none focus:border-2 focus:border-noche disabled:cursor-not-allowed disabled:border-linea disabled:bg-niebla ${className}`}
       {...props}
     />
   );
@@ -59,14 +59,14 @@ export function GrillaDeSets({ sistema, nombres, sets: escritos, problemas, gana
         const perdio = ganador !== null && ganador !== lado;
         return (
           <div key={lado} className="flex min-w-0 items-center gap-2.5" style={{ gridColumn: 1, gridRow: j + 2 }}>
-            <span className={`size-[7px] shrink-0 rounded-full ${ganador === lado ? 'bg-lima' : 'bg-linea'}`} />
-            <span className={`truncate text-lg ${perdio ? 'font-medium text-gris-700' : 'font-semibold'}`}>{nombre}</span>
+            <span className={`size-[7px] shrink-0 rounded-full ${ganador === lado ? 'bg-lona-texto' : 'bg-linea'}`} />
+            <span className={`truncate text-lg ${perdio ? 'font-medium text-pizarra-700' : 'font-semibold'}`}>{nombre}</span>
           </div>
         );
       })}
 
       {conTieBreak.some(Boolean) && (
-        <p className="text-[13px] text-gris-500" style={{ gridColumn: 1, gridRow: 4 }}>
+        <p className="text-[13px] text-pizarra-500" style={{ gridColumn: 1, gridRow: 4 }}>
           tie-break · opcional
         </p>
       )}
@@ -78,7 +78,7 @@ export function GrillaDeSets({ sistema, nombres, sets: escritos, problemas, gana
         const campo = (gridRow: number) => ({ gridColumn: i + 2, gridRow });
         return (
           <Fragment key={i}>
-            <span className="text-center font-mono text-xs text-gris-500" style={campo(1)}>
+            <span className="text-center font-mono text-xs text-pizarra-500" style={campo(1)}>
               {columna.rotulo}
             </span>
             {(['gamesA', 'gamesB'] as const).map((games, j) => (
@@ -98,7 +98,7 @@ export function GrillaDeSets({ sistema, nombres, sets: escritos, problemas, gana
               <div className="flex items-center justify-between" style={campo(4)}>
                 {(['tieBreakA', 'tieBreakB'] as const).map((puntos, j) => (
                   <Fragment key={puntos}>
-                    {j === 1 && <span className="text-gris-400">-</span>}
+                    {j === 1 && <span className="text-pizarra-400">-</span>}
                     <CampoNumerico
                       aria-label={`Tie-break del ${columna.rotulo}, ${nombres[j]}`}
                       aria-invalid={problemas.tieBreaks[i] !== null}

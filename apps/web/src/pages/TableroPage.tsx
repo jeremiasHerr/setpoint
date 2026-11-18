@@ -29,7 +29,7 @@ export function TableroPage() {
 
 function Marco({ sesion, torneoId, children }: { sesion: Sesion; torneoId: number; children: ReactNode }) {
   return (
-    <div className="min-h-screen bg-white text-negro">
+    <div className="min-h-screen bg-papel text-noche">
       <EncabezadoDelTorneo sesion={sesion} torneoId={torneoId} actual="tablero" />
       {children}
     </div>
@@ -55,7 +55,7 @@ function TableroDelTorneo({ sesion, torneoId }: { sesion: Sesion; torneoId: numb
       <div className="flex flex-col items-start gap-3 px-7 pt-[34px]">
         {tablero.error && !sesionInvalida ? (
           <>
-            <p className="text-[15px] text-gris-500">{ERRORES[codigo] ?? 'No pudimos cargar el tablero.'}</p>
+            <p className="text-[15px] text-pizarra-500">{ERRORES[codigo] ?? 'No pudimos cargar el tablero.'}</p>
             {codigo === 'TABLERO_NO_DISPONIBLE' ? (
               <Boton onClick={() => navegar(`/torneos/${torneoId}/sorteo`)}>Ir al sorteo</Boton>
             ) : codigo === 'TORNEO_NO_ENCONTRADO' ? (
@@ -113,10 +113,10 @@ function alCerrarLasZonas(tablero: Tablero): ReactNode[] {
 // Cuando lo que corresponde es pasar a la etapa siguiente: cerrar las zonas o cerrar el torneo.
 function Siguiente({ titulo, texto, children }: { titulo: string; texto: string; children: ReactNode }) {
   return (
-    <Tarjeta className="flex flex-wrap items-center justify-between gap-4 border-lima bg-lima-tenue px-5 py-4">
+    <Tarjeta className="flex flex-wrap items-center justify-between gap-4 border-lona-borde bg-lona-fondo px-5 py-4">
       <div className="flex flex-col gap-1">
         <p className="text-[15px] font-semibold">{titulo}</p>
-        <p className="text-sm text-gris-700">{texto}</p>
+        <p className="text-sm text-pizarra-700">{texto}</p>
       </div>
       <div className="flex flex-col items-end gap-1.5">{children}</div>
     </Tarjeta>
@@ -138,8 +138,8 @@ function Contenido({ sesion, tablero }: { sesion: Sesion; tablero: Tablero }) {
     <Marco sesion={sesion} torneoId={torneoId}>
       <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-4 px-7 pt-[26px] pb-5">
         <div className="flex flex-col gap-[7px]">
-          <h1 className="text-[30px] font-semibold tracking-[-0.035em]">{titulo}</h1>
-          <p className="text-[15px] text-gris-500">{bajada(tablero)}</p>
+          <h1 className="text-[28px] font-display font-semibold tracking-[-0.02em]">{titulo}</h1>
+          <p className="text-[15px] text-pizarra-500">{bajada(tablero)}</p>
         </div>
         <div className="flex flex-wrap gap-[9px]">
           <BotonCopiarLink ruta={`/torneos/${torneoId}/en-vivo`} className="" />

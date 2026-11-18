@@ -15,7 +15,7 @@ export function SinTelefono({ nombre, sobreNegro = false }: { nombre: string; so
 
 const estilos = StyleSheet.create({
   caja: {
-    backgroundColor: colores.fondo,
+    backgroundColor: colores.niebla,
     borderRadius: radios.control,
     paddingVertical: 12,
     paddingHorizontal: 14,
@@ -24,10 +24,10 @@ const estilos = StyleSheet.create({
     fontFamily: fuentes.sans[400],
     fontSize: 15,
     lineHeight: 21,
-    color: colores.gris700,
+    color: colores.pizarra700,
   },
   textoSobreNegro: {
-    color: colores.gris400,
+    color: colores.pizarra400,
     textAlign: 'center',
   },
 });

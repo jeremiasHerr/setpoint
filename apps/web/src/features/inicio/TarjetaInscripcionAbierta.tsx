@@ -22,7 +22,7 @@ export function TarjetaInscripcionAbierta({ torneo }: { torneo: TorneoConInscrip
             state={{ desde: torneo.id }}
             aria-label="Editar el torneo"
             title="Editar el torneo"
-            className="-m-2.5 flex size-11 shrink-0 items-center justify-center rounded-control text-gris-500 hover:text-negro"
+            className="-m-2.5 flex size-11 shrink-0 items-center justify-center rounded-control text-pizarra-500 hover:text-noche"
           >
             <IconoEngranaje className="size-5" />
           </Link>

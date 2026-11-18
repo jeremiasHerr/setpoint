@@ -16,7 +16,7 @@ export function AvisosAtencion({ avisos }: { avisos: Aviso[] }) {
               <p className="text-sm leading-[1.45]">
                 <Numero>{aviso.partidos}</Numero> {aviso.partidos === 1 ? 'partido' : 'partidos'} de {aviso.categoria}{' '}
                 {aviso.partidos === 1 ? 'venció' : 'vencieron'} sin resultado.{' '}
-                <Link to={`/torneos/${aviso.torneoId}/tablero`} className="font-medium underline hover:text-gris-500">
+                <Link to={`/torneos/${aviso.torneoId}/tablero`} className="font-medium underline hover:text-pizarra-500">
                   Resolver
                 </Link>
               </p>
@@ -25,7 +25,7 @@ export function AvisosAtencion({ avisos }: { avisos: Aviso[] }) {
               <p className="text-sm leading-[1.45]">
                 {aviso.torneo} tiene <Numero>{aviso.pagaron}</Numero> de <Numero>{aviso.cupo}</Numero> inscriptos y cierra en{' '}
                 {aviso.cierraEn}.{' '}
-                <button type="button" className="font-medium underline hover:text-gris-500">
+                <button type="button" className="font-medium underline hover:text-pizarra-500">
                   Copiar link
                 </button>
               </p>

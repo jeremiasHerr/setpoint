@@ -25,13 +25,13 @@ export function TablaPuntos({ puntos, alCambiar }: Props) {
               min={0}
               value={puntos[clave]}
               onChange={(e) => alCambiar(clave, Math.max(0, Number(e.target.value) || 0))}
-              className="h-12 rounded-control border border-gris-300 px-3.5 text-right font-mono text-[15px] font-medium tabular-nums outline-none focus:border-2 focus:border-negro focus:px-[13px]"
+              className="h-12 rounded-control border border-borde-campo px-3.5 text-right font-mono text-[15px] font-medium tabular-nums outline-none focus:border-2 focus:border-noche focus:px-[13px]"
             />
           </div>
         ))}
       </div>
 
-      <p className="text-[13px] text-gris-500">Participación la recibe todo el que completa la fase de grupos sin clasificar a Campeonato.</p>
+      <p className="text-[13px] text-pizarra-500">Participación la recibe todo el que completa la fase de grupos sin clasificar a Campeonato.</p>
     </Tarjeta>
   );
 }

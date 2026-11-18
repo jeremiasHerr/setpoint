@@ -92,7 +92,7 @@ function Plazo({ vence }: { vence: string }) {
 const estilos = StyleSheet.create({
   pantalla: {
     flex: 1,
-    backgroundColor: colores.blanco,
+    backgroundColor: colores.niebla,
   },
   contenido: {
     paddingHorizontal: medidas.margen,
@@ -104,7 +104,7 @@ const estilos = StyleSheet.create({
     fontFamily: fuentes.sans[400],
     fontSize: 15,
     lineHeight: 22,
-    color: colores.gris700,
+    color: colores.pizarra700,
   },
   titulo: {
     flexDirection: 'row',
@@ -119,21 +119,21 @@ const estilos = StyleSheet.create({
     gap: 10,
   },
   textoTitulo: {
-    fontFamily: fuentes.sans[600],
+    fontFamily: fuentes.display[600],
     fontSize: 26,
-    letterSpacing: -0.8,
-    color: colores.negro,
+    letterSpacing: -0.52,
+    color: colores.noche,
   },
   jugados: {
     fontFamily: fuentes.mono[400],
     fontSize: 13,
-    color: colores.gris500,
+    color: colores.pizarra500,
     ...tabular,
   },
   torneo: {
     fontFamily: fuentes.sans[400],
     fontSize: 14,
-    color: colores.gris500,
+    color: colores.pizarra500,
   },
   plazo: {
     paddingVertical: 6,

@@ -51,7 +51,7 @@ export default function Circuitos() {
                 onPress={() => elegir(jugador.id)}
                 style={({ pressed }) => [estilos.fila, i > 0 && estilos.separador, pressed && estilos.filaApretada]}
               >
-                {/* El lima marca dónde estás vos (design.md §2). */}
+                {/* El verde marca dónde estás vos (design.md §2). */}
                 <View style={[estilos.punto, actual && estilos.puntoActual]} />
                 <View style={estilos.datos}>
                   <Text style={estilos.circuito}>{organizacion.nombre}</Text>
@@ -74,7 +74,7 @@ export default function Circuitos() {
 const estilos = StyleSheet.create({
   pantalla: {
     flex: 1,
-    backgroundColor: colores.blanco,
+    backgroundColor: colores.niebla,
   },
   contenido: {
     flexGrow: 1,
@@ -91,26 +91,27 @@ const estilos = StyleSheet.create({
   nombreMarca: {
     fontFamily: fuentes.sans[600],
     fontSize: 15,
-    color: colores.negro,
+    color: colores.noche,
   },
   encabezado: {
     gap: 8,
     paddingTop: 8,
   },
   titulo: {
-    fontFamily: fuentes.sans[600],
+    fontFamily: fuentes.display[600],
     fontSize: 28,
-    letterSpacing: -0.9,
-    color: colores.negro,
+    letterSpacing: -0.56,
+    color: colores.noche,
   },
   bajada: {
     fontFamily: fuentes.sans[400],
     fontSize: 16,
     lineHeight: 23,
-    color: colores.gris500,
+    color: colores.pizarra500,
   },
   lista: {
     borderWidth: 1,
+    backgroundColor: colores.papel,
     borderColor: colores.linea,
     borderRadius: radios.tarjeta,
     overflow: 'hidden',
@@ -128,7 +129,7 @@ const estilos = StyleSheet.create({
     borderTopColor: colores.lineaSuave,
   },
   filaApretada: {
-    backgroundColor: colores.fondo,
+    backgroundColor: colores.niebla,
   },
   punto: {
     width: 7,
@@ -137,7 +138,7 @@ const estilos = StyleSheet.create({
     backgroundColor: colores.linea,
   },
   puntoActual: {
-    backgroundColor: colores.lima,
+    backgroundColor: colores.lonaTexto,
   },
   datos: {
     flex: 1,
@@ -146,12 +147,12 @@ const estilos = StyleSheet.create({
   circuito: {
     fontFamily: fuentes.sans[500],
     fontSize: 17,
-    color: colores.negro,
+    color: colores.noche,
   },
   categoria: {
     fontFamily: fuentes.sans[400],
     fontSize: 15,
-    color: colores.gris500,
+    color: colores.pizarra500,
   },
   pie: {
     marginTop: 'auto',
@@ -160,7 +161,7 @@ const estilos = StyleSheet.create({
   cuenta: {
     fontFamily: fuentes.sans[400],
     fontSize: 15,
-    color: colores.gris500,
+    color: colores.pizarra500,
     textAlign: 'center',
   },
 });

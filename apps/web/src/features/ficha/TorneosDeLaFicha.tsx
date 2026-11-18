@@ -42,11 +42,11 @@ export function TorneosDeLaFicha({ torneos }: { torneos: TorneoDeLaFicha[] }) {
     <section className="flex flex-col gap-2.5">
       <div className="flex items-baseline justify-between gap-3">
         <h2 className="text-[17px] font-semibold tracking-[-0.015em]">Torneos</h2>
-        {torneos.length > 0 && <Numero className="text-xs text-gris-400">{torneos.length}</Numero>}
+        {torneos.length > 0 && <Numero className="text-xs text-pizarra-400">{torneos.length}</Numero>}
       </div>
 
       {torneos.length === 0 ? (
-        <p className="text-[15px] text-gris-500">Todavía no jugó ningún torneo en el circuito.</p>
+        <p className="text-[15px] text-pizarra-500">Todavía no jugó ningún torneo en el circuito.</p>
       ) : (
         <ul className="flex flex-col">
           {torneos.map((torneo) => {
@@ -58,12 +58,12 @@ export function TorneosDeLaFicha({ torneos }: { torneos: TorneoDeLaFicha[] }) {
               >
                 <div className="flex min-w-0 flex-col gap-0.5">
                   <span className="truncate text-base font-medium">{torneo.nombre}</span>
-                  <span className="text-xs text-gris-500">{torneo.categoria}</span>
+                  <span className="text-xs text-pizarra-500">{torneo.categoria}</span>
                 </div>
                 <div className="flex flex-col items-end gap-0.5 text-right">
                   <span className="text-[15px]">{hastaDonde(torneo.instancia)}</span>
                   {partes.length > 0 && (
-                    <span className="text-xs text-gris-500">
+                    <span className="text-xs text-pizarra-500">
                       {partes.map((parte, i) => (
                         <Fragment key={i}>
                           {i > 0 && ' · '}

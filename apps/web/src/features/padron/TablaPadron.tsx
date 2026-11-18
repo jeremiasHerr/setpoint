@@ -106,8 +106,8 @@ export function TablaPadron({ jugadores, categorias, conRanking, seleccionadoId,
           )}
         </div>
 
-        <label className="flex h-[38px] w-full items-center gap-[9px] rounded-control border border-gris-300 px-[13px] focus-within:border-2 focus-within:border-negro focus-within:px-3 sm:w-[250px]">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" className="size-[15px] shrink-0 text-gris-500" aria-hidden="true">
+        <label className="flex h-[38px] w-full items-center gap-[9px] rounded-control border border-borde-campo px-[13px] focus-within:border-2 focus-within:border-noche focus-within:px-3 sm:w-[250px]">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" className="size-[15px] shrink-0 text-pizarra-500" aria-hidden="true">
             <circle cx="11" cy="11" r="7" />
             <path d="M20 20l-3.5-3.5" />
           </svg>
@@ -117,24 +117,24 @@ export function TablaPadron({ jugadores, categorias, conRanking, seleccionadoId,
             onChange={(e) => setBusqueda(e.target.value)}
             placeholder="Buscar por apellido"
             aria-label="Buscar por apellido"
-            className="min-w-0 flex-1 text-sm outline-none placeholder:text-gris-400"
+            className="min-w-0 flex-1 text-sm outline-none placeholder:text-pizarra-400"
           />
         </label>
       </div>
 
-      <div className={`grid h-[38px] items-center gap-x-4 border-b border-linea bg-fondo-tabla px-[18px] ${columnas}`}>
+      <div className={`grid h-[38px] items-center gap-x-4 border-b border-linea bg-niebla px-[18px] ${columnas}`}>
         <span />
-        <span className="font-mono text-[11px] text-gris-500">jugador</span>
-        <span className="hidden font-mono text-[11px] text-gris-500 md:block">categoría</span>
+        <span className="font-mono text-[11px] text-pizarra-500">jugador</span>
+        <span className="hidden font-mono text-[11px] text-pizarra-500 md:block">categoría</span>
         {enNuevas ? (
           <>
-            <span className="hidden font-mono text-[11px] text-gris-500 md:block">cómo se vinculó</span>
-            <span className="text-right font-mono text-[11px] text-gris-500">cuándo</span>
+            <span className="hidden font-mono text-[11px] text-pizarra-500 md:block">cómo se vinculó</span>
+            <span className="text-right font-mono text-[11px] text-pizarra-500">cuándo</span>
           </>
         ) : (
           <>
-            {conRanking && <span className="font-mono text-[11px] text-gris-500">ranking</span>}
-            <span className="hidden text-right font-mono text-[11px] text-gris-500 xl:block">partidos</span>
+            {conRanking && <span className="font-mono text-[11px] text-pizarra-500">ranking</span>}
+            <span className="hidden text-right font-mono text-[11px] text-pizarra-500 xl:block">partidos</span>
           </>
         )}
         <span />
@@ -167,7 +167,7 @@ export function TablaPadron({ jugadores, categorias, conRanking, seleccionadoId,
       ))}
 
       {visibles.length === 0 && (
-        <p className="border-b border-linea-suave px-[18px] py-8 text-center text-sm text-gris-500">
+        <p className="border-b border-linea-suave px-[18px] py-8 text-center text-sm text-pizarra-500">
           {jugadores.length === 0
             ? 'Todavía no hay jugadores. Agregá el primero con el formulario de al lado.'
             : enNuevas && delFiltro.length === 0
@@ -179,13 +179,13 @@ export function TablaPadron({ jugadores, categorias, conRanking, seleccionadoId,
       )}
 
       {enNuevas ? (
-        <p className="rounded-b-tarjeta bg-fondo-tabla px-[18px] py-[15px] text-[13px] leading-normal text-gris-500">
+        <p className="rounded-b-tarjeta bg-niebla px-[18px] py-[15px] text-[13px] leading-normal text-pizarra-500">
           {anterior ? `Las vinculaciones desde tu última visita, ${laVisita(anterior)}.` : 'Es la primera vez que abrís el padrón: están todas las vinculaciones.'}{' '}
           No tenés que aprobar nada: si alguna no te cierra, la desvinculás.
         </p>
       ) : (
-        <div className="rounded-b-tarjeta bg-fondo-tabla px-[18px] py-[15px]">
-          <span className="font-mono text-[13px] text-gris-500">
+        <div className="rounded-b-tarjeta bg-niebla px-[18px] py-[15px]">
+          <span className="font-mono text-[13px] text-pizarra-500">
             mostrando <Numero>{visibles.length}</Numero> de <Numero>{jugadores.length}</Numero>
           </span>
         </div>

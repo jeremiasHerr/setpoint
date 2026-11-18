@@ -1,6 +1,6 @@
 # 090 — Más contraste en los bordes y el interruptor
 
-**Estado:** aceptada — 12 de noviembre de 2026
+**Estado:** Reemplazada por la [decisión 105](105-sistema-visual-ultima-luz.md) — aceptada el 12 de noviembre de 2026
 
 ## Contexto
 

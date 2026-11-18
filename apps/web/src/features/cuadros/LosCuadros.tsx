@@ -21,7 +21,7 @@ function mensajeDeError(error: Error) {
 export function LosCuadros({ slug, torneoId }: { slug: string; torneoId: string }) {
   const cuadros = useCuadrosPublicos(slug, torneoId);
   if (cuadros.isPending) return <Esqueleto forma="bloque" />;
-  if (cuadros.error) return <p className="text-[15px] text-gris-700">{mensajeDeError(cuadros.error)}</p>;
+  if (cuadros.error) return <p className="text-[15px] text-pizarra-700">{mensajeDeError(cuadros.error)}</p>;
   return <Contenido datos={cuadros.data} />;
 }
 
@@ -31,7 +31,7 @@ function Contenido({ datos }: { datos: Cuadros }) {
 
   return (
     <section className="flex flex-col gap-4">
-      <p className="text-[15px] text-gris-500">{bajada(datos.cuadros, datos.clasificadosPorGrupo)}</p>
+      <p className="text-[15px] text-pizarra-500">{bajada(datos.cuadros, datos.clasificadosPorGrupo)}</p>
 
       {/* Celular y tablet: un cuadro a la vez y una ronda a la vez, sin scroll horizontal. */}
       <div className="flex flex-col gap-4 xl:hidden">
@@ -54,7 +54,7 @@ function Contenido({ datos }: { datos: Cuadros }) {
         ))}
       </div>
 
-      <p className="text-[13px] text-gris-500">Tocá cualquier partido para ver el marcador set por set.</p>
+      <p className="text-[13px] text-pizarra-500">Tocá cualquier partido para ver el marcador set por set.</p>
     </section>
   );
 }

@@ -1,5 +1,6 @@
 // Un import por peso: el índice de cada paquete trae los 26 archivos (itálicas incluidas) y Metro
 // los empaquetaría todos.
+import { FunnelDisplay_600SemiBold } from '@expo-google-fonts/funnel-display/600SemiBold';
 import { GeistMono_400Regular } from '@expo-google-fonts/geist-mono/400Regular';
 import { GeistMono_500Medium } from '@expo-google-fonts/geist-mono/500Medium';
 import { GeistMono_600SemiBold } from '@expo-google-fonts/geist-mono/600SemiBold';
@@ -32,6 +33,7 @@ export default function RootLayout() {
     GeistMono_400Regular,
     GeistMono_500Medium,
     GeistMono_600SemiBold,
+    FunnelDisplay_600SemiBold,
   });
 
   // React Native no tiene el foco de la ventana: sin esto, lo que está en pantalla queda viejo al

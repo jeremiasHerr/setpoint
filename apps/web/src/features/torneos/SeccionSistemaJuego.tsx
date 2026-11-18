@@ -39,7 +39,7 @@ export function SeccionSistemaJuego({ setsPorPartido, puntoDeOro, terceroSet, pu
             <span id="punto-de-oro-titulo" className="text-[15px]">
               Punto de oro
             </span>
-            <p className="text-sm text-gris-500">
+            <p className="text-sm text-pizarra-500">
               En <Numero>40-40</Numero> se juega un punto único, sin ventajas.
             </p>
           </div>
@@ -58,7 +58,7 @@ export function SeccionSistemaJuego({ setsPorPartido, puntoDeOro, terceroSet, pu
               {/* El set que define: el tercero, o el quinto a cinco sets. */}
               Super tie-break en lugar del {setsPorPartido === 5 ? 'quinto' : 'tercer'} set
             </span>
-            <p className="text-sm text-gris-500">
+            <p className="text-sm text-pizarra-500">
               A <Numero>{puntosSuperTieBreak}</Numero> puntos, sin diferencia.
             </p>
           </div>

@@ -9,24 +9,24 @@ function Fila({ partido, torneo }: { partido: PartidoEnVivo; torneo: TorneoEnViv
   const jugado = tieneResultado(partido);
   const nombre = (j: PartidoEnVivo['jugadorA']) => j?.apellido ?? 'a definir';
   const estilo = (j: PartidoEnVivo['jugadorA']) =>
-    jugado && j !== null && partido.ganadorId === j.jugadorId ? 'font-semibold' : jugado ? 'text-gris-500' : '';
+    jugado && j !== null && partido.ganadorId === j.jugadorId ? 'font-semibold' : jugado ? 'text-pizarra-500' : '';
   const detalle = [dondeSeJuega(partido, torneo), partido.sede].filter(Boolean).join(' · ');
 
   return (
     <li className="grid grid-cols-[52px_minmax(0,1fr)_auto] items-center gap-3 border-b border-linea-suave px-4 py-3 last:border-b-0">
-      <Numero className={`text-[15px] ${jugado ? 'text-gris-400' : 'font-semibold'}`}>{laHora(partido.fechaAcordada!)}</Numero>
+      <Numero className={`text-[15px] ${jugado ? 'text-pizarra-400' : 'font-semibold'}`}>{laHora(partido.fechaAcordada!)}</Numero>
       <div className="flex min-w-0 flex-col gap-0.5">
         <span className="truncate text-[15px]">
           <span className={estilo(partido.jugadorA)}>{nombre(partido.jugadorA)}</span>
-          <span className="text-gris-400"> · </span>
+          <span className="text-pizarra-400"> · </span>
           <span className={estilo(partido.jugadorB)}>{nombre(partido.jugadorB)}</span>
         </span>
-        <span className="truncate text-[13px] text-gris-500">{detalle}</span>
+        <span className="truncate text-[13px] text-pizarra-500">{detalle}</span>
       </div>
       {jugado ? (
         <Numero className="text-[13px] font-semibold">{marcador(partido)}</Numero>
       ) : partido.estado === 'anotada' ? (
-        <span className="text-xs text-gris-500">a confirmar</span>
+        <span className="text-xs text-pizarra-500">a confirmar</span>
       ) : (
         <span />
       )}
@@ -39,7 +39,7 @@ function Dias({ lista, torneo }: { lista: DiaDelCalendario[]; torneo: TorneoEnVi
     <div className="flex flex-col gap-4">
       {lista.map(({ dia, titulo, partidos }) => (
         <Tarjeta key={dia} className="overflow-hidden">
-          <h3 className="border-b border-linea bg-fondo-tabla px-4 py-2.5 text-sm font-semibold first-letter:uppercase">{titulo}</h3>
+          <h3 className="border-b border-linea bg-niebla px-4 py-2.5 text-sm font-semibold first-letter:uppercase">{titulo}</h3>
           <ul>
             {partidos.map((partido) => (
               <Fila key={partido.id} partido={partido} torneo={torneo} />
@@ -67,16 +67,16 @@ export function CalendarioEnVivo({ torneo }: { torneo: TorneoEnVivo }) {
         : `${torneo.sinFecha} partidos todavía no tienen fecha: aparecen acá cuando los jugadores la anotan.`;
 
   if (dias.length === 0) {
-    return <p className="text-[15px] text-gris-500">Todavía no hay partidos con fecha. {sinFecha}</p>;
+    return <p className="text-[15px] text-pizarra-500">Todavía no hay partidos con fecha. {sinFecha}</p>;
   }
 
   return (
     <section className="flex max-w-[640px] flex-col gap-5">
-      {sinFecha && <p className="text-[15px] text-gris-500">{sinFecha}</p>}
+      {sinFecha && <p className="text-[15px] text-pizarra-500">{sinFecha}</p>}
       {proximos.length > 0 ? (
         <Dias lista={proximos} torneo={torneo} />
       ) : (
-        <p className="text-[15px] text-gris-500">No hay partidos con fecha para los próximos días.</p>
+        <p className="text-[15px] text-pizarra-500">No hay partidos con fecha para los próximos días.</p>
       )}
       {pasados.length > 0 && (
         <>

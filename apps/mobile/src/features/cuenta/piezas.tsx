@@ -17,7 +17,7 @@ export function Reloj({ tamano = 18 }: { tamano?: number }) {
   );
 }
 
-// El estado de la inscripción (design.md §7): punto hueco en revisión, negro lleno aprobada (el lima
+// El estado de la inscripción (design.md §7): punto hueco en revisión, noche lleno aprobada (el verde
 // queda para "pagada"), y el reloj mientras reserva.
 export function Marca({ estado }: { estado: InscripcionEnCurso['estado'] }) {
   return (
@@ -42,12 +42,12 @@ export function Vence({ iso }: { iso: string }) {
 const estilos = StyleSheet.create({
   reloj: {
     borderWidth: 1.8,
-    borderColor: colores.gris500,
+    borderColor: colores.pizarra500,
   },
   aguja: {
     position: 'absolute',
     width: 1.8,
-    backgroundColor: colores.gris500,
+    backgroundColor: colores.pizarra500,
   },
   marca: {
     flexDirection: 'row',
@@ -61,19 +61,19 @@ const estilos = StyleSheet.create({
   },
   hueco: {
     borderWidth: 1.5,
-    borderColor: colores.gris400,
+    borderColor: colores.pizarra400,
   },
   lleno: {
-    backgroundColor: colores.negro,
+    backgroundColor: colores.noche,
   },
   textoMarca: {
     fontFamily: fuentes.sans[400],
     fontSize: 15,
-    color: colores.gris500,
+    color: colores.pizarra500,
   },
   hora: {
     fontFamily: fuentes.mono[500],
-    color: colores.negro,
+    color: colores.noche,
     ...tabular,
   },
   urgente: {

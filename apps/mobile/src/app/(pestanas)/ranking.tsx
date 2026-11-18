@@ -129,7 +129,7 @@ function Tabla({ ranking, jugadorId, categoriaPropiaId }: PropsTabla) {
 const estilos = StyleSheet.create({
   pantalla: {
     flex: 1,
-    backgroundColor: colores.blanco,
+    backgroundColor: colores.niebla,
   },
   contenido: {
     paddingHorizontal: medidas.margen,
@@ -141,7 +141,7 @@ const estilos = StyleSheet.create({
     fontFamily: fuentes.sans[400],
     fontSize: 15,
     lineHeight: 22,
-    color: colores.gris700,
+    color: colores.pizarra700,
   },
   titulo: {
     flexDirection: 'row',
@@ -151,10 +151,10 @@ const estilos = StyleSheet.create({
     gap: 12,
   },
   textoTitulo: {
-    fontFamily: fuentes.sans[600],
+    fontFamily: fuentes.display[600],
     fontSize: 30,
-    letterSpacing: -1,
-    color: colores.negro,
+    letterSpacing: -0.6,
+    color: colores.noche,
   },
   chips: {
     flexDirection: 'row',
@@ -172,18 +172,18 @@ const estilos = StyleSheet.create({
     fontFamily: fuentes.sans[600],
     fontSize: 20,
     letterSpacing: -0.4,
-    color: colores.negro,
+    color: colores.noche,
   },
   cantidad: {
     fontFamily: fuentes.mono[400],
     fontSize: 15,
-    color: colores.gris500,
+    color: colores.pizarra500,
     ...tabular,
   },
   ayuda: {
     fontFamily: fuentes.sans[400],
     fontSize: 15,
     lineHeight: 22,
-    color: colores.gris500,
+    color: colores.pizarra500,
   },
 });

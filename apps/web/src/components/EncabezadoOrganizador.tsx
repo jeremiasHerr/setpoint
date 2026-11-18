@@ -18,13 +18,13 @@ type Props = {
 
 export function EncabezadoOrganizador({ organizacion, navegacion = [], activo, iniciales, alSalir }: Props) {
   return (
-    <header className="flex h-[60px] items-center justify-between gap-6 bg-negro px-7">
+    <header className="flex h-[60px] items-center justify-between gap-6 bg-noche px-7">
       <div className="flex min-w-0 items-center gap-3.5">
         <Link to="/inicio" aria-label="Ir al inicio" className="rounded-[7px]">
-          <Logo sobreNegro />
+          <Logo sobreNoche />
         </Link>
-        <div className="h-[18px] w-px bg-borde-oscuro" />
-        <span className="truncate text-sm whitespace-nowrap text-gris-400">{organizacion}</span>
+        <div className="h-[18px] w-px bg-borde-noche" />
+        <span className="truncate text-sm whitespace-nowrap text-pizarra-400">{organizacion}</span>
       </div>
 
       {(navegacion.length > 0 || iniciales || alSalir) && (
@@ -39,7 +39,7 @@ export function EncabezadoOrganizador({ organizacion, navegacion = [], activo, i
                     to={href}
                     aria-current={esActivo ? 'page' : undefined}
                     className={`flex h-[34px] items-center rounded-lg px-[13px] text-sm ${
-                      esActivo ? 'bg-carbon font-semibold text-white' : 'text-gris-400 hover:text-white'
+                      esActivo ? 'bg-noche-2 font-semibold text-white' : 'text-pizarra-400 hover:text-white'
                     }`}
                   >
                     {etiqueta}
@@ -50,13 +50,13 @@ export function EncabezadoOrganizador({ organizacion, navegacion = [], activo, i
           )}
 
           {iniciales && (
-            <span className="flex size-8 items-center justify-center rounded-full border border-borde-oscuro bg-carbon text-[13px] font-semibold text-white">
+            <span className="flex size-8 items-center justify-center rounded-full border border-borde-noche bg-noche-2 text-[13px] font-semibold text-white">
               {iniciales}
             </span>
           )}
 
           {alSalir && (
-            <button type="button" onClick={alSalir} className="text-sm text-gris-400 hover:text-white">
+            <button type="button" onClick={alSalir} className="text-sm text-pizarra-400 hover:text-white">
               Salir
             </button>
           )}

@@ -10,12 +10,12 @@ type Props = {
 
 export function PantallaAcceso({ pregunta, enlace, children }: Props) {
   return (
-    <div className="min-h-screen bg-fondo text-negro">
-      <header className="flex h-[60px] items-center justify-between gap-4 border-b border-linea bg-white px-4 sm:px-7">
+    <div className="min-h-screen bg-niebla text-noche">
+      <header className="flex h-[60px] items-center justify-between gap-4 border-b border-linea bg-papel px-4 sm:px-7">
         <Logo />
-        <p className="text-sm text-gris-500">
+        <p className="text-sm text-pizarra-500">
           {pregunta}{' '}
-          <Link to={enlace.a} className="font-medium text-negro hover:text-gris-500">
+          <Link to={enlace.a} className="font-medium text-noche hover:text-pizarra-500">
             {enlace.texto}
           </Link>
         </p>

@@ -31,10 +31,10 @@ export function CampoCodigo({ valor, onChange, onCompleto, apagado = false }: Pr
             i === 3 ? 'ml-1.5' : ''
           } ${
             apagado
-              ? 'border border-linea bg-fondo text-gris-400'
+              ? 'border border-linea bg-niebla text-pizarra-400'
               : enfocado && i === Math.min(valor.length, LARGO - 1)
-                ? 'border-2 border-negro'
-                : 'border border-gris-300'
+                ? 'border-2 border-noche'
+                : 'border border-borde-campo'
           }`}
         >
           {valor[i] ?? ''}

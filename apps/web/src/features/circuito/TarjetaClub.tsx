@@ -10,7 +10,7 @@ type Props = {
 };
 
 const estiloControl =
-  'h-10 min-w-0 rounded-control border border-gris-300 bg-white px-3 text-sm text-negro outline-none focus:border-2 focus:border-negro focus:px-[11px]';
+  'h-10 min-w-0 rounded-control border border-borde-campo bg-papel px-3 text-sm text-noche outline-none focus:border-2 focus:border-noche focus:px-[11px]';
 
 // "Cancha 1", "Cancha 2"...: el primer número que no esté usado en este club.
 function nombreDeCanchaNueva(canchas: Cancha[]) {
@@ -48,13 +48,13 @@ export function TarjetaClub({ indice, club, alCambiar, alQuitar }: Props) {
           value={club.direccion}
           onChange={(e) => alCambiar({ ...club, direccion: e.target.value })}
         />
-        <button type="button" onClick={alQuitar} className="h-12 text-sm font-medium text-gris-500 hover:text-negro">
+        <button type="button" onClick={alQuitar} className="h-12 text-sm font-medium text-pizarra-500 hover:text-noche">
           Quitar club
         </button>
       </div>
 
       <div className="flex flex-col gap-2">
-        <h3 className="text-[13px] font-semibold text-gris-500">Canchas</h3>
+        <h3 className="text-[13px] font-semibold text-pizarra-500">Canchas</h3>
         {club.canchas.length > 0 && (
           <ul className="flex flex-col gap-2">
             {club.canchas.map((cancha, i) => (
@@ -81,7 +81,7 @@ export function TarjetaClub({ indice, club, alCambiar, alQuitar }: Props) {
                 <button
                   type="button"
                   onClick={() => alCambiar({ ...club, canchas: club.canchas.filter((_, otra) => otra !== i) })}
-                  className="justify-self-start text-sm font-medium text-gris-500 hover:text-negro"
+                  className="justify-self-start text-sm font-medium text-pizarra-500 hover:text-noche"
                 >
                   Quitar
                 </button>
@@ -89,7 +89,7 @@ export function TarjetaClub({ indice, club, alCambiar, alQuitar }: Props) {
             ))}
           </ul>
         )}
-        <button type="button" onClick={agregarCancha} className="self-start text-sm font-medium hover:text-gris-500">
+        <button type="button" onClick={agregarCancha} className="self-start text-sm font-medium hover:text-pizarra-500">
           Agregar una cancha
         </button>
       </div>

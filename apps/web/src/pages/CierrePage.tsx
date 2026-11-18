@@ -24,7 +24,7 @@ export function CierrePage() {
 
 function Marco({ sesion, torneoId, children }: { sesion: Sesion; torneoId: number; children: ReactNode }) {
   return (
-    <div className="min-h-screen bg-white text-negro">
+    <div className="min-h-screen bg-papel text-noche">
       <EncabezadoDelTorneo sesion={sesion} torneoId={torneoId} actual="cierre" />
       {children}
     </div>
@@ -52,7 +52,7 @@ function Cierre({ sesion, torneoId }: { sesion: Sesion; torneoId: number }) {
       <div className="flex flex-col items-start gap-3 px-7 pt-[34px]">
         {cierre.error && !sesionInvalida ? (
           <>
-            <p className="text-[15px] text-gris-500">{ERRORES[codigo] ?? 'No pudimos cargar el cierre del torneo.'}</p>
+            <p className="text-[15px] text-pizarra-500">{ERRORES[codigo] ?? 'No pudimos cargar el cierre del torneo.'}</p>
             {codigo === 'CUADROS_INCOMPLETOS' ? (
               <Boton onClick={() => navegar(`/torneos/${torneoId}/resultados`)}>Cargar resultados</Boton>
             ) : codigo === 'TORNEO_NO_ENCONTRADO' || codigo === 'TORNEO_NO_CERRABLE' ? (
@@ -95,14 +95,14 @@ function AvisoParticipacion({ cierre }: { cierre: CierreDelTorneo }) {
   const puntos = participacion[0]?.ranking?.puntos;
   if (cierre.cerrado || puntos === undefined) return null;
   return (
-    <div className="flex items-start gap-[11px] rounded-tarjeta border border-linea bg-fondo px-[18px] py-4">
-      <svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" className="mt-px shrink-0 text-gris-500">
+    <div className="flex items-start gap-[11px] rounded-tarjeta border border-linea bg-niebla px-[18px] py-4">
+      <svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" className="mt-px shrink-0 text-pizarra-500">
         <circle cx="12" cy="12" r="9" />
         <path d="M12 8v5M12 16v.01" />
       </svg>
-      <p className="text-sm leading-normal text-gris-500">
+      <p className="text-sm leading-normal text-pizarra-500">
         Los <Numero>{participacion.length}</Numero> jugadores de participación reciben{' '}
-        <Numero className="text-negro">{puntos}</Numero> puntos de participación. Cada uno reemplaza lo que tenía en el casillero
+        <Numero className="text-noche">{puntos}</Numero> puntos de participación. Cada uno reemplaza lo que tenía en el casillero
         de {cierre.torneoDelCalendario}, no se suma encima.
       </p>
     </div>
@@ -120,8 +120,8 @@ function VistaDelCierre({ sesion, cierre }: { sesion: Sesion; cierre: CierreDelT
   return (
     <Marco sesion={sesion} torneoId={torneoId}>
       <div className="flex flex-col gap-[7px] px-7 pt-[26px] pb-5">
-        <h1 className="text-[30px] font-semibold tracking-[-0.035em]">{cierre.cerrado ? 'Torneo cerrado' : 'Cerrar el torneo'}</h1>
-        <p className="text-[15px] text-gris-500">
+        <h1 className="text-[28px] font-display font-semibold tracking-[-0.02em]">{cierre.cerrado ? 'Torneo cerrado' : 'Cerrar el torneo'}</h1>
+        <p className="text-[15px] text-pizarra-500">
           <Subtitulo cierre={cierre} />
         </p>
       </div>

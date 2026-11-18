@@ -14,8 +14,8 @@ export function TorneoPublicado({ slug, convocatoria }: { slug: string; convocat
   return (
     <main className="flex max-w-[720px] flex-col gap-5 px-7 pt-[26px] pb-7">
       <div className="flex flex-col gap-[7px]">
-        <h1 className="text-[30px] font-semibold tracking-[-0.035em]">Publicaste {convocatoria.nombre}</h1>
-        <p className="text-[15px] text-gris-500">
+        <h1 className="text-[28px] font-display font-semibold tracking-[-0.02em]">Publicaste {convocatoria.nombre}</h1>
+        <p className="text-[15px] text-pizarra-500">
           La inscripción ya está abierta. Pasá {varias ? 'el link de cada categoría' : 'el link'} por el grupo: se anotan y pagan
           desde ahí.
         </p>
@@ -29,7 +29,7 @@ export function TorneoPublicado({ slug, convocatoria }: { slug: string; convocat
           >
             <div className="flex min-w-0 flex-col gap-1">
               {varias && <span className="text-[15px] font-semibold">{torneo.categoria}</span>}
-              <Numero className="text-[13px] break-all text-gris-500">
+              <Numero className="text-[13px] break-all text-pizarra-500">
                 {window.location.host}/c/{slug}/torneos/{torneo.id}
               </Numero>
             </div>

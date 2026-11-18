@@ -7,9 +7,9 @@ import { NOMBRE_DEL_CUADRO } from '../cuadros/cuadro';
 import { comoVieneLaZona, marcadorDesde } from '../tablero/tablero';
 import { laHora, elDia, tieneResultado } from './enVivo';
 
-const rotulo = 'font-mono text-[11px] text-gris-500';
+const rotulo = 'font-mono text-[11px] text-pizarra-500';
 
-// La tabla de una zona: quién clasifica a cada cuadro se ve con el punto lima y la negrita,
+// La tabla de una zona: quién clasifica a cada cuadro se ve con el punto verde y la negrita,
 // como en el tablero y en Mi zona. Cada nombre lleva a la ficha del jugador (decisión 074), que
 // vuelve a las zonas (decisión 102). Debajo, los partidos de la zona con su resultado o su fecha.
 function TablaDeZona({ zona, slug, vuelta }: { zona: ZonaEnVivo; slug: string; vuelta: VueltaDeLaFicha }) {
@@ -18,13 +18,13 @@ function TablaDeZona({ zona, slug, vuelta }: { zona: ZonaEnVivo; slug: string; v
     <Tarjeta className="overflow-hidden">
       <div className="flex items-center justify-between border-b border-linea px-4 py-3">
         <h3 className="text-[17px] font-semibold tracking-[-0.02em]">Zona {zona.grupo}</h3>
-        <Numero className="text-xs text-gris-500">
+        <Numero className="text-xs text-pizarra-500">
           {zona.partidos.filter(tieneResultado).length} de {zona.partidos.length} jugados
         </Numero>
       </div>
 
-      <div className={`${grilla} border-b border-linea bg-fondo-tabla`}>
-        <span className="px-4 py-2 text-xs text-gris-500">jugador</span>
+      <div className={`${grilla} border-b border-linea bg-niebla`}>
+        <span className="px-4 py-2 text-xs text-pizarra-500">jugador</span>
         <span className={`py-2 text-center ${rotulo}`}>pg</span>
         <span className={`py-2 text-center ${rotulo}`}>sets</span>
         <span className={`py-2 pr-4 text-right ${rotulo}`}>games</span>
@@ -34,30 +34,30 @@ function TablaDeZona({ zona, slug, vuelta }: { zona: ZonaEnVivo; slug: string; v
         return (
           <div key={fila.jugadorId} className={`${grilla} h-[46px] border-b border-linea-suave`}>
             <div className="flex min-w-0 items-center gap-2.5 px-4">
-              <Numero className={`text-xs ${clasifica ? 'text-gris-500' : 'text-gris-400'}`}>{fila.posicion}</Numero>
-              <span className={`size-1.5 shrink-0 rounded-full ${clasifica ? 'bg-lima' : 'bg-linea'}`} />
+              <Numero className={`text-xs ${clasifica ? 'text-pizarra-500' : 'text-pizarra-400'}`}>{fila.posicion}</Numero>
+              <span className={`size-1.5 shrink-0 rounded-full ${clasifica ? 'bg-lona-texto' : 'bg-linea'}`} />
               <Link
                 to={`/c/${slug}/jugadores/${fila.jugadorId}`}
                 state={estadoParaLaFicha(vuelta)}
-                className={`truncate text-[15px] hover:underline ${clasifica ? 'font-semibold' : 'font-medium text-gris-700'}`}
+                className={`truncate text-[15px] hover:underline ${clasifica ? 'font-semibold' : 'font-medium text-pizarra-700'}`}
               >
                 {fila.nombre} {fila.apellido}
               </Link>
             </div>
-            <Numero className={`text-center text-[15px] font-semibold ${clasifica ? '' : 'text-gris-700'}`}>{fila.partidosGanados}</Numero>
-            <Numero className="text-center text-[13px] text-gris-500">
+            <Numero className={`text-center text-[15px] font-semibold ${clasifica ? '' : 'text-pizarra-700'}`}>{fila.partidosGanados}</Numero>
+            <Numero className="text-center text-[13px] text-pizarra-500">
               {fila.setsGanados}-{fila.setsPerdidos}
             </Numero>
-            <Numero className="pr-4 text-right text-[13px] text-gris-500">
+            <Numero className="pr-4 text-right text-[13px] text-pizarra-500">
               {fila.gamesGanados}-{fila.gamesPerdidos}
             </Numero>
           </div>
         );
       })}
 
-      <div className="flex items-start gap-2.5 bg-fondo-tabla px-4 py-3">
-        <span className="mt-[7px] size-1.5 shrink-0 rounded-full bg-lima" />
-        <p className="text-[13px] text-gris-500">{comoVieneLaZona(zona.filas)}</p>
+      <div className="flex items-start gap-2.5 bg-niebla px-4 py-3">
+        <span className="mt-[7px] size-1.5 shrink-0 rounded-full bg-lona-texto" />
+        <p className="text-[13px] text-pizarra-500">{comoVieneLaZona(zona.filas)}</p>
       </div>
 
       <ul className="flex flex-col px-4 py-2">
@@ -83,17 +83,17 @@ function PartidoDeZona({ partido }: { partido: PartidoEnVivo }) {
         <>
           <span className="min-w-0 truncate">
             <span className="font-semibold">{ganador.apellido}</span>
-            <span className="text-gris-400"> le ganó a </span>
+            <span className="text-pizarra-400"> le ganó a </span>
             {perdedor.apellido}
           </span>
           <Numero className="shrink-0 text-[13px] font-semibold">{marcadorDesde(partido, ganador.jugadorId)}</Numero>
         </>
       ) : (
         <>
-          <span className="min-w-0 truncate text-gris-700">
+          <span className="min-w-0 truncate text-pizarra-700">
             {jugadorA.apellido} · {jugadorB.apellido}
           </span>
-          <Numero className="shrink-0 text-[13px] text-gris-500">
+          <Numero className="shrink-0 text-[13px] text-pizarra-500">
             {partido.fechaAcordada ? `${elDia(partido.fechaAcordada)} · ${laHora(partido.fechaAcordada)}` : 'a coordinar'}
           </Numero>
         </>
@@ -109,7 +109,7 @@ export function ZonasEnVivo({ torneo, slug }: { torneo: TorneoEnVivo; slug: stri
   const primeros = torneo.clasificanPorGrupo === 1 ? 'El primero de cada zona va' : `Los ${torneo.clasificanPorGrupo} primeros de cada zona van`;
   return (
     <section className="flex flex-col gap-4">
-      <p className="text-[15px] text-gris-500">
+      <p className="text-[15px] text-pizarra-500">
         {primeros} a {NOMBRE_DEL_CUADRO.campeonato}
         {consuelo}.{torneo.hayCuadros && ' Las zonas ya terminaron: así quedaron.'}
       </p>

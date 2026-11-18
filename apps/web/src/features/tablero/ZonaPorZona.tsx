@@ -4,7 +4,7 @@ import { Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
 import { comoVieneLaZona, elDiaCorto, marcadorDesde, partidoEntre } from './tablero';
 
-const rotulo = 'font-mono text-[11px] text-gris-500';
+const rotulo = 'font-mono text-[11px] text-pizarra-500';
 
 // Lo que va en el cruce de dos jugadores, desde quien está en la fila.
 function Cruce({ zona, fila, rival }: { zona: ZonaDelTablero; fila: FilaDePosiciones; rival: FilaDePosiciones }) {
@@ -17,7 +17,7 @@ function Cruce({ zona, fila, rival }: { zona: ZonaDelTablero; fila: FilaDePosici
   if (partido.situacion === 'jugado') {
     const gano = partido.ganadorId === fila.jugadorId;
     return (
-      <div className={`${celda} ${gano ? 'bg-lima-tenue font-semibold' : 'text-gris-400'}`}>
+      <div className={`${celda} ${gano ? 'bg-lona-fondo font-semibold' : 'text-pizarra-400'}`}>
         <Numero className="text-[13px]">{marcadorDesde(partido, fila.jugadorId)}</Numero>
       </div>
     );
@@ -32,13 +32,13 @@ function Cruce({ zona, fila, rival }: { zona: ZonaDelTablero; fila: FilaDePosici
   if (partido.fechaAcordada) {
     return (
       <div className={celda}>
-        <Numero className="text-xs text-gris-500">{elDiaCorto(partido.fechaAcordada)}</Numero>
+        <Numero className="text-xs text-pizarra-500">{elDiaCorto(partido.fechaAcordada)}</Numero>
       </div>
     );
   }
   return (
     <div className={celda}>
-      <span aria-label="sin coordinar" className="h-[26px] w-12 rounded-md border border-dashed border-gris-300" />
+      <span aria-label="sin coordinar" className="h-[26px] w-12 rounded-md border border-dashed border-borde-campo" />
     </div>
   );
 }
@@ -50,8 +50,8 @@ function Tabla({ zona }: { zona: ZonaDelTablero }) {
 
   return (
     <Tarjeta className="overflow-hidden">
-      <div className={`${grilla} border-b border-linea bg-fondo-tabla`} style={columnas}>
-        <span className="px-4 py-2.5 text-xs text-gris-500">jugador</span>
+      <div className={`${grilla} border-b border-linea bg-niebla`} style={columnas}>
+        <span className="px-4 py-2.5 text-xs text-pizarra-500">jugador</span>
         {zona.filas.map((rival) => (
           <span key={rival.jugadorId} className={`hidden truncate px-1 py-2.5 text-center md:block ${rotulo}`}>
             {rival.apellido.toLowerCase()}
@@ -67,27 +67,27 @@ function Tabla({ zona }: { zona: ZonaDelTablero }) {
         return (
           <div key={fila.jugadorId} className={`${grilla} items-center border-b border-linea-suave`} style={columnas}>
             <div className="flex h-[60px] min-w-0 items-center gap-2.5 px-4">
-              <Numero className={`text-xs ${clasifica ? 'text-gris-500' : 'text-gris-400'}`}>{fila.posicion}</Numero>
-              <span className={`size-1.5 shrink-0 rounded-full ${clasifica ? 'bg-lima' : 'bg-linea'}`} />
-              <span className={`truncate text-[15px] ${clasifica ? 'font-semibold' : 'font-medium text-gris-700'}`}>{fila.apellido}</span>
+              <Numero className={`text-xs ${clasifica ? 'text-pizarra-500' : 'text-pizarra-400'}`}>{fila.posicion}</Numero>
+              <span className={`size-1.5 shrink-0 rounded-full ${clasifica ? 'bg-lona-texto' : 'bg-linea'}`} />
+              <span className={`truncate text-[15px] ${clasifica ? 'font-semibold' : 'font-medium text-pizarra-700'}`}>{fila.apellido}</span>
             </div>
             {zona.filas.map((rival) => (
               <Cruce key={rival.jugadorId} zona={zona} fila={fila} rival={rival} />
             ))}
-            <Numero className={`text-center text-[15px] font-semibold ${clasifica ? '' : 'text-gris-700'}`}>{fila.partidosGanados}</Numero>
-            <Numero className={`text-center text-[13px] ${clasifica ? 'text-gris-500' : 'text-gris-400'}`}>
+            <Numero className={`text-center text-[15px] font-semibold ${clasifica ? '' : 'text-pizarra-700'}`}>{fila.partidosGanados}</Numero>
+            <Numero className={`text-center text-[13px] ${clasifica ? 'text-pizarra-500' : 'text-pizarra-400'}`}>
               {fila.setsGanados}-{fila.setsPerdidos}
             </Numero>
-            <Numero className={`pr-2.5 text-right text-[13px] ${clasifica ? 'text-gris-500' : 'text-gris-400'}`}>
+            <Numero className={`pr-2.5 text-right text-[13px] ${clasifica ? 'text-pizarra-500' : 'text-pizarra-400'}`}>
               {fila.gamesGanados}-{fila.gamesPerdidos}
             </Numero>
           </div>
         );
       })}
 
-      <div className="flex items-start gap-2.5 bg-fondo-tabla px-5 py-[13px]">
-        <span className="mt-[7px] size-1.5 shrink-0 rounded-full bg-lima" />
-        <p className="text-[13px] text-gris-500">{comoVieneLaZona(zona.filas)}</p>
+      <div className="flex items-start gap-2.5 bg-niebla px-5 py-[13px]">
+        <span className="mt-[7px] size-1.5 shrink-0 rounded-full bg-lona-texto" />
+        <p className="text-[13px] text-pizarra-500">{comoVieneLaZona(zona.filas)}</p>
       </div>
     </Tarjeta>
   );
@@ -116,10 +116,10 @@ export function ZonaPorZona({ tablero }: { tablero: Tablero }) {
                 onClick={() => setElegida(grupo)}
                 className={`inline-flex h-[34px] items-center gap-[7px] rounded-[9px] px-[15px] text-sm ${
                   activa
-                    ? 'bg-negro font-semibold text-white'
+                    ? 'bg-noche font-semibold text-white'
                     : conVencidos
                       ? 'border border-rojo-linea font-medium text-rojo-texto'
-                      : 'border border-linea font-medium text-gris-700 hover:bg-fondo'
+                      : 'border border-linea font-medium text-pizarra-700 hover:bg-niebla'
                 }`}
               >
                 {grupo}

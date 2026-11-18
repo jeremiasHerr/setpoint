@@ -24,7 +24,7 @@ export function TarjetaOpciones<T extends string>({ titulo, aclaracion, opciones
     <Tarjeta className="flex flex-col gap-3 px-[18px] py-4">
       <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
         <h2 className="text-[15px] font-semibold">{titulo}</h2>
-        <span className="text-[13px] text-gris-500">{aclaracion}</span>
+        <span className="text-[13px] text-pizarra-500">{aclaracion}</span>
       </div>
 
       <div role="group" aria-label={titulo} className="flex flex-wrap gap-2">
@@ -36,7 +36,7 @@ export function TarjetaOpciones<T extends string>({ titulo, aclaracion, opciones
               variante={activa ? 'organizador' : 'secundario'}
               aria-pressed={activa}
               disabled={deshabilitada}
-              className={`text-sm ${activa ? 'font-semibold' : 'font-normal text-gris-700'}`}
+              className={`text-sm ${activa ? 'font-semibold' : 'font-normal text-pizarra-700'}`}
               onClick={() => alElegir(valor)}
             >
               {etiqueta}
@@ -45,7 +45,7 @@ export function TarjetaOpciones<T extends string>({ titulo, aclaracion, opciones
         })}
       </div>
 
-      <p className="text-sm leading-[1.42] text-gris-500">{ayuda}</p>
+      <p className="text-sm leading-[1.42] text-pizarra-500">{ayuda}</p>
     </Tarjeta>
   );
 }

@@ -74,7 +74,8 @@ const estilos = StyleSheet.create({
     height: medidas.toque,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: colores.gris300,
+    backgroundColor: colores.papel,
+    borderColor: colores.bordeCampo,
     paddingHorizontal: 16,
     flexDirection: 'row',
     alignItems: 'center',
@@ -82,13 +83,13 @@ const estilos = StyleSheet.create({
     gap: 12,
   },
   apretado: {
-    backgroundColor: colores.fondo,
+    backgroundColor: colores.niebla,
   },
   valor: {
     flexShrink: 1,
     fontFamily: fuentes.sans[400],
     fontSize: 17,
-    color: colores.negro,
+    color: colores.noche,
   },
   numerico: {
     fontFamily: fuentes.mono[500],
@@ -96,7 +97,7 @@ const estilos = StyleSheet.create({
     ...tabular,
   },
   vacio: {
-    color: colores.gris400,
+    color: colores.pizarra400,
   },
   // Un ángulo hecho con dos bordes, como en el encabezado del circuito: sin react-native-svg.
   chevron: {
@@ -105,7 +106,7 @@ const estilos = StyleSheet.create({
     marginTop: -4,
     borderRightWidth: 2,
     borderBottomWidth: 2,
-    borderColor: colores.gris500,
+    borderColor: colores.pizarra500,
     transform: [{ rotate: '45deg' }],
   },
   fondo: {
@@ -114,7 +115,7 @@ const estilos = StyleSheet.create({
   },
   hoja: {
     maxHeight: '60%',
-    backgroundColor: colores.blanco,
+    backgroundColor: colores.papel,
     borderTopLeftRadius: radios.superficie,
     borderTopRightRadius: radios.superficie,
     paddingTop: 18,
@@ -123,7 +124,7 @@ const estilos = StyleSheet.create({
   titulo: {
     fontFamily: fuentes.sans[600],
     fontSize: 16,
-    color: colores.negro,
+    color: colores.noche,
     marginBottom: 6,
   },
   opcion: {
@@ -137,11 +138,11 @@ const estilos = StyleSheet.create({
   textoOpcion: {
     fontFamily: fuentes.sans[400],
     fontSize: 17,
-    color: colores.gris700,
+    color: colores.pizarra700,
   },
   textoActivo: {
     fontFamily: fuentes.sans[600],
-    color: colores.negro,
+    color: colores.noche,
   },
   // Un tilde hecho con dos bordes.
   marca: {
@@ -150,7 +151,7 @@ const estilos = StyleSheet.create({
     marginRight: 4,
     borderRightWidth: 2,
     borderBottomWidth: 2,
-    borderColor: colores.negro,
+    borderColor: colores.noche,
     transform: [{ rotate: '45deg' }],
   },
 });

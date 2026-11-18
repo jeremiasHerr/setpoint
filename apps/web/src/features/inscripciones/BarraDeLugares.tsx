@@ -1,3 +1,4 @@
+import { MARCA } from '../../components/marcas';
 import { Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
 
@@ -15,9 +16,9 @@ type Props = {
 export function BarraDeLugares({ cupo, pagados, reservando, solicitudes, enEspera }: Props) {
   const libres = Math.max(0, cupo - pagados - reservando);
   const tramos = [
-    { cantidad: pagados, rotulo: pagados === 1 ? 'pagado' : 'pagados', color: 'bg-negro' },
-    { cantidad: reservando, rotulo: 'reservando', color: 'bg-gris-400' },
-    { cantidad: libres, rotulo: libres === 1 ? 'libre' : 'libres', color: 'bg-linea' },
+    { cantidad: pagados, rotulo: pagados === 1 ? 'pagado' : 'pagados', color: MARCA.hecho },
+    { cantidad: reservando, rotulo: 'reservando', color: MARCA['en-curso'] },
+    { cantidad: libres, rotulo: libres === 1 ? 'libre' : 'libres', color: MARCA.pendiente },
   ];
 
   return (
@@ -31,23 +32,23 @@ export function BarraDeLugares({ cupo, pagados, reservando, solicitudes, enEsper
             <li key={rotulo} className="flex items-center gap-[7px]">
               <span className={`size-[9px] rounded-[2px] ${color}`} />
               <Numero className="text-[13px]">{cantidad}</Numero>
-              <span className="text-[13px] text-gris-500">{rotulo}</span>
+              <span className="text-[13px] text-pizarra-500">{rotulo}</span>
             </li>
           ))}
           {solicitudes !== undefined && (
             <li className="flex items-center gap-[7px]">
-              <span className="size-[9px] rounded-full border-[1.5px] border-gris-400" />
+              <span className="size-[9px] rounded-full border-[1.5px] border-pizarra-400" />
               <Numero className="text-[13px]">{solicitudes}</Numero>
-              <span className="text-[13px] text-gris-500">
+              <span className="text-[13px] text-pizarra-500">
                 {solicitudes === 1 ? 'solicitud' : 'solicitudes'}, sin lugar todavía
               </span>
             </li>
           )}
           {enEspera !== undefined && (
             <li className="flex items-center gap-[7px]">
-              <span className="size-[9px] rounded-[2px] bg-lima" />
+              <span className="size-[9px] rounded-[2px] bg-lona" />
               <Numero className="text-[13px]">{enEspera}</Numero>
-              <span className="text-[13px] text-gris-500">en lista de espera</span>
+              <span className="text-[13px] text-pizarra-500">en lista de espera</span>
             </li>
           )}
         </ul>

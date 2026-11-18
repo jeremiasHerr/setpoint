@@ -1,6 +1,6 @@
 # 104 — El logo son las marcas
 
-**Estado:** aceptada — 16 de noviembre de 2026.
+**Estado:** Reemplazada por la [decisión 105](105-sistema-visual-ultima-luz.md) en el dibujo, los colores y la tipografía; sigue la idea de las cuatro marcas — aceptada el 16 de noviembre de 2026.
 
 ## Contexto
 

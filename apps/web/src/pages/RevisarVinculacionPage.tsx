@@ -92,7 +92,7 @@ function Revisar({ sesion }: { sesion: Sesion }) {
   const noEncontrado = caso.error instanceof ErrorApi && caso.error.codigo === 'CASO_NO_ENCONTRADO';
 
   return (
-    <div className="min-h-screen bg-white text-negro">
+    <div className="min-h-screen bg-papel text-noche">
       <EncabezadoOrganizador
         organizacion={organizacion}
         navegacion={navegacionOrganizador}
@@ -104,10 +104,10 @@ function Revisar({ sesion }: { sesion: Sesion }) {
       <div className="flex flex-col gap-[7px] px-7 pt-6 pb-5">
         <Migas anteriores={[{ etiqueta: 'Padrón', ruta: '/padron' }]}>Revisar vinculación</Migas>
         <div className="flex flex-wrap items-center gap-3">
-          <h1 className="text-[30px] font-semibold tracking-[-0.035em]">Revisar vinculación</h1>
+          <h1 className="text-[28px] font-display font-semibold tracking-[-0.02em]">Revisar vinculación</h1>
           {caso.data && !resuelto && <MarcaParaRevisar />}
         </div>
-        {caso.data && <p className="text-[15px] text-gris-500">{subtitulo(caso.data)}</p>}
+        {caso.data && <p className="text-[15px] text-pizarra-500">{subtitulo(caso.data)}</p>}
       </div>
 
       <div className="grid items-start gap-[22px] px-7 pb-7 lg:grid-cols-[minmax(0,1fr)_320px]">
@@ -115,7 +115,7 @@ function Revisar({ sesion }: { sesion: Sesion }) {
           {caso.isPending && <Esqueleto forma="pagina" />}
           {caso.error && !sesionInvalida && (
             <div className="flex flex-col items-start gap-3">
-              <p className="text-[15px] text-gris-500">
+              <p className="text-[15px] text-pizarra-500">
                 {noEncontrado ? 'Este caso ya no está para revisar: se resolvió o el perfil se desvinculó.' : 'No pudimos cargar el caso.'}
               </p>
               <Boton onClick={() => navegar('/padron')}>Volver al padrón</Boton>
@@ -127,7 +127,7 @@ function Revisar({ sesion }: { sesion: Sesion }) {
           ) : resuelto ? (
             <section className="flex flex-col items-start gap-3 rounded-[16px] border border-linea px-6 py-[22px]">
               <h2 className="text-xl font-semibold tracking-[-0.02em]">Listo, no queda nada para revisar</h2>
-              <p className="text-[15px] text-gris-500">Las vinculaciones nuevas se siguen guardando solas.</p>
+              <p className="text-[15px] text-pizarra-500">Las vinculaciones nuevas se siguen guardando solas.</p>
               <Boton onClick={() => navegar('/padron')}>Volver al padrón</Boton>
             </section>
           ) : (
@@ -139,7 +139,7 @@ function Revisar({ sesion }: { sesion: Sesion }) {
                   <CasoReclamo caso={caso.data} enviando={resolver.isPending} alResolver={alResolver} />
                 )}
                 {resolver.error && (
-                  <p role="alert" className="rounded-control bg-fondo px-3.5 py-3 text-[15px] font-medium text-gris-700">
+                  <p role="alert" className="rounded-control bg-niebla px-3.5 py-3 text-[15px] font-medium text-pizarra-700">
                     {mensajeDeError(resolver.error)}
                   </p>
                 )}
@@ -152,9 +152,9 @@ function Revisar({ sesion }: { sesion: Sesion }) {
           <div className="flex flex-col gap-4">
             <ColumnaRevisiones revisiones={revisiones.data} actual={resuelto ? null : Number(jugadorId)} />
             {caso.data?.motivo === 'homonimo' && !resuelto && (
-              <section className="flex flex-col gap-[9px] rounded-tarjeta border border-linea bg-fondo p-[18px]">
+              <section className="flex flex-col gap-[9px] rounded-tarjeta border border-linea bg-niebla p-[18px]">
                 <h2 className="text-sm font-semibold">¿No sabés cuál es?</h2>
-                <p className="text-sm leading-normal text-gris-500">
+                <p className="text-sm leading-normal text-pizarra-500">
                   Llamalos: el teléfono de cada perfil está en su tarjeta. Mientras tanto, la inscripción sigue confirmada.
                 </p>
               </section>

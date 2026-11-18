@@ -8,7 +8,7 @@ type Props = Omit<TextInputProps, 'style'> & {
   ref?: Ref<TextInputInstance>;
 };
 
-// Campo de 56 con el rótulo arriba (design.md §6). Enfocado, el borde pasa a 2px negro.
+// Campo de 56 con el rótulo arriba (design.md §6). Enfocado, el borde pasa a 2px noche.
 export function Campo({ rotulo, ref, onFocus, onBlur, ...props }: Props) {
   const [enfocado, setEnfocado] = useState(false);
 
@@ -18,7 +18,7 @@ export function Campo({ rotulo, ref, onFocus, onBlur, ...props }: Props) {
       <TextInput
         ref={ref}
         accessibilityLabel={rotulo}
-        placeholderTextColor={colores.gris400}
+        placeholderTextColor={colores.pizarra400}
         style={[estilos.campo, enfocado && estilos.campoEnfocado]}
         onFocus={(e) => {
           setEnfocado(true);
@@ -41,22 +41,23 @@ const estilos = StyleSheet.create({
   rotulo: {
     fontFamily: fuentes.sans[600],
     fontSize: 15,
-    color: colores.negro,
+    color: colores.noche,
   },
   campo: {
     height: medidas.toque,
     borderRadius: radios.control,
     borderWidth: 1,
-    borderColor: colores.gris300,
+    backgroundColor: colores.papel,
+    borderColor: colores.bordeCampo,
     // Con el borde de 2 al enfocar, el texto se movería: se compensa con el padding.
     paddingHorizontal: 16,
     fontFamily: fuentes.sans[400],
     fontSize: 17,
-    color: colores.negro,
+    color: colores.noche,
   },
   campoEnfocado: {
     borderWidth: 2,
-    borderColor: colores.negro,
+    borderColor: colores.noche,
     paddingHorizontal: 15,
   },
 });

@@ -73,14 +73,15 @@ export function PorConfirmar({ partido }: { partido: PartidoDelJugador }) {
 const estilos = StyleSheet.create({
   tarjeta: {
     borderWidth: 1,
+    backgroundColor: colores.papel,
     borderColor: colores.linea,
     borderRadius: 16,
     overflow: 'hidden',
   },
-  // Lima y no rojo: no vence nada, falta un toque.
+  // Lona y no rojo: no vence nada, falta un toque.
   franja: {
     height: 4,
-    backgroundColor: colores.lima,
+    backgroundColor: colores.lona,
   },
   cuerpo: {
     padding: 18,
@@ -97,12 +98,12 @@ const estilos = StyleSheet.create({
     fontFamily: fuentes.sans[600],
     fontSize: 22,
     letterSpacing: -0.55,
-    color: colores.negro,
+    color: colores.noche,
   },
   instancia: {
     fontFamily: fuentes.mono[500],
     fontSize: 13,
-    color: colores.gris500,
+    color: colores.pizarra500,
   },
   cuando: {
     gap: 4,
@@ -111,19 +112,19 @@ const estilos = StyleSheet.create({
     fontFamily: fuentes.sans[400],
     fontSize: 16,
     lineHeight: 22,
-    color: colores.gris500,
+    color: colores.pizarra500,
   },
   fecha: {
     fontFamily: fuentes.mono[500],
     fontSize: 22,
     letterSpacing: -0.22,
-    color: colores.negro,
+    color: colores.noche,
     ...tabular,
   },
   sede: {
     fontFamily: fuentes.sans[400],
     fontSize: 16,
-    color: colores.gris700,
+    color: colores.pizarra700,
   },
   error: {
     fontFamily: fuentes.sans[400],

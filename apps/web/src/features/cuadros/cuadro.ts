@@ -68,7 +68,7 @@ export function rondaEnCurso(cuadro: CuadroEliminatorio) {
   return cuadro.partidos.find((p) => !tieneResultado(p))?.ronda ?? cuadro.rondas;
 }
 
-// La final por jugarse se destaca: con borde negro y franja lima en el cuadro principal, y en gris
+// La final por jugarse se destaca: con borde noche y franja verde en el cuadro principal, y en gris
 // en el consuelo, para que lo primero que se vea sea la final del principal.
 export type Destacado = 'principal' | 'consuelo';
 

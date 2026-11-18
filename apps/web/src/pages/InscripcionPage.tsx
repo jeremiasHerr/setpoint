@@ -34,7 +34,7 @@ export function InscripcionPage() {
   return (
     <main className="mx-auto flex min-h-screen max-w-[480px] flex-col gap-5 px-4 pt-5 pb-7">
       {torneo.isPending && <Esqueleto forma="lista" />}
-      {torneo.error && <p className="text-[15px] text-gris-700">{mensajeDeError(torneo.error)}</p>}
+      {torneo.error && <p className="text-[15px] text-pizarra-700">{mensajeDeError(torneo.error)}</p>}
       {torneo.data && <Inscripcion torneo={torneo.data} />}
     </main>
   );
@@ -62,16 +62,16 @@ function Inscripcion({ torneo }: { torneo: TorneoPublico }) {
     <>
       <div className="flex items-center justify-between gap-3">
         <EncabezadoPublico organizacion={torneo.organizacion.nombre} />
-        <Numero className="rounded-full border border-linea px-2.5 py-1.5 text-[14px] font-medium text-gris-500">{torneo.categoria}</Numero>
+        <Numero className="rounded-full border border-linea px-2.5 py-1.5 text-[14px] font-medium text-pizarra-500">{torneo.categoria}</Numero>
       </div>
       {/* Las páginas públicas no tienen menú: esta vuelve a la del torneo, como la página en vivo (decisión 084). */}
       <div className="flex flex-col gap-1.5">
         <LinkDeVuelta ruta={`/c/${torneo.organizacion.slug}/torneos/${torneo.id}`}>El torneo</LinkDeVuelta>
-        <h1 className="text-2xl leading-[1.15] font-semibold tracking-[-0.03em]">{torneo.nombre}</h1>
+        <h1 className="text-2xl leading-[1.15] font-display font-semibold tracking-[-0.02em]">{torneo.nombre}</h1>
       </div>
 
       {torneo.inscripcion === 'cerrada' ? (
-        <p className="rounded-[12px] bg-fondo px-4 py-3.5 text-[15px] leading-[1.42] text-gris-700">
+        <p className="rounded-[12px] bg-niebla px-4 py-3.5 text-[15px] leading-[1.42] text-pizarra-700">
           La inscripción de este torneo ya cerró.
         </p>
       ) : !activa ? (
@@ -79,9 +79,9 @@ function Inscripcion({ torneo }: { torneo: TorneoPublico }) {
       ) : (
         <>
           <CuentaVerificada email={activa.usuario.email} onCambiar={cambiarEmail} />
-          {situacion.isPending && <p className="text-[15px] text-gris-500">Buscando tu perfil…</p>}
+          {situacion.isPending && <p className="text-[15px] text-pizarra-500">Buscando tu perfil…</p>}
           {situacion.error && (
-            <p className="text-[15px] text-gris-700">No pudimos cargar tu inscripción. Probá de nuevo en unos minutos.</p>
+            <p className="text-[15px] text-pizarra-700">No pudimos cargar tu inscripción. Probá de nuevo en unos minutos.</p>
           )}
           {situacion.data &&
             (situacion.data.inscripcion ? (

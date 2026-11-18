@@ -1,16 +1,17 @@
 import { StyleSheet, View } from 'react-native';
 import { colores } from '../lib/tokens';
 
-const LADO = 26;
-// El logo está dibujado en una grilla de 120 (docs/logos/marcas.svg): U pasa de esa grilla al lado.
-const U = LADO / 120;
+// El dibujo del logo de la web (components/Logo.tsx), en su grilla de 63 × 53: U pasa de esa grilla al alto.
+const ALTO = 22;
+const U = ALTO / 53;
 
-// La marca de la app: el cuadrado negro con las cuatro marcas, tres hechas y la que está en juego,
-// en lima y levantada (decisión 104). Va con View y no con SVG para no sumar una dependencia.
+// El logo de la app: las marcas de una zona, tres partidos jugados y el último, levantado, es el set
+// point (decisiones 104 y 105). Va sobre claro, así que las barras van en noche y la levantada en lona.
+// Con View y no con SVG para no sumar una dependencia por un logo.
 export function Logo() {
   return (
-    <View style={estilos.cuadro}>
-      {[22, 42, 62].map((x) => (
+    <View style={estilos.marco}>
+      {[0, 17, 34].map((x) => (
         <View key={x} style={[estilos.marca, { left: x * U }]} />
       ))}
       <View style={[estilos.marca, estilos.enJuego]} />
@@ -19,23 +20,21 @@ export function Logo() {
 }
 
 const estilos = StyleSheet.create({
-  cuadro: {
-    width: LADO,
-    height: LADO,
-    borderRadius: 28 * U,
-    backgroundColor: colores.negro,
+  marco: {
+    width: 63 * U,
+    height: ALTO,
   },
   marca: {
     position: 'absolute',
-    top: 39 * U,
-    width: 16 * U,
-    height: 50 * U,
-    borderRadius: 4 * U,
-    backgroundColor: colores.blanco,
+    top: 12 * U,
+    width: 11 * U,
+    height: 41 * U,
+    borderRadius: 2 * U,
+    backgroundColor: colores.noche,
   },
   enJuego: {
-    left: 82 * U,
-    top: 27 * U,
-    backgroundColor: colores.lima,
+    left: 52 * U,
+    top: 0,
+    backgroundColor: colores.lona,
   },
 });

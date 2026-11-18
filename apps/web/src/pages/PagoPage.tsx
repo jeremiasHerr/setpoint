@@ -27,7 +27,7 @@ export function PagoPage() {
   if (!sesion) {
     return (
       <Marco>
-        <p className="text-[15px] text-gris-700">Para ver tu inscripción, entrá con tu email desde el link del torneo.</p>
+        <p className="text-[15px] text-pizarra-700">Para ver tu inscripción, entrá con tu email desde el link del torneo.</p>
       </Marco>
     );
   }
@@ -36,7 +36,7 @@ export function PagoPage() {
     <Marco organizacion={inscripcion.data?.torneo.organizacion.nombre}>
       {inscripcion.isPending && <Esqueleto forma="lista" />}
       {inscripcion.error && (
-        <p className="text-[15px] text-gris-700">
+        <p className="text-[15px] text-pizarra-700">
           {inscripcion.error instanceof ErrorApi && inscripcion.error.codigo === 'INSCRIPCION_NO_ENCONTRADA'
             ? 'No encontramos esa inscripción con tu email.'
             : 'No pudimos cargar tu inscripción. Probá de nuevo en unos minutos.'}
@@ -68,7 +68,7 @@ function Estado({ datos, volviendo, token }: { datos: InscripcionParaPagar; volv
   if (datos.estado === 'aprobada') return <Aprobada datos={datos} token={token} />;
   if (datos.estado === 'no_aprobada') return <NoAprobada datos={datos} />;
   if (datos.estado === 'cancelada') {
-    return <p className="text-[15px] text-gris-700">Esta inscripción se dio de baja. Si es un error, hablá con la organización.</p>;
+    return <p className="text-[15px] text-pizarra-700">Esta inscripción se dio de baja. Si es un error, hablá con la organización.</p>;
   }
   if (volviendo) return <Confirmando datos={datos} />;
   // El lugar que le tocó de la lista de espera es suyo por horas, no por minutos (decisión 076).
@@ -84,7 +84,7 @@ const linkTorneo = (datos: InscripcionParaPagar) => `/c/${datos.torneo.organizac
 
 function VolverAlTorneo({ datos }: { datos: InscripcionParaPagar }) {
   return (
-    <Link to={linkTorneo(datos)} className="mt-auto flex h-[52px] items-center justify-center rounded-[12px] border border-linea text-base font-medium hover:bg-fondo">
+    <Link to={linkTorneo(datos)} className="mt-auto flex h-[52px] items-center justify-center rounded-[12px] border border-linea text-base font-medium hover:bg-niebla">
       Volver al torneo
     </Link>
   );
@@ -94,12 +94,12 @@ function Resumen({ datos }: { datos: InscripcionParaPagar }) {
   return (
     <div className="flex flex-col gap-3 rounded-tarjeta border border-linea p-4">
       <div className="flex justify-between gap-3">
-        <span className="text-[15px] text-gris-500">
+        <span className="text-[15px] text-pizarra-500">
           {datos.torneo.nombre} · {datos.torneo.categoria}
         </span>
       </div>
       <div className="flex justify-between gap-3">
-        <span className="text-[15px] text-gris-500">Jugador</span>
+        <span className="text-[15px] text-pizarra-500">Jugador</span>
         <span className="text-base font-medium">
           {datos.jugador.nombre} {datos.jugador.apellido}
         </span>
@@ -128,7 +128,7 @@ function PagoSimulado({ datos, simular }: { datos: InscripcionParaPagar; simular
   return (
     <>
       <Caja>
-        <strong className="mb-1 block font-semibold text-negro">Pago simulado</strong>
+        <strong className="mb-1 block font-semibold text-noche">Pago simulado</strong>
         Esta instalación no tiene credenciales de MercadoPago. Elegí cómo termina el pago para seguir el flujo.
       </Caja>
       <Monto precio={datos.precio} />
@@ -150,9 +150,9 @@ function Pagar({ datos, token }: { datos: InscripcionParaPagar; token: string })
   return (
     <>
       <div className="flex flex-col gap-2">
-        <h1 className="text-[28px] leading-[1.12] font-semibold tracking-[-0.032em]">Tenés el lugar reservado</h1>
-        <p className="text-base text-gris-500">
-          Quedan <Numero className="text-negro">{resta ?? '—'}</Numero> para pagar. Si no llegás, el lugar vuelve a quedar libre.
+        <h1 className="text-[28px] leading-[1.12] font-display font-semibold tracking-[-0.02em]">Tenés el lugar reservado</h1>
+        <p className="text-base text-pizarra-500">
+          Quedan <Numero className="text-noche">{resta ?? '—'}</Numero> para pagar. Si no llegás, el lugar vuelve a quedar libre.
         </p>
       </div>
       <Resumen datos={datos} />
@@ -191,9 +191,9 @@ function EnLaLista({
         <Numero className="self-start rounded-full border border-linea px-3 py-1.5 text-[15px] font-medium">
           {espera.posicion}º en la lista de espera
         </Numero>
-        <h1 className="text-[28px] leading-[1.12] font-semibold tracking-[-0.032em]">Estás en la lista de espera</h1>
-        <p className="text-base leading-[1.45] text-gris-500">
-          Si se libera un lugar y te toca, te llega un email a {datos.email} y tenés <Numero className="text-negro">{horas}</Numero> horas
+        <h1 className="text-[28px] leading-[1.12] font-display font-semibold tracking-[-0.02em]">Estás en la lista de espera</h1>
+        <p className="text-base leading-[1.45] text-pizarra-500">
+          Si se libera un lugar y te toca, te llega un email a {datos.email} y tenés <Numero className="text-noche">{horas}</Numero> horas
           para pagar. Hasta entonces no pagás nada.
         </p>
       </div>
@@ -211,7 +211,7 @@ function EnLaLista({
 function Dato({ rotulo, valor }: { rotulo: string; valor: string }) {
   return (
     <div className="flex items-center justify-between gap-3">
-      <dt className="text-[15px] text-gris-500">{rotulo}</dt>
+      <dt className="text-[15px] text-pizarra-500">{rotulo}</dt>
       <dd>
         <Numero className="text-[15px]">{valor}</Numero>
       </dd>
@@ -220,37 +220,37 @@ function Dato({ rotulo, valor }: { rotulo: string; valor: string }) {
 }
 
 // 6 · Se liberó un lugar: es suyo por las horas del torneo desde el aviso (decisión 076), así que se
-// dice como algo que ya tiene, en lima sobre negro, como "Listo".
+// dice como algo que ya tiene, en verde sobre noche, como "Listo".
 function LugarLiberado({ datos, reservaVence, token }: { datos: InscripcionParaPagar; reservaVence: string; token: string }) {
   const { pagar, iniciar, simular, error } = usePagar(datos, token);
 
   return (
     <div className="-mx-4 flex grow flex-col">
-      <div className="flex flex-col gap-4 bg-negro px-5 pt-[30px] pb-[26px]">
-        <Numero className="self-start rounded-full bg-lima px-3 py-1.5 text-[15px] font-medium text-negro">
+      <div className="flex flex-col gap-4 bg-noche px-5 pt-[30px] pb-[26px]">
+        <Numero className="self-start rounded-full bg-lona px-3 py-1.5 text-[15px] font-medium text-noche-900">
           es tuyo hasta {cuandoVence(reservaVence).texto}
         </Numero>
         <div className="flex flex-col gap-2">
-          <h1 className="text-[30px] leading-[1.1] font-semibold tracking-[-0.032em] text-white">Se liberó un lugar para vos</h1>
-          <p className="text-base text-gris-400">
+          <h1 className="text-[28px] leading-[1.1] font-display font-semibold tracking-[-0.02em] text-white">Se liberó un lugar para vos</h1>
+          <p className="text-base text-pizarra-400">
             {datos.torneo.nombre} · {datos.torneo.categoria}
           </p>
         </div>
       </div>
       <dl className="flex flex-col gap-[13px] border-b border-linea px-[18px] py-5">
         <div className="flex justify-between gap-3">
-          <dt className="text-[15px] text-gris-500">Inscripción</dt>
+          <dt className="text-[15px] text-pizarra-500">Inscripción</dt>
           <dd>
             <Numero className="text-base font-medium">{importe(datos.precio)}</Numero>
           </dd>
         </div>
         <div className="flex justify-between gap-3">
-          <dt className="text-[15px] text-gris-500">Tenés para pagar hasta</dt>
+          <dt className="text-[15px] text-pizarra-500">Tenés para pagar hasta</dt>
           <dd>
             <Numero className="text-base">{hastaCuando(reservaVence)}</Numero>
           </dd>
         </div>
-        <p className="pt-1 text-[15px] leading-[1.42] text-gris-500">
+        <p className="pt-1 text-[15px] leading-[1.42] text-pizarra-500">
           Eras el primero de la lista de espera. Si no pagás a tiempo, el lugar pasa al siguiente y no se te cobra nada.
         </p>
       </dl>
@@ -263,7 +263,7 @@ function LugarLiberado({ datos, reservaVence, token }: { datos: InscripcionParaP
             <BotonPrincipal onClick={pagar} disabled={iniciar.isPending}>
               {iniciar.isPending ? 'Abriendo MercadoPago…' : `Pagar ${importe(datos.precio)}`}
             </BotonPrincipal>
-            <p className="text-center text-[15px] leading-[1.42] text-gris-500">
+            <p className="text-center text-[15px] leading-[1.42] text-pizarra-500">
               Pagás con MercadoPago. Tu lugar sigue guardado mientras pagás.
             </p>
           </>
@@ -278,8 +278,8 @@ function ListaTerminada({ datos }: { datos: InscripcionParaPagar }) {
   return (
     <>
       <div className="flex flex-col gap-4 pt-10">
-        <h1 className="text-[28px] leading-[1.12] font-semibold tracking-[-0.032em]">La lista de espera terminó</h1>
-        <p className="text-base leading-[1.45] text-gris-500">
+        <h1 className="text-[28px] leading-[1.12] font-display font-semibold tracking-[-0.02em]">La lista de espera terminó</h1>
+        <p className="text-base leading-[1.45] text-pizarra-500">
           Ya se sortearon las zonas y no se liberó un lugar para vos. No quedaste inscripto y no se te cobró nada.
         </p>
       </div>
@@ -294,14 +294,14 @@ function EnRevision({ datos }: { datos: InscripcionParaPagar }) {
   return (
     <>
       <div className="flex flex-col gap-4 pt-10">
-        <span className="flex size-[46px] items-center justify-center rounded-full bg-fondo">
+        <span className="flex size-[46px] items-center justify-center rounded-full bg-niebla">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
             <circle cx="12" cy="12" r="8.5" />
             <path d="M12 7.5V12l3 2" />
           </svg>
         </span>
-        <h1 className="text-[28px] leading-[1.12] font-semibold tracking-[-0.032em]">Tu solicitud está en revisión</h1>
-        <p className="text-base leading-[1.45] text-gris-500">
+        <h1 className="text-[28px] leading-[1.12] font-display font-semibold tracking-[-0.02em]">Tu solicitud está en revisión</h1>
+        <p className="text-base leading-[1.45] text-pizarra-500">
           {datos.torneo.organizacion.nombre} la revisa y te avisamos a {datos.email}.
         </p>
       </div>
@@ -319,8 +319,8 @@ function Aprobada({ datos, token }: { datos: InscripcionParaPagar; token: string
   return (
     <>
       <div className="flex flex-col gap-2">
-        <h1 className="text-[28px] leading-[1.12] font-semibold tracking-[-0.032em]">Te aprobaron la solicitud</h1>
-        <p className="text-base leading-[1.45] text-gris-500">
+        <h1 className="text-[28px] leading-[1.12] font-display font-semibold tracking-[-0.02em]">Te aprobaron la solicitud</h1>
+        <p className="text-base leading-[1.45] text-pizarra-500">
           Los lugares se asignan por orden de pago. Al reservar te guardamos el tuyo unos minutos mientras pagás.
         </p>
       </div>
@@ -341,8 +341,8 @@ function NoAprobada({ datos }: { datos: InscripcionParaPagar }) {
   return (
     <>
       <div className="flex flex-col gap-4 pt-10">
-        <h1 className="text-[28px] leading-[1.12] font-semibold tracking-[-0.032em]">La organización no aprobó tu solicitud</h1>
-        <p className="text-base leading-[1.45] text-gris-500">No se te cobró nada. Si tenés dudas, hablá con {datos.torneo.organizacion.nombre}.</p>
+        <h1 className="text-[28px] leading-[1.12] font-display font-semibold tracking-[-0.02em]">La organización no aprobó tu solicitud</h1>
+        <p className="text-base leading-[1.45] text-pizarra-500">No se te cobró nada. Si tenés dudas, hablá con {datos.torneo.organizacion.nombre}.</p>
       </div>
       <Resumen datos={datos} />
       <VolverAlTorneo datos={datos} />
@@ -360,13 +360,13 @@ function Confirmando({ datos }: { datos: InscripcionParaPagar }) {
       <div className="flex grow flex-col items-center justify-center gap-6 text-center">
         <svg className="animate-spin" width="52" height="52" viewBox="0 0 52 52" fill="none" aria-hidden>
           <circle cx="26" cy="26" r="22" stroke="var(--color-linea)" strokeWidth="5" />
-          <path d="M26 4a22 22 0 0 1 22 22" stroke="#0A0B0D" strokeWidth="5" strokeLinecap="round" />
+          <path d="M26 4a22 22 0 0 1 22 22" className="stroke-noche-900" strokeWidth="5" strokeLinecap="round" />
         </svg>
         <div className="flex flex-col gap-2.5">
-          <h1 className="text-2xl font-semibold tracking-[-0.03em]">Confirmando el pago</h1>
-          <p className="max-w-[290px] text-base leading-[1.45] text-gris-500">MercadoPago nos tiene que avisar que salió bien. Suele tardar unos segundos.</p>
+          <h1 className="text-2xl font-display font-semibold tracking-[-0.02em]">Confirmando el pago</h1>
+          <p className="max-w-[290px] text-base leading-[1.45] text-pizarra-500">MercadoPago nos tiene que avisar que salió bien. Suele tardar unos segundos.</p>
         </div>
-        <Numero className="rounded-full border border-linea px-3.5 py-2 text-[15px] text-gris-500">tu lugar sigue reservado · {resta ?? '—'}</Numero>
+        <Numero className="rounded-full border border-linea px-3.5 py-2 text-[15px] text-pizarra-500">tu lugar sigue reservado · {resta ?? '—'}</Numero>
       </div>
       <Caja>
         Podés cerrar esta página: cuando se confirme, te mandamos el comprobante a {datos.email}. Si el pago no sale, el lugar se libera y no se te cobra.
@@ -379,46 +379,46 @@ function Confirmando({ datos }: { datos: InscripcionParaPagar }) {
 function Listo({ datos }: { datos: InscripcionParaPagar }) {
   return (
     <div className="-mx-4 flex grow flex-col">
-      <div className="flex flex-col gap-4 bg-negro px-5 pt-[30px] pb-[26px]">
-        <span className="flex size-[46px] items-center justify-center rounded-full bg-lima">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A0B0D" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <div className="flex flex-col gap-4 bg-noche px-5 pt-[30px] pb-[26px]">
+        <span className="flex size-[46px] items-center justify-center rounded-full bg-lona">
+          <svg className="stroke-noche-900" width="24" height="24" viewBox="0 0 24 24" fill="none" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
             <path d="M5 12.5l4.5 4.5L19 7.5" />
           </svg>
         </span>
         <div className="flex flex-col gap-2">
-          <h1 className="text-[30px] leading-[1.1] font-semibold tracking-[-0.032em] text-white">Listo, estás inscripto</h1>
-          <p className="text-base text-gris-400">
+          <h1 className="text-[28px] leading-[1.1] font-display font-semibold tracking-[-0.02em] text-white">Listo, estás inscripto</h1>
+          <p className="text-base text-pizarra-400">
             {datos.torneo.nombre} · {datos.torneo.categoria}
           </p>
         </div>
       </div>
       <dl className="flex flex-col gap-[13px] border-b border-linea px-[18px] py-5">
         <div className="flex justify-between gap-3">
-          <dt className="text-[15px] text-gris-500">Pagaste</dt>
+          <dt className="text-[15px] text-pizarra-500">Pagaste</dt>
           <dd>
             <Numero className="text-base font-medium">{importe(datos.precio)}</Numero>
           </dd>
         </div>
         <div className="flex justify-between gap-3">
-          <dt className="text-[15px] text-gris-500">Número de inscripción</dt>
+          <dt className="text-[15px] text-pizarra-500">Número de inscripción</dt>
           <dd>
             <Numero className="text-base">{datos.id}</Numero>
           </dd>
         </div>
-        <p className="pt-1 text-[15px] leading-[1.42] text-gris-500">Te mandamos el comprobante a {datos.email}.</p>
+        <p className="pt-1 text-[15px] leading-[1.42] text-pizarra-500">Te mandamos el comprobante a {datos.email}.</p>
       </dl>
       {/* La app todavía no está en ninguna tienda: no se la ofrece hasta que se pueda bajar (decisión 097). */}
       <div className="flex flex-col gap-3 px-[18px] py-[22px]">
         <h2 className="text-xl font-semibold tracking-[-0.025em]">Seguí el torneo desde el link</h2>
-        <p className="text-base leading-[1.45] text-gris-500">Zonas, cuadros y resultados, sin instalar nada.</p>
+        <p className="text-base leading-[1.45] text-pizarra-500">Zonas, cuadros y resultados, sin instalar nada.</p>
         <Link
           to={`${linkTorneo(datos)}/en-vivo`}
-          className="flex h-14 items-center justify-center rounded-[12px] bg-lima text-[17px] font-semibold"
+          className="flex h-14 items-center justify-center rounded-[12px] border border-lona-borde bg-lona text-noche-900 text-[17px] font-semibold"
         >
           Ver el torneo en vivo
         </Link>
       </div>
-      <p className="mx-[18px] mt-auto rounded-tarjeta bg-fondo px-4 py-3.5 text-[15px] leading-[1.42] text-gris-700">
+      <p className="mx-[18px] mt-auto rounded-tarjeta bg-niebla px-4 py-3.5 text-[15px] leading-[1.42] text-pizarra-700">
         La app para Android todavía no está publicada. Cuando esté, entrás con este mismo email.
       </p>
     </div>
@@ -430,23 +430,23 @@ function Rechazado({ datos }: { datos: InscripcionParaPagar }) {
   return (
     <>
       <div className="flex flex-col gap-4 pt-10">
-        <span className="flex size-[46px] items-center justify-center rounded-full bg-fondo">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0B0D" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+        <span className="flex size-[46px] items-center justify-center rounded-full bg-niebla">
+          <svg className="stroke-noche-900" width="22" height="22" viewBox="0 0 24 24" fill="none" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
             <rect x="3" y="5.5" width="18" height="13" rx="2" />
             <path d="M3 10h18" />
           </svg>
         </span>
-        <h1 className="text-[28px] leading-[1.12] font-semibold tracking-[-0.032em]">MercadoPago no aprobó el pago</h1>
-        <p className="text-base leading-[1.45] text-gris-500">
+        <h1 className="text-[28px] leading-[1.12] font-display font-semibold tracking-[-0.02em]">MercadoPago no aprobó el pago</h1>
+        <p className="text-base leading-[1.45] text-pizarra-500">
           No se te cobró nada y el lugar que te guardamos se liberó. Podés probar de nuevo, con otra tarjeta o con dinero en tu cuenta de MercadoPago.
         </p>
       </div>
       <Resumen datos={datos} />
       <div className="mt-auto flex flex-col gap-3">
-        <Link to={linkInscripcion(datos)} className="flex h-14 items-center justify-center rounded-[12px] bg-lima text-[17px] font-semibold">
+        <Link to={linkInscripcion(datos)} className="flex h-14 items-center justify-center rounded-[12px] border border-lona-borde bg-lona text-noche-900 text-[17px] font-semibold">
           Probar de nuevo
         </Link>
-        <p className="text-center text-[15px] text-gris-500">Al probar de nuevo te guardamos otros 15 minutos.</p>
+        <p className="text-center text-[15px] text-pizarra-500">Al probar de nuevo te guardamos otros 15 minutos.</p>
       </div>
     </>
   );
@@ -462,10 +462,10 @@ function Vencida({ datos }: { datos: InscripcionParaPagar }) {
         <span className="self-start rounded-full border border-rojo-linea bg-rojo-fondo px-3 py-1.5 font-mono text-[15px] font-medium text-rojo-texto">
           venció la reserva
         </span>
-        <h1 className="text-[28px] leading-[1.12] font-semibold tracking-[-0.032em]">
+        <h1 className="text-[28px] leading-[1.12] font-display font-semibold tracking-[-0.02em]">
           {lista ? `Pasaron las ${lista.horas} horas` : 'Pasaron los 15 minutos'}
         </h1>
-        <p className="text-base leading-[1.45] text-gris-500">
+        <p className="text-base leading-[1.45] text-pizarra-500">
           {lista
             ? 'El lugar pasó al siguiente de la lista y no se te cobró nada.'
             : 'El lugar volvió a quedar libre y no se te cobró nada. Si todavía hay lugares, podés reservar otra vez.'}
@@ -476,7 +476,7 @@ function Vencida({ datos }: { datos: InscripcionParaPagar }) {
         <VolverAlTorneo datos={datos} />
       ) : (
         <div className="mt-auto flex flex-col gap-3">
-          <Link to={linkInscripcion(datos)} className="flex h-14 items-center justify-center rounded-[12px] bg-lima text-[17px] font-semibold">
+          <Link to={linkInscripcion(datos)} className="flex h-14 items-center justify-center rounded-[12px] border border-lona-borde bg-lona text-noche-900 text-[17px] font-semibold">
             Reservar otra vez y pagar
           </Link>
         </div>

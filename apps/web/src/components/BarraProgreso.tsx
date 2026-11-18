@@ -1,8 +1,8 @@
-type Color = 'negro' | 'lima';
+type Color = 'negro' | 'lona';
 
 const estilos: Record<Color, string> = {
-  negro: 'bg-negro',
-  lima: 'bg-lima',
+  negro: 'bg-noche',
+  lona: 'bg-lona',
 };
 
 type Props = {

@@ -9,7 +9,7 @@ type Props = {
   torneosDelCalendario: TorneoDelCalendario[];
 };
 
-// La tarjeta negra del ranking: tu puesto, tus puntos y tus casilleros. Sin el "+15" del HTML: la
+// La tarjeta noche del ranking: tu puesto, tus puntos y tus casilleros. Sin el "+15" del HTML: la
 // API no devuelve qué puntos reemplazó cada casillero (decisión 043).
 export function TarjetaPropia({ fila, jugadores, torneosDelCalendario }: Props) {
   return (
@@ -32,7 +32,7 @@ export function TarjetaPropia({ fila, jugadores, torneosDelCalendario }: Props) 
 
 const estilos = StyleSheet.create({
   tarjeta: {
-    backgroundColor: colores.negro,
+    backgroundColor: colores.noche,
     borderRadius: radios.superficie,
     paddingHorizontal: 18,
     paddingTop: 20,
@@ -45,7 +45,7 @@ const estilos = StyleSheet.create({
   puesto: {
     fontFamily: fuentes.sans[500],
     fontSize: 15,
-    color: colores.gris400,
+    color: colores.pizarra400,
   },
   total: {
     flexDirection: 'row',
@@ -56,12 +56,12 @@ const estilos = StyleSheet.create({
     fontFamily: fuentes.mono[500],
     fontSize: 52,
     letterSpacing: -2,
-    color: colores.lima,
+    color: colores.blanco,
     ...tabular,
   },
   palabraPuntos: {
     fontFamily: fuentes.sans[400],
     fontSize: 17,
-    color: colores.gris400,
+    color: colores.pizarra400,
   },
 });

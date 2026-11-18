@@ -11,9 +11,9 @@ type Fila = {
 
 const estilosValor: Record<Variante, string> = {
   numero: 'font-mono text-2xl font-medium tracking-[-0.02em] text-white tabular-nums',
-  acento: 'font-mono text-2xl font-medium tracking-[-0.02em] text-lima tabular-nums',
+  acento: 'font-mono text-2xl font-medium tracking-[-0.02em] text-white tabular-nums',
   importe: 'font-mono text-lg font-medium tracking-[-0.02em] text-white tabular-nums',
-  texto: 'text-sm font-medium text-gris-400',
+  texto: 'text-sm font-medium text-pizarra-400',
 };
 
 type Props = {
@@ -24,25 +24,25 @@ type Props = {
   pie?: ReactNode;
 };
 
-// La tarjeta negra de la pantalla de inicio: los números de la organización de un vistazo.
+// La tarjeta noche de la pantalla de inicio: los números de la organización de un vistazo.
 export function ResumenOrganizacion({ titulo, filas, nota, pie }: Props) {
   return (
-    <Tarjeta variante="negra" className="flex flex-col gap-4">
+    <Tarjeta variante="noche" className="flex flex-col gap-4">
       <h2 className="text-[15px] font-semibold">{titulo}</h2>
 
       <dl className="flex flex-col gap-[13px]">
         {filas.map(({ rotulo, valor, variante = 'numero' }, i) => (
           <div
             key={rotulo}
-            className={`flex items-baseline justify-between gap-3 ${i > 0 ? 'border-t border-borde-oscuro pt-[13px]' : ''}`}
+            className={`flex items-baseline justify-between gap-3 ${i > 0 ? 'border-t border-borde-noche pt-[13px]' : ''}`}
           >
-            <dt className="text-sm text-gris-400">{rotulo}</dt>
+            <dt className="text-sm text-pizarra-400">{rotulo}</dt>
             <dd className={`shrink-0 ${estilosValor[variante]}`}>{valor}</dd>
           </div>
         ))}
       </dl>
 
-      {nota && <p className="text-[13px] leading-[1.45] text-gris-400">{nota}</p>}
+      {nota && <p className="text-[13px] leading-[1.45] text-pizarra-400">{nota}</p>}
       {pie}
     </Tarjeta>
   );

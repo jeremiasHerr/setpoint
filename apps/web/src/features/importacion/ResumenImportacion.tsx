@@ -22,14 +22,14 @@ export function ResumenImportacion({ conteos, categoria, casilleros, jugadores }
         <TarjetaConteo numero={conteos.existentes} titulo="ya están en el padrón" detalle="se les cargan los puntos" />
         <TarjetaConteo numero={conteos.nuevos} titulo="son nuevos" detalle={`se dan de alta en ${categoria ?? 'la categoría'}`} />
         {paraRevisar > 0 ? (
-          // Lo que hay que decidir no venció nada: borde negro, no rojo (design.md §3, decisión 099).
-          <div className="flex items-baseline gap-3 rounded-tarjeta border-[1.5px] border-negro px-[18px] py-4">
+          // Lo que hay que decidir no venció nada: borde noche, no rojo (design.md §3, decisión 099).
+          <div className="flex items-baseline gap-3 rounded-tarjeta border-[1.5px] border-noche px-[18px] py-4">
             <Numero className="text-[30px] font-medium tracking-[-0.03em]">{paraRevisar}</Numero>
             <div className="flex flex-col gap-0.5">
               <span className="text-[15px] font-semibold">
                 {paraRevisar === 1 ? 'necesita que decidas' : 'necesitan que decidas'}
               </span>
-              <span className="text-[13px] text-gris-700">{motivoRevision}</span>
+              <span className="text-[13px] text-pizarra-700">{motivoRevision}</span>
             </div>
           </div>
         ) : (
@@ -41,12 +41,12 @@ export function ResumenImportacion({ conteos, categoria, casilleros, jugadores }
         <h2 className="text-[15px] font-semibold">Los casilleros quedaron así</h2>
         <div className="flex flex-wrap items-center gap-2">
           {casilleros.map((c) => (
-            <span key={c} className="flex h-8 items-center rounded-lg bg-fondo px-[11px] font-mono text-xs text-gris-700">
+            <span key={c} className="flex h-8 items-center rounded-lg bg-niebla px-[11px] font-mono text-xs text-pizarra-700">
               {c}
             </span>
           ))}
         </div>
-        <p className="text-[13px] text-gris-500">
+        <p className="text-[13px] text-pizarra-500">
           Se leyeron <Numero>{jugadores}</Numero> jugadores. Las filas de títulos, encabezados, totales y notas se
           descartaron.
         </p>
@@ -61,7 +61,7 @@ function TarjetaConteo({ numero, titulo, detalle }: { numero: number; titulo: st
       <Numero className="text-[30px] font-medium tracking-[-0.03em]">{numero}</Numero>
       <div className="flex flex-col gap-0.5">
         <span className="text-[15px] font-semibold">{titulo}</span>
-        <span className="text-[13px] text-gris-500">{detalle}</span>
+        <span className="text-[13px] text-pizarra-500">{detalle}</span>
       </div>
     </div>
   );

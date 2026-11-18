@@ -43,7 +43,7 @@ const estilos = StyleSheet.create({
     fontFamily: fuentes.sans[600],
     fontSize: 16,
     letterSpacing: -0.24,
-    color: colores.negro,
+    color: colores.noche,
   },
   // Un ángulo hecho con dos bordes: para un solo ícono no se suma react-native-svg.
   chevron: {
@@ -53,7 +53,7 @@ const estilos = StyleSheet.create({
     marginLeft: 2,
     borderRightWidth: 1.8,
     borderBottomWidth: 1.8,
-    borderColor: colores.gris500,
+    borderColor: colores.pizarra500,
     transform: [{ rotate: '45deg' }],
   },
 });

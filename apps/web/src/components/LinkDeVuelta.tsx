@@ -11,7 +11,7 @@ type Props = {
 // La vuelta de las páginas públicas, que no tienen menú ni migas (decisiones 084 y 100).
 export function LinkDeVuelta({ ruta, children }: Props) {
   return (
-    <Link to={ruta} className="self-start py-1 text-sm text-gris-500 hover:text-negro">
+    <Link to={ruta} className="self-start py-1 text-sm text-pizarra-500 hover:text-noche">
       ← {children}
     </Link>
   );

@@ -62,15 +62,15 @@ export function InscribirAMano({ slug, torneoId, categoria, suelto, precio, libr
   const montoElegido = Number(monto.replace(/\D/g, ''));
 
   return (
-    <section className="flex flex-col gap-4 rounded-tarjeta border-[1.5px] border-negro p-[18px]">
+    <section className="flex flex-col gap-4 rounded-tarjeta border-[1.5px] border-noche p-[18px]">
       <div className="flex flex-col gap-1">
         <div className="flex items-center justify-between gap-2.5">
           <h2 className="text-base font-semibold">Inscribir a mano</h2>
-          <button type="button" onClick={alCerrar} className="text-sm text-gris-500 hover:text-negro">
+          <button type="button" onClick={alCerrar} className="text-sm text-pizarra-500 hover:text-noche">
             Cancelar
           </button>
         </div>
-        <p className="text-sm leading-[1.45] text-gris-500">Para quien te pagó en efectivo o por transferencia.</p>
+        <p className="text-sm leading-[1.45] text-pizarra-500">Para quien te pagó en efectivo o por transferencia.</p>
       </div>
 
       <div className="flex flex-col gap-2">
@@ -96,12 +96,12 @@ export function InscribirAMano({ slug, torneoId, categoria, suelto, precio, libr
                     type="button"
                     disabled={motivo !== null}
                     onClick={() => setElegido(jugador)}
-                    className="flex h-11 w-full items-center justify-between gap-2.5 px-3 text-left text-sm hover:bg-lima-tenue disabled:hover:bg-transparent"
+                    className="flex h-11 w-full items-center justify-between gap-2.5 px-3 text-left text-sm hover:bg-lona-fondo disabled:hover:bg-transparent"
                   >
-                    <span className={motivo ? 'text-gris-400' : 'font-medium'}>
+                    <span className={motivo ? 'text-pizarra-400' : 'font-medium'}>
                       {jugador.nombre} {jugador.apellido}
                     </span>
-                    {motivo && <span className="font-mono text-xs text-gris-400">{motivo}</span>}
+                    {motivo && <span className="font-mono text-xs text-pizarra-400">{motivo}</span>}
                   </button>
                 </li>
               );
@@ -109,12 +109,12 @@ export function InscribirAMano({ slug, torneoId, categoria, suelto, precio, libr
           </ul>
         )}
         {!elegido && termino.length >= 2 && padron.data && candidatos.length === 0 && (
-          <p className="text-[13px] text-gris-500">Nadie en el padrón de {categoria} tiene ese apellido.</p>
+          <p className="text-[13px] text-pizarra-500">Nadie en el padrón de {categoria} tiene ese apellido.</p>
         )}
       </div>
 
       <div className="flex flex-col gap-2">
-        <span className="text-[13px] font-semibold text-gris-500">Cómo te pagó</span>
+        <span className="text-[13px] font-semibold text-pizarra-500">Cómo te pagó</span>
         <div role="group" aria-label="Cómo te pagó" className="flex flex-wrap gap-1.5">
           {MEDIOS.map(({ clave, nombre }) => (
             <Chip key={clave} activo={medio === clave} onClick={() => setMedio(clave)}>
@@ -134,12 +134,12 @@ export function InscribirAMano({ slug, torneoId, categoria, suelto, precio, libr
         sufijo="pesos"
       />
 
-      <p className="text-[13px] leading-[1.45] text-gris-500">
+      <p className="text-[13px] leading-[1.45] text-pizarra-500">
         {elegido && reservando.has(elegido.id) ? (
           'Está reservando: se confirma su reserva y no ocupa otro lugar.'
         ) : (
           <>
-            Queda pagado y ocupa {libres === 1 ? 'el único lugar libre' : <>uno de los <Numero className="text-negro">{libres}</Numero> lugares libres</>}.
+            Queda pagado y ocupa {libres === 1 ? 'el único lugar libre' : <>uno de los <Numero className="text-noche">{libres}</Numero> lugares libres</>}.
             No le llega comprobante: el pago lo recibiste vos.
           </>
         )}

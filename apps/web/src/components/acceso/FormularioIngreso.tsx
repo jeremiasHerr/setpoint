@@ -26,8 +26,8 @@ export function FormularioIngreso({ alEnviar, enviando = false, error }: Props) 
     <Tarjeta className="p-6">
       <form onSubmit={manejarEnvio} className="flex flex-col gap-5">
         <div className="flex flex-col gap-1.5">
-          <h1 className="text-2xl font-semibold tracking-[-0.03em]">Ingresar</h1>
-          <p className="text-[15px] text-gris-500">Con el email y la contraseña que usaste al registrar tu organización.</p>
+          <h1 className="text-2xl font-display font-semibold tracking-[-0.02em]">Ingresar</h1>
+          <p className="text-[15px] text-pizarra-500">Con el email y la contraseña que usaste al registrar tu organización.</p>
         </div>
 
         <div className="flex flex-col gap-3.5">
@@ -48,7 +48,7 @@ export function FormularioIngreso({ alEnviar, enviando = false, error }: Props) 
             value={contrasena}
             onChange={(e) => setContrasena(e.target.value)}
             accesorio={
-              <Link to="/recuperar-contrasena" className="text-[13px] font-medium text-negro hover:text-gris-500">
+              <Link to="/recuperar-contrasena" className="text-[13px] font-medium text-noche hover:text-pizarra-500">
                 Olvidé mi contraseña
               </Link>
             }

@@ -36,7 +36,7 @@ function erroresDe(error: Error | null): ErroresRegistro {
           email: (
             <>
               Ya hay una cuenta con este email.{' '}
-              <Link to="/ingresar" className="font-medium text-negro underline hover:text-gris-500">
+              <Link to="/ingresar" className="font-medium text-noche underline hover:text-pizarra-500">
                 Ingresá
               </Link>
             </>
@@ -116,7 +116,7 @@ export function RegistroPage() {
         />
 
         <aside className="flex flex-col gap-4">
-          <Tarjeta variante="negra" className="flex flex-col gap-[15px] p-5">
+          <Tarjeta variante="noche" className="flex flex-col gap-[15px] p-5">
             <h2 className="text-[15px] font-semibold text-white">Lo que sigue</h2>
             <ol className="flex flex-col gap-3.5">
               {pasos.map((paso, i) => {
@@ -125,14 +125,14 @@ export function RegistroPage() {
                   <li key={paso.titulo} className="flex items-start gap-3">
                     <span
                       className={`flex size-[22px] shrink-0 items-center justify-center rounded-full font-mono text-xs font-semibold tabular-nums ${
-                        esUltimo ? 'bg-lima text-negro' : 'bg-borde-oscuro text-white'
+                        esUltimo ? 'bg-lona text-noche-900' : 'bg-borde-noche text-white'
                       }`}
                     >
                       {i + 1}
                     </span>
                     <div className="flex flex-col gap-0.5">
                       <span className="text-sm font-medium text-white">{paso.titulo}</span>
-                      <span className="text-[13px] leading-[1.4] text-gris-400">{paso.detalle}</span>
+                      <span className="text-[13px] leading-[1.4] text-pizarra-400">{paso.detalle}</span>
                     </div>
                   </li>
                 );
@@ -143,7 +143,7 @@ export function RegistroPage() {
           {ayudas.map((ayuda) => (
             <Tarjeta key={ayuda.titulo} className="flex flex-col gap-[9px] p-[18px]">
               <h2 className="text-sm font-semibold">{ayuda.titulo}</h2>
-              <p className="text-sm leading-normal text-gris-500">{ayuda.detalle}</p>
+              <p className="text-sm leading-normal text-pizarra-500">{ayuda.detalle}</p>
             </Tarjeta>
           ))}
         </aside>

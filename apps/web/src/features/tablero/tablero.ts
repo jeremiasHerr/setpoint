@@ -1,4 +1,5 @@
 import type { BloqueDelTablero, FilaDePosiciones, PartidoDelTablero, SituacionDelPartido, Tablero } from '@setpoint/shared';
+import { MARCA } from '../../components/marcas';
 import { NOMBRE_DEL_CUADRO, rotuloDeRonda } from '../cuadros/cuadro';
 import type { Frase } from '../resultados/resultado';
 
@@ -124,10 +125,12 @@ export function comoVieneLaZona(filas: FilaDePosiciones[]) {
     .join(' ');
 }
 
+// Las marcas del tablero son las de la barra de marcas. El que espera a los ganadores de la ronda
+// anterior todavía no se puede jugar: va lleno en línea, sin estado.
 export const COLOR_DE_LA_SITUACION: Record<SituacionDelPartido, string> = {
-  jugado: 'bg-negro',
-  con_fecha: 'bg-gris-400',
-  sin_coordinar: 'bg-linea',
-  vencido: 'bg-rojo',
-  esperando: 'border border-dashed border-gris-300 bg-white',
+  jugado: MARCA.hecho,
+  con_fecha: MARCA['en-curso'],
+  sin_coordinar: MARCA.pendiente,
+  vencido: MARCA.vencido,
+  esperando: 'bg-linea',
 };

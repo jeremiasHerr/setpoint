@@ -23,7 +23,7 @@ const rotulo = (nombre: string) => nombre.slice(0, 3).toLowerCase();
 const anioCorto = (anio: number) => String(anio).slice(-2);
 
 // Una barra por torneo del calendario, con los puntos vigentes de cada casillero: se ve de un vistazo
-// en qué torneo hizo su mejor resultado, que va en lima.
+// en qué torneo hizo su mejor resultado, que va en verde.
 export function PuntosPorTorneo({ ranking }: { ranking: RankingDeLaFicha }) {
   const { torneosDelCalendario, casilleros } = ranking;
   if (torneosDelCalendario.length === 0) return null;
@@ -42,7 +42,7 @@ export function PuntosPorTorneo({ ranking }: { ranking: RankingDeLaFicha }) {
     <section className="flex flex-col gap-3">
       <div className="flex items-baseline justify-between gap-3">
         <h2 className="text-[17px] font-semibold tracking-[-0.015em]">Puntos por torneo del calendario</h2>
-        {anios.length > 0 && <Numero className="shrink-0 text-xs text-gris-400">{anios.join(' · ')}</Numero>}
+        {anios.length > 0 && <Numero className="shrink-0 text-xs text-pizarra-400">{anios.join(' · ')}</Numero>}
       </div>
 
       <ul
@@ -58,11 +58,11 @@ export function PuntosPorTorneo({ ranking }: { ranking: RankingDeLaFicha }) {
               title={casillero ? `${torneo.nombre} ${anioCorto(casillero.anio)}` : torneo.nombre}
               className="flex flex-col items-center gap-[7px]"
             >
-              <Numero className={`text-[13px] ${esLaMejor ? 'font-semibold' : 'font-medium'} ${puntos > 0 ? '' : 'text-gris-400'}`}>
+              <Numero className={`text-[13px] ${esLaMejor ? 'font-semibold' : 'font-medium'} ${puntos > 0 ? '' : 'text-pizarra-400'}`}>
                 {puntos}
               </Numero>
-              <div className={`w-full rounded-t-[5px] ${esLaMejor ? 'bg-lima' : 'bg-linea'}`} style={{ height: alto(puntos) }} />
-              <Numero className={`text-[11px] ${esLaMejor ? 'text-negro' : 'text-gris-500'}`}>{rotulo(torneo.nombre)}</Numero>
+              <div className={`w-full rounded-t-[5px] ${esLaMejor ? 'bg-lona' : 'bg-linea'}`} style={{ height: alto(puntos) }} />
+              <Numero className={`text-[11px] ${esLaMejor ? 'text-noche' : 'text-pizarra-500'}`}>{rotulo(torneo.nombre)}</Numero>
             </li>
           );
         })}
@@ -70,7 +70,7 @@ export function PuntosPorTorneo({ ranking }: { ranking: RankingDeLaFicha }) {
 
       {/* Los importados de la planilla no dicen de qué instancia salieron: ahí no hay nada que explicar. */}
       {mejor?.casillero?.instancia && (
-        <p className="text-sm leading-[1.42] text-gris-500">
+        <p className="text-sm leading-[1.42] text-pizarra-500">
           Los <Numero>{mejor.casillero.puntos}</Numero> de {mejor.torneo.nombre} {anioCorto(mejor.casillero.anio)} son de haber{' '}
           {QUE_HIZO[mejor.casillero.instancia]}.
         </p>

@@ -53,18 +53,18 @@ export function AvisoEnviado({ organizacion, perfil, email, torneo, pie }: Props
   return (
     <>
       <div className="flex flex-col gap-4 pt-7">
-        <span className="flex size-[46px] items-center justify-center rounded-full bg-fondo">
+        <span className="flex size-[46px] items-center justify-center rounded-full bg-niebla">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
             <path d="M4 5.5h16v10.5H9.5L4 20z" />
           </svg>
         </span>
         <h2 className="text-[28px] leading-[1.12] font-semibold tracking-[-0.032em]">Le avisamos a {organizacion}</h2>
-        <p className="text-base leading-[1.45] text-gris-500">
+        <p className="text-base leading-[1.45] text-pizarra-500">
           La organización ve tu email y la cuenta que tiene el perfil de {perfil}, y decide de quién es. Te escriben a{' '}
-          <span className="font-medium text-negro">{email}</span>.
+          <span className="font-medium text-noche">{email}</span>.
         </p>
       </div>
-      <p className="rounded-[12px] bg-fondo px-4 py-3.5 text-[15px] leading-[1.42] text-gris-700">
+      <p className="rounded-[12px] bg-niebla px-4 py-3.5 text-[15px] leading-[1.42] text-pizarra-700">
         {torneo
           ? `Todavía no estás inscripto en ${torneo}. Si la organización te pasa el perfil, inscribite desde el mismo link.`
           : 'Si la organización te pasa el perfil, inscribite desde el mismo link.'}

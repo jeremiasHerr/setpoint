@@ -12,7 +12,7 @@ export function ColumnaRevisiones({ revisiones, actual }: { revisiones: Revision
         <nav className="overflow-hidden rounded-tarjeta border border-linea">
           <div className="flex items-center justify-between gap-2.5 border-b border-linea px-4 py-3.5">
             <h2 className="text-[15px] font-semibold">Para revisar</h2>
-            <Numero className="text-[13px] text-gris-500">{revisiones.casos.length}</Numero>
+            <Numero className="text-[13px] text-pizarra-500">{revisiones.casos.length}</Numero>
           </div>
           <ul>
             {revisiones.casos.map((c) => {
@@ -23,10 +23,10 @@ export function ColumnaRevisiones({ revisiones, actual }: { revisiones: Revision
                   <Link
                     to={`/padron/revisar/${c.jugadorId}`}
                     aria-current={esActual ? 'page' : undefined}
-                    className={`flex flex-col gap-[3px] px-4 py-3 hover:bg-fondo-tabla ${esActual ? 'bg-fondo-tabla' : ''}`}
+                    className={`flex flex-col gap-[3px] px-4 py-3 hover:bg-niebla ${esActual ? 'bg-niebla' : ''}`}
                   >
                     <span className={`text-sm ${esActual ? 'font-semibold' : 'font-medium'}`}>{nombre}</span>
-                    <span className="text-[13px] text-gris-500">
+                    <span className="text-[13px] text-pizarra-500">
                       {c.categoria ? `${c.categoria} · ` : ''}
                       {motivoCorto(c.motivo, nombre)}
                     </span>
@@ -38,13 +38,13 @@ export function ColumnaRevisiones({ revisiones, actual }: { revisiones: Revision
         </nav>
       )}
 
-      <section className="flex flex-col gap-3 rounded-tarjeta bg-negro p-[18px]">
+      <section className="flex flex-col gap-3 rounded-tarjeta bg-noche p-[18px]">
         <h2 className="text-[15px] font-semibold text-white">Se vincularon solos</h2>
         <div className="flex items-baseline gap-2.5">
           <Numero className="text-[34px] leading-none font-medium tracking-[-0.03em] text-white">{revisiones.vinculadosSolos}</Numero>
-          <span className="text-sm text-gris-400">{revisiones.vinculadosSolos === 1 ? 'jugador' : 'jugadores'} de tu padrón</span>
+          <span className="text-sm text-pizarra-400">{revisiones.vinculadosSolos === 1 ? 'jugador' : 'jugadores'} de tu padrón</span>
         </div>
-        <p className="text-[13px] leading-[1.45] text-gris-400">
+        <p className="text-[13px] leading-[1.45] text-pizarra-400">
           El sistema solo pide que decidas cuando hay dos perfiles iguales o parecidos, o cuando otra cuenta reclama un perfil.
         </p>
       </section>

@@ -8,23 +8,23 @@ type Resumen = NonNullable<CierreDelTorneo['resumen']>;
 function Dato({ rotulo, children }: { rotulo: string; children: ReactNode }) {
   return (
     <div className="flex items-baseline justify-between gap-3">
-      <span className="text-sm text-gris-400">{rotulo}</span>
+      <span className="text-sm text-pizarra-400">{rotulo}</span>
       {children}
     </div>
   );
 }
 
-const separador = <div className="h-px bg-borde-oscuro" />;
+const separador = <div className="h-px bg-borde-noche" />;
 
-// El panel negro: qué le pasa al ranking con el cierre.
+// El panel noche: qué le pasa al ranking con el cierre.
 export function ResumenCierre({ resumen, cerrado }: { resumen: Resumen; cerrado: boolean }) {
   const { numeroUno } = resumen;
   return (
-    <Tarjeta variante="negra" className="flex flex-col gap-4">
+    <Tarjeta variante="noche" className="flex flex-col gap-4">
       <h2 className="text-[15px] font-semibold">{cerrado ? 'Con el cierre' : 'Después del cierre'}</h2>
       <div className="flex flex-col gap-[13px]">
         <Dato rotulo={cerrado ? 'Puntos repartidos' : 'Puntos a repartir'}>
-          <Numero className="text-2xl font-medium tracking-[-0.02em] text-lima">{resumen.puntosARepartir}</Numero>
+          <Numero className="text-2xl font-medium tracking-[-0.02em] text-white">{resumen.puntosARepartir}</Numero>
         </Dato>
         {separador}
         <Dato rotulo={cerrado ? 'Cambiaron de puesto' : 'Cambian de puesto'}>
@@ -39,7 +39,7 @@ export function ResumenCierre({ resumen, cerrado }: { resumen: Resumen; cerrado:
           </>
         )}
       </div>
-      <p className="text-[13px] leading-[1.45] text-gris-400">
+      <p className="text-[13px] leading-[1.45] text-pizarra-400">
         {cerrado
           ? 'El ranking público ya tiene estos puntos. Si corregís un resultado, se recalculan solos.'
           : 'El ranking público se actualiza al instante. Si después corregís un resultado, los puntos se recalculan.'}

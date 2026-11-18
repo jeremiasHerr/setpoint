@@ -5,7 +5,7 @@ export type PartidosAgrupados = {
   // Los que tienen una fecha que anotó el rival y falta que confirme (F14). Van arriba de todo:
   // es lo único que le pide una acción, y sin confirmar todavía no es un turno pactado.
   porConfirmar: PartidoDelJugador[];
-  // El primero con fecha acordada desde hoy: va en la tarjeta negra.
+  // El primero con fecha acordada desde hoy: va en la tarjeta noche.
   proximo: PartidoDelJugador | null;
   // Sin fecha y con rival, del que vence antes al que vence después.
   sinCoordinar: PartidoDelJugador[];

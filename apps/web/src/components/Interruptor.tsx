@@ -5,8 +5,8 @@ type Props = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onChange'> & {
   alCambiar: (encendido: boolean) => void;
 };
 
-// Prendido, lima con la bolita negra; apagado, gris con la bolita blanca (design.md §6). Los dos
-// estados se distinguen sobre blanco y sobre el fondo gris.
+// Prendido, verde lona oscuro; apagado, pizarra; la bolita siempre blanca (design.md §6). Los dos
+// estados se distinguen de un vistazo sobre el papel y sobre la niebla (decisiones 090 y 105).
 export function Interruptor({ encendido, alCambiar, className = '', ...props }: Props) {
   return (
     <button
@@ -15,11 +15,11 @@ export function Interruptor({ encendido, alCambiar, className = '', ...props }: 
       aria-checked={encendido}
       onClick={() => alCambiar(!encendido)}
       className={`flex h-6 w-10 shrink-0 items-center rounded-full p-[3px] transition-colors ${
-        encendido ? 'justify-end bg-lima ring-1 ring-negro' : 'justify-start bg-gris-400'
+        encendido ? 'justify-end bg-lona-texto' : 'justify-start bg-pizarra-400'
       } ${className}`}
       {...props}
     >
-      <span className={`size-[18px] rounded-full ${encendido ? 'bg-negro' : 'bg-white'}`} />
+      <span className="size-[18px] rounded-full bg-papel" />
     </button>
   );
 }

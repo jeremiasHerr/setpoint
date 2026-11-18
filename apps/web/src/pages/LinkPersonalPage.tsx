@@ -29,7 +29,7 @@ export function LinkPersonalPage() {
       {link.isPending && <Esqueleto forma="lista" />}
       {noAnda && <LinkQueNoAnda />}
       {link.error && !noAnda && (
-        <p className="text-[15px] text-gris-700">
+        <p className="text-[15px] text-pizarra-700">
           {link.error instanceof ErrorApi && link.error.codigo === 'SIN_CONEXION'
             ? 'No pudimos conectarnos. Revisá tu conexión y probá de nuevo.'
             : 'No pudimos abrir el link. Probá de nuevo en unos minutos.'}
@@ -64,7 +64,7 @@ function LinkEncontrado({ link, codigo }: { link: LinkPersonal; codigo: string }
       <div className="flex items-center justify-between gap-3">
         <EncabezadoPublico organizacion={link.organizacion.nombre} />
         {link.jugador.categoria && (
-          <Numero className="rounded-full border border-linea px-2.5 py-1.5 text-[14px] font-medium text-gris-500">
+          <Numero className="rounded-full border border-linea px-2.5 py-1.5 text-[14px] font-medium text-pizarra-500">
             {link.jugador.categoria}
           </Numero>
         )}
@@ -72,9 +72,9 @@ function LinkEncontrado({ link, codigo }: { link: LinkPersonal; codigo: string }
 
       {(!activa || enCurso === 'otra_cuenta') && (
         <div className="flex flex-col gap-2.5 pt-2">
-          <h1 className="text-[34px] leading-[1.08] font-semibold tracking-[-0.032em]">Hola, {link.jugador.nombre}</h1>
+          <h1 className="text-[34px] leading-[1.08] font-display font-semibold tracking-[-0.02em]">Hola, {link.jugador.nombre}</h1>
           {!activa && (
-            <p className="text-base leading-[1.45] text-gris-500">
+            <p className="text-base leading-[1.45] text-pizarra-500">
               Este es tu link para inscribirte en los torneos de {link.organizacion.nombre}. Te lo mandó la organización.
             </p>
           )}
@@ -86,9 +86,9 @@ function LinkEncontrado({ link, codigo }: { link: LinkPersonal; codigo: string }
       ) : (
         <>
           <CuentaVerificada email={activa.usuario.email} onCambiar={cambiarEmail} />
-          {situacion.isPending && <p className="text-[15px] text-gris-500">Revisando tu perfil…</p>}
+          {situacion.isPending && <p className="text-[15px] text-pizarra-500">Revisando tu perfil…</p>}
           {situacion.error && !sesionVencida && (
-            <p className="text-[15px] text-gris-700">No pudimos revisar tu perfil. Probá de nuevo en unos minutos.</p>
+            <p className="text-[15px] text-pizarra-700">No pudimos revisar tu perfil. Probá de nuevo en unos minutos.</p>
           )}
           {enCurso === 'otra_cuenta' && (
             <AvisarALaOrganizacion
@@ -138,8 +138,8 @@ function LinkQueNoAnda() {
     <>
       <EncabezadoPublico organizacion="SetPoint" />
       <div className="flex flex-col gap-3 pt-10">
-        <h1 className="text-[30px] leading-[1.1] font-semibold tracking-[-0.032em]">Este link ya no anda</h1>
-        <p className="text-base leading-[1.45] text-gris-500">
+        <h1 className="text-[28px] leading-[1.1] font-display font-semibold tracking-[-0.02em]">Este link ya no anda</h1>
+        <p className="text-base leading-[1.45] text-pizarra-500">
           Puede que la organización haya generado uno nuevo. El anterior deja de funcionar.
         </p>
       </div>
@@ -147,16 +147,16 @@ function LinkQueNoAnda() {
         <h2 className="text-base font-semibold">Para inscribirte</h2>
         <ol className="flex flex-col gap-3.5">
           <li className="flex gap-3">
-            <Numero className="text-[15px] text-gris-500">1</Numero>
+            <Numero className="text-[15px] text-pizarra-500">1</Numero>
             <span className="text-base leading-[1.42]">Pedile a tu organización tu link nuevo.</span>
           </li>
           <li className="flex gap-3">
-            <Numero className="text-[15px] text-gris-500">2</Numero>
+            <Numero className="text-[15px] text-pizarra-500">2</Numero>
             <span className="text-base leading-[1.42]">O entrá desde el link del torneo que compartieron en el grupo, con tu email.</span>
           </li>
         </ol>
       </section>
-      <p className="mt-auto text-center text-[15px] leading-[1.42] text-gris-500">
+      <p className="mt-auto text-center text-[15px] leading-[1.42] text-pizarra-500">
         Mirar el ranking, las zonas y los cuadros no necesita cuenta ni link personal.
       </p>
     </>

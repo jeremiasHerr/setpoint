@@ -15,7 +15,7 @@ export function LoQueSeCrea({ crea }: { crea: Importacion['crea'] }) {
     partes.push(
       <>
         {crea.categorias.length === 1 ? 'la categoría' : 'las categorías'}{' '}
-        <span className="font-semibold text-negro">{enumerar(crea.categorias)}</span>
+        <span className="font-semibold text-noche">{enumerar(crea.categorias)}</span>
       </>,
     );
   }
@@ -23,12 +23,12 @@ export function LoQueSeCrea({ crea }: { crea: Importacion['crea'] }) {
     partes.push(
       crea.etapas.length === 1 ? (
         <>
-          el torneo del calendario <span className="font-semibold text-negro">{crea.etapas[0]}</span>
+          el torneo del calendario <span className="font-semibold text-noche">{crea.etapas[0]}</span>
         </>
       ) : (
         <>
           los <Numero>{crea.etapas.length}</Numero> torneos del calendario:{' '}
-          <span className="font-semibold text-negro">{enumerar(crea.etapas)}</span>
+          <span className="font-semibold text-noche">{enumerar(crea.etapas)}</span>
         </>
       ),
     );
@@ -36,7 +36,7 @@ export function LoQueSeCrea({ crea }: { crea: Importacion['crea'] }) {
   if (partes.length === 0 && !crea.ranking) return null;
 
   return (
-    <div className="flex flex-col gap-1.5 rounded-tarjeta border border-linea bg-fondo px-[18px] py-4 text-[15px] leading-normal text-gris-700">
+    <div className="flex flex-col gap-1.5 rounded-tarjeta border border-linea bg-niebla px-[18px] py-4 text-[15px] leading-normal text-pizarra-700">
       {partes.length > 0 && (
         <p>
           Al importar, en tu circuito se crean {partes[0]}

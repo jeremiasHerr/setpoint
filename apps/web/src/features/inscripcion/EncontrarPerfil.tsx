@@ -91,14 +91,14 @@ export function EncontrarPerfil({ torneo, token, email, nombre, situacion, onRes
       <>
         <div className="flex flex-col gap-2 rounded-tarjeta border border-linea p-[18px]">
           <div className="flex items-center gap-[9px]">
-            <span className="size-[7px] rounded-full bg-lima" />
-            <span className="text-[15px] font-semibold text-gris-700">Tu perfil en {torneo.organizacion.nombre}</span>
+            <span className="size-[7px] rounded-full bg-lona-texto" />
+            <span className="text-[15px] font-semibold text-pizarra-700">Tu perfil en {torneo.organizacion.nombre}</span>
           </div>
           <div className="flex items-baseline justify-between gap-3">
             <span className="text-xl font-semibold tracking-[-0.025em]">
               {perfil.nombre} {perfil.apellido}
             </span>
-            <span className="font-mono text-[15px] text-gris-500">{perfil.categoria}</span>
+            <span className="font-mono text-[15px] text-pizarra-500">{perfil.categoria}</span>
           </div>
         </div>
         {pie('Ir a pagar con MercadoPago', perfil.jugadorId, undefined, false)}
@@ -115,7 +115,7 @@ export function EncontrarPerfil({ torneo, token, email, nombre, situacion, onRes
             <h2 className="text-[30px] leading-[1.12] font-semibold tracking-[-0.032em] text-balance">
               ¿Sos {unico.nombre} {unico.apellido}, de {torneo.categoria}?
             </h2>
-            <p className="text-base leading-[1.45] text-gris-500">
+            <p className="text-base leading-[1.45] text-pizarra-500">
               Lo encontramos por tu apellido en el padrón de {torneo.organizacion.nombre}.
             </p>
           </div>
@@ -169,7 +169,7 @@ export function EncontrarPerfil({ torneo, token, email, nombre, situacion, onRes
             pie={
               <Link
                 to={`/c/${torneo.organizacion.slug}/torneos/${torneo.id}`}
-                className="flex h-[52px] w-full items-center justify-center rounded-[12px] border border-linea text-base font-medium hover:bg-fondo"
+                className="flex h-[52px] w-full items-center justify-center rounded-[12px] border border-linea text-base font-medium hover:bg-niebla"
               >
                 Volver al torneo
               </Link>
@@ -177,7 +177,7 @@ export function EncontrarPerfil({ torneo, token, email, nombre, situacion, onRes
           />
         }
       >
-        <div className="flex h-14 items-center justify-between gap-3 rounded-tarjeta border-2 border-negro px-[15px] text-[17px] font-medium">
+        <div className="flex h-14 items-center justify-between gap-3 rounded-tarjeta border-2 border-noche px-[15px] text-[17px] font-medium">
           <span>
             {elegido.nombre} {elegido.apellido}
           </span>
@@ -191,7 +191,7 @@ export function EncontrarPerfil({ torneo, token, email, nombre, situacion, onRes
         <button
           type="button"
           onClick={() => setModo('buscar')}
-          className="self-start text-[15px] font-medium text-gris-500 underline underline-offset-[3px]"
+          className="self-start text-[15px] font-medium text-pizarra-500 underline underline-offset-[3px]"
         >
           Volver a buscarme
         </button>
@@ -267,7 +267,7 @@ function Buscar({
         <button
           type="button"
           onClick={() => onElegir(null)}
-          className="flex h-14 items-center justify-between gap-3 rounded-tarjeta border-2 border-negro px-[15px] text-left text-[17px] font-medium"
+          className="flex h-14 items-center justify-between gap-3 rounded-tarjeta border-2 border-noche px-[15px] text-left text-[17px] font-medium"
         >
           <span>
             {elegido.nombre} {elegido.apellido}
@@ -287,8 +287,8 @@ function Buscar({
         <Ayuda>Escribí tu apellido. Buscamos entre los jugadores de {torneo.categoria}.</Ayuda>
       </div>
       <div className="flex flex-col gap-2.5">
-        <div className="flex h-14 items-center gap-3 rounded-[12px] border-2 border-negro px-[15px]">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6A7079" strokeWidth="1.9" strokeLinecap="round" aria-hidden>
+        <div className="flex h-14 items-center gap-3 rounded-[12px] border-2 border-noche px-[15px]">
+          <svg className="stroke-pizarra-500" width="18" height="18" viewBox="0 0 24 24" fill="none" strokeWidth="1.9" strokeLinecap="round" aria-hidden>
             <circle cx="11" cy="11" r="7" />
             <path d="M20 20l-3.5-3.5" />
           </svg>
@@ -349,8 +349,8 @@ function ListaPerfiles({
           <button
             type="button"
             onClick={() => onElegir(perfil)}
-            className={`flex h-14 w-full items-center justify-between gap-3 px-4 text-left text-[17px] font-medium hover:bg-fondo ${
-              elegido?.jugadorId === perfil.jugadorId ? 'bg-fondo' : ''
+            className={`flex h-14 w-full items-center justify-between gap-3 px-4 text-left text-[17px] font-medium hover:bg-niebla ${
+              elegido?.jugadorId === perfil.jugadorId ? 'bg-niebla' : ''
             }`}
           >
             <span>
@@ -365,7 +365,7 @@ function ListaPerfiles({
 }
 
 function MarcaVinculado() {
-  return <span className="rounded-full bg-linea-suave px-2 py-[3px] font-mono text-[13px] text-gris-500">vinculado</span>;
+  return <span className="rounded-full bg-linea-suave px-2 py-[3px] font-mono text-[13px] text-pizarra-500">vinculado</span>;
 }
 
 // Un link de red social se abre; un usuario ("@polenta") se muestra tal cual.
@@ -375,11 +375,11 @@ const esLink = (valor: string) => /^https?:\/\//i.test(valor);
 function Contactos({ contactos, torneo }: { contactos: Contacto[]; torneo: string }) {
   return (
     <div className="flex flex-col gap-2.5 rounded-tarjeta border border-linea p-4">
-      <span className="text-[15px] text-gris-500">Contacto de la organización</span>
+      <span className="text-[15px] text-pizarra-500">Contacto de la organización</span>
       <ul className="flex flex-col gap-2">
         {contactos.map((c) => (
           <li key={`${c.tipo}-${c.valor}`} className="flex flex-col gap-0.5">
-            <span className="font-mono text-xs text-gris-500">{c.tipo === 'whatsapp' ? 'whatsapp' : 'red social'}</span>
+            <span className="font-mono text-xs text-pizarra-500">{c.tipo === 'whatsapp' ? 'whatsapp' : 'red social'}</span>
             {c.tipo === 'whatsapp' ? (
               <a
                 href={urlDeWhatsApp(c.valor, `Hola, te escribo por el torneo ${torneo}`)}

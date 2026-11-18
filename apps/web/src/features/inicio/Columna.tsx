@@ -24,10 +24,10 @@ export function Columna({ titulo, marca, cantidad, ayuda, vacia, children, pie }
           <span className={`size-2.5 shrink-0 rounded-[3px] ${marca}`} />
           {titulo}
         </h2>
-        <Numero className="flex h-6 min-w-6 items-center justify-center rounded-full bg-white px-1.5 text-xs">{cantidad}</Numero>
+        <Numero className="flex h-6 min-w-6 items-center justify-center rounded-full bg-papel px-1.5 text-xs">{cantidad}</Numero>
       </div>
-      <p className="px-1.5 text-[13px] text-gris-500">{ayuda}</p>
-      {cantidad === 0 && <p className="px-1.5 py-2 text-sm text-gris-500">{vacia}</p>}
+      <p className="px-1.5 text-[13px] text-pizarra-500">{ayuda}</p>
+      {cantidad === 0 && <p className="px-1.5 py-2 text-sm text-pizarra-500">{vacia}</p>}
       {children}
       {pie}
     </section>

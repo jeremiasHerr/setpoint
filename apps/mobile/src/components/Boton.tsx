@@ -1,8 +1,8 @@
 import { Pressable, StyleSheet, Text, type PressableProps } from 'react-native';
 import { colores, fuentes, medidas, radios } from '../lib/tokens';
 
-// Los mismos nombres que en la web (design.md §6). "organizador" es el negro, que la app también usa
-// para acciones como Ingresar; "principal" es el lima, para pagar.
+// Los mismos nombres que en la web (design.md §6). "organizador" es el noche, que la app también usa
+// para acciones como Ingresar; "principal" es el verde lona, para pagar.
 type Variante = 'principal' | 'organizador' | 'secundario';
 
 type Props = Omit<PressableProps, 'style' | 'children'> & {
@@ -12,20 +12,20 @@ type Props = Omit<PressableProps, 'style' | 'children'> & {
 
 export function Boton({ texto, variante = 'secundario', disabled, ...props }: Props) {
   const oscuro = variante === 'organizador';
-  const lima = variante === 'principal';
+  const esPrincipal = variante === 'principal';
   return (
     <Pressable
       accessibilityRole="button"
       disabled={disabled}
       style={({ pressed }) => [
         estilos.base,
-        lima ? estilos.principal : oscuro ? estilos.organizador : estilos.secundario,
-        pressed && (lima ? estilos.principalApretado : oscuro ? estilos.organizadorApretado : estilos.secundarioApretado),
+        esPrincipal ? estilos.principal : oscuro ? estilos.organizador : estilos.secundario,
+        pressed && (esPrincipal ? estilos.principalApretado : oscuro ? estilos.organizadorApretado : estilos.secundarioApretado),
         disabled && estilos.deshabilitado,
       ]}
       {...props}
     >
-      <Text style={[estilos.texto, lima ? estilos.textoPrincipal : oscuro ? estilos.textoOrganizador : estilos.textoSecundario]}>
+      <Text style={[estilos.texto, esPrincipal ? estilos.textoPrincipal : oscuro ? estilos.textoOrganizador : estilos.textoSecundario]}>
         {texto}
       </Text>
     </Pressable>
@@ -41,17 +41,19 @@ const estilos = StyleSheet.create({
   },
   principal: {
     height: medidas.toque,
-    backgroundColor: colores.lima,
+    backgroundColor: colores.lona,
+    borderWidth: 1,
+    borderColor: colores.lonaBorde,
   },
   principalApretado: {
     opacity: 0.85,
   },
   organizador: {
     height: medidas.toque,
-    backgroundColor: colores.negro,
+    backgroundColor: colores.noche,
   },
   organizadorApretado: {
-    backgroundColor: colores.carbon,
+    backgroundColor: colores.noche2,
   },
   secundario: {
     height: medidas.toqueSecundario,
@@ -59,7 +61,7 @@ const estilos = StyleSheet.create({
     borderColor: colores.linea,
   },
   secundarioApretado: {
-    backgroundColor: colores.fondo,
+    backgroundColor: colores.niebla,
   },
   deshabilitado: {
     opacity: 0.4,
@@ -69,7 +71,7 @@ const estilos = StyleSheet.create({
   },
   textoPrincipal: {
     fontFamily: fuentes.sans[600],
-    color: colores.negro,
+    color: colores.noche900,
   },
   textoOrganizador: {
     fontFamily: fuentes.sans[600],
@@ -77,6 +79,6 @@ const estilos = StyleSheet.create({
   },
   textoSecundario: {
     fontFamily: fuentes.sans[500],
-    color: colores.negro,
+    color: colores.noche,
   },
 });

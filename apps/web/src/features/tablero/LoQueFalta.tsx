@@ -24,12 +24,12 @@ function Escribirles({ partido, tablero }: { partido: PartidoDelTablero; tablero
                 href={urlDeWhatsApp(jugador.telefono, mensajeParaCoordinar(partido, lado, tablero))}
                 target="_blank"
                 rel="noreferrer"
-                className={`${accion} border border-linea hover:bg-fondo`}
+                className={`${accion} border border-linea hover:bg-niebla`}
               >
                 WhatsApp a {jugador.apellido}
               </a>
             ) : (
-              <span className={`${accion} border border-linea text-gris-400`}>{jugador.apellido} no tiene teléfono en el padrón</span>
+              <span className={`${accion} border border-linea text-pizarra-400`}>{jugador.apellido} no tiene teléfono en el padrón</span>
             )}
           </li>
         );
@@ -63,22 +63,22 @@ function Fila({ slug, partido, tablero, lista }: { slug: string; partido: Partid
           tablero.fase === 'grupos' ? 'md:grid-cols-[62px_minmax(0,1fr)_170px_auto]' : 'md:grid-cols-[150px_minmax(0,1fr)_170px_auto]'
         }`}
       >
-        <Numero className="text-[13px] text-gris-500">{dondeSeJuega(partido, tablero)}</Numero>
+        <Numero className="text-[13px] text-pizarra-500">{dondeSeJuega(partido, tablero)}</Numero>
         <span className={`text-base ${vencido ? 'font-semibold' : ''}`}>{nombresDelPartido(partido)}</span>
         {lista === 'con_fecha' && partido.fechaAcordada ? (
           <span className="flex flex-col">
             <Numero className="text-sm">{elDiaYHora(partido.fechaAcordada)}</Numero>
-            <span className="text-[13px] text-gris-500">{partido.estado === 'anotada' ? 'falta que confirme el rival' : 'confirmada'}</span>
+            <span className="text-[13px] text-pizarra-500">{partido.estado === 'anotada' ? 'falta que confirme el rival' : 'confirmada'}</span>
           </span>
         ) : (
-          <Numero className={`text-sm ${vencido ? 'text-rojo-texto' : 'text-gris-500'}`}>{textoDeLosDias(partido.dias)}</Numero>
+          <Numero className={`text-sm ${vencido ? 'text-rojo-texto' : 'text-pizarra-500'}`}>{textoDeLosDias(partido.dias)}</Numero>
         )}
         <div className="flex gap-2 md:justify-end">
           <button
             type="button"
             aria-expanded={abierto === 'escribirles'}
             onClick={() => alternar('escribirles')}
-            className={`${accion} border border-linea hover:bg-fondo`}
+            className={`${accion} border border-linea hover:bg-niebla`}
           >
             Escribirles
           </button>
@@ -88,14 +88,14 @@ function Fila({ slug, partido, tablero, lista }: { slug: string; partido: Partid
               type="button"
               aria-expanded={abierto === 'anotar'}
               onClick={() => alternar('anotar')}
-              className={`${accion} border border-linea hover:bg-fondo`}
+              className={`${accion} border border-linea hover:bg-niebla`}
             >
               {textoDeAnotar(lista, partido)}
             </button>
           )}
           {resolver && (
             // Resolver es cargarlo como W.O.: la pantalla de carga abre con el W.O. elegido (decisión 062).
-            <Link to={`/torneos/${tablero.torneoId}/resultados/${partido.id}?tipo=walkover`} className={`${accion} bg-negro font-semibold text-white`}>
+            <Link to={`/torneos/${tablero.torneoId}/resultados/${partido.id}?tipo=walkover`} className={`${accion} bg-noche font-semibold text-white`}>
               Resolver
             </Link>
           )}
@@ -113,14 +113,14 @@ function Encabezado({ rojo = false, titulo, cantidad, children }: { rojo?: boole
   return (
     <div
       className={`flex flex-wrap items-center gap-x-[9px] gap-y-1 border-b px-5 py-[11px] ${
-        rojo ? 'border-rojo-linea bg-rojo-fondo' : 'border-linea bg-fondo-tabla'
+        rojo ? 'border-rojo-linea bg-rojo-fondo' : 'border-linea bg-niebla'
       }`}
     >
       <span className={`size-2 rounded-[2px] ${rojo ? 'bg-rojo' : 'bg-linea'}`} />
       <h3 className={`text-sm font-semibold ${rojo ? 'text-rojo-texto' : ''}`}>
         {titulo} · <Numero>{cantidad}</Numero>
       </h3>
-      <p className={`text-sm ${rojo ? 'text-rojo-texto/80' : 'text-gris-500'}`}>{children}</p>
+      <p className={`text-sm ${rojo ? 'text-rojo-texto/80' : 'text-pizarra-500'}`}>{children}</p>
     </div>
   );
 }
@@ -138,7 +138,7 @@ export function LoQueFalta({ slug, tablero }: { slug: string; tablero: Tablero }
     <section className="flex flex-col gap-3">
       <div className="flex flex-wrap items-baseline justify-between gap-3">
         <h2 className="text-xl font-semibold tracking-[-0.025em]">Lo que falta</h2>
-        {!nada && <p className="text-sm text-gris-500">Ordenado por urgencia</p>}
+        {!nada && <p className="text-sm text-pizarra-500">Ordenado por urgencia</p>}
       </div>
 
       <Tarjeta className="overflow-hidden">
@@ -168,11 +168,11 @@ export function LoQueFalta({ slug, tablero }: { slug: string; tablero: Tablero }
           </>
         )}
 
-        {nada && <p className="px-5 py-5 text-[15px] text-gris-500">No hay partidos vencidos ni sin coordinar.</p>}
+        {nada && <p className="px-5 py-5 text-[15px] text-pizarra-500">No hay partidos vencidos ni sin coordinar.</p>}
 
         {totales.conFecha > 0 && (
-          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-linea bg-fondo-tabla px-5 py-3.5">
-            <p className="text-sm text-gris-500">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-linea bg-niebla px-5 py-3.5">
+            <p className="text-sm text-pizarra-500">
               <TextoConNumeros
                 frase={
                   totales.conFecha === 1
@@ -185,7 +185,7 @@ export function LoQueFalta({ slug, tablero }: { slug: string; tablero: Tablero }
               type="button"
               aria-expanded={verConFecha}
               onClick={() => setVerConFecha(!verConFecha)}
-              className={`${accion} border border-linea bg-white hover:bg-fondo`}
+              className={`${accion} border border-linea bg-papel hover:bg-niebla`}
             >
               {verConFecha ? 'Ocultar' : totales.conFecha === 1 ? 'Verlo' : 'Verlos'}
             </button>

@@ -50,12 +50,12 @@ export function FilaJugador({ jugador, columnas, conRanking, seleccionado, slug,
   return (
     <div
       className={`grid h-[58px] items-center gap-x-4 border-b border-linea-suave px-[18px] ${columnas} ${
-        seleccionado || esNuevo ? 'bg-fondo-tabla' : ''
+        seleccionado || esNuevo ? 'bg-niebla' : ''
       } ${jugador.activo ? '' : 'opacity-50'}`}
     >
       <span
         className={`flex size-[34px] items-center justify-center rounded-full text-[13px] font-semibold ${
-          esNuevo ? 'bg-lima text-negro' : 'bg-linea-suave text-gris-500'
+          esNuevo ? 'bg-lona-fondo text-lona-texto' : 'bg-linea-suave text-pizarra-500'
         }`}
         aria-hidden="true"
       >
@@ -67,33 +67,33 @@ export function FilaJugador({ jugador, columnas, conRanking, seleccionado, slug,
           <span className="truncate text-base font-medium">
             {jugador.nombre} {jugador.apellido}
           </span>
-          {esNuevo && <span className="shrink-0 rounded-full bg-lima px-[7px] py-0.5 font-mono text-[11px] whitespace-nowrap">nuevo</span>}
+          {esNuevo && <span className="shrink-0 rounded-full bg-lona-fondo text-lona-texto px-[7px] py-0.5 font-mono text-[11px] whitespace-nowrap">nuevo</span>}
           {jugador.cuenta && (
-            <span className="shrink-0 rounded-full bg-linea-suave px-[7px] py-0.5 font-mono text-[11px] whitespace-nowrap text-gris-500">
+            <span className="shrink-0 rounded-full bg-linea-suave px-[7px] py-0.5 font-mono text-[11px] whitespace-nowrap text-pizarra-500">
               con cuenta
             </span>
           )}
           {jugador.revision && (
             <Link
               to={`/padron/revisar/${jugador.id}`}
-              className="shrink-0 rounded-full border border-negro px-[7px] py-px font-mono text-[11px] whitespace-nowrap hover:bg-negro hover:text-white"
+              className="shrink-0 rounded-full border border-noche px-[7px] py-px font-mono text-[11px] whitespace-nowrap hover:bg-noche hover:text-white"
             >
               para revisar
             </Link>
           )}
           {!jugador.activo && (
-            <span className="shrink-0 rounded-full bg-linea-suave px-[7px] py-0.5 font-mono text-[11px] whitespace-nowrap text-gris-500">
+            <span className="shrink-0 rounded-full bg-linea-suave px-[7px] py-0.5 font-mono text-[11px] whitespace-nowrap text-pizarra-500">
               de baja
             </span>
           )}
         </div>
-        <span className="truncate font-mono text-xs text-gris-500">{detalle}</span>
+        <span className="truncate font-mono text-xs text-pizarra-500">{detalle}</span>
       </div>
 
       <div className="hidden md:block">
         <span
-          className={`inline-flex h-[34px] items-center rounded-full border border-linea bg-fondo px-[13px] text-sm font-medium ${
-            jugador.categoria ? '' : 'text-gris-500'
+          className={`inline-flex h-[34px] items-center rounded-full border border-linea bg-niebla px-[13px] text-sm font-medium ${
+            jugador.categoria ? '' : 'text-pizarra-500'
           }`}
         >
           {jugador.categoria ?? 'Sin categoría'}
@@ -102,15 +102,15 @@ export function FilaJugador({ jugador, columnas, conRanking, seleccionado, slug,
 
       {conRanking && (
         <div className="flex items-baseline gap-[7px]">
-          {muestraPuesto && jugador.activo && <Numero className="text-[13px] text-gris-500">{jugador.puesto}º</Numero>}
-          <Numero className={`text-[17px] font-medium ${jugador.puntos > 0 && jugador.activo ? '' : 'text-gris-500'}`}>
+          {muestraPuesto && jugador.activo && <Numero className="text-[13px] text-pizarra-500">{jugador.puesto}º</Numero>}
+          <Numero className={`text-[17px] font-medium ${jugador.puntos > 0 && jugador.activo ? '' : 'text-pizarra-500'}`}>
             {jugador.puntos}
           </Numero>
-          <span className="text-[13px] text-gris-500">puntos</span>
+          <span className="text-[13px] text-pizarra-500">puntos</span>
         </div>
       )}
 
-      <Numero className={`hidden text-right text-[15px] xl:block ${jugador.partidos > 0 ? '' : 'text-gris-400'}`}>
+      <Numero className={`hidden text-right text-[15px] xl:block ${jugador.partidos > 0 ? '' : 'text-pizarra-400'}`}>
         {jugador.partidos}
       </Numero>
 

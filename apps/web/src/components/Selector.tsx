@@ -9,13 +9,13 @@ type Props = SelectHTMLAttributes<HTMLSelectElement> & {
 export function Selector({ id, rotulo, className = '', children, ...props }: Props) {
   return (
     <div className={`flex flex-col gap-2 ${className}`}>
-      <label htmlFor={id} className="text-[13px] font-semibold text-gris-500">
+      <label htmlFor={id} className="text-[13px] font-semibold text-pizarra-500">
         {rotulo}
       </label>
       <div className="relative flex flex-col">
         <select
           id={id}
-          className="h-12 appearance-none rounded-control border border-gris-300 bg-white pr-10 pl-3.5 text-[15px] text-negro outline-none focus:border-2 focus:border-negro focus:pl-[13px]"
+          className="h-12 appearance-none rounded-control border border-borde-campo bg-papel pr-10 pl-3.5 text-[15px] text-noche outline-none focus:border-2 focus:border-noche focus:pl-[13px]"
           {...props}
         >
           {children}
@@ -26,7 +26,7 @@ export function Selector({ id, rotulo, className = '', children, ...props }: Pro
           fill="none"
           stroke="currentColor"
           strokeLinecap="round"
-          className="pointer-events-none absolute top-1/2 right-3.5 size-[13px] -translate-y-1/2 stroke-[2.4] text-gris-500"
+          className="pointer-events-none absolute top-1/2 right-3.5 size-[13px] -translate-y-1/2 stroke-[2.4] text-pizarra-500"
         >
           <path d="M6 9l6 6 6-6" />
         </svg>

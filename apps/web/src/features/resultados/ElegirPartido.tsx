@@ -22,10 +22,10 @@ type Pestana = { clave: string; titulo: string; faltan: number; zona?: FilaDeLaL
 
 // El rojo es solo para lo vencido (design.md §3).
 const colorDelEstado: Record<Situacion, string> = {
-  sin_jugadores: 'text-gris-400',
-  falta: 'text-gris-700',
+  sin_jugadores: 'text-pizarra-400',
+  falta: 'text-pizarra-700',
   vencido: 'text-rojo-texto',
-  con_resultado: 'text-gris-400',
+  con_resultado: 'text-pizarra-400',
 };
 
 // Elegir el partido a cargar (decisión 070): las zonas con sus partidos y los cuadros dibujados
@@ -44,7 +44,7 @@ export function ElegirPartido({ slug, torneoId, actual }: Props) {
       <div className="flex flex-col items-start gap-3 px-6 py-5">
         {error ? (
           <>
-            <p className="text-[15px] text-gris-500">No pudimos cargar los partidos.</p>
+            <p className="text-[15px] text-pizarra-500">No pudimos cargar los partidos.</p>
             <Boton onClick={() => void (partidos.error ? partidos.refetch() : cuadros.refetch())}>Probar de nuevo</Boton>
           </>
         ) : (
@@ -69,7 +69,7 @@ export function ElegirPartido({ slug, torneoId, actual }: Props) {
   }));
   const pestanas = [...zonas, ...deLosCuadros];
   if (pestanas.length === 0) {
-    return <p className="px-6 py-5 text-[15px] text-gris-500">Todavía no hay partidos: se generan al confirmar el sorteo.</p>;
+    return <p className="px-6 py-5 text-[15px] text-pizarra-500">Todavía no hay partidos: se generan al confirmar el sorteo.</p>;
   }
 
   // Abre donde está el partido abierto; sin partido, en la primera con algo por cargar.
@@ -91,11 +91,11 @@ export function ElegirPartido({ slug, torneoId, actual }: Props) {
               aria-pressed={activa}
               onClick={() => setElegida(clave)}
               className={`inline-flex h-[34px] items-center gap-[7px] rounded-[9px] px-[13px] text-sm ${
-                activa ? 'bg-negro font-semibold text-white' : 'border border-linea font-medium text-gris-700 hover:bg-fondo'
+                activa ? 'bg-noche font-semibold text-white' : 'border border-linea font-medium text-pizarra-700 hover:bg-niebla'
               }`}
             >
               {titulo}
-              {faltan > 0 && <Numero className={`text-xs ${activa ? 'text-lima' : 'text-gris-500'}`}>{faltan}</Numero>}
+              {faltan > 0 && <Numero className={`text-xs ${activa ? 'text-white' : 'text-pizarra-500'}`}>{faltan}</Numero>}
             </button>
           );
         })}
@@ -112,7 +112,7 @@ export function ElegirPartido({ slug, torneoId, actual }: Props) {
           <div className="hidden overflow-x-auto pb-2 xl:block">
             <CuadroCompleto cuadro={pestana.cuadro} eleccion={eleccion} />
           </div>
-          <p className="text-[13px] text-gris-500">Tocá un partido para cargar o corregir su resultado.</p>
+          <p className="text-[13px] text-pizarra-500">Tocá un partido para cargar o corregir su resultado.</p>
         </>
       )}
     </div>
@@ -132,8 +132,8 @@ function PartidosDeLaZona({ filas, actual, alElegir }: { filas: FilaDeLaLista[];
               type="button"
               aria-current={elegido ? 'true' : undefined}
               onClick={() => alElegir(partido.id)}
-              className={`flex w-full flex-col gap-1 bg-white px-3.5 py-2.5 text-left ${
-                elegido ? 'rounded-[10px] border-2 border-negro ring-2 ring-lima' : 'rounded-lg border border-linea hover:border-gris-500'
+              className={`flex w-full flex-col gap-1 bg-papel px-3.5 py-2.5 text-left ${
+                elegido ? 'rounded-[10px] border-2 border-noche ring-2 ring-lona-borde' : 'rounded-lg border border-linea hover:border-pizarra-500'
               }`}
             >
               <span className={`truncate text-sm ${elegido ? 'font-semibold' : ''}`}>

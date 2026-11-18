@@ -38,20 +38,20 @@ export function FilaImportacion({ hoja, categoria, fila, decision, problemas, pa
   const resumen = (
     <div className={COLUMNAS}>
       <div className="flex min-w-0 flex-col">
-        <span className="truncate font-mono text-sm text-gris-700">{fila.enLaPlanilla || nombreDe(fila)}</span>
-        <span className="font-mono text-xs text-gris-500">
+        <span className="truncate font-mono text-sm text-pizarra-700">{fila.enLaPlanilla || nombreDe(fila)}</span>
+        <span className="font-mono text-xs text-pizarra-500">
           {categoria ? `${categoria.toLowerCase()} · ` : ''}fila {fila.fila}
         </span>
       </div>
       <JugadorDestino decision={decision} fila={fila} vinculado={vinculado} marcada={marcada} />
-      <Numero className="text-[13px] text-gris-500">{casillerosComoTexto(fila)}</Numero>
+      <Numero className="text-[13px] text-pizarra-500">{casillerosComoTexto(fila)}</Numero>
       <div className="flex justify-end">
         <button
           type="button"
           onClick={alExpandir}
           aria-expanded={expandida}
           className={`text-sm hover:underline ${
-            marcada ? 'font-semibold text-negro' : decision.accion === 'crear' ? 'font-medium' : 'text-gris-500'
+            marcada ? 'font-semibold text-noche' : decision.accion === 'crear' ? 'font-medium' : 'text-pizarra-500'
           }`}
         >
           {marcada && expandida ? 'Elegí qué hacer' : QUE_PASA[decision.accion]}
@@ -69,21 +69,21 @@ export function FilaImportacion({ hoja, categoria, fila, decision, problemas, pa
 
   return (
     <li
-      className={`flex flex-col gap-[13px] border-b border-linea-suave px-[18px] py-4 ${marcada ? 'bg-fondo' : 'bg-fondo-tabla'}`}
+      className={`flex flex-col gap-[13px] border-b border-linea-suave px-[18px] py-4 ${marcada ? 'bg-niebla' : 'bg-papel'}`}
     >
       {resumen}
 
       {problemas && (
         <ul className="flex flex-col gap-1">
           {problemas.map((p) => (
-            <li key={p} className="text-[13px] font-medium text-negro">
+            <li key={p} className="text-[13px] font-medium text-noche">
               {p}
             </li>
           ))}
         </ul>
       )}
       {!problemas && sugerido && fila.confianza !== 'alta' && (
-        <p className="text-[13px] font-medium text-negro">
+        <p className="text-[13px] font-medium text-noche">
           En la planilla dice “{fila.enLaPlanilla}”. Puede ser {nombreDe(sugerido)}, pero el nombre no es exacto.
         </p>
       )}
@@ -146,17 +146,17 @@ function JugadorDestino({
   vinculado?: JugadorPadron;
   marcada: boolean;
 }) {
-  if (decision.accion === 'excluir') return <span className="text-[15px] text-gris-400">—</span>;
+  if (decision.accion === 'excluir') return <span className="text-[15px] text-pizarra-400">—</span>;
   if (decision.accion === 'crear') {
     return (
       <div className="flex min-w-0 items-center gap-[9px]">
-        <span className="size-[7px] shrink-0 rounded-full bg-lima" aria-hidden="true" />
+        <span className="size-[7px] shrink-0 rounded-full bg-lona-texto" aria-hidden="true" />
         <span className="truncate text-[15px] font-medium">{nombreDe(fila)}</span>
       </div>
     );
   }
   return (
-    <span className={`truncate text-[15px] ${marcada ? 'font-semibold text-negro' : 'font-medium'}`}>
+    <span className={`truncate text-[15px] ${marcada ? 'font-semibold text-noche' : 'font-medium'}`}>
       {vinculado ? nombreDe(vinculado) : 'Jugador del padrón'}
     </span>
   );
@@ -175,22 +175,22 @@ function Opcion({ elegida, onClick, titulo, detalle }: PropsOpcion) {
       type="button"
       aria-pressed={elegida}
       onClick={onClick}
-      className={`flex min-w-[220px] flex-1 items-center justify-between gap-3 rounded-xl bg-white px-[15px] py-[13px] text-left ${
-        elegida ? 'border-2 border-negro' : 'border border-linea hover:bg-fondo'
+      className={`flex min-w-[220px] flex-1 items-center justify-between gap-3 rounded-xl bg-papel px-[15px] py-[13px] text-left ${
+        elegida ? 'border-2 border-noche' : 'border border-linea hover:bg-niebla'
       }`}
     >
       <span className="flex flex-col gap-[3px]">
         <span className={`text-[15px] ${elegida ? 'font-semibold' : 'font-medium'}`}>{titulo}</span>
-        <span className="font-mono text-xs text-gris-500">{detalle}</span>
+        <span className="font-mono text-xs text-pizarra-500">{detalle}</span>
       </span>
       {elegida ? (
-        <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-negro">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="size-3 text-lima" aria-hidden="true">
+        <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-noche">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="size-3 text-lona" aria-hidden="true">
             <path d="M5 12.5l4.5 4.5L19 7.5" />
           </svg>
         </span>
       ) : (
-        <span className="size-5 shrink-0 rounded-full border border-gris-300" aria-hidden="true" />
+        <span className="size-5 shrink-0 rounded-full border border-borde-campo" aria-hidden="true" />
       )}
     </button>
   );

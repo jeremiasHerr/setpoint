@@ -126,17 +126,17 @@ function CargarTorneo({ sesion, id }: { sesion: Sesion; id: number | null }) {
   const noExiste = error?.message === 'TORNEO_NO_ENCONTRADO';
 
   return (
-    <div className="min-h-screen bg-white text-negro">
+    <div className="min-h-screen bg-papel text-noche">
       <Encabezado sesion={sesion} organizacion={sesion.organizacion.nombre} />
       <div className="flex flex-col items-start gap-3 px-7 pt-[26px]">
         {noExiste ? (
           <>
-            <p className="text-[15px] text-gris-500">No encontramos ese torneo.</p>
+            <p className="text-[15px] text-pizarra-500">No encontramos ese torneo.</p>
             <Boton onClick={() => navegar('/inicio')}>Volver al inicio</Boton>
           </>
         ) : error && !sesionInvalida ? (
           <>
-            <p className="text-[15px] text-gris-500">No pudimos cargar el torneo.</p>
+            <p className="text-[15px] text-pizarra-500">No pudimos cargar el torneo.</p>
             <Boton
               onClick={() => {
                 void circuito.refetch();
@@ -280,7 +280,7 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
 
   if (publicada) {
     return (
-      <div className="min-h-screen bg-white text-negro">
+      <div className="min-h-screen bg-papel text-noche">
         <Encabezado sesion={sesion} organizacion={circuito.nombre} />
         <TorneoPublicado slug={slug} convocatoria={publicada} />
       </div>
@@ -288,7 +288,7 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
   }
 
   return (
-    <div className="min-h-screen bg-white text-negro">
+    <div className="min-h-screen bg-papel text-noche">
       <Encabezado sesion={sesion} organizacion={circuito.nombre} />
 
       <div className="flex flex-wrap items-end justify-between gap-6 px-7 pt-[26px] pb-5">
@@ -297,14 +297,14 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
             {enBorrador ? 'Nuevo torneo' : 'Editar'}
           </Migas>
           {/* Publicado, ya no es nuevo: se edita uno que tiene nombre. */}
-          <h1 className="text-[30px] font-semibold tracking-[-0.035em]">
+          <h1 className="text-[28px] font-display font-semibold tracking-[-0.02em]">
             {enBorrador || !datos.nombre.trim() ? 'Nuevo torneo' : datos.nombre}
           </h1>
-          <p className="text-[15px] text-gris-500">
+          <p className="text-[15px] text-pizarra-500">
             Los valores vienen de la configuración de tu circuito. Cambiá solo lo que sea distinto esta vez.
           </p>
         </div>
-        <span aria-live="polite" className="shrink-0 font-mono text-[13px] text-gris-500 tabular-nums">
+        <span aria-live="polite" className="shrink-0 font-mono text-[13px] text-pizarra-500 tabular-nums">
           {guardado.estado === 'sin-cambios'
             ? `${enBorrador ? 'borrador' : 'publicado'} · ${textoEstado['sin-cambios']}`
             : textoEstado[guardado.estado]}
@@ -384,7 +384,7 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
           {enBorrador && (
             <Tarjeta className="flex flex-col gap-2.5 px-[18px] py-4">
               <h2 className="text-[15px] font-semibold">Al publicar</h2>
-              <p className="text-sm leading-[1.45] text-gris-500">
+              <p className="text-sm leading-[1.45] text-pizarra-500">
                 El torneo queda visible y se abren las inscripciones. Podés seguir editando el formato hasta que se cierre la
                 inscripción.
               </p>

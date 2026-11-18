@@ -2,24 +2,37 @@
 // apps/web/src/index.css: si cambia uno, cambia en los dos lados (decisión 034).
 
 export const colores = {
-  lima: '#CDF546',
-  limaTenue: '#F7FCE7',
-  negro: '#0A0B0D',
-  carbon: '#17191D',
-  bordeOscuro: '#2C3037',
-  gris700: '#3F4348',
-  gris500: '#6A7079',
-  gris400: '#9BA1A9',
-  gris300: '#B5BBC3',
-  linea: '#D5D9DE',
-  lineaSuave: '#F1F2F4',
-  fondo: '#F6F7F8',
-  fondoTabla: '#FAFBFC',
+  noche900: '#0B1220',
+  noche: '#101A2C',
+  noche2: '#1A2740',
+  bordeNoche: '#2E3D5A',
+  pizarra700: '#3B4659',
+  pizarra500: '#626D82',
+  pizarra400: '#9AA5B8',
+  bordeCampo: '#878FA1',
+  linea: '#D8DCE5',
+  lineaSuave: '#ECEEF3',
+  niebla: '#F4F5F8',
+  papel: '#FFFFFF',
+  // El texto sobre noche: el mismo valor que el papel, con otro rol.
   blanco: '#FFFFFF',
+  cal: '#E9E2D6',
+  lona: '#62BB78',
+  lonaBorde: '#93D2A3',
+  lonaFondo: '#E4F8E7',
+  lonaTexto: '#1B6236',
+  pelota: '#CDF546',
+  azul: '#3567D6',
+  azulTexto: '#2A55BC',
+  azulFondo: '#ECF1FD',
   rojo: '#E5484D',
   rojoTexto: '#C62A2F',
   rojoFondo: '#FEF6F6',
   rojoLinea: '#F3D3D4',
+  ambar: '#8F5200',
+  ambarFondo: '#FDF3E3',
+  petroleo: '#0F6170',
+  petroleoFondo: '#E5F4F6',
 } as const;
 
 // En Android cada peso es una familia aparte: el peso se elige con fontFamily, nunca con
@@ -36,6 +49,10 @@ export const fuentes = {
     500: 'GeistMono_500Medium',
     600: 'GeistMono_600SemiBold',
   },
+  // Funnel Display, solo para los títulos de pantalla y el nombre del rival.
+  display: {
+    600: 'FunnelDisplay_600SemiBold',
+  },
 } as const;
 
 // Todo número va en mono y con cifras de ancho fijo.
@@ -43,9 +60,9 @@ export const tabular = { fontVariant: ['tabular-nums'] } as const;
 
 export const radios = {
   chip: 999,
-  control: 10,
-  tarjeta: 14,
-  superficie: 18,
+  control: 8,
+  tarjeta: 12,
+  superficie: 20,
 } as const;
 
 export const medidas = {

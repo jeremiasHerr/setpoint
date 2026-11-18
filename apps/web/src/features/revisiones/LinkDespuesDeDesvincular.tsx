@@ -19,14 +19,14 @@ export function LinkDespuesDeDesvincular({ organizacion, jugador, fallo }: Props
   const mensaje = jugador && url ? mensajeDelLink(jugador, organizacion, url) : null;
 
   return (
-    <section className="flex flex-col gap-4 rounded-[16px] border-2 border-negro px-6 py-[22px]">
+    <section className="flex flex-col gap-4 rounded-[16px] border-2 border-noche px-6 py-[22px]">
       <div className="flex flex-col gap-2">
         <h2 className="text-xl font-semibold tracking-[-0.02em]">El perfil quedó libre</h2>
-        <p className="text-[15px] leading-normal text-gris-500">
+        <p className="text-[15px] leading-normal text-pizarra-500">
           Mandale el link personal al dueño. Generamos uno nuevo: el anterior ya no anda.
         </p>
       </div>
-      <p className="rounded-control bg-fondo px-[13px] py-[11px] text-sm leading-[1.45] break-words text-gris-700">
+      <p className="rounded-control bg-niebla px-[13px] py-[11px] text-sm leading-[1.45] break-words text-pizarra-700">
         {fallo ? 'No pudimos crear el link. Generalo desde el menú del jugador en el padrón.' : (mensaje ?? 'Creando el link…')}
       </p>
       <div className="flex flex-wrap gap-2.5">
@@ -35,7 +35,7 @@ export function LinkDespuesDeDesvincular({ organizacion, jugador, fallo }: Props
             href={urlDeWhatsApp(jugador.telefono, mensaje)}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex h-10 items-center justify-center rounded-control bg-negro px-4 text-[15px] font-medium text-white"
+            className="inline-flex h-10 items-center justify-center rounded-control bg-noche px-4 text-[15px] font-medium text-white"
           >
             Compartir por WhatsApp
           </a>
@@ -52,7 +52,7 @@ export function LinkDespuesDeDesvincular({ organizacion, jugador, fallo }: Props
         >
           {copiado ? 'Link copiado' : 'Copiar link'}
         </Boton>
-        <Link to="/padron" className="inline-flex h-10 items-center px-2 text-[15px] font-medium text-gris-500 underline underline-offset-[3px]">
+        <Link to="/padron" className="inline-flex h-10 items-center px-2 text-[15px] font-medium text-pizarra-500 underline underline-offset-[3px]">
           Volver al padrón
         </Link>
       </div>
