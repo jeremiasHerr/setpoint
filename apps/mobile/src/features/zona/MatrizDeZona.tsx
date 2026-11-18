@@ -106,6 +106,7 @@ export function LeyendaDeZona() {
 const estilos = StyleSheet.create({
   marco: {
     borderWidth: 1,
+    backgroundColor: colores.papel,
     borderColor: colores.linea,
     borderRadius: radios.tarjeta,
     overflow: 'hidden',
@@ -118,7 +119,7 @@ const estilos = StyleSheet.create({
     borderBottomColor: colores.linea,
   },
   encabezado: {
-    backgroundColor: colores.fondoTabla,
+    backgroundColor: colores.niebla,
     borderBottomWidth: 1,
     borderBottomColor: colores.linea,
   },
@@ -139,13 +140,13 @@ const estilos = StyleSheet.create({
     paddingVertical: 9,
     fontFamily: fuentes.mono[400],
     fontSize: 11,
-    color: colores.gris500,
+    color: colores.pizarra500,
     textAlign: 'center',
   },
   nombre: {
     fontFamily: fuentes.sans[600],
     fontSize: 13,
-    color: colores.negro,
+    color: colores.noche,
   },
   celda: {
     flex: 1,
@@ -158,7 +159,7 @@ const estilos = StyleSheet.create({
     backgroundColor: colores.lineaSuave,
   },
   gano: {
-    backgroundColor: colores.limaTenue,
+    backgroundColor: colores.lonaFondo,
   },
   games: {
     fontFamily: fuentes.mono[400],
@@ -167,15 +168,15 @@ const estilos = StyleSheet.create({
   },
   gamesGanados: {
     fontFamily: fuentes.mono[600],
-    color: colores.negro,
+    color: colores.noche,
   },
   gamesPerdidos: {
-    color: colores.gris400,
+    color: colores.pizarra400,
   },
   fecha: {
     fontFamily: fuentes.mono[400],
     fontSize: 11,
-    color: colores.gris500,
+    color: colores.pizarra500,
     ...tabular,
   },
   sinCoordinar: {
@@ -183,7 +184,7 @@ const estilos = StyleSheet.create({
     height: 24,
     borderWidth: 1,
     borderStyle: 'dashed',
-    borderColor: colores.gris300,
+    borderColor: colores.bordeCampo,
     borderRadius: 5,
   },
   leyenda: {
@@ -208,11 +209,11 @@ const estilos = StyleSheet.create({
   },
   muestraSinCoordinar: {
     borderStyle: 'dashed',
-    borderColor: colores.gris300,
+    borderColor: colores.bordeCampo,
   },
   textoLeyenda: {
     fontFamily: fuentes.sans[400],
     fontSize: 13,
-    color: colores.gris500,
+    color: colores.pizarra500,
   },
 });

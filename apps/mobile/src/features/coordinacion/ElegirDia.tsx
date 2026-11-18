@@ -47,6 +47,7 @@ const estilos = StyleSheet.create({
     height: 68,
     borderRadius: 12,
     borderWidth: 1,
+    backgroundColor: colores.papel,
     borderColor: colores.linea,
     alignItems: 'center',
     justifyContent: 'center',
@@ -60,28 +61,28 @@ const estilos = StyleSheet.create({
     width: 62,
   },
   activo: {
-    backgroundColor: colores.negro,
-    borderColor: colores.negro,
+    backgroundColor: colores.noche,
+    borderColor: colores.noche,
   },
   apretado: {
-    backgroundColor: colores.fondo,
+    backgroundColor: colores.niebla,
   },
   semana: {
     fontFamily: fuentes.mono[400],
     fontSize: 11,
-    color: colores.gris500,
+    color: colores.pizarra500,
   },
   semanaActiva: {
-    color: colores.gris400,
+    color: colores.pizarra400,
   },
   numero: {
     fontFamily: fuentes.mono[500],
     fontSize: 20,
-    color: colores.negro,
+    color: colores.noche,
     ...tabular,
   },
   numeroActivo: {
     fontFamily: fuentes.mono[600],
-    color: colores.lima,
+    color: colores.blanco,
   },
 });

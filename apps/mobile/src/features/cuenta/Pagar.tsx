@@ -99,7 +99,7 @@ const estilos = StyleSheet.create({
     gap: 12,
   },
   caja: {
-    backgroundColor: colores.fondo,
+    backgroundColor: colores.niebla,
     borderRadius: radios.control,
     padding: 14,
     gap: 4,
@@ -107,21 +107,21 @@ const estilos = StyleSheet.create({
   tituloCaja: {
     fontFamily: fuentes.sans[600],
     fontSize: 15,
-    color: colores.negro,
+    color: colores.noche,
   },
   textoCaja: {
     fontFamily: fuentes.sans[400],
     fontSize: 15,
     lineHeight: 21,
-    color: colores.gris700,
+    color: colores.pizarra700,
   },
   // El rojo es solo para vencimientos (design.md §3): los errores van en gris sobre fondo.
   error: {
     fontFamily: fuentes.sans[500],
     fontSize: 15,
     lineHeight: 21,
-    color: colores.gris700,
-    backgroundColor: colores.fondo,
+    color: colores.pizarra700,
+    backgroundColor: colores.niebla,
     borderRadius: radios.control,
     paddingHorizontal: 14,
     paddingVertical: 12,

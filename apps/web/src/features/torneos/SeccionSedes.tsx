@@ -43,7 +43,7 @@ export function SeccionSedes({ sedeGrupos, sedeEliminatorias, alCambiar }: Props
       </div>
 
       {/* El club de las eliminatorias (clubSede) se elige cuando exista el alta de clubes. */}
-      <p className="text-sm text-gris-500">Todavía no se puede elegir el club: por ahora queda anotado quién define la sede.</p>
+      <p className="text-sm text-pizarra-500">Todavía no se puede elegir el club: por ahora queda anotado quién define la sede.</p>
     </Tarjeta>
   );
 }

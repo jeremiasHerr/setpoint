@@ -33,7 +33,7 @@ export function FichaPublicaPage() {
   return (
     <main className="mx-auto flex min-h-screen max-w-[480px] flex-col gap-[22px] px-4 pt-5 pb-7">
       {ficha.isPending && <Esqueleto forma="lista" />}
-      {ficha.error && <p className="text-[15px] text-gris-700">{mensajeDeError(ficha.error)}</p>}
+      {ficha.error && <p className="text-[15px] text-pizarra-700">{mensajeDeError(ficha.error)}</p>}
       {ficha.data && <Ficha ficha={ficha.data} slug={slug} />}
     </main>
   );
@@ -58,7 +58,7 @@ function Ficha({ ficha, slug }: { ficha: FichaDelJugador; slug: string }) {
       <section className="flex flex-col gap-4">
         <div className="flex flex-col gap-1.5">
           {vuelta && <LinkDeVuelta ruta={vuelta.ruta}>{vuelta.etiqueta}</LinkDeVuelta>}
-          <h1 className="text-[30px] leading-[1.1] font-semibold tracking-[-0.035em]">{nombre}</h1>
+          <h1 className="text-[28px] leading-[1.1] font-display font-semibold tracking-[-0.02em]">{nombre}</h1>
           {(ficha.categoria || ranking) && (
             <div className="flex flex-wrap items-center gap-[9px]">
               {ficha.categoria && <Pildora>{ficha.categoria}</Pildora>}
@@ -78,13 +78,13 @@ function Ficha({ ficha, slug }: { ficha: FichaDelJugador; slug: string }) {
       {/* Sin torneos no hay partidos: con el aviso de Torneos alcanza. */}
       {ficha.torneos.length > 0 && <PartidosDeLaFicha partidos={ficha.partidos} />}
 
-      <p className="text-sm leading-[1.42] text-gris-500">Ninguna pantalla pública muestra datos de contacto.</p>
+      <p className="text-sm leading-[1.42] text-pizarra-500">Ninguna pantalla pública muestra datos de contacto.</p>
     </>
   );
 }
 
 function Pildora({ children }: { children: ReactNode }) {
-  return <Numero className="rounded-full border border-linea px-2.5 py-[5px] text-[13px] text-gris-500">{children}</Numero>;
+  return <Numero className="rounded-full border border-linea px-2.5 py-[5px] text-[13px] text-pizarra-500">{children}</Numero>;
 }
 
 // Jugados, ganados y perdidos. El W.O. no cuenta, porque no se jugó (decisión 073): se aclara para
@@ -102,12 +102,12 @@ function Record({ record }: { record: RecordDelJugador }) {
         {numeros.map(({ valor, rotulo }) => (
           <Tarjeta key={rotulo} className="flex flex-col gap-[3px] p-3">
             <Numero className="text-2xl font-medium">{valor}</Numero>
-            <span className="text-[13px] text-gris-500">{rotulo}</span>
+            <span className="text-[13px] text-pizarra-500">{rotulo}</span>
           </Tarjeta>
         ))}
       </div>
       {record.walkovers > 0 && (
-        <p className="text-[13px] text-gris-500">
+        <p className="text-[13px] text-pizarra-500">
           {record.walkovers === 1 ? (
             'Sin contar un W.O., que no se jugó.'
           ) : (

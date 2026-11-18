@@ -15,7 +15,7 @@ function donde(partido: PartidoDeLaFicha) {
 }
 
 // Sus partidos con resultado, del más reciente al más viejo: el rival, dónde fue y el marcador desde
-// su lado. El punto lima es un partido ganado. El W.O. figura aunque no cuente en jugados (decisión 073).
+// su lado. El punto verde es un partido ganado. El W.O. figura aunque no cuente en jugados (decisión 073).
 export function PartidosDeLaFicha({ partidos }: { partidos: PartidoDeLaFicha[] }) {
   const [todos, setTodos] = useState(false);
   const hayMas = partidos.length > VISIBLES;
@@ -26,7 +26,7 @@ export function PartidosDeLaFicha({ partidos }: { partidos: PartidoDeLaFicha[] }
       <h2 className="text-[17px] font-semibold tracking-[-0.015em]">{hayMas && !todos ? 'Últimos partidos' : 'Partidos'}</h2>
 
       {partidos.length === 0 ? (
-        <p className="text-[15px] text-gris-500">Todavía no tiene partidos con resultado.</p>
+        <p className="text-[15px] text-pizarra-500">Todavía no tiene partidos con resultado.</p>
       ) : (
         <ul className="flex flex-col">
           {visibles.map((partido) => (
@@ -34,17 +34,17 @@ export function PartidosDeLaFicha({ partidos }: { partidos: PartidoDeLaFicha[] }
               key={partido.id}
               className="grid h-[52px] grid-cols-[14px_minmax(0,1fr)_auto] items-center gap-x-2.5 border-b border-linea-suave last:border-b-0"
             >
-              <span className={`size-[7px] rounded-full ${partido.gano ? 'bg-lima' : 'bg-linea'}`} />
+              <span className={`size-[7px] rounded-full ${partido.gano ? 'bg-lona-texto' : 'bg-linea'}`} />
               <div className="flex min-w-0 flex-col gap-0.5">
-                <span className={`truncate text-base ${partido.gano ? 'font-medium' : 'text-gris-700'}`}>
+                <span className={`truncate text-base ${partido.gano ? 'font-medium' : 'text-pizarra-700'}`}>
                   <span className="sr-only">{partido.gano ? 'Le ganó a ' : 'Perdió con '}</span>
                   {partido.rival.apellido}
                 </span>
-                <span className="truncate text-xs text-gris-500">
+                <span className="truncate text-xs text-pizarra-500">
                   {partido.torneo} · {donde(partido)}
                 </span>
               </div>
-              <Numero className={`text-right text-sm ${partido.gano ? '' : 'text-gris-500'}`}>{partido.marcador}</Numero>
+              <Numero className={`text-right text-sm ${partido.gano ? '' : 'text-pizarra-500'}`}>{partido.marcador}</Numero>
             </li>
           ))}
         </ul>

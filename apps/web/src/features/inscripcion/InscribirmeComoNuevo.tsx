@@ -61,7 +61,7 @@ export function InscribirmeComoNuevo({ torneo, token, email, nombre: nombreDeLaC
       <button
         type="button"
         onClick={onVolver}
-        className="self-start text-[15px] font-medium text-gris-500 underline underline-offset-[3px]"
+        className="self-start text-[15px] font-medium text-pizarra-500 underline underline-offset-[3px]"
       >
         Volver a buscarme
       </button>
@@ -112,7 +112,7 @@ function Campo({
         onChange={(e) => onCambiar(e.target.value)}
         autoComplete={autoComplete}
         maxLength={60}
-        className="h-14 min-w-0 rounded-[12px] border border-gris-300 px-4 text-[17px] outline-none focus:border-2 focus:border-negro focus:px-[15px]"
+        className="h-14 min-w-0 rounded-[12px] border border-borde-campo px-4 text-[17px] outline-none focus:border-2 focus:border-noche focus:px-[15px]"
       />
     </div>
   );
@@ -123,25 +123,25 @@ function SolicitudEnviada({ torneo, email }: { torneo: TorneoPublico; email: str
   return (
     <>
       <div className="flex flex-col gap-4 pt-7">
-        <span className="flex size-[46px] items-center justify-center rounded-full bg-fondo">
+        <span className="flex size-[46px] items-center justify-center rounded-full bg-niebla">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
             <circle cx="12" cy="12" r="8.5" />
             <path d="M12 7.5V12l3 2" />
           </svg>
         </span>
         <h2 className="text-[28px] leading-[1.12] font-semibold tracking-[-0.032em]">Mandamos tu solicitud</h2>
-        <p className="text-base leading-[1.45] text-gris-500">La organización la revisa y te avisamos a {email}.</p>
+        <p className="text-base leading-[1.45] text-pizarra-500">La organización la revisa y te avisamos a {email}.</p>
       </div>
       <dl className="flex flex-col gap-3 rounded-tarjeta border border-linea p-4">
         <div className="flex justify-between gap-3">
-          <dt className="text-[15px] text-gris-500">Torneo</dt>
+          <dt className="text-[15px] text-pizarra-500">Torneo</dt>
           <dd className="text-right text-base font-medium">
             {torneo.nombre} · {torneo.categoria}
           </dd>
         </div>
         {torneo.cierreInscripcion && (
           <div className="flex justify-between gap-3">
-            <dt className="text-[15px] text-gris-500">Cierra</dt>
+            <dt className="text-[15px] text-pizarra-500">Cierra</dt>
             <dd>
               <Numero className="text-base">{diaLargo(torneo.cierreInscripcion)}</Numero>
             </dd>
@@ -152,7 +152,7 @@ function SolicitudEnviada({ torneo, email }: { torneo: TorneoPublico; email: str
       <div className="mt-auto">
         <Link
           to={`/c/${torneo.organizacion.slug}/torneos/${torneo.id}`}
-          className="flex h-[52px] w-full items-center justify-center rounded-[12px] border border-linea text-base font-medium hover:bg-fondo"
+          className="flex h-[52px] w-full items-center justify-center rounded-[12px] border border-linea text-base font-medium hover:bg-niebla"
         >
           Volver al torneo
         </Link>

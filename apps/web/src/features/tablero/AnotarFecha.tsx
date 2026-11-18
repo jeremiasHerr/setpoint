@@ -54,7 +54,7 @@ export function AnotarFecha({ slug, torneoId, partidoId, sangria, onCerrar }: Pr
 
   return (
     <div className={`px-5 pb-4 ${sangria}`}>
-      <div className="rounded-control border border-linea bg-fondo-tabla p-4">
+      <div className="rounded-control border border-linea bg-niebla p-4">
         {coordinacion.isPending && <Esqueleto forma="bloque" />}
         {coordinacion.error && <MensajeError>No pudimos cargar el partido. Probá de nuevo.</MensajeError>}
         {coordinacion.data && (
@@ -89,7 +89,7 @@ function Formulario({
   const porConfirmar = coordinacion.estado === 'ANOTADA';
 
   if (!coordinacion.accion) {
-    return <p className="text-sm text-gris-700">{MENSAJES[coordinacion.bloqueo ?? 'PARTIDO_TERMINADO'] ?? 'Este partido no se puede coordinar.'}</p>;
+    return <p className="text-sm text-pizarra-700">{MENSAJES[coordinacion.bloqueo ?? 'PARTIDO_TERMINADO'] ?? 'Este partido no se puede coordinar.'}</p>;
   }
 
   const libre = sede.modo === 'libre';
@@ -166,8 +166,8 @@ function Formulario({
           </div>
         ) : (
           <div className="flex flex-col gap-2">
-            <span className="text-[13px] font-semibold text-gris-500">Dónde juegan</span>
-            <span className="flex h-12 items-center rounded-control bg-fondo px-3.5 text-[15px]">{sede.nombre ?? 'Sin sede elegida'}</span>
+            <span className="text-[13px] font-semibold text-pizarra-500">Dónde juegan</span>
+            <span className="flex h-12 items-center rounded-control bg-niebla px-3.5 text-[15px]">{sede.nombre ?? 'Sin sede elegida'}</span>
           </div>
         )}
       </div>
@@ -178,7 +178,7 @@ function Formulario({
       {mensaje && <MensajeError>{mensaje}</MensajeError>}
 
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-gris-500">
+        <p className="text-sm text-pizarra-500">
           {porConfirmar
             ? 'La anotó un jugador y falta que el otro confirme. Guardala así o cambiala: queda confirmada para los dos.'
             : 'Queda confirmada para los dos, y les avisamos a los que tienen la app.'}

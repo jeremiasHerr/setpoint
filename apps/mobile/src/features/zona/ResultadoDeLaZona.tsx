@@ -36,7 +36,7 @@ export function ResultadoDeLaZona({ zona, jugadorId }: { zona: MiZona; jugadorId
 
 const estilos = StyleSheet.create({
   tarjeta: {
-    backgroundColor: colores.negro,
+    backgroundColor: colores.noche,
     borderRadius: radios.superficie,
     paddingTop: 22,
     paddingHorizontal: 20,
@@ -46,7 +46,7 @@ const estilos = StyleSheet.create({
   rotulo: {
     fontFamily: fuentes.mono[500],
     fontSize: 15,
-    color: colores.gris400,
+    color: colores.pizarra400,
     ...tabular,
   },
   titulo: {
@@ -60,7 +60,7 @@ const estilos = StyleSheet.create({
     fontFamily: fuentes.sans[400],
     fontSize: 17,
     lineHeight: 24,
-    color: colores.gris400,
+    color: colores.pizarra400,
   },
   puesto: {
     fontFamily: fuentes.mono[500],
@@ -71,7 +71,9 @@ const estilos = StyleSheet.create({
     marginTop: 6,
     height: medidas.toque,
     borderRadius: 12,
-    backgroundColor: colores.lima,
+    backgroundColor: colores.lona,
+    borderWidth: 1,
+    borderColor: colores.lonaBorde,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -81,6 +83,6 @@ const estilos = StyleSheet.create({
   textoBoton: {
     fontFamily: fuentes.sans[600],
     fontSize: 17,
-    color: colores.negro,
+    color: colores.noche900,
   },
 });

@@ -39,8 +39,8 @@ export function SeccionQuienesSon({ nombre, slug, contactos, alCambiarNombre, al
         <Campo id="circuito-nombre" rotulo="Nombre del circuito" required value={nombre} onChange={(e) => alCambiarNombre(e.target.value)} />
         {/* La dirección la asigna la API al registrar la organización: acá solo se muestra. */}
         <div className="flex flex-col gap-2">
-          <span className="text-[13px] font-semibold text-gris-500">Dirección pública</span>
-          <span className="flex h-12 items-center rounded-control border border-gris-300 px-3.5 font-mono text-sm text-gris-500 tabular-nums">
+          <span className="text-[13px] font-semibold text-pizarra-500">Dirección pública</span>
+          <span className="flex h-12 items-center rounded-control border border-borde-campo px-3.5 font-mono text-sm text-pizarra-500 tabular-nums">
             /{slug}
           </span>
         </div>
@@ -82,21 +82,21 @@ function Contactos({ contactos, alCambiar }: { contactos: Contacto[]; alCambiar:
   return (
     <div className="flex flex-col gap-2.5">
       <div className="flex flex-col gap-0.5">
-        <h3 className="text-[13px] font-semibold text-gris-500">Contactos</h3>
-        <p className="text-[13px] text-gris-500">Los ven los jugadores en el link del torneo, para saber a quién escribirle.</p>
+        <h3 className="text-[13px] font-semibold text-pizarra-500">Contactos</h3>
+        <p className="text-[13px] text-pizarra-500">Los ven los jugadores en el link del torneo, para saber a quién escribirle.</p>
       </div>
 
       {contactos.length > 0 && (
         <ul className="flex flex-col gap-2">
           {contactos.map((c, i) => (
             <li key={`${c.tipo}-${c.valor}`} className="flex h-11 items-center gap-3 rounded-control border border-linea pr-1.5 pl-3.5">
-              <span className="w-[78px] shrink-0 font-mono text-xs text-gris-500">{c.tipo === 'whatsapp' ? 'whatsapp' : 'red social'}</span>
+              <span className="w-[78px] shrink-0 font-mono text-xs text-pizarra-500">{c.tipo === 'whatsapp' ? 'whatsapp' : 'red social'}</span>
               <span className={`min-w-0 flex-1 truncate text-[15px] ${c.tipo === 'whatsapp' ? 'font-mono tabular-nums' : ''}`}>{c.valor}</span>
               <button
                 type="button"
                 aria-label={`Quitar ${c.valor}`}
                 onClick={() => alCambiar(contactos.filter((_, j) => j !== i))}
-                className="flex size-8 shrink-0 items-center justify-center rounded-control text-gris-500 hover:bg-fondo hover:text-negro"
+                className="flex size-8 shrink-0 items-center justify-center rounded-control text-pizarra-500 hover:bg-niebla hover:text-noche"
               >
                 <IconoQuitar className="size-3.5" />
               </button>
@@ -106,7 +106,7 @@ function Contactos({ contactos, alCambiar }: { contactos: Contacto[]; alCambiar:
       )}
 
       {agregando ? (
-        <div className="flex flex-col gap-2.5 rounded-control bg-fondo p-3">
+        <div className="flex flex-col gap-2.5 rounded-control bg-niebla p-3">
           <div className="flex flex-wrap gap-2">
             {(Object.keys(TIPOS) as Contacto['tipo'][]).map((clave) => (
               <Chip
@@ -140,7 +140,7 @@ function Contactos({ contactos, alCambiar }: { contactos: Contacto[]; alCambiar:
                 }
                 if (e.key === 'Escape') cerrar();
               }}
-              className={`h-10 min-w-0 flex-1 rounded-control border border-gris-300 bg-white px-3.5 text-[15px] outline-none placeholder:text-gris-400 focus:border-2 focus:border-negro focus:px-[13px] ${
+              className={`h-10 min-w-0 flex-1 rounded-control border border-borde-campo bg-papel px-3.5 text-[15px] outline-none placeholder:text-pizarra-400 focus:border-2 focus:border-noche focus:px-[13px] ${
                 tipo === 'whatsapp' ? 'font-mono tabular-nums' : ''
               }`}
             />

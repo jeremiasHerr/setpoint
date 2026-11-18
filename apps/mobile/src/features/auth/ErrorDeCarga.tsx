@@ -38,6 +38,6 @@ const estilos = StyleSheet.create({
     fontFamily: fuentes.sans[400],
     fontSize: 15,
     lineHeight: 22,
-    color: colores.gris700,
+    color: colores.pizarra700,
   },
 });

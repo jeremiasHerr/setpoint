@@ -46,16 +46,16 @@ export function TablaInscriptos({ slug, torneoId, inscripciones, sePuedeDarDeBaj
     <div className="flex flex-col gap-3">
       {recordar.error && <MensajeError>{textoDelError(recordar.error)}</MensajeError>}
       <Tarjeta className="flex flex-col overflow-hidden">
-        <div className={`grid gap-x-1 border-b border-linea bg-fondo-tabla px-[18px] py-[11px] ${COLUMNAS}`}>
-          <span className="text-xs text-gris-500">jugador</span>
-          <span className="font-mono text-[11px] text-gris-500">estado</span>
-          <span className="hidden font-mono text-[11px] text-gris-500 md:block">medio</span>
-          <span className="font-mono text-[11px] text-gris-500">fecha</span>
+        <div className={`grid gap-x-1 border-b border-linea bg-niebla px-[18px] py-[11px] ${COLUMNAS}`}>
+          <span className="text-xs text-pizarra-500">jugador</span>
+          <span className="font-mono text-[11px] text-pizarra-500">estado</span>
+          <span className="hidden font-mono text-[11px] text-pizarra-500 md:block">medio</span>
+          <span className="font-mono text-[11px] text-pizarra-500">fecha</span>
           <span />
         </div>
 
         {inscripciones.length === 0 ? (
-          <p className="px-[18px] py-4 text-sm text-gris-500">{vacio}</p>
+          <p className="px-[18px] py-4 text-sm text-pizarra-500">{vacio}</p>
         ) : (
           <ul>
             {inscripciones.map((inscripcion) => {
@@ -66,25 +66,25 @@ export function TablaInscriptos({ slug, torneoId, inscripciones, sePuedeDarDeBaj
                 <li
                   key={inscripcion.id}
                   className={`grid min-h-14 items-center gap-x-1 border-b border-linea-suave px-[18px] py-1.5 ${COLUMNAS} ${
-                    pagada ? '' : 'bg-fondo-tabla'
+                    pagada ? '' : 'bg-niebla'
                   }`}
                 >
                   <div className="flex min-w-0 items-center gap-2.5">
-                    <span className={`size-[7px] shrink-0 rounded-full ${pagada ? 'bg-lima' : 'bg-gris-400'}`} />
+                    <span className={`size-[7px] shrink-0 rounded-full ${pagada ? 'bg-lona-texto' : 'bg-pizarra-400'}`} />
                     <div className="flex min-w-0 flex-col gap-0.5">
                       <span className={`truncate text-[15px] ${pagada ? 'font-medium' : ''}`}>
                         {inscripcion.nombre} {inscripcion.apellido}
                       </span>
                       {inscripcion.deLaListaDeEspera && (
-                        <span className="truncate font-mono text-xs text-gris-500">de la lista de espera</span>
+                        <span className="truncate font-mono text-xs text-pizarra-500">de la lista de espera</span>
                       )}
                     </div>
                   </div>
-                  <span className={`text-sm ${pagada ? '' : 'text-gris-700'}`}>{pagada ? 'Pagada' : 'Reservando'}</span>
-                  <Numero className="hidden text-[13px] text-gris-500 md:block">
+                  <span className={`text-sm ${pagada ? '' : 'text-pizarra-700'}`}>{pagada ? 'Pagada' : 'Reservando'}</span>
+                  <Numero className="hidden text-[13px] text-pizarra-500 md:block">
                     {inscripcion.medio ? nombreDelMedio[inscripcion.medio] : '—'}
                   </Numero>
-                  <Numero className={`text-[13px] whitespace-nowrap ${fecha.urgente ? 'text-rojo-texto' : 'text-gris-500'}`}>
+                  <Numero className={`text-[13px] whitespace-nowrap ${fecha.urgente ? 'text-rojo-texto' : 'text-pizarra-500'}`}>
                     {fecha.texto}
                   </Numero>
                   <div className="col-span-full flex justify-end pt-1 md:col-span-1 md:pt-0">
@@ -113,7 +113,7 @@ export function TablaInscriptos({ slug, torneoId, inscripciones, sePuedeDarDeBaj
           </ul>
         )}
 
-        {pie && <p className="border-t border-linea bg-fondo-tabla px-[18px] py-[13px] text-[13px] leading-normal text-gris-500">{pie}</p>}
+        {pie && <p className="border-t border-linea bg-niebla px-[18px] py-[13px] text-[13px] leading-normal text-pizarra-500">{pie}</p>}
       </Tarjeta>
 
       <DarDeBaja

@@ -34,7 +34,7 @@ export function SeccionFormato({
     <Tarjeta className="flex flex-col gap-4 p-5">
       <div className="flex items-baseline justify-between gap-3">
         <h2 className="text-[17px] font-semibold">Formato</h2>
-        <span className="text-[13px] text-gris-500">de acá sale la cuenta de partidos</span>
+        <span className="text-[13px] text-pizarra-500">de acá sale la cuenta de partidos</span>
       </div>
 
       <div className="grid gap-3.5 sm:grid-cols-3">
@@ -54,10 +54,10 @@ export function SeccionFormato({
         </div>
         {/* Fijo: los grupos son siempre de 4, todos contra todos (02-dominio §3.1). */}
         <div className="flex flex-col gap-2">
-          <span className="text-[13px] font-semibold text-gris-500">Jugadores por grupo</span>
-          <div className="flex h-12 items-center justify-between gap-2.5 rounded-control border border-linea bg-fondo px-3.5">
+          <span className="text-[13px] font-semibold text-pizarra-500">Jugadores por grupo</span>
+          <div className="flex h-12 items-center justify-between gap-2.5 rounded-control border border-linea bg-niebla px-3.5">
             <Numero className="text-[15px]">{JUGADORES_POR_GRUPO}</Numero>
-            <span className="text-[13px] text-gris-500">todos contra todos</span>
+            <span className="text-[13px] text-pizarra-500">todos contra todos</span>
           </div>
         </div>
         <div className="flex flex-col gap-2">
@@ -81,7 +81,7 @@ export function SeccionFormato({
           <h3 id="complementaria-titulo" className="text-[15px] font-medium">
             Cuadro consuelo
           </h3>
-          <p className="text-sm text-gris-500">Los que no clasifican siguen jugando en un segundo cuadro. Nadie queda afuera.</p>
+          <p className="text-sm text-pizarra-500">Los que no clasifican siguen jugando en un segundo cuadro. Nadie queda afuera.</p>
         </div>
         <Interruptor encendido={tieneComplementaria} alCambiar={alCambiarComplementaria} aria-labelledby="complementaria-titulo" />
       </div>

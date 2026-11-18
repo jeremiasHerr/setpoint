@@ -71,17 +71,17 @@ function CargarSorteo({ sesion, id }: { sesion: Sesion; id: number }) {
   const noExiste = sorteo.error?.message === 'TORNEO_NO_ENCONTRADO';
 
   return (
-    <div className="min-h-screen bg-white text-negro">
+    <div className="min-h-screen bg-papel text-noche">
       <EncabezadoDelTorneo sesion={sesion} torneoId={id} actual="zonas" />
       <div className="flex flex-col items-start gap-3 px-7 pt-[26px]">
         {noExiste ? (
           <>
-            <p className="text-[15px] text-gris-500">No encontramos ese torneo.</p>
+            <p className="text-[15px] text-pizarra-500">No encontramos ese torneo.</p>
             <Boton onClick={() => navegar('/inicio')}>Volver al inicio</Boton>
           </>
         ) : sorteo.error && !sesionInvalida ? (
           <>
-            <p className="text-[15px] text-gris-500">No pudimos cargar el sorteo.</p>
+            <p className="text-[15px] text-pizarra-500">No pudimos cargar el sorteo.</p>
             <Boton onClick={() => void sorteo.refetch()}>Probar de nuevo</Boton>
           </>
         ) : (
@@ -100,8 +100,8 @@ function ResumenDeSumas({ zonas }: { zonas: ZonaSorteada[] }) {
 
   return (
     <div className="flex items-center gap-2.5">
-      <span className={`size-[7px] shrink-0 rounded-full ${parejas ? 'bg-lima' : 'bg-gris-300'}`} />
-      <p className="text-sm text-gris-700">
+      <span className={`size-[7px] shrink-0 rounded-full ${parejas ? 'bg-lona-texto' : 'bg-borde-campo'}`} />
+      <p className="text-sm text-pizarra-700">
         {parejas ? (
           <>
             Las <Numero>{zonas.length}</Numero> zonas suman <Numero>{menor}</Numero>. Están parejas.
@@ -243,13 +243,13 @@ function SorteoDeZonas({ sesion, sorteo }: { sesion: Sesion; sorteo: Sorteo }) {
   const errorAlPublicar = cargar.error ?? confirmar.error;
 
   return (
-    <div className="flex min-h-screen flex-col bg-white text-negro">
+    <div className="flex min-h-screen flex-col bg-papel text-noche">
       <EncabezadoDelTorneo sesion={sesion} torneoId={sorteo.torneoId} actual="zonas" />
 
       <div className="flex flex-wrap items-end justify-between gap-6 px-7 pt-[26px] pb-5">
         <div className="flex flex-col gap-[7px]">
-          <h1 className="text-[30px] font-semibold tracking-[-0.035em]">Sorteo de zonas</h1>
-          <p className="text-[15px] text-gris-500">
+          <h1 className="text-[28px] font-display font-semibold tracking-[-0.02em]">Sorteo de zonas</h1>
+          <p className="text-[15px] text-pizarra-500">
             <Numero>{sorteo.inscriptos}</Numero> inscriptos
             {/* Con la inscripción abierta todavía no se sabe cómo quedan las zonas. */}
             {(sorteable || zonas) && (
@@ -262,7 +262,7 @@ function SorteoDeZonas({ sesion, sorteo }: { sesion: Sesion; sorteo: Sorteo }) {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2.5">
-          <span className="flex h-9 items-center rounded-full border border-linea px-[13px] font-mono text-[13px] text-gris-500">
+          <span className="flex h-9 items-center rounded-full border border-linea px-[13px] font-mono text-[13px] text-pizarra-500">
             {sorteo.confirmado ? 'publicado' : 'todavía no publicado'}
           </span>
         </div>
@@ -302,7 +302,7 @@ function SorteoDeZonas({ sesion, sorteo }: { sesion: Sesion; sorteo: Sorteo }) {
             <CargaManual jugadores={sorteo.jugadores} zonas={zonasManuales} capacidad={mayor} alMover={mover} />
           ) : sorteable && zonasVisibles === null ? (
             <>
-              <p className="text-[15px] text-gris-500">
+              <p className="text-[15px] text-pizarra-500">
                 {enPantalla
                   ? 'Proyectá esta pantalla y tocá «Sortear en pantalla». Los jugadores salen de a uno, bombo por bombo.'
                   : 'Elegí cómo se reparten y tocá «Sortear».'}
@@ -321,14 +321,14 @@ function SorteoDeZonas({ sesion, sorteo }: { sesion: Sesion; sorteo: Sorteo }) {
             </div>
           ) : (
             (sorteo.estado === 'borrador' || sorteo.estado === 'publicado') && (
-              <p className="text-[15px] text-gris-500">La inscripción sigue abierta. El sorteo se hace cuando cierre.</p>
+              <p className="text-[15px] text-pizarra-500">La inscripción sigue abierta. El sorteo se hace cuando cierre.</p>
             )
           )}
 
           {error && <MensajeError>{textoDeError(error, sorteo)}</MensajeError>}
 
           {(zonasVisibles || (cargandoAMano && sorteo.jugadores.some((j) => j.posicionSiembra !== null))) && (
-            <p className="text-sm text-gris-500">El número es la posición de siembra, según el ranking al momento del sorteo.</p>
+            <p className="text-sm text-pizarra-500">El número es la posición de siembra, según el ranking al momento del sorteo.</p>
           )}
         </section>
       </main>
@@ -356,7 +356,7 @@ function SorteoDeZonas({ sesion, sorteo }: { sesion: Sesion; sorteo: Sorteo }) {
               </p>
             )
           )}
-          <p className="text-sm text-gris-500">
+          <p className="text-sm text-pizarra-500">
             Los jugadores tienen <Numero>{sorteo.plazoGruposDias}</Numero> días para jugar la fase de grupos.
           </p>
         </div>

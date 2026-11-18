@@ -6,7 +6,7 @@ import { colores, fuentes, medidas, radios, tabular } from '../../lib/tokens';
 import { enlaceDeWhatsApp } from './agrupar';
 import { SinTelefono } from './SinTelefono';
 
-// El partido que viene, en negro, ocupando el tercio de arriba. "Escribirle" abre WhatsApp con el
+// El partido que viene, en noche, ocupando el tercio de arriba. "Escribirle" abre WhatsApp con el
 // rival: no hay chat en la app (04-flujo-jugador §6.6).
 export function TarjetaProximo({ partido }: { partido: PartidoDelJugador }) {
   const { rival } = partido;
@@ -21,8 +21,9 @@ export function TarjetaProximo({ partido }: { partido: PartidoDelJugador }) {
         </View>
       </View>
       <View>
-        <Text style={estilos.rival}>{rival.nombre}</Text>
-        <Text style={estilos.rival}>{rival.apellido}</Text>
+        <Text style={estilos.rival}>
+          {rival.nombre} {rival.apellido}
+        </Text>
       </View>
       <View style={estilos.separador} />
       <View style={estilos.cuando}>
@@ -60,7 +61,7 @@ export function TarjetaProximo({ partido }: { partido: PartidoDelJugador }) {
 
 const estilos = StyleSheet.create({
   tarjeta: {
-    backgroundColor: colores.negro,
+    backgroundColor: colores.noche,
     borderRadius: radios.superficie,
     paddingTop: 22,
     paddingHorizontal: 20,
@@ -79,31 +80,31 @@ const estilos = StyleSheet.create({
   rotulo: {
     fontFamily: fuentes.sans[500],
     fontSize: 15,
-    color: colores.gris400,
+    color: colores.pizarra400,
   },
   instancia: {
     flexShrink: 1,
     paddingVertical: 5,
     paddingHorizontal: 9,
     borderWidth: 1,
-    borderColor: colores.bordeOscuro,
+    borderColor: colores.bordeNoche,
     borderRadius: radios.chip,
   },
   textoInstancia: {
     fontFamily: fuentes.mono[500],
     fontSize: 12,
-    color: colores.lima,
+    color: colores.pizarra400,
   },
   rival: {
-    fontFamily: fuentes.sans[600],
+    fontFamily: fuentes.display[600],
     fontSize: 34,
-    lineHeight: 36,
-    letterSpacing: -1.1,
+    lineHeight: 38,
+    letterSpacing: -0.68,
     color: colores.blanco,
   },
   separador: {
     height: 1,
-    backgroundColor: colores.carbon,
+    backgroundColor: colores.noche2,
   },
   cuando: {
     gap: 7,
@@ -112,18 +113,20 @@ const estilos = StyleSheet.create({
     fontFamily: fuentes.mono[500],
     fontSize: 24,
     letterSpacing: -0.24,
-    color: colores.lima,
+    color: colores.blanco,
     ...tabular,
   },
   sede: {
     fontFamily: fuentes.sans[400],
     fontSize: 17,
-    color: colores.gris400,
+    color: colores.pizarra400,
   },
   boton: {
     height: medidas.toque,
     borderRadius: 12,
-    backgroundColor: colores.lima,
+    backgroundColor: colores.lona,
+    borderWidth: 1,
+    borderColor: colores.lonaBorde,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -133,12 +136,12 @@ const estilos = StyleSheet.create({
   textoBoton: {
     fontFamily: fuentes.sans[600],
     fontSize: 17,
-    color: colores.negro,
+    color: colores.noche900,
   },
   pendiente: {
     fontFamily: fuentes.sans[500],
     fontSize: 15,
-    color: colores.gris400,
+    color: colores.pizarra400,
   },
   enlace: {
     alignSelf: 'center',

@@ -208,7 +208,7 @@ function Aviso({ mensaje }: { mensaje: string | null }) {
 const estilos = StyleSheet.create({
   pantalla: {
     flex: 1,
-    backgroundColor: colores.blanco,
+    backgroundColor: colores.niebla,
   },
   contenido: {
     flexGrow: 1,
@@ -225,23 +225,23 @@ const estilos = StyleSheet.create({
   nombreMarca: {
     fontFamily: fuentes.sans[600],
     fontSize: 15,
-    color: colores.negro,
+    color: colores.noche,
   },
   encabezado: {
     gap: 8,
     paddingTop: 8,
   },
   titulo: {
-    fontFamily: fuentes.sans[600],
+    fontFamily: fuentes.display[600],
     fontSize: 28,
-    letterSpacing: -0.9,
-    color: colores.negro,
+    letterSpacing: -0.56,
+    color: colores.noche,
   },
   bajada: {
     fontFamily: fuentes.sans[400],
     fontSize: 16,
     lineHeight: 23,
-    color: colores.gris500,
+    color: colores.pizarra500,
   },
   numero: {
     fontFamily: fuentes.mono[400],
@@ -249,7 +249,7 @@ const estilos = StyleSheet.create({
   },
   email: {
     fontFamily: fuentes.sans[500],
-    color: colores.negro,
+    color: colores.noche,
   },
   vencio: {
     alignSelf: 'flex-start',
@@ -269,7 +269,7 @@ const estilos = StyleSheet.create({
   },
   incorrecto: {
     borderWidth: 1,
-    borderColor: colores.negro,
+    borderColor: colores.noche,
     borderRadius: radios.control,
     paddingHorizontal: 14,
     paddingVertical: 12,
@@ -278,7 +278,7 @@ const estilos = StyleSheet.create({
     fontFamily: fuentes.sans[400],
     fontSize: 15,
     lineHeight: 21,
-    color: colores.negro,
+    color: colores.noche,
   },
   fuerte: {
     fontFamily: fuentes.sans[600],
@@ -290,14 +290,14 @@ const estilos = StyleSheet.create({
   enlace: {
     fontFamily: fuentes.sans[500],
     fontSize: 15,
-    color: colores.negro,
+    color: colores.noche,
     textDecorationLine: 'underline',
   },
   enlaceGris: {
-    color: colores.gris500,
+    color: colores.pizarra500,
   },
   error: {
-    backgroundColor: colores.fondo,
+    backgroundColor: colores.niebla,
     borderRadius: radios.control,
     paddingHorizontal: 14,
     paddingVertical: 12,
@@ -306,10 +306,10 @@ const estilos = StyleSheet.create({
     fontFamily: fuentes.sans[500],
     fontSize: 15,
     lineHeight: 21,
-    color: colores.gris700,
+    color: colores.pizarra700,
   },
   caja: {
-    backgroundColor: colores.fondo,
+    backgroundColor: colores.niebla,
     borderRadius: radios.control,
     padding: 16,
     gap: 6,
@@ -317,19 +317,19 @@ const estilos = StyleSheet.create({
   tituloCaja: {
     fontFamily: fuentes.sans[600],
     fontSize: 15,
-    color: colores.negro,
+    color: colores.noche,
   },
   textoCaja: {
     fontFamily: fuentes.sans[400],
     fontSize: 15,
     lineHeight: 22,
-    color: colores.gris700,
+    color: colores.pizarra700,
   },
   texto: {
     fontFamily: fuentes.sans[400],
     fontSize: 15,
     lineHeight: 22,
-    color: colores.gris500,
+    color: colores.pizarra500,
   },
   botones: {
     gap: 12,

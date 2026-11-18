@@ -60,7 +60,8 @@ const estilos = StyleSheet.create({
     height: 58,
     borderRadius: radios.control,
     borderWidth: 1,
-    borderColor: colores.gris300,
+    backgroundColor: colores.papel,
+    borderColor: colores.bordeCampo,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -69,20 +70,20 @@ const estilos = StyleSheet.create({
   },
   activa: {
     borderWidth: 2,
-    borderColor: colores.negro,
+    borderColor: colores.noche,
   },
   apagada: {
-    backgroundColor: colores.fondo,
+    backgroundColor: colores.niebla,
     borderColor: colores.linea,
   },
   digito: {
     fontFamily: fuentes.mono[500],
     fontSize: 26,
-    color: colores.negro,
+    color: colores.noche,
     ...tabular,
   },
   digitoApagado: {
-    color: colores.gris400,
+    color: colores.pizarra400,
   },
   oculto: {
     position: 'absolute',

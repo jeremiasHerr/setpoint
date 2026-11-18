@@ -92,7 +92,7 @@ export function PanelJugador({
         </div>
 
         <div className="flex flex-col gap-2">
-          <label htmlFor="jugador-categoria" className="text-[13px] font-semibold text-gris-500">
+          <label htmlFor="jugador-categoria" className="text-[13px] font-semibold text-pizarra-500">
             Categoría
           </label>
           <div className="relative">
@@ -100,7 +100,7 @@ export function PanelJugador({
               id="jugador-categoria"
               value={categoria}
               onChange={(e) => setCategoria(e.target.value)}
-              className="h-12 w-full appearance-none rounded-control border border-gris-300 bg-white pr-10 pl-3.5 text-[15px] text-negro outline-none focus:border-2 focus:border-negro focus:pl-[13px]"
+              className="h-12 w-full appearance-none rounded-control border border-borde-campo bg-papel pr-10 pl-3.5 text-[15px] text-noche outline-none focus:border-2 focus:border-noche focus:pl-[13px]"
               {...propsDeError('categoria')}
             >
               {categorias.map((nombreCategoria) => (
@@ -110,7 +110,7 @@ export function PanelJugador({
               ))}
               <option value={SIN_CATEGORIA}>Sin categoría</option>
             </select>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" className="pointer-events-none absolute top-1/2 right-3.5 size-[13px] -translate-y-1/2 text-gris-500" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" className="pointer-events-none absolute top-1/2 right-3.5 size-[13px] -translate-y-1/2 text-pizarra-500" aria-hidden="true">
               <path d="M6 9l6 6 6-6" />
             </svg>
           </div>
@@ -118,7 +118,7 @@ export function PanelJugador({
         </div>
 
         <div className="flex flex-col gap-2">
-          <label htmlFor="jugador-telefono" className="text-[13px] font-semibold text-gris-500">
+          <label htmlFor="jugador-telefono" className="text-[13px] font-semibold text-pizarra-500">
             Teléfono <span className="font-normal">— opcional</span>
           </label>
           <input
@@ -128,19 +128,19 @@ export function PanelJugador({
             value={telefono}
             onChange={(e) => setTelefono(e.target.value)}
             placeholder="Para avisarle cambios de horario"
-            className="h-12 rounded-control border border-gris-300 px-3.5 font-mono text-[15px] text-negro tabular-nums outline-none placeholder:font-sans placeholder:text-gris-400 focus:border-2 focus:border-negro focus:px-[13px]"
+            className="h-12 rounded-control border border-borde-campo px-3.5 font-mono text-[15px] text-noche tabular-nums outline-none placeholder:font-sans placeholder:text-pizarra-400 focus:border-2 focus:border-noche focus:px-[13px]"
             {...propsDeError('telefono')}
           />
           <MensajeError id="jugador-telefono-error">{campos.telefono}</MensajeError>
         </div>
 
         {conRanking && (
-          <p className="rounded-control bg-fondo p-[13px] text-[13px] leading-[1.45] text-gris-500">
+          <p className="rounded-control bg-niebla p-[13px] text-[13px] leading-[1.45] text-pizarra-500">
             {editando ? (
               'Si le cambiás la categoría, suma desde cero en la nueva. Sus puntos de la anterior quedan guardados.'
             ) : (
               <>
-                Entra con <Numero className="text-negro">0</Numero> puntos y sube cuando juegue. Le toma unos cuatro torneos
+                Entra con <Numero className="text-noche">0</Numero> puntos y sube cuando juegue. Le toma unos cuatro torneos
                 alcanzar a la mayoría.
               </>
             )}
@@ -163,7 +163,7 @@ export function PanelJugador({
               <Boton className="w-full" disabled={enviando} onClick={() => alCambiarActivo?.(!jugador.activo)}>
                 {jugador.activo ? 'Dar de baja' : 'Reactivar'}
               </Boton>
-              <p className="text-[13px] leading-[1.45] text-gris-500">
+              <p className="text-[13px] leading-[1.45] text-pizarra-500">
                 {jugador.activo
                   ? 'Deja de aparecer en el ranking. Sus puntos y sus partidos quedan guardados por si vuelve.'
                   : 'Vuelve al ranking con los puntos que tenía.'}
@@ -190,7 +190,7 @@ export function PanelJugador({
                     <Boton className="self-start" disabled={enviando} onClick={alDesvincular}>
                       Desvincular
                     </Boton>
-                    <p className="text-[13px] leading-[1.45] text-gris-500">
+                    <p className="text-[13px] leading-[1.45] text-pizarra-500">
                       El perfil queda libre para que lo reclame su dueño. No cambia el email de nadie, y las inscripciones quedan en el perfil.
                     </p>
                   </div>
@@ -199,7 +199,7 @@ export function PanelJugador({
               <button
                 type="button"
                 onClick={alCancelar}
-                className="self-center text-sm font-medium text-negro hover:text-gris-500"
+                className="self-center text-sm font-medium text-noche hover:text-pizarra-500"
               >
                 Cancelar
               </button>

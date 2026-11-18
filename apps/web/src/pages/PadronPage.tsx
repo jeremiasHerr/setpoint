@@ -111,7 +111,7 @@ function Padron({ sesion }: { sesion: Sesion }) {
   const error = circuito.error ?? padron.error;
 
   return (
-    <div className="min-h-screen bg-white text-negro">
+    <div className="min-h-screen bg-papel text-noche">
       <EncabezadoOrganizador
         organizacion={circuito.data?.nombre ?? sesion.organizacion.nombre}
         navegacion={navegacionOrganizador}
@@ -122,8 +122,8 @@ function Padron({ sesion }: { sesion: Sesion }) {
 
       <div className="flex flex-wrap items-end justify-between gap-6 px-7 pt-[26px] pb-[18px]">
         <div className="flex flex-col gap-[7px]">
-          <h1 className="text-[30px] font-semibold tracking-[-0.035em]">Padrón</h1>
-          <p className="text-[15px] text-gris-500">
+          <h1 className="text-[28px] font-display font-semibold tracking-[-0.02em]">Padrón</h1>
+          <p className="text-[15px] text-pizarra-500">
             Los jugadores de tu circuito. De acá salen las inscripciones, el ranking y el historial.
           </p>
         </div>
@@ -149,7 +149,7 @@ function Padron({ sesion }: { sesion: Sesion }) {
         <div className="flex flex-col items-start gap-3 px-7">
           {error && !sesionInvalida ? (
             <>
-              <p className="text-[15px] text-gris-500">No pudimos cargar el padrón.</p>
+              <p className="text-[15px] text-pizarra-500">No pudimos cargar el padrón.</p>
               <Boton
                 onClick={() => {
                   void circuito.refetch();
@@ -192,10 +192,10 @@ function Padron({ sesion }: { sesion: Sesion }) {
               alCancelar={() => elegir(null)}
             />
 
-            {/* Sin Tarjeta: su bg-white le gana a bg-fondo. */}
-            <div className="flex flex-col gap-[9px] rounded-tarjeta border border-linea bg-fondo p-[18px]">
+            {/* Sin Tarjeta: su bg-papel le gana a bg-niebla. */}
+            <div className="flex flex-col gap-[9px] rounded-tarjeta border border-linea bg-niebla p-[18px]">
               <h2 className="text-sm font-semibold">¿Son muchos?</h2>
-              <p className="text-sm leading-normal text-gris-500">
+              <p className="text-sm leading-normal text-pizarra-500">
                 Subí la planilla que ya usás y se cargan todos de una vez, con sus puntos históricos.
               </p>
             </div>

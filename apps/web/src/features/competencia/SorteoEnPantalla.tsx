@@ -42,11 +42,11 @@ export function SorteoEnPantalla({ nombre, zonas, cantidadGrupos, ronda, error, 
       role="dialog"
       aria-modal="true"
       aria-label="Sorteo en pantalla"
-      className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-negro text-white"
+      className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-noche text-white"
     >
       <div className="flex items-center justify-between gap-6 px-10 pt-8">
         <div className="flex flex-col gap-1">
-          <p className="font-mono text-sm text-gris-400">sorteo de zonas</p>
+          <p className="font-mono text-sm text-pizarra-400">sorteo de zonas</p>
           <Numero className="text-xl font-semibold">{nombre}</Numero>
         </div>
         <BotonOscuro onClick={alCerrar}>Cerrar</BotonOscuro>
@@ -62,7 +62,7 @@ export function SorteoEnPantalla({ nombre, zonas, cantidadGrupos, ronda, error, 
         />
       ) : (
         <div className="flex flex-1 flex-col items-center justify-center gap-4 px-10">
-          {error ? <p className="text-lg text-gris-400">{error}</p> : <p className="text-3xl text-gris-400">Sorteando…</p>}
+          {error ? <p className="text-lg text-pizarra-400">{error}</p> : <p className="text-3xl text-pizarra-400">Sorteando…</p>}
           {error && <BotonOscuro onClick={alVolverASortear}>Probar de nuevo</BotonOscuro>}
         </div>
       )}
@@ -102,36 +102,36 @@ function Revelacion({ zonas, cantidadGrupos, alVolverASortear, alCerrar }: Props
       <div className="flex min-h-[220px] flex-col items-center justify-center gap-3 px-10 py-8 text-center" aria-live="polite">
         {ultimo ? (
           <div key={ultimo.jugadorId} className="flex flex-col items-center gap-3 motion-safe:animate-aparecer">
-            <p className="font-mono text-sm text-gris-400">
+            <p className="font-mono text-sm text-pizarra-400">
               bombo {bombo(ultimo.posicionSiembra)}
               {bombo(ultimo.posicionSiembra) === 1 && ' · cabezas de serie'} · siembra {ultimo.posicionSiembra}
             </p>
             <p className="text-[56px] leading-none font-semibold tracking-[-0.035em]">
               {ultimo.nombre} {ultimo.apellido}
             </p>
-            <p className="text-2xl text-gris-400">
-              a la zona <span className="font-mono text-[40px] font-semibold text-lima">{ultimo.grupo}</span>
+            <p className="text-2xl text-pizarra-400">
+              a la zona <span className="font-mono text-[40px] font-semibold text-white">{ultimo.grupo}</span>
             </p>
           </div>
         ) : (
-          <p className="text-3xl text-gris-400">Empieza el sorteo</p>
+          <p className="text-3xl text-pizarra-400">Empieza el sorteo</p>
         )}
       </div>
 
       <div className="grid grid-cols-2 gap-4 px-10 lg:grid-cols-4">
         {zonas.map((zona) => (
-          <div key={zona.grupo} className="flex flex-col gap-1.5 rounded-tarjeta border border-borde-oscuro bg-carbon px-[15px] py-[13px]">
-            <h3 className="border-b border-borde-oscuro pb-[7px] text-[15px] font-semibold">Zona {zona.grupo}</h3>
+          <div key={zona.grupo} className="flex flex-col gap-1.5 rounded-tarjeta border border-borde-noche bg-noche-2 px-[15px] py-[13px]">
+            <h3 className="border-b border-borde-noche pb-[7px] text-[15px] font-semibold">Zona {zona.grupo}</h3>
             <ul>
               {zona.integrantes.map((integrante) => (
                 <li key={integrante.jugadorId} className="flex h-[34px] items-center gap-2.5">
                   {visibles.has(integrante.jugadorId) ? (
                     <span className="flex items-center gap-2.5 motion-safe:animate-aparecer">
-                      <Numero className="w-5 text-xs text-gris-400">{String(integrante.posicionSiembra).padStart(2, '0')}</Numero>
+                      <Numero className="w-5 text-xs text-pizarra-400">{String(integrante.posicionSiembra).padStart(2, '0')}</Numero>
                       <span className="truncate text-sm">{integrante.apellido}</span>
                     </span>
                   ) : (
-                    <span className="h-px w-16 bg-borde-oscuro" aria-hidden="true" />
+                    <span className="h-px w-16 bg-borde-noche" aria-hidden="true" />
                   )}
                 </li>
               ))}
@@ -141,7 +141,7 @@ function Revelacion({ zonas, cantidadGrupos, alVolverASortear, alCerrar }: Props
       </div>
 
       <div className="mt-auto flex flex-wrap items-center justify-between gap-4 px-10 py-8">
-        <p className="text-sm text-gris-400">
+        <p className="text-sm text-pizarra-400">
           <Numero>{Math.min(revelados, salidas.length)}</Numero> de <Numero>{salidas.length}</Numero> jugadores
         </p>
         <div className="flex gap-2.5">
@@ -151,7 +151,7 @@ function Revelacion({ zonas, cantidadGrupos, alVolverASortear, alCerrar }: Props
               <button
                 type="button"
                 onClick={alCerrar}
-                className="inline-flex h-12 items-center rounded-control bg-lima px-5 text-[15px] font-semibold text-negro"
+                className="inline-flex h-12 items-center rounded-control border border-lona-borde bg-lona text-noche-900 px-5 text-[15px] font-semibold"
               >
                 Listo, revisar y confirmar
               </button>
@@ -168,13 +168,13 @@ function Revelacion({ zonas, cantidadGrupos, alVolverASortear, alCerrar }: Props
   );
 }
 
-// Botón sobre fondo negro: transparente con borde oscuro (design.md).
+// Botón sobre fondo noche: transparente con borde oscuro (design.md).
 function BotonOscuro({ onClick, children }: { onClick: () => void; children: ReactNode }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex h-12 items-center rounded-control border border-borde-oscuro px-5 text-[15px] font-medium text-white hover:bg-carbon"
+      className="inline-flex h-12 items-center rounded-control border border-borde-noche px-5 text-[15px] font-medium text-white hover:bg-noche-2"
     >
       {children}
     </button>

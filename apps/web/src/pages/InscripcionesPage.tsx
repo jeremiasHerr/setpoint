@@ -45,17 +45,17 @@ function CargarInscripciones({ sesion, id }: { sesion: Sesion; id: number }) {
   const noExiste = inscripciones.error?.message === 'TORNEO_NO_ENCONTRADO';
 
   return (
-    <div className="min-h-screen bg-white text-negro">
+    <div className="min-h-screen bg-papel text-noche">
       <EncabezadoDelTorneo sesion={sesion} torneoId={id} actual="inscripciones" />
       <div className="flex flex-col items-start gap-3 px-7 pt-[26px]">
         {noExiste ? (
           <>
-            <p className="text-[15px] text-gris-500">No encontramos ese torneo.</p>
+            <p className="text-[15px] text-pizarra-500">No encontramos ese torneo.</p>
             <Boton onClick={() => navegar('/inicio')}>Volver al inicio</Boton>
           </>
         ) : inscripciones.error && !sesionInvalida ? (
           <>
-            <p className="text-[15px] text-gris-500">No pudimos cargar las inscripciones.</p>
+            <p className="text-[15px] text-pizarra-500">No pudimos cargar las inscripciones.</p>
             <Boton onClick={() => void inscripciones.refetch()}>Probar de nuevo</Boton>
           </>
         ) : (
@@ -98,12 +98,12 @@ function QuePasaAlCerrar({ datos, pagados, reservando }: { datos: InscripcionesD
     );
 
   if (datos.estado === 'borrador') {
-    return <p className="text-sm text-gris-500">La inscripción se abre cuando publiques el torneo.</p>;
+    return <p className="text-sm text-pizarra-500">La inscripción se abre cuando publiques el torneo.</p>;
   }
 
   if (datos.estado === 'publicado' && !datos.alcanzanParaLasZonas) {
     return (
-      <p className="text-sm text-gris-700">
+      <p className="text-sm text-pizarra-700">
         Para armar <Numero>{datos.cantidadGrupos}</Numero> zonas hacen falta al menos{' '}
         <Numero>{datos.cantidadGrupos * MINIMO_POR_ZONA}</Numero> inscriptos que hayan pagado, y hay <Numero>{pagados}</Numero>.
         Para poder cerrar, esperá a que paguen más o{' '}
@@ -117,18 +117,18 @@ function QuePasaAlCerrar({ datos, pagados, reservando }: { datos: InscripcionesD
 
   if (datos.estado === 'publicado') {
     return (
-      <p className="text-sm text-gris-500">
+      <p className="text-sm text-pizarra-500">
         Al cerrar, nadie más se puede inscribir y la categoría queda lista para sortear.
         {reservando > 0 && <> {reservas} {reservando === 1 ? 'no entra' : 'no entran'} al sorteo.</>}
       </p>
     );
   }
 
-  if (datos.sorteoConfirmado) return <p className="text-sm text-gris-500">Las zonas ya se sortearon.</p>;
+  if (datos.sorteoConfirmado) return <p className="text-sm text-pizarra-500">Las zonas ya se sortearon.</p>;
 
   if (datos.estado === 'inscripciones_cerradas') {
     return (
-      <p className="text-sm text-gris-500">
+      <p className="text-sm text-pizarra-500">
         Entran al sorteo los <Numero>{pagados}</Numero> que pagaron.
         {reservando > 0 && <> {reservas} {reservando === 1 ? 'queda' : 'quedan'} afuera.</>}
       </p>
@@ -192,7 +192,7 @@ function Pestana({ activa, onClick, children }: { activa: boolean; onClick: () =
       aria-selected={activa}
       onClick={onClick}
       className={`flex h-9 items-center gap-1.5 rounded-[9px] border px-[15px] text-sm ${
-        activa ? 'border-negro bg-negro font-semibold text-white' : 'border-linea font-medium text-gris-700 hover:bg-fondo'
+        activa ? 'border-noche bg-noche font-semibold text-white' : 'border-linea font-medium text-pizarra-700 hover:bg-niebla'
       }`}
     >
       {children}
@@ -231,13 +231,13 @@ function Inscripciones({ sesion, datos }: { sesion: Sesion; datos: Inscripciones
   const sinLugares = datos.libres === 0;
 
   return (
-    <div className="flex min-h-screen flex-col bg-white text-negro">
+    <div className="flex min-h-screen flex-col bg-papel text-noche">
       <EncabezadoDelTorneo sesion={sesion} torneoId={datos.torneoId} actual="inscripciones" />
 
       <div className="flex flex-wrap items-end justify-between gap-6 px-7 pt-[26px] pb-5">
         <div className="flex flex-col gap-[7px]">
-          <h1 className="text-[30px] font-semibold tracking-[-0.035em]">Inscripciones</h1>
-          <p className="text-[15px] text-gris-500">{bajada(datos)}</p>
+          <h1 className="text-[28px] font-display font-semibold tracking-[-0.02em]">Inscripciones</h1>
+          <p className="text-[15px] text-pizarra-500">{bajada(datos)}</p>
         </div>
 
         <div className="flex flex-col items-end gap-1.5">
@@ -266,7 +266,7 @@ function Inscripciones({ sesion, datos }: { sesion: Sesion; datos: Inscripciones
             {datos.sorteoConfirmado && <Boton onClick={irAlSorteo}>Ver zonas</Boton>}
           </div>
           {datos.sePuedeModificar && sinLugares && (
-            <p className="text-[13px] text-gris-500">No quedan lugares para inscribir a mano.</p>
+            <p className="text-[13px] text-pizarra-500">No quedan lugares para inscribir a mano.</p>
           )}
         </div>
       </div>
@@ -309,7 +309,7 @@ function Inscripciones({ sesion, datos }: { sesion: Sesion; datos: Inscripciones
                   Bajas <Numero>{datos.bajas.length}</Numero>
                 </Pestana>
               </div>
-              <label className="ml-auto flex h-9 items-center gap-2 rounded-[9px] border border-linea px-[13px] text-sm text-gris-500 focus-within:border-negro">
+              <label className="ml-auto flex h-9 items-center gap-2 rounded-[9px] border border-linea px-[13px] text-sm text-pizarra-500 focus-within:border-noche">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" aria-hidden>
                   <circle cx="11" cy="11" r="6.5" />
                   <path d="M16 16l4.5 4.5" />
@@ -321,7 +321,7 @@ function Inscripciones({ sesion, datos }: { sesion: Sesion; datos: Inscripciones
                   autoComplete="off"
                   value={busqueda}
                   onChange={(e) => setBusqueda(e.target.value)}
-                  className="w-40 bg-transparent text-negro outline-none placeholder:text-gris-500"
+                  className="w-40 bg-transparent text-noche outline-none placeholder:text-pizarra-500"
                 />
               </label>
             </div>

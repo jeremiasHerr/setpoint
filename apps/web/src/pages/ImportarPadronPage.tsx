@@ -143,7 +143,7 @@ function ImportarPadron({ sesion }: { sesion: Sesion }) {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-white text-negro">
+    <div className="flex min-h-screen flex-col bg-papel text-noche">
       <EncabezadoOrganizador
         organizacion={circuito.data?.nombre ?? sesion.organizacion.nombre}
         navegacion={navegacionOrganizador}
@@ -154,16 +154,16 @@ function ImportarPadron({ sesion }: { sesion: Sesion }) {
 
       <div className="flex flex-col gap-2 px-7 pt-[26px] pb-5">
         <Migas anteriores={[{ etiqueta: 'Padrón', ruta: '/padron' }]}>Importar planilla</Migas>
-        <h1 className="text-[30px] font-semibold tracking-[-0.035em]">
+        <h1 className="text-[28px] font-display font-semibold tracking-[-0.02em]">
           {enRevision ? 'Revisá la importación' : 'Importar planilla'}
         </h1>
         {enRevision && importacion.data && (
           <div className="flex items-center gap-2.5">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="text-gris-500" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="text-pizarra-500" aria-hidden="true">
               <path d="M6 3h8l4 4v14H6z" />
               <path d="M14 3v4h4" />
             </svg>
-            <span className="font-mono text-sm text-gris-500">
+            <span className="font-mono text-sm text-pizarra-500">
               {importacion.data.archivoNombre} ·{' '}
               {importacion.data.hojas.reduce((suma, h) => suma + h.propuesta.length, 0)} jugadores leídos
             </span>
@@ -180,7 +180,7 @@ function Cargando({ error }: { error: boolean }) {
   return (
     <div className="px-7">
       {error ? (
-        <p className="text-[15px] text-gris-500">No pudimos cargar la importación. Recargá la página.</p>
+        <p className="text-[15px] text-pizarra-500">No pudimos cargar la importación. Recargá la página.</p>
       ) : (
         <Esqueleto />
       )}
@@ -264,7 +264,7 @@ function Revision({ slug, importacion, padron, alConfirmar, alDescartar }: Props
   };
 
   const encabezado = (
-    <div className={`${COLUMNAS} h-[42px] border-b border-linea bg-fondo-tabla px-[18px] font-mono text-[11px] text-gris-500`}>
+    <div className={`${COLUMNAS} h-[42px] border-b border-linea bg-niebla px-[18px] font-mono text-[11px] text-pizarra-500`}>
       <span>como figura en la planilla</span>
       <span>jugador del padrón</span>
       <span>casilleros</span>
@@ -294,7 +294,7 @@ function Revision({ slug, importacion, padron, alConfirmar, alDescartar }: Props
                 setCategorias((c) => ({ ...c, [h.id]: e.target.value }));
               }}
             />
-            <p className="text-sm text-gris-500">No la encontramos en la hoja ni en el nombre del archivo.</p>
+            <p className="text-sm text-pizarra-500">No la encontramos en la hoja ni en el nombre del archivo.</p>
           </div>
         ))}
 
@@ -306,7 +306,7 @@ function Revision({ slug, importacion, padron, alConfirmar, alDescartar }: Props
               {conError.length === 1 ? 'Una planilla no se pudo leer y queda afuera' : `${conError.length} planillas no se pudieron leer y quedan afuera`}
             </p>
             {conError.map((h) => (
-              <p key={h.id} className="text-sm text-gris-700">
+              <p key={h.id} className="text-sm text-pizarra-700">
                 <span className="font-mono">{nombreDeHoja(h)}</span> · {h.error}
               </p>
             ))}
@@ -338,7 +338,7 @@ function Revision({ slug, importacion, padron, alConfirmar, alDescartar }: Props
                 className="flex items-baseline gap-2.5 self-start text-left"
               >
                 <span className="text-[17px] font-semibold">{nombreDeHoja(h)}</span>
-                <span className="font-mono text-[13px] text-gris-500">
+                <span className="font-mono text-[13px] text-pizarra-500">
                   {h.categoria && <>{h.archivoNombre} · </>}
                   <Numero>{resto.length}</Numero> sin dudas
                 </span>
@@ -395,7 +395,7 @@ function Final({ slug, importacion, confirmada, alSubirOtro }: PropsFinal) {
           <div className="flex flex-col gap-1.5">
             <h2 className="text-[17px] font-semibold">Listo, el padrón quedó actualizado</h2>
             {confirmada ? (
-              <p className="text-[15px] leading-normal text-gris-500">
+              <p className="text-[15px] leading-normal text-pizarra-500">
                 <Numero>{confirmada.creados}</Numero> altas y <Numero>{confirmada.vinculados}</Numero> jugadores
                 que ya estaban. Se cargaron <Numero>{confirmada.movimientosCreados}</Numero> casilleros
                 {confirmada.movimientosSalteados > 0 && (
@@ -407,13 +407,13 @@ function Final({ slug, importacion, confirmada, alSubirOtro }: PropsFinal) {
                 .
               </p>
             ) : (
-              <p className="text-[15px] text-gris-500">Los puntos ya cuentan para el ranking.</p>
+              <p className="text-[15px] text-pizarra-500">Los puntos ya cuentan para el ranking.</p>
             )}
           </div>
           <div className="flex gap-2.5">
             <Link
               to="/padron"
-              className="inline-flex h-10 items-center rounded-control bg-negro px-4 text-[15px] font-medium text-white"
+              className="inline-flex h-10 items-center rounded-control bg-noche px-4 text-[15px] font-medium text-white"
             >
               Ver el padrón
             </Link>
@@ -436,11 +436,11 @@ function Final({ slug, importacion, confirmada, alSubirOtro }: PropsFinal) {
                 : 'No pudimos leer esta planilla'
               : 'Descartaste esta importación'}
           </h2>
-          <p className="text-[15px] leading-normal text-gris-500">
+          <p className="text-[15px] leading-normal text-pizarra-500">
             {esError ? importacion.error : 'No se guardó nada. Podés subir la planilla de nuevo cuando quieras.'}
           </p>
           {esError && (
-            <p className="font-mono text-xs text-gris-500">{importacion.archivoNombre}</p>
+            <p className="font-mono text-xs text-pizarra-500">{importacion.archivoNombre}</p>
           )}
         </div>
         <Boton

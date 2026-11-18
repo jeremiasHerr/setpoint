@@ -85,6 +85,7 @@ const estilos = StyleSheet.create({
   },
   aviso: {
     borderWidth: 1,
+    backgroundColor: colores.papel,
     borderColor: colores.linea,
     borderRadius: radios.tarjeta,
     paddingHorizontal: 16,
@@ -101,11 +102,11 @@ const estilos = StyleSheet.create({
     fontFamily: fuentes.sans[400],
     fontSize: 15,
     lineHeight: 21,
-    color: colores.gris700,
+    color: colores.pizarra700,
   },
   fuerte: {
     fontFamily: fuentes.sans[600],
-    color: colores.negro,
+    color: colores.noche,
   },
   entendido: {
     alignSelf: 'flex-start',
@@ -113,7 +114,7 @@ const estilos = StyleSheet.create({
   textoEntendido: {
     fontFamily: fuentes.sans[500],
     fontSize: 15,
-    color: colores.negro,
+    color: colores.noche,
     textDecorationLine: 'underline',
   },
 });

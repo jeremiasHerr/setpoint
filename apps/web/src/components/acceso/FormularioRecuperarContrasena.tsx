@@ -25,16 +25,16 @@ export function FormularioRecuperarContrasena({ alEnviar, enviando = false, envi
     return (
       <Tarjeta className="flex flex-col gap-5 p-6">
         <div className="flex flex-col gap-1.5">
-          <h1 className="text-2xl font-semibold tracking-[-0.03em]">Revisá tu email</h1>
+          <h1 className="text-2xl font-display font-semibold tracking-[-0.02em]">Revisá tu email</h1>
           {/* No confirmamos si la cuenta existe, para no revelar qué emails están registrados. */}
-          <p className="text-[15px] text-gris-500">
-            Si hay una cuenta con <span className="font-medium text-negro">{email}</span>, te mandamos un link para elegir una
+          <p className="text-[15px] text-pizarra-500">
+            Si hay una cuenta con <span className="font-medium text-noche">{email}</span>, te mandamos un link para elegir una
             contraseña nueva. Vale por una hora.
           </p>
         </div>
         <Link
           to="/ingresar"
-          className="inline-flex h-12 items-center justify-center rounded-control border border-linea text-[15px] font-medium text-negro hover:bg-fondo"
+          className="inline-flex h-12 items-center justify-center rounded-control border border-linea text-[15px] font-medium text-noche hover:bg-niebla"
         >
           Volver a ingresar
         </Link>
@@ -46,8 +46,8 @@ export function FormularioRecuperarContrasena({ alEnviar, enviando = false, envi
     <Tarjeta className="p-6">
       <form onSubmit={manejarEnvio} className="flex flex-col gap-5">
         <div className="flex flex-col gap-1.5">
-          <h1 className="text-2xl font-semibold tracking-[-0.03em]">Recuperar la contraseña</h1>
-          <p className="text-[15px] text-gris-500">Escribí el email de tu cuenta y te mandamos un link para elegir una nueva.</p>
+          <h1 className="text-2xl font-display font-semibold tracking-[-0.02em]">Recuperar la contraseña</h1>
+          <p className="text-[15px] text-pizarra-500">Escribí el email de tu cuenta y te mandamos un link para elegir una nueva.</p>
         </div>
 
         <Campo

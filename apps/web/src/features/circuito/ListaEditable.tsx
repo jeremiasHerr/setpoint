@@ -65,16 +65,16 @@ export function ListaEditable({ items, alCambiar, rotuloNuevo, numerada = false 
         <li
           key={item}
           className={`flex h-9 items-center gap-[9px] rounded-full border px-3.5 text-sm font-medium ${
-            numerada ? 'border-linea bg-fondo text-negro' : 'border-negro bg-negro text-white'
+            numerada ? 'border-linea bg-niebla text-noche' : 'border-noche bg-noche text-white'
           }`}
         >
-          {numerada && <span className="font-mono text-xs text-gris-500 tabular-nums">{i + 1}</span>}
+          {numerada && <span className="font-mono text-xs text-pizarra-500 tabular-nums">{i + 1}</span>}
           <span>{item}</span>
           <button
             type="button"
             onClick={() => alCambiar(items.filter((otro) => otro !== item))}
             aria-label={`Quitar ${item}`}
-            className={`text-gris-400 ${numerada ? 'hover:text-negro' : 'hover:text-white'}`}
+            className={`text-pizarra-400 ${numerada ? 'hover:text-noche' : 'hover:text-white'}`}
           >
             <IconoCerrar />
           </button>
@@ -90,13 +90,13 @@ export function ListaEditable({ items, alCambiar, rotuloNuevo, numerada = false 
             onChange={(e) => setNuevo(e.target.value)}
             onKeyDown={manejarTecla}
             onBlur={confirmar}
-            className="h-9 w-40 rounded-full border-2 border-negro px-[13px] text-sm font-medium outline-none"
+            className="h-9 w-40 rounded-full border-2 border-noche px-[13px] text-sm font-medium outline-none"
           />
         ) : (
           <button
             type="button"
             onClick={abrir}
-            className="flex h-9 items-center gap-[9px] rounded-full border border-dashed border-gris-300 px-3.5 text-sm font-medium text-gris-500 hover:bg-fondo"
+            className="flex h-9 items-center gap-[9px] rounded-full border border-dashed border-borde-campo px-3.5 text-sm font-medium text-pizarra-500 hover:bg-niebla"
           >
             <IconoMas />
             <span>Agregar</span>

@@ -5,7 +5,7 @@ import { colores, fuentes, radios, tabular } from '../../lib/tokens';
 type Props = {
   fila: FilaDeRanking;
   torneosDelCalendario: TorneoDelCalendario[];
-  // Oscura: adentro de la tarjeta negra, con el último torneo que sumó en lima. Clara: el desglose
+  // Oscura: adentro de la tarjeta noche, con el último torneo que sumó en lona. Clara: el desglose
   // que se abre al tocar una fila de la tabla.
   variante: 'oscura' | 'clara';
 };
@@ -28,20 +28,20 @@ export function Casilleros({ fila, torneosDelCalendario, variante }: Props) {
     <View style={estilos.grilla}>
       {torneosDelCalendario.map((torneo) => {
         const puntos = fila.casilleros.find((c) => c.etapaId === torneo.id)?.puntos ?? 0;
-        const enLima = torneo.id === destacado;
+        const enLona = torneo.id === destacado;
         return (
           <View
             key={torneo.id}
             accessible
             accessibilityLabel={`${torneo.nombre}: ${puntos} puntos`}
-            style={[estilos.casillero, oscura ? estilos.casilleroOscuro : estilos.casilleroClaro, enLima && estilos.casilleroLima]}
+            style={[estilos.casillero, oscura ? estilos.casilleroOscuro : estilos.casilleroClaro, enLona && estilos.casilleroLona]}
           >
-            <Text style={[estilos.rotulo, enLima && estilos.textoSobreLima]}>{torneo.nombre.slice(0, 3).toLowerCase()}</Text>
+            <Text style={[estilos.rotulo, enLona && estilos.textoSobreLona]}>{torneo.nombre.slice(0, 3).toLowerCase()}</Text>
             <Text
               style={[
                 estilos.puntos,
                 oscura ? estilos.puntosOscuro : puntos > 0 ? estilos.puntosClaro : estilos.puntosVacio,
-                enLima && [estilos.textoSobreLima, estilos.puntosLima],
+                enLona && [estilos.textoSobreLona, estilos.puntosLona],
               ]}
             >
               {puntos}
@@ -66,18 +66,18 @@ const estilos = StyleSheet.create({
     borderRadius: radios.control,
   },
   casilleroOscuro: {
-    backgroundColor: colores.carbon,
+    backgroundColor: colores.noche2,
   },
   casilleroClaro: {
-    backgroundColor: colores.fondo,
+    backgroundColor: colores.niebla,
   },
-  casilleroLima: {
-    backgroundColor: colores.lima,
+  casilleroLona: {
+    backgroundColor: colores.lona,
   },
   rotulo: {
     fontFamily: fuentes.mono[400],
     fontSize: 15,
-    color: colores.gris500,
+    color: colores.pizarra500,
   },
   puntos: {
     fontFamily: fuentes.mono[500],
@@ -88,16 +88,16 @@ const estilos = StyleSheet.create({
     color: colores.blanco,
   },
   puntosClaro: {
-    color: colores.negro,
+    color: colores.noche,
   },
   puntosVacio: {
-    color: colores.gris400,
+    color: colores.pizarra400,
   },
-  // El negro sobre lima llega a 17:1 (design.md §3).
-  textoSobreLima: {
-    color: colores.negro,
+  // Texto oscuro sobre el verde lona.
+  textoSobreLona: {
+    color: colores.noche900,
   },
-  puntosLima: {
+  puntosLona: {
     fontFamily: fuentes.mono[600],
   },
 });

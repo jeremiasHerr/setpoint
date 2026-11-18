@@ -24,11 +24,11 @@ export function TarjetaPartido({ partido, destacado, eleccion, className = '' }:
   // Uno que espera a los ganadores de la ronda anterior todavía no se puede elegir.
   const sinJugadores = partido.jugadorA === null || partido.jugadorB === null;
   const borde = elegido
-    ? 'border-2 border-negro rounded-[10px] ring-2 ring-lima'
+    ? 'border-2 border-noche rounded-[10px] ring-2 ring-lona-borde'
     : destacado === 'principal'
-      ? 'border-2 border-negro rounded-[10px]'
+      ? 'border-2 border-noche rounded-[10px]'
       : destacado
-        ? 'border border-gris-300 rounded-[10px]'
+        ? 'border border-borde-campo rounded-[10px]'
         : 'border border-linea rounded-lg';
   const elegible = eleccion !== undefined && !sinJugadores;
 
@@ -39,12 +39,12 @@ export function TarjetaPartido({ partido, destacado, eleccion, className = '' }:
       aria-current={elegido ? 'true' : undefined}
       disabled={eleccion !== undefined && sinJugadores}
       onClick={() => (eleccion ? eleccion.alElegir(partido) : setAbierta(!abierta))}
-      className={`flex flex-col overflow-hidden bg-white text-left disabled:cursor-default ${elegible ? 'hover:border-gris-500' : ''} ${borde} ${className}`}
+      className={`flex flex-col overflow-hidden bg-papel text-left disabled:cursor-default ${elegible ? 'hover:border-pizarra-500' : ''} ${borde} ${className}`}
     >
       {destacado && (
         <Numero
           className={`flex h-[26px] items-center justify-center text-[11px] ${
-            destacado === 'principal' ? 'bg-lima font-semibold' : 'bg-linea-suave font-medium text-gris-700'
+            destacado === 'principal' ? 'bg-lona-fondo font-semibold text-lona-texto' : 'bg-linea-suave font-medium text-pizarra-700'
           }`}
         >
           {cuandoSeJuega(partido)}
@@ -53,7 +53,7 @@ export function TarjetaPartido({ partido, destacado, eleccion, className = '' }:
       <Fila partido={partido} lado="A" abierta={abierta} destacado={!!destacado} />
       <Fila partido={partido} lado="B" abierta={abierta} destacado={!!destacado} />
       {destacado && partido.sede && (
-        <span className="flex h-7 items-center justify-center border-t border-linea-suave bg-fondo-tabla text-xs text-gris-500">
+        <span className="flex h-7 items-center justify-center border-t border-linea-suave bg-niebla text-xs text-pizarra-500">
           {partido.sede}
         </span>
       )}
@@ -67,10 +67,10 @@ export function TarjetaPartido({ partido, destacado, eleccion, className = '' }:
 export function TarjetaPaseDirecto({ jugador, rotulo, className = '' }: { jugador: JugadorDelCuadro; rotulo: string; className?: string }) {
   return (
     <div className={`flex h-16 flex-col justify-center gap-1 rounded-lg border border-linea px-2.5 ${className}`}>
-      <span className="truncate text-[13px] text-gris-500" title={`${jugador.nombre} ${jugador.apellido}`}>
+      <span className="truncate text-[13px] text-pizarra-500" title={`${jugador.nombre} ${jugador.apellido}`}>
         {jugador.apellido}
       </span>
-      <span className="truncate font-mono text-[11px] text-gris-400">{rotulo}</span>
+      <span className="truncate font-mono text-[11px] text-pizarra-400">{rotulo}</span>
     </div>
   );
 }
@@ -83,9 +83,9 @@ function Fila({ partido, lado, abierta, destacado }: PropsFila) {
   const gano = jugado && jugador !== null && partido.ganadorId === jugador.jugadorId;
   const perdio = jugado && !gano;
 
-  const fondo = gano ? 'bg-lima-tenue' : '';
+  const fondo = gano ? 'bg-lona-fondo' : '';
   const separador = lado === 'B' ? 'border-t border-linea-suave' : '';
-  const nombre = !jugador ? 'text-gris-400' : gano || destacado ? 'font-semibold' : perdio ? 'text-gris-400' : '';
+  const nombre = !jugador ? 'text-pizarra-400' : gano || destacado ? 'font-semibold' : perdio ? 'text-pizarra-400' : '';
 
   return (
     <span className={`flex ${destacado ? 'h-[34px]' : 'h-[31px]'} items-center justify-between gap-2 px-2.5 ${fondo} ${separador}`}>
@@ -95,7 +95,7 @@ function Fila({ partido, lado, abierta, destacado }: PropsFila) {
       >
         {jugador?.apellido ?? 'a definir'}
       </span>
-      <Numero className={`shrink-0 text-xs ${gano ? 'font-semibold' : 'text-gris-400'}`}>{marcadorDelLado(partido, lado, abierta)}</Numero>
+      <Numero className={`shrink-0 text-xs ${gano ? 'font-semibold' : 'text-pizarra-400'}`}>{marcadorDelLado(partido, lado, abierta)}</Numero>
     </span>
   );
 }

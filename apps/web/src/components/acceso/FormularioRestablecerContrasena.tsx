@@ -31,8 +31,8 @@ export function FormularioRestablecerContrasena({ alEnviar, enviando = false, er
     <Tarjeta className="p-6">
       <form onSubmit={manejarEnvio} className="flex flex-col gap-5">
         <div className="flex flex-col gap-1.5">
-          <h1 className="text-2xl font-semibold tracking-[-0.03em]">Elegí una contraseña nueva</h1>
-          <p className="text-[15px] text-gris-500">Es la que vas a usar para ingresar de ahora en más.</p>
+          <h1 className="text-2xl font-display font-semibold tracking-[-0.02em]">Elegí una contraseña nueva</h1>
+          <p className="text-[15px] text-pizarra-500">Es la que vas a usar para ingresar de ahora en más.</p>
         </div>
 
         <div className="flex flex-col gap-2">
@@ -48,7 +48,7 @@ export function FormularioRestablecerContrasena({ alEnviar, enviando = false, er
               setNoCoinciden(false);
             }}
           />
-          <p className="text-xs text-gris-500">
+          <p className="text-xs text-pizarra-500">
             Al menos <span className="font-mono tabular-nums">{LARGO_MINIMO_CONTRASENA}</span> caracteres.
           </p>
         </div>

@@ -68,7 +68,7 @@ export function MenuJugador({ jugador, slug, organizacion, alEditar }: Props) {
         onClick={abrir}
         aria-label={`Opciones de ${jugador.nombre} ${jugador.apellido}`}
         aria-expanded={abierto}
-        className="flex size-8 items-center justify-center rounded-lg text-gris-400 hover:bg-linea-suave hover:text-negro"
+        className="flex size-8 items-center justify-center rounded-lg text-pizarra-400 hover:bg-linea-suave hover:text-noche"
       >
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" className="size-[17px]" aria-hidden="true">
           <circle cx="12" cy="5" r="1" />
@@ -78,7 +78,7 @@ export function MenuJugador({ jugador, slug, organizacion, alEditar }: Props) {
       </button>
 
       {abierto && (
-        <div className="absolute top-full right-0 z-10 mt-1 flex w-[330px] max-w-[calc(100vw-32px)] flex-col rounded-[12px] border border-linea bg-white text-left">
+        <div className="absolute top-full right-0 z-10 mt-1 flex w-[330px] max-w-[calc(100vw-32px)] flex-col rounded-[12px] border border-linea bg-papel text-left">
           {conLink && (
             <>
               <a
@@ -87,7 +87,7 @@ export function MenuJugador({ jugador, slug, organizacion, alEditar }: Props) {
                 rel="noreferrer"
                 aria-disabled={!mensaje}
                 onClick={() => setAbierto(false)}
-                className={`flex items-start gap-[11px] px-3.5 py-[11px] hover:bg-fondo ${mensaje ? '' : 'pointer-events-none opacity-40'}`}
+                className={`flex items-start gap-[11px] px-3.5 py-[11px] hover:bg-niebla ${mensaje ? '' : 'pointer-events-none opacity-40'}`}
               >
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="mt-px shrink-0" aria-hidden="true">
                   <circle cx="18" cy="5" r="2.5" />
@@ -97,21 +97,21 @@ export function MenuJugador({ jugador, slug, organizacion, alEditar }: Props) {
                 </svg>
                 <span className="flex flex-col gap-[3px]">
                   <span className="text-sm font-medium">Compartir link por WhatsApp</span>
-                  <span className="text-xs text-gris-500">
+                  <span className="text-xs text-pizarra-500">
                     {jugador.telefono
                       ? `Abre el chat con ${jugador.nombre}, con el mensaje armado`
                       : 'Sin teléfono: elegís el contacto en WhatsApp'}
                   </span>
                 </span>
               </a>
-              <p className="mx-3.5 mb-3 ml-[42px] rounded-control bg-fondo px-[13px] py-[11px] text-[13px] leading-[1.45] break-words text-gris-700">
+              <p className="mx-3.5 mb-3 ml-[42px] rounded-control bg-niebla px-[13px] py-[11px] text-[13px] leading-[1.45] break-words text-pizarra-700">
                 {generar.isError && !codigo ? 'No pudimos crear el link. Cerrá el menú y probá de nuevo.' : (mensaje ?? 'Creando el link…')}
               </p>
               <button
                 type="button"
                 onClick={copiar}
                 disabled={!url}
-                className="border-t border-linea-suave px-3.5 py-[11px] text-left text-sm font-medium hover:bg-fondo disabled:opacity-40"
+                className="border-t border-linea-suave px-3.5 py-[11px] text-left text-sm font-medium hover:bg-niebla disabled:opacity-40"
               >
                 Copiar link
               </button>
@@ -119,10 +119,10 @@ export function MenuJugador({ jugador, slug, organizacion, alEditar }: Props) {
                 type="button"
                 onClick={generarNuevo}
                 disabled={!codigo || generar.isPending}
-                className="flex flex-col gap-[3px] border-t border-linea-suave px-3.5 py-[11px] text-left hover:bg-fondo disabled:opacity-40"
+                className="flex flex-col gap-[3px] border-t border-linea-suave px-3.5 py-[11px] text-left hover:bg-niebla disabled:opacity-40"
               >
                 <span className="text-sm font-medium">Generar link nuevo</span>
-                <span className="text-xs text-gris-500">El anterior deja de andar</span>
+                <span className="text-xs text-pizarra-500">El anterior deja de andar</span>
               </button>
             </>
           )}
@@ -132,12 +132,12 @@ export function MenuJugador({ jugador, slug, organizacion, alEditar }: Props) {
               setAbierto(false);
               alEditar();
             }}
-            className={`px-3.5 py-[11px] text-left text-sm font-medium hover:bg-fondo ${conLink ? 'border-t border-linea-suave' : ''}`}
+            className={`px-3.5 py-[11px] text-left text-sm font-medium hover:bg-niebla ${conLink ? 'border-t border-linea-suave' : ''}`}
           >
             Editar jugador
           </button>
           {aviso && (
-            <p role="status" className="border-t border-linea-suave px-3.5 py-[11px] font-mono text-xs text-gris-500">
+            <p role="status" className="border-t border-linea-suave px-3.5 py-[11px] font-mono text-xs text-pizarra-500">
               {aviso}
             </p>
           )}

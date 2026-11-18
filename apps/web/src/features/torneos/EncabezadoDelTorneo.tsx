@@ -68,16 +68,16 @@ export function EncabezadoDelTorneo({ sesion, torneoId, actual }: Props) {
       {/* Sin la respuesta, la franja ocupa su lugar vacía: al llegar no empuja la pantalla. Si falla, la
           pantalla ya dice lo suyo. */}
       {!navegacion.isError && (
-        <div className="border-b border-linea bg-white px-7 pt-[18px]">
+        <div className="border-b border-linea bg-papel px-7 pt-[18px]">
           <div className="flex min-h-10 flex-wrap items-center justify-between gap-x-6 gap-y-3">
             {datos && (
               <>
                 <div className="flex min-w-0 flex-wrap items-center gap-3">
                   {/* El tercer nivel es la pestaña activa, justo debajo. */}
                   <Migas anteriores={[{ etiqueta: 'Inicio', ruta: '/inicio' }]} className="text-[15px]">
-                    <Numero className="font-semibold text-negro">{datos.nombre}</Numero>
+                    <Numero className="font-semibold text-noche">{datos.nombre}</Numero>
                   </Migas>
-                  <span className="flex h-7 items-center rounded-full border border-linea px-[11px] font-mono text-[13px] text-gris-500">
+                  <span className="flex h-7 items-center rounded-full border border-linea px-[11px] font-mono text-[13px] text-pizarra-500">
                     {ESTADO[datos.estado]}
                   </span>
                 </div>
@@ -95,7 +95,7 @@ export function EncabezadoDelTorneo({ sesion, torneoId, actual }: Props) {
                 const { etiqueta, ruta } = PESTANAS[clave];
                 if (clave === actual) {
                   return (
-                    <Link key={clave} to={`/torneos/${torneoId}/${ruta}`} aria-current="page" className={`${pestana} border-negro font-semibold`}>
+                    <Link key={clave} to={`/torneos/${torneoId}/${ruta}`} aria-current="page" className={`${pestana} border-noche font-semibold`}>
                       {etiqueta}
                     </Link>
                   );
@@ -105,7 +105,7 @@ export function EncabezadoDelTorneo({ sesion, torneoId, actual }: Props) {
                     <Link
                       key={clave}
                       to={`/torneos/${torneoId}/${ruta}`}
-                      className={`${pestana} border-transparent font-medium text-gris-700 hover:text-negro`}
+                      className={`${pestana} border-transparent font-medium text-pizarra-700 hover:text-noche`}
                     >
                       {etiqueta}
                     </Link>
@@ -118,7 +118,7 @@ export function EncabezadoDelTorneo({ sesion, torneoId, actual }: Props) {
                     aria-disabled="true"
                     aria-describedby={apagadaTocada === clave ? 'motivo-pestana' : undefined}
                     onClick={() => setApagadaTocada(apagadaTocada === clave ? null : clave)}
-                    className={`${pestana} cursor-default border-transparent font-medium text-gris-400`}
+                    className={`${pestana} cursor-default border-transparent font-medium text-pizarra-400`}
                   >
                     {etiqueta}
                   </button>
@@ -128,7 +128,7 @@ export function EncabezadoDelTorneo({ sesion, torneoId, actual }: Props) {
         </div>
       )}
 
-      <p id="motivo-pestana" aria-live="polite" className={apagadaTocada ? 'px-7 pt-3 text-sm text-gris-500' : 'sr-only'}>
+      <p id="motivo-pestana" aria-live="polite" className={apagadaTocada ? 'px-7 pt-3 text-sm text-pizarra-500' : 'sr-only'}>
         {apagadaTocada && PESTANAS[apagadaTocada].motivo}
       </p>
     </>

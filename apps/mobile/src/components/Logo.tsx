@@ -1,8 +1,8 @@
 import { StyleSheet, View } from 'react-native';
 import { colores } from '../lib/tokens';
 
-// La marca de las pantallas del jugador (docs/pantallas/jugador): el cuadrado negro con el punto
-// lima. La de la web es al revés.
+// La marca del circuito, como en las páginas públicas de la web: el cuadrado noche con el punto
+// pelota (design.md §3).
 export function Logo() {
   return (
     <View style={estilos.cuadro}>
@@ -16,7 +16,7 @@ const estilos = StyleSheet.create({
     width: 26,
     height: 26,
     borderRadius: 7,
-    backgroundColor: colores.negro,
+    backgroundColor: colores.noche,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -24,6 +24,6 @@ const estilos = StyleSheet.create({
     width: 9,
     height: 9,
     borderRadius: 999,
-    backgroundColor: colores.lima,
+    backgroundColor: colores.pelota,
   },
 });

@@ -37,14 +37,14 @@ export function InicioConTorneos({ torneos }: { torneos: TorneosDeInicio }) {
       <main className="grid items-start gap-3.5 px-7 pt-6 pb-8 md:grid-cols-2 xl:grid-cols-4">
         <Columna
           titulo="En preparación"
-          marca="border-[1.5px] border-dashed border-gris-500 bg-white"
+          marca="border-[1.5px] border-dashed border-pizarra-500 bg-papel"
           cantidad={borradores.length}
           ayuda="Borradores: todavía no los ve nadie"
           vacia="No hay ninguno a medio armar."
           pie={
             <Link
               to="/torneos/nuevo"
-              className="flex min-h-[72px] items-center justify-center gap-2 rounded-tarjeta border-[1.5px] border-dashed border-gris-300 text-sm font-medium text-gris-700 hover:border-gris-500 hover:text-negro"
+              className="flex min-h-[72px] items-center justify-center gap-2 rounded-tarjeta border-[1.5px] border-dashed border-borde-campo text-sm font-medium text-pizarra-700 hover:border-pizarra-500 hover:text-noche"
             >
               <IconoMas className="size-[13px] stroke-[2.4]" />
               Armar el próximo torneo
@@ -59,7 +59,7 @@ export function InicioConTorneos({ torneos }: { torneos: TorneosDeInicio }) {
         {/* Primero las que ya cerraron: el sorteo es lo próximo que hay que hacer con ellas. */}
         <Columna
           titulo="Inscripción"
-          marca="bg-lima"
+          marca="bg-lona-texto"
           cantidad={paraSortear.length + conInscripcionAbierta.length}
           ayuda="Se cobra desde el link de cada una"
           vacia="Cuando publiques un torneo, la inscripción se sigue desde acá."
@@ -74,7 +74,7 @@ export function InicioConTorneos({ torneos }: { torneos: TorneosDeInicio }) {
 
         <Columna
           titulo="En juego"
-          marca="bg-negro"
+          marca="bg-noche"
           cantidad={enJuego.length}
           ayuda="Del sorteo al cierre"
           vacia="Cuando confirmes un sorteo, el torneo pasa acá."
@@ -86,7 +86,7 @@ export function InicioConTorneos({ torneos }: { torneos: TorneosDeInicio }) {
 
         <Columna
           titulo="Terminados"
-          marca="bg-gris-500"
+          marca="bg-pizarra-500"
           cantidad={terminados.length}
           ayuda={torneos.usaRanking ? 'Sus puntos ya están en el ranking' : 'Cada uno con sus posiciones finales'}
           vacia="Todavía no terminó ninguno."
@@ -95,7 +95,7 @@ export function InicioConTorneos({ torneos }: { torneos: TorneosDeInicio }) {
               <button
                 type="button"
                 onClick={() => setTodosLosTerminados(true)}
-                className="min-h-11 rounded-tarjeta text-sm font-medium text-gris-700 hover:text-negro"
+                className="min-h-11 rounded-tarjeta text-sm font-medium text-pizarra-700 hover:text-noche"
               >
                 Ver los <Numero>{ocultos}</Numero> anteriores
               </button>

@@ -1,30 +1,55 @@
 @import "tailwindcss";
 
+/* Tokens de docs/design.md §3 (Última luz, decisión 104). Los mismos valores están en
+   apps/mobile/src/lib/tokens.ts: si cambia uno, cambia en los dos (decisión 034). */
 @theme {
-  --color-lima: #CDF546;
-  --color-lima-tenue: #F7FCE7;
-  --color-negro: #0A0B0D;
-  --color-carbon: #17191D;
-  --color-borde-oscuro: #2C3037;
-  --color-gris-700: #3F4348;
-  --color-gris-500: #6A7079;
-  --color-gris-400: #9BA1A9;
-  --color-gris-300: #B5BBC3;
-  --color-linea: #D5D9DE;
-  --color-linea-suave: #F1F2F4;
-  --color-fondo: #F6F7F8;
-  --color-fondo-tabla: #FAFBFC;
+  /* La noche: superficies oscuras, el texto principal y el botón del organizador. */
+  --color-noche-900: #0B1220;
+  --color-noche: #101A2C;
+  --color-noche-2: #1A2740;
+  --color-borde-noche: #2E3D5A;
+
+  /* La pizarra: texto secundario, rótulos y texto sobre noche. */
+  --color-pizarra-700: #3B4659;
+  --color-pizarra-500: #626D82;
+  --color-pizarra-400: #9AA5B8;
+  --color-borde-campo: #878FA1;
+
+  --color-linea: #D8DCE5;
+  --color-linea-suave: #ECEEF3;
+  --color-niebla: #F4F5F8;
+  --color-papel: #FFFFFF;
+  --color-cal: #E9E2D6;
+
+  /* La lona: la acción del jugador, lo ganado y lo que clasifica. La pelota, solo en el logo. */
+  --color-lona: #62BB78;
+  --color-lona-hover: #4FA866;
+  --color-lona-borde: #93D2A3;
+  --color-lona-fondo: #E4F8E7;
+  --color-lona-texto: #1B6236;
+  --color-pelota: #CDF546;
+
+  /* Estados: con fecha, vencido y los dos cuadros. */
+  --color-azul: #3567D6;
+  --color-azul-texto: #2A55BC;
+  --color-azul-fondo: #ECF1FD;
   --color-rojo: #E5484D;
   --color-rojo-texto: #C62A2F;
   --color-rojo-fondo: #FEF6F6;
   --color-rojo-linea: #F3D3D4;
+  --color-ambar: #8F5200;
+  --color-ambar-fondo: #FDF3E3;
+  --color-petroleo: #0F6170;
+  --color-petroleo-fondo: #E5F4F6;
 
-  --font-sans: "Instrument Sans", system-ui, "Helvetica Neue", sans-serif;
+  --font-sans: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Funnel Display", "Helvetica Neue", Arial, sans-serif;
+  --font-serif: "Newsreader", Georgia, serif;
   --font-mono: "Geist Mono", ui-monospace, "SF Mono", Consolas, monospace;
 
-  --radius-control: 10px;
-  --radius-tarjeta: 14px;
-  --radius-superficie: 18px;
+  --radius-control: 8px;
+  --radius-tarjeta: 12px;
+  --radius-superficie: 20px;
 
   /* Lo que entra en pantalla durante el sorteo en pantalla. */
   --animate-aparecer: aparecer 450ms ease-out;
@@ -41,7 +66,7 @@
 }
 
 body {
-  @apply bg-white text-negro font-sans antialiased;
+  @apply bg-niebla text-noche font-sans antialiased;
 }
 
 /* Tailwind 4 les quita la manito a los botones, y los enlaces con forma de botón la tienen:

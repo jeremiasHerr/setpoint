@@ -75,15 +75,15 @@ export function SeccionPlazos({ plazoGruposDias, plazoPorRondaDias, fechaInicio,
         </div>
       </div>
 
-      <div className="flex flex-col gap-[7px] rounded-control bg-fondo px-[15px] py-[13px]">
+      <div className="flex flex-col gap-[7px] rounded-control bg-niebla px-[15px] py-[13px]">
         {fechaInicio === null ? (
-          <p className="text-[13px] text-gris-500">Elegí cuándo empieza para ver las fechas de cada instancia.</p>
+          <p className="text-[13px] text-pizarra-500">Elegí cuándo empieza para ver las fechas de cada instancia.</p>
         ) : (
           cronograma.map(
             ({ nombre, desde, hasta }) =>
               desde &&
               hasta && (
-                <Numero key={nombre} className="text-[13px] text-gris-700">
+                <Numero key={nombre} className="text-[13px] text-pizarra-700">
                   {nombre} · {rangoDeDias(desde, hasta)}
                 </Numero>
               ),

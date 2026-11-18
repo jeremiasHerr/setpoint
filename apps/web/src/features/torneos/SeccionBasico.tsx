@@ -81,7 +81,7 @@ export function SeccionBasico({
       {/* Sin categorías en el circuito no hay a qué sumarlo: es suelto sí o sí (decisión 089). */}
       {hayCircuito ? (
         <div className="flex flex-col gap-2">
-          <h3 className="text-[13px] font-semibold text-gris-500">¿De qué es este torneo?</h3>
+          <h3 className="text-[13px] font-semibold text-pizarra-500">¿De qué es este torneo?</h3>
           <div role="radiogroup" aria-label="Tipo de torneo" className="grid gap-2.5 sm:grid-cols-2">
             {tipos.map((tipo) => {
               const elegido = tipo.suelto === suelto;
@@ -94,24 +94,24 @@ export function SeccionBasico({
                   disabled={categoriasFijas && !elegido}
                   onClick={() => !elegido && alCambiarSuelto(tipo.suelto)}
                   className={`flex flex-col gap-1 rounded-tarjeta p-3.5 text-left disabled:opacity-40 ${
-                    elegido ? 'border-2 border-negro px-[13px] py-[13px]' : 'border border-linea hover:bg-fondo'
+                    elegido ? 'border-2 border-noche px-[13px] py-[13px]' : 'border border-linea hover:bg-niebla'
                   }`}
                 >
                   <span className="flex items-center gap-2 text-sm font-semibold">
                     <span
-                      className={`size-2.5 rounded-full ${elegido ? 'bg-lima ring-1 ring-negro' : 'border border-gris-400'}`}
+                      className={`size-2.5 rounded-full ${elegido ? 'bg-lona-texto ring-1 ring-noche' : 'border border-pizarra-400'}`}
                     />
                     {tipo.titulo}
                   </span>
-                  <span className="text-[13px] leading-[1.4] text-gris-500">{tipo.detalle}</span>
+                  <span className="text-[13px] leading-[1.4] text-pizarra-500">{tipo.detalle}</span>
                 </button>
               );
             })}
           </div>
         </div>
       ) : (
-        <p className="rounded-control bg-fondo px-3.5 py-3 text-[13px] leading-[1.45] text-gris-500">
-          <span className="font-semibold text-negro">Torneo suelto.</span> No suma a ningún ranking y se anota cualquiera
+        <p className="rounded-control bg-niebla px-3.5 py-3 text-[13px] leading-[1.45] text-pizarra-500">
+          <span className="font-semibold text-noche">Torneo suelto.</span> No suma a ningún ranking y se anota cualquiera
           del padrón. Cuando armes tu circuito, vas a poder sumarle torneos.
         </p>
       )}
@@ -182,7 +182,7 @@ function CategoriasDelCircuito({ categorias, categoriasDelCircuito, cupoPorDefec
 
   return (
     <div className="flex flex-col gap-2">
-      <h3 className="text-[13px] font-semibold text-gris-500">Categorías que se disputan</h3>
+      <h3 className="text-[13px] font-semibold text-pizarra-500">Categorías que se disputan</h3>
       <div className="flex flex-wrap gap-2">
         {categoriasDelCircuito.map((categoria) => (
           <Chip key={categoria} activo={categorias.some((c) => c.categoria === categoria)} onClick={() => alternar(categoria)}>
@@ -228,13 +228,13 @@ function CategoriasSueltas({
 
   return (
     <div className="flex flex-col gap-2">
-      <h3 className="text-[13px] font-semibold text-gris-500">Categorías</h3>
+      <h3 className="text-[13px] font-semibold text-pizarra-500">Categorías</h3>
       {categorias.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {categorias.map(({ categoria }) => (
             <span
               key={categoria}
-              className="inline-flex h-[34px] items-center gap-1.5 rounded-full border border-negro bg-negro pr-2 pl-[13px] text-sm font-medium text-white"
+              className="inline-flex h-[34px] items-center gap-1.5 rounded-full border border-noche bg-noche pr-2 pl-[13px] text-sm font-medium text-white"
             >
               {categoria}
               {!fijas && (
@@ -242,7 +242,7 @@ function CategoriasSueltas({
                   type="button"
                   aria-label={`Quitar ${categoria}`}
                   onClick={() => alCambiar(categorias.filter((c) => c.categoria !== categoria))}
-                  className="flex size-5 items-center justify-center rounded-full text-gris-400 hover:bg-borde-oscuro hover:text-white"
+                  className="flex size-5 items-center justify-center rounded-full text-pizarra-400 hover:bg-borde-noche hover:text-white"
                 >
                   <IconoQuitar className="size-3" />
                 </button>
@@ -269,14 +269,14 @@ function CategoriasSueltas({
                 agregar();
               }
             }}
-            className="h-10 min-w-0 flex-1 rounded-control border border-gris-300 px-3.5 text-[15px] outline-none placeholder:text-gris-400 focus:border-2 focus:border-negro focus:px-[13px]"
+            className="h-10 min-w-0 flex-1 rounded-control border border-borde-campo px-3.5 text-[15px] outline-none placeholder:text-pizarra-400 focus:border-2 focus:border-noche focus:px-[13px]"
           />
           <Boton onClick={agregar} disabled={!nueva.trim()}>
             Agregar
           </Boton>
         </div>
       )}
-      <p className="text-xs text-gris-500">Si no dividís por nivel, alcanza con una.</p>
+      <p className="text-xs text-pizarra-500">Si no dividís por nivel, alcanza con una.</p>
       <MensajeError id="torneo-categorias-error">{problema ?? error}</MensajeError>
     </div>
   );

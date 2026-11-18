@@ -12,8 +12,8 @@ const tituloDeSeccion = 'text-[clamp(30px,3.8vw,44px)] leading-[1.08] font-semib
 type EstadoPartido = 'j' | 'f' | 's' | 'v';
 
 const colorPartido: Record<EstadoPartido, string> = {
-  j: 'bg-negro',
-  f: 'bg-gris-400',
+  j: 'bg-noche',
+  f: 'bg-pizarra-400',
   s: 'bg-linea',
   v: 'bg-rojo',
 };
@@ -63,11 +63,11 @@ const preguntas: { pregunta: string; respuesta: ReactNode }[] = [
 
 function Encabezado() {
   const seccion =
-    'flex min-h-12 items-center text-linea hover:text-white hover:shadow-[inset_0_-2px_0_var(--color-lima)]';
+    'flex min-h-12 items-center text-linea hover:text-white hover:shadow-[inset_0_-2px_0_var(--color-lona)]';
   return (
-    <header className="mx-auto flex max-w-[1180px] flex-wrap items-center gap-x-8 gap-y-2 border-b border-borde-oscuro py-4">
+    <header className="mx-auto flex max-w-[1180px] flex-wrap items-center gap-x-8 gap-y-2 border-b border-borde-noche py-4">
       <Link to="/" className="mr-auto flex min-h-11 items-center">
-        <Logo sobreNegro grande />
+        <Logo sobreNoche grande />
       </Link>
       <nav className="flex flex-wrap items-center gap-x-8 gap-y-1 text-[17px] font-medium">
         <a href="#producto" className={seccion}>
@@ -83,13 +83,13 @@ function Encabezado() {
       <div className="flex flex-wrap items-center gap-2.5">
         <Link
           to="/ingresar"
-          className="flex h-[46px] items-center rounded-[11px] border border-gris-700 px-[18px] text-base font-medium text-white"
+          className="flex h-[46px] items-center rounded-[11px] border border-pizarra-700 px-[18px] text-base font-medium text-white"
         >
           Ingresar
         </Link>
         <Link
           to="/registro"
-          className="flex h-[46px] items-center rounded-[11px] bg-lima px-5 text-base font-semibold text-negro"
+          className="flex h-[46px] items-center rounded-[11px] border border-lona-borde bg-lona text-noche-900 px-5 text-base font-semibold"
         >
           Crear mi circuito
         </Link>
@@ -100,27 +100,27 @@ function Encabezado() {
 
 function Portada() {
   return (
-    <section className={`bg-negro pb-[300px] ${margen}`}>
+    <section className={`bg-noche pb-[300px] ${margen}`}>
       <Encabezado />
       <div className="mx-auto flex max-w-[860px] flex-col items-center gap-6 pt-[88px] text-center">
-        <span className="flex h-[34px] items-center gap-[9px] rounded-full border border-borde-oscuro px-3.5 text-sm text-gris-400">
-          <span className="size-[7px] rounded-full bg-lima" />
+        <span className="flex h-[34px] items-center gap-[9px] rounded-full border border-borde-noche px-3.5 text-sm text-pizarra-400">
+          <span className="size-[7px] rounded-full bg-lona" />
           Torneos, ranking e inscripciones
         </span>
-        <h1 className="text-[clamp(40px,6vw,72px)] leading-[1.02] font-semibold tracking-[-0.045em] text-balance text-white">
+        <h1 className="text-[clamp(40px,6vw,72px)] leading-[1.02] font-display font-semibold tracking-[-0.02em] text-balance text-white">
           Tu circuito de tenis, en un solo lugar.
         </h1>
-        <p className="max-w-[640px] text-[clamp(17px,1.6vw,20px)] leading-normal text-gris-400">
+        <p className="max-w-[640px] text-[clamp(17px,1.6vw,20px)] leading-normal text-pizarra-400">
           Inscripciones con MercadoPago, zonas, cuadros y ranking que se calculan solos. Vos cargás los resultados; tus
           jugadores lo ven en el celular.
         </p>
         <Link
           to="/registro"
-          className="mt-1.5 flex h-[52px] items-center rounded-xl bg-lima px-6 text-base font-semibold text-negro"
+          className="mt-1.5 flex h-[52px] items-center rounded-xl border border-lona-borde bg-lona text-noche-900 px-6 text-base font-semibold"
         >
           Crear mi circuito
         </Link>
-        <span className="text-sm text-gris-400">
+        <span className="text-sm text-pizarra-400">
           Web para la organización · App Android, en prueba · Link público para todos
         </span>
       </div>
@@ -147,12 +147,12 @@ function FilaDelTablero({
         vencido ? 'border-b border-rojo-linea bg-rojo-fondo' : 'border-b border-linea-suave last:border-b-0'
       }`}
     >
-      <Numero className={`text-xs ${vencido ? 'text-rojo-texto' : 'text-gris-500'}`}>{zona}</Numero>
+      <Numero className={`text-xs ${vencido ? 'text-rojo-texto' : 'text-pizarra-500'}`}>{zona}</Numero>
       <span className={`flex-[1_1_160px] text-[15px] ${vencido ? 'font-semibold' : ''}`}>{partido}</span>
-      <Numero className={`text-[13px] ${vencido ? 'text-rojo-texto' : 'text-gris-500'}`}>{estado}</Numero>
+      <Numero className={`text-[13px] ${vencido ? 'text-rojo-texto' : 'text-pizarra-500'}`}>{estado}</Numero>
       <span
         className={`flex h-8 items-center rounded-lg px-3 text-[13px] ${
-          vencido ? 'bg-negro font-semibold text-white' : 'border border-linea font-medium'
+          vencido ? 'bg-noche font-semibold text-white' : 'border border-linea font-medium'
         }`}
       >
         {accion}
@@ -166,22 +166,22 @@ function TableroDeEjemplo() {
   return (
     <div
       aria-hidden
-      className="min-w-0 flex-[1_1_640px] overflow-hidden rounded-2xl border border-borde-oscuro bg-carbon"
+      className="min-w-0 flex-[1_1_640px] overflow-hidden rounded-2xl border border-borde-noche bg-noche-2"
     >
       <div className="flex h-10 items-center gap-3.5 px-4">
         <span className="flex gap-1.5">
-          <span className="size-2.5 rounded-full bg-borde-oscuro" />
-          <span className="size-2.5 rounded-full bg-borde-oscuro" />
-          <span className="size-2.5 rounded-full bg-borde-oscuro" />
+          <span className="size-2.5 rounded-full bg-borde-noche" />
+          <span className="size-2.5 rounded-full bg-borde-noche" />
+          <span className="size-2.5 rounded-full bg-borde-noche" />
         </span>
-        <Numero className="min-w-0 flex-1 truncate text-center text-xs text-gris-400">Tablero · Primavera 26 · Tercera</Numero>
+        <Numero className="min-w-0 flex-1 truncate text-center text-xs text-pizarra-400">Tablero · Primavera 26 · Tercera</Numero>
         <span className="w-[42px]" />
       </div>
-      <div className="flex flex-col bg-white">
-        <div className="flex flex-wrap items-center gap-x-[18px] gap-y-1.5 border-b border-linea px-[22px] py-3 text-[13px] text-gris-500">
-          <span className="flex items-center gap-[7px] font-semibold text-negro">
-            <span className="flex size-[18px] items-center justify-center rounded-[5px] bg-lima">
-              <span className="size-1.5 rounded-full bg-negro" />
+      <div className="flex flex-col bg-papel">
+        <div className="flex flex-wrap items-center gap-x-[18px] gap-y-1.5 border-b border-linea px-[22px] py-3 text-[13px] text-pizarra-500">
+          <span className="flex items-center gap-[7px] font-semibold text-noche">
+            <span className="flex size-[18px] items-center justify-center rounded-[5px] bg-lona">
+              <span className="size-1.5 rounded-full bg-noche" />
             </span>
             Liga Amateur del Valle
           </span>
@@ -192,11 +192,11 @@ function TableroDeEjemplo() {
         <div className="flex flex-col gap-5 p-[22px]">
           <div className="flex flex-wrap items-end justify-between gap-x-5 gap-y-2.5">
             <div className="flex flex-col gap-1">
-              <Numero className="text-xs text-gris-500">grupos en curso</Numero>
+              <Numero className="text-xs text-pizarra-500">grupos en curso</Numero>
               <span className="text-[26px] leading-[1.1] font-semibold tracking-[-0.035em]">Fase de grupos</span>
-              <span className="text-sm text-gris-500">8 zonas de 4 · terminan el sábado 20</span>
+              <span className="text-sm text-pizarra-500">8 zonas de 4 · terminan el sábado 20</span>
             </div>
-            <span className="flex h-[38px] items-center rounded-control bg-negro px-3.5 text-sm font-semibold text-white">
+            <span className="flex h-[38px] items-center rounded-control bg-noche px-3.5 text-sm font-semibold text-white">
               Cargar resultado
             </span>
           </div>
@@ -204,7 +204,7 @@ function TableroDeEjemplo() {
             <div className="flex items-baseline justify-between gap-2.5">
               <span className="text-sm font-semibold">Partidos de la fase de grupos</span>
               <Numero className="text-sm">
-                31 <span className="text-gris-500">/ 48</span>
+                31 <span className="text-pizarra-500">/ 48</span>
               </Numero>
             </div>
             <div className="grid grid-cols-[repeat(auto-fill,minmax(76px,1fr))] gap-3.5">
@@ -215,7 +215,7 @@ function TableroDeEjemplo() {
                       <div key={i} className={`h-9 flex-1 rounded-[3px] ${colorPartido[estado as EstadoPartido]}`} />
                     ))}
                   </div>
-                  <Numero className="text-xs text-gris-500">
+                  <Numero className="text-xs text-pizarra-500">
                     {nombre} · {partidos.split('j').length - 1}/6
                   </Numero>
                 </div>
@@ -235,24 +235,24 @@ function TableroDeEjemplo() {
 
 function CelularDeEjemplo() {
   return (
-    <div aria-hidden className="flex-[0_1_300px] rounded-[40px] border border-borde-oscuro bg-carbon p-2.5">
-      <div className="flex flex-col gap-3.5 rounded-[31px] bg-white px-4 pt-[26px] pb-[18px]">
+    <div aria-hidden className="flex-[0_1_300px] rounded-[40px] border border-borde-noche bg-noche-2 p-2.5">
+      <div className="flex flex-col gap-3.5 rounded-[31px] bg-papel px-4 pt-[26px] pb-[18px]">
         <span className="text-[26px] leading-[1.1] font-semibold tracking-[-0.032em]">Cuándo juego</span>
-        <div className="flex flex-col gap-2.5 rounded-2xl bg-negro px-4 py-[18px]">
-          <span className="text-[15px] font-medium text-gris-400">Tu próximo partido</span>
+        <div className="flex flex-col gap-2.5 rounded-2xl bg-noche px-4 py-[18px]">
+          <span className="text-[15px] font-medium text-pizarra-400">Tu próximo partido</span>
           <span className="text-[26px] leading-[1.08] font-semibold tracking-[-0.032em] text-white">
             Marcelo Sanhueza
           </span>
-          <Numero className="text-lg font-medium text-lima">sáb 14 · 10:00</Numero>
-          <span className="text-[15px] text-gris-400">Club Alta Barda · cancha 3</span>
-          <span className="mt-1 flex h-12 items-center justify-center rounded-xl bg-lima text-base font-semibold text-negro">
+          <Numero className="text-lg font-medium text-white">sáb 14 · 10:00</Numero>
+          <span className="text-[15px] text-pizarra-400">Club Alta Barda · cancha 3</span>
+          <span className="mt-1 flex h-12 items-center justify-center rounded-xl border border-lona-borde bg-lona text-noche-900 text-base font-semibold">
             Escribirle
           </span>
         </div>
         <span className="text-[17px] font-semibold tracking-[-0.02em]">Te falta coordinar</span>
         <div className="flex items-center justify-between gap-2 rounded-xl border border-linea px-3.5 py-3">
           <span className="text-base font-medium">Diego Roa</span>
-          <Numero className="text-[15px] text-gris-500">6 días</Numero>
+          <Numero className="text-[15px] text-pizarra-500">6 días</Numero>
         </div>
       </div>
     </div>
@@ -273,10 +273,10 @@ function Producto() {
 function Pantalla({ superficie, titulo, texto, children }: { superficie: string; titulo: string; texto: string; children: ReactNode }) {
   return (
     <div className="flex flex-[1_1_320px] flex-col gap-[18px] rounded-superficie border border-linea p-6">
-      <Numero className="text-[13px] text-gris-500">{superficie}</Numero>
+      <Numero className="text-[13px] text-pizarra-500">{superficie}</Numero>
       <div className="flex flex-col gap-2">
         <h3 className="text-[22px] leading-[1.15] font-semibold tracking-[-0.03em]">{titulo}</h3>
-        <p className="text-[15px] text-gris-500">{texto}</p>
+        <p className="text-[15px] text-pizarra-500">{texto}</p>
       </div>
       <div aria-hidden className="mt-auto">
         {children}
@@ -298,7 +298,7 @@ function PuestoDeEjemplo({ puesto, nombre, puntos, ultimo = false }: { puesto: n
     <div
       className={`grid grid-cols-[22px_minmax(0,1fr)_auto] gap-2 px-3.5 py-2.5 ${ultimo ? '' : 'border-b border-linea-suave'}`}
     >
-      <Numero className="text-gris-500">{puesto}</Numero>
+      <Numero className="text-pizarra-500">{puesto}</Numero>
       <span className="font-medium">{nombre}</span>
       <Numero>{puntos}</Numero>
     </div>
@@ -310,7 +310,7 @@ function TresPantallas() {
     <section className={`pt-28 ${margen}`}>
       <div className="mx-auto flex max-w-[1180px] flex-col gap-10">
         <div className="flex flex-col items-center gap-3.5 text-center">
-          <Numero className="text-[13px] text-gris-500">un torneo, tres pantallas</Numero>
+          <Numero className="text-[13px] text-pizarra-500">un torneo, tres pantallas</Numero>
           <h2 className={`max-w-[720px] text-balance ${tituloDeSeccion}`}>Cada uno ve lo que necesita, siempre al día</h2>
         </div>
         <div className="flex flex-wrap gap-[18px]">
@@ -326,7 +326,7 @@ function TresPantallas() {
               </FilaDeEjemplo>
               <FilaDeEjemplo>
                 <span>Sorteo</span>
-                <Numero className="text-gris-500">confirmado</Numero>
+                <Numero className="text-pizarra-500">confirmado</Numero>
               </FilaDeEjemplo>
               <FilaDeEjemplo ultima>
                 <span>Resultados</span>
@@ -339,10 +339,10 @@ function TresPantallas() {
             titulo="Cuándo juega, contra quién y dónde"
             texto="Anota la fecha que arregló, el rival la confirma con un toque y le llega un aviso antes del partido."
           >
-            <div className="flex flex-col gap-1.5 rounded-tarjeta bg-negro p-4">
-              <span className="text-sm text-gris-400">Tu próximo partido</span>
+            <div className="flex flex-col gap-1.5 rounded-tarjeta bg-noche p-4">
+              <span className="text-sm text-pizarra-400">Tu próximo partido</span>
               <span className="text-xl font-semibold tracking-[-0.03em] text-white">Marcelo Sanhueza</span>
-              <Numero className="text-[15px] text-lima">sáb 14 · 10:00</Numero>
+              <Numero className="text-[15px] text-white">sáb 14 · 10:00</Numero>
             </div>
           </Pantalla>
           <Pantalla
@@ -364,10 +364,10 @@ function TresPantallas() {
 
 function Funcion({ titulo, texto, oscura = false, children }: { titulo: string; texto: string; oscura?: boolean; children: ReactNode }) {
   return (
-    <div className={`flex flex-col gap-[18px] rounded-superficie p-6 ${oscura ? 'bg-negro' : 'border border-linea'}`}>
+    <div className={`flex flex-col gap-[18px] rounded-superficie p-6 ${oscura ? 'bg-noche' : 'border border-linea'}`}>
       <div className="flex flex-col gap-2">
         <h3 className={`text-xl leading-[1.15] font-semibold tracking-[-0.03em] ${oscura ? 'text-white' : ''}`}>{titulo}</h3>
-        <p className={`text-[15px] ${oscura ? 'text-gris-400' : 'text-gris-500'}`}>{texto}</p>
+        <p className={`text-[15px] ${oscura ? 'text-pizarra-400' : 'text-pizarra-500'}`}>{texto}</p>
       </div>
       <div aria-hidden className="mt-auto">
         {children}
@@ -390,15 +390,15 @@ function Funciones() {
       <div className="mx-auto flex max-w-[1180px] flex-col gap-9">
         <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-4">
           <h2 className={`max-w-[620px] ${tituloDeSeccion}`}>Lo que antes llevaba una planilla y cien mensajes</h2>
-          <p className="max-w-[380px] text-[17px] text-gris-500">Pensado con el reglamento de un circuito real.</p>
+          <p className="max-w-[380px] text-[17px] text-pizarra-500">Pensado con el reglamento de un circuito real.</p>
         </div>
         <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-4">
           <Funcion
             titulo="Traés tu planilla"
             texto="Jugadores, puntos, categorías y torneos del calendario entran solos. Revisás solo lo dudoso."
           >
-            <div className="flex flex-col gap-2 rounded-xl border border-linea bg-white p-3.5 text-sm">
-              <Numero className="text-xs text-gris-500">ranking-tercera-2026.xlsx</Numero>
+            <div className="flex flex-col gap-2 rounded-xl border border-linea bg-papel p-3.5 text-sm">
+              <Numero className="text-xs text-pizarra-500">ranking-tercera-2026.xlsx</Numero>
               <div className="flex justify-between gap-2.5">
                 <span>Importados</span>
                 <Numero className="font-medium">74</Numero>
@@ -416,9 +416,9 @@ function Funciones() {
           >
             <div className="flex flex-col gap-2.5">
               <div className="flex items-baseline justify-between gap-2.5">
-                <span className="text-sm text-gris-400">Pagaron</span>
+                <span className="text-sm text-pizarra-400">Pagaron</span>
                 <Numero className="text-lg font-medium text-white">
-                  28 <span className="text-gris-400">/ 32</span>
+                  28 <span className="text-pizarra-400">/ 32</span>
                 </Numero>
               </div>
               {/* El cupo: 28 pagados, 1 reservando, 3 libres. */}
@@ -426,7 +426,7 @@ function Funciones() {
                 {Array.from({ length: 32 }, (_, i) => (
                   <div
                     key={i}
-                    className={`h-6 flex-1 rounded-[2px] ${i < 28 ? 'bg-lima' : i === 28 ? 'bg-gris-400' : 'bg-borde-oscuro'}`}
+                    className={`h-6 flex-1 rounded-[2px] ${i < 28 ? 'bg-lona' : i === 28 ? 'bg-pizarra-400' : 'bg-borde-noche'}`}
                   />
                 ))}
               </div>
@@ -437,7 +437,7 @@ function Funciones() {
             texto="Sorteo sembrado por ranking, desempates del reglamento, cuadro principal y consuelo."
           >
             <div className="flex flex-wrap gap-1.5 text-sm font-medium">
-              <span className="flex h-8 items-center rounded-full bg-negro px-3 text-white">Serpentina</span>
+              <span className="flex h-8 items-center rounded-full bg-noche px-3 text-white">Serpentina</span>
               <span className="flex h-8 items-center rounded-full border border-linea px-3">Directa</span>
               <span className="flex h-8 items-center rounded-full border border-linea px-3">Bombos</span>
             </div>
@@ -447,9 +447,9 @@ function Funciones() {
               {casilleros.map(({ etapa, puntos, nuevo }) => (
                 <div
                   key={etapa}
-                  className={`flex flex-col items-center gap-0.5 rounded-[7px] py-[7px] ${nuevo ? 'bg-lima' : 'bg-fondo'}`}
+                  className={`flex flex-col items-center gap-0.5 rounded-[7px] py-[7px] ${nuevo ? 'bg-lona-fondo' : 'bg-niebla'}`}
                 >
-                  <Numero className={`text-[11px] ${nuevo ? '' : 'text-gris-500'}`}>{etapa}</Numero>
+                  <Numero className={`text-[11px] ${nuevo ? '' : 'text-pizarra-500'}`}>{etapa}</Numero>
                   <Numero className="text-[15px] font-medium">{puntos}</Numero>
                 </div>
               ))}
@@ -476,7 +476,7 @@ function Preguntas() {
                   <IconoMas className="size-3.5 stroke-[1.8]" />
                 </span>
               </summary>
-              <p className="pr-12 pb-[22px] text-base text-gris-700">{respuesta}</p>
+              <p className="pr-12 pb-[22px] text-base text-pizarra-700">{respuesta}</p>
             </details>
           ))}
         </div>
@@ -488,16 +488,16 @@ function Preguntas() {
 function Llamado() {
   return (
     <section className={`pt-28 pb-20 ${margen}`}>
-      <div className="mx-auto flex max-w-[1180px] flex-col items-center gap-5 rounded-3xl bg-negro px-[clamp(20px,4vw,48px)] py-[clamp(40px,6vw,72px)] text-center">
+      <div className="mx-auto flex max-w-[1180px] flex-col items-center gap-5 rounded-3xl bg-noche px-[clamp(20px,4vw,48px)] py-[clamp(40px,6vw,72px)] text-center">
         <h2 className="max-w-[680px] text-[clamp(30px,4vw,48px)] leading-[1.06] font-semibold tracking-[-0.04em] text-balance text-white">
           Tu próximo torneo, sin Excel ni comprobantes
         </h2>
-        <p className="max-w-[520px] text-[17px] leading-normal text-gris-400">
+        <p className="max-w-[520px] text-[17px] leading-normal text-pizarra-400">
           Creá tu circuito y publicá un torneo suelto. Si llevás ranking, lo activás después, sin rehacer nada.
         </p>
         <Link
           to="/registro"
-          className="mt-1.5 flex h-[52px] items-center rounded-xl bg-lima px-[26px] text-base font-semibold text-negro"
+          className="mt-1.5 flex h-[52px] items-center rounded-xl border border-lona-borde bg-lona text-noche-900 px-[26px] text-base font-semibold"
         >
           Crear mi circuito
         </Link>
@@ -507,18 +507,18 @@ function Llamado() {
 }
 
 function Pie() {
-  const enlace = 'flex min-h-10 items-center text-gris-700 hover:text-negro';
+  const enlace = 'flex min-h-10 items-center text-pizarra-700 hover:text-noche';
   return (
     <footer className={`mt-auto ${margen}`}>
       <div className="mx-auto flex max-w-[1180px] flex-col gap-14 border-t border-linea pt-[72px] pb-8">
         <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-x-12 gap-y-10 text-[15px]">
           <div className="flex flex-col gap-3.5">
             <Logo grande />
-            <span className="max-w-[240px] text-gris-500">Torneos, ranking e inscripciones para circuitos de tenis.</span>
-            <Numero className="text-[13px] text-gris-500">Neuquén, Argentina</Numero>
+            <span className="max-w-[240px] text-pizarra-500">Torneos, ranking e inscripciones para circuitos de tenis.</span>
+            <Numero className="text-[13px] text-pizarra-500">Neuquén, Argentina</Numero>
           </div>
           <nav aria-label="Producto" className="flex flex-col gap-0.5">
-            <Numero className="pb-2.5 text-[13px] text-gris-500">producto</Numero>
+            <Numero className="pb-2.5 text-[13px] text-pizarra-500">producto</Numero>
             <a href="#producto" className={enlace}>
               Cómo se ve
             </a>
@@ -530,7 +530,7 @@ function Pie() {
             </a>
           </nav>
           <nav aria-label="Cuenta" className="flex flex-col gap-0.5">
-            <Numero className="pb-2.5 text-[13px] text-gris-500">cuenta</Numero>
+            <Numero className="pb-2.5 text-[13px] text-pizarra-500">cuenta</Numero>
             <Link to="/ingresar" className={enlace}>
               Ingresar
             </Link>
@@ -539,7 +539,7 @@ function Pie() {
             </Link>
           </nav>
         </div>
-        <div className="flex flex-wrap justify-between gap-x-6 gap-y-2 border-t border-linea-suave pt-6 text-sm text-gris-500">
+        <div className="flex flex-wrap justify-between gap-x-6 gap-y-2 border-t border-linea-suave pt-6 text-sm text-pizarra-500">
           <span>© {new Date().getFullYear()} SetPoint</span>
           <span>Pensado con el reglamento de un circuito real</span>
         </div>
@@ -550,7 +550,7 @@ function Pie() {
 
 export function LandingPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-white leading-[1.45] text-negro">
+    <div className="flex min-h-screen flex-col bg-papel leading-[1.45] text-noche">
       <Portada />
       <Producto />
       <TresPantallas />

@@ -40,7 +40,7 @@ export function CargarResultadoPage() {
 
 function Marco({ sesion, torneoId, children }: { sesion: Sesion; torneoId: number; children: ReactNode }) {
   return (
-    <div className="min-h-screen bg-fondo-tabla text-negro">
+    <div className="min-h-screen bg-niebla text-noche">
       <EncabezadoDelTorneo sesion={sesion} torneoId={torneoId} actual="resultados" />
       <div className="flex justify-center px-7 pt-[34px] pb-10">
         <div className="flex w-full max-w-[1240px] flex-col gap-4">{children}</div>
@@ -69,8 +69,8 @@ function PrimeroSinResultado({ sesion, torneoId }: { sesion: Sesion; torneoId: n
         <Tarjeta className="overflow-hidden">
           <div className="flex flex-wrap items-center justify-between gap-4 border-b border-linea px-6 py-5">
             <div className="flex flex-col gap-[5px]">
-              <h1 className="text-[22px] font-semibold tracking-[-0.03em]">No falta cargar ningún resultado</h1>
-              <p className="text-sm text-gris-500">
+              <h1 className="text-[22px] font-display font-semibold tracking-[-0.02em]">No falta cargar ningún resultado</h1>
+              <p className="text-sm text-pizarra-500">
                 {conCuadros
                   ? 'Los campeones están definidos. Si tenés que corregir un resultado, elegí el partido.'
                   : 'Si tenés que corregir uno, elegí el partido.'}
@@ -93,12 +93,12 @@ function PrimeroSinResultado({ sesion, torneoId }: { sesion: Sesion; torneoId: n
       <Estado>
         {partidos.error?.message === 'TORNEO_NO_ENCONTRADO' ? (
           <>
-            <p className="text-[15px] text-gris-500">No encontramos ese torneo.</p>
+            <p className="text-[15px] text-pizarra-500">No encontramos ese torneo.</p>
             <Boton onClick={() => navegar('/inicio')}>Volver al inicio</Boton>
           </>
         ) : partidos.error && !sesionInvalida ? (
           <>
-            <p className="text-[15px] text-gris-500">No pudimos cargar los partidos.</p>
+            <p className="text-[15px] text-pizarra-500">No pudimos cargar los partidos.</p>
             <Boton onClick={() => void partidos.refetch()}>Probar de nuevo</Boton>
           </>
         ) : (
@@ -122,12 +122,12 @@ function CargarResultado({ sesion, torneoId, partidoId }: { sesion: Sesion; torn
       <Estado>
         {noExiste ? (
           <>
-            <p className="text-[15px] text-gris-500">No encontramos ese partido.</p>
+            <p className="text-[15px] text-pizarra-500">No encontramos ese partido.</p>
             <Boton onClick={() => navegar('/inicio')}>Volver al inicio</Boton>
           </>
         ) : partido.error && !sesionInvalida ? (
           <>
-            <p className="text-[15px] text-gris-500">No pudimos cargar el partido.</p>
+            <p className="text-[15px] text-pizarra-500">No pudimos cargar el partido.</p>
             <Boton onClick={() => void partido.refetch()}>Probar de nuevo</Boton>
           </>
         ) : (
@@ -251,14 +251,14 @@ function TarjetaDelPartido({ sesion, partido }: { sesion: Sesion; partido: Parti
       <Tarjeta className="w-full max-w-[720px] self-center overflow-hidden">
         <form ref={formulario} onSubmit={enviar} className="scroll-mt-4">
           <div className="flex flex-col gap-[5px] border-b border-linea px-6 py-5">
-            <h1 className="text-[22px] font-semibold tracking-[-0.03em]">
+            <h1 className="text-[22px] font-display font-semibold tracking-[-0.02em]">
               {nombres[0]} · {nombres[1]}
             </h1>
-            <p className="font-mono text-[13px] text-gris-500">{rotuloDelPartido(partido)}</p>
+            <p className="font-mono text-[13px] text-pizarra-500">{rotuloDelPartido(partido)}</p>
           </div>
 
           {sinCarga ? (
-            <p className="px-6 py-5 text-[15px] text-gris-500">{sinCarga}</p>
+            <p className="px-6 py-5 text-[15px] text-pizarra-500">{sinCarga}</p>
           ) : (
             <>
               <div className="flex flex-col gap-4 px-6 pt-6 pb-5">
@@ -284,12 +284,12 @@ function TarjetaDelPartido({ sesion, partido }: { sesion: Sesion; partido: Parti
                 )}
 
                 {resumen && (
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-xl bg-lima-tenue px-4 py-3">
-                    <span className="size-2 shrink-0 rounded-full bg-lima" />
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-xl bg-lona-fondo px-4 py-3">
+                    <span className="size-2 shrink-0 rounded-full bg-lona-texto" />
                     <p className="text-[15px] font-semibold">
                       <TextoConNumeros frase={resumen.titulo} />
                     </p>
-                    {resumen.detalle && <p className="font-mono text-[13px] text-gris-500">{resumen.detalle}</p>}
+                    {resumen.detalle && <p className="font-mono text-[13px] text-pizarra-500">{resumen.detalle}</p>}
                   </div>
                 )}
 
@@ -322,7 +322,7 @@ function TarjetaDelPartido({ sesion, partido }: { sesion: Sesion; partido: Parti
                         : 'Resultado guardado. No falta cargar ningún otro.'}
                   </p>
                 ) : (
-                  <p className="min-w-0 flex-1 text-sm text-gris-500">
+                  <p className="min-w-0 flex-1 text-sm text-pizarra-500">
                     Podés corregirlo después, mientras no cambie a quién ya se ubicó en los cuadros.
                   </p>
                 )}

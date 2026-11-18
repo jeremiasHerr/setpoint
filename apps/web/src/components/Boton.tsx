@@ -2,18 +2,19 @@ import type { ButtonHTMLAttributes } from 'react';
 
 type Variante = 'principal' | 'organizador' | 'secundario';
 
-// Los tres reaccionan al mouse, sin tokens nuevos: el lima se oscurece un poco, el negro se aclara al
-// gris-700 y el secundario toma el fondo. Deshabilitados, no reaccionan.
+// La lona es la acción del jugador; la noche, la del organizador; el secundario va en papel con
+// borde (design.md §6). Con el mouse, la lona se oscurece, la noche se aclara a pizarra y el
+// secundario toma la línea suave. Deshabilitados, no reaccionan.
 const estilos: Record<Variante, string> = {
-  principal: 'bg-lima text-negro enabled:hover:brightness-[.93]',
-  organizador: 'bg-negro text-white enabled:hover:bg-gris-700',
-  secundario: 'border border-linea text-negro enabled:hover:bg-fondo',
+  principal: 'border border-lona-borde bg-lona text-noche-900 enabled:hover:bg-lona-hover',
+  organizador: 'bg-noche text-white enabled:hover:bg-pizarra-700',
+  secundario: 'border border-linea bg-papel text-noche enabled:hover:bg-linea-suave',
 };
 
-// Al apretar, apenas más chico; con el teclado, un anillo negro de 2 px. Es un outline y no una
-// sombra: el sistema no tiene sombras (design.md §2).
+// Al apretar, apenas más chico; con el teclado, un anillo de 2 px en noche. Es un outline y no una
+// sombra: el producto no tiene sombras (design.md §2).
 const estados =
-  'motion-safe:transition-[transform,background-color,filter] motion-safe:duration-100 enabled:active:scale-[.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-negro';
+  'motion-safe:transition-[transform,background-color] motion-safe:duration-100 enabled:active:scale-[.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-noche';
 
 type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   variante?: Variante;

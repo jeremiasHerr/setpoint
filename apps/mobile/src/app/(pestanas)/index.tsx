@@ -115,7 +115,7 @@ function Contenido({ datos }: { datos: MisPartidos }) {
 const estilos = StyleSheet.create({
   pantalla: {
     flex: 1,
-    backgroundColor: colores.blanco,
+    backgroundColor: colores.niebla,
   },
   contenido: {
     paddingHorizontal: medidas.margen,
@@ -140,13 +140,13 @@ const estilos = StyleSheet.create({
   textoTorneo: {
     fontFamily: fuentes.mono[500],
     fontSize: 12,
-    color: colores.gris500,
+    color: colores.pizarra500,
   },
   aviso: {
     fontFamily: fuentes.sans[400],
     fontSize: 15,
     lineHeight: 22,
-    color: colores.gris700,
+    color: colores.pizarra700,
   },
   subtitulo: {
     flexDirection: 'row',
@@ -160,12 +160,12 @@ const estilos = StyleSheet.create({
     fontFamily: fuentes.sans[600],
     fontSize: 20,
     letterSpacing: -0.4,
-    color: colores.negro,
+    color: colores.noche,
   },
   cantidad: {
     fontFamily: fuentes.mono[500],
     fontSize: 13,
-    color: colores.gris500,
+    color: colores.pizarra500,
     ...tabular,
   },
 });

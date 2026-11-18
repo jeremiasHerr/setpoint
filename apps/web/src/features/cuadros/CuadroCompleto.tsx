@@ -16,16 +16,16 @@ const ANCHO_TARJETA = 190;
 const SEPARACION = 34;
 const ALTO_POR_LUGAR = 74;
 
-// Nombre del cuadro y cuántos partidos van. El principal lleva el punto lima y la regla negra.
+// Nombre del cuadro y cuántos partidos van. El principal lleva el punto verde y la regla noche.
 export function EncabezadoDelCuadro({ cuadro }: { cuadro: CuadroEliminatorio }) {
   const principal = cuadro.cuadro === 'campeonato';
   return (
-    <div className={`flex items-center justify-between gap-3 border-b-2 pb-3 ${principal ? 'border-negro' : 'border-linea'}`}>
+    <div className={`flex items-center justify-between gap-3 border-b-2 pb-3 ${principal ? 'border-noche' : 'border-linea'}`}>
       <div className="flex items-center gap-2.5">
-        <span className={`size-[9px] rounded-full ${principal ? 'bg-lima' : 'bg-linea'}`} />
+        <span className={`size-[9px] rounded-full ${principal ? 'bg-lona-texto' : 'bg-linea'}`} />
         <h2 className="text-xl font-semibold tracking-[-0.025em]">{NOMBRE_DEL_CUADRO[cuadro.cuadro]}</h2>
       </div>
-      <Numero className="text-[13px] text-gris-500">
+      <Numero className="text-[13px] text-pizarra-500">
         {partidosJugados(cuadro)} de {cuadro.partidos.length} jugados
       </Numero>
     </div>
@@ -47,7 +47,7 @@ export function CuadroCompleto({ cuadro, eleccion }: { cuadro: CuadroEliminatori
 
       <div className="grid" style={columnas}>
         {rondas.map((ronda) => (
-          <Numero key={ronda} className="text-xs text-gris-500">
+          <Numero key={ronda} className="text-xs text-pizarra-500">
             {rotuloDeRonda(ronda, cuadro.rondas)}
           </Numero>
         ))}

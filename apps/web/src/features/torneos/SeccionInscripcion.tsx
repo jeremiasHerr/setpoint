@@ -101,7 +101,7 @@ export function SeccionInscripcion({
       </div>
 
       <div className="flex flex-col gap-2">
-        <h3 className="text-[13px] font-semibold text-gris-500">Quién se puede inscribir</h3>
+        <h3 className="text-[13px] font-semibold text-pizarra-500">Quién se puede inscribir</h3>
         <div className="flex flex-wrap gap-2">
           {MODOS.map(({ valor, etiqueta }) => (
             <Chip
@@ -117,14 +117,14 @@ export function SeccionInscripcion({
           ))}
         </div>
         {padronVacio && (
-          <p className={`text-[13px] leading-[1.45] ${modoInscripcion === 'cerrada' ? 'font-medium text-negro' : 'text-gris-500'}`}>
+          <p className={`text-[13px] leading-[1.45] ${modoInscripcion === 'cerrada' ? 'font-medium text-noche' : 'text-pizarra-500'}`}>
             {modoInscripcion === 'cerrada' ? 'Con el padrón vacío no se puede anotar nadie. ' : 'Tu padrón está vacío. '}
             Para usar "Solo el padrón",{' '}
-            <Link to="/padron/importar" className="font-medium text-negro underline">
+            <Link to="/padron/importar" className="font-medium text-noche underline">
               importá tu planilla
             </Link>{' '}
             o{' '}
-            <Link to="/padron" className="font-medium text-negro underline">
+            <Link to="/padron" className="font-medium text-noche underline">
               cargá tus jugadores
             </Link>
             .

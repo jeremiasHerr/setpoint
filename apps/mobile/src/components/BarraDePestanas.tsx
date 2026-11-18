@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { colores, fuentes, medidas } from '../lib/tokens';
 
 // Barra de pestañas de la app (decisión 045). No tiene pantalla de referencia: es texto solo,
-// con la pestaña activa en negro y una raya lima arriba, como el resto de los activos de design.md.
+// con la pestaña activa en noche y una raya verde arriba, como el resto de los activos de design.md.
 export function BarraDePestanas({ state, descriptors, navigateToTab, insets }: BottomTabBarProps) {
   return (
     <View style={[estilos.barra, { paddingBottom: insets.bottom }]}>
@@ -31,7 +31,7 @@ export function BarraDePestanas({ state, descriptors, navigateToTab, insets }: B
 const estilos = StyleSheet.create({
   barra: {
     flexDirection: 'row',
-    backgroundColor: colores.blanco,
+    backgroundColor: colores.papel,
     borderTopWidth: 1,
     borderTopColor: colores.linea,
   },
@@ -52,15 +52,15 @@ const estilos = StyleSheet.create({
     borderRadius: 2,
   },
   rayaActiva: {
-    backgroundColor: colores.lima,
+    backgroundColor: colores.lonaTexto,
   },
   texto: {
     fontFamily: fuentes.sans[500],
     fontSize: 15,
-    color: colores.gris500,
+    color: colores.pizarra500,
   },
   textoActivo: {
     fontFamily: fuentes.sans[600],
-    color: colores.negro,
+    color: colores.noche,
   },
 });

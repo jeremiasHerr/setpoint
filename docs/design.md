@@ -1,8 +1,8 @@
 # Diseño
 
-Sistema visual de SetPoint. Esta es la fuente de verdad para todo lo que se dibuje en la web y en la app: si algo no está acá, se resuelve con los tokens y componentes que sí están, no inventando uno nuevo.
+Sistema visual de SetPoint: **Última luz** ([decisión 104](decisiones/104-sistema-visual-ultima-luz.md)). Esta es la fuente de verdad para todo lo que se dibuje en la web y en la app: si algo no está acá, se resuelve con los tokens y componentes que sí están, no inventando uno nuevo.
 
-Las pantallas de referencia están en el canvas **SetPoint — Verde pelota**, dividido en tres páginas: Jugador, Organizador y Público.
+El sistema está dibujado en el artifact **Última luz v2** (la landing, el Tablero, Cargar resultado y Cuándo juego). Las pantallas de referencia de cada flujo están en [pantallas/](pantallas/README.md) y en el canvas **SetPoint — Verde pelota**, con el sistema anterior: de ahí se toma la estructura de cada pantalla, no los colores.
 
 ---
 
@@ -13,7 +13,7 @@ Todo el sistema sale de que hay dos personas usando esto en situaciones opuestas
 | | Organizador | Jugador |
 |---|---|---|
 | Dónde | Escritorio | Celular |
-| Cuándo | Sentado, con tiempo | Parado afuera del club, al sol, antes de jugar |
+| Cuándo | Sentado, con tiempo, muchas veces de noche | Parado afuera del club, al sol, antes de jugar |
 | Qué necesita | Densidad y escaneo: 78 partidos, 8 zonas, tablas | Una sola cosa por pantalla, tipografía grande, contraste alto |
 | Trabajo principal | "Qué partidos faltan y a quién apurar" | "Cuándo juego, contra quién y dónde" |
 
@@ -23,12 +23,13 @@ Todo el sistema sale de que hay dos personas usando esto en situaciones opuestas
 
 ## 2. Principios
 
-1. **El color no decora.** El lima marca tres cosas y nada más: lo que ganaste, lo que sos vos, y la acción principal. Si aparece en un cuarto lugar, algo está mal.
-2. **Un objeto gráfico, repetido.** La barra de marcas es la misma en el tablero, en la landing y en el cupo de inscripciones. La matriz de zona es la misma para el jugador y para el organizador. Nadie tiene que aprender dos lenguajes.
-3. **El número se lee antes que la etiqueta.** Todo dato numérico va en mono y con más peso visual que su rótulo.
-4. **Decir qué va a pasar antes de que pase.** Antes de guardar un resultado, la pantalla dice quién queda primero y quién va al cuadro consuelo. Antes de pagar, dice que el lugar se reserva 15 minutos.
-5. **Bordes, no sombras.** La jerarquía la dan el borde de 1px, el fondo negro y el espacio. No hay `box-shadow` en el sistema.
-6. **Sentence case siempre.** Ni títulos ni botones ni etiquetas en mayúsculas. Los rótulos en mono minúscula (`pg`, `sets`, `zona D`) son la única excepción y son parte del acabado.
+1. **La atmósfera vive en un solo lugar.** El club al atardecer, pintado y enmarcado, está en el hero de la landing y en ningún otro lado. El producto es claro, sobrio y denso: fondo niebla, tarjetas papel, bordes de 1px.
+2. **El color dice un estado, no decora.** La lona es la acción del jugador, lo ganado y lo que clasifica. El azul es "con fecha", el rojo "vencido", el ámbar y el petróleo los dos cuadros. La pelota es solo el logo. Si un color aparece por adorno, algo está mal.
+3. **Un objeto gráfico, repetido.** La barra de marcas es la misma en el tablero, en la landing, en el inicio y en el cupo de inscripciones, y es también el logo. La matriz de zona es la misma para el jugador y para el organizador. Nadie tiene que aprender dos lenguajes.
+4. **El número se lee antes que la etiqueta.** Todo dato numérico va en mono y con más peso visual que su rótulo.
+5. **Decir qué va a pasar antes de que pase.** Antes de guardar un resultado, la pantalla dice quién queda primero y quién va al cuadro consuelo. Antes de pagar, dice que el lugar se reserva 15 minutos.
+6. **Bordes, no sombras.** En el producto, la jerarquía la dan el borde de 1px, la superficie noche y el espacio. La única sombra del sistema es la del demo de la landing, que se apoya sobre la pintura.
+7. **Sentence case siempre.** Ni títulos ni botones ni etiquetas en mayúsculas. Los rótulos en mono minúscula (`pg`, `sets`, `zona D`) son la única excepción y son parte del acabado.
 
 ---
 
@@ -38,44 +39,60 @@ Todo el sistema sale de que hay dos personas usando esto en situaciones opuestas
 
 | Token | Hex | Para qué |
 |---|---|---|
-| `--lima` | `#CDF546` | Acento único. Acción principal, victoria, "vos", torneo del calendario en curso |
-| `--lima-tenue` | `#F7FCE7` | Fondo de celda ganada en matrices y tablas |
-| `--negro` | `#0A0B0D` | Texto principal, superficies oscuras, botones secundarios sólidos |
-| `--carbon` | `#17191D` | Celdas dentro de una superficie negra, ítem activo de la navegación |
-| `--borde-oscuro` | `#2C3037` | Bordes y separadores sobre una superficie negra |
-| `--gris-700` | `#3F4348` | Texto secundario sobre blanco |
-| `--gris-500` | `#6A7079` | Rótulos, texto de apoyo |
-| `--gris-400` | `#9BA1A9` | Texto sobre negro, datos apagados, perdedor en una tabla |
-| `--gris-300` | `#B5BBC3` | Borde de campo de formulario, celda punteada |
-| `--linea` | `#D5D9DE` | Borde de tarjeta y separador |
-| `--linea-suave` | `#F1F2F4` | Separador entre filas de tabla |
-| `--fondo` | `#F6F7F8` | Fondo de página secundario, cajas de ayuda |
-| `--fondo-tabla` | `#FAFBFC` | Encabezado de tabla, pie de tarjeta |
-| `--blanco` | `#FFFFFF` | Superficie principal |
-| `--rojo` | `#E5484D` | Solo vencimientos. Marcas y rellenos |
-| `--rojo-texto` | `#C62A2F` | El mismo rojo para texto (el otro no llega a 4.5:1) |
-| `--rojo-fondo` | `#FEF6F6` | Fondo de fila o tarjeta vencida |
-| `--rojo-linea` | `#F3D3D4` | Borde de lo anterior |
+| `noche-900` | `#0B1220` | El fondo de la landing y el ícono de la app |
+| `noche` | `#101A2C` | Texto principal, encabezado del organizador, tarjeta noche, botón del organizador |
+| `noche-2` | `#1A2740` | Ítem activo de la navegación y celdas sobre noche |
+| `borde-noche` | `#2E3D5A` | Bordes y separadores sobre noche |
+| `pizarra-700` | `#3B4659` | Texto secundario sobre papel |
+| `pizarra-500` | `#626D82` | Rótulos, texto de apoyo, marca punteada |
+| `pizarra-400` | `#9AA5B8` | Texto sobre noche, datos apagados, perdedor en una tabla |
+| `borde-campo` | `#878FA1` | Borde de campo de formulario y de las celdas de la grilla de sets |
+| `linea` | `#D8DCE5` | Borde de tarjeta y separador |
+| `linea-suave` | `#ECEEF3` | Separador entre filas de tabla, hover del secundario |
+| `niebla` | `#F4F5F8` | Fondo de página, encabezado de tabla, pie de tarjeta |
+| `papel` | `#FFFFFF` | Tarjetas, tablas, campos y botones secundarios. El texto sobre noche es blanco, el mismo valor |
+| `cal` | `#E9E2D6` | Texto de la bajada sobre la pintura y sobre `noche-900` |
+| `lona` | `#62BB78` | Acción principal del jugador; relleno de progreso y marcadores sobre noche |
+| `lona-hover` | `#4FA866` | La lona con el mouse encima |
+| `lona-borde` | `#93D2A3` | Borde del botón lona; anillo del partido elegido |
+| `lona-fondo` | `#E4F8E7` | Celda ganada, chip "nueva", fila tuya |
+| `lona-texto` | `#1B6236` | La lona como texto o punto sobre papel: clasifica, pagada, ganador; interruptor prendido |
+| `pelota` | `#CDF546` | **Solo** la barra levantada del logo sobre noche, el punto de la marca del circuito y una pelota dibujada |
+| `azul` | `#3567D6` | Marca "con fecha" o "en curso" |
+| `azul-texto` | `#2A55BC` | Chip de fecha |
+| `azul-fondo` | `#ECF1FD` | Fondo del chip de fecha |
+| `rojo` | `#E5484D` | Solo vencimientos. Marcas y rellenos |
+| `rojo-texto` | `#C62A2F` | El mismo rojo para texto (el otro no llega a 4.5:1) |
+| `rojo-fondo` | `#FEF6F6` | Fondo de fila o tarjeta vencida |
+| `rojo-linea` | `#F3D3D4` | Borde de lo anterior |
+| `ambar` | `#8F5200` | Chip del cuadro principal |
+| `ambar-fondo` | `#FDF3E3` | Su fondo |
+| `petroleo` | `#0F6170` | Chip del cuadro consuelo |
+| `petroleo-fondo` | `#E5F4F6` | Su fondo |
 
 ### Reglas
 
-- **El lima nunca es texto sobre blanco.** No llega al contraste mínimo. Sobre negro sí (17:1), y ahí es donde vive: números grandes, chips, el punto del logo.
+- **La pelota no es el acento.** Sobre papel no se ve (1,2:1) y sobre el cielo de la pintura peleaba con todo. Queda para el logo y para una pelota dibujada; la acción es lona.
+- **La lona tiene dos caras.** Como relleno (`lona`) lleva texto `noche-900` encima (7,93:1). Como texto o punto sobre papel va `lona-texto` (7,38:1). Sobre noche, un punto o una barra van en `lona`.
 - **El rojo solo significa vencimiento.** No se usa para "error de formulario" ni para eliminar. Un partido que venció sin jugarse es lo único urgente del sistema.
-- **La derrota se dibuja en gris, no en rojo.** En tablas y matrices, el ganador va en `--negro` con peso 600 y el perdedor en `--gris-400`.
-- **Contrastes verificados:** negro sobre blanco 19:1, `--gris-500` sobre blanco 5.3:1, blanco sobre negro 19:1, `--gris-400` sobre negro 7.4:1, negro sobre lima 17:1.
+- **La derrota se dibuja en pizarra, no en rojo.** En tablas y matrices, el ganador va en `noche` con peso 600 y el perdedor en `pizarra-400`.
+- **Sobre noche, los números van en blanco.** El lima de antes sobre las tarjetas oscuras pasa a blanco: la fecha del próximo partido, los puntos propios, la conciliación.
+- **Contrastes verificados:** `noche` sobre `niebla` 15,97:1 y sobre papel 17,41:1. `pizarra-500` sobre papel 5,21:1. `pizarra-400` sobre noche 7,00:1. Blanco sobre `noche-2` 14,91:1. `cal` sobre `noche-900` 14,55:1. `azul-texto` sobre `azul-fondo` 5,94:1. `rojo-texto` sobre `rojo-fondo` 5,23:1. `ambar` y `petroleo` sobre sus fondos, 5,66:1 y 6,28:1. `borde-campo` sobre papel 3,2:1, el mínimo para el borde de un control.
 
 ---
 
 ## 4. Tipografía
 
-Dos familias, de Google Fonts:
+Cuatro familias, de Google Fonts, cada una con un solo rol:
 
 ```html
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Funnel+Display:wght@600&family=Newsreader:opsz,wght@6..72,500&display=swap" rel="stylesheet">
 ```
 
-- **Instrument Sans** — interfaz, nombres, títulos, copy. Pesos 400 / 500 / 600. El 700 casi no se usa.
-- **Geist Mono** — **todo número**: marcadores, puntos, plazos, horarios, importes, fechas cortas, rótulos de columna. Siempre con `font-variant-numeric: tabular-nums`.
+- **Funnel Display 600** (`font-display`) — títulos de página del producto y de la landing, el nombre del rival en la tarjeta del próximo partido, el partido que se está cargando. Tracking −0.02em.
+- **Newsreader 500** (`font-serif`) — **solo el titular del hero de la landing**, con `opsz` 72 y tracking −0.028em. Es la única frase que vende una emoción; en el producto parecía el título de un documento.
+- **Instrument Sans** (`font-sans`) — interfaz, nombres, títulos de sección, copy. Pesos 400 / 500 / 600.
+- **Geist Mono** (`font-mono`) — **todo número**: marcadores, puntos, plazos, horarios, importes, fechas cortas, rótulos de columna. Siempre con `font-variant-numeric: tabular-nums`.
 
 ```css
 .mono {
@@ -88,27 +105,36 @@ El mono es lo que da el acabado de producto y lo que hace que las tablas queden 
 
 ### Escala móvil (390 de ancho)
 
-| Uso | Tamaño | Peso | Tracking |
+| Uso | Tamaño | Familia y peso | Tracking |
 |---|---|---|---|
-| Nombre del rival, título de pantalla | 34–38 | 600 | −0.032em |
-| Título de sección | 20 | 600 | −0.025em |
-| Dato principal (nombre en lista) | 17–19 | 500 | — |
-| Cuerpo | 16–17 | 400 | — |
-| Rótulo | 15 | 500 | — |
-| Mono grande (puntos, marcador) | 24–52 | 500 | −0.02 a −0.04em |
-| Mono chico (fecha, zona, rótulo de casillero) | 15 | 400/500 | — |
+| Título de pantalla | 26–30 | Display 600 | −0.02em |
+| Nombre del rival | 34 | Display 600 | −0.02em |
+| Título de sección | 20 | Sans 600 | −0.01em |
+| Dato principal (nombre en lista) | 17–19 | Sans 500 | — |
+| Cuerpo | 16–17 | Sans 400 | — |
+| Rótulo | 15 | Sans 500 | — |
+| Mono grande (puntos, marcador, fecha) | 24–52 | Mono 500 | −0.02 a −0.04em |
+| Mono chico (fecha, zona, rótulo de casillero) | 15 | Mono 400/500 | — |
 
 **Piso duro: 15px.** Ningún texto baja de ahí en móvil, y los datos van de 17 para arriba. Las pantallas de referencia del jugador tienen rótulos de 10 a 14: al implementarlas suben a 15. Si algo no entra, se reorganiza, como los casilleros del ranking, que van sin el año.
 
 ### Escala escritorio (1280)
 
-| Uso | Tamaño | Peso |
+| Uso | Tamaño | Familia y peso |
 |---|---|---|
-| Título de página | 30 | 600 |
-| Título de sección | 17–20 | 600 |
-| Fila de tabla | 14–15 | 400/500/600 |
-| Rótulo de columna (mono) | 11–12 | 400 |
-| Cuerpo / ayuda | 13–15 | 400 |
+| Título de página | 28 | Display 600 |
+| Título de sección | 15–20 | Sans 600 |
+| Fila de tabla | 14–15 | Sans 400/500/600 |
+| Rótulo de columna (mono) | 11–12 | Mono 400 |
+| Cuerpo / ayuda | 13–15 | Sans 400 |
+
+### Landing
+
+| Uso | Tamaño | Familia y peso |
+|---|---|---|
+| Titular del hero | 36 en el celular, hasta 68 | Serif 500 |
+| Bajada del hero | 16–19, en `cal` | Sans 400 |
+| Título de sección | 30–40 | Display 600 |
 
 ---
 
@@ -116,101 +142,129 @@ El mono es lo que da el acabado de producto y lo que hace que las tablas queden 
 
 | | Móvil | Escritorio |
 |---|---|---|
-| Alto de toque / botón principal | **56** | 40–44 |
-| Botón secundario | 52 | 34–36 |
-| Alto de fila de lista | 52–60 | 38 (denso) / 56–64 (con acción) |
+| Alto de toque / botón principal | **56** | 40–48 |
+| Botón secundario | 52 | 32–40 |
+| Alto de fila de lista | 52–60 | 38 (denso) / 52–64 (con acción) |
 | Padding lateral de pantalla | 16–18 | 28 |
-| Separación entre bloques | 18–22 | 16–24 |
+| Separación entre bloques | 16–22 | 16–24 |
 
-**Radios:** 999 para chips y píldoras · 8–12 para botones y campos · 12–14 para tarjetas y tablas · 16–20 para superficies grandes y tarjetas negras.
+**Radios:** 999 para las píldoras de estado (`--r-chip`) · **8** para botones, campos y chips de filtro (`rounded-control`) · **12** para tarjetas y tablas (`rounded-tarjeta`) · **20** para la tarjeta noche, el modal y el marco del hero (`rounded-superficie`).
 
-**Bordes:** 1px `--linea` por defecto. 2px `--negro` para el campo enfocado y para el partido destacado (la final pendiente). Nunca hay sombras.
+**Bordes:** 1px `linea` por defecto. 2px `noche` para el campo enfocado y para el partido destacado. En el producto nunca hay sombras.
 
 ---
 
 ## 6. Componentes
 
+### Logo
+
+Las marcas de una zona: tres barras de partido jugado y la cuarta, levantada, que es el set point. Al lado, "SetPoint" en Display 600 con tracking −0.02em, separado 0,4em.
+
+- **Sobre noche:** las barras en blanco y la levantada en `pelota`.
+- **Sobre claro:** las barras en `noche` y la levantada en `lona`, porque la pelota no se ve sobre papel.
+- **Ícono** (favicon, app): un cuadrado `noche-900` con radio 14/64 y la marca adentro, con la versión sobre noche.
+
+La marca del circuito en las páginas públicas y en la app es otra cosa: un cuadrado `noche` con un punto `pelota`, al lado del nombre de la organización.
+
+### Encabezado del organizador
+
+Franja `noche` de 56 de alto: el logo, la organización en `pizarra-400` y, a la derecha, el menú. Ítem activo con fondo `noche-2` y texto blanco; los demás en `pizarra-400`, blancos con el mouse encima.
+
 ### Botones
 
 | Variante | Fondo | Texto | Cuándo |
 |---|---|---|---|
-| Principal (jugador) | `--lima` | `--negro` | La acción que el jugador quiere hacer: pagar, anotar la fecha, escribirle al rival |
-| Principal (organizador) | `--negro` | blanco | Guardar, resolver, publicar, cargar resultado |
-| Secundario | transparente + borde `--linea` | `--negro` | Todo lo demás |
-| Sobre fondo negro | transparente + borde `--borde-oscuro` | blanco | Acción alternativa dentro de una tarjeta negra |
+| Principal (jugador) | `lona` con borde 1px `lona-borde` | `noche-900` | La acción que el jugador quiere hacer: pagar, anotar la fecha, escribirle al rival. En la landing, "Crear mi circuito" |
+| Principal (organizador) | `noche` | blanco | Guardar, resolver, publicar, cargar resultado |
+| Secundario | `papel` + borde 1px `linea` | `noche` | Todo lo demás |
+| Sobre noche | transparente + borde `borde-noche` | blanco | Acción alternativa dentro de una tarjeta noche |
 
 Nunca hay flechas pegadas al texto del botón. El texto dice la acción completa: "Anotar y avisarle a Pablo", no "Continuar".
 
-**Estados en la web.** Con el mouse, el lima se oscurece un poco, el negro pasa a `--gris-700` y el secundario toma `--fondo`. Al apretar, el botón se achica apenas. Con el teclado, un anillo `--negro` de 2px separado 2px del borde: es un outline, no una sombra. Deshabilitado, opacidad 40% y sin reacción.
+**Estados en la web.** Con el mouse, la lona pasa a `lona-hover`, la noche a `pizarra-700` y el secundario toma `linea-suave`. Al apretar, el botón se achica apenas. Con el teclado, un anillo `noche` de 2px separado 2px del borde: es un outline, no una sombra. Deshabilitado, opacidad 40% y sin reacción.
 
 ### Chips
 
-Píldora de radio 999, alto 34–40, borde 1px. Activo: fondo `--negro`, texto blanco. Se usan para categorías, filtros, superficies y modos.
+Dos objetos distintos:
+
+- **Chip de filtro u opción** (zona A, Campeonato, "Fue walkover"): rectángulo de radio 8 y alto 34, borde 1px `linea`, fondo `papel`, texto `pizarra-700`. Activo: fondo `noche`, texto blanco 600; el número que lleva al lado va en mono.
+- **Píldora de estado** (radio 999, alto 24, mono 12): `sáb 21 · 10:00` en `azul-fondo` con `azul-texto`; `sin fecha` con un contorno punteado 1,5px `pizarra-500`; `principal` en `ambar-fondo` con `ambar`; `consuelo` en `petroleo-fondo` con `petroleo`.
 
 ### Pestañas del torneo
 
-Solo en la franja de las pantallas de un torneo, debajo del encabezado del organizador ([decisión 095](decisiones/095-navegacion-del-torneo.md)). Texto de 15, alto 44, sobre la línea `--linea` del borde de la franja. Activa: `--negro`, peso 600 y subrayado de 2px `--negro`. Disponible: `--gris-700`, peso 500. Apagada: `--gris-400`, y al tocarla, una línea debajo de la franja dice por qué. Son distintas de los chips a propósito: los chips filtran dentro de una pantalla (Confirmados, Reservando), las pestañas cambian de pantalla.
+Solo en la franja de las pantallas de un torneo, debajo del encabezado del organizador ([decisión 095](decisiones/095-navegacion-del-torneo.md)). La franja va en `papel` con borde inferior `linea`. Texto de 15, alto 40–44. Activa: `noche`, peso 600 y subrayado de 2px `noche`. Disponible: `pizarra-700`, peso 500. Apagada: `pizarra-400`, y al tocarla, una línea debajo de la franja dice por qué. Son distintas de los chips a propósito: los chips filtran dentro de una pantalla (Confirmados, Reservando), las pestañas cambian de pantalla.
 
 ### Migas de pan
 
-En las pantallas internas de la organización, las que no están en el menú: las del torneo, *Editar el torneo* e *Importar planilla* y *Revisar vinculación* en el padrón ([decisión 100](decisiones/100-migas-de-pan.md)). Una línea arriba del título: los niveles de arriba como links `--gris-500` (`--negro` al pasar), separados por el chevron del set en `--gris-400`, y el último, donde se está, sin link en `--gris-700`. Texto de 14; en la franja del torneo van en 15, y la última miga es el nombre del torneo con su peso de título. Cada miga lleva siempre al mismo lugar, nunca "atrás" en el historial.
+En las pantallas internas de la organización, las que no están en el menú: las del torneo, *Editar el torneo* e *Importar planilla* y *Revisar vinculación* en el padrón ([decisión 100](decisiones/100-migas-de-pan.md)). Una línea arriba del título: los niveles de arriba como links `pizarra-500` (`noche` al pasar), separados por el chevron del set en `pizarra-400`, y el último, donde se está, sin link en `pizarra-700`. Texto de 14; en la franja del torneo, la última miga es el nombre del torneo en `noche` con peso 500. Cada miga lleva siempre al mismo lugar, nunca "atrás" en el historial.
 
 ### Campos
 
-Alto 56 en móvil y 48 en escritorio, radio 10–12, borde 1px `--gris-300`. El campo activo lleva borde 2px `--negro`. El valor va en mono si es un número.
+Alto 56 en móvil y 48 en escritorio, radio 8, fondo `papel`, borde 1px `borde-campo`. El campo activo lleva borde 2px `noche`. El valor va en mono si es un número. La grilla de sets de *Cargar resultado* usa el mismo campo, de 56 de alto, con el número en mono 22.
 
 ### Interruptor
 
-40×24, bolita de 18. **Prendido:** fondo `--lima` con un anillo de 1px `--negro` y la bolita negra. **Apagado:** fondo `--gris-400` y la bolita blanca. Los dos estados tienen que distinguirse de un vistazo, sobre blanco y sobre `--fondo`: el apagado anterior, `--linea` con la bolita blanca, casi no se veía ([decisión 090](decisiones/090-mas-contraste.md)).
+40×24, bolita de 18 en `papel`. **Prendido:** fondo `lona-texto`. **Apagado:** fondo `pizarra-400`. Los dos estados se distinguen de un vistazo sobre papel y sobre niebla, por color y por la posición de la bolita.
 
-### Tarjeta negra
+### Tarjeta noche
 
-Fondo `--negro`, radio 16–18, padding 20–22. Es el recurso de jerarquía más fuerte del sistema y se usa para **una sola cosa por pantalla**: el próximo partido, el ranking propio, la conciliación, el resumen del torneo, el hero de la landing.
+Fondo `noche`, radio 20, padding 20–22, texto blanco y rótulos en `pizarra-400`. Es el recurso de jerarquía más fuerte del sistema y se usa para **una sola cosa por pantalla**: el próximo partido, el ranking propio, la conciliación, el resumen del torneo. En la tarjeta del próximo partido, el rival va en Display 34, la fecha en mono 26 blanco y el botón en lona.
 
 ### Barra de marcas
 
-El objeto gráfico central del sistema. Una fila de rectángulos de 3px de radio y 30–44 de alto, uno por unidad real (un partido, un lugar del cupo), agrupados con `gap: 3px` y separados en bloques con `gap: 18px` cuando hay agrupación.
+El objeto gráfico central del sistema. Una fila de rectángulos de 2–3px de radio y 18–44 de alto, uno por unidad real (un partido, un lugar del cupo), agrupados con `gap: 3px` y separados en bloques con `gap: 18–20px` cuando hay agrupación.
 
-Colores: `--negro` hecho · `--gris-400` en curso · `--linea` pendiente · `--rojo` vencido.
+| Estado | Marca | En el tablero | En las inscripciones |
+|---|---|---|---|
+| Hecho | `noche` | Jugado | Pagado |
+| En curso | `azul` | Con fecha | Reservando |
+| Pendiente | contorno punteado 1,5px `pizarra-500` | Sin coordinar | Libre |
+| Vencido | `rojo` | Vencido | — |
 
-Aparece en el tablero (48 partidos en 8 bloques de 6, con la letra de zona debajo), en inscripciones (32 lugares) y en la landing. **Es siempre el mismo objeto.**
+Un partido de cuadro que espera a los ganadores de la ronda anterior va lleno en `linea`: todavía no tiene estado. Las cuatro clases salen de un solo lugar en el código (`components/marcas.ts`).
+
+Aparece en el tablero (48 partidos en 8 bloques de 6, con la letra de zona debajo y la cuenta `4/6` en mono), en el inicio, en inscripciones (32 lugares) y en la landing. **Es siempre el mismo objeto**, y el logo es una zona de esa barra.
 
 ### Matriz de zona
 
 La fase de grupos como todos contra todos. Fila = el jugador, columna = el rival.
 
-- Ganó: fondo `--lima-tenue`, marcador en peso 600
-- Perdió: marcador en `--gris-400`
-- Con fecha: la fecha corta en mono `--gris-500`
-- Sin coordinar: recuadro punteado 1px `--gris-300`, vacío
-- Diagonal: `#F1F2F4`, sin contenido
+- Ganó: fondo `lona-fondo`, marcador en peso 600
+- Perdió: marcador en `pizarra-400`
+- Con fecha: la fecha corta en mono `pizarra-500`
+- Sin coordinar: recuadro punteado 1,5px `pizarra-500`, vacío
+- Diagonal: `linea-suave`, sin contenido
 
 En escritorio se le suman columnas de `pg`, `sets` y `games` a la derecha. En móvil se muestra sola y las posiciones van abajo.
 
 ### Tabla de posiciones
 
-Fila de 52–60. Punto de 7px a la izquierda del nombre: lima si clasifica, `--linea` si no. La línea de corte es una regla de 1px `--negro` con el texto centrado encima. Debajo de la tabla, **el desempate explicado en palabras**: "Bustos y Ledesma están igualados en partidos y sets. Desempata games ganados: 23 contra 17."
+Fila de 52–60. Punto de 7px a la izquierda del nombre: `lona-texto` si clasifica, `linea` si no. La línea de corte es una regla de 1px `noche` con el texto centrado encima. Debajo de la tabla, **el desempate explicado en palabras**: "Bustos y Ledesma están igualados en partidos y sets. Desempata games ganados: 23 contra 17."
 
 ### Cuadro eliminatorio
 
-Columnas por ronda con rótulo en mono minúscula. Tarjeta de 190×62 con dos filas de 31; el ganador con fondo `--lima-tenue` y peso 600. **En las tarjetas va el resultado en sets (2-0, 2-1), no el marcador completo** — es lo que hace legible un cuadro de 16. Las llaves se dibujan con codos de 1px `--linea`. El partido pendiente destacado lleva borde 2px `--negro` y franja lima con fecha y hora. Donde hubo un bye no hay partido: el lugar lleva una tarjeta del mismo alto, sin fondo, con el apellido de quien pasa directo en `--gris-500` y el rótulo mono "pasa directo a semis" en `--gris-400` ([decisión 083](decisiones/083-el-bye-se-ve-en-el-cuadro.md)).
+Columnas por ronda con rótulo en mono minúscula. Tarjeta de 190×62 con dos filas de 31; el ganador con fondo `lona-fondo` y peso 600. **En las tarjetas va el resultado en sets (2-0, 2-1), no el marcador completo**: es lo que hace legible un cuadro de 16. Las llaves se dibujan con codos de 1px `linea`. La final pendiente del cuadro principal lleva borde 2px `noche` y una franja `lona-fondo` con la fecha y la hora en `lona-texto`; la del consuelo, borde `borde-campo` y franja `linea-suave`. El partido elegido en *Cargar resultado* suma un anillo de 2–3px `lona-borde`. Donde hubo un bye no hay partido: el lugar lleva una tarjeta del mismo alto, sin fondo, con el apellido de quien pasa directo en `pizarra-500` y el rótulo mono "pasa directo a semis" en `pizarra-400` ([decisión 083](decisiones/083-el-bye-se-ve-en-el-cuadro.md)).
 
 ### Errores
 
 El rojo es solo vencimiento: un error no es rojo ([decisión 099](decisiones/099-los-errores-no-son-rojos.md)). Un solo componente para toda la web y el flujo del jugador:
 
-- **Aviso**: bloque con borde 1px `--negro`, radio 10–12, texto 15 `--negro`. Para el error de un formulario entero o de una acción ("No pudimos ingresar"). La primera frase puede ir en negrita: "**Ese código no es.** Revisá que sea el último que te mandamos".
-- **Mensaje de error**: una línea en `--negro`, peso 500, debajo del campo o de la acción que falló. El campo lo nombra en su `aria-describedby`.
+- **Aviso**: bloque con borde 1px `noche`, radio 8–12, texto 15 `noche`. Para el error de un formulario entero o de una acción ("No pudimos ingresar"). La primera frase puede ir en negrita: "**Ese código no es.** Revisá que sea el último que te mandamos".
+- **Mensaje de error**: una línea en `noche`, peso 500, debajo del campo o de la acción que falló. El campo lo nombra en su `aria-describedby`.
 
-Lo que hay que revisar, como una fila de la importación, se marca con borde `--negro`, como la marca "para revisar" de *Revisar vinculación*.
+Lo que hay que revisar, como una fila de la importación, se marca con borde `noche`, como la marca "para revisar" de *Revisar vinculación*.
 
 ### Confirmación
 
-Para lo que no se deshace: cerrar la inscripción, confirmar el sorteo, cerrar las zonas, rechazar una solicitud y dar de baja ([decisión 096](decisiones/096-confirmar-lo-que-no-se-deshace.md)). Un modal de hasta 560 de ancho, radio 18, borde 1px `--linea` y sin sombra, sobre un fondo `--negro` al 40 % desenfocado 4 px. Arriba, el título con la acción y a quién afecta ("Dar de baja a Diego Antileo"); debajo, lo que va a pasar, una línea por consecuencia y con los números del torneo. Al pie, sobre `--fondo-tabla`, Cancelar y la acción en el botón principal del organizador, con el mismo texto que el botón que lo abrió. Se cancela con Escape o con un clic en el fondo, y el foco nunca arranca en la acción.
+Para lo que no se deshace: cerrar la inscripción, confirmar el sorteo, cerrar las zonas, rechazar una solicitud y dar de baja ([decisión 096](decisiones/096-confirmar-lo-que-no-se-deshace.md)). Un modal de hasta 560 de ancho, radio 20, borde 1px `linea` y sin sombra, sobre un fondo `noche` al 40 % desenfocado 4 px. Arriba, el título con la acción y a quién afecta ("Dar de baja a Diego Antileo"); debajo, lo que va a pasar, una línea por consecuencia y con los números del torneo. Al pie, sobre `niebla`, Cancelar y la acción en el botón principal del organizador, con el mismo texto que el botón que lo abrió. Se cancela con Escape o con un clic en el fondo, y el foco nunca arranca en la acción.
 
 ### Esqueleto de carga
 
-Mientras una pantalla espera a la API no se escribe "Cargando…": va un esqueleto de barras `--linea` con radio 6, que late entre opacidad 1 y 0,5 (quieto con "reducir movimiento"). **Aparece recién a los 200 ms**, así que una respuesta rápida no hace parpadear nada. Formas en la web: `pagina`, `lista` y `bloque`; en la app, `tarjeta` y `lista`. Para el lector de pantalla dice "Cargando" ([decisión 093](decisiones/093-esqueleto-de-carga.md)).
+Mientras una pantalla espera a la API no se escribe "Cargando…": va un esqueleto de barras `linea` con radio 6, que late entre opacidad 1 y 0,5 (quieto con "reducir movimiento"). **Aparece recién a los 200 ms**, así que una respuesta rápida no hace parpadear nada. Formas en la web: `pagina`, `lista` y `bloque`; en la app, `tarjeta` y `lista`. Para el lector de pantalla dice "Cargando" ([decisión 093](decisiones/093-esqueleto-de-carga.md)).
+
+### Hero de la landing
+
+El único lugar con atmósfera. Sobre `noche-900`, un marco de radio 20 con un filete interior `cal` al 20 %, que nunca es más ancho que alto, con la pintura del club al atardecer anclada abajo y un velo `noche-900` arriba para que el titular se lea sobre el cielo. Adentro: el titular en Newsreader, la bajada en `cal`, "Crear mi circuito" en lona y "Ver un torneo en vivo" con borde `cal` y un velo detrás. Debajo, el demo del producto, con la única sombra del sistema. El demo es el **único momento de animación** del sitio: recorre el flujo real (Tablero, Cargar resultado y de vuelta), se puede pausar, arranca recién cuando está a la vista y con "reducir movimiento" queda quieto en la vista previa de la zona.
 
 ---
 
@@ -220,21 +274,21 @@ Mientras una pantalla espera a la API no se escribe "Cargando…": va un esquele
 
 | Estado | Cómo se ve |
 |---|---|
-| `pendiente` (sin coordinar) | Recuadro punteado vacío |
-| `anotada` / `confirmada` | Fecha corta en mono gris: `sáb 14` |
-| `jugada` | Marcador en tinta, ganador en peso 600, perdedor en gris |
-| `vencida` | Rojo. Fila con fondo `--rojo-fondo` y texto `--rojo-texto` |
+| `pendiente` (sin coordinar) | Marca punteada; en una fila, la píldora `sin fecha` punteada y los días que quedan |
+| `anotada` / `confirmada` | Marca azul; en una fila, la píldora de fecha en azul: `sáb 14 · 10:00` |
+| `jugada` | Marca noche. Marcador en tinta, ganador en peso 600, perdedor en pizarra |
+| `vencida` | Rojo. Fila con fondo `rojo-fondo`, texto `rojo-texto` y un punto rojo antes de la zona |
 
 ### Inscripción
 
-`reservando` (con reloj de 15 minutos corriendo, en rojo cuando queda poco) · `pagada` (punto lima) · `en lista de espera` (numerada por orden de llegada) · `libre` (marca `--linea`) · `solicitud` (torneo con aprobación: punto hueco con borde `--gris-400`, con "Aprobar" y "Rechazar" en la fila; no ocupa lugar en la barra de marcas hasta que paga).
+`reservando` (marca azul, con reloj de 15 minutos corriendo, en rojo cuando queda poco) · `pagada` (marca noche; punto `lona-texto` en las listas) · `en lista de espera` (numerada por orden de llegada) · `libre` (marca punteada) · `solicitud` (torneo con aprobación: punto hueco con borde `pizarra-400`, con "Aprobar" y "Rechazar" en la fila; no ocupa lugar en la barra de marcas hasta que paga).
 
 Desde la [decisión 054](decisiones/054-perfil-pendiente.md), la solicitud tiene tres momentos. Para el jugador se escriben en mono minúscula al lado de un punto:
 
 | Estado | Cómo se ve |
 |---|---|
-| `en revisión` | El mismo punto hueco con borde `--gris-400` de la solicitud |
-| `aprobada` | Punto lleno `--negro`, con "Pagar". **No es lima**: el lima es de `pagada`, y todavía no pagó |
+| `en revisión` | El mismo punto hueco con borde `pizarra-400` de la solicitud |
+| `aprobada` | Punto lleno `noche`, con "Pagar". **No es lona**: la lona es de `pagada`, y todavía no pagó |
 | `no aprobada` | Sin punto ni color: se avisa una vez, con un texto, y desaparece |
 
 Una reserva vencida se avisa igual que una no aprobada: una vez, con texto, sin rojo. El rojo es para lo que vence mientras se mira, no para lo que ya pasó.
@@ -249,10 +303,10 @@ Cómo está conectado un perfil del padrón con la persona ([04-flujo-jugador.md
 
 | Estado | Cómo se ve |
 |---|---|
-| Sin vincular | Rótulo en mono `--gris-500` debajo del nombre: `sin vincular`. Es el estado de todo el padrón importado, no un problema |
-| Vinculado | El email de la cuenta en `--gris-500` debajo del nombre. Para el jugador que busca su perfil, el rótulo `vinculado` al lado del nombre, sin el email |
-| `nueva` | Chip lima en mono minúscula, el mismo de "nuevo" en el padrón: la vinculación se hizo desde la última visita de la organización |
-| `para revisar` | Chip en mono minúscula con borde 1px `--negro`, sin relleno. **No es rojo**: no venció nada, es un caso dudoso que espera una decisión |
+| Sin vincular | Rótulo en mono `pizarra-500` debajo del nombre: `sin vincular`. Es el estado de todo el padrón importado, no un problema |
+| Vinculado | El email de la cuenta en `pizarra-500` debajo del nombre. Para el jugador que busca su perfil, el rótulo `vinculado` al lado del nombre, sin el email |
+| `nueva` | Chip `lona-fondo` con texto `lona-texto` en mono minúscula, el mismo de "nuevo" en el padrón: la vinculación se hizo desde la última visita de la organización |
+| `para revisar` | Chip en mono minúscula con borde 1px `noche`, sin relleno. **No es rojo**: no venció nada, es un caso dudoso que espera una decisión |
 
 **Motivos de revisión.** Debajo del chip, o en la lista "Para revisar", va el motivo en palabras: *"hay otro Juan Pérez en Tercera"* (posible homónimo) o *"otra cuenta dice que es suyo"* (perfil reclamado).
 
@@ -311,15 +365,15 @@ La interfaz usa términos genéricos, no los del código ni los de un circuito e
 
 *Propuesto* ([devolucion-25.md](devolucion-25.md), cambio H). **No hay tutorial** que resalte pasos en pantalla: es caro de hacer y la gente lo saltea. La explicación aparece donde hace falta:
 
-- Debajo del campo o la sección que explica, en `--gris-500`, cuerpo 13–14 en escritorio. Una o dos oraciones que digan la consecuencia, como el resto de la voz: *"Cada torneo del calendario es un casillero del ranking. Cuando se juega Primavera 26, sus puntos reemplazan los de Primavera 25."*
-- Para explicaciones largas, una caja `--fondo` con radio de tarjeta, sin ícono de ayuda ni signo de pregunta.
-- **Tarjeta "Primeros pasos"** en el inicio del organizador: tres pasos con check (*Importá tus jugadores · Creá tu primer torneo · Compartí el link de inscripción*) que **se tildan solos** cuando se cumplen. Borde `--linea`, no tarjeta negra: no es el dato principal de la pantalla. Desaparece cuando están los tres.
+- Debajo del campo o la sección que explica, en `pizarra-500`, cuerpo 13–14 en escritorio. Una o dos oraciones que digan la consecuencia, como el resto de la voz: *"Cada torneo del calendario es un casillero del ranking. Cuando se juega Primavera 26, sus puntos reemplazan los de Primavera 25."*
+- Para explicaciones largas, una caja `niebla` con radio de tarjeta, sin ícono de ayuda ni signo de pregunta.
+- **Tarjeta "Primeros pasos"** en el inicio del organizador: tres pasos con check (*Importá tus jugadores · Creá tu primer torneo · Compartí el link de inscripción*) que **se tildan solos** cuando se cumplen. Borde `linea`, no tarjeta noche: no es el dato principal de la pantalla. Desaparece cuando están los tres.
 
 ---
 
 ## 10. Iconos
 
-SVG en línea, trazo de 1.7–1.9, grilla de 16/18/20/24, `stroke-linecap: round`. Nunca emoji ni glifos unicode como ícono. El set actual: búsqueda, chevron, reloj, cámara, compartir, mensaje, check, cuadro, calendario, tarjeta, archivo, barras, engranaje.
+SVG en línea, trazo de 1.7–1.9, grilla de 16/18/20/24, `stroke-linecap: round`, con el color de un token (`stroke-pizarra-500`, `currentColor`), nunca un hex. Nunca emoji ni glifos unicode como ícono. El set actual: búsqueda, chevron, reloj, cámara, compartir, mensaje, check, cuadro, calendario, tarjeta, archivo, barras, engranaje.
 
 Un ícono sin texto dice qué hace en `aria-label` y en `title`, y tiene un área de toque de 44 aunque el dibujo sea de 20. El engranaje abre la configuración de algo: hoy, *Editar el torneo* desde su tarjeta en el inicio ([decisión 101](decisiones/101-engranaje-para-editar.md)).
 
@@ -327,7 +381,7 @@ Un ícono sin texto dice qué hace en `aria-label` y en `title`, y tiene un áre
 
 ## 11. Pantallas y features
 
-El canvas tiene **21 pantallas**, en el orden en que se usan. Las **5 del rediseño de la inscripción y la vinculación** (octubre de 2026, [decisiones 049 a 051](decisiones/049-identidad-e-ingreso-con-codigo.md)) están solo en HTML, en [pantallas/](pantallas/README.md), y van marcadas con *nueva*.
+El canvas *Verde pelota* tiene **21 pantallas**, en el orden en que se usan, con el sistema anterior. Las **5 del rediseño de la inscripción y la vinculación** (octubre de 2026, [decisiones 049 a 051](decisiones/049-identidad-e-ingreso-con-codigo.md)) están solo en HTML, en [pantallas/](pantallas/README.md), y van marcadas con *nueva*. El artifact *Última luz v2* redibuja con el sistema nuevo la landing, el Tablero, Cargar resultado y Cuándo juego.
 
 | Pantalla | Superficie | Feature |
 |---|---|---|
@@ -364,70 +418,70 @@ El canvas tiene **21 pantallas**, en el orden en que se usan. Las **5 del redise
 
 ## 12. Implementación
 
-### Tokens en CSS
+### Tokens en la web
+
+La web usa Tailwind 4: los tokens están en el bloque `@theme` de `apps/web/src/index.css`, y **el nombre de la clase es el nombre del token**: `bg-noche`, `text-pizarra-500`, `border-linea`, `bg-lona-fondo`, `font-display`, `rounded-tarjeta`. Nunca un hex en un componente.
 
 ```css
-:root {
-  --lima: #CDF546;
-  --lima-tenue: #F7FCE7;
-  --negro: #0A0B0D;
-  --carbon: #17191D;
-  --borde-oscuro: #2C3037;
-  --gris-700: #3F4348;
-  --gris-500: #6A7079;
-  --gris-400: #9BA1A9;
-  --gris-300: #B5BBC3;
-  --linea: #D5D9DE;
-  --linea-suave: #F1F2F4;
-  --fondo: #F6F7F8;
-  --fondo-tabla: #FAFBFC;
-  --rojo: #E5484D;
-  --rojo-texto: #C62A2F;
-  --rojo-fondo: #FEF6F6;
-  --rojo-linea: #F3D3D4;
+@theme {
+  --color-noche-900: #0B1220;
+  --color-noche: #101A2C;
+  --color-noche-2: #1A2740;
+  --color-borde-noche: #2E3D5A;
+  --color-pizarra-700: #3B4659;
+  --color-pizarra-500: #626D82;
+  --color-pizarra-400: #9AA5B8;
+  --color-borde-campo: #878FA1;
+  --color-linea: #D8DCE5;
+  --color-linea-suave: #ECEEF3;
+  --color-niebla: #F4F5F8;
+  --color-papel: #FFFFFF;
+  --color-cal: #E9E2D6;
+  --color-lona: #62BB78;
+  --color-lona-hover: #4FA866;
+  --color-lona-borde: #93D2A3;
+  --color-lona-fondo: #E4F8E7;
+  --color-lona-texto: #1B6236;
+  --color-pelota: #CDF546;
+  --color-azul: #3567D6;
+  --color-azul-texto: #2A55BC;
+  --color-azul-fondo: #ECF1FD;
+  --color-rojo: #E5484D;
+  --color-rojo-texto: #C62A2F;
+  --color-rojo-fondo: #FEF6F6;
+  --color-rojo-linea: #F3D3D4;
+  --color-ambar: #8F5200;
+  --color-ambar-fondo: #FDF3E3;
+  --color-petroleo: #0F6170;
+  --color-petroleo-fondo: #E5F4F6;
 
-  --r-chip: 999px;
-  --r-control: 10px;
-  --r-tarjeta: 14px;
-  --r-superficie: 18px;
+  --font-sans: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Funnel Display", "Helvetica Neue", Arial, sans-serif;
+  --font-serif: "Newsreader", Georgia, serif;
+  --font-mono: "Geist Mono", ui-monospace, "SF Mono", Consolas, monospace;
+
+  --radius-control: 8px;
+  --radius-tarjeta: 12px;
+  --radius-superficie: 20px;
 }
 ```
 
-### Tailwind
-
-```js
-// tailwind.config.js
-theme: {
-  extend: {
-    colors: {
-      lima: { DEFAULT: '#CDF546', tenue: '#F7FCE7' },
-      negro: '#0A0B0D',
-      carbon: '#17191D',
-      'borde-oscuro': '#2C3037',
-      gris: { 700: '#3F4348', 500: '#6A7079', 400: '#9BA1A9', 300: '#B5BBC3' },
-      linea: { DEFAULT: '#D5D9DE', suave: '#F1F2F4' },
-      rojo: { DEFAULT: '#E5484D', texto: '#C62A2F', fondo: '#FEF6F6', linea: '#F3D3D4' },
-    },
-    fontFamily: {
-      sans: ['"Instrument Sans"', 'system-ui', 'sans-serif'],
-      mono: ['"Geist Mono"', 'ui-monospace', 'monospace'],
-    },
-  },
-}
-```
+El texto sobre noche usa el `text-white` de Tailwind: es el mismo valor que `papel`, con otro rol.
 
 ### Tokens en React Native
 
-La app tiene su copia de los tokens en `apps/mobile/src/lib/tokens.ts`, con los mismos valores que `apps/web/src/index.css` ([decisión 034](decisiones/034-tokens-de-la-app.md)). Si cambia un valor de este documento, cambia en los dos archivos. Los estilos se escriben con `StyleSheet` y esos tokens ([decisión 035](decisiones/035-estilos-de-la-app.md)).
+La app tiene su copia de los tokens en `apps/mobile/src/lib/tokens.ts`, con los mismos valores que `apps/web/src/index.css` ([decisión 034](decisiones/034-tokens-de-la-app.md)), en camelCase: `colores.noche`, `colores.pizarra500`, `colores.lonaFondo`. Si cambia un valor de este documento, cambia en los dos archivos. Los estilos se escriben con `StyleSheet` y esos tokens ([decisión 035](decisiones/035-estilos-de-la-app.md)).
 
-- **Las fuentes van dentro de la app**, porque en el celular no hay Google Fonts. Salen de los paquetes `@expo-google-fonts/instrument-sans` y `@expo-google-fonts/geist-mono`, se cargan con `useFonts` en `src/app/_layout.tsx` y la splash espera a que estén. Es en tiempo de ejecución y no con el plugin de `expo-font` porque Expo Go no lee el plugin.
-- **El peso se elige con la familia, nunca con `fontWeight`.** En Android cada peso es una fuente aparte: `fontFamily: fuentes.sans[600]`, no `fontWeight: '600'`.
+- **Las fuentes van dentro de la app**, porque en el celular no hay Google Fonts. Salen de los paquetes `@expo-google-fonts/instrument-sans`, `@expo-google-fonts/geist-mono` y `@expo-google-fonts/funnel-display`, se cargan con `useFonts` en `src/app/_layout.tsx` y la splash espera a que estén. Es en tiempo de ejecución y no con el plugin de `expo-font` porque Expo Go no lee el plugin. Newsreader no está en la app: es solo de la landing.
+- **El peso se elige con la familia, nunca con `fontWeight`.** En Android cada peso es una fuente aparte: `fontFamily: fuentes.display[600]`, no `fontWeight: '600'`.
 - **`tabular-nums` se escribe `fontVariant: ['tabular-nums']`**, que en los tokens es `tabular`.
+- **`papel` y `blanco` valen lo mismo**: `papel` es la superficie y `blanco`, el texto sobre noche.
 - **Las medidas de la escala móvil también son tokens** (`medidas.toque` = 56, `medidas.margen` = 16), porque en la app se repiten en cada pantalla.
 
 ### Notas para quien implemente
 
-- Las tarjetas negras no llevan sombra ni gradiente. Si parece plano, es correcto.
+- La tarjeta noche no lleva sombra ni gradiente. Si parece plana, es correcto.
+- Las tarjetas y las tablas llevan fondo `papel` explícito: el fondo de la página es `niebla`, y sin él se funden.
 - Toda tabla y toda matriz usan `tabular-nums`. Sin eso, las columnas bailan.
 - El cuadro eliminatorio se arma con columnas de altura fija y `justify-content: space-around` anidado: cada par de partidos queda centrado respecto del siguiente, y los codos son bordes de 1px con `border-left: none`.
 - Nada de scroll horizontal en móvil. Si una tabla no entra, se reorganiza (así se resolvieron los cinco casilleros del ranking).
@@ -436,6 +490,6 @@ La app tiene su copia de los tokens en `apps/mobile/src/lib/tokens.ts`, con los 
 
 ## 13. Decisiones de diseño abiertas
 
-- El lima queda casi todo sobre superficies negras; en pantallas claras el color casi no aparece. Falta decidir si se quiere más presencia de marca en las vistas claras.
 - La matriz de zona está pensada para grupos de 4. Un circuito que arme zonas de 5 o 6 necesita otro tratamiento de esa tabla.
 - Falta la versión móvil del tablero del organizador. Hoy es solo escritorio, que es lo que el reparto web/móvil define, pero conviene revisarlo con el organizador real.
+- El ícono de la app instalable todavía es el de Expo. Falta generarlo con el ícono del logo (§6).

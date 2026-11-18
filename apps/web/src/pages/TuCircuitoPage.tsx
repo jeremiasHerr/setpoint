@@ -57,12 +57,12 @@ function CargarCircuito({ sesion }: { sesion: Sesion }) {
   if (abierto && data) return <EditorCircuito sesion={sesion} inicial={data} />;
 
   return (
-    <div className="min-h-screen bg-white text-negro">
+    <div className="min-h-screen bg-papel text-noche">
       <Encabezado sesion={sesion} organizacion={sesion.organizacion.nombre} />
       <div className="flex flex-col items-start gap-3 px-7 pt-[26px]">
         {error && !sesionInvalida ? (
           <>
-            <p className="text-[15px] text-gris-500">No pudimos cargar tu circuito.</p>
+            <p className="text-[15px] text-pizarra-500">No pudimos cargar tu circuito.</p>
             <Boton onClick={() => void refetch()}>Probar de nuevo</Boton>
           </>
         ) : (
@@ -91,17 +91,17 @@ function EditorCircuito({ sesion, inicial }: { sesion: Sesion; inicial: Circuito
   const { usaRanking } = circuito;
 
   return (
-    <div className="min-h-screen bg-white text-negro">
+    <div className="min-h-screen bg-papel text-noche">
       <Encabezado sesion={sesion} organizacion={circuito.nombre || sesion.organizacion.nombre} />
 
       <div className="flex flex-wrap items-end justify-between gap-6 px-7 pt-[26px] pb-5">
         <div className="flex flex-col gap-[7px]">
-          <h1 className="text-[30px] font-semibold tracking-[-0.035em]">Tu circuito</h1>
-          <p className="text-[15px] text-gris-500">
+          <h1 className="text-[28px] font-display font-semibold tracking-[-0.02em]">Tu circuito</h1>
+          <p className="text-[15px] text-pizarra-500">
             Podés crear un torneo sin configurar nada de esto. El ranking anual es opcional y lo activás cuando quieras.
           </p>
         </div>
-        <span aria-live="polite" className="shrink-0 font-mono text-[13px] text-gris-500 tabular-nums">
+        <span aria-live="polite" className="shrink-0 font-mono text-[13px] text-pizarra-500 tabular-nums">
           {textoEstado[estadoGuardado]}
         </span>
       </div>
@@ -145,9 +145,9 @@ function EditorCircuito({ sesion, inicial }: { sesion: Sesion; inicial: Circuito
           />
 
           {usaRanking && (
-            <Tarjeta className="flex flex-col gap-[9px] bg-fondo p-[18px]">
+            <Tarjeta className="flex flex-col gap-[9px] bg-niebla p-[18px]">
               <h2 className="text-sm font-semibold">¿Solo querés probar?</h2>
-              <p className="text-sm leading-normal text-gris-500">
+              <p className="text-sm leading-normal text-pizarra-500">
                 Apagá el ranking anual y creá un torneo suelto. Al terminar vas a tener la tabla de posiciones de ese torneo, sin
                 acumular puntos.
               </p>

@@ -1,22 +1,26 @@
 type Props = {
-  sobreNegro?: boolean;
-  // El de la landing, en el encabezado y el pie.
+  sobreNoche?: boolean;
+  // El de la landing, en la barra y el pie.
   grande?: boolean;
 };
 
-export function Logo({ sobreNegro = false, grande = false }: Props) {
+// Las marcas de una zona: tres partidos jugados y el último, levantado, es el set point (decisión
+// 104). Sobre noche, las barras van en blanco y la levantada en pelota; sobre claro, en noche y lona,
+// porque la pelota no se ve sobre el papel.
+export function Logo({ sobreNoche = false, grande = false }: Props) {
   return (
-    <div className={`flex items-center ${grande ? 'gap-2.5' : 'gap-[9px]'}`}>
-      <div
-        className={`flex items-center justify-center bg-lima ${grande ? 'size-[30px] rounded-lg' : 'size-6 rounded-[7px]'}`}
-      >
-        <div className={`rounded-full bg-negro ${grande ? 'size-2.5' : 'size-2'}`} />
-      </div>
-      <span
-        className={`font-semibold ${grande ? 'text-[21px] tracking-[-0.03em]' : 'text-base tracking-[-0.02em]'} ${sobreNegro ? 'text-white' : 'text-negro'}`}
-      >
-        SetPoint
-      </span>
-    </div>
+    <span
+      className={`inline-flex items-baseline gap-[0.4em] font-display font-semibold tracking-[-0.02em] ${
+        grande ? 'text-xl' : 'text-base'
+      } ${sobreNoche ? 'text-white' : 'text-noche'}`}
+    >
+      <svg viewBox="0 0 63 53" className="h-[0.9em] w-[1.07em] shrink-0" aria-hidden="true" focusable="false">
+        <rect x="0" y="12" width="11" height="41" rx="2" fill="currentColor" />
+        <rect x="17" y="12" width="11" height="41" rx="2" fill="currentColor" />
+        <rect x="34" y="12" width="11" height="41" rx="2" fill="currentColor" />
+        <rect x="52" y="0" width="11" height="41" rx="2" className={sobreNoche ? 'fill-pelota' : 'fill-lona'} />
+      </svg>
+      SetPoint
+    </span>
   );
 }

@@ -32,12 +32,12 @@ export function RankingPublicoPage() {
       {ranking.data && <title>{`Ranking · ${ranking.data.organizacion}`}</title>}
       {ranking.data && <EncabezadoPublico organizacion={ranking.data.organizacion} />}
       {ranking.isPending && <Esqueleto forma="lista" />}
-      {ranking.error && <p className="text-[15px] text-gris-700">{mensajeDeError(ranking.error)}</p>}
+      {ranking.error && <p className="text-[15px] text-pizarra-700">{mensajeDeError(ranking.error)}</p>}
       {ranking.data &&
         (ranking.data.usaRanking ? (
           <Ranking ranking={ranking.data} slug={slug} />
         ) : (
-          <p className="text-[15px] text-gris-700">Este circuito no lleva ranking.</p>
+          <p className="text-[15px] text-pizarra-700">Este circuito no lleva ranking.</p>
         ))}
     </main>
   );
@@ -51,7 +51,7 @@ function Ranking({ ranking, slug }: { ranking: RankingPublico; slug: string }) {
   const pedida = ranking.categorias.find((c) => String(c.id) === parametros.get('categoria'));
   const categoria = pedida ?? ranking.categorias.find((c) => c.filas.length > 0) ?? ranking.categorias[0];
 
-  if (!categoria) return <p className="text-[15px] text-gris-700">Este circuito todavía no cargó sus categorías.</p>;
+  if (!categoria) return <p className="text-[15px] text-pizarra-700">Este circuito todavía no cargó sus categorías.</p>;
 
   // Cada fila conserva su puesto: se busca para ver dónde está alguien, no para reordenar.
   const termino = normalizar(busqueda);
@@ -60,7 +60,7 @@ function Ranking({ ranking, slug }: { ranking: RankingPublico; slug: string }) {
   return (
     <>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-[30px] font-semibold tracking-[-0.035em]">Ranking</h1>
+        <h1 className="text-[28px] font-display font-semibold tracking-[-0.02em]">Ranking</h1>
         <div className="flex flex-wrap gap-1.5">
           {ranking.categorias.map((c) => (
             <Chip key={c.id} activo={c.id === categoria.id} onClick={() => setParametros({ categoria: String(c.id) }, { replace: true })}>
@@ -81,18 +81,18 @@ function Ranking({ ranking, slug }: { ranking: RankingPublico; slug: string }) {
 
       <div className="flex items-baseline justify-between gap-3 pt-0.5">
         <h2 className="text-xl font-semibold tracking-[-0.02em]">Toda la tabla</h2>
-        <Numero className="text-[13px] text-gris-500">
+        <Numero className="text-[13px] text-pizarra-500">
           {categoria.filas.length} {categoria.filas.length === 1 ? 'jugador' : 'jugadores'}
         </Numero>
       </div>
 
       {/* Arriba de la tabla: al pie quedaba después de todas las filas, y nadie lo veía. */}
-      {filas.length > 0 && <p className="text-[15px] text-gris-500">Tocá un jugador para ver sus puntos por torneo y su ficha.</p>}
+      {filas.length > 0 && <p className="text-[15px] text-pizarra-500">Tocá un jugador para ver sus puntos por torneo y su ficha.</p>}
 
       {categoria.filas.length === 0 ? (
-        <p className="text-[15px] text-gris-500">Todavía no hay jugadores en esta categoría.</p>
+        <p className="text-[15px] text-pizarra-500">Todavía no hay jugadores en esta categoría.</p>
       ) : filas.length === 0 ? (
-        <p className="text-[15px] text-gris-500">Nadie en {categoria.nombre} tiene ese apellido.</p>
+        <p className="text-[15px] text-pizarra-500">Nadie en {categoria.nombre} tiene ese apellido.</p>
       ) : (
         <TablaRanking
           slug={slug}

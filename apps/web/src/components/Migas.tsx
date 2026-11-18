@@ -29,7 +29,7 @@ export function Migas({ anteriores, children, alIr, className = 'text-sm' }: Pro
       <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
         {anteriores.map(({ etiqueta, ruta }) => (
           <li key={ruta} className="flex items-center gap-1.5">
-            <Link to={ruta} onClick={(evento) => ir(evento, ruta)} className="py-1 text-gris-500 hover:text-negro">
+            <Link to={ruta} onClick={(evento) => ir(evento, ruta)} className="py-1 text-pizarra-500 hover:text-noche">
               {etiqueta}
             </Link>
             <svg
@@ -39,14 +39,14 @@ export function Migas({ anteriores, children, alIr, className = 'text-sm' }: Pro
               strokeWidth="2.2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="size-3 shrink-0 text-gris-400"
+              className="size-3 shrink-0 text-pizarra-400"
               aria-hidden="true"
             >
               <path d="M9 6l6 6-6 6" />
             </svg>
           </li>
         ))}
-        <li className="min-w-0 text-gris-700">{children}</li>
+        <li className="min-w-0 text-pizarra-700">{children}</li>
       </ol>
     </nav>
   );

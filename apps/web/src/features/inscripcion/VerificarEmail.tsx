@@ -82,7 +82,7 @@ export function VerificarEmail({ onVerificado, desdeLink = false }: Props) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="tu@email.com"
-            className="h-[60px] rounded-[12px] border border-gris-300 px-4 text-lg outline-none placeholder:text-gris-400 focus:border-2 focus:border-negro focus:px-[15px]"
+            className="h-[60px] rounded-[12px] border border-borde-campo px-4 text-lg outline-none placeholder:text-pizarra-400 focus:border-2 focus:border-noche focus:px-[15px]"
           />
           <Ayuda>
             {desdeLink
@@ -92,7 +92,7 @@ export function VerificarEmail({ onVerificado, desdeLink = false }: Props) {
         </div>
         {!desdeLink && (
           <Caja>
-            <strong className="mb-1 block font-semibold text-negro">¿Ya te inscribiste antes?</strong>
+            <strong className="mb-1 block font-semibold text-noche">¿Ya te inscribiste antes?</strong>
             Usá el mismo email y vas directo a tu perfil.
           </Caja>
         )}
@@ -101,7 +101,7 @@ export function VerificarEmail({ onVerificado, desdeLink = false }: Props) {
           <BotonPrincipal type="submit" disabled={pedirCodigo.isPending}>
             {pedirCodigo.isPending ? 'Mandando…' : 'Mandarme el código'}
           </BotonPrincipal>
-          <p className="text-center text-[15px] text-gris-500">
+          <p className="text-center text-[15px] text-pizarra-500">
             {desdeLink ? 'No necesitás registrarte ni crear una contraseña.' : 'No necesitás registrarte.'}
           </p>
         </div>
@@ -143,7 +143,7 @@ export function VerificarEmail({ onVerificado, desdeLink = false }: Props) {
       <div className="flex flex-col gap-2 pt-2">
         <Titulo>Revisá tu email</Titulo>
         <Ayuda>
-          Te mandamos un código de <Numero>6</Numero> dígitos a <span className="font-medium text-negro">{email}</span>.
+          Te mandamos un código de <Numero>6</Numero> dígitos a <span className="font-medium text-noche">{email}</span>.
         </Ayuda>
       </div>
       <div className="flex flex-col gap-3">
@@ -163,7 +163,7 @@ export function VerificarEmail({ onVerificado, desdeLink = false }: Props) {
         <button type="button" onClick={mandarCodigo} disabled={pedirCodigo.isPending} className="text-[15px] font-medium underline underline-offset-[3px]">
           {pedirCodigo.isPending ? 'Mandando…' : 'Reenviar el código'}
         </button>
-        <button type="button" onClick={cambiarEmail} className="text-[15px] font-medium text-gris-500 underline underline-offset-[3px]">
+        <button type="button" onClick={cambiarEmail} className="text-[15px] font-medium text-pizarra-500 underline underline-offset-[3px]">
           Cambiar el email
         </button>
       </div>

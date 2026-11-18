@@ -143,7 +143,7 @@ function AvisoUnico({ aviso, onEntendido }: { aviso: AvisoDeInscripcion; onEnten
 const estilos = StyleSheet.create({
   pantalla: {
     flex: 1,
-    backgroundColor: colores.blanco,
+    backgroundColor: colores.niebla,
   },
   contenido: {
     flexGrow: 1,
@@ -161,7 +161,7 @@ const estilos = StyleSheet.create({
     fontFamily: fuentes.sans[600],
     fontSize: 16,
     letterSpacing: -0.24,
-    color: colores.negro,
+    color: colores.noche,
   },
   encabezado: {
     gap: 10,
@@ -172,20 +172,21 @@ const estilos = StyleSheet.create({
     paddingTop: 40,
   },
   titulo: {
-    fontFamily: fuentes.sans[600],
+    fontFamily: fuentes.display[600],
     fontSize: 30,
     lineHeight: 33,
-    letterSpacing: -0.96,
-    color: colores.negro,
+    letterSpacing: -0.6,
+    color: colores.noche,
   },
   bajada: {
     fontFamily: fuentes.sans[400],
     fontSize: 16,
     lineHeight: 23,
-    color: colores.gris500,
+    color: colores.pizarra500,
   },
   tarjeta: {
     borderWidth: 1,
+    backgroundColor: colores.papel,
     borderColor: colores.linea,
     borderRadius: radios.tarjeta,
     padding: 18,
@@ -198,18 +199,18 @@ const estilos = StyleSheet.create({
     fontFamily: fuentes.sans[600],
     fontSize: 22,
     letterSpacing: -0.55,
-    color: colores.negro,
+    color: colores.noche,
   },
   circuito: {
     fontFamily: fuentes.sans[400],
     fontSize: 15,
-    color: colores.gris500,
+    color: colores.pizarra500,
   },
   textoTarjeta: {
     fontFamily: fuentes.sans[400],
     fontSize: 16,
     lineHeight: 23,
-    color: colores.gris700,
+    color: colores.pizarra700,
   },
   reloj: {
     flexDirection: 'row',
@@ -221,10 +222,10 @@ const estilos = StyleSheet.create({
     fontFamily: fuentes.sans[400],
     fontSize: 15,
     lineHeight: 21,
-    color: colores.gris500,
+    color: colores.pizarra500,
   },
   caja: {
-    backgroundColor: colores.fondo,
+    backgroundColor: colores.niebla,
     borderRadius: radios.control,
     paddingHorizontal: 16,
     paddingVertical: 14,
@@ -233,13 +234,13 @@ const estilos = StyleSheet.create({
     fontFamily: fuentes.sans[400],
     fontSize: 15,
     lineHeight: 21,
-    color: colores.gris700,
+    color: colores.pizarra700,
   },
   texto: {
     fontFamily: fuentes.sans[400],
     fontSize: 15,
     lineHeight: 22,
-    color: colores.gris700,
+    color: colores.pizarra700,
   },
   pie: {
     marginTop: 'auto',
@@ -248,7 +249,7 @@ const estilos = StyleSheet.create({
   cuenta: {
     fontFamily: fuentes.sans[400],
     fontSize: 15,
-    color: colores.gris500,
+    color: colores.pizarra500,
     textAlign: 'center',
   },
 });

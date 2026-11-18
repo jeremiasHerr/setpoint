@@ -14,7 +14,7 @@ export function TarjetaTerminado({ torneo }: { torneo: TorneoTerminado }) {
       detalle={torneo.campeon ? `Campeón: ${torneo.campeon}` : 'Sin campeón del cuadro principal'}
       acciones={
         <>
-          <Numero className="flex grow items-center text-[13px] text-gris-500">
+          <Numero className="flex grow items-center text-[13px] text-pizarra-500">
             {torneo.termino ?? '—'} · {torneo.jugadores} jugadores
           </Numero>
           <Boton onClick={() => navegar(`/torneos/${torneo.id}/cierre`)}>Ver</Boton>

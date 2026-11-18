@@ -31,7 +31,7 @@ function Lineas({ lineas }: { lineas: Frase[] }) {
     <ul className="flex flex-col gap-[7px]">
       {lineas.map((linea, i) => (
         <li key={i} className="flex items-start gap-2.5 text-[15px]">
-          <span className="mt-[9px] size-[5px] shrink-0 rounded-full bg-negro" />
+          <span className="mt-[9px] size-[5px] shrink-0 rounded-full bg-noche" />
           <span>
             <TextoConNumeros frase={linea} />
           </span>
@@ -41,7 +41,7 @@ function Lineas({ lineas }: { lineas: Frase[] }) {
   );
 }
 
-const ayuda = (texto: string) => <p className="text-[15px] text-gris-500">{texto}</p>;
+const ayuda = (texto: string) => <p className="text-[15px] text-pizarra-500">{texto}</p>;
 
 // Antes de guardar, la pantalla dice quién queda dónde y a qué cuadro va (design.md §2,
 // principio 4). En una zona lo calcula la API sin guardar nada (decisión 032); en un cuadro
@@ -75,8 +75,8 @@ export function AlGuardar({ partido, datos, simulacion, siguienteYaJugado }: Pro
   }
 
   return (
-    <section aria-labelledby="al-guardar" className="flex flex-col gap-2.5 border-t border-linea bg-fondo-tabla px-6 py-[18px]">
-      <h2 id="al-guardar" className="text-[13px] font-semibold text-gris-500">
+    <section aria-labelledby="al-guardar" className="flex flex-col gap-2.5 border-t border-linea bg-niebla px-6 py-[18px]">
+      <h2 id="al-guardar" className="text-[13px] font-semibold text-pizarra-500">
         Al guardar
       </h2>
       {contenido}

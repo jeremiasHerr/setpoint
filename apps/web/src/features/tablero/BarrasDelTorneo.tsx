@@ -38,7 +38,7 @@ export function BarrasDelTorneo({ tablero }: { tablero: Tablero }) {
         </h2>
         <ul className="flex flex-wrap items-center gap-x-4 gap-y-1">
           {leyenda.map(([situacion, rotulo]) => (
-            <li key={situacion} className="flex items-center gap-1.5 text-[13px] text-gris-500">
+            <li key={situacion} className="flex items-center gap-1.5 text-[13px] text-pizarra-500">
               <span className={`size-[9px] rounded-[2px] ${COLOR_DE_LA_SITUACION[situacion]}`} />
               {rotulo}
             </li>
@@ -74,7 +74,7 @@ export function BarrasDelTorneo({ tablero }: { tablero: Tablero }) {
               </ul>
               <div className={`flex items-baseline justify-between gap-2 ${conVencidos ? 'text-rojo-texto' : ''}`}>
                 <span className="min-w-0 text-sm font-semibold">{nombreDelBloque(bloque, tablero)}</span>
-                <Numero className={`text-xs ${conVencidos ? '' : 'text-gris-500'}`}>
+                <Numero className={`text-xs ${conVencidos ? '' : 'text-pizarra-500'}`}>
                   {jugados}/{bloque.partidos.length}
                 </Numero>
               </div>

@@ -31,7 +31,7 @@ export function SeccionClubes({ usaClubes, clubes, alCambiarUsaClubes, alCambiar
           <h2 id="clubes-titulo" className="text-[17px] font-semibold">
             Clubes donde juegan
           </h2>
-          <p className="text-sm text-gris-500">Es opcional. Cargalos solo si querés estadísticas por superficie.</p>
+          <p className="text-sm text-pizarra-500">Es opcional. Cargalos solo si querés estadísticas por superficie.</p>
         </div>
         <Interruptor encendido={usaClubes} alCambiar={alCambiarUsaClubes} aria-labelledby="clubes-titulo" />
       </div>
@@ -50,19 +50,19 @@ export function SeccionClubes({ usaClubes, clubes, alCambiarUsaClubes, alCambiar
               />
             ))}
           </ul>
-          <button type="button" onClick={agregarClub} className="self-start text-sm font-medium hover:text-gris-500">
+          <button type="button" onClick={agregarClub} className="self-start text-sm font-medium hover:text-pizarra-500">
             Agregar otro club
           </button>
         </>
       ) : (
-        <div className="flex flex-col items-center gap-1.5 rounded-xl border border-dashed border-gris-300 p-[18px] text-center">
-          <p className="text-sm text-gris-500">
+        <div className="flex flex-col items-center gap-1.5 rounded-xl border border-dashed border-borde-campo p-[18px] text-center">
+          <p className="text-sm text-pizarra-500">
             {clubes.length > 0
               ? 'Con esto apagado, la sede de cada partido se escribe a mano. Los clubes que cargaste quedan guardados.'
               : 'Sin clubes cargados, la sede de cada partido se escribe a mano.'}
           </p>
           {usaClubes && (
-            <button type="button" onClick={agregarClub} className="text-sm font-medium hover:text-gris-500">
+            <button type="button" onClick={agregarClub} className="text-sm font-medium hover:text-pizarra-500">
               Agregar el primer club
             </button>
           )}

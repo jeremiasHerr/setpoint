@@ -37,7 +37,7 @@ export function FormularioSubida({ categorias, enviando, error, alSubir }: Props
       <form onSubmit={enviar} className="flex flex-col gap-5">
         <div className="flex flex-col gap-1.5">
           <h2 className="text-[17px] font-semibold">Subí la planilla que ya usás</h2>
-          <p className="text-[15px] leading-normal text-gris-500">
+          <p className="text-[15px] leading-normal text-pizarra-500">
             Una fila por jugador y una columna por torneo, como el ranking de siempre. No importa el orden de las
             columnas ni si tiene títulos, totales o notas. Las categorías y los torneos del calendario que tu circuito
             no tiene los tomamos de la planilla, y se crean al confirmar.
@@ -59,14 +59,14 @@ export function FormularioSubida({ categorias, enviando, error, alSubir }: Props
             ))}
           </Selector>
         ) : (
-          <p className="rounded-control bg-fondo px-3.5 py-3 text-sm leading-normal text-gris-700">
+          <p className="rounded-control bg-niebla px-3.5 py-3 text-sm leading-normal text-pizarra-700">
             La categoría la tomamos del nombre de la hoja, de un título o del nombre del archivo, como «Ranking Tercera
             2026.xlsx». Si no la dice, la elegís al revisar.
           </p>
         )}
 
         <div className="flex flex-col gap-2">
-          <span className="text-[13px] font-semibold text-gris-500">Archivos</span>
+          <span className="text-[13px] font-semibold text-pizarra-500">Archivos</span>
           {/* El input nativo queda oculto: su botón viene en el idioma del navegador. */}
           <div className="flex items-center gap-3">
             <input
@@ -80,11 +80,11 @@ export function FormularioSubida({ categorias, enviando, error, alSubir }: Props
             />
             <label
               htmlFor="importacion-archivo"
-              className="inline-flex h-10 cursor-pointer items-center rounded-control border border-linea px-4 text-[15px] font-medium peer-focus-visible:outline-2 peer-focus-visible:outline-negro hover:bg-fondo"
+              className="inline-flex h-10 cursor-pointer items-center rounded-control border border-linea px-4 text-[15px] font-medium peer-focus-visible:outline-2 peer-focus-visible:outline-noche hover:bg-niebla"
             >
               {archivos.length > 0 ? 'Elegir otros' : 'Elegir archivos'}
             </label>
-            <span className="truncate font-mono text-sm text-gris-700">
+            <span className="truncate font-mono text-sm text-pizarra-700">
               {archivos.length === 0
                 ? 'Ningún archivo elegido'
                 : archivos.length === 1
@@ -93,7 +93,7 @@ export function FormularioSubida({ categorias, enviando, error, alSubir }: Props
             </span>
           </div>
           {archivos.length > 1 && (
-            <ul className="flex flex-col gap-1 font-mono text-[13px] text-gris-700">
+            <ul className="flex flex-col gap-1 font-mono text-[13px] text-pizarra-700">
               {archivos.map((a) => (
                 <li key={a.name} className="truncate">
                   {a.name}
@@ -101,7 +101,7 @@ export function FormularioSubida({ categorias, enviando, error, alSubir }: Props
               ))}
             </ul>
           )}
-          <p id="importacion-ayuda" className="font-mono text-xs text-gris-500">
+          <p id="importacion-ayuda" className="font-mono text-xs text-pizarra-500">
             .xlsx, .xls o .csv · hasta {ARCHIVOS_MAXIMOS} archivos de 2 MB · una o varias hojas por archivo
           </p>
         </div>
@@ -114,7 +114,7 @@ export function FormularioSubida({ categorias, enviando, error, alSubir }: Props
           <Boton type="submit" variante="organizador" disabled={archivos.length === 0 || demasiados || enviando} className="self-start">
             {archivos.length > 1 ? 'Leer las planillas' : 'Leer la planilla'}
           </Boton>
-          <p className="text-sm text-gris-500">Todavía no se guarda nada: primero vas a revisar lo que se leyó.</p>
+          <p className="text-sm text-pizarra-500">Todavía no se guarda nada: primero vas a revisar lo que se leyó.</p>
         </div>
       </form>
     </Tarjeta>

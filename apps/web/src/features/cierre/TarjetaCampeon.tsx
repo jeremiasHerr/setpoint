@@ -19,12 +19,12 @@ export function TarjetaCampeon({ campeon }: { campeon: CampeonDelCuadro }) {
   const principal = campeon.cuadro === 'campeonato';
   return (
     <Tarjeta className="flex flex-col gap-[13px] p-[18px]">
-      <span className="font-mono text-[11px] text-gris-500">{NOMBRE_DEL_CUADRO[campeon.cuadro].toLowerCase()}</span>
+      <span className="font-mono text-[11px] text-pizarra-500">{NOMBRE_DEL_CUADRO[campeon.cuadro].toLowerCase()}</span>
       <div className="flex items-center gap-3">
         <span
           aria-hidden="true"
           className={`flex size-10 shrink-0 items-center justify-center rounded-full text-sm font-semibold ${
-            principal ? 'bg-lima text-negro' : 'bg-linea-suave text-gris-500'
+            principal ? 'bg-lona-fondo text-lona-texto' : 'bg-linea-suave text-pizarra-500'
           }`}
         >
           {iniciales(`${campeon.nombre} ${campeon.apellido}`)}
@@ -33,7 +33,7 @@ export function TarjetaCampeon({ campeon }: { campeon: CampeonDelCuadro }) {
           <p className="truncate text-[17px] font-semibold">
             {campeon.nombre} {campeon.apellido}
           </p>
-          <p className="text-[13px] text-gris-500">
+          <p className="text-[13px] text-pizarra-500">
             campeón · <ComoGano campeon={campeon} />
           </p>
         </div>

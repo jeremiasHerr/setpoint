@@ -227,7 +227,7 @@ function Formulario({ coordinacion, rival, recargar }: { coordinacion: Coordinac
 const estilos = StyleSheet.create({
   pantalla: {
     flex: 1,
-    backgroundColor: colores.blanco,
+    backgroundColor: colores.niebla,
   },
   contenido: {
     flexGrow: 1,
@@ -251,7 +251,7 @@ const estilos = StyleSheet.create({
     justifyContent: 'center',
   },
   apretado: {
-    backgroundColor: colores.fondo,
+    backgroundColor: colores.niebla,
   },
   // Un ángulo hecho con dos bordes, apuntando a la izquierda.
   flecha: {
@@ -260,23 +260,24 @@ const estilos = StyleSheet.create({
     marginLeft: 4,
     borderLeftWidth: 2,
     borderBottomWidth: 2,
-    borderColor: colores.negro,
+    borderColor: colores.noche,
     transform: [{ rotate: '45deg' }],
   },
   titulo: {
-    fontFamily: fuentes.sans[600],
+    fontFamily: fuentes.display[600],
     fontSize: 20,
-    letterSpacing: -0.5,
-    color: colores.negro,
+    letterSpacing: -0.4,
+    color: colores.noche,
   },
   texto: {
     fontFamily: fuentes.sans[400],
     fontSize: 15,
     lineHeight: 22,
-    color: colores.gris700,
+    color: colores.pizarra700,
   },
   tarjeta: {
     borderWidth: 1,
+    backgroundColor: colores.papel,
     borderColor: colores.linea,
     borderRadius: radios.tarjeta,
     paddingVertical: 16,
@@ -294,12 +295,12 @@ const estilos = StyleSheet.create({
     fontFamily: fuentes.sans[600],
     fontSize: 20,
     letterSpacing: -0.5,
-    color: colores.negro,
+    color: colores.noche,
   },
   instancia: {
     fontFamily: fuentes.mono[400],
     fontSize: 13,
-    color: colores.gris500,
+    color: colores.pizarra500,
   },
   plazo: {
     paddingVertical: 6,
@@ -314,7 +315,7 @@ const estilos = StyleSheet.create({
   textoPlazo: {
     fontFamily: fuentes.mono[500],
     fontSize: 12,
-    color: colores.gris500,
+    color: colores.pizarra500,
     ...tabular,
   },
   textoPlazoUrgente: {
@@ -326,13 +327,13 @@ const estilos = StyleSheet.create({
   pregunta: {
     fontFamily: fuentes.sans[600],
     fontSize: 16,
-    color: colores.negro,
+    color: colores.noche,
   },
   ayuda: {
     fontFamily: fuentes.sans[400],
     fontSize: 14,
     lineHeight: 20,
-    color: colores.gris500,
+    color: colores.pizarra500,
   },
   error: {
     fontFamily: fuentes.sans[400],
@@ -343,14 +344,14 @@ const estilos = StyleSheet.create({
   sedeFija: {
     height: medidas.toque,
     borderRadius: 12,
-    backgroundColor: colores.fondo,
+    backgroundColor: colores.niebla,
     paddingHorizontal: 16,
     justifyContent: 'center',
   },
   textoSedeFija: {
     fontFamily: fuentes.sans[400],
     fontSize: 17,
-    color: colores.negro,
+    color: colores.noche,
   },
   pie: {
     marginTop: 'auto',
@@ -358,7 +359,7 @@ const estilos = StyleSheet.create({
   },
   aviso: {
     borderRadius: 12,
-    backgroundColor: colores.fondo,
+    backgroundColor: colores.niebla,
     paddingVertical: 14,
     paddingHorizontal: 16,
   },
@@ -366,6 +367,6 @@ const estilos = StyleSheet.create({
     fontFamily: fuentes.sans[400],
     fontSize: 15,
     lineHeight: 21,
-    color: colores.gris700,
+    color: colores.pizarra700,
   },
 });

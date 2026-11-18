@@ -34,7 +34,7 @@ export function TablaRanking({ slug, filas, torneosDelCalendario, vuelta }: Prop
               onClick={() => setAbierta(estaAbierta ? null : fila.jugadorId)}
               className="grid h-14 w-full grid-cols-[26px_minmax(0,1fr)_58px_16px] items-center gap-x-2.5 text-left"
             >
-              <Numero className="text-sm text-gris-500">{fila.puesto}</Numero>
+              <Numero className="text-sm text-pizarra-500">{fila.puesto}</Numero>
               <span className="truncate text-lg font-medium">
                 {fila.nombre} {fila.apellido}
               </span>
@@ -47,7 +47,7 @@ export function TablaRanking({ slug, filas, torneosDelCalendario, vuelta }: Prop
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className={`size-4 text-gris-500 transition-transform ${estaAbierta ? 'rotate-180' : ''}`}
+                className={`size-4 text-pizarra-500 transition-transform ${estaAbierta ? 'rotate-180' : ''}`}
                 aria-hidden="true"
               >
                 <path d="m6 9 6 6 6-6" />
@@ -59,7 +59,7 @@ export function TablaRanking({ slug, filas, torneosDelCalendario, vuelta }: Prop
                 <Link
                   to={`/c/${slug}/jugadores/${fila.jugadorId}`}
                   state={estadoParaLaFicha(vuelta)}
-                  className="self-start text-sm font-medium text-negro underline underline-offset-[3px] hover:text-gris-500"
+                  className="self-start text-sm font-medium text-noche underline underline-offset-[3px] hover:text-pizarra-500"
                 >
                   Ver la ficha
                 </Link>
@@ -84,12 +84,12 @@ function Casilleros({ fila, torneosDelCalendario }: { fila: FilaDeRanking; torne
           <div
             key={torneo.id}
             title={torneo.nombre}
-            className="flex flex-col items-center gap-1 rounded-lg bg-fondo px-1 py-[9px]"
+            className="flex flex-col items-center gap-1 rounded-lg bg-niebla px-1 py-[9px]"
           >
-            <Numero className="text-[10px] text-gris-500">
+            <Numero className="text-[10px] text-pizarra-500">
               {casillero ? rotuloDeCasillero(torneo.nombre, casillero.anio) : torneo.nombre.slice(0, 3).toLowerCase()}
             </Numero>
-            <Numero className={`text-[17px] font-medium ${casillero ? 'text-negro' : 'text-gris-400'}`}>
+            <Numero className={`text-[17px] font-medium ${casillero ? 'text-noche' : 'text-pizarra-400'}`}>
               {casillero?.puntos ?? 0}
             </Numero>
           </div>

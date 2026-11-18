@@ -7,7 +7,7 @@ type Props = {
   onPress: () => void;
 };
 
-// Píldora de categorías y filtros (design.md §6), como el Chip de la web. Activo: negro.
+// Píldora de categorías y filtros (design.md §6), como el Chip de la web. Activo: noche.
 export function Chip({ texto, activo = false, onPress }: Props) {
   return (
     <Pressable
@@ -30,19 +30,20 @@ const estilos = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: radios.chip,
     borderWidth: 1,
+    backgroundColor: colores.papel,
     borderColor: colores.linea,
   },
   activo: {
-    backgroundColor: colores.negro,
-    borderColor: colores.negro,
+    backgroundColor: colores.noche,
+    borderColor: colores.noche,
   },
   apretado: {
-    backgroundColor: colores.fondo,
+    backgroundColor: colores.niebla,
   },
   texto: {
     fontFamily: fuentes.sans[500],
     fontSize: 15,
-    color: colores.gris700,
+    color: colores.pizarra700,
   },
   textoActivo: {
     fontFamily: fuentes.sans[600],

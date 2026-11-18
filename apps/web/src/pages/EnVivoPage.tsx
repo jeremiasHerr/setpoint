@@ -40,7 +40,7 @@ export function EnVivoPage({ pestanaInicial }: { pestanaInicial?: Pestana }) {
     <main className="mx-auto flex min-h-screen max-w-[480px] flex-col gap-[18px] px-4 pt-5 pb-7 xl:max-w-none xl:px-[30px]">
       {torneo.isPending && <Esqueleto forma="lista" />}
       {/* Si falla una actualización, queda lo último que se cargó. */}
-      {torneo.error && !torneo.data && <p className="text-[15px] text-gris-700">{mensajeDeError(torneo.error)}</p>}
+      {torneo.error && !torneo.data && <p className="text-[15px] text-pizarra-700">{mensajeDeError(torneo.error)}</p>}
       {torneo.data && <Contenido torneo={torneo.data} slug={slug} id={id} pestanaInicial={pestanaInicial} />}
     </main>
   );
@@ -65,7 +65,7 @@ function Contenido({ torneo, slug, id, pestanaInicial }: { torneo: TorneoEnVivo;
         {/* Las páginas públicas no tienen menú: esta vuelve a la del torneo, que enlaza acá (decisión 084). */}
         <LinkDeVuelta ruta={`/c/${slug}/torneos/${id}`}>El torneo</LinkDeVuelta>
         <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
-          <h1 className="text-[30px] font-semibold tracking-[-0.035em]">El torneo en vivo</h1>
+          <h1 className="text-[28px] font-display font-semibold tracking-[-0.02em]">El torneo en vivo</h1>
           <BotonCompartir titulo={`${torneo.nombre} · ${torneo.organizacion}`} />
         </div>
       </div>
@@ -83,7 +83,7 @@ function Contenido({ torneo, slug, id, pestanaInicial }: { torneo: TorneoEnVivo;
         (torneo.hayCuadros ? (
           <LosCuadros slug={slug} torneoId={id} />
         ) : (
-          <p className="text-[15px] text-gris-500">Los cuadros se arman cuando terminan las zonas. Volvé a mirar más adelante.</p>
+          <p className="text-[15px] text-pizarra-500">Los cuadros se arman cuando terminan las zonas. Volvé a mirar más adelante.</p>
         ))}
       {pestana === 'calendario' && <CalendarioEnVivo torneo={torneo} />}
     </>

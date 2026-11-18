@@ -60,16 +60,16 @@ const estilos = StyleSheet.create({
     marginHorizontal: -12,
     paddingHorizontal: 12,
     borderRadius: radios.control,
-    backgroundColor: colores.limaTenue,
+    backgroundColor: colores.lonaFondo,
   },
   apretada: {
-    backgroundColor: colores.fondo,
+    backgroundColor: colores.niebla,
   },
   puesto: {
     width: 26,
     fontFamily: fuentes.mono[400],
     fontSize: 15,
-    color: colores.gris500,
+    color: colores.pizarra500,
     ...tabular,
   },
   nombre: {
@@ -82,7 +82,7 @@ const estilos = StyleSheet.create({
     flexShrink: 1,
     fontFamily: fuentes.sans[500],
     fontSize: 18,
-    color: colores.negro,
+    color: colores.noche,
   },
   nombrePropio: {
     fontFamily: fuentes.sans[700],
@@ -91,19 +91,19 @@ const estilos = StyleSheet.create({
     width: 7,
     height: 7,
     borderRadius: radios.chip,
-    backgroundColor: colores.lima,
+    backgroundColor: colores.lonaTexto,
   },
   total: {
     width: 58,
     textAlign: 'right',
     fontFamily: fuentes.mono[500],
     fontSize: 18,
-    color: colores.negro,
+    color: colores.noche,
     ...tabular,
   },
   textoPropio: {
     fontFamily: fuentes.mono[600],
-    color: colores.negro,
+    color: colores.noche,
   },
   desglose: {
     paddingBottom: 12,

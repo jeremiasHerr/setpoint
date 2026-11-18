@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { diaYHora } from '../../lib/fechas';
 import { colores, fuentes, tabular } from '../../lib/tokens';
 
-// El resto del torneo: los que tienen fecha más adelante y los jugados. El punto lima marca los
+// El resto del torneo: los que tienen fecha más adelante y los jugados. El punto verde marca los
 // que ganó.
 export function OtrosPartidos({ partidos }: { partidos: PartidoDelJugador[] }) {
   return (
@@ -28,6 +28,7 @@ export function OtrosPartidos({ partidos }: { partidos: PartidoDelJugador[] }) {
 const estilos = StyleSheet.create({
   lista: {
     borderWidth: 1,
+    backgroundColor: colores.papel,
     borderColor: colores.linea,
     borderRadius: 16,
     overflow: 'hidden',
@@ -54,22 +55,22 @@ const estilos = StyleSheet.create({
     width: 7,
     height: 7,
     borderRadius: 999,
-    backgroundColor: colores.lima,
+    backgroundColor: colores.lonaTexto,
   },
   rival: {
     flexShrink: 1,
     fontFamily: fuentes.sans[500],
     fontSize: 18,
-    color: colores.negro,
+    color: colores.noche,
   },
   dato: {
     fontFamily: fuentes.mono[400],
     fontSize: 14,
-    color: colores.gris500,
+    color: colores.pizarra500,
     ...tabular,
   },
   marcador: {
     fontFamily: fuentes.mono[500],
-    color: colores.negro,
+    color: colores.noche,
   },
 });

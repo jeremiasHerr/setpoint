@@ -28,7 +28,7 @@ export function CasoReclamo({ caso, enviando, alResolver }: Props) {
   return (
     <>
       <Planteo titulo={`Otra cuenta dice que el perfil de ${nombre} es suyo.`}>
-        <p className="-mt-2.5 text-[15px] leading-normal text-gris-500">
+        <p className="-mt-2.5 text-[15px] leading-normal text-pizarra-500">
           El perfil está vinculado a {titular.email}. Lo reclama {reclamante.email || 'una cuenta que ya no existe'}, que verificó
           su email. Vos decidís de quién es el perfil; los emails de cada uno no cambian.
         </p>
@@ -52,7 +52,7 @@ export function CasoReclamo({ caso, enviando, alResolver }: Props) {
           </Boton>
         </section>
 
-        <section className="flex flex-col gap-4 rounded-tarjeta border-2 border-negro p-[19px]">
+        <section className="flex flex-col gap-4 rounded-tarjeta border-2 border-noche p-[19px]">
           <div className="flex min-w-0 flex-col gap-1">
             <Rotulo>lo reclama</Rotulo>
             <h3 className="truncate text-lg font-semibold tracking-[-0.02em]">{reclamante.email || '—'}</h3>
@@ -70,7 +70,7 @@ export function CasoReclamo({ caso, enviando, alResolver }: Props) {
             Es de esta cuenta: pasarle el perfil
           </Boton>
           {reclamante.otroPerfil && (
-            <p className="text-[13px] leading-[1.45] text-gris-500">
+            <p className="text-[13px] leading-[1.45] text-pizarra-500">
               Una cuenta tiene un solo perfil por circuito. Para pasarle este, primero desvinculá el otro desde el padrón.
             </p>
           )}
@@ -83,7 +83,7 @@ export function CasoReclamo({ caso, enviando, alResolver }: Props) {
             <h3 className="text-[15px] font-semibold">
               Si le pasás el perfil: ¿qué hace{pagadas.length === 1 ? ` la inscripción a ${pagadas[0].torneo}` : 'n sus inscripciones'}?
             </h3>
-            <p className="text-sm text-gris-500">
+            <p className="text-sm text-pizarra-500">
               {pagadas.length === 1 ? (
                 <>
                   La pagó {titular.email} (inscripción <Numero>{pagadas[0].id}</Numero>, <Numero>{importe(pagadas[0].monto)}</Numero>).
@@ -125,14 +125,14 @@ function Opcion({ elegida, onElegir, titulo, children }: { elegida: boolean; onE
       role="radio"
       aria-checked={elegida}
       onClick={onElegir}
-      className={`flex items-start gap-[11px] rounded-[12px] text-left ${elegida ? 'border-2 border-negro px-3.5 py-3' : 'border border-linea px-[15px] py-[13px] hover:bg-fondo'}`}
+      className={`flex items-start gap-[11px] rounded-[12px] text-left ${elegida ? 'border-2 border-noche px-3.5 py-3' : 'border border-linea px-[15px] py-[13px] hover:bg-niebla'}`}
     >
-      <span className={`mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full border-2 ${elegida ? 'border-negro' : 'border-gris-300'}`}>
-        {elegida && <span className="size-2 rounded-full bg-negro" />}
+      <span className={`mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full border-2 ${elegida ? 'border-noche' : 'border-borde-campo'}`}>
+        {elegida && <span className="size-2 rounded-full bg-noche" />}
       </span>
       <span className="flex flex-col gap-[3px]">
         <span className="text-sm font-semibold">{titulo}</span>
-        <span className="text-[13px] leading-[1.4] text-gris-500">{children}</span>
+        <span className="text-[13px] leading-[1.4] text-pizarra-500">{children}</span>
       </span>
     </button>
   );

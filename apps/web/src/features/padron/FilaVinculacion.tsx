@@ -28,12 +28,12 @@ export function FilaVinculacion({ jugador, columnas, seleccionado, slug, organiz
   return (
     <div
       className={`grid h-[58px] items-center gap-x-4 border-b border-linea-suave px-[18px] ${columnas} ${
-        seleccionado ? 'bg-fondo-tabla' : ''
+        seleccionado ? 'bg-niebla' : ''
       }`}
     >
       <span
         className={`flex size-[34px] items-center justify-center rounded-full text-[13px] font-semibold ${
-          jugador.revision ? 'bg-linea-suave text-gris-500' : 'bg-lima text-negro'
+          jugador.revision ? 'bg-linea-suave text-pizarra-500' : 'bg-lona-fondo text-lona-texto'
         }`}
         aria-hidden="true"
       >
@@ -46,21 +46,21 @@ export function FilaVinculacion({ jugador, columnas, seleccionado, slug, organiz
           {jugador.revision ? (
             <Link
               to={`/padron/revisar/${jugador.id}`}
-              className="shrink-0 rounded-full border border-negro px-[7px] py-px font-mono text-[11px] whitespace-nowrap hover:bg-negro hover:text-white"
+              className="shrink-0 rounded-full border border-noche px-[7px] py-px font-mono text-[11px] whitespace-nowrap hover:bg-noche hover:text-white"
             >
               para revisar
             </Link>
           ) : (
-            <span className="shrink-0 rounded-full bg-lima px-[7px] py-0.5 font-mono text-[11px] whitespace-nowrap">nueva</span>
+            <span className="shrink-0 rounded-full bg-lona-fondo text-lona-texto px-[7px] py-0.5 font-mono text-[11px] whitespace-nowrap">nueva</span>
           )}
         </div>
-        <span className="truncate font-mono text-xs text-gris-500">{detalle}</span>
+        <span className="truncate font-mono text-xs text-pizarra-500">{detalle}</span>
       </div>
 
       <div className="hidden md:block">
         <span
-          className={`inline-flex h-[34px] items-center rounded-full border border-linea bg-fondo px-[13px] text-sm font-medium ${
-            jugador.categoria ? '' : 'text-gris-500'
+          className={`inline-flex h-[34px] items-center rounded-full border border-linea bg-niebla px-[13px] text-sm font-medium ${
+            jugador.categoria ? '' : 'text-pizarra-500'
           }`}
         >
           {jugador.categoria ?? 'Sin categoría'}
@@ -69,7 +69,7 @@ export function FilaVinculacion({ jugador, columnas, seleccionado, slug, organiz
 
       <span className="hidden text-sm md:block">{jugador.vinculadoPor ? COMO_EN_LA_LISTA[jugador.vinculadoPor] : '—'}</span>
 
-      <Numero className="text-right text-[13px] text-gris-500">{jugador.vinculadoEn ? cuandoSeVinculo(jugador.vinculadoEn) : '—'}</Numero>
+      <Numero className="text-right text-[13px] text-pizarra-500">{jugador.vinculadoEn ? cuandoSeVinculo(jugador.vinculadoEn) : '—'}</Numero>
 
       <MenuJugador jugador={jugador} slug={slug} organizacion={organizacion} alEditar={alEditar} />
     </div>

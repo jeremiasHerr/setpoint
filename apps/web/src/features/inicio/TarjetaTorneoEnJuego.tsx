@@ -16,7 +16,7 @@ export function TarjetaTorneoEnJuego({ torneo }: { torneo: TorneoEnJuego }) {
       calendario={torneo.calendario}
       nombre={torneo.nombre}
       detalle={torneo.detalle}
-      etiqueta={<Etiqueta variante="negra">{torneo.fase}</Etiqueta>}
+      etiqueta={<Etiqueta variante="noche">{torneo.fase}</Etiqueta>}
       acciones={
         <Boton variante="organizador" className="grow font-semibold" onClick={() => navegar(`/torneos/${torneo.id}/tablero`)}>
           Ver el tablero
@@ -25,17 +25,17 @@ export function TarjetaTorneoEnJuego({ torneo }: { torneo: TorneoEnJuego }) {
     >
       <div className="flex flex-col gap-1.5">
         <div className="flex items-baseline justify-between gap-2 text-[13px]">
-          <span className="text-gris-700">Partidos jugados</span>
+          <span className="text-pizarra-700">Partidos jugados</span>
           <Numero className="text-sm font-medium">
-            {jugados} <span className="text-gris-400">/ {total}</span>
+            {jugados} <span className="text-pizarra-400">/ {total}</span>
           </Numero>
         </div>
         <BarraDeMarcas
           rotulo={`${jugados} de ${total} partidos jugados${vencidos > 0 ? `, ${vencidos} vencidos` : ''}`}
           tramos={[
-            { cantidad: jugados, color: 'negro' },
-            { cantidad: vencidos, color: 'rojo' },
-            { cantidad: total - jugados - vencidos, color: 'linea' },
+            { cantidad: jugados, estado: 'hecho' },
+            { cantidad: vencidos, estado: 'vencido' },
+            { cantidad: total - jugados - vencidos, estado: 'pendiente' },
           ]}
         />
         {vencidos > 0 && (

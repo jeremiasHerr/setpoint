@@ -20,7 +20,7 @@ export function TarjetaDeColumna({ calendario, nombre, detalle, etiqueta, esquin
   return (
     <Tarjeta className="flex flex-col gap-3.5 p-4">
       <div className="flex items-start justify-between gap-2">
-        <span className="rounded-md bg-linea-suave px-2 py-[3px] font-mono text-xs text-gris-700">{calendario}</span>
+        <span className="rounded-md bg-linea-suave px-2 py-[3px] font-mono text-xs text-pizarra-700">{calendario}</span>
         {esquina}
       </div>
       <div className="flex flex-col gap-0.5">
@@ -28,7 +28,7 @@ export function TarjetaDeColumna({ calendario, nombre, detalle, etiqueta, esquin
           <h3 className="text-base font-semibold tracking-[-0.02em]">{nombre}</h3>
           {etiqueta}
         </div>
-        <p className="text-[13px] text-gris-500">{detalle}</p>
+        <p className="text-[13px] text-pizarra-500">{detalle}</p>
       </div>
       {children}
       <div className="flex flex-wrap gap-2">{acciones}</div>
@@ -41,16 +41,16 @@ export function CuentaDelCupo({ pagaron, cupo }: { pagaron: number; cupo: number
   return (
     <div className="flex flex-col gap-1.5">
       <div className="flex items-baseline justify-between gap-2 text-[13px]">
-        <span className="text-gris-700">Pagaron</span>
+        <span className="text-pizarra-700">Pagaron</span>
         <Numero className="text-sm font-medium">
-          {pagaron} <span className="text-gris-400">/ {cupo}</span>
+          {pagaron} <span className="text-pizarra-400">/ {cupo}</span>
         </Numero>
       </div>
       <BarraDeMarcas
         rotulo={`${pagaron} de ${cupo} pagaron`}
         tramos={[
-          { cantidad: pagaron, color: 'negro' },
-          { cantidad: cupo - pagaron, color: 'linea' },
+          { cantidad: pagaron, estado: 'hecho' },
+          { cantidad: cupo - pagaron, estado: 'pendiente' },
         ]}
       />
     </div>

@@ -31,7 +31,7 @@ function Inicio({ sesion }: { sesion: Sesion }) {
   const cerrarSesion = useCerrarSesion();
 
   return (
-    <div className="min-h-screen bg-white text-negro">
+    <div className="min-h-screen bg-papel text-noche">
       <EncabezadoOrganizador
         organizacion={circuito.data?.nombre ?? sesion.organizacion.nombre}
         navegacion={navegacionOrganizador}
@@ -45,7 +45,7 @@ function Inicio({ sesion }: { sesion: Sesion }) {
         error ? (
           !sesionInvalida && (
             <div className="flex flex-col items-start gap-3 px-7 pt-[26px]">
-              <p className="text-[15px] text-gris-500">No pudimos cargar tu organización.</p>
+              <p className="text-[15px] text-pizarra-500">No pudimos cargar tu organización.</p>
               <Boton
                 onClick={() => {
                   void circuito.refetch();

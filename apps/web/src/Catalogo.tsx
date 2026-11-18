@@ -19,7 +19,7 @@ const categorias = ['Todas', 'Segunda', 'Tercera'];
 function Seccion({ titulo, children }: { titulo: string; children: ReactNode }) {
   return (
     <section className="flex flex-col gap-4">
-      <h2 className="font-mono text-xs text-gris-500">{titulo}</h2>
+      <h2 className="font-mono text-xs text-pizarra-500">{titulo}</h2>
       {children}
     </section>
   );
@@ -30,13 +30,13 @@ export function Catalogo() {
   const navegar = useNavigate();
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-papel">
       <EncabezadoOrganizador organizacion="Liga Amateur del Valle" navegacion={navegacion} activo="Padrón" />
 
       <main className="mx-auto flex max-w-4xl flex-col gap-10 px-7 py-8">
         <div className="flex flex-col gap-2">
-          <h1 className="text-3xl font-semibold tracking-[-0.035em]">Componentes</h1>
-          <p className="text-[15px] text-gris-500">La base compartida de la web. Todo sale de los tokens de design.md.</p>
+          <h1 className="text-3xl font-display font-semibold tracking-[-0.02em]">Componentes</h1>
+          <p className="text-[15px] text-pizarra-500">La base compartida de la web. Todo sale de los tokens de design.md.</p>
         </div>
 
         <Seccion titulo="acceso">
@@ -90,14 +90,14 @@ export function Catalogo() {
           <div className="grid grid-cols-2 gap-5">
             <Tarjeta className="flex flex-col gap-1.5 p-5">
               <span className="text-[15px] font-semibold">Otoño 26 · Tercera</span>
-              <span className="text-sm text-gris-500">
+              <span className="text-sm text-pizarra-500">
                 <Numero>32</Numero> inscriptos · <Numero>8</Numero> zonas
               </span>
             </Tarjeta>
-            <Tarjeta variante="negra" className="flex flex-col gap-2">
-              <span className="text-sm text-gris-400">Tu ranking</span>
-              <Numero className="text-5xl font-medium tracking-[-0.04em] text-lima">165</Numero>
-              <span className="text-sm text-gris-400">puntos · puesto 1 de Tercera</span>
+            <Tarjeta variante="noche" className="flex flex-col gap-2">
+              <span className="text-sm text-pizarra-400">Tu ranking</span>
+              <Numero className="text-5xl font-medium tracking-[-0.04em] text-white">165</Numero>
+              <span className="text-sm text-pizarra-400">puntos · puesto 1 de Tercera</span>
             </Tarjeta>
           </div>
         </Seccion>
@@ -109,7 +109,7 @@ export function Catalogo() {
             </span>
             <Numero>sáb 14 · 10:00</Numero>
             <Numero>6-4 3-6 10-8</Numero>
-            <Numero className="text-gris-500">quedan 6 días</Numero>
+            <Numero className="text-pizarra-500">quedan 6 días</Numero>
           </div>
         </Seccion>
 

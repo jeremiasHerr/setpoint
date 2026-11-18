@@ -37,7 +37,7 @@ export function DarDeBaja({ inscripcion, primeroEnEspera, horasReserva, enCurso,
         primeroEnEspera ? (
           <>
             Su lugar pasa a{' '}
-            <span className="font-semibold text-negro">
+            <span className="font-semibold text-noche">
               {primeroEnEspera.nombre} {primeroEnEspera.apellido}
             </span>
             , primero en la lista de espera: le llega un email y tiene <Numero>{horasReserva}</Numero> horas para pagar.
@@ -56,8 +56,8 @@ export function DarDeBaja({ inscripcion, primeroEnEspera, horasReserva, enCurso,
     >
       {inscripcion && hayQueElegir && (
         <>
-          <p className="text-[15px] text-gris-700">
-            Pagó <Numero className="text-negro">{plata(pago)}</Numero>
+          <p className="text-[15px] text-pizarra-700">
+            Pagó <Numero className="text-noche">{plata(pago)}</Numero>
             {inscripcion.medio && <> por {nombreDelMedio[inscripcion.medio]}</>}. ¿Le corresponde que se lo devuelvas?
           </p>
           <div role="radiogroup" aria-label="Devolución" className="grid gap-2.5 md:grid-cols-2">
@@ -67,7 +67,7 @@ export function DarDeBaja({ inscripcion, primeroEnEspera, horasReserva, enCurso,
               titulo="Sí, le corresponde"
               detalle={
                 <>
-                  Le devolvés <Numero className="text-negro">{plata(pago)}</Numero> vos, por fuera del sistema. Queda pendiente en la
+                  Le devolvés <Numero className="text-noche">{plata(pago)}</Numero> vos, por fuera del sistema. Queda pendiente en la
                   conciliación hasta que marques que lo hiciste.
                 </>
               }
@@ -94,20 +94,20 @@ function Opcion({ elegida, alElegir, titulo, detalle }: PropsOpcion) {
       role="radio"
       aria-checked={elegida}
       onClick={alElegir}
-      className={`flex gap-[11px] rounded-xl bg-white p-3.5 text-left ${
-        elegida ? 'border-[1.5px] border-negro' : 'border border-linea hover:border-gris-300'
+      className={`flex gap-[11px] rounded-xl bg-papel p-3.5 text-left ${
+        elegida ? 'border-[1.5px] border-noche' : 'border border-linea hover:border-borde-campo'
       }`}
     >
       <span
         className={`mt-px flex size-[18px] shrink-0 items-center justify-center rounded-full border-[1.5px] ${
-          elegida ? 'border-negro' : 'border-gris-300'
+          elegida ? 'border-noche' : 'border-borde-campo'
         }`}
       >
-        {elegida && <span className="size-2 rounded-full bg-negro" />}
+        {elegida && <span className="size-2 rounded-full bg-noche" />}
       </span>
       <span className="flex flex-col gap-1">
         <span className="text-sm font-semibold">{titulo}</span>
-        <span className="text-[13px] leading-[1.45] text-gris-500">{detalle}</span>
+        <span className="text-[13px] leading-[1.45] text-pizarra-500">{detalle}</span>
       </span>
     </button>
   );

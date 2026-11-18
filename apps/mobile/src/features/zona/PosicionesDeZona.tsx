@@ -71,12 +71,12 @@ const estilos = StyleSheet.create({
     fontFamily: fuentes.sans[600],
     fontSize: 20,
     letterSpacing: -0.4,
-    color: colores.negro,
+    color: colores.noche,
   },
   columnas: {
     fontFamily: fuentes.mono[400],
     fontSize: 12,
-    color: colores.gris400,
+    color: colores.pizarra400,
   },
   fila: {
     flexDirection: 'row',
@@ -92,7 +92,7 @@ const estilos = StyleSheet.create({
     width: 22,
     fontFamily: fuentes.mono[400],
     fontSize: 13,
-    color: colores.gris500,
+    color: colores.pizarra500,
     ...tabular,
   },
   nombre: {
@@ -108,17 +108,17 @@ const estilos = StyleSheet.create({
     backgroundColor: colores.linea,
   },
   puntoClasifica: {
-    backgroundColor: colores.lima,
+    backgroundColor: colores.lonaTexto,
   },
   apellido: {
     flexShrink: 1,
     fontFamily: fuentes.sans[600],
     fontSize: 17,
-    color: colores.negro,
+    color: colores.noche,
   },
   apellidoAfuera: {
     fontFamily: fuentes.sans[500],
-    color: colores.gris700,
+    color: colores.pizarra700,
   },
   // Tu fila: el apellido subrayado, sin otro color, para no competir con el corte.
   propio: {
@@ -128,18 +128,18 @@ const estilos = StyleSheet.create({
     width: 30,
     fontFamily: fuentes.mono[600],
     fontSize: 14,
-    color: colores.negro,
+    color: colores.noche,
     textAlign: 'center',
     ...tabular,
   },
   ganadosAfuera: {
-    color: colores.gris700,
+    color: colores.pizarra700,
   },
   dato: {
     width: 46,
     fontFamily: fuentes.mono[400],
     fontSize: 13,
-    color: colores.gris500,
+    color: colores.pizarra500,
     textAlign: 'center',
     ...tabular,
   },
@@ -148,7 +148,7 @@ const estilos = StyleSheet.create({
     textAlign: 'right',
   },
   apagado: {
-    color: colores.gris400,
+    color: colores.pizarra400,
   },
   corte: {
     flexDirection: 'row',
@@ -159,17 +159,17 @@ const estilos = StyleSheet.create({
   raya: {
     flex: 1,
     height: 1,
-    backgroundColor: colores.negro,
+    backgroundColor: colores.noche,
   },
   textoCorte: {
     fontFamily: fuentes.mono[400],
     fontSize: 11,
-    color: colores.negro,
+    color: colores.noche,
   },
   desempate: {
     fontFamily: fuentes.sans[400],
     fontSize: 14,
     lineHeight: 20,
-    color: colores.gris500,
+    color: colores.pizarra500,
   },
 });
