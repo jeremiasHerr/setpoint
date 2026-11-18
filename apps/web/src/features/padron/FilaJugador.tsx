@@ -49,7 +49,7 @@ export function FilaJugador({ jugador, columnas, conRanking, seleccionado, slug,
 
   return (
     <div
-      className={`grid h-[58px] items-center gap-x-4 border-b border-linea-suave px-[18px] ${columnas} ${
+      className={`grid min-h-[58px] items-center gap-x-3 border-b border-linea-suave px-4 py-2 md:h-[58px] md:gap-x-4 md:px-[18px] md:py-0 ${columnas} ${
         seleccionado || esNuevo ? 'bg-niebla' : ''
       } ${jugador.activo ? '' : 'opacity-50'}`}
     >
@@ -63,8 +63,8 @@ export function FilaJugador({ jugador, columnas, conRanking, seleccionado, slug,
       </span>
 
       <div className="flex min-w-0 flex-col gap-0.5">
-        <div className="flex min-w-0 items-center gap-[9px]">
-          <span className="truncate text-base font-medium">
+        <div className="flex min-w-0 flex-wrap items-center gap-x-[9px] gap-y-1 md:flex-nowrap">
+          <span className="max-w-full shrink-0 truncate text-base font-medium md:shrink">
             {jugador.nombre} {jugador.apellido}
           </span>
           {esNuevo && <span className="shrink-0 rounded-full bg-lona-fondo text-lona-texto px-[7px] py-0.5 font-mono text-[11px] whitespace-nowrap">nuevo</span>}
@@ -101,12 +101,12 @@ export function FilaJugador({ jugador, columnas, conRanking, seleccionado, slug,
       </div>
 
       {conRanking && (
-        <div className="flex items-baseline gap-[7px]">
-          {muestraPuesto && jugador.activo && <Numero className="text-[13px] text-pizarra-500">{jugador.puesto}º</Numero>}
+        <div className="flex items-baseline justify-end gap-[7px] md:justify-start">
+          {muestraPuesto && jugador.activo && <Numero className="hidden text-[13px] text-pizarra-500 md:inline">{jugador.puesto}º</Numero>}
           <Numero className={`text-[17px] font-medium ${jugador.puntos > 0 && jugador.activo ? '' : 'text-pizarra-500'}`}>
             {jugador.puntos}
           </Numero>
-          <span className="text-[13px] text-pizarra-500">puntos</span>
+          <span className="hidden text-[13px] text-pizarra-500 md:inline">puntos</span>
         </div>
       )}
 

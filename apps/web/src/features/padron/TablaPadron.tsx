@@ -21,11 +21,11 @@ type Props = {
 
 // Las columnas que no entran en una notebook se ocultan: partidos por debajo de xl, categoría por debajo de md.
 const COLUMNAS_CON_RANKING =
-  'grid-cols-[34px_minmax(0,1fr)_auto_40px] md:grid-cols-[34px_minmax(0,1fr)_118px_158px_40px] xl:grid-cols-[34px_minmax(0,1fr)_118px_158px_84px_40px]';
+  'grid-cols-[34px_minmax(0,1fr)_auto_32px] md:grid-cols-[34px_minmax(0,1fr)_118px_158px_40px] xl:grid-cols-[34px_minmax(0,1fr)_118px_158px_84px_40px]';
 const COLUMNAS_SIN_RANKING =
-  'grid-cols-[34px_minmax(0,1fr)_40px] md:grid-cols-[34px_minmax(0,1fr)_118px_40px] xl:grid-cols-[34px_minmax(0,1fr)_118px_84px_40px]';
+  'grid-cols-[34px_minmax(0,1fr)_32px] md:grid-cols-[34px_minmax(0,1fr)_118px_40px] xl:grid-cols-[34px_minmax(0,1fr)_118px_84px_40px]';
 // En Nuevas: categoría, cómo se vinculó y cuándo. En el celular queda solo cuándo.
-const COLUMNAS_NUEVAS = 'grid-cols-[34px_minmax(0,1fr)_auto_40px] md:grid-cols-[34px_minmax(0,1fr)_118px_130px_70px_40px]';
+const COLUMNAS_NUEVAS = 'grid-cols-[34px_minmax(0,1fr)_auto_32px] md:grid-cols-[34px_minmax(0,1fr)_118px_130px_70px_40px]';
 
 // Además de las categorías, el padrón filtra las vinculaciones nuevas y las que quedaron para revisar.
 type Filtro = { categoria: string } | 'nuevas' | 'revisar' | null;
@@ -74,7 +74,7 @@ export function TablaPadron({ jugadores, categorias, conRanking, seleccionadoId,
   return (
     // Sin overflow-hidden: el menú de las últimas filas se saldría recortado.
     <Tarjeta className="flex flex-col">
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-linea px-[18px] py-4">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-linea px-4 md:px-[18px] py-4">
         <div className="flex flex-wrap items-center gap-2">
           <Chip activo={filtro === null} onClick={() => setFiltro(null)}>
             Todas
@@ -122,7 +122,7 @@ export function TablaPadron({ jugadores, categorias, conRanking, seleccionadoId,
         </label>
       </div>
 
-      <div className={`grid h-[38px] items-center gap-x-4 border-b border-linea bg-niebla px-[18px] ${columnas}`}>
+      <div className={`grid h-[38px] items-center gap-x-3 md:gap-x-4 border-b border-linea bg-niebla px-4 md:px-[18px] ${columnas}`}>
         <span />
         <span className="font-mono text-[11px] text-pizarra-500">jugador</span>
         <span className="hidden font-mono text-[11px] text-pizarra-500 md:block">categoría</span>
@@ -133,7 +133,12 @@ export function TablaPadron({ jugadores, categorias, conRanking, seleccionadoId,
           </>
         ) : (
           <>
-            {conRanking && <span className="font-mono text-[11px] text-pizarra-500">ranking</span>}
+            {conRanking && (
+              <span className="text-right font-mono text-[11px] text-pizarra-500 md:text-left">
+                <span className="md:hidden">puntos</span>
+                <span className="hidden md:inline">ranking</span>
+              </span>
+            )}
             <span className="hidden text-right font-mono text-[11px] text-pizarra-500 xl:block">partidos</span>
           </>
         )}
@@ -167,7 +172,7 @@ export function TablaPadron({ jugadores, categorias, conRanking, seleccionadoId,
       ))}
 
       {visibles.length === 0 && (
-        <p className="border-b border-linea-suave px-[18px] py-8 text-center text-sm text-pizarra-500">
+        <p className="border-b border-linea-suave px-4 md:px-[18px] py-8 text-center text-sm text-pizarra-500">
           {jugadores.length === 0
             ? 'Todavía no hay jugadores. Agregá el primero con el formulario de al lado.'
             : enNuevas && delFiltro.length === 0
@@ -179,12 +184,12 @@ export function TablaPadron({ jugadores, categorias, conRanking, seleccionadoId,
       )}
 
       {enNuevas ? (
-        <p className="rounded-b-tarjeta bg-niebla px-[18px] py-[15px] text-[13px] leading-normal text-pizarra-500">
+        <p className="rounded-b-tarjeta bg-niebla px-4 md:px-[18px] py-[15px] text-[13px] leading-normal text-pizarra-500">
           {anterior ? `Las vinculaciones desde tu última visita, ${laVisita(anterior)}.` : 'Es la primera vez que abrís el padrón: están todas las vinculaciones.'}{' '}
           No tenés que aprobar nada: si alguna no te cierra, la desvinculás.
         </p>
       ) : (
-        <div className="rounded-b-tarjeta bg-niebla px-[18px] py-[15px]">
+        <div className="rounded-b-tarjeta bg-niebla px-4 md:px-[18px] py-[15px]">
           <span className="font-mono text-[13px] text-pizarra-500">
             mostrando <Numero>{visibles.length}</Numero> de <Numero>{jugadores.length}</Numero>
           </span>
