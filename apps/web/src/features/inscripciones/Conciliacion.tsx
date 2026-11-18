@@ -14,7 +14,7 @@ function Linea({ rotulo, valor }: { rotulo: string; valor: string }) {
 const pagos = (n: number) => (n === 1 ? 'pago' : 'pagos');
 
 // La conciliación del torneo, en noche abajo a la derecha (inscripciones.html). Sin la comisión de la
-// referencia: SetPoint cobra un cargo por jugador inscripto (decisión 103). Lo cobrado por fuera ya lo
+// referencia: Setpoint cobra un cargo por jugador inscripto (decisión 103). Lo cobrado por fuera ya lo
 // tiene la organización, y las devoluciones las hace ella (decisión 075). La transferencia de lo de
 // MercadoPago es por fuera del sistema (05-pagos §2).
 export function Conciliacion({ conciliacion }: { conciliacion: ConciliacionDelTorneo }) {

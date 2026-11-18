@@ -20,7 +20,7 @@ F13 pide la conciliación del torneo: cuánto se recaudó, cuánto le correspond
 Opción 1, elegida por el grupo. `conciliacion()`, en `apps/api/src/modules/inscripciones/conciliacion.ts`, con `COMISION = 0.05`:
 
 - **Por MercadoPago:** los pagos cobrados con ese medio, también los que después se devolvieron, porque la plata entró.
-- **Comisión de SetPoint:** el 5% de eso, redondeado a los centavos.
+- **Comisión de Setpoint:** el 5% de eso, redondeado a los centavos.
 - **Te corresponde:** lo de MercadoPago menos la comisión. Es lo que la plataforma le transfiere a la organización.
 - **Cobraste por fuera:** efectivo, transferencia u otro. Ya lo tiene la organización: no paga comisión.
 - **A devolver por fuera:** las devoluciones pendientes ([decisión 075](075-la-devolucion-se-anota.md)). No se resta: la hace la organización.

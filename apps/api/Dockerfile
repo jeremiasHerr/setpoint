@@ -1,4 +1,4 @@
-# API de SetPoint. Se construye desde la raíz del repo: docker build -f apps/api/Dockerfile .
+# API de Setpoint. Se construye desde la raíz del repo: docker build -f apps/api/Dockerfile .
 # Corre con tsx, sin compilar, porque packages/shared se consume como TypeScript (decisión 085).
 FROM node:22-slim
 

@@ -11,7 +11,7 @@ export function BarraDeLaLanding() {
       <div className="mx-auto grid min-h-[72px] max-w-[1200px] grid-cols-[1fr_auto_1fr] items-center gap-x-7 gap-y-2.5 max-[859px]:min-h-14 max-[859px]:grid-cols-[1fr_auto]">
         <Link
           to="/"
-          aria-label="SetPoint, inicio"
+          aria-label="Setpoint, inicio"
           className="flex min-h-11 items-center justify-self-start rounded-control focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
         >
           <Logo sobreNoche grande />

@@ -1,4 +1,4 @@
-# SetPoint
+# Setpoint
 
 Plataforma de gestión de torneos de tenis amateur. Web + app móvil instalable.
 
@@ -169,7 +169,7 @@ Se configura una sola vez, en este orden:
    | `WEB_URL` | `https://setpoint.com.ar` |
    | `API_URL_PUBLICA` | `https://api.setpoint.com.ar` |
    | `RESEND_API_KEY` | La API key de Resend, del paso 3 |
-   | `CORREO_REMITENTE` | `SetPoint <no-responder@setpoint.com.ar>` |
+   | `CORREO_REMITENTE` | `Setpoint <no-responder@setpoint.com.ar>` |
    | `MERCADOPAGO_ACCESS_TOKEN` | La de prueba. Vacía, el pago es simulado |
    | `ANTHROPIC_API_KEY` | Para la importación del padrón |
 

@@ -28,7 +28,7 @@ export default function Circuitos() {
       <ScrollView contentContainerStyle={estilos.contenido}>
         <View style={estilos.marca}>
           <Logo />
-          <Text style={estilos.nombreMarca}>SetPoint</Text>
+          <Text style={estilos.nombreMarca}>Setpoint</Text>
         </View>
 
         <View style={estilos.encabezado}>

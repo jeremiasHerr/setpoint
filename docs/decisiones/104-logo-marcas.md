@@ -4,7 +4,7 @@
 
 ## Contexto
 
-SetPoint no tenía un logo decidido. La web mostraba un cuadrado lima con un punto negro al lado de la palabra; la app, el mismo dibujo con los colores al revés; y el APK se instalaba con el ícono por defecto de Expo. Un punto en un cuadrado no dice nada del producto, y a días de la entrega hacía falta un ícono para la app y un logo para la defensa.
+Setpoint no tenía un logo decidido. La web mostraba un cuadrado lima con un punto negro al lado de la palabra; la app, el mismo dibujo con los colores al revés; y el APK se instalaba con el ícono por defecto de Expo. Un punto en un cuadrado no dice nada del producto, y a días de la entrega hacía falta un ícono para la app y un logo para la defensa.
 
 Se buscó un logo plano, de un símbolo geométrico con la palabra al lado y un solo acento, que se lea a 16 px y funcione en una sola tinta.
 

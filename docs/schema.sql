@@ -1,5 +1,5 @@
 -- ============================================================================
--- SetPoint — Plataforma de gestión de torneos de tenis amateur
+-- Setpoint — Plataforma de gestión de torneos de tenis amateur
 -- Trabajo Final 2026 — Tecnicatura Universitaria en Desarrollo Web, UNCo FaI
 --
 -- PostgreSQL 16. Equivalente al schema.prisma del proyecto.

@@ -9,7 +9,7 @@ const SMTP_HOST = process.env.SMTP_HOST;
 const SMTP_PORT = Number(process.env.SMTP_PORT) || 1025;
 const SMTP_USER = process.env.SMTP_USER;
 const SMTP_PASS = process.env.SMTP_PASS;
-const REMITENTE = process.env.CORREO_REMITENTE ?? 'SetPoint <no-responder@setpoint.local>';
+const REMITENTE = process.env.CORREO_REMITENTE ?? 'Setpoint <no-responder@setpoint.local>';
 
 const transporte = SMTP_HOST
   ? nodemailer.createTransport({

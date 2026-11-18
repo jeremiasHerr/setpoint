@@ -1,4 +1,4 @@
-# Web de SetPoint. Se construye desde la raíz del repo: docker build -f apps/web/Dockerfile .
+# Web de Setpoint. Se construye desde la raíz del repo: docker build -f apps/web/Dockerfile .
 # Se compila con Vite y la sirve nginx, que además le pasa /api a la API (decisión 085).
 FROM node:22-slim AS build
 

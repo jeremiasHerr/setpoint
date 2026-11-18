@@ -1,7 +1,7 @@
 # Lista de funcionalidades (features)
 
 **Segunda entrega — Trabajo Final 2026**
-Proyecto: SetPoint — Plataforma de gestión de torneos de tenis amateur
+Proyecto: Setpoint — Plataforma de gestión de torneos de tenis amateur
 Caso de validación: POLENTA Team Tenis
 
 > **Actualizado tras la verificación del 25%** ([devolucion-25.md](devolucion-25.md)): F03 pasa a ser automática por excepción y detecta el calendario y las categorías; F19 pasa a ser la candidata a "IA en el uso diario", condicionada al tiempo. Los textos usan los términos genéricos de la interfaz ("torneo del calendario", "cuadro consuelo").
@@ -286,7 +286,7 @@ La organización podrá seguir el estado de las inscripciones de cada torneo en 
 - Dar de baja a quien pagó, diciendo si le corresponde la devolución; el sistema la anota y la organización la hace por fuera ([decisión 075](decisiones/075-la-devolucion-se-anota.md)). Se puede hasta que se confirma el sorteo ([decisión 077](decisiones/077-baja-hasta-el-sorteo.md)).
 - Un lugar que se libera (baja, reserva vencida, pago rechazado o cupo más grande) pasa al primero de la lista de espera, con 24 horas para pagar y un email; si no paga, pasa al siguiente ([decisión 076](decisiones/076-lista-de-espera-24-horas.md)).
 - Inscribir a mano a quien pagó por fuera, sin pasarse del cupo ([decisión 079](decisiones/079-inscribir-a-mano-sin-pasarse-del-cupo.md)), y "Recordarle" el pago a una reserva.
-- La conciliación separa lo cobrado por MercadoPago de lo cobrado por fuera, sin comisión: SetPoint cobra un cargo por jugador inscripto, que todavía no se cobra en el sistema ([decisión 103](decisiones/103-cargo-por-jugador-inscripto.md), que reemplaza la [078](decisiones/078-comision-de-la-plataforma.md)).
+- La conciliación separa lo cobrado por MercadoPago de lo cobrado por fuera, sin comisión: Setpoint cobra un cargo por jugador inscripto, que todavía no se cobra en el sistema ([decisión 103](decisiones/103-cargo-por-jugador-inscripto.md), que reemplaza la [078](decisiones/078-comision-de-la-plataforma.md)).
 - Al cerrar, las reservas sin pagar no se tocan y no entran al sorteo ([decisión 024](decisiones/024-reservas-sin-pagar-al-cerrar.md)), y no se puede cerrar si los que pagaron no alcanzan para las zonas ([decisión 025](decisiones/025-no-se-cierra-sin-inscriptos-para-las-zonas.md)).
 - Con el cupo lleno, el link del torneo lleva a "Anotarme en la lista de espera", por el mismo camino que inscribirse y sin pagar. Se anota quien tiene perfil en el padrón ([decisión 081](decisiones/081-anotarse-en-la-lista-de-espera.md)). La pantalla de pago muestra su puesto en la lista, el lugar que le tocó con hasta cuándo es suyo, y que la lista terminó si se sorteó sin que le tocara ([decisión 082](decisiones/082-la-lista-termina-con-el-sorteo.md)). En el seed, la Copa Confluencia tiene a Sanhueza primero en la lista.
 - Faltan la lista de espera desde el link personal y en la app, y la marca de las vinculaciones para revisar.
