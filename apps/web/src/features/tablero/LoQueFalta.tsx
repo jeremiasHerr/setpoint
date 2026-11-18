@@ -2,19 +2,20 @@ import type { PartidoDelTablero, Tablero } from '@setpoint/shared';
 import { useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { Numero } from '../../components/Numero';
+import { Pildora } from '../../components/Pildora';
 import { Tarjeta } from '../../components/Tarjeta';
 import { urlDeWhatsApp } from '../padron/linkPersonal';
 import { TextoConNumeros } from '../resultados/AlGuardar';
 import { AnotarFecha } from './AnotarFecha';
 import { dondeSeJuega, elDiaYHora, mensajeParaCoordinar, nombresDelPartido, partidosConFecha, textoDeLosDias } from './tablero';
 
-const accion = 'inline-flex h-9 items-center rounded-[9px] px-[13px] text-[13px] font-medium';
+const accion = 'inline-flex h-8 items-center justify-center rounded-control px-3 text-[13px] font-medium';
 
 // "Escribirles" abre, debajo de la fila, el WhatsApp de cada jugador con el mensaje listo
 // (decisión 062). Sin teléfono en el padrón, ese jugador no tiene enlace.
 function Escribirles({ partido, tablero }: { partido: PartidoDelTablero; tablero: Tablero }) {
   return (
-    <ul className={`flex flex-wrap gap-2 px-5 pb-4 ${tablero.fase === 'grupos' ? 'md:pl-[98px]' : 'md:pl-[186px]'}`}>
+    <ul className={`flex flex-wrap gap-2 px-5 pb-4 ${tablero.fase === 'grupos' ? 'md:pl-[108px]' : 'md:pl-[182px]'}`}>
       {(['A', 'B'] as const).map((lado) => {
         const jugador = lado === 'A' ? partido.jugadorA! : partido.jugadorB!;
         return (
@@ -52,33 +53,48 @@ function Fila({ slug, partido, tablero, lista }: { slug: string; partido: Partid
   // Escribirles y Anotar fecha se abren debajo de la fila, de a uno.
   const [abierto, setAbierto] = useState<Abierto>(null);
   const alternar = (que: Abierto) => setAbierto(abierto === que ? null : que);
-  const sangria = tablero.fase === 'grupos' ? 'md:pl-[98px]' : 'md:pl-[186px]';
+  const sangria = tablero.fase === 'grupos' ? 'md:pl-[108px]' : 'md:pl-[182px]';
   const vencido = partido.situacion === 'vencido';
 
   return (
     <li className="border-b border-linea-suave last:border-b-0">
       {/* En los cuadros, la primera columna tiene que entrar "cuartos · consuelo". */}
       <div
-        className={`grid gap-x-4 gap-y-2 px-5 py-3.5 md:min-h-16 md:items-center md:py-2 ${
-          tablero.fase === 'grupos' ? 'md:grid-cols-[62px_minmax(0,1fr)_170px_auto]' : 'md:grid-cols-[150px_minmax(0,1fr)_170px_auto]'
+        className={`grid gap-x-3 gap-y-2 px-5 py-3.5 md:min-h-[52px] md:items-center md:py-2 ${
+          tablero.fase === 'grupos' ? 'md:grid-cols-[76px_minmax(0,1fr)_300px_auto]' : 'md:grid-cols-[150px_minmax(0,1fr)_300px_auto]'
         }`}
       >
-        <Numero className="text-[13px] text-pizarra-500">{dondeSeJuega(partido, tablero)}</Numero>
-        <span className={`text-base ${vencido ? 'font-semibold' : ''}`}>{nombresDelPartido(partido)}</span>
-        {lista === 'con_fecha' && partido.fechaAcordada ? (
-          <span className="flex flex-col">
-            <Numero className="text-sm">{elDiaYHora(partido.fechaAcordada)}</Numero>
-            <span className="text-[13px] text-pizarra-500">{partido.estado === 'anotada' ? 'falta que confirme el rival' : 'confirmada'}</span>
-          </span>
+        {vencido ? (
+          <Numero className="flex items-center gap-1.5 text-xs text-rojo-texto">
+            <span className="size-1.5 shrink-0 rounded-full bg-rojo" />
+            {dondeSeJuega(partido, tablero)}
+          </Numero>
         ) : (
-          <Numero className={`text-sm ${vencido ? 'text-rojo-texto' : 'text-pizarra-500'}`}>{textoDeLosDias(partido.dias)}</Numero>
+          <Numero className="text-xs text-pizarra-500">{dondeSeJuega(partido, tablero)}</Numero>
         )}
-        <div className="flex gap-2 md:justify-end">
+        <span className={`text-base ${vencido ? 'font-semibold' : ''}`}>{nombresDelPartido(partido)}</span>
+        <span className="flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1">
+          {lista === 'con_fecha' && partido.fechaAcordada ? (
+            <>
+              <Pildora tono="fecha">{elDiaYHora(partido.fechaAcordada)}</Pildora>
+              <span className="text-[13px] text-pizarra-500">{partido.estado === 'anotada' ? 'falta que confirme el rival' : 'confirmada'}</span>
+            </>
+          ) : vencido ? (
+            <Numero className="text-[13px] text-rojo-texto">{textoDeLosDias(partido.dias)}</Numero>
+          ) : (
+            <>
+              <Pildora tono="sin-fecha" />
+              <Numero className="text-[13px] text-pizarra-500">{textoDeLosDias(partido.dias)}</Numero>
+            </>
+          )}
+        </span>
+        {/* Dos columnas fijas: los botones quedan alineados en todas las filas. */}
+        <div className="grid grid-cols-[100px_152px] gap-2 md:justify-end">
           <button
             type="button"
             aria-expanded={abierto === 'escribirles'}
             onClick={() => alternar('escribirles')}
-            className={`${accion} border border-linea hover:bg-niebla`}
+            className={`${accion} w-full border border-linea hover:bg-niebla`}
           >
             Escribirles
           </button>
@@ -88,14 +104,14 @@ function Fila({ slug, partido, tablero, lista }: { slug: string; partido: Partid
               type="button"
               aria-expanded={abierto === 'anotar'}
               onClick={() => alternar('anotar')}
-              className={`${accion} border border-linea hover:bg-niebla`}
+              className={`${accion} w-full border border-linea hover:bg-niebla`}
             >
               {textoDeAnotar(lista, partido)}
             </button>
           )}
           {resolver && (
             // Resolver es cargarlo como W.O.: la pantalla de carga abre con el W.O. elegido (decisión 062).
-            <Link to={`/torneos/${tablero.torneoId}/resultados/${partido.id}?tipo=walkover`} className={`${accion} bg-noche font-semibold text-white`}>
+            <Link to={`/torneos/${tablero.torneoId}/resultados/${partido.id}?tipo=walkover`} className={`${accion} w-full bg-noche font-semibold text-white`}>
               Resolver
             </Link>
           )}

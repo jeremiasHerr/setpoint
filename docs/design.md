@@ -224,7 +224,7 @@ El objeto gráfico central del sistema. Una fila de rectángulos de 2–3px de r
 
 Un partido de cuadro que espera a los ganadores de la ronda anterior va lleno en `linea`: todavía no tiene estado. Las cuatro clases salen de un solo lugar en el código (`components/marcas.ts`).
 
-Aparece en el tablero (48 partidos en 8 bloques de 6, con la letra de zona debajo y la cuenta `4/6` en mono), en el inicio, en inscripciones (32 lugares) y en la landing. **Es siempre el mismo objeto**, y el logo es una zona de esa barra.
+Aparece en el tablero (48 partidos en 8 bloques de 6, con la letra de zona debajo y la cuenta `4/6` en mono, y los jugados sobre el total, `32 / 48`, en el encabezado de su tarjeta: [decisión 106](decisiones/106-tablero-sin-panel-del-plazo.md)), en el inicio, en inscripciones (32 lugares) y en la landing. **Es siempre el mismo objeto**, y el logo es una zona de esa barra.
 
 ### Matriz de zona
 
@@ -278,7 +278,7 @@ El único lugar con atmósfera. Sobre `noche-900`, un marco de radio 20 con un f
 | `pendiente` (sin coordinar) | Marca punteada; en una fila, la píldora `sin fecha` punteada y los días que quedan |
 | `anotada` / `confirmada` | Marca azul; en una fila, la píldora de fecha en azul: `sáb 14 · 10:00` |
 | `jugada` | Marca noche. Marcador en tinta, ganador en peso 600, perdedor en pizarra |
-| `vencida` | Rojo. Fila con fondo `rojo-fondo`, texto `rojo-texto` y un punto rojo antes de la zona |
+| `vencida` | Rojo. En una fila, un punto rojo antes de la zona, y la zona y el plazo en `rojo-texto`. El fondo `rojo-fondo` va en el encabezado del grupo de vencidos, no en cada fila |
 
 ### Inscripción
 

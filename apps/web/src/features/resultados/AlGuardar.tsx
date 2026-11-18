@@ -75,7 +75,7 @@ export function AlGuardar({ partido, datos, simulacion, siguienteYaJugado }: Pro
   }
 
   return (
-    <section aria-labelledby="al-guardar" className="flex flex-col gap-2.5 border-t border-linea bg-niebla px-6 py-[18px]">
+    <section aria-labelledby="al-guardar" className="flex flex-col gap-2.5 border-t border-linea bg-niebla px-4 py-[18px] sm:px-6">
       <h2 id="al-guardar" className="text-[13px] font-semibold text-pizarra-500">
         Al guardar
       </h2>

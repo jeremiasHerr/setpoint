@@ -42,7 +42,7 @@ function Marco({ sesion, torneoId, children }: { sesion: Sesion; torneoId: numbe
   return (
     <div className="min-h-screen bg-niebla text-noche">
       <EncabezadoDelTorneo sesion={sesion} torneoId={torneoId} actual="resultados" />
-      <div className="flex justify-center px-7 pt-[34px] pb-10">
+      <div className="flex justify-center px-4 pt-6 pb-10 sm:px-7 sm:pt-[34px]">
         <div className="flex w-full max-w-[1240px] flex-col gap-4">{children}</div>
       </div>
     </div>
@@ -67,7 +67,7 @@ function PrimeroSinResultado({ sesion, torneoId }: { sesion: Sesion; torneoId: n
     return (
       <Marco sesion={sesion} torneoId={torneoId}>
         <Tarjeta className="overflow-hidden">
-          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-linea px-6 py-5">
+          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-linea px-4 py-5 sm:px-6">
             <div className="flex flex-col gap-[5px]">
               <h1 className="text-[22px] font-display font-semibold tracking-[-0.02em]">No falta cargar ningún resultado</h1>
               <p className="text-sm text-pizarra-500">
@@ -244,13 +244,13 @@ function TarjetaDelPartido({ sesion, partido }: { sesion: Sesion; partido: Parti
     <Marco sesion={sesion} torneoId={torneoId}>
       {/* Arriba, las zonas y los cuadros para elegir el partido; abajo, la carga (decisión 070). */}
       <Tarjeta className="overflow-hidden">
-        <h2 className="border-b border-linea px-6 py-4 text-[15px] font-semibold">Elegí el partido</h2>
+        <h2 className="border-b border-linea px-4 py-4 text-[15px] font-semibold sm:px-6">Elegí el partido</h2>
         <ElegirPartido slug={slug} torneoId={torneoId} actual={partido.id} />
       </Tarjeta>
 
       <Tarjeta className="w-full max-w-[720px] self-center overflow-hidden">
         <form ref={formulario} onSubmit={enviar} className="scroll-mt-4">
-          <div className="flex flex-col gap-[5px] border-b border-linea px-6 py-5">
+          <div className="flex flex-col gap-[5px] border-b border-linea px-4 py-5 sm:px-6">
             <h1 className="text-[22px] font-display font-semibold tracking-[-0.02em]">
               {nombres[0]} · {nombres[1]}
             </h1>
@@ -258,10 +258,10 @@ function TarjetaDelPartido({ sesion, partido }: { sesion: Sesion; partido: Parti
           </div>
 
           {sinCarga ? (
-            <p className="px-6 py-5 text-[15px] text-pizarra-500">{sinCarga}</p>
+            <p className="px-4 py-5 text-[15px] text-pizarra-500 sm:px-6">{sinCarga}</p>
           ) : (
             <>
-              <div className="flex flex-col gap-4 px-6 pt-6 pb-5">
+              <div className="flex flex-col gap-4 px-4 pt-6 pb-5 sm:px-6">
                 {/* En un W.O. o un abandono los casilleros quedan bloqueados: no se cargan sets y
                     cuenta 6-0 6-0 a favor de quien se elige (decisiones 016 y 059). */}
                 <GrillaDeSets
@@ -310,11 +310,11 @@ function TarjetaDelPartido({ sesion, partido }: { sesion: Sesion; partido: Parti
                 siguienteYaJugado={siguienteYaJugado}
               />
 
-              <div className="flex items-center justify-between gap-4 border-t border-linea px-6 py-[18px]">
+              <div className="flex flex-col items-stretch gap-3 border-t border-linea px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-6 sm:py-[18px]">
                 {guardar.error ? (
-                  <MensajeError className="min-w-0 flex-1">{textoDelError(guardar.error)}</MensajeError>
+                  <MensajeError className="min-w-0 sm:flex-1">{textoDelError(guardar.error)}</MensajeError>
                 ) : recienGuardado ? (
-                  <p className="min-w-0 flex-1 text-[15px] font-semibold">
+                  <p className="min-w-0 text-[15px] font-semibold sm:flex-1">
                     {siguiente
                       ? 'Resultado guardado.'
                       : paraCerrar
@@ -322,23 +322,23 @@ function TarjetaDelPartido({ sesion, partido }: { sesion: Sesion; partido: Parti
                         : 'Resultado guardado. No falta cargar ningún otro.'}
                   </p>
                 ) : (
-                  <p className="min-w-0 flex-1 text-sm text-pizarra-500">
+                  <p className="min-w-0 text-sm text-pizarra-500 sm:flex-1">
                     Podés corregirlo después, mientras no cambie a quién ya se ubicó en los cuadros.
                   </p>
                 )}
-                <div className="flex shrink-0 gap-2.5">
-                  <Boton onClick={() => navegar(`/torneos/${torneoId}/tablero`)}>{recienGuardado ? 'Volver al tablero' : 'Cancelar'}</Boton>
+                <div className="flex flex-col-reverse gap-2 sm:shrink-0 sm:flex-row sm:gap-2.5">
+                  <Boton className="w-full sm:w-auto" onClick={() => navegar(`/torneos/${torneoId}/tablero`)}>{recienGuardado ? 'Volver al tablero' : 'Cancelar'}</Boton>
                   {/* Uno solo a la vez, y es el que dispara Enter. */}
                   {recienGuardado && siguiente ? (
-                    <Boton type="submit" variante="organizador" className="font-semibold">
+                    <Boton type="submit" variante="organizador" className="w-full font-semibold sm:w-auto">
                       Cargar el siguiente partido
                     </Boton>
                   ) : recienGuardado && paraCerrar ? (
-                    <Boton type="submit" variante="organizador" className="font-semibold">
+                    <Boton type="submit" variante="organizador" className="w-full font-semibold sm:w-auto">
                       Cerrar el torneo
                     </Boton>
                   ) : (
-                    <Boton type="submit" variante="organizador" className="font-semibold" disabled={!sePuedeGuardar}>
+                    <Boton type="submit" variante="organizador" className="w-full font-semibold sm:w-auto" disabled={!sePuedeGuardar}>
                       {guardar.isPending ? 'Guardando…' : corrigiendo ? 'Guardar corrección' : 'Guardar resultado'}
                     </Boton>
                   )}
