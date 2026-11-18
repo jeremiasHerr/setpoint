@@ -206,6 +206,7 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 - ~~¿El tablero mantiene el panel noche con los días que quedan?~~ **No: las barras van a todo el ancho, con los jugados sobre el total en su encabezado** ([decisión 106](decisiones/106-tablero-sin-panel-del-plazo.md)). Es lo que dibuja la referencia de Última luz; con pocas zonas el panel dejaba media tarjeta vacía, y el plazo ya estaba en la bajada y en cada fila
 - ~~¿Cómo va el splash de la app con el logo de la 105?~~ **En noche, como el ícono, con las marcas solas** ([decisión 107](decisiones/107-splash-en-noche.md)). Del ícono al splash no hay corte, y Android 12 no puede recortar un recuadro que no hay
 - ~~¿La marca es "SetPoint" o "Setpoint"?~~ **"Setpoint" en todo: la web, los emails, la app y los docs** ([decisión 108](decisiones/108-la-marca-se-escribe-setpoint.md)). Es la grafía del logo, y convivían dos; los nombres de canvas y artifacts que existen afuera no cambian
+- ~~¿Cómo entra el encabezado de la organización en el celular?~~ **El menú, las iniciales y Salir van en un panel que abre el botón "Menú", debajo de 768 px** ([decisión 109](decisiones/109-menu-del-organizador-en-el-celular.md)). A 375 no entraban en una fila, y dos filas cargaban el encabezado y recortaban el nombre de la organización
 
 ---
 
