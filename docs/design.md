@@ -158,11 +158,12 @@ El mono es lo que da el acabado de producto y lo que hace que las tablas queden 
 
 ### Logo
 
-Las marcas de una zona: tres barras de partido jugado y la cuarta, levantada, que es el set point ([decisión 104](decisiones/104-logo-marcas.md), con el dibujo de la [105](decisiones/105-sistema-visual-ultima-luz.md)). Al lado, "SetPoint" en Display 600 con tracking −0.02em, separado 0,4em.
+Las marcas de una zona: tres barras de partido jugado y la cuarta, levantada, que es el set point. Al lado, "Setpoint" en Display 600 con tracking −0.02em. El ícono es un poco más alto que las mayúsculas (1,1em): 18px de texto en el producto y 24 en la landing.
 
 - **Sobre noche:** las barras en blanco y la levantada en `pelota`.
 - **Sobre claro:** las barras en `noche` y la levantada en `lona`, porque la pelota no se ve sobre papel.
 - **Ícono** (favicon, app): un cuadrado `noche-900` con radio 14/64 y la marca adentro, con la versión sobre noche.
+- **Con el mouse encima**, el set point recorre la zona: el acento arranca en la primera barra, la levanta y pasa a la siguiente, hasta volver a la última, en un segundo. Responde a una acción, como toda animación fuera del demo de la landing, y con "reducir movimiento" no se mueve.
 
 En la app es el mismo dibujo, con cuatro `View` para no sumar `react-native-svg` por un logo, y sin la palabra: va al lado del nombre del circuito. La marca de la organización en las páginas públicas de la web es otra cosa: un cuadrado `noche` con un punto `pelota`, al lado de su nombre.
 
@@ -264,7 +265,7 @@ Mientras una pantalla espera a la API no se escribe "Cargando…": va un esquele
 
 ### Hero de la landing
 
-El único lugar con atmósfera. Sobre `noche-900`, un marco de radio 20 con un filete interior `cal` al 20 %, que nunca es más ancho que alto, con la pintura del club al atardecer anclada abajo y un velo `noche-900` arriba para que el titular se lea sobre el cielo. Adentro: el titular en Newsreader, la bajada en `cal`, "Crear mi circuito" en lona y "Ver un torneo en vivo" con borde `cal` y un velo detrás. Debajo, el demo del producto, con la única sombra del sistema. El demo es el **único momento de animación** del sitio: recorre el flujo real (Tablero, Cargar resultado y de vuelta), se puede pausar, arranca recién cuando está a la vista y con "reducir movimiento" queda quieto en la vista previa de la zona.
+El único lugar con atmósfera. Sobre `noche-900`, un marco de radio 20 con un filete interior `cal` al 20 %, que nunca es más ancho que alto, con la pintura del club al atardecer anclada abajo y un velo `noche-900` arriba para que el titular se lea sobre el cielo. Adentro: el titular en Newsreader, la bajada en `cal` y un solo botón, "Crear mi circuito", en lona. Debajo, el demo del producto, con la única sombra del sistema (`shadow-demo`). Después del marco, todo el contenido va en una sola hoja `niebla` de radio 20 sobre la pared `noche-900`: *Cada uno ve lo que necesita*, las funciones (en filas, no en tarjetas) y las preguntas. El pie vuelve a la pared oscura. El demo es el **único momento de animación** del sitio: recorre el flujo real (Tablero, Cargar resultado y de vuelta), se puede pausar, arranca recién cuando está a la vista y con "reducir movimiento" queda quieto en la vista previa de la zona.
 
 ---
 
