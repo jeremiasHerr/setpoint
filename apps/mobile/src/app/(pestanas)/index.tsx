@@ -52,6 +52,9 @@ export default function CuandoJuego() {
             </View>
           )}
         </View>
+        <Text style={estilos.titulo} accessibilityRole="header">
+          Cuándo juego
+        </Text>
         {/* Las inscripciones en curso en otro circuito, sin tapar el partido que viene (decisión 054). */}
         <AvisoInscripcion />
         {consulta.isPending && <Esqueleto forma="tarjeta" />}
@@ -129,18 +132,28 @@ const estilos = StyleSheet.create({
     justifyContent: 'space-between',
     gap: 12,
   },
+  // El título de la pantalla, como "Zona C" en Mi zona (design.md §4, escala móvil).
+  titulo: {
+    fontFamily: fuentes.display[600],
+    fontSize: 26,
+    lineHeight: 30,
+    letterSpacing: -0.52,
+    color: colores.noche,
+  },
   torneo: {
     flexShrink: 1,
-    paddingVertical: 6,
-    paddingHorizontal: 10,
+    minHeight: 34,
+    justifyContent: 'center',
+    paddingHorizontal: 12,
     borderWidth: 1,
     borderColor: colores.linea,
     borderRadius: radios.chip,
   },
   textoTorneo: {
-    fontFamily: fuentes.mono[500],
-    fontSize: 12,
+    fontFamily: fuentes.mono[400],
+    fontSize: 15,
     color: colores.pizarra500,
+    ...tabular,
   },
   aviso: {
     fontFamily: fuentes.sans[400],
@@ -163,8 +176,8 @@ const estilos = StyleSheet.create({
     color: colores.noche,
   },
   cantidad: {
-    fontFamily: fuentes.mono[500],
-    fontSize: 13,
+    fontFamily: fuentes.mono[400],
+    fontSize: 15,
     color: colores.pizarra500,
     ...tabular,
   },
