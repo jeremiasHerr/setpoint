@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Boton } from '../../components/Boton';
 import { EncabezadoOrganizador } from '../../components/EncabezadoOrganizador';
 import { Migas } from '../../components/Migas';
-import { Numero } from '../../components/Numero';
 import type { Sesion } from '../auth/sesion';
 import { useCerrarSesion } from '../auth/useCerrarSesion';
 import { iniciales, navegacionOrganizador } from '../organizador/encabezado';
@@ -74,8 +73,8 @@ export function EncabezadoDelTorneo({ sesion, torneoId, actual }: Props) {
               <>
                 <div className="flex min-w-0 flex-wrap items-center gap-3">
                   {/* El tercer nivel es la pestaña activa, justo debajo. */}
-                  <Migas anteriores={[{ etiqueta: 'Inicio', ruta: '/inicio' }]} className="text-[15px]">
-                    <Numero className="font-semibold text-noche">{datos.nombre}</Numero>
+                  <Migas anteriores={[{ etiqueta: 'Inicio', ruta: '/inicio' }]}>
+                    <span className="font-medium text-noche">{datos.nombre}</span>
                   </Migas>
                   <span className="flex h-7 items-center rounded-full border border-linea px-[11px] font-mono text-[13px] text-pizarra-500">
                     {ESTADO[datos.estado]}

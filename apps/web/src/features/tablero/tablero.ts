@@ -1,7 +1,6 @@
 import type { BloqueDelTablero, FilaDePosiciones, PartidoDelTablero, SituacionDelPartido, Tablero } from '@setpoint/shared';
 import { MARCA } from '../../components/marcas';
 import { NOMBRE_DEL_CUADRO, rotuloDeRonda } from '../cuadros/cuadro';
-import type { Frase } from '../resultados/resultado';
 
 // Las fechas límite son días ('AAAA-MM-DD'): se leen y se muestran en UTC para que no se corran.
 const diaLargo = new Intl.DateTimeFormat('es-AR', { weekday: 'long', day: 'numeric', timeZone: 'UTC' });
@@ -47,24 +46,13 @@ export function dondeSeJuega(partido: PartidoDelTablero, tablero: Tablero) {
   return partido.cuadro === 'campeonato' ? ronda : `${ronda} · consuelo`;
 }
 
-// "venció ayer", "venció hace 3 días", "vence hoy", "6 días".
+// "venció ayer", "venció hace 3 días", "vence hoy", "quedan 6 días".
 export function textoDeLosDias(dias: number | null) {
   if (dias === null) return 'sin plazo';
   if (dias === -1) return 'venció ayer';
   if (dias < 0) return `venció hace ${-dias} días`;
   if (dias === 0) return 'vence hoy';
-  return dias === 1 ? '1 día' : `${dias} días`;
-}
-
-// "Faltan jugarse 17 partidos y 8 todavía no tienen fecha." Los números van en mono (design.md §4).
-export function queFalta({ totales }: Tablero): Frase {
-  const faltan = totales.partidos - totales.jugados;
-  if (faltan === 0) return ['Ya se jugaron todos los partidos.'];
-  const sinFecha = totales.sinCoordinar + totales.vencidos;
-  const partidos: Frase = faltan === 1 ? ['Falta jugarse ', 1, ' partido'] : ['Faltan jugarse ', faltan, ' partidos'];
-  if (sinFecha === 0) return [...partidos, ', y todos tienen fecha.'];
-  if (sinFecha === faltan) return [...partidos, faltan === 1 ? ' y no tiene fecha.' : ' y ninguno tiene fecha.'];
-  return [...partidos, ' y ', sinFecha, sinFecha === 1 ? ' todavía no tiene fecha.' : ' todavía no tienen fecha.'];
+  return dias === 1 ? 'queda 1 día' : `quedan ${dias} días`;
 }
 
 // Los apellidos del partido, como en la referencia: "Curihual · Nieva".

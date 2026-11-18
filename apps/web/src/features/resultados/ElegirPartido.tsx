@@ -2,6 +2,7 @@ import type { ClaveCuadro, CuadroEliminatorio } from '@setpoint/shared';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Boton } from '../../components/Boton';
+import { Chip } from '../../components/Chip';
 import { Numero } from '../../components/Numero';
 import { NOMBRE_DEL_CUADRO } from '../cuadros/cuadro';
 import { CuadroCompleto } from '../cuadros/CuadroCompleto';
@@ -20,12 +21,12 @@ type Props = {
 // Una pestaña por zona y una por cuadro.
 type Pestana = { clave: string; titulo: string; faltan: number; zona?: FilaDeLaLista[]; cuadro?: CuadroEliminatorio };
 
-// El rojo es solo para lo vencido (design.md §3).
+// El rojo es solo para lo vencido (design.md §3). Lo apagado va en pizarra-500: el 400 sobre papel no llega a 4,5:1.
 const colorDelEstado: Record<Situacion, string> = {
-  sin_jugadores: 'text-pizarra-400',
+  sin_jugadores: 'text-pizarra-500',
   falta: 'text-pizarra-700',
   vencido: 'text-rojo-texto',
-  con_resultado: 'text-pizarra-400',
+  con_resultado: 'text-pizarra-500',
 };
 
 // Elegir el partido a cargar (decisión 070): las zonas con sus partidos y los cuadros dibujados
@@ -41,7 +42,7 @@ export function ElegirPartido({ slug, torneoId, actual }: Props) {
   if (!partidos.data || (hayCuadros && !cuadros.data)) {
     const error = partidos.error ?? cuadros.error;
     return (
-      <div className="flex flex-col items-start gap-3 px-6 py-5">
+      <div className="flex flex-col items-start gap-3 px-4 py-5 sm:px-6">
         {error ? (
           <>
             <p className="text-[15px] text-pizarra-500">No pudimos cargar los partidos.</p>
@@ -69,7 +70,7 @@ export function ElegirPartido({ slug, torneoId, actual }: Props) {
   }));
   const pestanas = [...zonas, ...deLosCuadros];
   if (pestanas.length === 0) {
-    return <p className="px-6 py-5 text-[15px] text-pizarra-500">Todavía no hay partidos: se generan al confirmar el sorteo.</p>;
+    return <p className="px-4 py-5 text-[15px] text-pizarra-500 sm:px-6">Todavía no hay partidos: se generan al confirmar el sorteo.</p>;
   }
 
   // Abre donde está el partido abierto; sin partido, en la primera con algo por cargar.
@@ -80,23 +81,15 @@ export function ElegirPartido({ slug, torneoId, actual }: Props) {
   const eleccion = { elegido: actual, alElegir: ({ id }: { id: number }) => abrir(id) };
 
   return (
-    <div className="flex flex-col gap-4 px-6 py-5">
+    <div className="flex flex-col gap-4 px-4 py-5 sm:px-6">
       <div role="group" aria-label="Zona o cuadro" className="flex flex-wrap gap-[5px]">
         {pestanas.map(({ clave, titulo, faltan }) => {
           const activa = clave === pestana.clave;
           return (
-            <button
-              key={clave}
-              type="button"
-              aria-pressed={activa}
-              onClick={() => setElegida(clave)}
-              className={`inline-flex h-[34px] items-center gap-[7px] rounded-[9px] px-[13px] text-sm ${
-                activa ? 'bg-noche font-semibold text-white' : 'border border-linea font-medium text-pizarra-700 hover:bg-niebla'
-              }`}
-            >
+            <Chip key={clave} activo={activa} onClick={() => setElegida(clave)} className="gap-[7px]">
               {titulo}
               {faltan > 0 && <Numero className={`text-xs ${activa ? 'text-white' : 'text-pizarra-500'}`}>{faltan}</Numero>}
-            </button>
+            </Chip>
           );
         })}
       </div>

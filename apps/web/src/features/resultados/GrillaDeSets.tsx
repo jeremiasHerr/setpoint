@@ -1,5 +1,5 @@
 import type { SistemaDeJuego } from '@setpoint/shared';
-import { Fragment, type InputHTMLAttributes } from 'react';
+import { Fragment, type CSSProperties, type InputHTMLAttributes } from 'react';
 import { MensajeError } from '../../components/Aviso';
 import { columnasDeLaGrilla, llevaTieBreak, type Problemas, type SetEscrito } from './resultado';
 
@@ -40,8 +40,10 @@ export function GrillaDeSets({ sistema, nombres, sets: escritos, problemas, gana
   const sets = bloqueada ? columnas.map(() => VACIO) : escritos;
   const conTieBreak = columnas.map((columna, i) => llevaTieBreak(sets[i], columna, sistema));
   const filaDeMensajes = conTieBreak.some(Boolean) ? 5 : 4;
-  // La última columna, flexible, deja lugar a los mensajes del último set.
-  const plantilla = ['minmax(0,200px)', ...columnas.map((c) => (c.esSuperTieBreak ? '118px' : '84px')), 'minmax(0,1fr)'].join(' ');
+  // En el celular el nombre se lleva lo que sobra y no hay columna final para los mensajes, que igual
+  // van de su columna al final. En escritorio, la última columna flexible les deja lugar.
+  const escritorio = ['minmax(0,200px)', ...columnas.map((c) => (c.esSuperTieBreak ? '118px' : '84px')), 'minmax(0,1fr)'].join(' ');
+  const celular = ['minmax(0,1fr)', ...columnas.map((c) => (c.esSuperTieBreak ? '68px' : '56px'))].join(' ');
 
   // Cada mensaje va debajo de su set, en una fila propia: desde esa columna hasta el final.
   const mensajes = columnas.flatMap((_, i) =>
@@ -53,14 +55,17 @@ export function GrillaDeSets({ sistema, nombres, sets: escritos, problemas, gana
   const describe = (id: string) => (mensajes.some((m) => m.id === id) ? id : undefined);
 
   return (
-    <div className="grid items-center gap-x-3.5 gap-y-2.5" style={{ gridTemplateColumns: plantilla }}>
+    <div
+      className="grid items-center gap-x-2 gap-y-2.5 grid-cols-(--celular) sm:gap-x-3.5 sm:grid-cols-(--escritorio)"
+      style={{ '--celular': celular, '--escritorio': escritorio } as CSSProperties}
+    >
       {nombres.map((nombre, j) => {
         const lado = j === 0 ? 'A' : 'B';
         const perdio = ganador !== null && ganador !== lado;
         return (
           <div key={lado} className="flex min-w-0 items-center gap-2.5" style={{ gridColumn: 1, gridRow: j + 2 }}>
             <span className={`size-[7px] shrink-0 rounded-full ${ganador === lado ? 'bg-lona-texto' : 'bg-linea'}`} />
-            <span className={`truncate text-lg ${perdio ? 'font-medium text-pizarra-700' : 'font-semibold'}`}>{nombre}</span>
+            <span className={`truncate text-base sm:text-lg ${perdio ? 'font-medium text-pizarra-700' : 'font-semibold'}`}>{nombre}</span>
           </div>
         );
       })}
@@ -78,7 +83,7 @@ export function GrillaDeSets({ sistema, nombres, sets: escritos, problemas, gana
         const campo = (gridRow: number) => ({ gridColumn: i + 2, gridRow });
         return (
           <Fragment key={i}>
-            <span className="text-center font-mono text-xs text-pizarra-500" style={campo(1)}>
+            <span className="text-center font-mono text-[11px] leading-[13px] text-pizarra-500 sm:text-xs" style={campo(1)}>
               {columna.rotulo}
             </span>
             {(['gamesA', 'gamesB'] as const).map((games, j) => (
@@ -90,7 +95,7 @@ export function GrillaDeSets({ sistema, nombres, sets: escritos, problemas, gana
                 value={set[games]}
                 disabled={bloqueada}
                 alCambiar={(valor) => alCambiar(i, games, valor)}
-                className="h-14 w-full rounded-control text-[22px]"
+                className="h-14 w-full rounded-control text-[19px] sm:text-[22px]"
                 style={campo(j + 2)}
               />
             ))}
@@ -105,7 +110,7 @@ export function GrillaDeSets({ sistema, nombres, sets: escritos, problemas, gana
                       aria-describedby={describe(`problema-tie-break-${i}`)}
                       value={set[puntos]}
                       alCambiar={(valor) => alCambiar(i, puntos, valor)}
-                      className="h-10 w-[37px] rounded-lg text-[15px]"
+                      className="h-10 w-6 rounded-lg text-[13px] sm:w-[37px] sm:text-[15px]"
                     />
                   </Fragment>
                 ))}

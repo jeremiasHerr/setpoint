@@ -1,5 +1,6 @@
 import type { FilaDePosiciones, Tablero, ZonaDelTablero } from '@setpoint/shared';
 import { useState, type CSSProperties } from 'react';
+import { Chip } from '../../components/Chip';
 import { Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
 import { comoVieneLaZona, elDiaCorto, marcadorDesde, partidoEntre } from './tablero';
@@ -108,23 +109,16 @@ export function ZonaPorZona({ tablero }: { tablero: Tablero }) {
             const activa = grupo === zona.grupo;
             const conVencidos = partidos.some((p) => p.situacion === 'vencido');
             return (
-              <button
+              <Chip
                 key={grupo}
-                type="button"
-                aria-pressed={activa}
+                activo={activa}
                 aria-label={conVencidos ? `Zona ${grupo}, con partidos vencidos` : `Zona ${grupo}`}
                 onClick={() => setElegida(grupo)}
-                className={`inline-flex h-[34px] items-center gap-[7px] rounded-[9px] px-[15px] text-sm ${
-                  activa
-                    ? 'bg-noche font-semibold text-white'
-                    : conVencidos
-                      ? 'border border-rojo-linea font-medium text-rojo-texto'
-                      : 'border border-linea font-medium text-pizarra-700 hover:bg-niebla'
-                }`}
+                className="gap-[7px]"
               >
                 {grupo}
                 {conVencidos && <span className="size-[5px] rounded-full bg-rojo" />}
-              </button>
+              </Chip>
             );
           })}
         </div>

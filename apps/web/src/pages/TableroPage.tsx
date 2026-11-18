@@ -11,7 +11,6 @@ import { NOMBRE_DEL_CUADRO } from '../features/cuadros/cuadro';
 import { BotonCopiarLink } from '../features/inicio/BotonCopiarLink';
 import { BarrasDelTorneo } from '../features/tablero/BarrasDelTorneo';
 import { LoQueFalta } from '../features/tablero/LoQueFalta';
-import { ResumenPlazo } from '../features/tablero/ResumenPlazo';
 import { elDia } from '../features/tablero/tablero';
 import { useCerrarZonas, useTablero } from '../features/tablero/useTablero';
 import { EncabezadoDelTorneo } from '../features/torneos/EncabezadoDelTorneo';
@@ -29,7 +28,7 @@ export function TableroPage() {
 
 function Marco({ sesion, torneoId, children }: { sesion: Sesion; torneoId: number; children: ReactNode }) {
   return (
-    <div className="min-h-screen bg-papel text-noche">
+    <div className="min-h-screen bg-niebla text-noche">
       <EncabezadoDelTorneo sesion={sesion} torneoId={torneoId} actual="tablero" />
       {children}
     </div>
@@ -72,19 +71,22 @@ function TableroDelTorneo({ sesion, torneoId }: { sesion: Sesion; torneoId: numb
   );
 }
 
-// "8 zonas de 4 · terminan el sábado 20". Con zonas de 3 y de 4, dice las dos.
+// "8 zonas de 4 · terminan el sábado 20". Con zonas de 3 y de 4, dice las dos. El plazo solo se dice
+// acá (decisión 106), así que también cuando ya venció.
 function bajada(tablero: Tablero): string {
-  const vence = tablero.plazo && tablero.plazo.dias >= 0 ? elDia(tablero.plazo.fechaLimite) : null;
+  const { plazo } = tablero;
+  const elPlazo = (termina: string) =>
+    plazo ? ` · ${plazo.dias >= 0 ? termina : 'el plazo venció'} el ${elDia(plazo.fechaLimite)}` : '';
   if (tablero.fase === 'terminado') return 'El torneo está cerrado y los puntos ya están en el ranking.';
   if (tablero.fase === 'cuadros') {
     const cuadros = tablero.tieneComplementaria
       ? `${NOMBRE_DEL_CUADRO.campeonato} y ${NOMBRE_DEL_CUADRO.complementaria.toLowerCase()}`
       : NOMBRE_DEL_CUADRO.campeonato;
-    return vence ? `${cuadros} · la ronda en curso termina el ${vence}` : cuadros;
+    return `${cuadros}${elPlazo('la ronda en curso termina')}`;
   }
   const tamanos = [...new Set(tablero.zonas.map((z) => z.filas.length))].sort((a, b) => b - a);
   const zonas = `${tablero.zonas.length} ${tablero.zonas.length === 1 ? 'zona' : 'zonas'} de ${tamanos.join(' y ')}`;
-  return vence ? `${zonas} · terminan el ${vence}` : zonas;
+  return `${zonas}${elPlazo('terminan')}`;
 }
 
 // Lo que dice la confirmación de cerrar las zonas (decisión 096). Como arma la API los cuadros: los
@@ -177,10 +179,7 @@ function Contenido({ sesion, tablero }: { sesion: Sesion; tablero: Tablero }) {
           </Siguiente>
         )}
 
-        <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_300px]">
-          <BarrasDelTorneo tablero={tablero} />
-          <ResumenPlazo tablero={tablero} />
-        </div>
+        <BarrasDelTorneo tablero={tablero} />
 
         {fase !== 'terminado' && <LoQueFalta slug={slug} tablero={tablero} />}
         {fase === 'grupos' && <ZonaPorZona tablero={tablero} />}
