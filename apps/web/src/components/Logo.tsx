@@ -5,7 +5,7 @@ type Props = {
 };
 
 // Las marcas de una zona: tres partidos jugados y el último, levantado, es el set point (decisión
-// 104). Sobre noche, las barras van en blanco y la levantada en pelota; sobre claro, en noche y lona,
+// 105). Sobre noche, las barras van en blanco y la levantada en pelota; sobre claro, en noche y lona,
 // porque la pelota no se ve sobre el papel.
 //
 // Con el mouse encima, el verde arranca en la primera barra y recorre las cuatro hasta volver a la

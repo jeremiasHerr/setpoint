@@ -28,6 +28,7 @@ import { pagoRouter } from './modules/pagos/pago.routes';
 import { programarVencimientoDeReservas } from './modules/pagos/vencimiento';
 import { webhookRouter } from './modules/pagos/webhook.routes';
 import { importacionesRouter } from './modules/padron/importacion/importaciones.routes';
+import { proyeccionPublicaRouter } from './modules/proyeccion/proyeccion-publica.routes';
 import { rankingPublicoRouter } from './modules/ranking/ranking-publico.routes';
 import { revisionesRouter } from './modules/revisiones/revisiones.routes';
 import { navegacionRouter } from './modules/torneos/navegacion.routes';
@@ -69,6 +70,7 @@ app.use('/api/publico/:slug/jugadores/:id', fichaPublicaRouter);
 app.use('/api/publico/:slug/torneos/:id/cuadros', cuadrosPublicoRouter);
 app.use('/api/publico/:slug/torneos/:id/en-vivo', enVivoRouter);
 app.use('/api/publico/:slug/torneos/:id/padron', padronPublicoRouter);
+app.use('/api/publico/:slug/torneos/:id/proyeccion', proyeccionPublicaRouter);
 app.use('/api/publico/:slug/torneos/:id', torneoPublicoRouter);
 // Con la sesión del código, todavía sin perfil: encontrarlo y reservar el lugar (F12).
 app.use('/api/links/:codigo', linkPersonalRouter);

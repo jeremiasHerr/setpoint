@@ -6,7 +6,7 @@ type Props = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onChange'> & {
 };
 
 // Prendido, verde lona oscuro; apagado, pizarra; la bolita siempre blanca (design.md §6). Los dos
-// estados se distinguen de un vistazo sobre el papel y sobre la niebla (decisiones 090 y 104).
+// estados se distinguen de un vistazo sobre el papel y sobre la niebla (decisiones 090 y 105).
 export function Interruptor({ encendido, alCambiar, className = '', ...props }: Props) {
   return (
     <button
