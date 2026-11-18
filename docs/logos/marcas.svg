@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="SetPoint">
-  <rect width="120" height="120" rx="28" fill="#0A0B0D"/>
-  <rect x="22" y="39" width="16" height="50" rx="4" fill="#FFFFFF"/>
-  <rect x="42" y="39" width="16" height="50" rx="4" fill="#FFFFFF"/>
-  <rect x="62" y="39" width="16" height="50" rx="4" fill="#FFFFFF"/>
-  <rect x="82" y="27" width="16" height="50" rx="4" fill="#CDF546"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Setpoint">
+  <rect width="64" height="64" rx="14" fill="#0B1220"/>
+  <rect x="14" y="23.84" width="6.27" height="23.37" rx="1.14" fill="#FFFFFF"/>
+  <rect x="23.69" y="23.84" width="6.27" height="23.37" rx="1.14" fill="#FFFFFF"/>
+  <rect x="33.38" y="23.84" width="6.27" height="23.37" rx="1.14" fill="#FFFFFF"/>
+  <rect x="43.64" y="17" width="6.27" height="23.37" rx="1.14" fill="#CDF546"/>
 </svg>
