@@ -162,7 +162,8 @@ Las marcas de una zona: tres barras de partido jugado y la cuarta, levantada, qu
 
 - **Sobre noche:** las barras en blanco y la levantada en `pelota`.
 - **Sobre claro:** las barras en `noche` y la levantada en `lona`, porque la pelota no se ve sobre papel.
-- **Ícono** (favicon, app): un cuadrado `noche-900` con radio 14/64 y la marca adentro, con la versión sobre noche.
+- **Ícono** (favicon, app): un cuadrado `noche-900` con radio 14/64 y la marca adentro, con la versión sobre noche. En el ícono adaptable de Android la marca va a dos tercios, por el recorte del sistema.
+- **Splash de la app:** fondo `noche-900` y la marca sola, sin recuadro, en la versión sobre noche ([decisión 107](decisiones/107-splash-en-noche.md)).
 - **Con el mouse encima**, el set point recorre la zona: el acento arranca en la primera barra, la levanta y pasa a la siguiente, hasta volver a la última, en un segundo. Responde a una acción, como toda animación fuera del demo de la landing, y con "reducir movimiento" no se mueve.
 
 En la app es el mismo dibujo, con cuatro `View` para no sumar `react-native-svg` por un logo, y sin la palabra: va al lado del nombre del circuito. La marca de la organización en las páginas públicas de la web es otra cosa: un cuadrado `noche` con un punto `pelota`, al lado de su nombre.
@@ -493,4 +494,3 @@ La app tiene su copia de los tokens en `apps/mobile/src/lib/tokens.ts`, con los 
 
 - La matriz de zona está pensada para grupos de 4. Un circuito que arme zonas de 5 o 6 necesita otro tratamiento de esa tabla.
 - Falta la versión móvil del tablero del organizador. Hoy es solo escritorio, que es lo que el reparto web/móvil define, pero conviene revisarlo con el organizador real.
-- Los íconos del APK (`apps/mobile/assets/`) y los archivos de `docs/logos/` tienen el dibujo de la [decisión 104](decisiones/104-logo-marcas.md). Falta regenerarlos con el del logo de §6.

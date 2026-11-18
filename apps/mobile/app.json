@@ -11,7 +11,7 @@
     "android": {
       "package": "com.setpoint.app",
       "adaptiveIcon": {
-        "backgroundColor": "#0A0B0D",
+        "backgroundColor": "#0B1220",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
@@ -25,7 +25,7 @@
         {
           "image": "./assets/splash-icon.png",
           "imageWidth": 200,
-          "backgroundColor": "#FFFFFF"
+          "backgroundColor": "#0B1220"
         }
       ],
       "expo-secure-store",
