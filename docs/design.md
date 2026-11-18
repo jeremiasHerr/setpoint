@@ -172,6 +172,8 @@ En la app es el mismo dibujo, con cuatro `View` para no sumar `react-native-svg`
 
 Franja `noche` de 56 de alto: el logo, la organización en `pizarra-400` y, a la derecha, el menú. Ítem activo con fondo `noche-2` y texto blanco; los demás en `pizarra-400`, blancos con el mouse encima.
 
+**Debajo de 768 px** no entra en una fila: el menú, las iniciales y Salir van en un panel que abre el botón "Menú" ([decisión 109](decisiones/109-menu-del-organizador-en-el-celular.md)). El panel baja en `noche`, con las secciones en filas de 48 y, abajo, las iniciales con el nombre completo de la organización y Salir. Detrás va el velo del modal de confirmación, y se cierra con Escape, tocando el velo o al elegir una sección.
+
 ### Botones
 
 | Variante | Fondo | Texto | Cuándo |
