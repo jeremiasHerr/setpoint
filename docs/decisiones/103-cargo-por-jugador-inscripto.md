@@ -1,4 +1,4 @@
-# 103 — SetPoint cobra un cargo por jugador inscripto, no una comisión
+# 103 — Setpoint cobra un cargo por jugador inscripto, no una comisión
 
 **Estado:** aceptada — 15 de noviembre de 2026. Reemplaza a la [decisión 078](078-comision-de-la-plataforma.md).
 
@@ -6,7 +6,7 @@
 
 La [decisión 078](078-comision-de-la-plataforma.md) puso una comisión del 5% de la plataforma sobre lo cobrado por MercadoPago, y la landing y el registro la anunciaban. Al pensar cómo hacerla automática aparecieron dos problemas:
 
-- **Con la cuenta única de [05-pagos.md](../05-pagos.md) §2, toda la plata de las inscripciones entra a la cuenta de SetPoint**, que le transfiere a cada organización lo suyo. Para el grupo eso no es aceptable fuera de la demo: la plata de los circuitos no tiene que pasar por la plataforma. Para que llegue a la cuenta de la organización, cada una tiene que conectar su MercadoPago, y eso hace falta con cualquier forma de cobrar.
+- **Con la cuenta única de [05-pagos.md](../05-pagos.md) §2, toda la plata de las inscripciones entra a la cuenta de Setpoint**, que le transfiere a cada organización lo suyo. Para el grupo eso no es aceptable fuera de la demo: la plata de los circuitos no tiene que pasar por la plataforma. Para que llegue a la cuenta de la organización, cada una tiene que conectar su MercadoPago, y eso hace falta con cualquier forma de cobrar.
 - **La comisión deja una fuga:** lo que la organización inscribe a mano, cobrado en efectivo o por transferencia (F13, [decisión 079](079-inscribir-a-mano-sin-pasarse-del-cupo.md)), no paga nada. Un circuito podría cobrar todo en mano y no pagar nunca.
 
 ## Opciones consideradas

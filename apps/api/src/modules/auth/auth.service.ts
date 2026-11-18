@@ -146,8 +146,8 @@ export async function pedirCodigo({ email }: DatosPedirCodigo) {
 }
 
 const PARA_QUE = {
-  ingreso: { asunto: 'para entrar a SetPoint', sinElCodigo: 'nadie puede entrar con tu email' },
-  registro: { asunto: 'para crear tu organización en SetPoint', sinElCodigo: 'nadie puede crear una cuenta con tu email' },
+  ingreso: { asunto: 'para entrar a Setpoint', sinElCodigo: 'nadie puede entrar con tu email' },
+  registro: { asunto: 'para crear tu organización en Setpoint', sinElCodigo: 'nadie puede crear una cuenta con tu email' },
 };
 
 async function mandarCodigo(email: string, para: keyof typeof PARA_QUE) {
@@ -237,7 +237,7 @@ export async function pedirRecuperacion(datos: DatosRecuperarContrasena) {
     texto: [
       `Hola, ${usuario.nombre}:`,
       '',
-      'Pediste cambiar la contraseña de tu cuenta de SetPoint. Entrá a este link para elegir una nueva:',
+      'Pediste cambiar la contraseña de tu cuenta de Setpoint. Entrá a este link para elegir una nueva:',
       '',
       link,
       '',

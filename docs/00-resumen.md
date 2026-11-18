@@ -1,10 +1,10 @@
-# SetPoint en dos minutos
+# Setpoint en dos minutos
 
 ## El problema
 
 Los circuitos amateur de tenis se organizan con **Excel y WhatsApp**. El ranking vive en una planilla que actualiza una sola persona. Los cuadros, los horarios y los resultados se pierden entre mensajes del grupo. Las inscripciones se cobran por transferencia y se verifican a mano, comprobante por comprobante. Los desempates de zona se calculan con el reglamento al lado.
 
-SetPoint es una plataforma para que cualquier circuito organice sus torneos y su ranking sin eso.
+Setpoint es una plataforma para que cualquier circuito organice sus torneos y su ranking sin eso.
 
 **Caso de validación:** POLENTA Team Tenis, un circuito real de Neuquén con 77 jugadores en 2 categorías. Sus reglas y sus datos sirven para probar que el sistema resuelve un caso real. No son el molde: cada circuito configura su formato, su calendario y su tabla de puntos ([07-configurabilidad.md](07-configurabilidad.md)).
 

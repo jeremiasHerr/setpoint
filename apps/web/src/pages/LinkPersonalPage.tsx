@@ -132,11 +132,11 @@ function LinkEncontrado({ link, codigo }: { link: LinkPersonal; codigo: string }
 }
 
 // Un link regenerado y uno que nunca existió se ven igual. Sin código encontrado no se sabe de qué
-// organización es: el encabezado es de SetPoint.
+// organización es: el encabezado es de Setpoint.
 function LinkQueNoAnda() {
   return (
     <>
-      <EncabezadoPublico organizacion="SetPoint" />
+      <EncabezadoPublico organizacion="Setpoint" />
       <div className="flex flex-col gap-3 pt-10">
         <h1 className="text-[28px] leading-[1.1] font-display font-semibold tracking-[-0.02em]">Este link ya no anda</h1>
         <p className="text-base leading-[1.45] text-pizarra-500">

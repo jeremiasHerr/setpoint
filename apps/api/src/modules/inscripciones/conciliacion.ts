@@ -1,5 +1,5 @@
 // La conciliación del torneo (F13). Lógica pura: recibe los pagos cobrados, ya leídos.
-// SetPoint no se queda con un porcentaje de lo cobrado: cobra un cargo por jugador inscripto (decisión
+// Setpoint no se queda con un porcentaje de lo cobrado: cobra un cargo por jugador inscripto (decisión
 // 103, que reemplaza la comisión de la 078).
 import type { ConciliacionDelTorneo, DevolucionDeLaBaja } from '@setpoint/shared';
 

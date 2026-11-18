@@ -1,5 +1,5 @@
 // ============================================================================
-// Seed de desarrollo — SetPoint
+// Seed de desarrollo — Setpoint
 //
 // Llena la base local con datos de prueba para poder desarrollar sin depender
 // de otras features. NO es la carga de datos del producto: en producción,

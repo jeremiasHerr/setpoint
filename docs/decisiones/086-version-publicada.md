@@ -4,7 +4,7 @@
 
 ## Contexto
 
-Además de la entrega dockerizada ([decisión 085](085-entrega-dockerizada.md)), queremos SetPoint publicado en internet, en `setpoint.com.ar`, con la idea de que lo use un circuito real. Eso cierra dos decisiones abiertas que decían "revisar antes de un deploy público": el proveedor de email (17) y dónde guarda la web el token de sesión (13).
+Además de la entrega dockerizada ([decisión 085](085-entrega-dockerizada.md)), queremos Setpoint publicado en internet, en `setpoint.com.ar`, con la idea de que lo use un circuito real. Eso cierra dos decisiones abiertas que decían "revisar antes de un deploy público": el proveedor de email (17) y dónde guarda la web el token de sesión (13).
 
 La API no puede correr en cualquier lado. Tiene dos tareas propias que corren solas: vence las reservas sin pagar cada minuto y pasa los torneos a grupos cada hora ([decisión 029](029-grupos-en-curso.md)). Si el servidor se apaga entre pedidos, las reservas vencidas no se liberan y el cupo queda trabado. Además, el límite de pedidos por IP vive en la memoria de la API ([decisión 052](052-limite-de-pedidos.md)): tiene que haber una sola instancia.
 
