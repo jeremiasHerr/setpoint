@@ -198,6 +198,8 @@ Dos objetos distintos:
 
 Solo en la franja de las pantallas de un torneo, debajo del encabezado del organizador ([decisión 095](decisiones/095-navegacion-del-torneo.md)). La franja va en `papel` con borde inferior `linea`. Texto de 15, alto 40–44. Activa: `noche`, peso 600 y subrayado de 2px `noche`. Disponible: `pizarra-700`, peso 500. Apagada: `pizarra-400`, y al tocarla, una línea debajo de la franja dice por qué. Son distintas de los chips a propósito: los chips filtran dentro de una pantalla (Confirmados, Reservando), las pestañas cambian de pantalla.
 
+**En el celular**, debajo de 640, las cinco no entran en una fila y van en una grilla de tres columnas: Inscripciones, Zonas y Tablero arriba; Resultados y Cierre abajo ([decisión 110](decisiones/110-pestanas-del-torneo-en-el-celular.md)). Cada pestaña ocupa su celda, sin margen, y la fila de arriba lleva una línea de base `linea-suave`.
+
 ### Migas de pan
 
 En las pantallas internas de la organización, las que no están en el menú: las del torneo, *Editar el torneo* e *Importar planilla* y *Revisar vinculación* en el padrón ([decisión 100](decisiones/100-migas-de-pan.md)). Una línea arriba del título: los niveles de arriba como links `pizarra-500` (`noche` al pasar), separados por el chevron del set en `pizarra-400`, y el último, donde se está, sin link en `pizarra-700`. Texto de 14; en la franja del torneo, la última miga es el nombre del torneo en `noche` con peso 500. Cada miga lleva siempre al mismo lugar, nunca "atrás" en el historial.
