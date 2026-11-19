@@ -35,7 +35,7 @@ export function CasoReclamo({ caso, enviando, alResolver }: Props) {
       </Planteo>
 
       <div className="grid gap-4 md:grid-cols-2">
-        <section className="flex flex-col gap-4 rounded-tarjeta border border-linea p-5">
+        <section className="flex flex-col gap-4 rounded-tarjeta border border-linea bg-papel p-5">
           <div className="flex min-w-0 flex-col gap-1">
             <Rotulo>tiene el perfil</Rotulo>
             <h3 className="truncate text-lg font-semibold tracking-[-0.02em]">{titular.email}</h3>
@@ -52,7 +52,7 @@ export function CasoReclamo({ caso, enviando, alResolver }: Props) {
           </Boton>
         </section>
 
-        <section className="flex flex-col gap-4 rounded-tarjeta border-2 border-noche p-[19px]">
+        <section className="flex flex-col gap-4 rounded-tarjeta border-2 border-noche bg-papel p-[19px]">
           <div className="flex min-w-0 flex-col gap-1">
             <Rotulo>lo reclama</Rotulo>
             <h3 className="truncate text-lg font-semibold tracking-[-0.02em]">{reclamante.email || '—'}</h3>
@@ -78,7 +78,7 @@ export function CasoReclamo({ caso, enviando, alResolver }: Props) {
       </div>
 
       {pagadas.length > 0 && (
-        <section className="flex flex-col gap-3 rounded-tarjeta border border-linea px-5 py-[18px]">
+        <section className="flex flex-col gap-3 rounded-tarjeta border border-linea bg-papel px-5 py-[18px]">
           <div className="flex flex-col gap-1">
             <h3 className="text-[15px] font-semibold">
               Si le pasás el perfil: ¿qué hace{pagadas.length === 1 ? ` la inscripción a ${pagadas[0].torneo}` : 'n sus inscripciones'}?
@@ -125,7 +125,7 @@ function Opcion({ elegida, onElegir, titulo, children }: { elegida: boolean; onE
       role="radio"
       aria-checked={elegida}
       onClick={onElegir}
-      className={`flex items-start gap-[11px] rounded-[12px] text-left ${elegida ? 'border-2 border-noche px-3.5 py-3' : 'border border-linea px-[15px] py-[13px] hover:bg-niebla'}`}
+      className={`flex items-start gap-[11px] rounded-[12px] bg-papel text-left ${elegida ? 'border-2 border-noche px-3.5 py-3' : 'border border-linea px-[15px] py-[13px] hover:bg-niebla'}`}
     >
       <span className={`mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full border-2 ${elegida ? 'border-noche' : 'border-borde-campo'}`}>
         {elegida && <span className="size-2 rounded-full bg-noche" />}

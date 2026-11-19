@@ -9,7 +9,7 @@ export function ColumnaRevisiones({ revisiones, actual }: { revisiones: Revision
   return (
     <aside className="flex flex-col gap-4">
       {revisiones.casos.length > 0 && (
-        <nav className="overflow-hidden rounded-tarjeta border border-linea">
+        <nav className="overflow-hidden rounded-tarjeta border border-linea bg-papel">
           <div className="flex items-center justify-between gap-2.5 border-b border-linea px-4 py-3.5">
             <h2 className="text-[15px] font-semibold">Para revisar</h2>
             <Numero className="text-[13px] text-pizarra-500">{revisiones.casos.length}</Numero>

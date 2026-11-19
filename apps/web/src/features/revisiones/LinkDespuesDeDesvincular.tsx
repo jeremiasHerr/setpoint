@@ -19,7 +19,7 @@ export function LinkDespuesDeDesvincular({ organizacion, jugador, fallo }: Props
   const mensaje = jugador && url ? mensajeDelLink(jugador, organizacion, url) : null;
 
   return (
-    <section className="flex flex-col gap-4 rounded-[16px] border-2 border-noche px-6 py-[22px]">
+    <section className="flex flex-col gap-4 rounded-[16px] border-2 border-noche bg-papel px-6 py-[22px]">
       <div className="flex flex-col gap-2">
         <h2 className="text-xl font-semibold tracking-[-0.02em]">El perfil quedó libre</h2>
         <p className="text-[15px] leading-normal text-pizarra-500">

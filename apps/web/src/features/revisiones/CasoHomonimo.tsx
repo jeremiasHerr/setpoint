@@ -96,7 +96,7 @@ export function CasoHomonimo({ caso, enviando, alResolver }: Props) {
 
 function Perfil({ perfil, eligio = false, children }: { perfil: PerfilEnRevision; eligio?: boolean; children: React.ReactNode }) {
   return (
-    <section className={`flex flex-col gap-4 rounded-tarjeta p-5 ${eligio ? 'border-2 border-noche p-[19px]' : 'border border-linea'}`}>
+    <section className={`flex flex-col gap-4 rounded-tarjeta bg-papel p-5 ${eligio ? 'border-2 border-noche p-[19px]' : 'border border-linea'}`}>
       <div className="flex items-start justify-between gap-3">
         <div className="flex flex-col gap-1">
           <h3 className="text-xl font-semibold tracking-[-0.02em]">{nombre(perfil)}</h3>
