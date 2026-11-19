@@ -31,7 +31,7 @@ function Inicio({ sesion }: { sesion: Sesion }) {
   const cerrarSesion = useCerrarSesion();
 
   return (
-    <div className="min-h-screen bg-papel text-noche">
+    <div className="min-h-screen bg-niebla text-noche">
       <EncabezadoOrganizador
         organizacion={circuito.data?.nombre ?? sesion.organizacion.nombre}
         navegacion={navegacionOrganizador}
@@ -44,7 +44,7 @@ function Inicio({ sesion }: { sesion: Sesion }) {
       {!circuito.data || !torneos.data ? (
         error ? (
           !sesionInvalida && (
-            <div className="flex flex-col items-start gap-3 px-7 pt-[26px]">
+            <div className="flex flex-col items-start gap-3 px-4 pt-[26px] md:px-7">
               <p className="text-[15px] text-pizarra-500">No pudimos cargar tu organización.</p>
               <Boton
                 onClick={() => {
@@ -57,7 +57,7 @@ function Inicio({ sesion }: { sesion: Sesion }) {
             </div>
           )
         ) : (
-          <div className="px-7 pt-[26px]">
+          <div className="px-4 pt-[26px] md:px-7">
             <Esqueleto />
           </div>
         )

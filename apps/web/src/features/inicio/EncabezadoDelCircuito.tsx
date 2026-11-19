@@ -27,7 +27,7 @@ export function EncabezadoDelCircuito({ torneos }: { torneos: TorneosDeInicio })
   ];
 
   return (
-    <section className="bg-noche px-7 pb-7">
+    <section className="bg-noche px-4 pb-7 md:px-7">
       <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-6 border-t border-borde-noche pt-5">
         <div className="flex min-w-0 flex-col gap-2">
           <span className="font-mono text-xs text-pizarra-400">tu circuito</span>

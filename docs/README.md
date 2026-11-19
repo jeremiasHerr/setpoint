@@ -210,6 +210,7 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 - ~~¿Cómo entran las pestañas del torneo en el celular?~~ **En una grilla de tres columnas y dos filas, debajo de 640 px** ([decisión 110](decisiones/110-pestanas-del-torneo-en-el-celular.md)). Las cinco en una fila miden 444 px y a 360 hay 328. Es la única opción que deja todo a la vista con un toque, sin scroll horizontal y sin esconder las pantallas en un menú
 - ~~¿Qué muestra el Sorteo de zonas una vez confirmado?~~ **Las zonas arriba, con cómo se sorteó en una línea, y "Copiar el link de las zonas" en lugar de "Ir al tablero"; desde 1024 px, en una hoja con una columna por zona** ([decisión 111](decisiones/111-el-sorteo-confirmado-muestra-las-zonas.md)). Durante la fase de grupos la pantalla seguía armada para sortear, con las zonas abajo de las opciones en gris, y a 1440 las tarjetas dejaban media pantalla vacía
 - ~~¿Cómo dice el sorteo si las zonas quedaron parejas cuando hay zonas de 3?~~ **Compara solo las zonas completas, y de las de 3 dice cuánto suman** ([decisión 112](decisiones/112-sumas-entre-zonas-del-mismo-tamano.md)). A las de 3 les falta el más débil, así que suman menos aunque el sorteo sea parejo, y el promedio tampoco lo arreglaba. La pantalla decía "No quedaron parejas" en serpentina
+- ~~¿Cómo pasa el inicio al fondo niebla?~~ **Con las columnas sin relleno y con un borde de 1 px** ([decisión 113](decisiones/113-columnas-del-inicio-con-borde.md)). Su gris casi no se distinguía de la niebla, y el borde es el que ya usa todo el sistema
 
 ---
 
