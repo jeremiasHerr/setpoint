@@ -6,7 +6,8 @@ type Variante = 'principal' | 'organizador' | 'secundario';
 // borde (design.md §6). Con el mouse, la lona se oscurece, la noche se aclara a pizarra y el
 // secundario toma la línea suave. Deshabilitados, no reaccionan.
 const estilos: Record<Variante, string> = {
-  principal: 'border border-lona-borde bg-lona text-noche-900 enabled:hover:bg-lona-hover',
+  // Blanco sobre lona-texto, con borde lona (decisión 114).
+  principal: 'border border-lona bg-lona-texto text-white enabled:hover:brightness-125',
   organizador: 'bg-noche text-white enabled:hover:bg-pizarra-700',
   secundario: 'border border-linea bg-papel text-noche enabled:hover:bg-linea-suave',
 };

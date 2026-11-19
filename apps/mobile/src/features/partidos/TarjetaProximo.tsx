@@ -124,9 +124,9 @@ const estilos = StyleSheet.create({
   boton: {
     height: medidas.toque,
     borderRadius: 12,
-    backgroundColor: colores.lona,
+    backgroundColor: colores.lonaTexto,
     borderWidth: 1,
-    borderColor: colores.lonaBorde,
+    borderColor: colores.lona,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -136,7 +136,7 @@ const estilos = StyleSheet.create({
   textoBoton: {
     fontFamily: fuentes.sans[600],
     fontSize: 17,
-    color: colores.noche900,
+    color: colores.blanco,
   },
   pendiente: {
     fontFamily: fuentes.sans[500],
