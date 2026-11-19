@@ -62,7 +62,7 @@ export function InscribirAMano({ slug, torneoId, categoria, suelto, precio, libr
   const montoElegido = Number(monto.replace(/\D/g, ''));
 
   return (
-    <section className="flex flex-col gap-4 rounded-tarjeta border-[1.5px] border-noche p-[18px]">
+    <section className="flex flex-col gap-4 rounded-tarjeta border-[1.5px] border-noche bg-papel p-[18px]">
       <div className="flex flex-col gap-1">
         <div className="flex items-center justify-between gap-2.5">
           <h2 className="text-base font-semibold">Inscribir a mano</h2>
@@ -76,6 +76,7 @@ export function InscribirAMano({ slug, torneoId, categoria, suelto, precio, libr
       <div className="flex flex-col gap-2">
         <Campo
           id="inscribir-a-mano-apellido"
+          autoFocus
           rotulo={`Jugador del padrón de ${categoria}`}
           type="search"
           autoComplete="off"

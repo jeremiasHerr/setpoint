@@ -8,8 +8,8 @@ import { ErrorApi } from '../../lib/api';
 import { diaCorto } from '../torneos/texto';
 import { useAprobarSolicitud, useRechazarSolicitud } from './useInscripciones';
 
-// El email se oculta en pantallas angostas: el nombre y las acciones dicen más.
-const COLUMNAS = 'grid-cols-[minmax(0,1fr)_90px_180px] md:grid-cols-[minmax(0,1fr)_230px_110px_200px]';
+// En el celular, el día va debajo del nombre y Rechazar y Aprobar abajo: al lado no entran.
+const COLUMNAS = 'grid-cols-[minmax(0,1fr)] md:grid-cols-[minmax(0,1fr)_230px_110px_200px]';
 
 type Props = {
   slug: string;
@@ -46,15 +46,15 @@ export function TablaSolicitudes({ slug, torneoId, solicitudes, abierta }: Props
     <div className="flex flex-col gap-3">
       {aprobar.error && <MensajeError>{textoDeError(aprobar.error)}</MensajeError>}
       <Tarjeta className="flex flex-col overflow-hidden">
-        <div className={`grid gap-x-1 border-b border-linea bg-niebla px-[18px] py-[11px] ${COLUMNAS}`}>
+        <div className={`grid gap-x-1 border-b border-linea bg-niebla px-4 py-[11px] md:px-[18px] ${COLUMNAS}`}>
           <span className="text-xs text-pizarra-500">jugador</span>
           <span className="hidden font-mono text-[11px] text-pizarra-500 md:block">email</span>
-          <span className="font-mono text-[11px] text-pizarra-500">pidió</span>
-          <span />
+          <span className="hidden font-mono text-[11px] text-pizarra-500 md:block">pidió</span>
+          <span className="hidden md:block" />
         </div>
 
         {solicitudes.length === 0 ? (
-          <p className="px-[18px] py-4 text-sm text-pizarra-500">Todavía no pidió nadie.</p>
+          <p className="px-4 py-4 text-sm md:px-[18px] text-pizarra-500">Todavía no pidió nadie.</p>
         ) : (
           <ul>
             {solicitudes.map((solicitud) => {
@@ -62,7 +62,7 @@ export function TablaSolicitudes({ slug, torneoId, solicitudes, abierta }: Props
               return (
                 <li
                   key={solicitud.id}
-                  className={`grid h-[60px] items-center gap-x-1 border-b border-linea-suave px-[18px] last:border-b-0 ${COLUMNAS}`}
+                  className={`grid min-h-[60px] items-center gap-x-1 border-b border-linea-suave px-4 py-3 last:border-b-0 md:h-[60px] md:px-[18px] md:py-0 ${COLUMNAS}`}
                 >
                   <div className="flex min-w-0 items-center gap-2.5">
                     {/* Punto hueco la solicitud; noche lleno la aprobada que falta pagar (design.md §7). */}
@@ -75,12 +75,13 @@ export function TablaSolicitudes({ slug, torneoId, solicitudes, abierta }: Props
                       </span>
                       <span className="truncate font-mono text-xs text-pizarra-500">
                         {aprobada ? 'aprobada · falta pagar' : 'no está en el padrón'}
+                        <span className="md:hidden"> · {diaCorto(solicitud.fecha)}</span>
                       </span>
                     </div>
                   </div>
                   <span className="hidden truncate text-sm text-pizarra-700 md:block">{solicitud.email}</span>
-                  <Numero className="text-[13px] whitespace-nowrap text-pizarra-500">{diaCorto(solicitud.fecha)}</Numero>
-                  <div className="flex justify-end gap-2">
+                  <Numero className="hidden text-[13px] whitespace-nowrap text-pizarra-500 md:block">{diaCorto(solicitud.fecha)}</Numero>
+                  <div className="flex justify-end gap-2 pt-2.5 max-md:empty:hidden md:pt-0">
                     {!aprobada && abierta && (
                       <>
                         <button
@@ -109,7 +110,7 @@ export function TablaSolicitudes({ slug, torneoId, solicitudes, abierta }: Props
           </ul>
         )}
 
-        <p className="border-t border-linea bg-niebla px-[18px] py-[13px] text-[13px] leading-normal text-pizarra-500">
+        <p className="border-t border-linea bg-niebla px-4 py-[13px] md:px-[18px] text-[13px] leading-normal text-pizarra-500">
           Al aprobar, le llega un email con el link para pagar. No tiene lugar hasta que paga: los lugares se asignan por orden de
           pago. Cuando paga, entra al padrón con <Numero className="text-noche">0</Numero> puntos. Al rechazar, le llega un aviso, sin
           motivo.
