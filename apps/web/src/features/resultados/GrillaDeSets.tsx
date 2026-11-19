@@ -41,9 +41,10 @@ export function GrillaDeSets({ sistema, nombres, sets: escritos, problemas, gana
   const conTieBreak = columnas.map((columna, i) => llevaTieBreak(sets[i], columna, sistema));
   const filaDeMensajes = conTieBreak.some(Boolean) ? 5 : 4;
   // En el celular el nombre se lleva lo que sobra y no hay columna final para los mensajes, que igual
-  // van de su columna al final. En escritorio, la última columna flexible les deja lugar.
+  // van de su columna al final. Los casilleros son angostos para que entre el apellido: siguen
+  // teniendo 56 de alto. En escritorio, la última columna flexible les deja lugar a los mensajes.
   const escritorio = ['minmax(0,200px)', ...columnas.map((c) => (c.esSuperTieBreak ? '118px' : '84px')), 'minmax(0,1fr)'].join(' ');
-  const celular = ['minmax(0,1fr)', ...columnas.map((c) => (c.esSuperTieBreak ? '68px' : '56px'))].join(' ');
+  const celular = ['minmax(0,1fr)', ...columnas.map((c) => (c.esSuperTieBreak ? '64px' : '52px'))].join(' ');
 
   // Cada mensaje va debajo de su set, en una fila propia: desde esa columna hasta el final.
   const mensajes = columnas.flatMap((_, i) =>
@@ -56,7 +57,7 @@ export function GrillaDeSets({ sistema, nombres, sets: escritos, problemas, gana
 
   return (
     <div
-      className="grid items-center gap-x-2 gap-y-2.5 grid-cols-(--celular) sm:gap-x-3.5 sm:grid-cols-(--escritorio)"
+      className="grid items-center gap-x-1.5 gap-y-2.5 grid-cols-(--celular) sm:gap-x-3.5 sm:grid-cols-(--escritorio)"
       style={{ '--celular': celular, '--escritorio': escritorio } as CSSProperties}
     >
       {nombres.map((nombre, j) => {
@@ -65,7 +66,7 @@ export function GrillaDeSets({ sistema, nombres, sets: escritos, problemas, gana
         return (
           <div key={lado} className="flex min-w-0 items-center gap-2.5" style={{ gridColumn: 1, gridRow: j + 2 }}>
             <span className={`size-[7px] shrink-0 rounded-full ${ganador === lado ? 'bg-lona-texto' : 'bg-linea'}`} />
-            <span className={`truncate text-base sm:text-lg ${perdio ? 'font-medium text-pizarra-700' : 'font-semibold'}`}>{nombre}</span>
+            <span className={`truncate text-[15px] sm:text-lg ${perdio ? 'font-medium text-pizarra-700' : 'font-semibold'}`}>{nombre}</span>
           </div>
         );
       })}
@@ -103,7 +104,7 @@ export function GrillaDeSets({ sistema, nombres, sets: escritos, problemas, gana
               <div className="flex items-center justify-between" style={campo(4)}>
                 {(['tieBreakA', 'tieBreakB'] as const).map((puntos, j) => (
                   <Fragment key={puntos}>
-                    {j === 1 && <span className="text-pizarra-400">-</span>}
+                    {j === 1 && <span className="text-xs text-pizarra-400 sm:text-base">-</span>}
                     <CampoNumerico
                       aria-label={`Tie-break del ${columna.rotulo}, ${nombres[j]}`}
                       aria-invalid={problemas.tieBreaks[i] !== null}
