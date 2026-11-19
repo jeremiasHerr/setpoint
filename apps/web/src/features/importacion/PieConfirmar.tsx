@@ -13,7 +13,7 @@ type Props = {
 
 export function PieConfirmar({ aImportar, enviando, falta = false, error, alCancelar, alConfirmar }: Props) {
   return (
-    <footer className="sticky bottom-0 flex flex-wrap items-center justify-between gap-5 border-t border-linea bg-papel px-7 py-[18px]">
+    <footer className="sticky bottom-0 flex flex-wrap items-center justify-between gap-5 border-t border-linea bg-papel px-4 md:px-7 py-[18px]">
       <div className="flex flex-col gap-1">
         <span className="text-[15px] font-semibold">Todavía no se guardó nada</span>
         <span className="text-sm text-pizarra-500">

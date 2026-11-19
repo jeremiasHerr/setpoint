@@ -108,13 +108,13 @@ function ImportarPadron({ sesion }: { sesion: Sesion }) {
   let contenido;
   if (subir.isPending) {
     contenido = (
-      <main className="px-7 pb-7">
+      <main className="px-4 md:px-7 pb-7">
         <EstadoProcesando archivo={archivoSubiendo} />
       </main>
     );
   } else if (id === null) {
     contenido = circuito.data ? (
-      <main className="px-7 pb-7">
+      <main className="px-4 md:px-7 pb-7">
         <FormularioSubida
           categorias={circuito.data.categorias}
           enviando={subir.isPending}
@@ -143,7 +143,7 @@ function ImportarPadron({ sesion }: { sesion: Sesion }) {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-papel text-noche">
+    <div className="flex min-h-screen flex-col bg-niebla text-noche">
       <EncabezadoOrganizador
         organizacion={circuito.data?.nombre ?? sesion.organizacion.nombre}
         navegacion={navegacionOrganizador}
@@ -152,7 +152,7 @@ function ImportarPadron({ sesion }: { sesion: Sesion }) {
         alSalir={cerrarSesion}
       />
 
-      <div className="flex flex-col gap-2 px-7 pt-[26px] pb-5">
+      <div className="flex flex-col gap-2 px-4 md:px-7 pt-[26px] pb-5">
         <Migas anteriores={[{ etiqueta: 'Padrón', ruta: '/padron' }]}>Importar planilla</Migas>
         <h1 className="text-[28px] font-display font-semibold tracking-[-0.02em]">
           {enRevision ? 'Revisá la importación' : 'Importar planilla'}
@@ -178,7 +178,7 @@ function ImportarPadron({ sesion }: { sesion: Sesion }) {
 
 function Cargando({ error }: { error: boolean }) {
   return (
-    <div className="px-7">
+    <div className="px-4 md:px-7">
       {error ? (
         <p className="text-[15px] text-pizarra-500">No pudimos cargar la importación. Recargá la página.</p>
       ) : (
@@ -274,7 +274,7 @@ function Revision({ slug, importacion, padron, alConfirmar, alDescartar }: Props
 
   return (
     <>
-      <main className="flex flex-1 flex-col gap-5 px-7 pb-7">
+      <main className="flex flex-1 flex-col gap-5 px-4 md:px-7 pb-7">
         <ResumenImportacion
           conteos={importacion.conteos}
           categoria={unaCategoria}
@@ -301,7 +301,7 @@ function Revision({ slug, importacion, padron, alConfirmar, alDescartar }: Props
         <LoQueSeCrea crea={crea} />
 
         {conError.length > 0 && (
-          <div className="flex flex-col gap-1.5 rounded-tarjeta border border-linea px-[18px] py-4 text-[15px]">
+          <div className="flex flex-col gap-1.5 rounded-tarjeta border border-linea bg-papel px-[18px] py-4 text-[15px]">
             <p className="font-semibold">
               {conError.length === 1 ? 'Una planilla no se pudo leer y queda afuera' : `${conError.length} planillas no se pudieron leer y quedan afuera`}
             </p>
@@ -318,7 +318,7 @@ function Revision({ slug, importacion, padron, alConfirmar, alDescartar }: Props
             <h2 className="text-[17px] font-semibold">
               Para revisar · <Numero>{paraRevisar.length}</Numero>
             </h2>
-            <div className="overflow-x-auto rounded-tarjeta border border-linea">
+            <div className="overflow-x-auto rounded-tarjeta border border-linea bg-papel">
               {encabezado}
               <ul>{paraRevisar.map(({ hoja, fila: f }) => fila(hoja, f, leidas.length > 1))}</ul>
             </div>
@@ -345,7 +345,7 @@ function Revision({ slug, importacion, padron, alConfirmar, alDescartar }: Props
                 <span className="text-sm font-medium underline">{abierta ? 'Ocultar' : 'Ver'}</span>
               </button>
               {abierta && (
-                <div className="overflow-x-auto rounded-tarjeta border border-linea">
+                <div className="overflow-x-auto rounded-tarjeta border border-linea bg-papel">
                   {encabezado}
                   <ul>{resto.map((f) => fila(h, f, false))}</ul>
                 </div>
@@ -390,7 +390,7 @@ function Final({ slug, importacion, confirmada, alSubirOtro }: PropsFinal) {
 
   if (importacion.estado === 'CONFIRMADO') {
     return (
-      <main className="px-7 pb-7">
+      <main className="px-4 md:px-7 pb-7">
         <Tarjeta className="flex max-w-[560px] flex-col gap-4 p-[22px]">
           <div className="flex flex-col gap-1.5">
             <h2 className="text-[17px] font-semibold">Listo, el padrón quedó actualizado</h2>
@@ -426,7 +426,7 @@ function Final({ slug, importacion, confirmada, alSubirOtro }: PropsFinal) {
 
   const esError = importacion.estado === 'ERROR';
   return (
-    <main className="px-7 pb-7">
+    <main className="px-4 md:px-7 pb-7">
       <Tarjeta className="flex max-w-[560px] flex-col gap-4 p-[22px]">
         <div className="flex flex-col gap-1.5">
           <h2 className="text-[17px] font-semibold">
