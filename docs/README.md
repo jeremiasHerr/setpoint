@@ -208,6 +208,7 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 - ~~¿La marca es "SetPoint" o "Setpoint"?~~ **"Setpoint" en todo: la web, los emails, la app y los docs** ([decisión 108](decisiones/108-la-marca-se-escribe-setpoint.md)). Es la grafía del logo, y convivían dos; los nombres de canvas y artifacts que existen afuera no cambian
 - ~~¿Cómo entra el encabezado de la organización en el celular?~~ **El menú, las iniciales y Salir van en un panel que abre el botón "Menú", debajo de 768 px** ([decisión 109](decisiones/109-menu-del-organizador-en-el-celular.md)). A 375 no entraban en una fila, y dos filas cargaban el encabezado y recortaban el nombre de la organización
 - ~~¿Cómo entran las pestañas del torneo en el celular?~~ **En una grilla de tres columnas y dos filas, debajo de 640 px** ([decisión 110](decisiones/110-pestanas-del-torneo-en-el-celular.md)). Las cinco en una fila miden 444 px y a 360 hay 328. Es la única opción que deja todo a la vista con un toque, sin scroll horizontal y sin esconder las pantallas en un menú
+- ~~¿Qué muestra el Sorteo de zonas una vez confirmado?~~ **Las zonas arriba, con cómo se sorteó en una línea, y "Copiar el link de las zonas" en lugar de "Ir al tablero"; desde 1024 px, en una hoja con una columna por zona** ([decisión 111](decisiones/111-el-sorteo-confirmado-muestra-las-zonas.md)). Durante la fase de grupos la pantalla seguía armada para sortear, con las zonas abajo de las opciones en gris, y a 1440 las tarjetas dejaban media pantalla vacía
 
 ---
 

@@ -1,6 +1,6 @@
 # 095 — Las pantallas del torneo comparten una franja con pestañas
 
-**Estado:** aceptada — 13 de noviembre de 2026. Reemplaza las migas de la [decisión 058](058-como-se-llega-al-cierre.md) y de la [decisión 063](063-entrada-al-tablero.md). Las entradas que definen esas decisiones se mantienen.
+**Estado:** aceptada — 13 de noviembre de 2026. Reemplaza las migas de la [decisión 058](058-como-se-llega-al-cierre.md) y de la [decisión 063](063-entrada-al-tablero.md). Las entradas que definen esas decisiones se mantienen. El "Ir al tablero" del Sorteo confirmado, que esta decisión mantenía, está reemplazado por la [decisión 111](111-el-sorteo-confirmado-muestra-las-zonas.md).
 
 ## Contexto
 
