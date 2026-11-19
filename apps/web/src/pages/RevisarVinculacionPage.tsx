@@ -1,5 +1,6 @@
 import type { CasoDeRevision, ResolverRevision } from '@setpoint/shared';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Aviso } from '../components/Aviso';
 import { Boton } from '../components/Boton';
 import { EncabezadoOrganizador } from '../components/EncabezadoOrganizador';
 import { Migas } from '../components/Migas';
@@ -92,7 +93,7 @@ function Revisar({ sesion }: { sesion: Sesion }) {
   const noEncontrado = caso.error instanceof ErrorApi && caso.error.codigo === 'CASO_NO_ENCONTRADO';
 
   return (
-    <div className="min-h-screen bg-papel text-noche">
+    <div className="min-h-screen bg-niebla text-noche">
       <EncabezadoOrganizador
         organizacion={organizacion}
         navegacion={navegacionOrganizador}
@@ -101,7 +102,7 @@ function Revisar({ sesion }: { sesion: Sesion }) {
         alSalir={cerrarSesion}
       />
 
-      <div className="flex flex-col gap-[7px] px-7 pt-6 pb-5">
+      <div className="flex flex-col gap-[7px] px-4 md:px-7 pt-6 pb-5">
         <Migas anteriores={[{ etiqueta: 'Padrón', ruta: '/padron' }]}>Revisar vinculación</Migas>
         <div className="flex flex-wrap items-center gap-3">
           <h1 className="text-[28px] font-display font-semibold tracking-[-0.02em]">Revisar vinculación</h1>
@@ -110,7 +111,7 @@ function Revisar({ sesion }: { sesion: Sesion }) {
         {caso.data && <p className="text-[15px] text-pizarra-500">{subtitulo(caso.data)}</p>}
       </div>
 
-      <div className="grid items-start gap-[22px] px-7 pb-7 lg:grid-cols-[minmax(0,1fr)_320px]">
+      <div className="grid items-start gap-[22px] px-4 md:px-7 pb-7 lg:grid-cols-[minmax(0,1fr)_320px]">
         <main className="flex min-w-0 flex-col gap-[18px]">
           {caso.isPending && <Esqueleto forma="pagina" />}
           {caso.error && !sesionInvalida && (
@@ -125,7 +126,7 @@ function Revisar({ sesion }: { sesion: Sesion }) {
           {desvinculado ? (
             <LinkDespuesDeDesvincular organizacion={organizacion} jugador={generar.data} fallo={generar.isError} />
           ) : resuelto ? (
-            <section className="flex flex-col items-start gap-3 rounded-[16px] border border-linea px-6 py-[22px]">
+            <section className="flex flex-col items-start gap-3 rounded-[16px] border border-linea bg-papel px-6 py-[22px]">
               <h2 className="text-xl font-semibold tracking-[-0.02em]">Listo, no queda nada para revisar</h2>
               <p className="text-[15px] text-pizarra-500">Las vinculaciones nuevas se siguen guardando solas.</p>
               <Boton onClick={() => navegar('/padron')}>Volver al padrón</Boton>
@@ -139,9 +140,7 @@ function Revisar({ sesion }: { sesion: Sesion }) {
                   <CasoReclamo caso={caso.data} enviando={resolver.isPending} alResolver={alResolver} />
                 )}
                 {resolver.error && (
-                  <p role="alert" className="rounded-control bg-niebla px-3.5 py-3 text-[15px] font-medium text-pizarra-700">
-                    {mensajeDeError(resolver.error)}
-                  </p>
+                  <Aviso>{mensajeDeError(resolver.error)}</Aviso>
                 )}
               </>
             )

@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { Boton } from '../components/Boton';
 import { EncabezadoOrganizador } from '../components/EncabezadoOrganizador';
-import { Tarjeta } from '../components/Tarjeta';
 import { leerSesion, type Sesion } from '../features/auth/sesion';
 import { useCerrarSesion } from '../features/auth/useCerrarSesion';
 import { useSesionInvalida } from '../features/auth/useSesionInvalida';
@@ -57,9 +56,9 @@ function CargarCircuito({ sesion }: { sesion: Sesion }) {
   if (abierto && data) return <EditorCircuito sesion={sesion} inicial={data} />;
 
   return (
-    <div className="min-h-screen bg-papel text-noche">
+    <div className="min-h-screen bg-niebla text-noche">
       <Encabezado sesion={sesion} organizacion={sesion.organizacion.nombre} />
-      <div className="flex flex-col items-start gap-3 px-7 pt-[26px]">
+      <div className="flex flex-col items-start gap-3 px-4 md:px-7 pt-[26px]">
         {error && !sesionInvalida ? (
           <>
             <p className="text-[15px] text-pizarra-500">No pudimos cargar tu circuito.</p>
@@ -91,10 +90,10 @@ function EditorCircuito({ sesion, inicial }: { sesion: Sesion; inicial: Circuito
   const { usaRanking } = circuito;
 
   return (
-    <div className="min-h-screen bg-papel text-noche">
+    <div className="min-h-screen bg-niebla text-noche">
       <Encabezado sesion={sesion} organizacion={circuito.nombre || sesion.organizacion.nombre} />
 
-      <div className="flex flex-wrap items-end justify-between gap-6 px-7 pt-[26px] pb-5">
+      <div className="flex flex-wrap items-end justify-between gap-6 px-4 md:px-7 pt-[26px] pb-5">
         <div className="flex flex-col gap-[7px]">
           <h1 className="text-[28px] font-display font-semibold tracking-[-0.02em]">Tu circuito</h1>
           <p className="text-[15px] text-pizarra-500">
@@ -106,7 +105,7 @@ function EditorCircuito({ sesion, inicial }: { sesion: Sesion; inicial: Circuito
         </span>
       </div>
 
-      <main className="grid items-start gap-[22px] px-7 pb-7 lg:grid-cols-[minmax(0,1fr)_360px]">
+      <main className="grid items-start gap-[22px] px-4 md:px-7 pb-7 lg:grid-cols-[minmax(0,1fr)_360px]">
         <div className="flex flex-col gap-4">
           <SeccionQuienesSon
             nombre={circuito.nombre}
@@ -145,13 +144,14 @@ function EditorCircuito({ sesion, inicial }: { sesion: Sesion; inicial: Circuito
           />
 
           {usaRanking && (
-            <Tarjeta className="flex flex-col gap-[9px] bg-niebla p-[18px]">
+            // Sin Tarjeta: su bg-papel le gana a bg-niebla.
+            <div className="flex flex-col gap-[9px] rounded-tarjeta border border-linea bg-niebla p-[18px]">
               <h2 className="text-sm font-semibold">¿Solo querés probar?</h2>
               <p className="text-sm leading-normal text-pizarra-500">
                 Apagá el ranking anual y creá un torneo suelto. Al terminar vas a tener la tabla de posiciones de ese torneo, sin
                 acumular puntos.
               </p>
-            </Tarjeta>
+            </div>
           )}
 
           <div className="flex flex-col gap-2.5">

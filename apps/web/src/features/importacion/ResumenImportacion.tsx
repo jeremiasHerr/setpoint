@@ -23,7 +23,7 @@ export function ResumenImportacion({ conteos, categoria, casilleros, jugadores }
         <TarjetaConteo numero={conteos.nuevos} titulo="son nuevos" detalle={`se dan de alta en ${categoria ?? 'la categoría'}`} />
         {paraRevisar > 0 ? (
           // Lo que hay que decidir no venció nada: borde noche, no rojo (design.md §3, decisión 099).
-          <div className="flex items-baseline gap-3 rounded-tarjeta border-[1.5px] border-noche px-[18px] py-4">
+          <div className="flex items-baseline gap-3 rounded-tarjeta border-[1.5px] border-noche bg-papel px-[18px] py-4">
             <Numero className="text-[30px] font-medium tracking-[-0.03em]">{paraRevisar}</Numero>
             <div className="flex flex-col gap-0.5">
               <span className="text-[15px] font-semibold">
@@ -37,7 +37,7 @@ export function ResumenImportacion({ conteos, categoria, casilleros, jugadores }
         )}
       </div>
 
-      <div className="flex flex-col gap-[9px] rounded-tarjeta border border-linea px-[18px] py-4">
+      <div className="flex flex-col gap-[9px] rounded-tarjeta border border-linea bg-papel px-[18px] py-4">
         <h2 className="text-[15px] font-semibold">Los casilleros quedaron así</h2>
         <div className="flex flex-wrap items-center gap-2">
           {casilleros.map((c) => (
@@ -57,7 +57,7 @@ export function ResumenImportacion({ conteos, categoria, casilleros, jugadores }
 
 function TarjetaConteo({ numero, titulo, detalle }: { numero: number; titulo: string; detalle: string }) {
   return (
-    <div className="flex items-baseline gap-3 rounded-tarjeta border border-linea px-[18px] py-4">
+    <div className="flex items-baseline gap-3 rounded-tarjeta border border-linea bg-papel px-[18px] py-4">
       <Numero className="text-[30px] font-medium tracking-[-0.03em]">{numero}</Numero>
       <div className="flex flex-col gap-0.5">
         <span className="text-[15px] font-semibold">{titulo}</span>

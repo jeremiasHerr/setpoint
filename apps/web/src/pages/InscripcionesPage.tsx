@@ -2,6 +2,7 @@ import type { InscripcionesDelTorneo } from '@setpoint/shared';
 import { useState, type ReactNode } from 'react';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Boton } from '../components/Boton';
+import { Chip } from '../components/Chip';
 import { Confirmacion } from '../components/Confirmacion';
 import { Numero } from '../components/Numero';
 import { leerSesion, type Sesion } from '../features/auth/sesion';
@@ -45,9 +46,9 @@ function CargarInscripciones({ sesion, id }: { sesion: Sesion; id: number }) {
   const noExiste = inscripciones.error?.message === 'TORNEO_NO_ENCONTRADO';
 
   return (
-    <div className="min-h-screen bg-papel text-noche">
+    <div className="min-h-screen bg-niebla text-noche">
       <EncabezadoDelTorneo sesion={sesion} torneoId={id} actual="inscripciones" />
-      <div className="flex flex-col items-start gap-3 px-7 pt-[26px]">
+      <div className="flex flex-col items-start gap-3 px-4 md:px-7 pt-[26px]">
         {noExiste ? (
           <>
             <p className="text-[15px] text-pizarra-500">No encontramos ese torneo.</p>
@@ -184,22 +185,6 @@ function textoDeError(error: Error): ReactNode {
   }
 }
 
-function Pestana({ activa, onClick, children }: { activa: boolean; onClick: () => void; children: ReactNode }) {
-  return (
-    <button
-      type="button"
-      role="tab"
-      aria-selected={activa}
-      onClick={onClick}
-      className={`flex h-9 items-center gap-1.5 rounded-[9px] border px-[15px] text-sm ${
-        activa ? 'border-noche bg-noche font-semibold text-white' : 'border-linea font-medium text-pizarra-700 hover:bg-niebla'
-      }`}
-    >
-      {children}
-    </button>
-  );
-}
-
 type Pestana = 'confirmados' | 'reservando' | 'espera' | 'bajas' | 'solicitudes';
 
 // Si tiene apellido parecido a lo que se busca. Sin búsqueda, todos.
@@ -231,26 +216,26 @@ function Inscripciones({ sesion, datos }: { sesion: Sesion; datos: Inscripciones
   const sinLugares = datos.libres === 0;
 
   return (
-    <div className="flex min-h-screen flex-col bg-papel text-noche">
+    <div className="flex min-h-screen flex-col bg-niebla text-noche">
       <EncabezadoDelTorneo sesion={sesion} torneoId={datos.torneoId} actual="inscripciones" />
 
-      <div className="flex flex-wrap items-end justify-between gap-6 px-7 pt-[26px] pb-5">
+      <div className="flex flex-wrap items-end justify-between gap-6 px-4 md:px-7 pt-[26px] pb-5">
         <div className="flex flex-col gap-[7px]">
           <h1 className="text-[28px] font-display font-semibold tracking-[-0.02em]">Inscripciones</h1>
           <p className="text-[15px] text-pizarra-500">{bajada(datos)}</p>
         </div>
 
-        <div className="flex flex-col items-end gap-1.5">
-          <div className="flex flex-wrap gap-[9px]">
+        <div className="flex w-full flex-col gap-1.5 sm:w-auto sm:items-end">
+          <div className="flex w-full flex-col-reverse gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:gap-[9px]">
             {datos.sePuedeModificar && (
-              <Boton onClick={() => setAMano(true)} disabled={sinLugares || aMano} className="text-sm">
+              <Boton onClick={() => setAMano(true)} disabled={sinLugares || aMano} className="w-full text-sm sm:w-auto">
                 Inscribir a mano
               </Boton>
             )}
             {datos.estado === 'publicado' && (
               <Boton
                 variante="organizador"
-                className="font-semibold"
+                className="w-full font-semibold sm:w-auto"
                 disabled={!datos.alcanzanParaLasZonas}
                 aria-haspopup="dialog"
                 onClick={() => setCerrando(true)}
@@ -259,11 +244,15 @@ function Inscripciones({ sesion, datos }: { sesion: Sesion; datos: Inscripciones
               </Boton>
             )}
             {datos.estado === 'inscripciones_cerradas' && !datos.sorteoConfirmado && (
-              <Boton variante="organizador" className="font-semibold" onClick={irAlSorteo}>
+              <Boton variante="organizador" className="w-full font-semibold sm:w-auto" onClick={irAlSorteo}>
                 Sortear zonas
               </Boton>
             )}
-            {datos.sorteoConfirmado && <Boton onClick={irAlSorteo}>Ver zonas</Boton>}
+            {datos.sorteoConfirmado && (
+              <Boton onClick={irAlSorteo} className="w-full sm:w-auto">
+                Ver zonas
+              </Boton>
+            )}
           </div>
           {datos.sePuedeModificar && sinLugares && (
             <p className="text-[13px] text-pizarra-500">No quedan lugares para inscribir a mano.</p>
@@ -271,7 +260,7 @@ function Inscripciones({ sesion, datos }: { sesion: Sesion; datos: Inscripciones
         </div>
       </div>
 
-      <main className="flex flex-col gap-[22px] px-7 pb-7">
+      <main className="flex flex-col gap-[22px] px-4 md:px-7 pb-7">
         <section className="flex flex-col gap-3">
           <BarraDeLugares
             cupo={datos.cupo}
@@ -288,28 +277,28 @@ function Inscripciones({ sesion, datos }: { sesion: Sesion; datos: Inscripciones
         <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_320px]">
           <section className="flex min-w-0 flex-col gap-3">
             <div className="flex flex-wrap items-center gap-1.5">
-              <div role="tablist" aria-label="Inscripciones" className="flex flex-wrap items-center gap-1.5">
-                <Pestana activa={pestana === 'confirmados'} onClick={() => setPestana('confirmados')}>
+              <div role="group" aria-label="Qué inscripciones ver" className="flex flex-wrap items-center gap-1.5">
+                <Chip activo={pestana === 'confirmados'} onClick={() => setPestana('confirmados')} className="gap-1.5">
                   Confirmados <Numero>{pagados}</Numero>
-                </Pestana>
-                <Pestana activa={pestana === 'reservando'} onClick={() => setPestana('reservando')}>
+                </Chip>
+                <Chip activo={pestana === 'reservando'} onClick={() => setPestana('reservando')} className="gap-1.5">
                   Reservando <Numero>{reservando}</Numero>
-                </Pestana>
+                </Chip>
                 {conAprobacion && (
-                  <Pestana activa={pestana === 'solicitudes'} onClick={() => setPestana('solicitudes')}>
+                  <Chip activo={pestana === 'solicitudes'} onClick={() => setPestana('solicitudes')} className="gap-1.5">
                     Solicitudes <Numero>{datos.solicitudes.length}</Numero>
-                  </Pestana>
+                  </Chip>
                 )}
                 {datos.tieneListaEspera && (
-                  <Pestana activa={pestana === 'espera'} onClick={() => setPestana('espera')}>
+                  <Chip activo={pestana === 'espera'} onClick={() => setPestana('espera')} className="gap-1.5">
                     Lista de espera <Numero>{datos.listaDeEspera.length}</Numero>
-                  </Pestana>
+                  </Chip>
                 )}
-                <Pestana activa={pestana === 'bajas'} onClick={() => setPestana('bajas')}>
+                <Chip activo={pestana === 'bajas'} onClick={() => setPestana('bajas')} className="gap-1.5">
                   Bajas <Numero>{datos.bajas.length}</Numero>
-                </Pestana>
+                </Chip>
               </div>
-              <label className="ml-auto flex h-9 items-center gap-2 rounded-[9px] border border-linea px-[13px] text-sm text-pizarra-500 focus-within:border-noche">
+              <label className="flex h-[34px] w-full items-center gap-2 rounded-control border border-linea bg-papel px-[13px] text-sm text-pizarra-500 focus-within:border-noche sm:ml-auto sm:w-auto">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" aria-hidden>
                   <circle cx="11" cy="11" r="6.5" />
                   <path d="M16 16l4.5 4.5" />
@@ -321,7 +310,7 @@ function Inscripciones({ sesion, datos }: { sesion: Sesion; datos: Inscripciones
                   autoComplete="off"
                   value={busqueda}
                   onChange={(e) => setBusqueda(e.target.value)}
-                  className="w-40 bg-transparent text-noche outline-none placeholder:text-pizarra-500"
+                  className="min-w-0 flex-1 bg-transparent text-noche outline-none placeholder:text-pizarra-500 sm:w-40 sm:flex-none"
                 />
               </label>
             </div>

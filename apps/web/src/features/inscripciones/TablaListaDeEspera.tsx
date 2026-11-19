@@ -10,19 +10,19 @@ type Props = { listaDeEspera: EnListaDeEspera[]; horasReserva: number };
 export function TablaListaDeEspera({ listaDeEspera, horasReserva }: Props) {
   return (
     <Tarjeta className="flex flex-col overflow-hidden">
-      <div className="grid grid-cols-[40px_minmax(0,1fr)_110px] gap-x-1 border-b border-linea bg-niebla px-[18px] py-[11px]">
+      <div className="grid grid-cols-[40px_minmax(0,1fr)_110px] gap-x-1 border-b border-linea bg-niebla px-4 md:px-[18px] py-[11px]">
         <span className="font-mono text-[11px] text-pizarra-500">#</span>
         <span className="text-xs text-pizarra-500">jugador</span>
         <span className="font-mono text-[11px] text-pizarra-500">se anotó</span>
       </div>
       {listaDeEspera.length === 0 ? (
-        <p className="px-[18px] py-4 text-sm text-pizarra-500">No hay nadie esperando un lugar.</p>
+        <p className="px-4 md:px-[18px] py-4 text-sm text-pizarra-500">No hay nadie esperando un lugar.</p>
       ) : (
         <ul>
           {listaDeEspera.map((enEspera) => (
             <li
               key={enEspera.id}
-              className="grid h-14 grid-cols-[40px_minmax(0,1fr)_110px] items-center gap-x-1 border-b border-linea-suave px-[18px] last:border-b-0"
+              className="grid h-14 grid-cols-[40px_minmax(0,1fr)_110px] items-center gap-x-1 border-b border-linea-suave px-4 md:px-[18px] last:border-b-0"
             >
               <Numero className="text-[13px] text-pizarra-500">{enEspera.posicion}</Numero>
               <span className={`truncate text-[15px] ${enEspera.posicion === 1 ? 'font-semibold' : ''}`}>
@@ -33,7 +33,7 @@ export function TablaListaDeEspera({ listaDeEspera, horasReserva }: Props) {
           ))}
         </ul>
       )}
-      <p className="border-t border-linea bg-niebla px-[18px] py-[13px] text-[13px] leading-normal text-pizarra-500">
+      <p className="border-t border-linea bg-niebla px-4 md:px-[18px] py-[13px] text-[13px] leading-normal text-pizarra-500">
         Cuando se libera un lugar, el primero lo tiene reservado <Numero className="text-noche">{horasReserva}</Numero> horas para
         pagar, y le llega un email. Si no paga, pasa al siguiente. La lista termina cuando se confirma el sorteo.
       </p>

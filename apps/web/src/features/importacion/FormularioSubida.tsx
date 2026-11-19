@@ -80,7 +80,7 @@ export function FormularioSubida({ categorias, enviando, error, alSubir }: Props
             />
             <label
               htmlFor="importacion-archivo"
-              className="inline-flex h-10 cursor-pointer items-center rounded-control border border-linea px-4 text-[15px] font-medium peer-focus-visible:outline-2 peer-focus-visible:outline-noche hover:bg-niebla"
+              className="inline-flex h-10 shrink-0 cursor-pointer items-center whitespace-nowrap rounded-control border border-linea px-4 text-[15px] font-medium peer-focus-visible:outline-2 peer-focus-visible:outline-noche hover:bg-niebla"
             >
               {archivos.length > 0 ? 'Elegir otros' : 'Elegir archivos'}
             </label>

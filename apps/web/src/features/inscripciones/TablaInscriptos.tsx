@@ -10,9 +10,8 @@ import { DarDeBaja } from './DarDeBaja';
 import { cuandoVence, nombreDelMedio } from './texto';
 import { useDarDeBaja, useRecordarPago } from './useInscripciones';
 
-// El medio se oculta en pantallas angostas: el estado y la fecha dicen más.
-const COLUMNAS =
-  'grid-cols-[minmax(0,1fr)_96px_104px_116px] md:grid-cols-[minmax(0,1fr)_120px_130px_130px_130px]';
+// En el celular, el estado lo dicen el filtro y el punto: la fecha y el medio van debajo del nombre, y la acción a la derecha.
+const COLUMNAS = 'grid-cols-[minmax(0,1fr)_auto] md:grid-cols-[minmax(0,1fr)_120px_130px_130px_130px]';
 
 type Props = {
   slug: string;
@@ -46,16 +45,16 @@ export function TablaInscriptos({ slug, torneoId, inscripciones, sePuedeDarDeBaj
     <div className="flex flex-col gap-3">
       {recordar.error && <MensajeError>{textoDelError(recordar.error)}</MensajeError>}
       <Tarjeta className="flex flex-col overflow-hidden">
-        <div className={`grid gap-x-1 border-b border-linea bg-niebla px-[18px] py-[11px] ${COLUMNAS}`}>
+        <div className={`grid gap-x-3 border-b border-linea bg-niebla px-4 py-[11px] md:gap-x-1 md:px-[18px] ${COLUMNAS}`}>
           <span className="text-xs text-pizarra-500">jugador</span>
-          <span className="font-mono text-[11px] text-pizarra-500">estado</span>
+          <span className="hidden font-mono text-[11px] text-pizarra-500 md:block">estado</span>
           <span className="hidden font-mono text-[11px] text-pizarra-500 md:block">medio</span>
-          <span className="font-mono text-[11px] text-pizarra-500">fecha</span>
+          <span className="hidden font-mono text-[11px] text-pizarra-500 md:block">fecha</span>
           <span />
         </div>
 
         {inscripciones.length === 0 ? (
-          <p className="px-[18px] py-4 text-sm text-pizarra-500">{vacio}</p>
+          <p className="px-4 py-4 text-sm md:px-[18px] text-pizarra-500">{vacio}</p>
         ) : (
           <ul>
             {inscripciones.map((inscripcion) => {
@@ -65,7 +64,7 @@ export function TablaInscriptos({ slug, torneoId, inscripciones, sePuedeDarDeBaj
               return (
                 <li
                   key={inscripcion.id}
-                  className={`grid min-h-14 items-center gap-x-1 border-b border-linea-suave px-[18px] py-1.5 ${COLUMNAS} ${
+                  className={`grid min-h-14 items-center gap-x-3 border-b border-linea-suave px-4 py-2 md:gap-x-1 md:px-[18px] md:py-1.5 ${COLUMNAS} ${
                     pagada ? '' : 'bg-niebla'
                   }`}
                 >
@@ -75,19 +74,23 @@ export function TablaInscriptos({ slug, torneoId, inscripciones, sePuedeDarDeBaj
                       <span className={`truncate text-[15px] ${pagada ? 'font-medium' : ''}`}>
                         {inscripcion.nombre} {inscripcion.apellido}
                       </span>
+                      <Numero className={`text-[13px] md:hidden ${fecha.urgente ? 'text-rojo-texto' : 'text-pizarra-500'}`}>
+                        {fecha.texto}
+                        {pagada && inscripcion.medio && ` · ${nombreDelMedio[inscripcion.medio]}`}
+                      </Numero>
                       {inscripcion.deLaListaDeEspera && (
                         <span className="truncate font-mono text-xs text-pizarra-500">de la lista de espera</span>
                       )}
                     </div>
                   </div>
-                  <span className={`text-sm ${pagada ? '' : 'text-pizarra-700'}`}>{pagada ? 'Pagada' : 'Reservando'}</span>
+                  <span className={`hidden text-sm md:block ${pagada ? '' : 'text-pizarra-700'}`}>{pagada ? 'Pagada' : 'Reservando'}</span>
                   <Numero className="hidden text-[13px] text-pizarra-500 md:block">
                     {inscripcion.medio ? nombreDelMedio[inscripcion.medio] : '—'}
                   </Numero>
-                  <Numero className={`text-[13px] whitespace-nowrap ${fecha.urgente ? 'text-rojo-texto' : 'text-pizarra-500'}`}>
+                  <Numero className={`hidden text-[13px] whitespace-nowrap md:block ${fecha.urgente ? 'text-rojo-texto' : 'text-pizarra-500'}`}>
                     {fecha.texto}
                   </Numero>
-                  <div className="col-span-full flex justify-end pt-1 md:col-span-1 md:pt-0">
+                  <div className="flex justify-end">
                     {pagada && sePuedeDarDeBaja && (
                       <BotonAccion onClick={() => setEnBaja(inscripcion)} aria-haspopup="dialog">
                         Dar de baja
@@ -113,7 +116,7 @@ export function TablaInscriptos({ slug, torneoId, inscripciones, sePuedeDarDeBaj
           </ul>
         )}
 
-        {pie && <p className="border-t border-linea bg-niebla px-[18px] py-[13px] text-[13px] leading-normal text-pizarra-500">{pie}</p>}
+        {pie && <p className="border-t border-linea bg-niebla px-4 py-[13px] md:px-[18px] text-[13px] leading-normal text-pizarra-500">{pie}</p>}
       </Tarjeta>
 
       <DarDeBaja

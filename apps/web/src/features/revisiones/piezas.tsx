@@ -34,11 +34,16 @@ export function Cifra({ rotulo, valor }: { rotulo: string; valor: ReactNode }) {
   );
 }
 
+// El título empieza con un email, que a 375 no entra en una línea: puede cortar después de la arroba
+// y, si igual no entra, donde haga falta.
+const cortaDespuesDeLaArroba = (texto: string) =>
+  texto.split('@').flatMap((parte, i) => (i === 0 ? [parte] : ['@', <wbr key={i} />, parte]));
+
 // El caso, arriba: qué pasó y qué se decide.
 export function Planteo({ titulo, children }: { titulo: string; children?: ReactNode }) {
   return (
-    <section className="flex flex-col gap-[18px] rounded-[16px] border-2 border-noche px-6 py-[22px]">
-      <h2 className="text-xl leading-[1.3] font-semibold tracking-[-0.02em]">{titulo}</h2>
+    <section className="flex flex-col gap-[18px] rounded-[16px] border-2 border-noche bg-papel px-6 py-[22px]">
+      <h2 className="text-xl leading-[1.3] font-semibold tracking-[-0.02em] break-words">{cortaDespuesDeLaArroba(titulo)}</h2>
       {children}
     </section>
   );
@@ -47,7 +52,7 @@ export function Planteo({ titulo, children }: { titulo: string; children?: React
 // Una salida que no es ninguna de las dos tarjetas: "No es ninguno de los dos", "No sabés de quién es".
 export function OtraSalida({ titulo, children, accion }: { titulo: string; children: ReactNode; accion: ReactNode }) {
   return (
-    <section className="flex flex-wrap items-center justify-between gap-5 rounded-tarjeta border border-linea px-5 py-4">
+    <section className="flex flex-wrap items-center justify-between gap-5 rounded-tarjeta border border-linea bg-papel px-5 py-4">
       <div className="flex min-w-0 flex-1 flex-col gap-1">
         <h3 className="text-[15px] font-semibold">{titulo}</h3>
         <p className="text-sm text-pizarra-500">{children}</p>

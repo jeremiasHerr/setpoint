@@ -12,7 +12,7 @@ export function TorneoPublicado({ slug, convocatoria }: { slug: string; convocat
   const varias = convocatoria.torneos.length > 1;
 
   return (
-    <main className="flex max-w-[720px] flex-col gap-5 px-7 pt-[26px] pb-7">
+    <main className="flex max-w-[720px] flex-col gap-5 px-4 md:px-7 pt-[26px] pb-7">
       <div className="flex flex-col gap-[7px]">
         <h1 className="text-[28px] font-display font-semibold tracking-[-0.02em]">Publicaste {convocatoria.nombre}</h1>
         <p className="text-[15px] text-pizarra-500">

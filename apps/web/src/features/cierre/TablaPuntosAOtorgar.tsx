@@ -40,17 +40,24 @@ function Cambio({ antes, despues, sufijo = '' }: { antes: number | null; despues
 }
 
 // Con ranking: jugador, instancia, casillero, acumulado y puesto. Sin ranking, las posiciones finales.
-const COLUMNAS_CON_RANKING = 'grid-cols-[minmax(0,1fr)_132px_96px] md:grid-cols-[minmax(0,1fr)_150px_130px_88px_120px]';
-const COLUMNAS_SIN_RANKING = 'grid-cols-[minmax(0,1fr)_150px]';
+const COLUMNAS_CON_RANKING = 'grid-cols-[minmax(0,1fr)_auto] md:grid-cols-[minmax(0,1fr)_150px_130px_88px_120px]';
+const COLUMNAS_SIN_RANKING = 'grid-cols-[minmax(0,1fr)_auto] md:grid-cols-[minmax(0,1fr)_150px]';
 
 function Fila({ fila, columnas }: { fila: FilaDelCierre; columnas: string }) {
   const { ranking } = fila;
   return (
-    <div className={`grid h-[54px] items-center gap-x-4 border-b border-linea-suave px-[18px] ${columnas}`}>
-      <span className="truncate text-base font-medium">
-        {fila.nombre} {fila.apellido}
-      </span>
-      <span>
+    <div className={`grid min-h-[54px] items-center gap-x-3 border-b border-linea-suave px-4 py-2 md:h-[54px] md:gap-x-4 md:px-[18px] md:py-0 ${columnas}`}>
+      <div className="flex min-w-0 flex-col items-start gap-1">
+        <span className="max-w-full truncate text-base font-medium">
+          {fila.nombre} {fila.apellido}
+        </span>
+        {ranking && (
+          <span className="md:hidden">
+            <ChipInstancia instancia={fila.instancia} />
+          </span>
+        )}
+      </div>
+      <span className={ranking ? 'hidden md:block' : ''}>
         <ChipInstancia instancia={fila.instancia} />
       </span>
       {ranking && (
@@ -79,7 +86,7 @@ export function TablaPuntosAOtorgar({ cierre }: { cierre: CierreDelTorneo }) {
 
   return (
     <Tarjeta className="overflow-hidden">
-      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-b border-linea px-[18px] py-4">
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-b border-linea px-4 py-4 md:px-[18px]">
         <h2 className="text-[17px] font-semibold">{titulo}</h2>
         <p className="font-mono text-[13px] text-pizarra-500">
           <Numero>{cierre.filas.length}</Numero> jugadores
@@ -87,9 +94,9 @@ export function TablaPuntosAOtorgar({ cierre }: { cierre: CierreDelTorneo }) {
         </p>
       </div>
 
-      <div className={`grid h-[38px] items-center gap-x-4 border-b border-linea bg-niebla px-[18px] ${columnas}`}>
+      <div className={`grid h-[38px] items-center gap-x-3 border-b border-linea bg-niebla px-4 md:gap-x-4 md:px-[18px] ${columnas}`}>
         <span className={rotulo}>jugador</span>
-        <span className={rotulo}>instancia</span>
+        <span className={conRanking ? `hidden md:block ${rotulo}` : rotulo}>instancia</span>
         {conRanking && (
           <>
             <span className={`hidden md:block ${rotulo}`}>reemplaza</span>
@@ -104,7 +111,7 @@ export function TablaPuntosAOtorgar({ cierre }: { cierre: CierreDelTorneo }) {
       ))}
 
       {cierre.filas.length > VISIBLES && (
-        <div className="flex items-center justify-between gap-4 bg-niebla px-[18px] py-[15px]">
+        <div className="flex items-center justify-between gap-4 bg-niebla px-4 py-[15px] md:px-[18px]">
           <span className="font-mono text-[13px] text-pizarra-500">
             mostrando <Numero>{visibles.length}</Numero> de <Numero>{cierre.filas.length}</Numero>
           </span>
