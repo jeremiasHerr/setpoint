@@ -126,9 +126,9 @@ function CargarTorneo({ sesion, id }: { sesion: Sesion; id: number | null }) {
   const noExiste = error?.message === 'TORNEO_NO_ENCONTRADO';
 
   return (
-    <div className="min-h-screen bg-papel text-noche">
+    <div className="min-h-screen bg-niebla text-noche">
       <Encabezado sesion={sesion} organizacion={sesion.organizacion.nombre} />
-      <div className="flex flex-col items-start gap-3 px-7 pt-[26px]">
+      <div className="flex flex-col items-start gap-3 px-4 md:px-7 pt-[26px]">
         {noExiste ? (
           <>
             <p className="text-[15px] text-pizarra-500">No encontramos ese torneo.</p>
@@ -280,7 +280,7 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
 
   if (publicada) {
     return (
-      <div className="min-h-screen bg-papel text-noche">
+      <div className="min-h-screen bg-niebla text-noche">
         <Encabezado sesion={sesion} organizacion={circuito.nombre} />
         <TorneoPublicado slug={slug} convocatoria={publicada} />
       </div>
@@ -288,10 +288,10 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
   }
 
   return (
-    <div className="min-h-screen bg-papel text-noche">
+    <div className="min-h-screen bg-niebla text-noche">
       <Encabezado sesion={sesion} organizacion={circuito.nombre} />
 
-      <div className="flex flex-wrap items-end justify-between gap-6 px-7 pt-[26px] pb-5">
+      <div className="flex flex-wrap items-end justify-between gap-6 px-4 md:px-7 pt-[26px] pb-5">
         <div className="flex flex-col gap-[7px]">
           <Migas anteriores={migas} alIr={(ruta) => void salir(ruta)}>
             {enBorrador ? 'Nuevo torneo' : 'Editar'}
@@ -311,7 +311,7 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
         </span>
       </div>
 
-      <main className="grid items-start gap-[22px] px-7 pb-7 lg:grid-cols-[minmax(0,1fr)_360px]">
+      <main className="grid items-start gap-[22px] px-4 md:px-7 pb-7 lg:grid-cols-[minmax(0,1fr)_360px]">
         <div className="flex flex-col gap-4">
           <SeccionBasico
             nombre={datos.nombre}
