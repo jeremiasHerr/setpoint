@@ -164,7 +164,7 @@ Las marcas de una zona: tres barras de partido jugado y la cuarta, levantada, qu
 - **Sobre claro:** las barras en `noche` y la levantada en `lona`, porque la pelota no se ve sobre papel.
 - **Ícono** (favicon, app): un cuadrado `noche-900` con radio 14/64 y la marca adentro, con la versión sobre noche. En el ícono adaptable de Android la marca va a dos tercios, por el recorte del sistema.
 - **Splash de la app:** fondo `noche-900` y la marca sola, sin recuadro, en la versión sobre noche ([decisión 107](decisiones/107-splash-en-noche.md)).
-- **Con el mouse encima**, el set point recorre la zona: el acento arranca en la primera barra, la levanta y pasa a la siguiente, hasta volver a la última, en un segundo. Responde a una acción, como toda animación fuera del demo de la landing, y con "reducir movimiento" no se mueve.
+- **Al pasar el mouse**, el set point recorre la zona: el acento arranca en la primera barra, la levanta y pasa a la siguiente, hasta volver a la última, en un segundo. Corre completa aunque el mouse se vaya enseguida, y no vuelve a arrancar hasta terminar. Responde a una acción, como toda animación fuera del demo de la landing, y con "reducir movimiento" no se mueve.
 
 En la app es el mismo dibujo, con cuatro `View` para no sumar `react-native-svg` por un logo, y sin la palabra: va al lado del nombre del circuito. La marca de la organización en las páginas públicas de la web es otra cosa: un cuadrado `noche` con un punto `pelota`, al lado de su nombre.
 
