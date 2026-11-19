@@ -24,7 +24,7 @@ export function CierrePage() {
 
 function Marco({ sesion, torneoId, children }: { sesion: Sesion; torneoId: number; children: ReactNode }) {
   return (
-    <div className="min-h-screen bg-papel text-noche">
+    <div className="min-h-screen bg-niebla text-noche">
       <EncabezadoDelTorneo sesion={sesion} torneoId={torneoId} actual="cierre" />
       {children}
     </div>
@@ -49,7 +49,7 @@ function Cierre({ sesion, torneoId }: { sesion: Sesion; torneoId: number }) {
   const codigo = cierre.error?.message ?? '';
   return (
     <Marco sesion={sesion} torneoId={torneoId}>
-      <div className="flex flex-col items-start gap-3 px-7 pt-[34px]">
+      <div className="flex flex-col items-start gap-3 px-4 md:px-7 pt-[34px]">
         {cierre.error && !sesionInvalida ? (
           <>
             <p className="text-[15px] text-pizarra-500">{ERRORES[codigo] ?? 'No pudimos cargar el cierre del torneo.'}</p>
@@ -119,14 +119,14 @@ function VistaDelCierre({ sesion, cierre }: { sesion: Sesion; cierre: CierreDelT
 
   return (
     <Marco sesion={sesion} torneoId={torneoId}>
-      <div className="flex flex-col gap-[7px] px-7 pt-[26px] pb-5">
+      <div className="flex flex-col gap-[7px] px-4 md:px-7 pt-[26px] pb-5">
         <h1 className="text-[28px] font-display font-semibold tracking-[-0.02em]">{cierre.cerrado ? 'Torneo cerrado' : 'Cerrar el torneo'}</h1>
         <p className="text-[15px] text-pizarra-500">
           <Subtitulo cierre={cierre} />
         </p>
       </div>
 
-      <div className="grid items-start gap-[22px] px-7 pb-7 lg:grid-cols-[minmax(0,1fr)_340px]">
+      <div className="grid items-start gap-[22px] px-4 md:px-7 pb-7 lg:grid-cols-[minmax(0,1fr)_340px]">
         <div className="flex min-w-0 flex-col gap-4">
           <div className="grid gap-4 md:grid-cols-2">
             {cierre.campeones.map((campeon) => (
