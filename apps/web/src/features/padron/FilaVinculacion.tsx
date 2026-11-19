@@ -27,7 +27,7 @@ export function FilaVinculacion({ jugador, columnas, seleccionado, slug, organiz
 
   return (
     <div
-      className={`grid h-[58px] items-center gap-x-4 border-b border-linea-suave px-[18px] ${columnas} ${
+      className={`grid min-h-[58px] items-center gap-x-3 border-b border-linea-suave px-4 py-2 md:h-[58px] md:gap-x-4 md:px-[18px] md:py-0 ${columnas} ${
         seleccionado ? 'bg-niebla' : ''
       }`}
     >
@@ -41,8 +41,8 @@ export function FilaVinculacion({ jugador, columnas, seleccionado, slug, organiz
       </span>
 
       <div className="flex min-w-0 flex-col gap-0.5">
-        <div className="flex min-w-0 items-center gap-[9px]">
-          <span className="truncate text-base font-medium">{nombre}</span>
+        <div className="flex min-w-0 flex-wrap items-center gap-x-[9px] gap-y-1 md:flex-nowrap">
+          <span className="max-w-full shrink-0 truncate text-base font-medium md:shrink">{nombre}</span>
           {jugador.revision ? (
             <Link
               to={`/padron/revisar/${jugador.id}`}

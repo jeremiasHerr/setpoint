@@ -111,7 +111,7 @@ function Padron({ sesion }: { sesion: Sesion }) {
   const error = circuito.error ?? padron.error;
 
   return (
-    <div className="min-h-screen bg-papel text-noche">
+    <div className="min-h-screen bg-niebla text-noche">
       <EncabezadoOrganizador
         organizacion={circuito.data?.nombre ?? sesion.organizacion.nombre}
         navegacion={navegacionOrganizador}
@@ -120,7 +120,7 @@ function Padron({ sesion }: { sesion: Sesion }) {
         alSalir={cerrarSesion}
       />
 
-      <div className="flex flex-wrap items-end justify-between gap-6 px-7 pt-[26px] pb-[18px]">
+      <div className="flex flex-wrap items-end justify-between gap-6 px-4 md:px-7 pt-[26px] pb-[18px]">
         <div className="flex flex-col gap-[7px]">
           <h1 className="text-[28px] font-display font-semibold tracking-[-0.02em]">Padrón</h1>
           <p className="text-[15px] text-pizarra-500">
@@ -128,8 +128,8 @@ function Padron({ sesion }: { sesion: Sesion }) {
           </p>
         </div>
         {!cargando && (
-          <div className="flex items-center gap-2.5">
-            <Boton onClick={() => navegar('/padron/importar')}>
+          <div className="flex w-full flex-col-reverse gap-2 sm:w-auto sm:flex-row sm:items-center sm:gap-2.5">
+            <Boton className="w-full whitespace-nowrap sm:w-auto" onClick={() => navegar('/padron/importar')}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="size-[15px]" aria-hidden="true">
                 <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
                 <path d="M7 10l5 5 5-5" />
@@ -137,7 +137,7 @@ function Padron({ sesion }: { sesion: Sesion }) {
               </svg>
               Importar planilla
             </Boton>
-            <Boton variante="organizador" onClick={agregarJugador}>
+            <Boton variante="organizador" className="w-full whitespace-nowrap sm:w-auto" onClick={agregarJugador}>
               <IconoMas className="size-[15px] stroke-[2.2]" />
               Agregar jugador
             </Boton>
@@ -146,7 +146,7 @@ function Padron({ sesion }: { sesion: Sesion }) {
       </div>
 
       {cargando ? (
-        <div className="flex flex-col items-start gap-3 px-7">
+        <div className="flex flex-col items-start gap-3 px-4 md:px-7">
           {error && !sesionInvalida ? (
             <>
               <p className="text-[15px] text-pizarra-500">No pudimos cargar el padrón.</p>
@@ -164,7 +164,7 @@ function Padron({ sesion }: { sesion: Sesion }) {
           )}
         </div>
       ) : (
-        <main className="grid items-start gap-[22px] px-7 pb-7 lg:grid-cols-[minmax(0,1fr)_340px]">
+        <main className="grid items-start gap-[22px] px-4 md:px-7 pb-7 lg:grid-cols-[minmax(0,1fr)_340px]">
           <TablaPadron
             jugadores={padron.data}
             categorias={circuito.data.categorias}
