@@ -35,7 +35,7 @@ Antes del listado, la secuencia operativa completa. Cada paso está cubierto por
 | 25% | Fin de septiembre | F01 a F04 | **Puesta en marcha:** alta de organización, jugadores y torneos |
 | 50% | Mediados de octubre | F05 a F11 | Motor de competencia, consulta pública y app móvil |
 | 75% | Principios de noviembre | F12 a F17 | Inscripciones, pagos, coordinación y cierre |
-| 100% | Mediados de noviembre | F18 a F20 | Estadísticas y funcionalidades asistidas por IA |
+| 100% | Mediados de noviembre | F18 a F20 | Estadísticas, resultados desde los mensajes (IA) y proyecciones |
 
 ---
 
@@ -408,7 +408,7 @@ La organización podrá cargar varios resultados de una sola vez a partir de los
 - Usa la misma arquitectura que F03: lo que pasa los controles (el partido existe, los jugadores son los de esa zona, el marcador es válido) se carga solo; lo dudoso queda para que la organización lo confirme.
 - Si no logra interpretar un mensaje, ese partido queda para carga manual sin bloquear a los demás.
 
-**Estado: condicionada, a confirmar con el profesor.** Desde la devolución del 25% es la candidata a llevar la IA al uso de todos los días, porque cargar resultados es el dolor recurrente real y F03 se usa pocas veces por año. Depende del tiempo: se encara después de terminar F03 y la app móvil ([devolucion-25.md](devolucion-25.md), cambio I).
+**Estado: prioridad alta, con el alcance a confirmar con el profesor.** Es la segunda funcionalidad de IA, desde que las proyecciones (F20) dejaron de contarse como IA ([decisión 117](decisiones/117-las-proyecciones-no-son-ia.md)). Lleva la IA al uso de todos los días, porque cargar resultados es el dolor recurrente real y F03 se usa pocas veces por año ([devolucion-25.md](devolucion-25.md), cambio I).
 
 **Funcionalidad asistida por IA. Entrega: 100%**
 
@@ -424,7 +424,9 @@ Antes y durante el torneo, cada jugador podrá ver cuántos puntos sumaría y qu
 - Muestra la posición estimada en el ranking en cada escenario.
 - Se accede desde la ficha del jugador y desde la vista del torneo.
 
-**Funcionalidad asistida por IA. Entrega: 100%**
+**Entrega: 100%**
+
+**Estado:** la API está (`GET /api/publico/:slug/torneos/:id/proyeccion/:jugadorId`); falta la pantalla. Es una cuenta exacta, sin IA: aplica la tabla de puntos, reemplaza el casillero y vuelve a ordenar el ranking ([decisión 117](decisiones/117-las-proyecciones-no-son-ia.md)).
 
 ---
 
@@ -439,7 +441,7 @@ Antes y durante el torneo, cada jugador podrá ver cuántos puntos sumaría y qu
 
 **Orden de lectura.** La lista se recorre de arriba abajo como la historia de uso del sistema: se da de alta la organización, se cargan los jugadores, se crea el torneo, se juega, se cierra. Si alguna feature no encaja en ese relato, está mal ubicada.
 
-**Crónicas automáticas y fotos: fuera de alcance.** Se descartaron por decisión del grupo. Consecuencia a tener presente: quedan dos funcionalidades asistidas por IA confirmadas (F03 y F20) más una condicionada (F19). La cátedra exige integración significativa de IA; dos sólidas alcanzan, pero conviene no perder más.
+**Crónicas automáticas y fotos: fuera de alcance.** Se descartaron por decisión del grupo. Consecuencia a tener presente: quedan dos funcionalidades asistidas por IA, la importación (F03) y los resultados desde los mensajes (F19). Las proyecciones (F20) no son IA: son una cuenta exacta ([decisión 117](decisiones/117-las-proyecciones-no-son-ia.md)). La cátedra exige integración significativa de IA; dos sólidas alcanzan, pero conviene no perder más.
 
 **Devolución del 25%.** El profesor dijo que la IA no lo convenció y que "lo ideal es que sea todo automático". F03 responde con la importación por excepción y la detección del calendario; si lo que espera es IA en el uso diario, la respuesta es F19. Las preguntas están en [devolucion-25.md](devolucion-25.md) §4.
 

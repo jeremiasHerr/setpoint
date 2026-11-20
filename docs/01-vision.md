@@ -89,6 +89,6 @@ Detalle completo en [07-configurabilidad.md](07-configurabilidad.md).
 | Framework JavaScript en frontend | React |
 | Autenticación de usuarios | JWT, con roles organización y jugador |
 | **App móvil instalable** (obligatoria para grupos de 3) | React Native + Expo, build APK |
-| **Integración de IA significativa** (novedad 2026) | Importación automática por excepción del ranking existente (F03) y proyecciones (F20); resultados desde mensajes (F19), condicionada al tiempo — ver [06-ia.md](06-ia.md) |
+| **Integración de IA significativa** (novedad 2026) | Importación automática por excepción del ranking existente (F03) y resultados desde los mensajes (F19). Las proyecciones (F20) son una cuenta exacta, sin IA ([decisión 117](decisiones/117-las-proyecciones-no-son-ia.md)) — ver [06-ia.md](06-ia.md) |
 | **Entrega dockerizada** (novedad 2026) | `docker-compose` autosuficiente con Postgres local |
 | Necesidad claramente identificada | Problema general de los circuitos amateur, validado con un cliente externo real: POLENTA Team Tenis |

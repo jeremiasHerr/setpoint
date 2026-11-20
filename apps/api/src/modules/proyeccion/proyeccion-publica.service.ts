@@ -10,7 +10,7 @@ import { NO_PUBLICOS } from '../torneos/torneo-publico';
 import { instanciasAlcanzables, proyectar, rondasPorElFormato } from './proyeccion';
 
 // La proyección de un jugador en un torneo (F20), sin login. Todo lo que usa ya es público: el
-// ranking (F09) y los cuadros (F10). No llama a ningún modelo: es una cuenta exacta (decisión 105).
+// ranking (F09) y los cuadros (F10). No llama a ningún modelo: es una cuenta exacta (decisión 117).
 
 const jugador = { select: { id: true, nombre: true, apellido: true } } as const;
 

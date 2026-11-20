@@ -24,7 +24,7 @@ Los circuitos amateur de tenis se organizan con Excel y WhatsApp: el ranking en 
 | [03-flujo-organizacion.md](03-flujo-organizacion.md) | Qué hace la organización desde la web |
 | [04-flujo-jugador.md](04-flujo-jugador.md) | Qué hace el jugador desde la app |
 | [05-pagos.md](05-pagos.md) | Integración con MercadoPago |
-| [06-ia.md](06-ia.md) | Las tres funcionalidades de IA |
+| [06-ia.md](06-ia.md) | Las funcionalidades de IA: la importación de la planilla y los resultados desde los mensajes |
 | [07-configurabilidad.md](07-configurabilidad.md) | Qué se parametriza por organización y qué queda fijo |
 | [08-repositorio.md](08-repositorio.md) | Estructura de carpetas, ramas, tags de entrega y forma de trabajo |
 | [09-setup-inicial.md](09-setup-inicial.md) | Guía paso a paso para inicializar el proyecto |
@@ -71,7 +71,7 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 | 2 | ¿Desde qué instancia paga las canchas la organización? El reglamento dice "fases de Campeonato y Complementaria", la respuesta 9 dice cuartos y la 23 dice octavos | Modelo de sedes | Consultar |
 | 3 | El ranking del PDF tiene 5 casilleros (incluye "Pretemporada"), pero la respuesta 15 menciona 4 torneos + Master. ¿Pretemporada **es** el Master? | Modelo de ranking | Consultar |
 | 4 | ¿Se implementa el cuadro consuelo (la "Complementaria" de POLENTA) completo, o se recorta el alcance para llegar a noviembre? | Alcance del proyecto | **Decidir en grupo** |
-| 5 | ¿El resultado lo carga la organización a mano, o se extrae del mensaje de WhatsApp con IA? Desde la devolución del 25%, F19 es la candidata a "IA en el uso diario", condicionada al tiempo ([devolucion-25.md](devolucion-25.md), cambio I) | Alcance de [06](06-ia.md) | **Preguntar al profesor**, después decidir en grupo |
+| 5 | ¿El resultado lo carga la organización a mano, o se extrae del mensaje de WhatsApp con IA? F19 es la segunda funcionalidad de IA y la de uso diario, con prioridad alta ([decisión 117](decisiones/117-las-proyecciones-no-son-ia.md)); la carga a mano sigue ([devolucion-25.md](devolucion-25.md), cambio I) | Alcance de [06](06-ia.md) | **Confirmar el alcance con el profesor** |
 | 7 | **Cambio de categoría:** si un jugador de Tercera pasa a Segunda, ¿qué pasa con sus puntos de Tercera? ¿Se transfieren, quedan congelados, o el jugador desaparece de esa tabla? | Modelo de ranking | Consultar |
 | 10 | ¿Se implementan las **proyecciones pre-torneo** sugeridas por la cátedra? ("si llegás a semis sumás 50 y pasás al puesto 4") | Alcance | **Decidir en grupo** |
 | 11 | **Política de devolución:** ¿POLENTA devuelve el dinero si alguien se baja después de pagar? ¿Cambia si ya se hizo el sorteo? | Nada: en cada baja la organización anota si corresponde la devolución, y la hace ella por fuera ([decisión 075](decisiones/075-la-devolucion-se-anota.md)). Solo define qué elige POLENTA en la demo | Consultar |
@@ -214,6 +214,7 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 - ~~¿El botón principal puede llevar el texto en blanco, como el logo?~~ **Sí, sobre `lona-texto` y con borde `lona`, en todos los botones principales de la web y de la app** ([decisión 114](decisiones/114-boton-principal-blanco.md), que reemplaza en esto a la [105](decisiones/105-sistema-visual-ultima-luz.md); reemplazada por la [115](decisiones/115-boton-principal-noche.md)). Blanco sobre la lona clara daba 2,4:1, y sobre `lona-texto` da 7,37:1
 - ~~¿De qué color es el botón principal, si el color pasa a los estados?~~ **Del noche de la barra, con texto blanco, en la web y en la app; sobre una superficie noche va dado vuelta, en papel con texto noche** ([decisión 115](decisiones/115-boton-principal-noche.md), que reemplaza a la 114). El verde competía con la columna Inscripción; el ladrillo quedaba cerca del rojo de vencido o pesaba menos que los secundarios, y el azul ya es "con fecha"
 - ~~¿Cómo se separan las tarjetas del fondo y cómo se suma color?~~ **Con el fondo `cemento` debajo de la barra en todas las pantallas del organizador, y las columnas del inicio en el color de su estado: en preparación amarillo, inscripción lona y en juego azul** ([decisión 116](decisiones/116-cemento-y-columnas-por-estado.md)). La niebla casi no se distinguía del papel; el color dice dónde está cada torneo, sin adorno. El bloque del circuito pierde los torneos del calendario, que repetían las columnas, y el modo oscuro queda afuera
+- ~~¿Las proyecciones de ranking (F20) son una funcionalidad de IA?~~ **No: son una cuenta exacta, y la segunda funcionalidad de IA pasa a ser F19, con prioridad alta** ([decisión 117](decisiones/117-las-proyecciones-no-son-ia.md)). Aplicar la tabla de puntos y reemplazar el casillero no necesita un modelo, y una etiqueta forzada empeora lo que el profesor ya criticó; la IA va donde entiende texto libre
 
 ---
 
