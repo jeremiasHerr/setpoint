@@ -1,7 +1,7 @@
 import type { AvanceDelTorneo, Circuito, EstadoTorneo, ResumenConvocatoria, ResumenTorneo } from '@setpoint/shared';
 import { nombreDeRonda } from '../resultados/resultado';
 import { diaConSemana, diaCorto } from '../torneos/texto';
-import type { EtapaDelCircuito, MomentoDeEtapa, TorneosDeInicio } from './tiposDeInicio';
+import type { TorneosDeInicio } from './tiposDeInicio';
 
 // La etiqueta de arriba de cada tarjeta: a qué pertenece el torneo (decisión 094).
 function calendarioDe({ etapa, suelto }: ResumenConvocatoria) {
@@ -10,26 +10,6 @@ function calendarioDe({ etapa, suelto }: ResumenConvocatoria) {
 }
 
 const EN_JUEGO: EstadoTorneo[] = ['zonas_generadas', 'grupos_en_curso', 'eliminatorias'];
-const EN_INSCRIPCION: EstadoTorneo[] = ['publicado', 'inscripciones_cerradas'];
-
-// Lo más adelantado entre sus categorías: si una ya se juega, la convocatoria está en juego.
-function momentoDe({ estado, torneos }: ResumenConvocatoria): MomentoDeEtapa {
-  if (estado === 'borrador') return 'borrador';
-  if (torneos.some((t) => EN_JUEGO.includes(t.estado))) return 'en-juego';
-  if (torneos.some((t) => EN_INSCRIPCION.includes(t.estado))) return 'inscripcion';
-  return 'terminado';
-}
-
-// Cada torneo del calendario con su última edición. Las convocatorias vienen de la más nueva a la más vieja.
-function etapasDelCircuito(convocatorias: ResumenConvocatoria[], circuito: Circuito): EtapaDelCircuito[] {
-  if (!circuito.usaRanking) return [];
-  return circuito.etapas.map((nombre) => {
-    const ultima = convocatorias.find((c) => !c.suelto && c.etapa === nombre);
-    return ultima
-      ? { nombre, edicion: ultima.nombre, momento: momentoDe(ultima) }
-      : { nombre, edicion: nombre, momento: 'sin-edicion' };
-  });
-}
 
 // "Primavera 26 · Tercera y Segunda": el borrador es uno solo aunque tenga varias categorías.
 function nombreDelBorrador({ nombre, torneos }: ResumenConvocatoria) {
@@ -149,7 +129,6 @@ export function aTorneosDeInicio(convocatorias: ResumenConvocatoria[], circuito:
         : [],
     ),
     organizacion: circuito.nombre,
-    etapas: etapasDelCircuito(convocatorias, circuito),
     jugadores: circuito.jugadores,
     categorias: circuito.categorias.length,
     recaudadoEnInscripcionesAbiertas: abiertas.reduce((suma, { convocatoria, torneo }) => suma + torneo.inscriptos * convocatoria.precio, 0),

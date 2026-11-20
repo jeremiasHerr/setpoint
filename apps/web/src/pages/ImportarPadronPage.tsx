@@ -143,7 +143,7 @@ function ImportarPadron({ sesion }: { sesion: Sesion }) {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-niebla text-noche">
+    <div className="flex min-h-screen flex-col bg-cemento text-noche">
       <EncabezadoOrganizador
         organizacion={circuito.data?.nombre ?? sesion.organizacion.nombre}
         navegacion={navegacionOrganizador}

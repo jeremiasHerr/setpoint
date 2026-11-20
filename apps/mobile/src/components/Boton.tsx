@@ -1,9 +1,8 @@
 import { Pressable, StyleSheet, Text, type PressableProps } from 'react-native';
 import { colores, fuentes, medidas, radios } from '../lib/tokens';
 
-// Los mismos nombres que en la web (design.md §6). "organizador" es el noche, que la app también usa
-// para acciones como Ingresar; "principal" es blanco sobre lona-texto, para pagar
-// (decisión 114).
+// Los mismos nombres que en la web (design.md §6). "principal" y "organizador" son el mismo botón:
+// el noche de la barra con el texto blanco (decisión 115). Queda el nombre para no tocar cada pantalla.
 type Variante = 'principal' | 'organizador' | 'secundario';
 
 type Props = Omit<PressableProps, 'style' | 'children'> & {
@@ -42,16 +41,14 @@ const estilos = StyleSheet.create({
   },
   principal: {
     height: medidas.toque,
-    backgroundColor: colores.lonaTexto,
-    borderWidth: 1,
-    borderColor: colores.lona,
+    backgroundColor: colores.noche900,
   },
   principalApretado: {
-    opacity: 0.85,
+    backgroundColor: colores.noche2,
   },
   organizador: {
     height: medidas.toque,
-    backgroundColor: colores.noche,
+    backgroundColor: colores.noche900,
   },
   organizadorApretado: {
     backgroundColor: colores.noche2,

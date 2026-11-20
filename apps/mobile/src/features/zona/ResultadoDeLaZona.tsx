@@ -67,13 +67,12 @@ const estilos = StyleSheet.create({
     color: colores.blanco,
     ...tabular,
   },
+  // Sobre la tarjeta noche, el botón principal va dado vuelta: papel con el texto noche (decisión 115).
   boton: {
     marginTop: 6,
     height: medidas.toque,
     borderRadius: 12,
-    backgroundColor: colores.lonaTexto,
-    borderWidth: 1,
-    borderColor: colores.lona,
+    backgroundColor: colores.papel,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -83,6 +82,6 @@ const estilos = StyleSheet.create({
   textoBoton: {
     fontFamily: fuentes.sans[600],
     fontSize: 17,
-    color: colores.blanco,
+    color: colores.noche900,
   },
 });

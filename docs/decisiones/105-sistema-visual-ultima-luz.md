@@ -1,6 +1,6 @@
 # 105 — Sistema visual: Última luz
 
-**Estado:** aceptada — 18 de noviembre de 2026. Reemplaza la [decisión 090](090-mas-contraste.md), y el dibujo del logo de la [104](104-logo-marcas.md). Reemplazada en el botón principal por la [decisión 114](114-boton-principal-blanco.md): pasa a texto blanco sobre `lona-texto`.
+**Estado:** aceptada — 18 de noviembre de 2026. Reemplaza la [decisión 090](090-mas-contraste.md), y el dibujo del logo de la [104](104-logo-marcas.md). Reemplazada en el botón principal por la [decisión 114](114-boton-principal-blanco.md): pasa a texto blanco sobre `lona-texto`, y después al noche de la barra por la [decisión 115](115-boton-principal-noche.md). El fondo del organizador pasa a `cemento` por la [116](116-cemento-y-columnas-por-estado.md).
 
 ## Contexto
 

@@ -37,7 +37,8 @@ export function InicioConTorneos({ torneos }: { torneos: TorneosDeInicio }) {
       <main className="grid items-start gap-3.5 px-4 pt-6 pb-8 md:grid-cols-2 md:px-7 xl:grid-cols-4">
         <Columna
           titulo="En preparación"
-          marca="border-[1.5px] border-dashed border-pizarra-500 bg-papel"
+          tono="amarillo"
+          marca="border-[1.5px] border-dashed border-amarillo"
           cantidad={borradores.length}
           ayuda="Borradores: todavía no los ve nadie"
           vacia="No hay ninguno a medio armar."
@@ -59,6 +60,7 @@ export function InicioConTorneos({ torneos }: { torneos: TorneosDeInicio }) {
         {/* Primero las que ya cerraron: el sorteo es lo próximo que hay que hacer con ellas. */}
         <Columna
           titulo="Inscripción"
+          tono="lona"
           marca="bg-lona-texto"
           cantidad={paraSortear.length + conInscripcionAbierta.length}
           ayuda="Se cobra desde el link de cada una"
@@ -74,7 +76,8 @@ export function InicioConTorneos({ torneos }: { torneos: TorneosDeInicio }) {
 
         <Columna
           titulo="En juego"
-          marca="bg-noche"
+          tono="azul"
+          marca="bg-azul"
           cantidad={enJuego.length}
           ayuda="Del sorteo al cierre"
           vacia="Cuando confirmes un sorteo, el torneo pasa acá."
@@ -86,6 +89,7 @@ export function InicioConTorneos({ torneos }: { torneos: TorneosDeInicio }) {
 
         <Columna
           titulo="Terminados"
+          tono="neutro"
           marca="bg-pizarra-500"
           cantidad={terminados.length}
           ayuda={torneos.usaRanking ? 'Sus puntos ya están en el ranking' : 'Cada uno con sus posiciones finales'}

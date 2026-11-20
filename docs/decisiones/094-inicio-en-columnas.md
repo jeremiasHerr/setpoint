@@ -1,6 +1,6 @@
 # 094 — El inicio con el circuito arriba y los torneos en columnas
 
-**Estado:** aceptada — 13 de noviembre de 2026
+**Estado:** aceptada — 13 de noviembre de 2026. Reemplazada en parte por la [decisión 116](116-cemento-y-columnas-por-estado.md): el bloque del circuito va sobre el `cemento`, sin franja negra y sin los torneos del calendario
 
 ## Contexto
 
