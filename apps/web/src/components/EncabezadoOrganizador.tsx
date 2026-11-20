@@ -47,7 +47,7 @@ export function EncabezadoOrganizador({ organizacion, navegacion = [], activo, i
 
   return (
     <header
-      className={`relative flex h-[60px] items-center justify-between gap-3 bg-noche px-4 md:gap-6 md:px-7 ${
+      className={`relative flex h-[60px] items-center justify-between gap-3 bg-noche-900 px-4 md:gap-6 md:px-7 ${
         abierto ? 'z-40' : ''
       }`}
     >
@@ -117,7 +117,7 @@ export function EncabezadoOrganizador({ organizacion, navegacion = [], activo, i
             ref={panel}
             id={idPanel}
             aria-label="Menú"
-            className="absolute inset-x-0 top-full z-40 flex flex-col border-t border-borde-noche bg-noche px-4 pt-1.5 pb-3.5 md:hidden"
+            className="absolute inset-x-0 top-full z-40 flex flex-col border-t border-borde-noche bg-noche-900 px-4 pt-1.5 pb-3.5 md:hidden"
           >
             {navegacion.map(({ etiqueta, href }) => {
               const esActivo = etiqueta === activo;

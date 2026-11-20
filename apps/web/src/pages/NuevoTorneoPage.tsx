@@ -126,7 +126,7 @@ function CargarTorneo({ sesion, id }: { sesion: Sesion; id: number | null }) {
   const noExiste = error?.message === 'TORNEO_NO_ENCONTRADO';
 
   return (
-    <div className="min-h-screen bg-niebla text-noche">
+    <div className="min-h-screen bg-cemento text-noche">
       <Encabezado sesion={sesion} organizacion={sesion.organizacion.nombre} />
       <div className="flex flex-col items-start gap-3 px-4 md:px-7 pt-[26px]">
         {noExiste ? (
@@ -280,7 +280,7 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
 
   if (publicada) {
     return (
-      <div className="min-h-screen bg-niebla text-noche">
+      <div className="min-h-screen bg-cemento text-noche">
         <Encabezado sesion={sesion} organizacion={circuito.nombre} />
         <TorneoPublicado slug={slug} convocatoria={publicada} />
       </div>
@@ -288,7 +288,7 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
   }
 
   return (
-    <div className="min-h-screen bg-niebla text-noche">
+    <div className="min-h-screen bg-cemento text-noche">
       <Encabezado sesion={sesion} organizacion={circuito.nombre} />
 
       <div className="flex flex-wrap items-end justify-between gap-6 px-4 md:px-7 pt-[26px] pb-5">

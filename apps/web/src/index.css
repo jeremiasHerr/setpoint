@@ -11,7 +11,7 @@
 
   /* La pizarra: texto secundario, rótulos y texto sobre noche. */
   --color-pizarra-700: #3B4659;
-  --color-pizarra-500: #626D82;
+  --color-pizarra-500: #4A5468;
   --color-pizarra-400: #9AA5B8;
   --color-borde-campo: #878FA1;
 
@@ -19,6 +19,9 @@
   --color-linea-suave: #ECEEF3;
   --color-niebla: #F4F5F8;
   --color-papel: #FFFFFF;
+  /* El cemento: el fondo de las pantallas del organizador, debajo de la barra, y su línea (decisión 116). */
+  --color-cemento: #DFE3EA;
+  --color-linea-cemento: #C3C9D4;
   --color-cal: #E9E2D6;
 
   /* La lona: la acción del jugador, lo ganado y lo que clasifica. La pelota, solo en el logo. */
@@ -31,7 +34,12 @@
   /* Estados: con fecha, vencido y los dos cuadros. */
   --color-azul: #3567D6;
   --color-azul-texto: #2A55BC;
-  --color-azul-fondo: #ECF1FD;
+  --color-azul-fondo: #E5EDFE;
+  --color-azul-borde: #8DAAEC;
+  /* El amarillo: lo que está en preparación (decisión 116). */
+  --color-amarillo: #B7801F;
+  --color-amarillo-fondo: #FDF7E6;
+  --color-amarillo-borde: #E6CF94;
   --color-rojo: #E5484D;
   --color-rojo-texto: #C62A2F;
   --color-rojo-fondo: #FEF6F6;

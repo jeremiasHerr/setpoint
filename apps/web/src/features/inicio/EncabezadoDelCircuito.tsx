@@ -3,18 +3,11 @@ import { Boton } from '../../components/Boton';
 import { IconoMas } from '../../components/IconoMas';
 import { Numero } from '../../components/Numero';
 import { BotonCopiarLink } from './BotonCopiarLink';
-import type { MomentoDeEtapa, TorneosDeInicio } from './tiposDeInicio';
+import type { TorneosDeInicio } from './tiposDeInicio';
 
-const momentos: Record<MomentoDeEtapa, { texto: string; punto: string }> = {
-  'sin-edicion': { texto: 'sin edición todavía', punto: 'border border-pizarra-500' },
-  borrador: { texto: 'en preparación', punto: 'border border-dashed border-pizarra-400' },
-  inscripcion: { texto: 'inscripción', punto: 'bg-lona' },
-  'en-juego': { texto: 'en juego', punto: 'bg-papel' },
-  terminado: { texto: 'terminado', punto: 'bg-pizarra-500' },
-};
-
-// La franja noche de arriba del inicio: de quién son los torneos de abajo (decisión 094). Con
-// ranking, cada torneo del calendario con su última edición; y las cifras del circuito.
+// Arriba del inicio: de quién son los torneos de abajo (decisión 094), con las cifras del circuito.
+// Va sobre el mismo cemento que las columnas, sin una franja propia, y sin los torneos del calendario:
+// repetían lo que ya dicen las columnas (decisión 116).
 export function EncabezadoDelCircuito({ torneos }: { torneos: TorneosDeInicio }) {
   const navegar = useNavigate();
   const cifras = [
@@ -27,47 +20,27 @@ export function EncabezadoDelCircuito({ torneos }: { torneos: TorneosDeInicio })
   ];
 
   return (
-    <section className="bg-noche px-4 pb-7 md:px-7">
-      <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-6 border-t border-borde-noche pt-5">
+    <section className="px-4 pt-6 md:px-7">
+      <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-6">
         <div className="flex min-w-0 flex-col gap-2">
-          <span className="font-mono text-xs text-pizarra-400">tu circuito</span>
-          <h1 className="text-[32px] leading-[1.05] font-display font-semibold tracking-[-0.02em] text-white">{torneos.organizacion}</h1>
-          {torneos.etapas.length > 0 ? (
-            <ul aria-label="Torneos del calendario" className="flex flex-wrap gap-1.5 pt-1">
-              {torneos.etapas.map(({ nombre, edicion, momento }) => (
-                <li
-                  key={nombre}
-                  className="flex h-[30px] items-center gap-[7px] rounded-full border border-borde-noche px-[11px] text-[13px] text-white"
-                >
-                  <span className={`size-[7px] shrink-0 rounded-full ${momentos[momento].punto}`} />
-                  {edicion}
-                  <span className="text-pizarra-400">· {momentos[momento].texto}</span>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            !torneos.usaRanking && (
-              <p className="text-sm text-pizarra-400">Sin ranking anual: cada torneo termina con su propia tabla de posiciones.</p>
-            )
+          <span className="font-mono text-xs text-pizarra-500">tu circuito</span>
+          <h1 className="text-[32px] leading-[1.05] font-display font-semibold tracking-[-0.02em] text-noche">{torneos.organizacion}</h1>
+          {!torneos.usaRanking && (
+            <p className="text-sm text-pizarra-500">Sin ranking anual: cada torneo termina con su propia tabla de posiciones.</p>
           )}
         </div>
 
         <div className="flex flex-wrap items-end gap-x-7 gap-y-4">
           {cifras.map(({ rotulo, valor }) => (
             <div key={rotulo} className="flex flex-col gap-0.5">
-              <span className="text-[13px] text-pizarra-400">{rotulo}</span>
-              <Numero className={`text-[26px] leading-tight font-medium text-white`}>{valor}</Numero>
+              <span className="text-[13px] text-pizarra-500">{rotulo}</span>
+              <Numero className="text-[26px] leading-tight font-medium text-noche">{valor}</Numero>
             </div>
           ))}
           <div className="flex flex-wrap gap-2.5">
             {torneos.usaRanking && (
               // El enlace del ranking para el grupo, que hoy recibe la planilla por mensaje (F09).
-              <BotonCopiarLink
-                ruta="/ranking"
-                variante="organizador"
-                texto="Copiar el link del ranking"
-                className="border border-borde-noche text-sm"
-              />
+              <BotonCopiarLink ruta="/ranking" texto="Copiar el link del ranking" className="text-sm" />
             )}
             <Boton variante="principal" className="text-sm font-semibold" onClick={() => navegar('/torneos/nuevo')}>
               <IconoMas className="size-[13px] stroke-[2.6]" />

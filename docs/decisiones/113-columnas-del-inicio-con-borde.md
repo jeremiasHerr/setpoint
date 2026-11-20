@@ -1,6 +1,6 @@
 # 113 — El inicio pasa a niebla, con las columnas en borde
 
-**Estado:** aceptada — 19 de noviembre de 2026.
+**Estado:** aceptada — 19 de noviembre de 2026. Reemplazada en parte por la [decisión 116](116-cemento-y-columnas-por-estado.md): el fondo pasa a `cemento` y las columnas llevan el color de su estado.
 
 ## Contexto
 

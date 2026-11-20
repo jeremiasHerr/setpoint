@@ -93,7 +93,7 @@ function Revisar({ sesion }: { sesion: Sesion }) {
   const noEncontrado = caso.error instanceof ErrorApi && caso.error.codigo === 'CASO_NO_ENCONTRADO';
 
   return (
-    <div className="min-h-screen bg-niebla text-noche">
+    <div className="min-h-screen bg-cemento text-noche">
       <EncabezadoOrganizador
         organizacion={organizacion}
         navegacion={navegacionOrganizador}

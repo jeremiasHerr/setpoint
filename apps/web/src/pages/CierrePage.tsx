@@ -24,7 +24,7 @@ export function CierrePage() {
 
 function Marco({ sesion, torneoId, children }: { sesion: Sesion; torneoId: number; children: ReactNode }) {
   return (
-    <div className="min-h-screen bg-niebla text-noche">
+    <div className="min-h-screen bg-cemento text-noche">
       <EncabezadoDelTorneo sesion={sesion} torneoId={torneoId} actual="cierre" />
       {children}
     </div>

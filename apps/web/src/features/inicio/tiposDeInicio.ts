@@ -60,16 +60,6 @@ export type Aviso =
   | { tipo: 'partidos-vencidos'; torneoId: number; categoria: string; partidos: number }
   | { tipo: 'pocos-inscriptos'; torneo: string; pagaron: number; cupo: number; cierraEn: string };
 
-// En qué anda cada torneo del calendario, según su última edición.
-export type MomentoDeEtapa = 'sin-edicion' | 'borrador' | 'inscripcion' | 'en-juego' | 'terminado';
-
-export type EtapaDelCircuito = {
-  nombre: string;
-  // La última edición ("Primavera 26"), o el torneo del calendario solo si todavía no tuvo.
-  edicion: string;
-  momento: MomentoDeEtapa;
-};
-
 export type TorneosDeInicio = {
   borradores: TorneoEnBorrador[];
   enJuego: TorneoEnJuego[];
@@ -79,8 +69,6 @@ export type TorneosDeInicio = {
   terminados: TorneoTerminado[];
   avisos: Aviso[];
   organizacion: string;
-  // Los torneos del calendario, en su orden. Vacío si el circuito no lleva ranking.
-  etapas: EtapaDelCircuito[];
   jugadores: number;
   categorias: number;
   recaudadoEnInscripcionesAbiertas: number;

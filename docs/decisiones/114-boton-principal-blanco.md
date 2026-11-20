@@ -1,6 +1,6 @@
 # 114 — El botón principal lleva el texto en blanco, sobre lona-texto
 
-**Estado:** aceptada — 19 de noviembre de 2026. Reemplaza, en el botón principal, el texto `noche-900` sobre `lona` de la [decisión 105](105-sistema-visual-ultima-luz.md).
+**Estado:** reemplazada por la [decisión 115](115-boton-principal-noche.md) — 19 de noviembre de 2026. Reemplazaba, en el botón principal, el texto `noche-900` sobre `lona` de la [decisión 105](105-sistema-visual-ultima-luz.md).
 
 ## Contexto
 

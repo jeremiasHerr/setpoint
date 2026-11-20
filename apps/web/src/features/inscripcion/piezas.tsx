@@ -27,7 +27,7 @@ export function BotonPrincipal({ children, ...props }: React.ButtonHTMLAttribute
   return (
     <button
       type="button"
-      className="flex h-14 w-full items-center justify-center gap-2.5 rounded-[12px] border border-lona bg-lona-texto text-white text-[17px] font-semibold disabled:opacity-40"
+      className="flex h-14 w-full items-center justify-center gap-2.5 rounded-[12px] bg-noche-900 text-white text-[17px] font-semibold enabled:hover:bg-pizarra-700 disabled:opacity-40"
       {...props}
     >
       {children}

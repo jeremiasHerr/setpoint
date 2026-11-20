@@ -90,7 +90,7 @@ function CargarSorteo({ sesion, id }: { sesion: Sesion; id: number }) {
   const noExiste = sorteo.error?.message === 'TORNEO_NO_ENCONTRADO';
 
   return (
-    <div className="min-h-screen bg-niebla text-noche">
+    <div className="min-h-screen bg-cemento text-noche">
       <EncabezadoDelTorneo sesion={sesion} torneoId={id} actual="zonas" />
       <div className="flex flex-col items-start gap-3 px-4 md:px-7 pt-[26px]">
         {noExiste ? (
@@ -313,7 +313,7 @@ function SorteoDeZonas({ sesion, sorteo }: { sesion: Sesion; sorteo: Sorteo }) {
   const errorAlPublicar = cargar.error ?? confirmar.error;
 
   return (
-    <div className="flex min-h-screen flex-col bg-niebla text-noche">
+    <div className="flex min-h-screen flex-col bg-cemento text-noche">
       <EncabezadoDelTorneo sesion={sesion} torneoId={sorteo.torneoId} actual="zonas" />
 
       <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-4 px-4 md:px-7 pt-[26px] pb-5">

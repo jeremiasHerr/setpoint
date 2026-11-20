@@ -2,13 +2,14 @@ import type { ButtonHTMLAttributes } from 'react';
 
 type Variante = 'principal' | 'organizador' | 'secundario';
 
-// La lona es la acción del jugador; la noche, la del organizador; el secundario va en papel con
-// borde (design.md §6). Con el mouse, la lona se oscurece, la noche se aclara a pizarra y el
-// secundario toma la línea suave. Deshabilitados, no reaccionan.
+// El principal es el noche de la barra con el texto blanco: el color queda para los estados
+// (decisión 115). "organizador" es el mismo botón; queda el nombre para no tocar cada pantalla. El
+// secundario va en papel con borde. Con el mouse, el noche se aclara a pizarra y el secundario toma
+// la línea suave. Deshabilitados, no reaccionan.
+const principal = 'bg-noche-900 text-white enabled:hover:bg-pizarra-700';
 const estilos: Record<Variante, string> = {
-  // Blanco sobre lona-texto, con borde lona (decisión 114).
-  principal: 'border border-lona bg-lona-texto text-white enabled:hover:brightness-125',
-  organizador: 'bg-noche text-white enabled:hover:bg-pizarra-700',
+  principal,
+  organizador: principal,
   secundario: 'border border-linea bg-papel text-noche enabled:hover:bg-linea-suave',
 };
 
