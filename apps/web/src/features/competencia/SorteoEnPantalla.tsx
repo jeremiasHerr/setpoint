@@ -151,7 +151,7 @@ function Revelacion({ zonas, cantidadGrupos, alVolverASortear, alCerrar }: Props
               <button
                 type="button"
                 onClick={alCerrar}
-                className="inline-flex h-12 items-center rounded-control border border-lona-borde bg-lona text-noche-900 px-5 text-[15px] font-semibold"
+                className="inline-flex h-12 items-center rounded-control border border-lona bg-lona-texto px-5 text-[15px] font-semibold text-white hover:brightness-125"
               >
                 Listo, revisar y confirmar
               </button>

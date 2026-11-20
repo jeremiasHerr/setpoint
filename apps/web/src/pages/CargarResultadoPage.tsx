@@ -42,7 +42,7 @@ function Marco({ sesion, torneoId, children }: { sesion: Sesion; torneoId: numbe
   return (
     <div className="min-h-screen bg-niebla text-noche">
       <EncabezadoDelTorneo sesion={sesion} torneoId={torneoId} actual="resultados" />
-      <div className="flex justify-center px-4 pt-6 pb-10 sm:px-7 sm:pt-[34px]">
+      <div className="flex justify-center px-4 pt-6 pb-10 sm:pt-[34px] md:px-7">
         <div className="flex w-full max-w-[1240px] flex-col gap-4">{children}</div>
       </div>
     </div>

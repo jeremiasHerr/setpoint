@@ -68,7 +68,7 @@ export function EstadoInscripcion({ torneo, perfil, inscripcion, email }: Props)
         <Monto precio={torneo.precio} />
         <Link
           to={`/c/${torneo.organizacion.slug}/inscripciones/${inscripcion.id}`}
-          className="flex h-14 items-center justify-center rounded-[12px] border border-lona-borde bg-lona text-noche-900 text-[17px] font-semibold"
+          className="flex h-14 items-center justify-center rounded-[12px] border border-lona bg-lona-texto text-white text-[17px] font-semibold"
         >
           Seguir con el pago
         </Link>

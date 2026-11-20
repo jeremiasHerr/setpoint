@@ -13,7 +13,8 @@ const rotulo = 'font-mono text-[11px] text-pizarra-500';
 // como en el tablero y en Mi zona. Cada nombre lleva a la ficha del jugador (decisión 074), que
 // vuelve a las zonas (decisión 102). Debajo, los partidos de la zona con su resultado o su fecha.
 function TablaDeZona({ zona, slug, vuelta }: { zona: ZonaEnVivo; slug: string; vuelta: VueltaDeLaFicha }) {
-  const grilla = 'grid grid-cols-[minmax(0,1fr)_36px_52px_64px] items-center';
+  // En el celular las columnas de números se angostan para dejarle el lugar al nombre.
+  const grilla = 'grid grid-cols-[minmax(0,1fr)_28px_40px_56px] items-center sm:grid-cols-[minmax(0,1fr)_36px_52px_64px]';
   return (
     <Tarjeta className="overflow-hidden">
       <div className="flex items-center justify-between border-b border-linea px-4 py-3">
@@ -32,14 +33,15 @@ function TablaDeZona({ zona, slug, vuelta }: { zona: ZonaEnVivo; slug: string; v
       {zona.filas.map((fila) => {
         const clasifica = fila.destino === 'campeonato';
         return (
-          <div key={fila.jugadorId} className={`${grilla} h-[46px] border-b border-linea-suave`}>
+          <div key={fila.jugadorId} className={`${grilla} min-h-[46px] border-b border-linea-suave py-1`}>
             <div className="flex min-w-0 items-center gap-2.5 px-4">
               <Numero className={`text-xs ${clasifica ? 'text-pizarra-500' : 'text-pizarra-400'}`}>{fila.posicion}</Numero>
               <span className={`size-1.5 shrink-0 rounded-full ${clasifica ? 'bg-lona-texto' : 'bg-linea'}`} />
               <Link
                 to={`/c/${slug}/jugadores/${fila.jugadorId}`}
                 state={estadoParaLaFicha(vuelta)}
-                className={`truncate text-[15px] hover:underline ${clasifica ? 'font-semibold' : 'font-medium text-pizarra-700'}`}
+                // Si el nombre igual no entra, sigue en una segunda línea en lugar de cortarse.
+                className={`line-clamp-2 text-[15px] leading-tight break-words hover:underline ${clasifica ? 'font-semibold' : 'font-medium text-pizarra-700'}`}
               >
                 {fila.nombre} {fila.apellido}
               </Link>

@@ -4,7 +4,6 @@ import { Boton } from '../../components/Boton';
 import { Etiqueta } from '../../components/Etiqueta';
 import { IconoMas } from '../../components/IconoMas';
 import { Numero } from '../../components/Numero';
-import { Tarjeta } from '../../components/Tarjeta';
 import { ResumenOrganizacion } from './ResumenOrganizacion';
 
 // Tres barras de distinta altura: el ranking.
@@ -33,7 +32,7 @@ type PropsCamino = {
 // lo que dice cada una.
 function Camino({ icono, titulo, etiqueta, descripcion, pasos, boton, alElegir, nota }: PropsCamino) {
   return (
-    <section className="flex flex-col gap-[22px] rounded-superficie border border-linea p-7">
+    <section className="flex flex-col gap-[22px] rounded-superficie border border-linea bg-papel p-5 sm:p-7">
       <div className="flex flex-col gap-4">
         {icono}
         <div className="flex flex-col gap-[9px]">
@@ -94,12 +93,12 @@ export function InicioSinTorneos({ nombre, jugadores, usaRanking }: Props) {
 
   return (
     <>
-      <div className="flex flex-col gap-[7px] px-7 pt-[26px] pb-[22px]">
+      <div className="flex flex-col gap-[7px] px-4 pt-[26px] pb-[22px] md:px-7">
         <h1 className="text-[28px] font-display font-semibold tracking-[-0.02em]">Hola, {nombre}</h1>
         <p className="text-[15px] text-pizarra-500">Todavía no tenés torneos. Elegí cómo arrancar: el otro camino lo podés sumar después.</p>
       </div>
 
-      <main className="grid items-start gap-[22px] px-7 pb-7 lg:grid-cols-[minmax(0,1fr)_360px]">
+      <main className="grid items-start gap-[22px] px-4 pb-7 md:px-7 lg:grid-cols-[minmax(0,1fr)_360px]">
         <div className="grid gap-4 md:grid-cols-2">
           <Camino
             icono={
@@ -145,7 +144,8 @@ export function InicioSinTorneos({ nombre, jugadores, usaRanking }: Props) {
             ]}
           />
 
-          <Tarjeta className="flex flex-col gap-[9px] bg-niebla p-[18px]">
+          {/* Sin Tarjeta: su bg-papel le gana a bg-niebla. */}
+          <div className="flex flex-col gap-[9px] rounded-tarjeta border border-linea bg-niebla p-[18px]">
             <h2 className="text-sm font-semibold">¿Ya tenés tus jugadores en un Excel?</h2>
             <p className="text-sm leading-normal text-pizarra-500">
               Subí una planilla por categoría y cargamos los jugadores al padrón, con sus puntos. Las categorías y los torneos
@@ -154,7 +154,7 @@ export function InicioSinTorneos({ nombre, jugadores, usaRanking }: Props) {
             <Link to="/padron/importar" className="mt-0.5 self-start text-sm font-medium hover:text-pizarra-500">
               Importar padrón →
             </Link>
-          </Tarjeta>
+          </div>
         </aside>
       </main>
     </>

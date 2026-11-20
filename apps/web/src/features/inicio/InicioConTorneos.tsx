@@ -29,12 +29,12 @@ export function InicioConTorneos({ torneos }: { torneos: TorneosDeInicio }) {
 
       {/* Lo único urgente: en rojo, que en el sistema solo significa vencimiento. */}
       {avisos.length > 0 && (
-        <div className="px-7 pt-6">
+        <div className="px-4 pt-6 md:px-7">
           <AvisosAtencion avisos={avisos} />
         </div>
       )}
 
-      <main className="grid items-start gap-3.5 px-7 pt-6 pb-8 md:grid-cols-2 xl:grid-cols-4">
+      <main className="grid items-start gap-3.5 px-4 pt-6 pb-8 md:grid-cols-2 md:px-7 xl:grid-cols-4">
         <Columna
           titulo="En preparación"
           marca="border-[1.5px] border-dashed border-pizarra-500 bg-papel"

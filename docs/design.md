@@ -52,11 +52,10 @@ Todo el sistema sale de que hay dos personas usando esto en situaciones opuestas
 | `niebla` | `#F4F5F8` | Fondo de página, encabezado de tabla, pie de tarjeta |
 | `papel` | `#FFFFFF` | Tarjetas, tablas, campos y botones secundarios. El texto sobre noche es blanco, el mismo valor |
 | `cal` | `#E9E2D6` | Texto de la bajada sobre la pintura y sobre `noche-900` |
-| `lona` | `#62BB78` | Acción principal del jugador; relleno de progreso y marcadores sobre noche |
-| `lona-hover` | `#4FA866` | La lona con el mouse encima |
-| `lona-borde` | `#93D2A3` | Borde del botón lona; anillo del partido elegido |
+| `lona` | `#62BB78` | Borde del botón principal; relleno de progreso y marcadores sobre noche |
+| `lona-borde` | `#93D2A3` | Anillo del partido elegido |
 | `lona-fondo` | `#E4F8E7` | Celda ganada, chip "nueva", fila tuya |
-| `lona-texto` | `#1B6236` | La lona como texto o punto sobre papel: clasifica, pagada, ganador; interruptor prendido |
+| `lona-texto` | `#1B6236` | La lona como texto o punto sobre papel: clasifica, pagada, ganador; interruptor prendido; fondo del botón principal |
 | `pelota` | `#CDF546` | **Solo** la barra levantada del logo sobre noche, el punto de la marca del circuito y una pelota dibujada |
 | `azul` | `#3567D6` | Marca "con fecha" o "en curso" |
 | `azul-texto` | `#2A55BC` | Chip de fecha |
@@ -73,7 +72,8 @@ Todo el sistema sale de que hay dos personas usando esto en situaciones opuestas
 ### Reglas
 
 - **La pelota no es el acento.** Sobre papel no se ve (1,2:1) y sobre el cielo de la pintura peleaba con todo. Queda para el logo y para una pelota dibujada; la acción es lona.
-- **La lona tiene dos caras.** Como relleno (`lona`) lleva texto `noche-900` encima (7,93:1). Como texto o punto sobre papel va `lona-texto` (7,38:1). Sobre noche, un punto o una barra van en `lona`.
+- **La lona tiene dos caras.** Como relleno de una marca (`lona`) lleva texto `noche-900` encima (7,93:1). Como texto o punto sobre papel va `lona-texto` (7,38:1). Sobre noche, un punto o una barra van en `lona`.
+- **El botón principal es blanco sobre `lona-texto`** (7,37:1), con borde `lona`: el texto va en el blanco del logo. Blanco sobre `lona` daba 2,4:1 ([decisión 114](decisiones/114-boton-principal-blanco.md)).
 - **El rojo solo significa vencimiento.** No se usa para "error de formulario" ni para eliminar. Un partido que venció sin jugarse es lo único urgente del sistema.
 - **La derrota se dibuja en pizarra, no en rojo.** En tablas y matrices, el ganador va en `noche` con peso 600 y el perdedor en `pizarra-400`.
 - **Sobre noche, los números van en blanco.** El lima de antes sobre las tarjetas oscuras pasa a blanco: la fecha del próximo partido, los puntos propios, la conciliación.
@@ -178,14 +178,14 @@ Franja `noche` de 56 de alto: el logo, la organización en `pizarra-400` y, a la
 
 | Variante | Fondo | Texto | Cuándo |
 |---|---|---|---|
-| Principal (jugador) | `lona` con borde 1px `lona-borde` | `noche-900` | La acción que el jugador quiere hacer: pagar, anotar la fecha, escribirle al rival. En la landing, "Crear mi circuito" |
+| Principal (jugador) | `lona-texto` con borde 1px `lona` | blanco | La acción que el jugador quiere hacer: pagar, anotar la fecha, escribirle al rival. En la landing, "Crear mi circuito" |
 | Principal (organizador) | `noche` | blanco | Guardar, resolver, publicar, cargar resultado |
 | Secundario | `papel` + borde 1px `linea` | `noche` | Todo lo demás |
 | Sobre noche | transparente + borde `borde-noche` | blanco | Acción alternativa dentro de una tarjeta noche |
 
 Nunca hay flechas pegadas al texto del botón. El texto dice la acción completa: "Anotar y avisarle a Pablo", no "Continuar".
 
-**Estados en la web.** Con el mouse, la lona pasa a `lona-hover`, la noche a `pizarra-700` y el secundario toma `linea-suave`. Al apretar, el botón se achica apenas. Con el teclado, un anillo `noche` de 2px separado 2px del borde: es un outline, no una sombra. Deshabilitado, opacidad 40% y sin reacción.
+**Estados en la web.** Con el mouse, el principal se aclara (brillo al 125 %), la noche pasa a `pizarra-700` y el secundario toma `linea-suave`. Al apretar, el botón se achica apenas. Con el teclado, un anillo `noche` de 2px separado 2px del borde: es un outline, no una sombra. Deshabilitado, opacidad 40% y sin reacción.
 
 ### Chips
 
@@ -214,7 +214,7 @@ Alto 56 en móvil y 48 en escritorio, radio 8, fondo `papel`, borde 1px `borde-c
 
 ### Tarjeta noche
 
-Fondo `noche`, radio 20, padding 20–22, texto blanco y rótulos en `pizarra-400`. Es el recurso de jerarquía más fuerte del sistema y se usa para **una sola cosa por pantalla**: el próximo partido, el ranking propio, la conciliación, el resumen del torneo. En la tarjeta del próximo partido, el rival va en Display 34, la fecha en mono 26 blanco y el botón en lona.
+Fondo `noche`, radio 20, padding 20–22, texto blanco y rótulos en `pizarra-400`. Es el recurso de jerarquía más fuerte del sistema y se usa para **una sola cosa por pantalla**: el próximo partido, el ranking propio, la conciliación, el resumen del torneo. En la tarjeta del próximo partido, el rival va en Display 34, la fecha en mono 26 blanco y el botón principal.
 
 ### Barra de marcas
 
@@ -270,7 +270,7 @@ Mientras una pantalla espera a la API no se escribe "Cargando…": va un esquele
 
 ### Hero de la landing
 
-El único lugar con atmósfera. Sobre `noche-900`, un marco de radio 20 con un filete interior `cal` al 20 %, que nunca es más ancho que alto, con la pintura del club al atardecer anclada abajo y un velo `noche-900` arriba para que el titular se lea sobre el cielo. Adentro: el titular en Newsreader, la bajada en `cal` y un solo botón, "Crear mi circuito", en lona. Debajo, el demo del producto, con la única sombra del sistema (`shadow-demo`). Después del marco, todo el contenido va en una sola hoja `niebla` de radio 20 sobre la pared `noche-900`: *Cada uno ve lo que necesita*, las funciones (en filas, no en tarjetas) y las preguntas. El pie vuelve a la pared oscura. El demo es el **único momento de animación** del sitio: recorre el flujo real (Tablero, Cargar resultado y de vuelta), se puede pausar, arranca recién cuando está a la vista y con "reducir movimiento" queda quieto en la vista previa de la zona.
+El único lugar con atmósfera. Sobre `noche-900`, un marco de radio 20 con un filete interior `cal` al 20 %, que nunca es más ancho que alto, con la pintura del club al atardecer anclada abajo y un velo `noche-900` arriba para que el titular se lea sobre el cielo. Adentro: el titular en Newsreader, la bajada en `cal` y un solo botón, "Crear mi circuito", el principal: blanco sobre `lona-texto`. Debajo, el demo del producto, con la única sombra del sistema (`shadow-demo`). Después del marco, todo el contenido va en una sola hoja `niebla` de radio 20 sobre la pared `noche-900`: *Cada uno ve lo que necesita*, las funciones (en filas, no en tarjetas) y las preguntas. El pie vuelve a la pared oscura. El demo es el **único momento de animación** del sitio: recorre el flujo real (Tablero, Cargar resultado y de vuelta), se puede pausar, arranca recién cuando está a la vista y con "reducir movimiento" queda quieto en la vista previa de la zona.
 
 ---
 
@@ -444,7 +444,6 @@ La web usa Tailwind 4: los tokens están en el bloque `@theme` de `apps/web/src/
   --color-papel: #FFFFFF;
   --color-cal: #E9E2D6;
   --color-lona: #62BB78;
-  --color-lona-hover: #4FA866;
   --color-lona-borde: #93D2A3;
   --color-lona-fondo: #E4F8E7;
   --color-lona-texto: #1B6236;

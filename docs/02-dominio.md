@@ -127,6 +127,8 @@ El organizador prefiere **serpentina**, pero pidió poder elegir. Se implementan
 | | 32 | 31 | 30 | 29 | 28 | 27 | 26 | 25 |
 | **Suma** | **66** | **66** | **66** | **66** | **66** | **66** | **66** | **66** |
 
+Si no se llena el cupo y quedan zonas de 3, las de 4 siguen sumando lo mismo. A las de 3 les falta el más débil y suman menos, así que se comparan aparte ([decisión 112](decisiones/112-sumas-entre-zonas-del-mismo-tamano.md)).
+
 **Directa** — se recorre A→H en cada vuelta. El grupo A queda notoriamente más fácil (52) que el H (80).
 
 **Bombos** — aleatorio dentro de cada franja. Replica la mecánica actual.

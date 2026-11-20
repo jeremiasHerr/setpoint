@@ -42,7 +42,7 @@ function CelularDelJugador() {
                 <hr className="my-1.5 border-0 border-t border-borde-noche" />
                 <p className="font-mono text-[26px] leading-[30px] font-medium tabular-nums">sáb 21 · 10:00</p>
                 <p className="text-[16px] text-pizarra-400">Club Alta Barda, cancha 3</p>
-                <span className={`${boton} mt-1 border border-lona-borde bg-lona text-noche-900`}>Escribirle a Marcelo</span>
+                <span className={`${boton} mt-1 border border-lona bg-lona-texto text-white`}>Escribirle a Marcelo</span>
               </div>
               <div className="flex items-baseline justify-between text-[20px] font-semibold tracking-[-0.01em]">
                 <span>Te falta coordinar</span>

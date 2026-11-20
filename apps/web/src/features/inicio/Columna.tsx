@@ -14,11 +14,12 @@ type Props = {
 };
 
 // Una de las cuatro columnas del inicio, por el momento en que está cada torneo (decisión 094).
-// En el escritorio llegan hasta abajo de la pantalla, aunque tengan una sola tarjeta.
+// En el escritorio llegan hasta abajo de la pantalla, aunque tengan una sola tarjeta. Sobre la niebla
+// van sin relleno, con un borde: el gris de antes casi no se distinguía del fondo (decisión 113).
 export function Columna({ titulo, marca, cantidad, ayuda, vacia, children, pie }: Props) {
   const id = useId();
   return (
-    <section aria-labelledby={id} className="flex flex-col gap-2.5 rounded-superficie bg-linea-suave p-3 xl:min-h-[calc(100vh-290px)]">
+    <section aria-labelledby={id} className="flex flex-col gap-2.5 rounded-superficie border border-linea p-3 xl:min-h-[calc(100vh-290px)]">
       <div className="flex items-center justify-between gap-2 px-1.5 pt-1">
         <h2 id={id} className="flex items-center gap-2 text-[15px] font-semibold">
           <span className={`size-2.5 shrink-0 rounded-[3px] ${marca}`} />

@@ -39,7 +39,7 @@ const distribuciones: { valor: ModoDistribucion; etiqueta: string }[] = [
 ];
 
 const ayudaDistribucion: Record<ModoDistribucion, string> = {
-  serpentina: 'La serpentina invierte la dirección en cada vuelta, así todas las zonas suman lo mismo.',
+  serpentina: 'La serpentina invierte la dirección en cada vuelta para emparejar las zonas.',
   directa: 'Reparte siempre de la zona A a la última: las primeras zonas quedan más fáciles que las últimas.',
   bombos: 'Sortea al azar dentro de cada franja del ranking, como en un sorteo presencial con bombos.',
 };
@@ -111,23 +111,71 @@ function CargarSorteo({ sesion, id }: { sesion: Sesion; id: number }) {
   );
 }
 
-function ResumenDeSumas({ zonas }: { zonas: ZonaSorteada[] }) {
-  const sumas = zonas.map(sumaDeSiembra);
+// "66", "34 y 35" o "entre 34 y 39".
+function Sumas({ sumas }: { sumas: number[] }) {
   const menor = Math.min(...sumas);
   const mayor = Math.max(...sumas);
-  const parejas = menor === mayor;
+  if (menor === mayor) return <Numero>{menor}</Numero>;
+  if (sumas.length === 2) {
+    return (
+      <>
+        <Numero>{menor}</Numero> y <Numero>{mayor}</Numero>
+      </>
+    );
+  }
+  return (
+    <>
+      entre <Numero>{menor}</Numero> y <Numero>{mayor}</Numero>
+    </>
+  );
+}
+
+// Si quedan zonas parejas lo dicen las sumas de la siembra. Las zonas con un jugador menos no se
+// comparan con las completas, porque les falta el más débil: se compara entre las completas y de
+// las otras solo se dice cuánto suman (decisión 112).
+function ResumenDeSumas({ zonas }: { zonas: ZonaSorteada[] }) {
+  const tamano = Math.max(...zonas.map((zona) => zona.integrantes.length));
+  const completas = zonas.filter((zona) => zona.integrantes.length === tamano).map(sumaDeSiembra);
+  const conUnoMenos = zonas.filter((zona) => zona.integrantes.length < tamano).map(sumaDeSiembra);
+  const menor = Math.min(...completas);
+  const mayor = Math.max(...completas);
+  // Con una sola zona completa no hay con qué compararla.
+  const comparables = completas.length > 1;
+  const parejas = comparables && menor === mayor;
 
   return (
-    <div className="flex items-center gap-2.5">
-      <span className={`size-[7px] shrink-0 rounded-full ${parejas ? 'bg-lona-texto' : 'bg-borde-campo'}`} />
+    <div className="flex items-start gap-2.5">
+      <span className={`mt-[7px] size-[7px] shrink-0 rounded-full ${parejas ? 'bg-lona-texto' : 'bg-borde-campo'}`} />
       <p className="text-sm text-pizarra-700">
-        {parejas ? (
-          <>
-            Las <Numero>{zonas.length}</Numero> zonas suman <Numero>{menor}</Numero>. Están parejas.
-          </>
+        {conUnoMenos.length === 0 ? (
+          parejas ? (
+            <>
+              Las <Numero>{zonas.length}</Numero> zonas suman <Numero>{menor}</Numero>. Están parejas.
+            </>
+          ) : (
+            <>
+              Las zonas suman entre <Numero>{menor}</Numero> y <Numero>{mayor}</Numero>. No quedaron parejas.
+            </>
+          )
         ) : (
           <>
-            Las zonas suman entre <Numero>{menor}</Numero> y <Numero>{mayor}</Numero>. No quedaron parejas.
+            {comparables ? (
+              <>
+                Las <Numero>{completas.length}</Numero> zonas de <Numero>{tamano}</Numero> suman <Sumas sumas={completas} />:{' '}
+                {parejas ? 'están parejas.' : 'no quedaron parejas.'}
+              </>
+            ) : (
+              <>
+                La zona de <Numero>{tamano}</Numero> suma <Numero>{menor}</Numero>.
+              </>
+            )}{' '}
+            {conUnoMenos.length === 1 ? 'La' : (
+              <>
+                Las <Numero>{conUnoMenos.length}</Numero>
+              </>
+            )}{' '}
+            de <Numero>{tamano - 1}</Numero> {conUnoMenos.length === 1 ? 'suma' : 'suman'} <Sumas sumas={conUnoMenos} />, con un
+            jugador menos.
           </>
         )}
       </p>
