@@ -2,6 +2,7 @@ import {
   calcularFormato,
   convocatoriaInicial,
   JUGADORES_POR_GRUPO,
+  nombreCuadroConsuelo,
   type Circuito,
   type Convocatoria,
   type DatosConvocatoria,
@@ -333,6 +334,7 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
             cantidadGrupos={datos.cantidadGrupos}
             clasificanPorGrupo={datos.clasificanPorGrupo}
             tieneComplementaria={datos.tieneComplementaria}
+            nombreConsuelo={nombreCuadroConsuelo(circuito.nombreCuadroConsuelo)}
             errores={errores}
             alCambiarGrupos={cambiarGrupos}
             alCambiarClasificados={(clasificanPorGrupo) => cambiar('clasificanPorGrupo', clasificanPorGrupo)}
@@ -375,6 +377,7 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
           <PanelComoQueda
             formato={formato}
             tieneComplementaria={datos.tieneComplementaria}
+            nombreConsuelo={nombreCuadroConsuelo(circuito.nombreCuadroConsuelo)}
             fechaInicio={datos.fechaInicio}
             variasCategorias={datos.categorias.length > 1}
             // Un torneo suelto no actualiza ningún casillero del ranking.

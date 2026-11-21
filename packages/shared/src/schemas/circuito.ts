@@ -73,9 +73,22 @@ export const contactoSchema = z.object({
 
 export type Contacto = z.infer<typeof contactoSchema>;
 
+// Cómo se llama el cuadro de los que no clasifican al principal si la organización no lo cambia.
+export const NOMBRE_CUADRO_CONSUELO = 'Cuadro consuelo';
+
+// El nombre que se muestra: el de la organización o el de por defecto.
+export const nombreCuadroConsuelo = (guardado: string | null | undefined) => guardado?.trim() || NOMBRE_CUADRO_CONSUELO;
+
 export const configuracionCircuitoSchema = z.object({
   nombre: z.string({ error: 'Escribí el nombre del circuito' }).trim().min(2, 'Escribí el nombre del circuito').max(80),
   contactos: z.array(contactoSchema).max(10, 'Como máximo 10 contactos').default([]),
+  // Vacío vuelve al nombre por defecto.
+  nombreCuadroConsuelo: z
+    .string()
+    .trim()
+    .max(40, 'Como máximo 40 caracteres')
+    .nullish()
+    .transform((v) => v || null),
   usaRanking: z.boolean(),
   categorias: listaDeNombres('Hay categorías repetidas'),
   etapas: listaDeNombres('Hay torneos del calendario repetidos'),

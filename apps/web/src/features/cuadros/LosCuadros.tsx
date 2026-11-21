@@ -2,7 +2,7 @@ import type { ClaveCuadro, Cuadros } from '@setpoint/shared';
 import { useState } from 'react';
 import { Chip } from '../../components/Chip';
 import { ErrorApi } from '../../lib/api';
-import { NOMBRE_DEL_CUADRO, bajada } from './cuadro';
+import { nombreDelCuadro, bajada } from './cuadro';
 import { CuadroCompleto } from './CuadroCompleto';
 import { CuadroPorRonda } from './CuadroPorRonda';
 import { useCuadrosPublicos } from './useCuadrosPublicos';
@@ -31,7 +31,7 @@ function Contenido({ datos }: { datos: Cuadros }) {
 
   return (
     <section className="flex flex-col gap-4">
-      <p className="text-[15px] text-pizarra-500">{bajada(datos.cuadros, datos.clasificadosPorGrupo)}</p>
+      <p className="text-[15px] text-pizarra-500">{bajada(datos.cuadros, datos.clasificadosPorGrupo, datos.nombreCuadroConsuelo)}</p>
 
       {/* Celular y tablet: un cuadro a la vez y una ronda a la vez, sin scroll horizontal. */}
       <div className="flex flex-col gap-4 xl:hidden">
@@ -39,18 +39,18 @@ function Contenido({ datos }: { datos: Cuadros }) {
           <div className="flex flex-wrap gap-1.5">
             {datos.cuadros.map((c) => (
               <Chip key={c.cuadro} activo={c.cuadro === elegido} onClick={() => setElegido(c.cuadro)}>
-                {NOMBRE_DEL_CUADRO[c.cuadro]}
+                {nombreDelCuadro(c.cuadro, datos.nombreCuadroConsuelo)}
               </Chip>
             ))}
           </div>
         )}
-        {cuadroElegido && <CuadroPorRonda key={cuadroElegido.cuadro} cuadro={cuadroElegido} />}
+        {cuadroElegido && <CuadroPorRonda key={cuadroElegido.cuadro} cuadro={cuadroElegido} consuelo={datos.nombreCuadroConsuelo} />}
       </div>
 
       {/* Escritorio: los cuadros completos. Si no entran lado a lado, uno debajo del otro. */}
       <div className="hidden flex-wrap gap-x-[60px] gap-y-10 overflow-x-auto pb-4 xl:flex">
         {datos.cuadros.map((c) => (
-          <CuadroCompleto key={c.cuadro} cuadro={c} />
+          <CuadroCompleto key={c.cuadro} cuadro={c} consuelo={datos.nombreCuadroConsuelo} />
         ))}
       </div>
 

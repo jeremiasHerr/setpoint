@@ -1,5 +1,5 @@
 import { EstadoTorneo } from '@prisma/client';
-import type { RespuestaMisPartidos } from '@setpoint/shared';
+import { nombreCuadroConsuelo, type RespuestaMisPartidos } from '@setpoint/shared';
 import { perfilDeJugador } from '../../lib/permisos';
 import { prisma } from '../../lib/prisma';
 import { partidosDelJugador } from './mis-partidos';
@@ -14,6 +14,8 @@ const JUGADOR = { select: { nombre: true, apellido: true, telefono: true, usuari
 export async function misPartidos(slug: string, usuarioId: number): Promise<RespuestaMisPartidos> {
   const { organizacionId, jugadorId } = await perfilDeJugador(slug, usuarioId);
 
+  const organizacion = await prisma.organizacion.findUniqueOrThrow({ where: { id: organizacionId }, select: { nombreCuadroConsuelo: true } });
+  const consuelo = nombreCuadroConsuelo(organizacion.nombreCuadroConsuelo);
   const torneos = await prisma.torneo.findMany({
     where: {
       organizacionId,
@@ -63,7 +65,7 @@ export async function misPartidos(slug: string, usuarioId: number): Promise<Resp
           jugadorId,
           partidos.filter((p) => p.torneoId === t.id),
           // Con más de un torneo, cada partido dice de cuál es.
-          { torneo: torneos.length > 1 ? nombres[i] : undefined, reglas: t, ahora },
+          { torneo: torneos.length > 1 ? nombres[i] : undefined, reglas: t, consuelo, ahora },
         ),
       ),
     },

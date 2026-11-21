@@ -7,7 +7,7 @@ import { Numero } from '../components/Numero';
 import { Tarjeta } from '../components/Tarjeta';
 import { leerSesion, type Sesion } from '../features/auth/sesion';
 import { useSesionInvalida } from '../features/auth/useSesionInvalida';
-import { NOMBRE_DEL_CUADRO } from '../features/cuadros/cuadro';
+import { NOMBRE_DEL_PRINCIPAL } from '../features/cuadros/cuadro';
 import { BotonCopiarLink } from '../features/inicio/BotonCopiarLink';
 import { BarrasDelTorneo } from '../features/tablero/BarrasDelTorneo';
 import { LoQueFalta } from '../features/tablero/LoQueFalta';
@@ -80,8 +80,8 @@ function bajada(tablero: Tablero): string {
   if (tablero.fase === 'terminado') return 'El torneo está cerrado y los puntos ya están en el ranking.';
   if (tablero.fase === 'cuadros') {
     const cuadros = tablero.tieneComplementaria
-      ? `${NOMBRE_DEL_CUADRO.campeonato} y ${NOMBRE_DEL_CUADRO.complementaria.toLowerCase()}`
-      : NOMBRE_DEL_CUADRO.campeonato;
+      ? `${NOMBRE_DEL_PRINCIPAL} y ${tablero.nombreCuadroConsuelo.toLowerCase()}`
+      : NOMBRE_DEL_PRINCIPAL;
     return `${cuadros}${elPlazo('la ronda en curso termina')}`;
   }
   const tamanos = [...new Set(tablero.zonas.map((z) => z.filas.length))].sort((a, b) => b - a);
@@ -100,12 +100,12 @@ function alCerrarLasZonas(tablero: Tablero): ReactNode[] {
   return [
     alConsuelo > 0 ? (
       <>
-        Se arman los cuadros: <Numero>{alPrincipal}</Numero> jugadores van a {NOMBRE_DEL_CUADRO.campeonato} y{' '}
-        <Numero>{alConsuelo}</Numero> al {NOMBRE_DEL_CUADRO.complementaria.toLowerCase()}.
+        Se arman los cuadros: <Numero>{alPrincipal}</Numero> jugadores van a {NOMBRE_DEL_PRINCIPAL} y{' '}
+        <Numero>{alConsuelo}</Numero> al {tablero.nombreCuadroConsuelo.toLowerCase()}.
       </>
     ) : (
       <>
-        Se arma el cuadro de {NOMBRE_DEL_CUADRO.campeonato} con <Numero>{alPrincipal}</Numero> jugadores.
+        Se arma el cuadro de {NOMBRE_DEL_PRINCIPAL} con <Numero>{alPrincipal}</Numero> jugadores.
       </>
     ),
     'Después, un resultado de zona solo se puede corregir si los cuadros quedan iguales.',

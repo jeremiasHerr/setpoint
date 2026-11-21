@@ -32,6 +32,8 @@ export type TorneoEnVivo = {
   torneoId: number;
   // Nombre de la organización, para el encabezado de la página pública.
   organizacion: string;
+  // Cómo llama la organización a su cuadro consuelo (07 §1.2).
+  nombreCuadroConsuelo: string;
   // "Primavera 2026 · Tercera"
   nombre: string;
   // La línea de corte: los primeros clasificanPorGrupo van al cuadro principal.

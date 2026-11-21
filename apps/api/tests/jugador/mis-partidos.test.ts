@@ -101,6 +101,15 @@ describe('partidosDelJugador', () => {
     expect(conTorneo.instancia).toBe('Copa Confluencia 2026 · zona B');
   });
 
+  it('el cuadro consuelo lleva el nombre de la organización, o el de por defecto', () => {
+    const enElConsuelo = partido({ fase: 'ELIMINATORIA', grupo: null, cuadro: 'COMPLEMENTARIA', ronda: 2 });
+    const [porDefecto] = partidosDelJugador(1, [enElConsuelo]);
+    const [propio] = partidosDelJugador(1, [enElConsuelo], { consuelo: 'Complementaria' });
+
+    expect(porDefecto.instancia).toBe('cuadro consuelo · final');
+    expect(propio.instancia).toBe('complementaria · final');
+  });
+
   it('dice quién anotó la fecha, desde su lado (F14)', () => {
     const fecha = new Date('2026-11-14T13:00:00.000Z');
     const [mia, delRival, deLaOrganizacion] = partidosDelJugador(1, [

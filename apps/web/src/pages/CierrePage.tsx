@@ -130,7 +130,7 @@ function VistaDelCierre({ sesion, cierre }: { sesion: Sesion; cierre: CierreDelT
         <div className="flex min-w-0 flex-col gap-4">
           <div className="grid gap-4 md:grid-cols-2">
             {cierre.campeones.map((campeon) => (
-              <TarjetaCampeon key={campeon.cuadro} campeon={campeon} />
+              <TarjetaCampeon key={campeon.cuadro} campeon={campeon} consuelo={cierre.nombreCuadroConsuelo} />
             ))}
           </div>
           <TablaPuntosAOtorgar cierre={cierre} />
