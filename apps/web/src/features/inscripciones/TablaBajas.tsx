@@ -28,9 +28,9 @@ export function TablaBajas({ slug, torneoId, bajas }: Props) {
       <Tarjeta className="flex flex-col overflow-hidden">
         <div className={`grid gap-x-3 border-b border-linea bg-niebla px-4 py-[11px] md:gap-x-1 md:px-[18px] ${COLUMNAS}`}>
           <span className="text-xs text-pizarra-500">jugador</span>
-          <span className="hidden font-mono text-[11px] text-pizarra-500 md:block">medio</span>
-          <span className="hidden font-mono text-[11px] text-pizarra-500 md:block">baja</span>
-          <span className="hidden font-mono text-[11px] text-pizarra-500 md:block">devolución</span>
+          <span className="hidden text-[12.5px] font-medium text-noche md:block">medio</span>
+          <span className="hidden text-[12.5px] font-medium text-noche md:block">baja</span>
+          <span className="hidden text-[12.5px] font-medium text-noche md:block">devolución</span>
           <span />
         </div>
         {bajas.length === 0 ? (

@@ -98,7 +98,7 @@ export function EncontrarPerfil({ torneo, token, email, nombre, situacion, onRes
             <span className="text-xl font-semibold tracking-[-0.025em]">
               {perfil.nombre} {perfil.apellido}
             </span>
-            <span className="font-mono text-[15px] text-pizarra-500">{perfil.categoria}</span>
+            <span className="text-[15px] text-pizarra-500">{perfil.categoria}</span>
           </div>
         </div>
         {pie('Ir a pagar con MercadoPago', perfil.jugadorId, undefined, false)}
@@ -365,7 +365,7 @@ function ListaPerfiles({
 }
 
 function MarcaVinculado() {
-  return <span className="rounded-full bg-linea-suave px-2 py-[3px] font-mono text-[13px] text-pizarra-500">vinculado</span>;
+  return <span className="rounded-full bg-linea-suave px-2 py-[3px] text-[13px] text-pizarra-500">vinculado</span>;
 }
 
 // Un link de red social se abre; un usuario ("@polenta") se muestra tal cual.
@@ -379,7 +379,7 @@ function Contactos({ contactos, torneo }: { contactos: Contacto[]; torneo: strin
       <ul className="flex flex-col gap-2">
         {contactos.map((c) => (
           <li key={`${c.tipo}-${c.valor}`} className="flex flex-col gap-0.5">
-            <span className="font-mono text-xs text-pizarra-500">{c.tipo === 'whatsapp' ? 'whatsapp' : 'red social'}</span>
+            <span className="text-[12.5px] font-medium text-noche">{c.tipo === 'whatsapp' ? 'whatsapp' : 'red social'}</span>
             {c.tipo === 'whatsapp' ? (
               <a
                 href={urlDeWhatsApp(c.valor, `Hola, te escribo por el torneo ${torneo}`)}

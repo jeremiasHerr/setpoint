@@ -46,7 +46,7 @@ function CargarInscripciones({ sesion, id }: { sesion: Sesion; id: number }) {
   const noExiste = inscripciones.error?.message === 'TORNEO_NO_ENCONTRADO';
 
   return (
-    <div className="min-h-screen bg-cemento text-noche">
+    <div className="min-h-screen bg-papel text-noche">
       <EncabezadoDelTorneo sesion={sesion} torneoId={id} actual="inscripciones" />
       <div className="flex flex-col items-start gap-3 px-4 md:px-7 pt-[26px]">
         {noExiste ? (
@@ -216,7 +216,7 @@ function Inscripciones({ sesion, datos }: { sesion: Sesion; datos: Inscripciones
   const sinLugares = datos.libres === 0;
 
   return (
-    <div className="flex min-h-screen flex-col bg-cemento text-noche">
+    <div className="flex min-h-screen flex-col bg-papel text-noche">
       <EncabezadoDelTorneo sesion={sesion} torneoId={datos.torneoId} actual="inscripciones" />
 
       <div className="flex flex-wrap items-end justify-between gap-6 px-4 md:px-7 pt-[26px] pb-5">
