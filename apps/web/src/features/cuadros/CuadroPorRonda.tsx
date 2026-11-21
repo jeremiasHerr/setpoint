@@ -9,7 +9,7 @@ import { TarjetaPaseDirecto, TarjetaPartido, type Eleccion } from './TarjetaPart
 // ronda que se está jugando. En la primera, quien tuvo bye aparece en su lugar con la misma
 // tarjeta que en el cuadro completo (decisión 083).
 // Con eleccion, abre en la ronda del partido elegido y tocar un partido lo elige.
-export function CuadroPorRonda({ cuadro, eleccion }: { cuadro: CuadroEliminatorio; eleccion?: Eleccion }) {
+export function CuadroPorRonda({ cuadro, consuelo, eleccion }: { cuadro: CuadroEliminatorio; consuelo: string; eleccion?: Eleccion }) {
   const [ronda, setRonda] = useState(
     () => cuadro.partidos.find((p) => p.id === eleccion?.elegido)?.ronda ?? rondaEnCurso(cuadro),
   );
@@ -18,7 +18,7 @@ export function CuadroPorRonda({ cuadro, eleccion }: { cuadro: CuadroEliminatori
 
   return (
     <section className="flex flex-col gap-4">
-      <EncabezadoDelCuadro cuadro={cuadro} />
+      <EncabezadoDelCuadro cuadro={cuadro} consuelo={consuelo} />
       <div className="flex flex-wrap gap-1.5">
         {rondas.map((r) => (
           <Chip key={r} activo={r === ronda} onClick={() => setRonda(r)}>

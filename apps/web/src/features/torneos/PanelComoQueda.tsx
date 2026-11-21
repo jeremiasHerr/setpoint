@@ -10,6 +10,8 @@ type Props = {
   // Sale de calcularFormato, igual que el cronograma de la sección de plazos.
   formato: Formato;
   tieneComplementaria: boolean;
+  // Cómo llama el circuito a su cuadro consuelo.
+  nombreConsuelo: string;
   fechaInicio: string | null;
   // Con más de una categoría, cada una juega su propio torneo con este formato.
   variasCategorias: boolean;
@@ -26,11 +28,11 @@ function Punto({ children }: { children: ReactNode }) {
   );
 }
 
-export function PanelComoQueda({ formato, tieneComplementaria, fechaInicio, variasCategorias, puntosCampeon }: Props) {
+export function PanelComoQueda({ formato, tieneComplementaria, nombreConsuelo, fechaInicio, variasCategorias, puntosCampeon }: Props) {
   const filas = [
     { rotulo: 'Partidos de zona', valor: formato.partidosZona },
     { rotulo: 'Cuadro Campeonato', valor: formato.partidosCampeonato },
-    ...(tieneComplementaria ? [{ rotulo: 'Cuadro consuelo', valor: formato.partidosComplementaria }] : []),
+    ...(tieneComplementaria ? [{ rotulo: nombreConsuelo, valor: formato.partidosComplementaria }] : []),
   ];
 
   const enSemanas = formato.duracionDias % DIAS_POR_SEMANA === 0;

@@ -7,12 +7,13 @@ import {
   type PartidoDelCuadro,
 } from '@setpoint/shared';
 
-// "Cuadro consuelo" va fijo hasta que la organización pueda configurar su nombre (07 §1.2).
-// "Campeonato" sigue así hasta cerrar la decisión abierta 16.
-export const NOMBRE_DEL_CUADRO: Record<ClaveCuadro, string> = {
-  campeonato: 'Campeonato',
-  complementaria: 'Cuadro consuelo',
-};
+// El cuadro consuelo se llama como lo configuró la organización (07 §1.2): cada pantalla recibe el
+// nombre en la respuesta de la API. "Campeonato" sigue fijo hasta cerrar la decisión abierta 16.
+export const NOMBRE_DEL_PRINCIPAL = 'Campeonato';
+
+export function nombreDelCuadro(cuadro: ClaveCuadro, consuelo: string) {
+  return cuadro === 'campeonato' ? NOMBRE_DEL_PRINCIPAL : consuelo;
+}
 
 const RONDAS_DESDE_LA_FINAL = ['final', 'semis', 'cuartos', 'octavos'];
 
@@ -109,9 +110,9 @@ export function cuandoSeJuega(partido: PartidoDelCuadro) {
 const PRIMEROS = ['', 'el primero', 'los dos primeros', 'los tres primeros', 'los cuatro primeros'];
 
 // La bajada de la página, con el formato del torneo.
-export function bajada(cuadros: CuadroEliminatorio[], clasificadosPorGrupo: number) {
+export function bajada(cuadros: CuadroEliminatorio[], clasificadosPorGrupo: number, consuelo: string) {
   const primeros = PRIMEROS[clasificadosPorGrupo] ?? `los ${clasificadosPorGrupo} primeros`;
   const van = clasificadosPorGrupo === 1 ? 'va' : 'van';
   if (cuadros.length < 2) return `Al cuadro ${van} ${primeros} de cada zona.`;
-  return `Corren en paralelo. Nadie queda afuera de la fase de grupos: ${primeros} de cada zona ${van} a ${NOMBRE_DEL_CUADRO.campeonato} y el resto al ${NOMBRE_DEL_CUADRO.complementaria.toLowerCase()}.`;
+  return `Corren en paralelo. Nadie queda afuera de la fase de grupos: ${primeros} de cada zona ${van} a ${NOMBRE_DEL_PRINCIPAL} y el resto al ${consuelo.toLowerCase()}.`;
 }

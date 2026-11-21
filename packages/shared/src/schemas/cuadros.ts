@@ -59,6 +59,8 @@ export type Cuadros = {
   torneoId: number;
   // Nombre de la organización, para el encabezado de la página pública.
   organizacion: string;
+  // Cómo llama la organización a su cuadro consuelo (07 §1.2).
+  nombreCuadroConsuelo: string;
   // "Primavera 2026 · Tercera"
   nombre: string;
   // Los primeros de cada zona que van al cuadro principal; el resto, al consuelo si lo hay.

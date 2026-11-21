@@ -270,6 +270,8 @@ model Organizacion {
   nombre      String
   slug        String  @unique
   descripcion String?
+  // Cómo llama el circuito a su cuadro consuelo. null es "Cuadro consuelo" (07 §1.2).
+  nombreCuadroConsuelo String?
 
   usaRanking           Boolean              @default(true)
   ventanaRankingMeses  Int                  @default(12)

@@ -52,6 +52,8 @@ export type LecturaDeMensajes = {
   torneoId: number;
   // "Primavera 2026 · Tercera"
   nombre: string;
+  // Cómo llama la organización a su cuadro consuelo (07 §1.2).
+  nombreCuadroConsuelo: string;
   estado: 'PROCESADO' | 'ERROR';
   // El motivo, si terminó en ERROR: no se pudo leer nada.
   error: string | null;

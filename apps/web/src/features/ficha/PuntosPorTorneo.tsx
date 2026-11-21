@@ -1,12 +1,12 @@
 import type { Instancia, RankingDeLaFicha } from '@setpoint/shared';
 import { Numero } from '../../components/Numero';
-import { NOMBRE_DEL_CUADRO } from '../cuadros/cuadro';
+import { NOMBRE_DEL_PRINCIPAL } from '../cuadros/cuadro';
 
 // La barra más alta mide 100 px; una sin puntos queda como una línea.
 const ALTO_MAXIMO = 100;
 const ALTO_MINIMO = 2;
 
-const principal = NOMBRE_DEL_CUADRO.campeonato;
+const principal = NOMBRE_DEL_PRINCIPAL;
 
 // Qué hizo para sumar esos puntos: "Los 75 de Invierno 26 son de haber llegado a la final del Campeonato".
 const QUE_HIZO: Record<Instancia, string> = {

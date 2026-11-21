@@ -1,5 +1,6 @@
 import { EstadoPartido, EstadoProcesoIA, FasePartido, type Prisma } from '@prisma/client';
 import {
+  nombreCuadroConsuelo,
   type DatosResultado,
   type EstadoResultadoLeido,
   type LecturaDeMensajes,
@@ -68,11 +69,12 @@ const CON_RESULTADO: Partial<Record<EstadoPartido, PartidoAuditable['estado']>> 
   [EstadoPartido.ABANDONO]: 'abandono',
 };
 
-const CUADRO = { CAMPEONATO: 'Campeonato', COMPLEMENTARIA: 'cuadro consuelo' } as const;
-
 // Dónde se juega, para que la IA ubique el partido: "Zona B", "Campeonato, ronda 2".
-const donde = (p: PartidoLeido) =>
-  p.fase === FasePartido.GRUPOS ? `Zona ${p.grupo}` : `${p.cuadro ? CUADRO[p.cuadro] : 'Cuadro'}, ronda ${p.ronda}`;
+// El cuadro consuelo lleva el nombre que le da la organización, que es el que usan los jugadores en sus mensajes.
+const donde = (p: PartidoLeido, consuelo: string) =>
+  p.fase === FasePartido.GRUPOS
+    ? `Zona ${p.grupo}`
+    : `${p.cuadro ? (p.cuadro === 'CAMPEONATO' ? 'Campeonato' : consuelo) : 'Cuadro'}, ronda ${p.ronda}`;
 
 const nombre = (j: { nombre: string; apellido: string } | null) => (j ? `${j.nombre} ${j.apellido}` : 'a definir');
 
@@ -116,7 +118,7 @@ async function lecturaDe(organizacionId: number, torneoId: number, id: number) {
   return lectura;
 }
 
-async function vista(lectura: { id: number; torneoId: number; estado: EstadoProcesoIA; resumen: Prisma.JsonValue; creadoEn: Date }, nombreTorneo: string): Promise<LecturaDeMensajes> {
+async function vista(lectura: { id: number; torneoId: number; estado: EstadoProcesoIA; resumen: Prisma.JsonValue; creadoEn: Date }, nombreTorneo: string, consuelo: string): Promise<LecturaDeMensajes> {
   const resumen = (lectura.resumen ?? {}) as Partial<ResumenLectura>;
   const mensajes = new Map((resumen.mensajes ?? []).map((m) => [m.numero, m]));
   const ids = (resumen.resultados ?? []).flatMap((r) => (r.partidoId === null ? [] : [r.partidoId]));
@@ -146,6 +148,7 @@ async function vista(lectura: { id: number; torneoId: number; estado: EstadoProc
     id: lectura.id,
     torneoId: lectura.torneoId,
     nombre: nombreTorneo,
+    nombreCuadroConsuelo: consuelo,
     estado: lectura.estado === EstadoProcesoIA.ERROR ? 'ERROR' : 'PROCESADO',
     error: resumen.error ?? null,
     mensajes: resumen.mensajes?.length ?? 0,
@@ -179,7 +182,7 @@ export async function leerMensajes(slug: string, usuarioId: number, torneoId: nu
   const pedido = armarMensaje({
     torneo: nombreDelTorneo(torneo),
     sistema,
-    partidos: partidos.map((p) => ({ id: p.id, donde: donde(p), a: nombre(p.jugadorA), b: nombre(p.jugadorB), conResultado: p.estado in CON_RESULTADO })),
+    partidos: partidos.map((p) => ({ id: p.id, donde: donde(p, nombreCuadroConsuelo(torneo.organizacion.nombreCuadroConsuelo)), a: nombre(p.jugadorA), b: nombre(p.jugadorB), conResultado: p.estado in CON_RESULTADO })),
     mensajes,
   });
 
@@ -246,13 +249,13 @@ export async function leerMensajes(slug: string, usuarioId: number, torneoId: nu
     await prisma.extraccionResultado.update({ where: { id: lectura.id }, data: { resumen: resumen as unknown as Prisma.InputJsonValue } });
   }
 
-  return vista({ ...lectura, resumen: resumen as unknown as Prisma.JsonValue }, nombreDelTorneo(torneo));
+  return vista({ ...lectura, resumen: resumen as unknown as Prisma.JsonValue }, nombreDelTorneo(torneo), nombreCuadroConsuelo(torneo.organizacion.nombreCuadroConsuelo));
 }
 
 export async function obtenerLectura(slug: string, usuarioId: number, torneoId: number, id: number) {
   const organizacionId = await organizacionAdministrada(slug, usuarioId);
   const torneo = await torneoDeLaOrganizacion(organizacionId, torneoId);
-  return vista(await lecturaDe(organizacionId, torneo.id, id), nombreDelTorneo(torneo));
+  return vista(await lecturaDe(organizacionId, torneo.id, id), nombreDelTorneo(torneo), nombreCuadroConsuelo(torneo.organizacion.nombreCuadroConsuelo));
 }
 
 // La organización carga tal como se leyó, o descarta, un resultado que quedó para revisar. Para
@@ -286,5 +289,5 @@ export async function decidirResultado(
     where: { id: lectura.id },
     data: { resumen: resumen as unknown as Prisma.InputJsonValue },
   });
-  return vista(guardada, nombreDelTorneo(torneo));
+  return vista(guardada, nombreDelTorneo(torneo), nombreCuadroConsuelo(torneo.organizacion.nombreCuadroConsuelo));
 }

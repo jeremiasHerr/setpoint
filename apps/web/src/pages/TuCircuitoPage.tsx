@@ -110,8 +110,10 @@ function EditorCircuito({ sesion, inicial }: { sesion: Sesion; inicial: Circuito
           <SeccionQuienesSon
             nombre={circuito.nombre}
             slug={circuito.slug}
+            nombreCuadroConsuelo={circuito.nombreCuadroConsuelo}
             contactos={circuito.contactos}
             alCambiarNombre={(nombre) => cambiar('nombre', nombre)}
+            alCambiarNombreCuadroConsuelo={(nombre) => cambiar('nombreCuadroConsuelo', nombre)}
             alCambiarContactos={(contactos) => cambiar('contactos', contactos)}
           />
           <SeccionCategorias categorias={circuito.categorias} alCambiar={(categorias) => cambiar('categorias', categorias)} />
@@ -144,8 +146,7 @@ function EditorCircuito({ sesion, inicial }: { sesion: Sesion; inicial: Circuito
           />
 
           {usaRanking && (
-            // Sin Tarjeta: su bg-papel le gana a bg-niebla.
-            <div className="flex flex-col gap-[9px] rounded-tarjeta border border-linea bg-niebla p-[18px]">
+            <div className="flex flex-col gap-[9px] rounded-tarjeta border border-linea bg-papel p-[18px]">
               <h2 className="text-sm font-semibold">¿Solo querés probar?</h2>
               <p className="text-sm leading-normal text-pizarra-500">
                 Apagá el ranking anual y creá un torneo suelto. Al terminar vas a tener la tabla de posiciones de ese torneo, sin

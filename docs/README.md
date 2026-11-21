@@ -261,7 +261,7 @@ Lista para llevar a la próxima charla. Las respondidas se tachan.
 14. ¿Cómo arman hoy los cruces de la primera ronda de Campeonato y Complementaria? ¿Hay un patrón fijo (1° de A contra 2° de B), se sortea, o lo decide el Comité?
     *Contexto: el reglamento no lo dice. Hoy el sistema siembra a todos los clasificados (ganadores de zona primero) y separa a los de una misma zona hasta la final ([decisión 022](decisiones/022-ubicacion-en-el-cuadro.md)).*
 15. Si un jugador **abandona** un partido empezado (por ejemplo, 6-3 2-1 y se lesiona), ¿cómo lo computan en la tabla de la zona? ¿Como un W.O., o le cuentan los games que llegó a ganar?
-    *Contexto: el reglamento solo habla del W.O. Hoy el sistema guarda el marcador hasta el abandono y lo computa 6-0 6-0, igual que un W.O. ([decisión 027](decisiones/027-abandono.md)).*
+    *Contexto: el reglamento solo habla del W.O. Hoy el sistema lo computa como un W.O., 6-0 6-0 para quien siguió, sin guardar el marcador hasta el abandono ([decisión 059](decisiones/059-abandono-sin-sets.md), que reemplaza a la [027](decisiones/027-abandono.md)).*
 
 ### Resultados
 

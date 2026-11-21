@@ -13,6 +13,7 @@ import {
   type SimulacionDeResultado,
   type SistemaDeJuego,
 } from '@setpoint/shared';
+import { nombreDelCuadro } from '../cuadros/cuadro';
 import { ErrorApi } from '../../lib/api';
 
 // Lógica de la pantalla Cargar resultado (F06): de lo que se escribe en la grilla al resultado
@@ -197,9 +198,6 @@ export function resumenDelResultado(datos: DatosResultado, partido: PartidoConRe
       };
 }
 
-// En la interfaz, el cuadro consuelo no se llama "Complementaria" (design.md §9).
-export const nombreDelCuadro = (cuadro: ClaveCuadro) => (cuadro === 'campeonato' ? 'Campeonato' : 'Cuadro consuelo');
-
 // "semifinales", contando desde la final.
 export function nombreDeRonda(ronda: number, rondas: number) {
   return ['final', 'semifinales', 'cuartos de final', 'octavos de final'][rondas - ronda] ?? `ronda ${ronda}`;
@@ -208,7 +206,7 @@ export function nombreDeRonda(ronda: number, rondas: number) {
 // Dónde se juega el partido, para las migas: "Zona A", o "Campeonato · semifinales".
 export function ubicacionDelPartido(partido: PartidoConResultado) {
   if (partido.fase === 'grupos') return `Zona ${partido.grupo}`;
-  return `${nombreDelCuadro(partido.cuadro!)} · ${nombreDeRonda(partido.ronda!, partido.rondas!)}`;
+  return `${nombreDelCuadro(partido.cuadro!, partido.nombreCuadroConsuelo)} · ${nombreDeRonda(partido.ronda!, partido.rondas!)}`;
 }
 
 // El rótulo en mono debajo de los nombres: "zona A · fase de grupos".
@@ -220,11 +218,11 @@ export function rotuloDelPartido(partido: PartidoConResultado) {
 export const CAMBIA_LOS_CUADROS =
   'Las zonas ya se cerraron y este resultado cambia quién clasifica o en qué orden. Los cuadros ya están armados, así que no se puede corregir.';
 
-const DESTINOS = { campeonato: 'clasifica a Campeonato', complementaria: 'va al cuadro consuelo' };
+const destinos = (consuelo: string) => ({ campeonato: 'clasifica a Campeonato', complementaria: `va al ${consuelo.toLowerCase()}` });
 
 // A qué cuadro iría si la zona terminara así. Mientras falten partidos, es "por ahora".
-function destino(fila: FilaDePosiciones, zonaCompleta: boolean) {
-  const texto = fila.destino ? DESTINOS[fila.destino] : 'queda afuera de los cuadros';
+function destino(fila: FilaDePosiciones, zonaCompleta: boolean, consuelo: string) {
+  const texto = fila.destino ? destinos(consuelo)[fila.destino] : 'queda afuera de los cuadros';
   return zonaCompleta ? texto : `por ahora ${texto}`;
 }
 
@@ -251,9 +249,9 @@ export function vistaPreviaDeLaZona(simulacion: SimulacionDeResultado, datos: Da
       g.posicion,
       `.º de la zona ${zona.grupo} con `,
       g.partidosGanados,
-      ` ${g.partidosGanados === 1 ? 'partido ganado' : 'partidos ganados'} y ${destino(g, completa)}.`,
+      ` ${g.partidosGanados === 1 ? 'partido ganado' : 'partidos ganados'} y ${destino(g, completa, partido.nombreCuadroConsuelo)}.`,
     ],
-    [`${perdedor.nombre} queda `, p.posicion, `.º y ${destino(p, completa)}.`],
+    [`${perdedor.nombre} queda `, p.posicion, `.º y ${destino(p, completa, partido.nombreCuadroConsuelo)}.`],
     completa
       ? [`La zona ${zona.grupo} queda completa.`]
       : faltan === 1
@@ -292,7 +290,7 @@ export function vistaPreviaDelCuadro(datos: DatosResultado, partido: PartidoConR
   const lineas: Frase[] =
     ronda === rondas
       ? [
-          [`${ganador.nombre} es campeón ${partido.cuadro === 'campeonato' ? 'de Campeonato' : 'del cuadro consuelo'}.`],
+          [`${ganador.nombre} es campeón ${partido.cuadro === 'campeonato' ? 'de Campeonato' : `del ${partido.nombreCuadroConsuelo.toLowerCase()}`}.`],
           [`${perdedor.nombre} pierde la final.`],
         ]
       : [[`${ganador.nombre} pasa a ${siguiente}.`], [`${perdedor.nombre} queda afuera en ${conArticulo(nombreDeRonda(ronda, rondas))}.`]];
@@ -345,7 +343,7 @@ function estadoEnLaLista(partido: PartidoDeLaLista, situacion: Situacion) {
 // Para «Cambiar partido»: una sección por zona y por ronda de cada cuadro. Primero las
 // secciones con partidos que faltan y, en cada una, primero esos partidos. Los cancelados no
 // se cargan.
-export function seccionesDeLaLista(partidos: PartidoDeLaLista[]): SeccionDeLaLista[] {
+export function seccionesDeLaLista(partidos: PartidoDeLaLista[], consuelo: string): SeccionDeLaLista[] {
   const rondas = new Map<ClaveCuadro, number>();
   for (const { cuadro, ronda } of partidos) if (cuadro) rondas.set(cuadro, Math.max(rondas.get(cuadro) ?? 0, ronda!));
 
@@ -354,7 +352,7 @@ export function seccionesDeLaLista(partidos: PartidoDeLaLista[]): SeccionDeLaLis
     const titulo =
       partido.fase === 'grupos'
         ? `Zona ${partido.grupo}`
-        : `${nombreDelCuadro(partido.cuadro!)} · ${nombreDeRonda(partido.ronda!, rondas.get(partido.cuadro!)!)}`;
+        : `${nombreDelCuadro(partido.cuadro!, consuelo)} · ${nombreDeRonda(partido.ronda!, rondas.get(partido.cuadro!)!)}`;
     const situacion = situacionEnLaLista(partido);
     secciones.set(titulo, [...(secciones.get(titulo) ?? []), { partido, situacion, estado: estadoEnLaLista(partido, situacion) }]);
   }

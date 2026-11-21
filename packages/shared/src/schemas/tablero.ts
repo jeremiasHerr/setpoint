@@ -51,6 +51,8 @@ export type Tablero = {
   torneoId: number;
   // "Primavera 2026 · Tercera"
   nombre: string;
+  // Cómo llama la organización a su cuadro consuelo (07 §1.2).
+  nombreCuadroConsuelo: string;
   // grupos: zonas en juego. cuadros: zonas cerradas, cuadros en juego. terminado: torneo cerrado.
   fase: 'grupos' | 'cuadros' | 'terminado';
   clasificanPorGrupo: number;
