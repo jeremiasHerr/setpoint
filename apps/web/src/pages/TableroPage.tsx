@@ -51,7 +51,7 @@ function TableroDelTorneo({ sesion, torneoId }: { sesion: Sesion; torneoId: numb
   const codigo = tablero.error?.message ?? '';
   return (
     <Marco sesion={sesion} torneoId={torneoId}>
-      <div className="flex flex-col items-start gap-3 px-7 pt-[34px]">
+      <div className="flex flex-col items-start gap-3 px-4 md:px-7 pt-[34px]">
         {tablero.error && !sesionInvalida ? (
           <>
             <p className="text-[15px] text-pizarra-500">{ERRORES[codigo] ?? 'No pudimos cargar el tablero.'}</p>
@@ -138,7 +138,7 @@ function Contenido({ sesion, tablero }: { sesion: Sesion; tablero: Tablero }) {
 
   return (
     <Marco sesion={sesion} torneoId={torneoId}>
-      <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-4 px-7 pt-[26px] pb-5">
+      <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-4 px-4 md:px-7 pt-[26px] pb-5">
         <div className="flex flex-col gap-[7px]">
           <h1 className="text-[28px] font-display font-semibold tracking-[-0.02em]">{titulo}</h1>
           <p className="text-[15px] text-pizarra-500">{bajada(tablero)}</p>
@@ -159,7 +159,7 @@ function Contenido({ sesion, tablero }: { sesion: Sesion; tablero: Tablero }) {
         </div>
       </div>
 
-      <div className="flex flex-col gap-[26px] px-7 pb-7">
+      <div className="flex flex-col gap-[26px] px-4 md:px-7 pb-7">
         {tablero.sePuedenCerrarLasZonas && (
           <Siguiente
             titulo="Todas las zonas tienen sus resultados"
