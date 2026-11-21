@@ -12,7 +12,7 @@ import { ErrorDeCarga } from '../features/auth/ErrorDeCarga';
 import { useSesion } from '../features/auth/SesionProvider';
 import { Marca, Reloj, Vence } from '../features/cuenta/piezas';
 import { Pagar } from '../features/cuenta/Pagar';
-import { colores, fuentes, medidas, radios } from '../lib/tokens';
+import { colores, fuentes, medidas, radios, tabular } from '../lib/tokens';
 
 export default function Inscripciones() {
   const { sesion, cuenta, avisos, descartarAviso, cerrarSesion } = useSesion();
@@ -79,11 +79,13 @@ export default function Inscripciones() {
   );
 }
 
-// 1 a 3 · Una inscripción en curso: en revisión, aprobada o reservando.
+// 1 a 3 · Una inscripción en curso: en revisión, aprobada o reservando. Y en la lista de espera, que
+// la referencia no dibuja (decisión 123): el puesto va en la marca, y no hay nada que hacer hasta que
+// le toque.
 function Tarjeta({ inscripcion }: { inscripcion: InscripcionEnCurso }) {
   return (
     <View style={estilos.tarjeta}>
-      <Marca estado={inscripcion.estado} />
+      <Marca inscripcion={inscripcion} />
       <View style={estilos.datos}>
         <Text style={estilos.edicion}>
           {inscripcion.torneo} · {inscripcion.categoria}
@@ -104,11 +106,17 @@ function Tarjeta({ inscripcion }: { inscripcion: InscripcionEnCurso }) {
           </View>
         </>
       )}
+      {inscripcion.listaDeEspera && (
+        <Text style={estilos.textoTarjeta}>
+          No pagás nada ahora. Si se libera un lugar y te toca, te llega un email y tenés{' '}
+          <Text style={estilos.numero}>{inscripcion.listaDeEspera.horas}</Text> horas para pagar.
+        </Text>
+      )}
       {inscripcion.estado === 'reservando' && (
         <>
           {inscripcion.reservaVence && (
             <Text style={estilos.textoTarjeta}>
-              Tenés un lugar reservado hasta las <Vence iso={inscripcion.reservaVence} />.
+              Tenés un lugar reservado <Vence iso={inscripcion.reservaVence} />.
             </Text>
           )}
           <Pagar inscripcion={inscripcion} />
@@ -141,6 +149,11 @@ function AvisoUnico({ aviso, onEntendido }: { aviso: AvisoDeInscripcion; onEnten
 }
 
 const estilos = StyleSheet.create({
+  numero: {
+    fontFamily: fuentes.mono[500],
+    color: colores.noche,
+    ...tabular,
+  },
   pantalla: {
     flex: 1,
     backgroundColor: colores.niebla,

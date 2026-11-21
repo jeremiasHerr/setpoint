@@ -1,6 +1,6 @@
 import type { InscripcionEnCurso } from '@setpoint/shared';
 import { StyleSheet, Text, View } from 'react-native';
-import { hora } from '../../lib/fechas';
+import { diaCorto, diasHasta, hora } from '../../lib/fechas';
 import { colores, fuentes, radios, tabular } from '../../lib/tokens';
 
 // Piezas de las inscripciones en curso, en la pantalla propia y en el aviso de Cuándo juego.
@@ -17,26 +17,41 @@ export function Reloj({ tamano = 18 }: { tamano?: number }) {
   );
 }
 
+const TEXTO_DE_LA_MARCA: Record<InscripcionEnCurso['estado'], string> = {
+  solicitada: 'en revisión',
+  aprobada: 'aprobada',
+  reservando: 'reservando',
+  en_lista_espera: 'en lista de espera',
+};
+
 // El estado de la inscripción (design.md §7): punto hueco en revisión, noche lleno aprobada (el verde
-// queda para "pagada"), y el reloj mientras reserva.
-export function Marca({ estado }: { estado: InscripcionEnCurso['estado'] }) {
+// queda para "pagada"), el reloj mientras reserva y, en la lista de espera, su puesto, porque la
+// lista va numerada por orden de llegada.
+export function Marca({ inscripcion }: { inscripcion: InscripcionEnCurso }) {
+  const { estado, listaDeEspera } = inscripcion;
   return (
     <View style={estilos.marca}>
       {estado === 'solicitada' && <View style={[estilos.punto, estilos.hueco]} />}
       {estado === 'aprobada' && <View style={[estilos.punto, estilos.lleno]} />}
       {estado === 'reservando' && <Reloj tamano={14} />}
-      <Text style={estilos.textoMarca}>
-        {estado === 'solicitada' ? 'en revisión' : estado === 'aprobada' ? 'aprobada' : 'reservando'}
-      </Text>
+      {listaDeEspera && <Text style={estilos.puesto}>{listaDeEspera.puesto}°</Text>}
+      <Text style={estilos.textoMarca}>{TEXTO_DE_LA_MARCA[estado]}</Text>
     </View>
   );
 }
 
-// "18:42", dentro de un texto. Se calcula al mostrarse: la app vuelve a pedir la cuenta al volver al
-// frente.
+// "hasta las 18:42", dentro de un texto. Si no vence hoy, también el día: el lugar que le toca a
+// quien esperaba en la lista es suyo por 24 horas (decisión 076), y la hora sola diría otro día. Se
+// calcula al mostrarse: la app vuelve a pedir la cuenta al volver al frente.
 export function Vence({ iso }: { iso: string }) {
   const urgente = new Date(iso).getTime() - Date.now() < POCO_TIEMPO_MS;
-  return <Text style={[estilos.hora, urgente && estilos.urgente]}>{hora(iso)}</Text>;
+  const otroDia = diasHasta(iso) !== 0;
+  return (
+    <>
+      {otroDia ? `hasta el ${diaCorto(iso)} a las ` : 'hasta las '}
+      <Text style={[estilos.hora, urgente && estilos.urgente]}>{hora(iso)}</Text>
+    </>
+  );
 }
 
 const estilos = StyleSheet.create({
@@ -65,6 +80,12 @@ const estilos = StyleSheet.create({
   },
   lleno: {
     backgroundColor: colores.noche,
+  },
+  puesto: {
+    fontFamily: fuentes.mono[500],
+    fontSize: 15,
+    color: colores.noche,
+    ...tabular,
   },
   textoMarca: {
     fontFamily: fuentes.sans[400],

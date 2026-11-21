@@ -292,7 +292,8 @@ La organización podrá seguir el estado de las inscripciones de cada torneo en 
 - Al cerrar, las reservas sin pagar no se tocan y no entran al sorteo ([decisión 024](decisiones/024-reservas-sin-pagar-al-cerrar.md)), y no se puede cerrar si los que pagaron no alcanzan para las zonas ([decisión 025](decisiones/025-no-se-cierra-sin-inscriptos-para-las-zonas.md)).
 - Con el cupo lleno, el link del torneo lleva a "Anotarme en la lista de espera", por el mismo camino que inscribirse y sin pagar. Se anota quien tiene perfil en el padrón ([decisión 081](decisiones/081-anotarse-en-la-lista-de-espera.md)). La pantalla de pago muestra su puesto en la lista, el lugar que le tocó con hasta cuándo es suyo, y que la lista terminó si se sorteó sin que le tocara ([decisión 082](decisiones/082-la-lista-termina-con-el-sorteo.md)). En el seed, la Copa Confluencia tiene a Sanhueza primero en la lista.
 - Las inscripciones cuya vinculación quedó para revisar llevan la marca "para revisar", la misma del padrón, que lleva a *Revisar vinculación*.
-- Falta la lista de espera desde el link personal y en la app.
+- En la app, quien espera en la lista ve su puesto en *Tus inscripciones* y arriba de *Cuándo juego*; anotarse sigue siendo desde la web ([decisión 123](decisiones/123-la-lista-de-espera-en-la-app.md)).
+- Falta la lista de espera desde el link personal.
 
 **Entrega: 75%**
 
