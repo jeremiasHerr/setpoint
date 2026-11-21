@@ -31,6 +31,10 @@ function errorDeLectura(error: Error | null) {
       return Object.values((error as ErrorApi).campos)[0] ?? 'Revisá el texto.';
     case 'TORNEO_SIN_PARTIDOS':
       return 'Este torneo todavía no tiene partidos: se arman al confirmar el sorteo de zonas.';
+    case 'LIMITE_DE_PEDIDOS_IA':
+      return 'Leíste muchos chats en poco tiempo. Esperá un rato y probá de nuevo.';
+    case 'TOPE_DE_GASTO_IA':
+      return 'Hoy llegaron al tope de uso de la IA. Se renueva solo en unas horas; mientras tanto podés cargar los resultados de a uno.';
     case 'SIN_CONEXION':
       return 'No hay conexión. Probá de nuevo.';
     default:
