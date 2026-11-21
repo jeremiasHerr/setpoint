@@ -24,6 +24,8 @@ export type InscripcionDelTorneo = {
   reservaVence: string | null;
   // Reserva el lugar que se liberó porque era el primero de la lista de espera (decisión 076).
   deLaListaDeEspera: boolean;
+  // Si la vinculación de su perfil quedó para revisar (decisión 051), para marcarla y llevar a Revisar vinculación.
+  revision: 'homonimo' | 'reclamo' | null;
 };
 
 // Quienes esperan un lugar, en el orden en que lo van a recibir.

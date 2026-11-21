@@ -62,7 +62,7 @@ function Inicio({ sesion }: { sesion: Sesion }) {
           </div>
         )
       ) : torneos.data.length > 0 ? (
-        <InicioConTorneos torneos={aTorneosDeInicio(torneos.data, circuito.data)} />
+        <InicioConTorneos torneos={aTorneosDeInicio(torneos.data, circuito.data)} slug={slug} />
       ) : (
         <InicioSinTorneos
           nombre={primerNombre(sesion.usuario.nombre)}

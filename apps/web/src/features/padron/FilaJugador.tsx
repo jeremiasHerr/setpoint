@@ -1,6 +1,6 @@
 import type { JugadorPadron } from '@setpoint/shared';
-import { Link } from 'react-router-dom';
 import { Numero } from '../../components/Numero';
+import { EnlaceParaRevisar } from '../revisiones/piezas';
 import { MenuJugador } from './MenuJugador';
 import { diasDesde } from './vinculacion';
 
@@ -74,12 +74,7 @@ export function FilaJugador({ jugador, columnas, conRanking, seleccionado, slug,
             </span>
           )}
           {jugador.revision && (
-            <Link
-              to={`/padron/revisar/${jugador.id}`}
-              className="shrink-0 rounded-full border border-noche px-[7px] py-px font-mono text-[11px] whitespace-nowrap hover:bg-noche hover:text-white"
-            >
-              para revisar
-            </Link>
+            <EnlaceParaRevisar jugadorId={jugador.id} />
           )}
           {!jugador.activo && (
             <span className="shrink-0 rounded-full bg-linea-suave px-[7px] py-0.5 font-mono text-[11px] whitespace-nowrap text-pizarra-500">

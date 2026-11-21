@@ -1,6 +1,6 @@
 import type { JugadorPadron } from '@setpoint/shared';
-import { Link } from 'react-router-dom';
 import { Numero } from '../../components/Numero';
+import { EnlaceParaRevisar } from '../revisiones/piezas';
 import { motivoCorto } from '../revisiones/textos';
 import { MenuJugador } from './MenuJugador';
 import { COMO_EN_LA_LISTA, cuandoSeVinculo } from './vinculacion';
@@ -44,12 +44,7 @@ export function FilaVinculacion({ jugador, columnas, seleccionado, slug, organiz
         <div className="flex min-w-0 flex-wrap items-center gap-x-[9px] gap-y-1 md:flex-nowrap">
           <span className="max-w-full shrink-0 truncate text-base font-medium md:shrink">{nombre}</span>
           {jugador.revision ? (
-            <Link
-              to={`/padron/revisar/${jugador.id}`}
-              className="shrink-0 rounded-full border border-noche px-[7px] py-px font-mono text-[11px] whitespace-nowrap hover:bg-noche hover:text-white"
-            >
-              para revisar
-            </Link>
+            <EnlaceParaRevisar jugadorId={jugador.id} />
           ) : (
             <span className="shrink-0 rounded-full bg-lona-fondo text-lona-texto px-[7px] py-0.5 font-mono text-[11px] whitespace-nowrap">nueva</span>
           )}
