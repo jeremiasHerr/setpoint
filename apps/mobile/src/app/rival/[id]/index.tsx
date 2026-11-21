@@ -69,7 +69,7 @@ export default function ComoTeFueConEl() {
             ) : (
               <>
                 <Text style={estilos.subtitulo}>Partidos</Text>
-                <PartidosDelCruce partidos={cara.partidos} apellidoRival={cara.b.apellido} />
+                <PartidosDelCruce partidos={cara.partidos} apellidoRival={cara.b.apellido} consuelo={cara.nombreCuadroConsuelo} />
               </>
             )}
           </>

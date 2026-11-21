@@ -1,19 +1,22 @@
 import type { PartidoDelCaraACara } from '@setpoint/shared';
 import { StyleSheet, Text, View } from 'react-native';
 import { colores, fuentes, tabular } from '../../lib/tokens';
+import { rotuloDeRonda } from '../ficha/textos';
 
 const TEXTO_DEL_ESTADO = { jugada: '', walkover: ' por W.O.', abandono: ' por abandono' } as const;
-const RONDAS_DESDE_LA_FINAL = ['final', 'semis', 'cuartos', 'octavos'];
 
-// "zona C", "semis", "semis · cuadro consuelo". Como en la ficha de la web.
-function donde(p: PartidoDelCaraACara) {
+// "zona C", "semis", o en el cuadro consuelo "semis · Complementaria", con el nombre que le da la
+// organización (07 §1.2). Como en la ficha de la web.
+function donde(p: PartidoDelCaraACara, consuelo: string) {
   if (p.grupo) return `zona ${p.grupo}`;
-  const ronda = RONDAS_DESDE_LA_FINAL[p.rondas! - p.ronda!] ?? `ronda ${p.ronda}`;
-  return p.cuadro === 'complementaria' ? `${ronda} · cuadro consuelo` : ronda;
+  const ronda = rotuloDeRonda(p.ronda!, p.rondas!);
+  return p.cuadro === 'complementaria' ? `${ronda} · ${consuelo}` : ronda;
 }
 
+type Props = { partidos: PartidoDelCaraACara[]; apellidoRival: string; consuelo: string };
+
 // Cada enfrentamiento, del más reciente al más viejo. El punto verde marca los que ganó el jugador.
-export function PartidosDelCruce({ partidos, apellidoRival }: { partidos: PartidoDelCaraACara[]; apellidoRival: string }) {
+export function PartidosDelCruce({ partidos, apellidoRival, consuelo }: Props) {
   return (
     <View style={estilos.lista}>
       {partidos.map((p, i) => {
@@ -27,7 +30,7 @@ export function PartidosDelCruce({ partidos, apellidoRival }: { partidos: Partid
                 {TEXTO_DEL_ESTADO[p.estado]}
               </Text>
               <Text style={estilos.detalle}>
-                {p.torneo} · {donde(p)}
+                {p.torneo} · {donde(p, consuelo)}
               </Text>
             </View>
             <Text style={[estilos.marcador, gane && estilos.ganado]}>{p.marcador}</Text>
