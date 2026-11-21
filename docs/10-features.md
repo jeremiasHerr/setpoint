@@ -246,7 +246,7 @@ El jugador dispondrá de una aplicación instalable en su teléfono donde ver su
 
 **Entrega: 50%**
 
-**Estado:** en curso. La app (`apps/mobile`, Expo) tiene el ingreso del jugador, la elección del circuito si juega en varios ([decisiones 039 a 042](decisiones/039-ingreso-del-jugador.md)), *Inscripciones en curso* para quien todavía no juega en ninguno, con el aviso arriba de Cuándo juego para quien ya juega en otro ([decisión 054](decisiones/054-perfil-pendiente.md)), el ranking, *Mi zona* (`GET /api/jugador/:slug/zona`, [decisión 044](decisiones/044-rutas-del-jugador.md)) y *Cuándo juego* (`GET /api/jugador/:slug/partidos`), con una barra de pestañas para pasar de una a otra ([decisión 045](decisiones/045-pestanas-de-la-app.md)). La app abre en Cuándo juego. "Escribirle" abre WhatsApp con el rival de un partido por jugar ([decisión 046](decisiones/046-telefono-del-rival.md)); anotar la fecha llega con F14 y "Cómo te fue con él", con F18. Avisos ([decisión 047](decisiones/047-avisos-push.md)): el fixture llega por push al confirmarse el sorteo, y la app programa un recordatorio antes de cada partido con fecha; el de la confirmación del rival llega con F14. Falta generar el APK con la cuenta de Expo y el proyecto de Firebase (pasos en el README de la raíz).
+**Estado:** en curso. La app (`apps/mobile`, Expo) tiene el ingreso del jugador, la elección del circuito si juega en varios ([decisiones 039 a 042](decisiones/039-ingreso-del-jugador.md)), *Inscripciones en curso* para quien todavía no juega en ninguno, con el aviso arriba de Cuándo juego para quien ya juega en otro ([decisión 054](decisiones/054-perfil-pendiente.md)), el ranking, *Mi zona* (`GET /api/jugador/:slug/zona`, [decisión 044](decisiones/044-rutas-del-jugador.md)) y *Cuándo juego* (`GET /api/jugador/:slug/partidos`), con una barra de pestañas para pasar de una a otra ([decisión 045](decisiones/045-pestanas-de-la-app.md)). La app abre en Cuándo juego. "Escribirle" abre WhatsApp con el rival de un partido por jugar ([decisión 046](decisiones/046-telefono-del-rival.md)); anotar la fecha llega con F14. "Cómo te fue con él" (F18) abre el historial con ese rival desde el próximo partido. Avisos ([decisión 047](decisiones/047-avisos-push.md)): el fixture llega por push al confirmarse el sorteo, y la app programa un recordatorio antes de cada partido con fecha; el de la confirmación del rival llega con F14. Falta generar el APK con la cuenta de Expo y el proyecto de Firebase (pasos en el README de la raíz).
 
 ---
 
@@ -400,7 +400,8 @@ Cualquier persona podrá comparar a dos jugadores del circuito y ver el historia
 **Estado:** implementada en la web, sin el filtro por superficie ([decisión 122](decisiones/122-cara-a-cara-sin-superficie.md)).
 - *Cara a cara* (`/c/:slug/jugadores/:id/cara-a-cara/:rivalId`) muestra el cruce acumulado, cada partido con su torneo e instancia, y vuelve a la ficha. Sin rival, lista con quiénes jugó el jugador para elegir.
 - La API: `GET /api/publico/:slug/jugadores/:id/rivales` y `.../cara-a-cara/:rivalId`. El W.O. no cuenta como jugado y el abandono sí ([decisión 073](decisiones/073-el-wo-no-cuenta-en-la-ficha.md)). Sin teléfono ni email.
-- Falta el filtro por superficie, porque los clubes todavía no tienen el dato, y "Cómo te fue con él" en la app.
+- En la app, *Cómo te fue con él* se abre desde la tarjeta del próximo partido en Cuándo juego (`/rival/:id`), con las mismas dos rutas y sin endpoints nuevos; `rival.jugadorId` se suma a los partidos del jugador. Sin historial, dice que va a ser el primero.
+- Falta el filtro por superficie, porque los clubes todavía no tienen el dato.
 
 ---
 

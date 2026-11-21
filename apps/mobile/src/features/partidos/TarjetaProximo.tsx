@@ -44,6 +44,14 @@ export function TarjetaProximo({ partido }: { partido: PartidoDelJugador }) {
         </Pressable>
       )}
       {!rival.telefono && <SinTelefono nombre={rival.nombre} sobreNegro />}
+      {/* El historial con este rival, para mirarlo antes de jugar (F18). */}
+      <Pressable
+        accessibilityRole="link"
+        onPress={() => router.push({ pathname: '/rival/[id]', params: { id: String(rival.jugadorId) } })}
+        style={({ pressed }) => [estilos.enlace, pressed && estilos.apretado]}
+      >
+        <Text style={estilos.textoEnlace}>Cómo te fue con {rival.nombre}</Text>
+      </Pressable>
       {/* Sin la acción (menos de 24 horas, sin reprogramaciones) no se ofrece: lo resuelve la organización. */}
       {(partido.accionDeFecha === 'cambiar' || partido.accionDeFecha === 'reprogramar') && (
         <Pressable
@@ -144,7 +152,8 @@ const estilos = StyleSheet.create({
   },
   enlace: {
     alignSelf: 'center',
-    paddingVertical: 4,
+    minHeight: 44,
+    justifyContent: 'center',
   },
   textoEnlace: {
     fontFamily: fuentes.sans[500],
