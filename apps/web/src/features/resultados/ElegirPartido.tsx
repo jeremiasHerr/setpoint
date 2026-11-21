@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Boton } from '../../components/Boton';
 import { Chip } from '../../components/Chip';
 import { Numero } from '../../components/Numero';
-import { NOMBRE_DEL_CUADRO } from '../cuadros/cuadro';
+import { nombreDelCuadro } from '../cuadros/cuadro';
 import { CuadroCompleto } from '../cuadros/CuadroCompleto';
 import { CuadroPorRonda } from '../cuadros/CuadroPorRonda';
 import { nombresDelPartido, seccionesDeLaLista, type FilaDeLaLista, type Situacion } from './resultado';
@@ -56,7 +56,7 @@ export function ElegirPartido({ slug, torneoId, actual }: Props) {
   }
 
   const lista = partidos.data.partidos;
-  const zonas: Pestana[] = seccionesDeLaLista(lista.filter((p) => p.fase === 'grupos'))
+  const zonas: Pestana[] = seccionesDeLaLista(lista.filter((p) => p.fase === 'grupos'), partidos.data.nombreCuadroConsuelo)
     .map(({ titulo, faltan, filas }) => ({ clave: titulo, titulo, faltan, zona: filas }))
     .sort((a, b) => a.titulo.localeCompare(b.titulo));
   const faltanEn = (cuadro: ClaveCuadro) =>
@@ -64,7 +64,7 @@ export function ElegirPartido({ slug, torneoId, actual }: Props) {
       .length;
   const deLosCuadros: Pestana[] = (cuadros.data?.cuadros ?? []).map((cuadro) => ({
     clave: cuadro.cuadro,
-    titulo: NOMBRE_DEL_CUADRO[cuadro.cuadro],
+    titulo: nombreDelCuadro(cuadro.cuadro, cuadros.data!.nombreCuadroConsuelo),
     faltan: faltanEn(cuadro.cuadro),
     cuadro,
   }));
@@ -100,10 +100,10 @@ export function ElegirPartido({ slug, torneoId, actual }: Props) {
         <>
           {/* En una pantalla angosta el cuadro va de a una ronda (decisión 038). */}
           <div className="xl:hidden">
-            <CuadroPorRonda key={pestana.cuadro.cuadro} cuadro={pestana.cuadro} eleccion={eleccion} />
+            <CuadroPorRonda key={pestana.cuadro.cuadro} cuadro={pestana.cuadro} consuelo={cuadros.data!.nombreCuadroConsuelo} eleccion={eleccion} />
           </div>
           <div className="hidden overflow-x-auto pb-2 xl:block">
-            <CuadroCompleto cuadro={pestana.cuadro} eleccion={eleccion} />
+            <CuadroCompleto cuadro={pestana.cuadro} consuelo={cuadros.data!.nombreCuadroConsuelo} eleccion={eleccion} />
           </div>
           <p className="text-[13px] text-pizarra-500">Tocá un partido para cargar o corregir su resultado.</p>
         </>

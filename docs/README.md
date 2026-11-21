@@ -218,6 +218,7 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 - ~~¿Cómo sabe F19 quién ganó, qué guarda y cómo se corrige un resultado leído?~~ **Por quien manda el mensaje, verificado por el código; una fila por cada pegado, con los resultados en su resumen; y lo mal cargado se corrige a mano desde Cargar resultado** ([decisión 119](decisiones/119-resultados-desde-los-mensajes.md)). La mayoría de los mensajes están en primera persona, la importación ya guarda así sus lecturas, y deshacer en bloque chocaba con la decisión 028
 - ~~¿Cómo se elige al rival en el cara a cara y qué pasa con la superficie?~~ **Una pantalla en dos pasos, con la lista de con quiénes jugó, y sin filtro por superficie hasta que exista el dato** ([decisión 122](decisiones/122-cara-a-cara-sin-superficie.md)). Se compara solo a quienes ya se enfrentaron, y los clubes todavía no tienen superficie. *Tomada durante la implementación: revisar*
 - ~~¿Las proyecciones de ranking (F20) son una funcionalidad de IA?~~ **No: son una cuenta exacta, y la segunda funcionalidad de IA pasa a ser F19, con prioridad alta** ([decisión 117](decisiones/117-las-proyecciones-no-son-ia.md)). Aplicar la tabla de puntos y reemplazar el casillero no necesita un modelo, y una etiqueta forzada empeora lo que el profesor ya criticó; la IA va donde entiende texto libre
+- ~~¿Cómo se limita el uso de la IA?~~ **Una fila por pedido en la base, con los tokens de la respuesta: 10 pedidos por hora por usuario y US$ 2 por día por organización, más un límite en memoria por usuario** ([decisión 121](decisiones/121-limites-de-la-ia.md)). Lo prometía 06-ia y no estaba; sobrevive a un reinicio y sin la clave todo sigue igual. *Tomada durante la implementación: revisar*
 
 ---
 
@@ -261,7 +262,7 @@ Lista para llevar a la próxima charla. Las respondidas se tachan.
 14. ¿Cómo arman hoy los cruces de la primera ronda de Campeonato y Complementaria? ¿Hay un patrón fijo (1° de A contra 2° de B), se sortea, o lo decide el Comité?
     *Contexto: el reglamento no lo dice. Hoy el sistema siembra a todos los clasificados (ganadores de zona primero) y separa a los de una misma zona hasta la final ([decisión 022](decisiones/022-ubicacion-en-el-cuadro.md)).*
 15. Si un jugador **abandona** un partido empezado (por ejemplo, 6-3 2-1 y se lesiona), ¿cómo lo computan en la tabla de la zona? ¿Como un W.O., o le cuentan los games que llegó a ganar?
-    *Contexto: el reglamento solo habla del W.O. Hoy el sistema guarda el marcador hasta el abandono y lo computa 6-0 6-0, igual que un W.O. ([decisión 027](decisiones/027-abandono.md)).*
+    *Contexto: el reglamento solo habla del W.O. Hoy el sistema lo computa como un W.O., 6-0 6-0 para quien siguió, sin guardar el marcador hasta el abandono ([decisión 059](decisiones/059-abandono-sin-sets.md), que reemplaza a la [027](decisiones/027-abandono.md)).*
 
 ### Resultados
 
@@ -284,7 +285,7 @@ Lista para llevar a la próxima charla. Las respondidas se tachan.
 | El plan gratis de Resend tiene un tope de mails por día, y al abrir una inscripción cada jugador recibe un código y un comprobante | Alcanza para un circuito como POLENTA; si no, plan pago u otro proveedor con API HTTP, porque Railway bloquea el SMTP saliente ([decisión 086](decisiones/086-version-publicada.md)) |
 | El APK se genera con la cuenta de Expo de un integrante ([decisión 036](decisiones/036-apk-con-eas.md)), y los avisos remotos piden además un proyecto de Firebase ([decisión 047](decisiones/047-avisos-push.md)) | El APK se entrega como archivo y no necesita la cuenta para funcionar. Generarlo con tiempo, porque el plan gratuito tiene cola. Sin Firebase el APK funciona igual, sin avisos remotos |
 | El insumo de la extracción de resultados no está confirmado | El desarrollo es el mismo para captura, foto o texto libre. Las otras dos funcionalidades de IA no dependen de esto |
-| La importación del padrón depende de la API de Anthropic, y `docker compose up` no puede depender de cuentas externas | Sin `ANTHROPIC_API_KEY` la API levanta igual y la importación termina en error con el motivo; el alta manual sigue funcionando. Para la demo, la key va en el `.env`. El rate limiting y el tope de gasto de [06](06-ia.md) todavía no están implementados |
+| La importación del padrón depende de la API de Anthropic, y `docker compose up` no puede depender de cuentas externas | Sin `ANTHROPIC_API_KEY` la API levanta igual y la importación termina en error con el motivo; el alta manual sigue funcionando. Para la demo, la key va en el `.env`. El límite de pedidos por usuario y el tope de gasto por organización de [06](06-ia.md) frenan las dos funcionalidades antes de llamar al modelo ([decisión 121](decisiones/121-limites-de-la-ia.md)) |
 | En la entrega, los códigos y los comprobantes no llegan a casillas reales | Mailpit los muestra en `http://localhost:8025`. La versión publicada los manda con Resend ([decisión 086](decisiones/086-version-publicada.md)) |
 | Exposición de datos de contacto en pantallas públicas | Ninguna vista pública incluye teléfono ni email. El email de un jugador lo ven solo él y las organizaciones en las que se inscribió |
 

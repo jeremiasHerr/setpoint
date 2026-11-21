@@ -5,6 +5,7 @@ import { Numero } from '../../components/Numero';
 import { AvisosAtencion } from './AvisosAtencion';
 import { Columna } from './Columna';
 import { EncabezadoDelCircuito } from './EncabezadoDelCircuito';
+import { VinculacionesParaRevisar } from './VinculacionesParaRevisar';
 import { TarjetaBorrador } from './TarjetaBorrador';
 import { TarjetaInscripcionAbierta } from './TarjetaInscripcionAbierta';
 import { TarjetaParaSortear } from './TarjetaParaSortear';
@@ -17,7 +18,7 @@ const TERMINADOS_VISIBLES = 4;
 
 // Con torneos: arriba el circuito, y abajo sus torneos en cuatro columnas, por el momento en que
 // está cada uno (decisión 094).
-export function InicioConTorneos({ torneos }: { torneos: TorneosDeInicio }) {
+export function InicioConTorneos({ torneos, slug }: { torneos: TorneosDeInicio; slug: string }) {
   const { borradores, enJuego, conInscripcionAbierta, paraSortear, terminados, avisos } = torneos;
   const [todosLosTerminados, setTodosLosTerminados] = useState(false);
   const terminadosVisibles = todosLosTerminados ? terminados : terminados.slice(0, TERMINADOS_VISIBLES);
@@ -33,6 +34,10 @@ export function InicioConTorneos({ torneos }: { torneos: TorneosDeInicio }) {
           <AvisosAtencion avisos={avisos} />
         </div>
       )}
+
+      <div className="px-4 pt-6 empty:hidden md:px-7">
+        <VinculacionesParaRevisar slug={slug} />
+      </div>
 
       <main className="grid items-start gap-3.5 px-4 pt-6 pb-8 md:grid-cols-2 md:px-7 xl:grid-cols-4">
         <Columna

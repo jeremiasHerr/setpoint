@@ -1,5 +1,5 @@
 import { EstadoTorneo, FasePartido } from '@prisma/client';
-import { caraACaraParamsSchema, type CaraACara, type JugadorDelCaraACara, type RivalesDelJugador } from '@setpoint/shared';
+import { caraACaraParamsSchema, nombreCuadroConsuelo, type CaraACara, type JugadorDelCaraACara, type RivalesDelJugador } from '@setpoint/shared';
 import { DEL_PADRON_ACTIVOS } from '../../lib/padron';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
@@ -17,7 +17,7 @@ const jugadorSelect = {
 } as const;
 
 async function organizacionPorSlug(slug: string) {
-  const organizacion = await prisma.organizacion.findUnique({ where: { slug }, select: { id: true, nombre: true, usaRanking: true } });
+  const organizacion = await prisma.organizacion.findUnique({ where: { slug }, select: { id: true, nombre: true, usaRanking: true, nombreCuadroConsuelo: true } });
   if (!organizacion) throw new ErrorHttp(404, 'ORGANIZACION_NO_ENCONTRADA');
   return organizacion;
 }
@@ -88,6 +88,7 @@ export async function caraACara(slug: string, params: unknown): Promise<CaraACar
 
   return {
     organizacion: organizacion.nombre,
+    nombreCuadroConsuelo: nombreCuadroConsuelo(organizacion.nombreCuadroConsuelo),
     a: lado(a, rankingA),
     b: lado(b, rankingB),
     resumen: resumenDelCaraACara(aId, partidos),

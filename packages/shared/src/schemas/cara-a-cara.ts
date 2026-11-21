@@ -42,6 +42,8 @@ export type PartidoDelCaraACara = Pick<PartidoDeLaFicha, 'id' | 'torneoId' | 'to
 
 export type CaraACara = {
   organizacion: string;
+  // Cómo llama la organización a su cuadro consuelo (07 §1.2).
+  nombreCuadroConsuelo: string;
   a: JugadorDelCaraACara;
   b: JugadorDelCaraACara;
   resumen: ResumenDelCaraACara;

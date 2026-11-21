@@ -4,12 +4,12 @@ import { donde } from './PartidosDeLaFicha';
 
 const TEXTO_DEL_ESTADO = { jugada: '', walkover: ' por W.O.', abandono: ' por abandono' } as const;
 
-type Props = { partidos: PartidoDelCaraACara[]; apellidoA: string; apellidoB: string };
+type Props = { partidos: PartidoDelCaraACara[]; apellidoA: string; apellidoB: string; consuelo: string };
 
 // Cada enfrentamiento, del más reciente al más viejo: quién ganó, en qué torneo e instancia, y el
 // marcador desde el lado del primer jugador. Las filas que ganó el primero van en negrita y con el
 // punto verde, como los partidos de la ficha.
-export function PartidosDelCaraACara({ partidos, apellidoA, apellidoB }: Props) {
+export function PartidosDelCaraACara({ partidos, apellidoA, apellidoB, consuelo }: Props) {
   return (
     <ul className="flex flex-col">
       {partidos.map((partido) => {
@@ -26,7 +26,7 @@ export function PartidosDelCaraACara({ partidos, apellidoA, apellidoB }: Props) 
                 {TEXTO_DEL_ESTADO[partido.estado]}
               </span>
               <span className="text-xs text-pizarra-500">
-                {partido.torneo} · {donde(partido)}
+                {partido.torneo} · {donde(partido, consuelo)}
               </span>
             </div>
             <Numero className={`text-right text-sm ${gana ? '' : 'text-pizarra-500'}`}>{partido.marcador}</Numero>

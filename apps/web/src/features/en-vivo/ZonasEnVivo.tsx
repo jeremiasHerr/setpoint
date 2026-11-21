@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
 import { estadoParaLaFicha, type VueltaDeLaFicha } from '../ficha/vuelta';
-import { NOMBRE_DEL_CUADRO } from '../cuadros/cuadro';
+import { NOMBRE_DEL_PRINCIPAL } from '../cuadros/cuadro';
 import { comoVieneLaZona, marcadorDesde } from '../tablero/tablero';
 import { laHora, elDia, tieneResultado } from './enVivo';
 
@@ -12,7 +12,7 @@ const rotulo = 'font-mono text-[11px] text-pizarra-500';
 // La tabla de una zona: quién clasifica a cada cuadro se ve con el punto verde y la negrita,
 // como en el tablero y en Mi zona. Cada nombre lleva a la ficha del jugador (decisión 074), que
 // vuelve a las zonas (decisión 102). Debajo, los partidos de la zona con su resultado o su fecha.
-function TablaDeZona({ zona, slug, vuelta }: { zona: ZonaEnVivo; slug: string; vuelta: VueltaDeLaFicha }) {
+function TablaDeZona({ zona, slug, vuelta, consuelo }: { zona: ZonaEnVivo; slug: string; vuelta: VueltaDeLaFicha; consuelo: string }) {
   // En el celular las columnas de números se angostan para dejarle el lugar al nombre.
   const grilla = 'grid grid-cols-[minmax(0,1fr)_28px_40px_56px] items-center sm:grid-cols-[minmax(0,1fr)_36px_52px_64px]';
   return (
@@ -59,7 +59,7 @@ function TablaDeZona({ zona, slug, vuelta }: { zona: ZonaEnVivo; slug: string; v
 
       <div className="flex items-start gap-2.5 bg-niebla px-4 py-3">
         <span className="mt-[7px] size-1.5 shrink-0 rounded-full bg-lona-texto" />
-        <p className="text-[13px] text-pizarra-500">{comoVieneLaZona(zona.filas)}</p>
+        <p className="text-[13px] text-pizarra-500">{comoVieneLaZona(zona.filas, consuelo)}</p>
       </div>
 
       <ul className="flex flex-col px-4 py-2">
@@ -106,18 +106,18 @@ function PartidoDeZona({ partido }: { partido: PartidoEnVivo }) {
 
 // Todas las zonas, una debajo de la otra en el celular y en columnas en escritorio.
 export function ZonasEnVivo({ torneo, slug }: { torneo: TorneoEnVivo; slug: string }) {
-  const consuelo = torneo.tieneComplementaria ? ` y el resto al ${NOMBRE_DEL_CUADRO.complementaria.toLowerCase()}` : '';
+  const consuelo = torneo.tieneComplementaria ? ` y el resto al ${torneo.nombreCuadroConsuelo.toLowerCase()}` : '';
   const vuelta = { ruta: `/c/${slug}/torneos/${torneo.torneoId}/en-vivo?ver=zonas`, etiqueta: `${torneo.nombre} en vivo` };
   const primeros = torneo.clasificanPorGrupo === 1 ? 'El primero de cada zona va' : `Los ${torneo.clasificanPorGrupo} primeros de cada zona van`;
   return (
     <section className="flex flex-col gap-4">
       <p className="text-[15px] text-pizarra-500">
-        {primeros} a {NOMBRE_DEL_CUADRO.campeonato}
+        {primeros} a {NOMBRE_DEL_PRINCIPAL}
         {consuelo}.{torneo.hayCuadros && ' Las zonas ya terminaron: así quedaron.'}
       </p>
       <div className="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
         {torneo.zonas.map((zona) => (
-          <TablaDeZona key={zona.grupo} zona={zona} slug={slug} vuelta={vuelta} />
+          <TablaDeZona key={zona.grupo} zona={zona} slug={slug} vuelta={vuelta} consuelo={torneo.nombreCuadroConsuelo} />
         ))}
       </div>
     </section>

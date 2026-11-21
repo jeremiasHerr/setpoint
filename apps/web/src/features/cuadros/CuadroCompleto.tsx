@@ -1,7 +1,7 @@
 import type { CuadroEliminatorio } from '@setpoint/shared';
 import { Numero } from '../../components/Numero';
 import {
-  NOMBRE_DEL_CUADRO,
+  nombreDelCuadro,
   destacadoDe,
   lugaresDeLaRonda,
   partidosJugados,
@@ -17,13 +17,13 @@ const SEPARACION = 34;
 const ALTO_POR_LUGAR = 74;
 
 // Nombre del cuadro y cuántos partidos van. El principal lleva el punto verde y la regla noche.
-export function EncabezadoDelCuadro({ cuadro }: { cuadro: CuadroEliminatorio }) {
+export function EncabezadoDelCuadro({ cuadro, consuelo }: { cuadro: CuadroEliminatorio; consuelo: string }) {
   const principal = cuadro.cuadro === 'campeonato';
   return (
     <div className={`flex items-center justify-between gap-3 border-b-2 pb-3 ${principal ? 'border-noche' : 'border-linea'}`}>
       <div className="flex items-center gap-2.5">
         <span className={`size-[9px] rounded-full ${principal ? 'bg-lona-texto' : 'bg-linea'}`} />
-        <h2 className="text-xl font-semibold tracking-[-0.025em]">{NOMBRE_DEL_CUADRO[cuadro.cuadro]}</h2>
+        <h2 className="text-xl font-semibold tracking-[-0.025em]">{nombreDelCuadro(cuadro.cuadro, consuelo)}</h2>
       </div>
       <Numero className="text-[13px] text-pizarra-500">
         {partidosJugados(cuadro)} de {cuadro.partidos.length} jugados
@@ -36,14 +36,14 @@ export function EncabezadoDelCuadro({ cuadro }: { cuadro: CuadroEliminatorio }) 
 // de lugares se reparte con space-around: así cada partido queda a la altura de los dos que lo
 // alimentan, y los codos son bordes de 1px (design.md §12).
 // Con eleccion, tocar un partido lo elige (Cargar resultado) en vez de abrir su marcador.
-export function CuadroCompleto({ cuadro, eleccion }: { cuadro: CuadroEliminatorio; eleccion?: Eleccion }) {
+export function CuadroCompleto({ cuadro, consuelo, eleccion }: { cuadro: CuadroEliminatorio; consuelo: string; eleccion?: Eleccion }) {
   const rondas = Array.from({ length: cuadro.rondas }, (_, i) => i + 1);
   const columnas = { gridTemplateColumns: `repeat(${cuadro.rondas}, ${ANCHO_TARJETA}px)`, columnGap: SEPARACION };
   const alto = Math.max(2 ** (cuadro.rondas - 1) * ALTO_POR_LUGAR, 150);
 
   return (
     <section className="flex flex-col gap-4" style={{ width: cuadro.rondas * ANCHO_TARJETA + (cuadro.rondas - 1) * SEPARACION }}>
-      <EncabezadoDelCuadro cuadro={cuadro} />
+      <EncabezadoDelCuadro cuadro={cuadro} consuelo={consuelo} />
 
       <div className="grid" style={columnas}>
         {rondas.map((ronda) => (

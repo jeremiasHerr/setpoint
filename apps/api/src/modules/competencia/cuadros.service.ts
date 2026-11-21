@@ -1,5 +1,5 @@
 import { Cuadro, EstadoPartido as EstadoPrisma, EstadoTorneo, FasePartido, ModoSede, type Prisma } from '@prisma/client';
-import { lugarSiguiente, type ClaveCuadro, type Cuadros, type EstadoPartido } from '@setpoint/shared';
+import { lugarSiguiente, nombreCuadroConsuelo, type ClaveCuadro, type Cuadros, type EstadoPartido } from '@setpoint/shared';
 import { organizacionAdministrada } from '../../lib/permisos';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
@@ -144,7 +144,7 @@ async function cuadrosDelTorneo(organizacionId: number, torneoId: number): Promi
       edicion: true,
       gruposCerrados: true,
       clasificanPorGrupo: true,
-      organizacion: { select: { nombre: true } },
+      organizacion: { select: { nombre: true, nombreCuadroConsuelo: true } },
       categoria: { select: { nombre: true } },
       partidos: {
         where: { fase: FasePartido.ELIMINATORIA },
@@ -197,6 +197,7 @@ async function cuadrosDelTorneo(organizacionId: number, torneoId: number): Promi
   return {
     torneoId: torneo.id,
     organizacion: torneo.organizacion.nombre,
+    nombreCuadroConsuelo: nombreCuadroConsuelo(torneo.organizacion.nombreCuadroConsuelo),
     nombre: `${torneo.edicion ?? torneo.nombre} · ${torneo.categoria.nombre}`,
     clasificadosPorGrupo: torneo.clasificanPorGrupo,
     cuadros,

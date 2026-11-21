@@ -7,7 +7,7 @@ import {
   type Instancia as InstanciaPrisma,
   type Prisma,
 } from '@prisma/client';
-import type { CampeonDelCuadro, CierreDelTorneo, ClaveCuadro } from '@setpoint/shared';
+import { nombreCuadroConsuelo, type CampeonDelCuadro, type CierreDelTorneo, type ClaveCuadro } from '@setpoint/shared';
 import { DEL_PADRON_ACTIVOS } from '../../lib/padron';
 import { organizacionAdministrada } from '../../lib/permisos';
 import { prisma } from '../../lib/prisma';
@@ -39,7 +39,7 @@ const DEL_CIERRE = {
   categoriaId: true,
   categoria: { select: { nombre: true } },
   etapa: { select: { id: true, nombre: true } },
-  organizacion: { select: { usaRanking: true, puntajes: { select: { instancia: true, puntos: true } } } },
+  organizacion: { select: { usaRanking: true, nombreCuadroConsuelo: true, puntajes: { select: { instancia: true, puntos: true } } } },
   // Quien tiene zona entró al sorteo confirmado, aunque después se haya bajado: jugó la fase de grupos.
   inscripciones: { where: { grupo: { not: null } }, select: { jugador } },
   partidos: {
@@ -138,7 +138,11 @@ async function vistaDelCierre(torneo: TorneoDelCierre): Promise<CierreDelTorneo>
   const cerrado = torneo.estado === EstadoTorneo.FINALIZADO;
   const alcanzada = instancias(torneo);
   const partidosJugados = await prisma.partido.count({ where: { torneoId: torneo.id, estado: { in: CON_RESULTADO } } });
-  const comun = { torneoId: torneo.id, nombre: nombreDelTorneo(torneo), cerrado, partidosJugados, campeones: campeones(torneo) };
+  const comun = {
+    torneoId: torneo.id,
+    nombre: nombreDelTorneo(torneo),
+    nombreCuadroConsuelo: nombreCuadroConsuelo(torneo.organizacion.nombreCuadroConsuelo),
+    cerrado, partidosJugados, campeones: campeones(torneo) };
   const etapa = casilleroDelTorneo(torneo);
 
   if (!etapa) {
