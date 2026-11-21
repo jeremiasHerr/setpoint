@@ -147,7 +147,7 @@ function Comparativa({ cara, slug }: { cara: CaraACara; slug: string }) {
         {cara.partidos.length === 0 ? (
           <p className="text-[15px] text-pizarra-500">Todavía no hay partidos con resultado entre los dos.</p>
         ) : (
-          <PartidosDelCaraACara partidos={cara.partidos} apellidoA={a.apellido} apellidoB={b.apellido} />
+          <PartidosDelCaraACara partidos={cara.partidos} apellidoA={a.apellido} apellidoB={b.apellido} consuelo={cara.nombreCuadroConsuelo} />
         )}
       </section>
 
