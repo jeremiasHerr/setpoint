@@ -48,6 +48,7 @@ export async function obtenerCircuito(slug: string, usuarioId: number): Promise<
 
   return {
     nombre: organizacion.nombre,
+    nombreCuadroConsuelo: organizacion.nombreCuadroConsuelo,
     slug: organizacion.slug,
     contactos: organizacion.contactos.map((c) => ({ tipo: c.tipo.toLowerCase() as Contacto['tipo'], valor: c.valor })),
     usaRanking: organizacion.usaRanking,
@@ -171,7 +172,7 @@ export async function guardarCircuito(slug: string, usuarioId: number, datos: Co
   await prisma.$transaction(async (tx) => {
     await tx.organizacion.update({
       where: { id: organizacionId },
-      data: { nombre: datos.nombre, usaRanking: datos.usaRanking },
+      data: { nombre: datos.nombre, nombreCuadroConsuelo: datos.nombreCuadroConsuelo, usaRanking: datos.usaRanking },
     });
 
     // Son pocos y no tienen nada colgando: se reemplazan enteros, en el orden de la pantalla.

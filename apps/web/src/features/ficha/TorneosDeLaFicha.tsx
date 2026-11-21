@@ -1,7 +1,7 @@
 import { instancias, type Instancia, type InstanciaDeLaFicha, type TorneoDeLaFicha } from '@setpoint/shared';
 import { Fragment, type ReactNode } from 'react';
 import { Numero } from '../../components/Numero';
-import { NOMBRE_DEL_CUADRO, rotuloDeRonda } from '../cuadros/cuadro';
+import { rotuloDeRonda } from '../cuadros/cuadro';
 
 // Con los mismos nombres que la tabla de puntos de Tu circuito: "Finalista", "Cuartos de final".
 const etiqueta = (clave: Instancia) => instancias.find((i) => i.clave === clave)!.etiqueta;
@@ -22,9 +22,9 @@ function hastaDonde(instancia: InstanciaDeLaFicha) {
 }
 
 // Debajo de la instancia: en el cuadro consuelo, el nombre del cuadro, y los puntos si los dio.
-function debajo(torneo: TorneoDeLaFicha): ReactNode[] {
+function debajo(torneo: TorneoDeLaFicha, consuelo: string): ReactNode[] {
   const partes: ReactNode[] = [];
-  if (torneo.instancia.tipo === 'cuadro' && torneo.instancia.cuadro === 'complementaria') partes.push(NOMBRE_DEL_CUADRO.complementaria);
+  if (torneo.instancia.tipo === 'cuadro' && torneo.instancia.cuadro === 'complementaria') partes.push(consuelo);
   if (torneo.puntos !== null) {
     partes.push(
       <>
@@ -37,7 +37,7 @@ function debajo(torneo: TorneoDeLaFicha): ReactNode[] {
 
 // Cada torneo que jugó, del más reciente al más viejo: hasta dónde llegó y cuántos puntos le dio.
 // La pantalla de referencia no tiene esta sección: está armada con las piezas de la ficha (decisión 071).
-export function TorneosDeLaFicha({ torneos }: { torneos: TorneoDeLaFicha[] }) {
+export function TorneosDeLaFicha({ torneos, consuelo }: { torneos: TorneoDeLaFicha[]; consuelo: string }) {
   return (
     <section className="flex flex-col gap-2.5">
       <div className="flex items-baseline justify-between gap-3">
@@ -50,7 +50,7 @@ export function TorneosDeLaFicha({ torneos }: { torneos: TorneoDeLaFicha[] }) {
       ) : (
         <ul className="flex flex-col">
           {torneos.map((torneo) => {
-            const partes = debajo(torneo);
+            const partes = debajo(torneo, consuelo);
             return (
               <li
                 key={torneo.torneoId}

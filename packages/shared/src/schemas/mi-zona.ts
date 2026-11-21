@@ -19,6 +19,8 @@ export type MiZona = {
   torneoId: number;
   // "Copa del Limay 2026 · Tercera"
   nombre: string;
+  // Cómo llama la organización a su cuadro consuelo (07 §1.2).
+  nombreCuadroConsuelo: string;
   grupo: string;
   usaRanking: boolean;
   clasificanPorGrupo: number;
