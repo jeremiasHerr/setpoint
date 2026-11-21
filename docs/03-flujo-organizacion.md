@@ -338,6 +338,16 @@ Al guardar:
 
 Todos son solo para quien administra la organización. Los errores de validación responden `400 DATOS_INVALIDOS` con un mensaje por set. Los que no dependen de los datos responden 409: `PARTIDO_SIN_JUGADORES` (un partido de cuadro que espera al ganador del anterior), `CORRECCION_CAMBIA_LOS_CUADROS`, `SIGUIENTE_YA_JUGADO`, `TORNEO_CANCELADO`, y `RESULTADO_DESACTUALIZADO` si otra carga del mismo partido llegó antes.
 
+### Resultados desde los mensajes del grupo (F19)
+
+Desde *Cargar resultado*, "¿Tenés varios resultados juntos?" abre *Resultados desde los mensajes* (`/torneos/:id/resultados/mensajes`). La organización pega los mensajes como los copia WhatsApp; lo que pasa todos los controles se carga solo, y lo dudoso queda en la pantalla, cada uno con su motivo, para cargarlo como se leyó, abrirlo en *Cargar resultado* o descartarlo. El diseño está en [06-ia.md](06-ia.md) §2 y la [decisión 119](decisiones/119-resultados-desde-los-mensajes.md).
+
+| Endpoint | Qué hace |
+|---|---|
+| `POST /api/organizaciones/:slug/torneos/:id/mensajes` | `{ texto }`, hasta 20.000 caracteres. Lee los mensajes con IA, audita cada resultado y carga los seguros con el mismo guardado que el `PUT` de arriba. Devuelve la lectura, en `PROCESADO`, o en `ERROR` si la IA no pudo leer nada. `409 TORNEO_SIN_PARTIDOS` antes del sorteo |
+| `GET /api/organizaciones/:slug/torneos/:id/mensajes/:lectura` | La lectura: cuántos mensajes tenía y cada resultado leído con su mensaje, el partido como está ahora, lo que se carga, su estado (`cargado`, `ya_estaba`, `a_revisar`, `descartado`) y su motivo |
+| `POST /api/organizaciones/:slug/torneos/:id/mensajes/:lectura/resultados/:n` | `{ accion: 'cargar' \| 'descartar' }` sobre un resultado a revisar. Cargar responde los mismos errores que el `PUT`; si falla, la lectura no cambia. `409 RESULTADO_YA_DECIDIDO` si ya no está a revisar |
+
 ---
 
 ## 11. Cierre de fase de grupos

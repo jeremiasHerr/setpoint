@@ -476,16 +476,20 @@ CREATE TABLE importaciones_padron (
 CREATE INDEX ix_importaciones_org ON importaciones_padron (organizacion_id);
 
 -- F19 — Registro de resultados a partir de mensajes.
+-- Una fila por cada vez que la organización pega los mensajes del grupo (decisión 119): los
+-- resultados leídos, con su estado y su motivo, van en el resumen.
 CREATE TABLE extracciones_resultado (
     id              SERIAL PRIMARY KEY,
-    partido_id      INTEGER           REFERENCES partidos(id) ON DELETE SET NULL,
+    organizacion_id INTEGER           NOT NULL REFERENCES organizaciones(id) ON DELETE CASCADE,
+    torneo_id       INTEGER           NOT NULL REFERENCES torneos(id)        ON DELETE CASCADE,
+    creado_por_id   INTEGER           REFERENCES usuarios(id)                ON DELETE SET NULL,
     entrada_cruda   TEXT              NOT NULL,
     respuesta_cruda JSONB,
+    resumen         JSONB,
     estado          estado_proceso_ia NOT NULL DEFAULT 'PENDIENTE',
-    confirmada_en   TIMESTAMPTZ,
     creado_en       TIMESTAMPTZ       NOT NULL DEFAULT now()
 );
-CREATE INDEX ix_extracciones_partido ON extracciones_resultado (partido_id);
+CREATE INDEX ix_extracciones_torneo ON extracciones_resultado (organizacion_id, torneo_id);
 
 COMMIT;
 

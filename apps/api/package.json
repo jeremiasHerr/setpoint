@@ -9,6 +9,7 @@
     "start:contenedor": "prisma migrate deploy && tsx scripts/sembrar-si-vacia.ts && tsx src/index.ts",
     "test": "vitest run",
     "eval:importacion": "tsx --env-file=.env scripts/eval-importacion.ts",
+    "eval:mensajes": "tsx --env-file=.env scripts/eval-mensajes.ts",
     "db:migrate": "prisma migrate dev",
     "db:seed": "prisma db seed",
     "db:studio": "prisma studio",

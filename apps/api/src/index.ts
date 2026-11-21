@@ -12,6 +12,7 @@ import { cuadrosRouter } from './modules/competencia/cuadros.routes';
 import { programarInicioDeGrupos } from './modules/competencia/inicio-de-grupos';
 import { posicionesRouter } from './modules/competencia/posiciones.routes';
 import { resultadosRouter } from './modules/competencia/resultados.routes';
+import { mensajesRouter } from './modules/competencia/mensajes/mensajes.routes';
 import { sorteoRouter } from './modules/competencia/sorteo.routes';
 import { tableroRouter } from './modules/competencia/tablero.routes';
 import { coordinacionRouter } from './modules/coordinacion/coordinacion.routes';
@@ -57,6 +58,7 @@ app.use('/api/organizaciones/:slug/torneos/:id/inscripciones', inscripcionesRout
 app.use('/api/organizaciones/:slug/torneos/:id/cuadros', cuadrosRouter);
 app.use('/api/organizaciones/:slug/torneos/:id/partidos/:partidoId/fecha', coordinacionRouter);
 app.use('/api/organizaciones/:slug/torneos/:id/partidos', resultadosRouter);
+app.use('/api/organizaciones/:slug/torneos/:id/mensajes', mensajesRouter);
 app.use('/api/organizaciones/:slug/torneos/:id/cierre', cierreRouter);
 app.use('/api/organizaciones/:slug/torneos/:id/tablero', tableroRouter);
 app.use('/api/organizaciones/:slug/torneos/:id/navegacion', navegacionRouter);

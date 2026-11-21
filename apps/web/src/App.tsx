@@ -4,6 +4,9 @@ import { Route, Routes, useLocation, useNavigationType } from 'react-router-dom'
 // Cada página se descarga cuando se la pide: quien abre el ranking desde el celular no baja también
 // el panel del organizador ni el arrastrar y soltar del sorteo.
 const CargarResultadoPage = lazy(() => import('./pages/CargarResultadoPage').then((m) => ({ default: m.CargarResultadoPage })));
+const ResultadosDesdeMensajesPage = lazy(() =>
+  import('./pages/ResultadosDesdeMensajesPage').then((m) => ({ default: m.ResultadosDesdeMensajesPage })),
+);
 const CierrePage = lazy(() => import('./pages/CierrePage').then((m) => ({ default: m.CierrePage })));
 const EnVivoPage = lazy(() => import('./pages/EnVivoPage').then((m) => ({ default: m.EnVivoPage })));
 const FichaPublicaPage = lazy(() => import('./pages/FichaPublicaPage').then((m) => ({ default: m.FichaPublicaPage })));
@@ -71,6 +74,7 @@ export default function App() {
         <Route path="/torneos/:id/inscripciones" element={<InscripcionesPage />} />
         <Route path="/torneos/:id/sorteo" element={<SorteoPage />} />
         {/* Sin partido, abre el primero que no tiene resultado (decisión 031). */}
+        <Route path="/torneos/:id/resultados/mensajes" element={<ResultadosDesdeMensajesPage />} />
         <Route path="/torneos/:id/resultados/:partidoId?" element={<CargarResultadoPage />} />
         {/* La página del torneo mientras se juega: se llega desde el Sorteo confirmado (decisión 063). */}
         <Route path="/torneos/:id/tablero" element={<TableroPage />} />

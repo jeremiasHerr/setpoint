@@ -1,0 +1,39 @@
+{
+  "descripcion": "Una semana de zonas: primera persona, sin separadores, super tie-break, del lado del perdedor, abandono, W.O. que manda la organización, un 2-0 sin games y conversación. Nombres ficticios; dos Martín en el torneo.",
+  "sistema": { "setsPorPartido": 3, "terceroSet": "super_tiebreak", "gamesPorSet": 6, "puntosTieBreak": 7, "puntosSuperTieBreak": 10 },
+  "partidos": [
+    { "id": 1, "donde": "Zona A", "a": "Diego Antileo", "b": "Martín Sanhueza" },
+    { "id": 2, "donde": "Zona A", "a": "Diego Antileo", "b": "Juan Paz" },
+    { "id": 3, "donde": "Zona A", "a": "Diego Antileo", "b": "Lucas Bravo" },
+    { "id": 4, "donde": "Zona A", "a": "Martín Sanhueza", "b": "Juan Paz" },
+    { "id": 5, "donde": "Zona A", "a": "Martín Sanhueza", "b": "Lucas Bravo" },
+    { "id": 6, "donde": "Zona A", "a": "Juan Paz", "b": "Lucas Bravo" },
+    { "id": 7, "donde": "Zona B", "a": "Pablo Vera", "b": "Javier Roa" },
+    { "id": 8, "donde": "Zona B", "a": "Pablo Vera", "b": "Martín Ruiz" },
+    { "id": 9, "donde": "Zona B", "a": "Pablo Vera", "b": "Tomás Gil" },
+    { "id": 10, "donde": "Zona B", "a": "Javier Roa", "b": "Martín Ruiz" },
+    { "id": 11, "donde": "Zona B", "a": "Javier Roa", "b": "Tomás Gil" },
+    { "id": 12, "donde": "Zona B", "a": "Martín Ruiz", "b": "Tomás Gil" }
+  ],
+  "chat": [
+    "[20/11/26, 18:03:12] Diego Antileo: Perdí con Sanhueza 46 36",
+    "[20/11/26, 18:10:40] Juan Paz: ¿alguien juega el jueves a la tarde?",
+    "[20/11/26, 18:40:02] Lucas Bravo: Le gané a Paz 6-4 3-6 10-8",
+    "[20/11/26, 19:02:19] Pablo Vera: 2-0 con Roa",
+    "[20/11/26, 19:15:51] Javier Roa: Se retiró Ruiz en el segundo, iba 6-2 3-1",
+    "[20/11/26, 19:30:07] Tomás Gil: Gil 7-6 6-4 a Vera",
+    "[20/11/26, 20:00:33] Martín Sanhueza: con Bravo jugamos el sábado a las 10",
+    "[20/11/26, 20:12:10] Organización: W.O. de Gil, no se presentó. Gana Ruiz",
+    "[20/11/26, 20:30:58] Martín Ruiz: perdí con Vera 64 26 8-10",
+    "[20/11/26, 21:00:14] Diego Antileo: ¿ya está cargado lo de ayer?"
+  ],
+  "esperado": [
+    { "mensaje": 1, "partidoId": 1, "tipo": "jugado", "ganador": "B", "sets": [[4, 6], [3, 6]], "seCargaSolo": true },
+    { "mensaje": 3, "partidoId": 6, "tipo": "jugado", "ganador": "B", "sets": [[4, 6], [6, 3], [8, 10]], "seCargaSolo": true },
+    { "mensaje": 4, "partidoId": 7, "tipo": "jugado", "ganador": "A", "sets": null, "seCargaSolo": false },
+    { "mensaje": 5, "partidoId": 10, "tipo": "abandono", "ganador": "A", "sets": [], "seCargaSolo": true },
+    { "mensaje": 6, "partidoId": 9, "tipo": "jugado", "ganador": "B", "sets": [[6, 7], [4, 6]], "seCargaSolo": true },
+    { "mensaje": 8, "partidoId": 12, "tipo": "walkover", "ganador": "A", "sets": [], "seCargaSolo": true },
+    { "mensaje": 9, "partidoId": 8, "tipo": "jugado", "ganador": "A", "sets": [[4, 6], [6, 2], [10, 8]], "seCargaSolo": true }
+  ]
+}
