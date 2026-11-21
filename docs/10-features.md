@@ -410,7 +410,7 @@ La organización podrá cargar varios resultados de una sola vez a partir de los
 - Usa la misma arquitectura que F03: lo que pasa los controles (el partido existe, los jugadores son los de esa zona, el marcador es válido) se carga solo; lo dudoso queda para que la organización lo confirme.
 - Si no logra interpretar un mensaje, ese partido queda para carga manual sin bloquear a los demás.
 
-**Estado: prioridad alta, con el alcance a confirmar con el profesor.** Es la segunda funcionalidad de IA, desde que las proyecciones (F20) dejaron de contarse como IA ([decisión 117](decisiones/117-las-proyecciones-no-son-ia.md)). Lleva la IA al uso de todos los días, porque cargar resultados es el dolor recurrente real y F03 se usa pocas veces por año ([devolucion-25.md](devolucion-25.md), cambio I).
+**Estado: implementada para texto pegado** ([decisión 119](decisiones/119-resultados-desde-los-mensajes.md)): lo que pasa los controles se carga solo, lo dudoso se revisa en *Resultados desde los mensajes*. Las capturas de pantalla quedan propuestas, y el alcance se confirma con el profesor. Es la segunda funcionalidad de IA, desde que las proyecciones (F20) dejaron de contarse como IA ([decisión 117](decisiones/117-las-proyecciones-no-son-ia.md)). Lleva la IA al uso de todos los días, porque cargar resultados es el dolor recurrente real y F03 se usa pocas veces por año ([devolucion-25.md](devolucion-25.md), cambio I).
 
 **Funcionalidad asistida por IA. Entrega: 100%**
 

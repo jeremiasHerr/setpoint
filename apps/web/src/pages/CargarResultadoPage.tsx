@@ -1,7 +1,7 @@
 import type { PartidoConResultado } from '@setpoint/shared';
 import { MensajeError } from '../components/Aviso';
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
-import { Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { Link, Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Boton } from '../components/Boton';
 import { Chip } from '../components/Chip';
 import { Tarjeta } from '../components/Tarjeta';
@@ -43,7 +43,19 @@ function Marco({ sesion, torneoId, children }: { sesion: Sesion; torneoId: numbe
     <div className="min-h-screen bg-cemento text-noche">
       <EncabezadoDelTorneo sesion={sesion} torneoId={torneoId} actual="resultados" />
       <div className="flex justify-center px-4 pt-6 pb-10 sm:pt-[34px] md:px-7">
-        <div className="flex w-full max-w-[1240px] flex-col gap-4">{children}</div>
+        <div className="flex w-full max-w-[1240px] flex-col gap-4">
+          {children}
+          {/* F19: varios resultados juntos, desde los mensajes del grupo (decisión 119). */}
+          <Link
+            to={`/torneos/${torneoId}/resultados/mensajes`}
+            className="flex items-center gap-2.5 self-start px-1 text-sm text-pizarra-500 hover:text-noche hover:underline"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M4 6h16M4 12h10M4 18h7" />
+            </svg>
+            ¿Tenés varios resultados juntos? Pegá los mensajes del grupo y los cargamos de una.
+          </Link>
+        </div>
       </div>
     </div>
   );

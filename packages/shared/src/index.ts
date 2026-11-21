@@ -13,6 +13,7 @@ export * from './schemas/revision';
 export * from './schemas/pago';
 export * from './schemas/cuadros';
 export * from './schemas/resultado';
+export * from './schemas/mensajes';
 export * from './schemas/cierre';
 export * from './schemas/tablero';
 export * from './schemas/navegacion';

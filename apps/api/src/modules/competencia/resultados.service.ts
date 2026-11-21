@@ -44,7 +44,7 @@ const DEL_TORNEO = {
 } satisfies Prisma.TorneoSelect;
 
 // Lo que se muestra de un partido en la lista para elegir cuál cargar.
-const DE_LA_LISTA = {
+export const DE_LA_LISTA = {
   id: true,
   fase: true,
   grupo: true,
@@ -71,7 +71,7 @@ const DEL_PARTIDO = {
 type Torneo = Prisma.TorneoGetPayload<{ select: typeof DEL_TORNEO }>;
 type Partido = Prisma.PartidoGetPayload<{ select: typeof DEL_PARTIDO }>;
 
-async function torneoDeLaOrganizacion(organizacionId: number, torneoId: number) {
+export async function torneoDeLaOrganizacion(organizacionId: number, torneoId: number) {
   if (!Number.isInteger(torneoId)) throw new ErrorHttp(404, 'TORNEO_NO_ENCONTRADO');
   // El filtro por organización es el aislamiento: el id solo no alcanza.
   const torneo = await prisma.torneo.findFirst({ where: { id: torneoId, organizacionId }, select: DEL_TORNEO });
@@ -87,7 +87,7 @@ async function partidoDelTorneo(torneoId: number, partidoId: number) {
   return partido;
 }
 
-const sistemaDeJuego = (torneo: Torneo): SistemaDeJuego => ({
+export const sistemaDeJuego = (torneo: Torneo): SistemaDeJuego => ({
   setsPorPartido: torneo.setsPorPartido,
   terceroSet: torneo.terceroSet.toLowerCase() as SistemaDeJuego['terceroSet'],
   gamesPorSet: torneo.gamesPorSet,
@@ -95,9 +95,9 @@ const sistemaDeJuego = (torneo: Torneo): SistemaDeJuego => ({
   puntosSuperTieBreak: torneo.puntosSuperTieBreak,
 });
 
-const nombreDelTorneo = (torneo: Torneo) => `${torneo.edicion ?? torneo.nombre} · ${torneo.categoria.nombre}`;
+export const nombreDelTorneo = (torneo: Torneo) => `${torneo.edicion ?? torneo.nombre} · ${torneo.categoria.nombre}`;
 
-function aPartidoDeLaLista(partido: Prisma.PartidoGetPayload<{ select: typeof DE_LA_LISTA }>): PartidoDeLaLista {
+export function aPartidoDeLaLista(partido: Prisma.PartidoGetPayload<{ select: typeof DE_LA_LISTA }>): PartidoDeLaLista {
   const aJugador = (j: typeof partido.jugadorA) => j && { jugadorId: j.id, nombre: j.nombre, apellido: j.apellido };
   return {
     id: partido.id,
