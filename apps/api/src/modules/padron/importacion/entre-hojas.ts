@@ -6,7 +6,7 @@ import type { Problema } from './auditar';
 export type HojaParaControlar = { id: number; categoria: string; propuesta: FilaExtraida[] };
 
 // Sin tildes ni mayúsculas: "Martín Sanhueza" y "MARTIN SANHUEZA" son el mismo.
-const normalizar = (texto: string) =>
+export const normalizar = (texto: string) =>
   texto
     .normalize('NFD')
     .replace(/\p{Diacritic}/gu, '')

@@ -3,8 +3,11 @@ import { Numero } from '../../components/Numero';
 import { Selector } from '../../components/Selector';
 import { casillerosComoTexto } from './decisiones';
 
-// Mismas columnas que el encabezado de la tabla en ImportarPadronPage.
-export const COLUMNAS = 'grid grid-cols-[200px_220px_minmax(0,1fr)_170px] items-center gap-x-4';
+// Mismas columnas que el encabezado de la tabla en ImportarPadronPage. En el celular, dos: la fila
+// con su jugador abajo, y qué pasa; los casilleros no entran y se ven al abrir la fila en la compu.
+export const COLUMNAS = 'grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 md:grid-cols-[200px_220px_minmax(0,1fr)_170px]';
+// Lo que en el celular no tiene columna.
+export const SOLO_COMPU = 'hidden md:block';
 
 type Props = {
   // La hoja del lote a la que pertenece la fila (decisión 012).
@@ -16,6 +19,8 @@ type Props = {
   problemas?: string[];
   padron: JugadorPadron[];
   expandida: boolean;
+  // Ya importada sin preguntar (decisión 118): se muestra para mirar, sin decisión que tomar.
+  importada?: boolean;
   alCambiar: (decision: DecisionImportacion) => void;
   alExpandir: () => void;
 };
@@ -30,10 +35,21 @@ function nombreDe(j: { nombre: string; apellido: string }) {
   return `${j.nombre} ${j.apellido}`;
 }
 
-export function FilaImportacion({ hoja, categoria, fila, decision, problemas, padron, expandida, alCambiar, alExpandir }: Props) {
+export function FilaImportacion({
+  hoja,
+  categoria,
+  fila,
+  decision,
+  problemas,
+  padron,
+  expandida,
+  importada = false,
+  alCambiar,
+  alExpandir,
+}: Props) {
   const vinculado = decision.accion === 'vincular' ? padron.find((j) => j.id === decision.jugadorId) : undefined;
   const sugerido = fila.coincideCon !== null ? padron.find((j) => j.id === fila.coincideCon) : undefined;
-  const marcada = problemas !== undefined || (fila.coincideCon !== null && fila.confianza !== 'alta');
+  const marcada = !importada && fila.revisar !== null;
 
   const resumen = (
     <div className={COLUMNAS}>
@@ -42,25 +58,34 @@ export function FilaImportacion({ hoja, categoria, fila, decision, problemas, pa
         <span className="font-mono text-xs text-pizarra-500">
           {categoria ? `${categoria.toLowerCase()} · ` : ''}fila {fila.fila}
         </span>
+        <div className="mt-1 md:hidden">
+          <JugadorDestino decision={decision} fila={fila} vinculado={vinculado} marcada={marcada} />
+        </div>
       </div>
-      <JugadorDestino decision={decision} fila={fila} vinculado={vinculado} marcada={marcada} />
-      <Numero className="text-[13px] text-pizarra-500">{casillerosComoTexto(fila)}</Numero>
+      <div className={`min-w-0 ${SOLO_COMPU}`}>
+        <JugadorDestino decision={decision} fila={fila} vinculado={vinculado} marcada={marcada} />
+      </div>
+      <Numero className={`text-[13px] text-pizarra-500 ${SOLO_COMPU}`}>{casillerosComoTexto(fila)}</Numero>
       <div className="flex justify-end">
-        <button
-          type="button"
-          onClick={alExpandir}
-          aria-expanded={expandida}
-          className={`text-sm hover:underline ${
-            marcada ? 'font-semibold text-noche' : decision.accion === 'crear' ? 'font-medium' : 'text-pizarra-500'
-          }`}
-        >
-          {marcada && expandida ? 'Elegí qué hacer' : QUE_PASA[decision.accion]}
-        </button>
+        {importada ? (
+          <span className="text-sm text-pizarra-500">Importado</span>
+        ) : (
+          <button
+            type="button"
+            onClick={alExpandir}
+            aria-expanded={expandida}
+            className={`text-sm hover:underline ${
+              marcada ? 'font-semibold text-noche' : decision.accion === 'crear' ? 'font-medium' : 'text-pizarra-500'
+            }`}
+          >
+            {marcada && expandida ? 'Elegí qué hacer' : QUE_PASA[decision.accion]}
+          </button>
+        )}
       </div>
     </div>
   );
 
-  if (!expandida) {
+  if (!expandida || importada) {
     return <li className="flex min-h-14 flex-col justify-center border-b border-linea-suave px-[18px] py-2.5">{resumen}</li>;
   }
 
@@ -85,6 +110,11 @@ export function FilaImportacion({ hoja, categoria, fila, decision, problemas, pa
       {!problemas && sugerido && fila.confianza !== 'alta' && (
         <p className="text-[13px] font-medium text-noche">
           En la planilla dice “{fila.enLaPlanilla}”. Puede ser {nombreDe(sugerido)}, pero el nombre no es exacto.
+        </p>
+      )}
+      {!problemas && !sugerido && fila.revisar && (
+        <p className="text-[13px] font-medium text-noche">
+          {fila.revisar}. Si es la misma persona, vinculalo; si no, dalo de alta.
         </p>
       )}
 

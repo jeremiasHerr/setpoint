@@ -39,7 +39,7 @@ export function LoQueSeCrea({ crea }: { crea: Importacion['crea'] }) {
     <div className="flex flex-col gap-1.5 rounded-tarjeta border border-linea bg-niebla px-[18px] py-4 text-[15px] leading-normal text-pizarra-700">
       {partes.length > 0 && (
         <p>
-          Al importar, en tu circuito se crean {partes[0]}
+          Al importar, en tu circuito {crea.categorias.length + crea.etapas.length === 1 ? 'se crea' : 'se crean'} {partes[0]}
           {partes[1] && <> y {partes[1]}</>}.
         </p>
       )}

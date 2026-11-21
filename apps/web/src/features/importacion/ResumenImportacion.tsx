@@ -1,8 +1,8 @@
-import type { ConteosImportacion } from '@setpoint/shared';
 import { Numero } from '../../components/Numero';
 
+// Por excepción (decisión 118): los que se importan solos, existentes o nuevos, y los que van a revisión.
 type Props = {
-  conteos: ConteosImportacion;
+  conteos: { existentes: number; nuevos: number; aRevisar: number };
   categoria: string | null;
   casilleros: string[];
   jugadores: number;
@@ -10,26 +10,22 @@ type Props = {
 
 // Qué va a pasar, en números, antes de tocar nada.
 export function ResumenImportacion({ conteos, categoria, casilleros, jugadores }: Props) {
-  const paraRevisar = conteos.dudosos + conteos.conProblemas;
-  const motivoRevision =
-    conteos.conProblemas > 0
-      ? 'hay números que no coinciden con la planilla'
-      : 'hay nombres que no son exactos';
+  const paraRevisar = conteos.aRevisar;
 
   return (
     <div className="flex flex-col gap-5">
       <div className="grid gap-4 md:grid-cols-3">
-        <TarjetaConteo numero={conteos.existentes} titulo="ya están en el padrón" detalle="se les cargan los puntos" />
-        <TarjetaConteo numero={conteos.nuevos} titulo="son nuevos" detalle={`se dan de alta en ${categoria ?? 'la categoría'}`} />
+        <TarjetaConteo numero={conteos.existentes} titulo="ya están en el padrón" detalle="se les cargan los puntos solos" />
+        <TarjetaConteo numero={conteos.nuevos} titulo="son nuevos" detalle={`se dan de alta solos en ${categoria ?? 'la categoría'}`} />
         {paraRevisar > 0 ? (
           // Lo que hay que decidir no venció nada: borde noche, no rojo (design.md §3, decisión 099).
           <div className="flex items-baseline gap-3 rounded-tarjeta border-[1.5px] border-noche bg-papel px-[18px] py-4">
             <Numero className="text-[30px] font-medium tracking-[-0.03em]">{paraRevisar}</Numero>
             <div className="flex flex-col gap-0.5">
               <span className="text-[15px] font-semibold">
-                {paraRevisar === 1 ? 'necesita que decidas' : 'necesitan que decidas'}
+                {paraRevisar === 1 ? 'lo revisás después' : 'los revisás después'}
               </span>
-              <span className="text-[13px] text-pizarra-700">{motivoRevision}</span>
+              <span className="text-[13px] text-pizarra-700">no pudimos confirmarlos solos</span>
             </div>
           </div>
         ) : (

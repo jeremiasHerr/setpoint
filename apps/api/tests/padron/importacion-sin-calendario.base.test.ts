@@ -30,10 +30,8 @@ describe.skipIf(!process.env.DATABASE_URL)('la importación configura el circuit
     { fila: 4, nombre: 'Federico', apellido: 'Lucero', casilleros: [{ etapa: 'Primavera', anio: 2025, puntos: 15 }, { etapa: 'Verano', anio: 2026, puntos: 10 }], acumulado: 25, coincideCon: null, confianza: null },
     { fila: 5, nombre: 'Ignacio', apellido: 'Vera', casilleros: [{ etapa: 'Primavera', anio: 2025, puntos: 0 }, { etapa: 'Verano', anio: 2026, puntos: 50 }], acumulado: 50, coincideCon: null, confianza: null },
   ];
-  const decisiones = [
-    { hoja: 0, fila: 4, accion: 'crear' as const },
-    { hoja: 0, fila: 5, accion: 'crear' as const },
-  ];
+  // Los dos son claramente nuevos: se importan solos, sin decisiones de la organización (decisión 118).
+  const decisiones: [] = [];
 
   async function organizacionConImportacion(sufijo: string, categoriaNueva: string | null) {
     const slug = `prueba-importacion-${sufijo}-${marca}`;

@@ -159,9 +159,11 @@ Mismas reglas de acceso que el padrón. El diseño de la extracción está en [0
 | Endpoint | Qué hace |
 |---|---|
 | `POST /api/organizaciones/:slug/importaciones` | Multipart con `archivo` (`.xlsx`, `.xls` o `.csv`, hasta 2 MB) y `categoria` (por nombre). Procesa la planilla con IA y devuelve la propuesta en estado `PROCESADO`, o `ERROR` con el motivo. Tarda unos 20 segundos |
-| `GET /api/organizaciones/:slug/importaciones/:id` | Propuesta, problemas de la auditoría y conteos (existentes, nuevos, dudosos, con problemas) |
-| `POST /api/organizaciones/:slug/importaciones/:id/confirmar` | Una decisión por fila: `vincular` con un jugador del padrón, `crear` uno nuevo o `excluir`. Aplica todo en una transacción y deja la importación `CONFIRMADO` |
-| `POST /api/organizaciones/:slug/importaciones/:id/descartar` | Pasa a `DESCARTADO` sin guardar nada |
+| `GET /api/organizaciones/:slug/importaciones/:id` | Propuesta, problemas de la auditoría y conteos (existentes, nuevos, dudosos, con problemas). Cada fila dice si se importa sola o por qué va a revisión, y si ya se aplicó; el lote, cuántas son seguras y cuántas van a revisión |
+| `POST /api/organizaciones/:slug/importaciones/:id/aplicar` | Confirma lo que se crea en el circuito (categorías, torneos del calendario, encender el ranking) y la categoría de las hojas que no la decían, y aplica las filas seguras. Si no hay nada de eso que preguntar, la subida lo hace sola ([decisión 118](decisiones/118-importacion-por-excepcion.md)) |
+| `POST /api/organizaciones/:slug/importaciones/:id/confirmar` | Una decisión por cada fila a revisar: `vincular` con un jugador del padrón, `crear` uno nuevo o `excluir`. Las seguras no llevan decisión: si todavía no se aplicaron, se aplican en la misma transacción. Deja la importación `CONFIRMADO` |
+| `POST /api/organizaciones/:slug/importaciones/:id/deshacer` | Borra los movimientos de la importación y los jugadores que creó, salvo los que ya tienen una cuenta, inscripciones, partidos o puntos de otro origen. Lo que se creó en el circuito queda. Pasa a `DESCARTADO` |
+| `POST /api/organizaciones/:slug/importaciones/:id/descartar` | Pasa a `DESCARTADO` sin guardar nada. Si ya se aplicó algo, devuelve `409 IMPORTACION_APLICADA`: hay que deshacerla |
 
 **La propuesta se lee de la base, no del cliente.** El cliente solo manda las decisiones. Así no puede cargar puntos que la IA no extrajo ni la auditoría revisó.
 
@@ -175,8 +177,8 @@ Mismas reglas de acceso que el padrón. El diseño de la extracción está en [0
 
 | Hoy | Después |
 |---|---|
-| Todas las filas esperan una decisión de la organización en `confirmar` | **Automática por excepción.** Las filas seguras se aplican solas al terminar el procesamiento; `confirmar` recibe decisiones solo para las filas a revisar. La pantalla dice *"Importamos 74 jugadores. Revisá estos 3"* |
-| Sin forma de deshacer una importación confirmada | **Deshacer la importación**: borra sus movimientos y los jugadores que creó, si no tienen otra actividad. Requiere vincular cada movimiento con su importación (migración) |
+| ~~Todas las filas esperan una decisión de la organización en `confirmar`~~ | **Implementado.** Automática por excepción ([decisión 118](decisiones/118-importacion-por-excepcion.md)): ver la tabla de arriba |
+| ~~Sin forma de deshacer una importación confirmada~~ | **Implementado.** `deshacer`, con cada movimiento y cada jugador creado vinculado a su importación |
 | ~~`archivo` y `categoria` por nombre, un archivo por subida~~ | **Implementado.** Hasta 10 archivos de 2 MB, cada uno con una o varias hojas, revisados en una sola página y confirmados juntos ([decisión 012](decisiones/012-importacion-de-varios-archivos-y-hojas.md)) |
 | ~~Sin etapas configuradas termina en `ERROR` (`SIN_ETAPAS`)~~ | **Implementado.** Detecta los torneos del calendario en los encabezados y la categoría en la hoja o el nombre del archivo; se crean al confirmar, en la misma transacción, y si hay puntos se enciende el ranking ([decisión 098](decisiones/098-importar-puntos-enciende-el-ranking.md)) |
 | Solo `.xlsx`, `.xls` y `.csv` | Propuesto: PDF con texto, texto pegado e imágenes, en ese orden de prioridad |
