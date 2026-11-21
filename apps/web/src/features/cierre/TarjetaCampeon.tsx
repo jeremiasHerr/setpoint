@@ -1,7 +1,7 @@
 import type { CampeonDelCuadro } from '@setpoint/shared';
 import { Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
-import { NOMBRE_DEL_CUADRO } from '../cuadros/cuadro';
+import { nombreDelCuadro } from '../cuadros/cuadro';
 import { iniciales } from '../organizador/encabezado';
 
 // Cómo ganó la final: el marcador, o cómo terminó si no se jugó entero.
@@ -15,11 +15,11 @@ function ComoGano({ campeon: { rival, estado, sets } }: { campeon: CampeonDelCua
   );
 }
 
-export function TarjetaCampeon({ campeon }: { campeon: CampeonDelCuadro }) {
+export function TarjetaCampeon({ campeon, consuelo }: { campeon: CampeonDelCuadro; consuelo: string }) {
   const principal = campeon.cuadro === 'campeonato';
   return (
     <Tarjeta className="flex flex-col gap-[13px] p-[18px]">
-      <span className="font-mono text-[11px] text-pizarra-500">{NOMBRE_DEL_CUADRO[campeon.cuadro].toLowerCase()}</span>
+      <span className="text-[12.5px] font-medium text-noche">{nombreDelCuadro(campeon.cuadro, consuelo).toLowerCase()}</span>
       <div className="flex items-center gap-3">
         <span
           aria-hidden="true"

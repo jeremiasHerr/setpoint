@@ -1,5 +1,5 @@
 import { EstadoTorneo, FasePartido, MotivoMovimiento } from '@prisma/client';
-import type { FichaDelJugador, RankingDeLaFicha } from '@setpoint/shared';
+import { nombreCuadroConsuelo, type FichaDelJugador, type RankingDeLaFicha } from '@setpoint/shared';
 import { DEL_PADRON_ACTIVOS } from '../../lib/padron';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
@@ -13,7 +13,7 @@ const jugador = { select: { id: true, nombre: true, apellido: true } } as const;
 export async function fichaPublica(slug: string, jugadorId: number): Promise<FichaDelJugador> {
   const organizacion = await prisma.organizacion.findUnique({
     where: { slug },
-    select: { id: true, nombre: true, usaRanking: true },
+    select: { id: true, nombre: true, nombreCuadroConsuelo: true, usaRanking: true },
   });
   if (!organizacion) throw new ErrorHttp(404, 'ORGANIZACION_NO_ENCONTRADA');
   if (!Number.isInteger(jugadorId)) throw new ErrorHttp(404, 'JUGADOR_NO_ENCONTRADO');
@@ -94,6 +94,7 @@ export async function fichaPublica(slug: string, jugadorId: number): Promise<Fic
 
   return {
     organizacion: organizacion.nombre,
+    nombreCuadroConsuelo: nombreCuadroConsuelo(organizacion.nombreCuadroConsuelo),
     jugadorId: elJugador.id,
     nombre: elJugador.nombre,
     apellido: elJugador.apellido,
@@ -108,7 +109,7 @@ type JugadorLeido = { id: number; categoriaId: number | null; categoria: { activ
 
 // Su puesto, sus puntos y sus casilleros en la categoría en la que juega hoy. Salen de la misma tabla
 // que el ranking público (F09), para que las dos pantallas digan lo mismo.
-async function rankingDelJugador(organizacion: OrganizacionLeida, elJugador: JugadorLeido): Promise<RankingDeLaFicha | null> {
+export async function rankingDelJugador(organizacion: OrganizacionLeida, elJugador: JugadorLeido): Promise<RankingDeLaFicha | null> {
   if (!organizacion.usaRanking || elJugador.categoriaId === null || !elJugador.categoria?.activa) return null;
   const organizacionId = organizacion.id;
   const categoriaId = elJugador.categoriaId;

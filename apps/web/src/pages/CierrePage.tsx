@@ -24,7 +24,7 @@ export function CierrePage() {
 
 function Marco({ sesion, torneoId, children }: { sesion: Sesion; torneoId: number; children: ReactNode }) {
   return (
-    <div className="min-h-screen bg-cemento text-noche">
+    <div className="min-h-screen bg-papel text-noche">
       <EncabezadoDelTorneo sesion={sesion} torneoId={torneoId} actual="cierre" />
       {children}
     </div>
@@ -95,7 +95,7 @@ function AvisoParticipacion({ cierre }: { cierre: CierreDelTorneo }) {
   const puntos = participacion[0]?.ranking?.puntos;
   if (cierre.cerrado || puntos === undefined) return null;
   return (
-    <div className="flex items-start gap-[11px] rounded-tarjeta border border-linea bg-niebla px-[18px] py-4">
+    <div className="flex items-start gap-[11px] rounded-tarjeta border border-linea bg-papel px-[18px] py-4">
       <svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" className="mt-px shrink-0 text-pizarra-500">
         <circle cx="12" cy="12" r="9" />
         <path d="M12 8v5M12 16v.01" />
@@ -130,7 +130,7 @@ function VistaDelCierre({ sesion, cierre }: { sesion: Sesion; cierre: CierreDelT
         <div className="flex min-w-0 flex-col gap-4">
           <div className="grid gap-4 md:grid-cols-2">
             {cierre.campeones.map((campeon) => (
-              <TarjetaCampeon key={campeon.cuadro} campeon={campeon} />
+              <TarjetaCampeon key={campeon.cuadro} campeon={campeon} consuelo={cierre.nombreCuadroConsuelo} />
             ))}
           </div>
           <TablaPuntosAOtorgar cierre={cierre} />

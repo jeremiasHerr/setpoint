@@ -10,7 +10,8 @@ const ResultadosDesdeMensajesPage = lazy(() =>
 const CierrePage = lazy(() => import('./pages/CierrePage').then((m) => ({ default: m.CierrePage })));
 const EnJuegoPage = lazy(() => import('./pages/EnJuegoPage').then((m) => ({ default: m.EnJuegoPage })));
 const EnVivoPage = lazy(() => import('./pages/EnVivoPage').then((m) => ({ default: m.EnVivoPage })));
-const FichaPublicaPage = lazy(() => import('./pages/FichaPublicaPage').then((m) => ({ default: m.FichaPublicaPage })));
+const CaraACaraPage = lazy(() => import('./pages/CaraACaraPage').then((m) => ({ default: m.CaraACaraPage })));
+const FichaPublicaPage =lazy(() => import('./pages/FichaPublicaPage').then((m) => ({ default: m.FichaPublicaPage })));
 const ImportarPadronPage = lazy(() => import('./pages/ImportarPadronPage').then((m) => ({ default: m.ImportarPadronPage })));
 const IngresoPage = lazy(() => import('./pages/IngresoPage').then((m) => ({ default: m.IngresoPage })));
 const InscripcionesPage = lazy(() => import('./pages/InscripcionesPage').then((m) => ({ default: m.InscripcionesPage })));
@@ -85,6 +86,8 @@ export default function App() {
         <Route path="/c/:slug/ranking" element={<RankingPublicoPage />} />
         {/* Pública, sin login: la ficha del jugador, desde el ranking y las zonas (F17). */}
         <Route path="/c/:slug/jugadores/:id" element={<FichaPublicaPage />} />
+        {/* Pública, sin login: el cara a cara; sin rival, elige entre con quiénes jugó (F18). */}
+        <Route path="/c/:slug/jugadores/:id/cara-a-cara/:rivalId?" element={<CaraACaraPage />} />
         {/* Pública, sin login: los cuadros de un torneo (una categoría), para compartir (F08, F10). */}
         <Route path="/c/:slug/torneos/:id" element={<TorneoPublicoPage />} />
         <Route path="/c/:slug/torneos/:id/inscripcion" element={<InscripcionPage />} />

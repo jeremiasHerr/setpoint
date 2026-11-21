@@ -1,50 +1,57 @@
-// Las proyecciones de ranking (F20): docs/pantallas/jugador/que-esta-en-juego.html, en la web
-// pública (decisión 120). Las calcula la API con la misma cuenta que el cierre; no es IA (decisión 117).
-import type { Instancia } from './circuito';
+// La proyección de un jugador en un torneo que todavía no cerró (F20): cómo queda en el ranking
+// según hasta dónde llegue. Es una cuenta exacta, sin modelos (decisión 117). La arma la API; la
+// web y la app solo la muestran. Como toda pantalla pública, sin teléfono ni email.
+import { z } from 'zod';
 import type { InstanciaDeLaFicha } from './ficha';
 
-// Cómo queda el jugador si termina el torneo en esa instancia.
-export type EscenarioDeProyeccion = {
-  instancia: Instancia;
-  // Los que le da esa instancia, según la tabla de puntos.
-  puntos: number;
-  // Su acumulado, con esos puntos en el casillero de este torneo del calendario.
-  acumulado: number;
-  // null si no está en la categoría del ranking.
-  puesto: number | null;
-};
+const instancia = z.enum(['campeon', 'finalista', 'semifinalista', 'cuartos', 'octavos', 'participacion']);
 
-export type ProyeccionDelJugador = {
-  organizacion: string;
-  torneoId: number;
-  // "Otoño 2026 · Tercera"
-  torneo: string;
-  // "Otoño": el casillero que reemplaza.
-  torneoDelCalendario: string;
-  jugadorId: number;
-  nombre: string;
-  apellido: string;
-  // Hasta dónde llegó hasta ahora. null antes del sorteo.
-  situacion: InstanciaDeLaFicha | null;
-  hoy: { puntos: number; puesto: number | null };
-  // Lo que tiene hoy en el casillero de este torneo del calendario, y de qué año es.
-  defiende: { puntos: number; anio: number } | null;
-  // Con un solo escenario: su torneo ya está definido.
-  definido: boolean;
-  // De la peor a la mejor instancia. La primera es la que ya tiene asegurada.
-  escenarios: EscenarioDeProyeccion[];
-  numeroUno: {
-    // La peor instancia con la que queda primero. null si en ninguna.
-    desde: Instancia | null;
-    // El mejor de los demás con lo que ya tienen asegurado.
-    rival: {
-      jugadorId: number;
-      nombre: string;
-      apellido: string;
-      puntos: number;
-      // null si no juega este torneo.
-      asegurada: Instancia | null;
-      sigueEnJuego: boolean;
-    } | null;
-  };
-};
+// Cómo llegó el jugador a este punto del torneo; el schema de la ficha es un tipo, no un schema.
+const situacion = z.custom<InstanciaDeLaFicha>();
+
+// Un cierre hipotético: con esa instancia, cuántos puntos suma, cómo queda su total y en qué puesto.
+export const escenarioDeProyeccionSchema = z.object({
+  instancia,
+  puntos: z.number().int(),
+  acumulado: z.number().int(),
+  // null si no figura en el ranking.
+  puesto: z.number().int().nullable(),
+});
+
+export const proyeccionDelJugadorSchema = z.object({
+  organizacion: z.string(),
+  torneoId: z.number().int(),
+  // "Primavera 26 · Tercera"
+  torneo: z.string(),
+  torneoDelCalendario: z.string(),
+  jugadorId: z.number().int(),
+  nombre: z.string(),
+  apellido: z.string(),
+  // null antes del sorteo.
+  situacion: situacion.nullable(),
+  hoy: z.object({ puntos: z.number().int(), puesto: z.number().int().nullable() }),
+  // Los puntos de su casillero del año pasado, que este torneo reemplaza. null si no tiene.
+  defiende: z.object({ puntos: z.number().int(), anio: z.number().int() }).nullable(),
+  // Con una sola instancia posible, su torneo ya está definido.
+  definido: z.boolean(),
+  // De la peor instancia a la mejor.
+  escenarios: z.array(escenarioDeProyeccionSchema),
+  numeroUno: z.object({
+    // La instancia más baja con la que quedaría primero. null si con ninguna.
+    desde: instancia.nullable(),
+    // El mejor de los demás con lo que ya tiene asegurado. null si no hay otro en la categoría.
+    rival: z
+      .object({
+        jugadorId: z.number().int(),
+        nombre: z.string(),
+        apellido: z.string(),
+        puntos: z.number().int(),
+        asegurada: instancia.nullable(),
+        sigueEnJuego: z.boolean(),
+      })
+      .nullable(),
+  }),
+});
+
+export type EscenarioDeProyeccion = z.infer<typeof escenarioDeProyeccionSchema>;
+export type ProyeccionDelJugador = z.infer<typeof proyeccionDelJugadorSchema>;

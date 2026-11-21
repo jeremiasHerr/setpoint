@@ -111,7 +111,7 @@ function Padron({ sesion }: { sesion: Sesion }) {
   const error = circuito.error ?? padron.error;
 
   return (
-    <div className="min-h-screen bg-cemento text-noche">
+    <div className="min-h-screen bg-papel text-noche">
       <EncabezadoOrganizador
         organizacion={circuito.data?.nombre ?? sesion.organizacion.nombre}
         navegacion={navegacionOrganizador}
@@ -192,8 +192,7 @@ function Padron({ sesion }: { sesion: Sesion }) {
               alCancelar={() => elegir(null)}
             />
 
-            {/* Sin Tarjeta: su bg-papel le gana a bg-niebla. */}
-            <div className="flex flex-col gap-[9px] rounded-tarjeta border border-linea bg-niebla p-[18px]">
+            <div className="flex flex-col gap-[9px] rounded-tarjeta border border-linea bg-papel p-[18px]">
               <h2 className="text-sm font-semibold">¿Son muchos?</h2>
               <p className="text-sm leading-normal text-pizarra-500">
                 Subí la planilla que ya usás y se cargan todos de una vez, con sus puntos históricos.

@@ -84,7 +84,7 @@ export function GrillaDeSets({ sistema, nombres, sets: escritos, problemas, gana
         const campo = (gridRow: number) => ({ gridColumn: i + 2, gridRow });
         return (
           <Fragment key={i}>
-            <span className="text-center font-mono text-[11px] leading-[13px] text-pizarra-500 sm:text-xs" style={campo(1)}>
+            <span className="text-center text-[12.5px] font-medium leading-[13px] text-noche" style={campo(1)}>
               {columna.rotulo}
             </span>
             {(['gamesA', 'gamesB'] as const).map((games, j) => (

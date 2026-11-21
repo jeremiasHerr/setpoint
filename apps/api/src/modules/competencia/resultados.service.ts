@@ -1,6 +1,7 @@
 import { EstadoPartido as EstadoPrisma, EstadoTorneo, FasePartido, type Prisma } from '@prisma/client';
 import {
   ganadorDeLosSets,
+  nombreCuadroConsuelo,
   resultadoDelTorneoSchema,
   type ClaveCuadro,
   type DatosResultado,
@@ -29,6 +30,7 @@ const jugador = { select: { id: true, nombre: true, apellido: true } } as const;
 
 const DEL_TORNEO = {
   id: true,
+  organizacion: { select: { nombreCuadroConsuelo: true } },
   nombre: true,
   edicion: true,
   estado: true,
@@ -127,6 +129,7 @@ async function aPartidoConResultado(torneo: Torneo, partido: Partido): Promise<P
     ...aPartidoDeLaLista(partido),
     torneoId: partido.torneoId,
     nombre: nombreDelTorneo(torneo),
+    nombreCuadroConsuelo: nombreCuadroConsuelo(torneo.organizacion.nombreCuadroConsuelo),
     rondas: await rondasDelCuadro(partido),
     sets: partido.sets,
     sistema: sistemaDeJuego(torneo),
@@ -143,7 +146,11 @@ export async function listarPartidos(slug: string, usuarioId: number, torneoId: 
     orderBy: [{ fase: 'asc' }, { grupo: 'asc' }, { cuadro: 'asc' }, { ronda: 'asc' }, { ordenEnRonda: 'asc' }, { id: 'asc' }],
     select: DE_LA_LISTA,
   });
-  return { torneoId: torneo.id, nombre: nombreDelTorneo(torneo), partidos: partidos.map(aPartidoDeLaLista) };
+  return {
+    torneoId: torneo.id,
+    nombre: nombreDelTorneo(torneo),
+    nombreCuadroConsuelo: nombreCuadroConsuelo(torneo.organizacion.nombreCuadroConsuelo),
+    partidos: partidos.map(aPartidoDeLaLista) };
 }
 
 // Un partido con su resultado y el sistema de juego del torneo: lo que hace falta para cargarlo o corregirlo.

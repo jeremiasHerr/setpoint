@@ -2,6 +2,7 @@ import {
   calcularFormato,
   convocatoriaInicial,
   JUGADORES_POR_GRUPO,
+  nombreCuadroConsuelo,
   type Circuito,
   type Convocatoria,
   type DatosConvocatoria,
@@ -126,7 +127,7 @@ function CargarTorneo({ sesion, id }: { sesion: Sesion; id: number | null }) {
   const noExiste = error?.message === 'TORNEO_NO_ENCONTRADO';
 
   return (
-    <div className="min-h-screen bg-cemento text-noche">
+    <div className="min-h-screen bg-papel text-noche">
       <Encabezado sesion={sesion} organizacion={sesion.organizacion.nombre} />
       <div className="flex flex-col items-start gap-3 px-4 md:px-7 pt-[26px]">
         {noExiste ? (
@@ -280,7 +281,7 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
 
   if (publicada) {
     return (
-      <div className="min-h-screen bg-cemento text-noche">
+      <div className="min-h-screen bg-papel text-noche">
         <Encabezado sesion={sesion} organizacion={circuito.nombre} />
         <TorneoPublicado slug={slug} convocatoria={publicada} />
       </div>
@@ -288,7 +289,7 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
   }
 
   return (
-    <div className="min-h-screen bg-cemento text-noche">
+    <div className="min-h-screen bg-papel text-noche">
       <Encabezado sesion={sesion} organizacion={circuito.nombre} />
 
       <div className="flex flex-wrap items-end justify-between gap-6 px-4 md:px-7 pt-[26px] pb-5">
@@ -304,7 +305,7 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
             Los valores vienen de la configuración de tu circuito. Cambiá solo lo que sea distinto esta vez.
           </p>
         </div>
-        <span aria-live="polite" className="shrink-0 font-mono text-[13px] text-pizarra-500 tabular-nums">
+        <span aria-live="polite" className="shrink-0 text-[13px] text-pizarra-500">
           {guardado.estado === 'sin-cambios'
             ? `${enBorrador ? 'borrador' : 'publicado'} · ${textoEstado['sin-cambios']}`
             : textoEstado[guardado.estado]}
@@ -333,6 +334,7 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
             cantidadGrupos={datos.cantidadGrupos}
             clasificanPorGrupo={datos.clasificanPorGrupo}
             tieneComplementaria={datos.tieneComplementaria}
+            nombreConsuelo={nombreCuadroConsuelo(circuito.nombreCuadroConsuelo)}
             errores={errores}
             alCambiarGrupos={cambiarGrupos}
             alCambiarClasificados={(clasificanPorGrupo) => cambiar('clasificanPorGrupo', clasificanPorGrupo)}
@@ -375,6 +377,7 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
           <PanelComoQueda
             formato={formato}
             tieneComplementaria={datos.tieneComplementaria}
+            nombreConsuelo={nombreCuadroConsuelo(circuito.nombreCuadroConsuelo)}
             fechaInicio={datos.fechaInicio}
             variasCategorias={datos.categorias.length > 1}
             // Un torneo suelto no actualiza ningún casillero del ranking.

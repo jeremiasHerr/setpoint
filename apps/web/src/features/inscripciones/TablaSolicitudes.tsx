@@ -48,8 +48,8 @@ export function TablaSolicitudes({ slug, torneoId, solicitudes, abierta }: Props
       <Tarjeta className="flex flex-col overflow-hidden">
         <div className={`grid gap-x-1 border-b border-linea bg-niebla px-4 py-[11px] md:px-[18px] ${COLUMNAS}`}>
           <span className="text-xs text-pizarra-500">jugador</span>
-          <span className="hidden font-mono text-[11px] text-pizarra-500 md:block">email</span>
-          <span className="hidden font-mono text-[11px] text-pizarra-500 md:block">pidió</span>
+          <span className="hidden text-[12.5px] font-medium text-noche md:block">email</span>
+          <span className="hidden text-[12.5px] font-medium text-noche md:block">pidió</span>
           <span className="hidden md:block" />
         </div>
 
@@ -73,7 +73,7 @@ export function TablaSolicitudes({ slug, torneoId, solicitudes, abierta }: Props
                       <span className="truncate text-[15px] font-medium">
                         {solicitud.nombre} {solicitud.apellido}
                       </span>
-                      <span className="truncate font-mono text-xs text-pizarra-500">
+                      <span className="truncate text-[13px] text-pizarra-500">
                         {aprobada ? 'aprobada · falta pagar' : 'no está en el padrón'}
                         <span className="md:hidden"> · {diaCorto(solicitud.fecha)}</span>
                       </span>

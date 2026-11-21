@@ -34,7 +34,7 @@ export function EstadoInscripcion({ torneo, perfil, inscripcion, email }: Props)
               <span className="text-xl font-semibold tracking-[-0.025em]">
                 {perfil.nombre} {perfil.apellido}
               </span>
-              <span className="font-mono text-[15px] text-pizarra-500">{perfil.categoria}</span>
+              <span className="text-[15px] text-pizarra-500">{perfil.categoria}</span>
             </div>
           )}
           <div className="h-px bg-linea-suave" />
@@ -68,7 +68,7 @@ export function EstadoInscripcion({ torneo, perfil, inscripcion, email }: Props)
         <Monto precio={torneo.precio} />
         <Link
           to={`/c/${torneo.organizacion.slug}/inscripciones/${inscripcion.id}`}
-          className="flex h-14 items-center justify-center rounded-[12px] bg-noche-900 text-white text-[17px] font-semibold hover:bg-pizarra-700"
+          className="flex h-14 items-center justify-center rounded-[12px] bg-noche-900 text-white text-[17px] font-semibold hover:bg-pizarra-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-noche"
         >
           Seguir con el pago
         </Link>

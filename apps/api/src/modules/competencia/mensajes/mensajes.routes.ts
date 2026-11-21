@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { decidirResultadoLeidoSchema, leerMensajesSchema } from '@setpoint/shared';
 import { autenticar } from '../../../middleware/autenticar';
+import { limiteDeIaPorUsuario } from '../../../middleware/limite';
 import { validar } from '../../../middleware/validar';
 import { decidirResultado, leerMensajes, obtenerLectura } from './mensajes.service';
 
@@ -15,6 +16,7 @@ mensajesRouter.use(autenticar);
 
 mensajesRouter.post(
   '/',
+  limiteDeIaPorUsuario,
   (req, res, next) => {
     req.setTimeout(TIEMPO_MAXIMO_MS);
     res.setTimeout(TIEMPO_MAXIMO_MS);

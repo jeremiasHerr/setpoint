@@ -1,6 +1,6 @@
 # 116 — El organizador pasa al cemento, con las columnas del inicio por estado
 
-**Estado:** aceptada — 19 de noviembre de 2026. Reemplaza en parte la [decisión 113](113-columnas-del-inicio-con-borde.md) (el fondo niebla y las columnas sin relleno) y la franja negra de la [094](094-inicio-en-columnas.md).
+**Estado:** reemplazada por la [decisión 123](123-inicio-en-noche-y-rotulos-sin-mono.md) — aceptada el 19 de noviembre de 2026. Reemplaza en parte la [decisión 113](113-columnas-del-inicio-con-borde.md) (el fondo niebla y las columnas sin relleno) y la franja negra de la [094](094-inicio-en-columnas.md).
 
 ## Contexto
 
@@ -28,6 +28,7 @@ Opción 2, elegida por el grupo. Se lee mejor de día y al sol, y es el cambio m
   - Inscripción, en lona: `lona-fondo` y `lona-borde`.
   - En juego, en azul: `azul-fondo`, que pasa de #ECF1FD a #E5EDFE, y un borde nuevo `azul-borde` (#8DAAEC). La marca pasa de noche a `azul`.
   - Terminados queda neutra, con borde `linea-cemento`.
+- **Las notas sueltas sobre el cemento van en `papel` con borde `linea`,** como las demás tarjetas: el relleno `niebla` quedaba como un hueco desteñido (nota de "Importar padrón" del inicio vacío, "¿Son muchos?", "¿Solo querés probar?", "¿No sabés cuál es?" y el aviso de participación del cierre).
 - **`pizarra-500` pasa de #626D82 a #4A5468:** el de antes daba 4,05:1 sobre el cemento, y el nuevo da 5,91:1.
 
 ## Por qué

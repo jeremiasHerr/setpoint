@@ -12,7 +12,7 @@ export function ResultadoDeLaZona({ zona, jugadorId }: { zona: MiZona; jugadorId
     fila.destino === 'campeonato'
       ? 'Clasificaste a Campeonato'
       : fila.destino === 'complementaria'
-        ? 'Pasaste al cuadro consuelo'
+        ? `Pasaste al ${zona.nombreCuadroConsuelo.toLowerCase()}`
         : 'Terminaste la zona';
 
   return (
@@ -21,7 +21,7 @@ export function ResultadoDeLaZona({ zona, jugadorId }: { zona: MiZona; jugadorId
       <Text style={estilos.titulo}>{titulo}</Text>
       <Text style={estilos.detalle}>
         Saliste <Text style={estilos.puesto}>{fila.posicion}º</Text> en la zona.
-        {fila.destino === null && ' Sin cuadro consuelo, tu torneo terminó acá.'}
+        {fila.destino === null && ` Sin ${zona.nombreCuadroConsuelo.toLowerCase()}, tu torneo terminó acá.`}
       </Text>
       <Pressable
         accessibilityRole="link"

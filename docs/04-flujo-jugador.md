@@ -361,7 +361,7 @@ Vista principal durante el torneo: próximo partido con rival, club, día y hora
 
 Notificación push al generarse el fixture, al acordarse una fecha y como recordatorio previo al partido.
 
-**Implementado** ([decisión 047](decisiones/047-avisos-push.md)): el fixture llega por push al confirmarse el sorteo; el recordatorio lo programa el celular un día antes de cada partido con fecha. El de la fecha acordada llega con F14.
+**Implementado** ([decisión 047](decisiones/047-avisos-push.md)): el fixture llega por push al confirmarse el sorteo; el recordatorio lo programa el celular un día antes de cada partido con fecha. El de la fecha acordada llegó con F14: sale al anotar, cambiar y confirmar una fecha.
 
 ---
 
@@ -398,7 +398,7 @@ Tabla de posiciones del grupo en vivo, con la línea de corte marcada — arriba
 | Mis partidos | ✓ | ✓ |
 | Notificaciones push | — | ✓ |
 
-**La persona entra a la app aunque todavía no juegue en ningún circuito** ([decisión 054](decisiones/054-perfil-pendiente.md)). Su cuenta existe desde que verificó el código. Sin circuitos, la app abre en *Inscripciones en curso* ([pantalla de referencia](pantallas/jugador/inscripciones-en-curso.html)): la solicitud en revisión, la aprobada que falta pagar o el lugar reservado sin pagar, con "Pagar". Sin nada en curso: *"Todavía no jugás en ningún circuito. Inscribite desde el link que comparte tu organización"*. Si ya juega en otro circuito, entra a ese, y las inscripciones en curso van como aviso arriba de Cuándo juego. Una solicitud no aprobada o una reserva vencida se avisan una vez. La app vuelve a pedir la cuenta (`GET /api/auth/cuenta`) al abrirse y al volver al frente: así aparece el circuito nuevo cuando se confirma el pago.
+**La persona entra a la app aunque todavía no juegue en ningún circuito** ([decisión 054](decisiones/054-perfil-pendiente.md)). Su cuenta existe desde que verificó el código. Sin circuitos, la app abre en *Inscripciones en curso* ([pantalla de referencia](pantallas/jugador/inscripciones-en-curso.html)): la solicitud en revisión, la aprobada que falta pagar o el lugar reservado sin pagar, con "Pagar". También el puesto en una lista de espera, sin nada que hacer hasta que le toque un lugar; anotarse sigue siendo desde la web ([decisión 123](decisiones/123-la-lista-de-espera-en-la-app.md)). Sin nada en curso: *"Todavía no jugás en ningún circuito. Inscribite desde el link que comparte tu organización"*. Si ya juega en otro circuito, entra a ese, y las inscripciones en curso van como aviso arriba de Cuándo juego. Una solicitud no aprobada o una reserva vencida se avisan una vez. La app vuelve a pedir la cuenta (`GET /api/auth/cuenta`) al abrirse y al volver al frente: así aparece el circuito nuevo cuando se confirma el pago.
 
 **La inscripción por link es web.** Quien no tiene la sesión iniciada abre el link del torneo en el navegador del celular y verifica su email ahí: sin sesión no hay app que abrir, porque la app sin sesión solo muestra el ingreso ([decisión 042](decisiones/042-la-app-sin-sesion.md)). Si el link abre la app cuando está instalada y con la sesión iniciada es la decisión abierta 18 del [README](README.md).
 

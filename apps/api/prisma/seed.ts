@@ -163,6 +163,7 @@ async function main() {
       nombre: 'Polenta Team Tenis',
       slug: 'polenta',
       descripcion: 'Circuito amateur de tenis de Neuquén',
+      nombreCuadroConsuelo: 'Complementaria',
       usaRanking: true,
       ventanaRankingMeses: 12,
       admins: administrador('organizador@polenta.example', 'Eduardo', 'Salinas'),

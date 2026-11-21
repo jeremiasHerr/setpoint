@@ -3,6 +3,7 @@ import { MensajeError } from '../../components/Aviso';
 import { useState } from 'react';
 import { Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
+import { EnlaceParaRevisar } from '../revisiones/piezas';
 import { diaCorto } from '../torneos/texto';
 import { BotonAccion } from './BotonAccion';
 import { textoDelError } from './errores';
@@ -47,9 +48,9 @@ export function TablaInscriptos({ slug, torneoId, inscripciones, sePuedeDarDeBaj
       <Tarjeta className="flex flex-col overflow-hidden">
         <div className={`grid gap-x-3 border-b border-linea bg-niebla px-4 py-[11px] md:gap-x-1 md:px-[18px] ${COLUMNAS}`}>
           <span className="text-xs text-pizarra-500">jugador</span>
-          <span className="hidden font-mono text-[11px] text-pizarra-500 md:block">estado</span>
-          <span className="hidden font-mono text-[11px] text-pizarra-500 md:block">medio</span>
-          <span className="hidden font-mono text-[11px] text-pizarra-500 md:block">fecha</span>
+          <span className="hidden text-[12.5px] font-medium text-noche md:block">estado</span>
+          <span className="hidden text-[12.5px] font-medium text-noche md:block">medio</span>
+          <span className="hidden text-[12.5px] font-medium text-noche md:block">fecha</span>
           <span />
         </div>
 
@@ -71,15 +72,18 @@ export function TablaInscriptos({ slug, torneoId, inscripciones, sePuedeDarDeBaj
                   <div className="flex min-w-0 items-center gap-2.5">
                     <span className={`size-[7px] shrink-0 rounded-full ${pagada ? 'bg-lona-texto' : 'bg-pizarra-400'}`} />
                     <div className="flex min-w-0 flex-col gap-0.5">
-                      <span className={`truncate text-[15px] ${pagada ? 'font-medium' : ''}`}>
-                        {inscripcion.nombre} {inscripcion.apellido}
-                      </span>
+                      <div className="flex min-w-0 flex-wrap items-center gap-x-[9px] gap-y-1">
+                        <span className={`truncate text-[15px] ${pagada ? 'font-medium' : ''}`}>
+                          {inscripcion.nombre} {inscripcion.apellido}
+                        </span>
+                        {inscripcion.revision && <EnlaceParaRevisar jugadorId={inscripcion.jugadorId} />}
+                      </div>
                       <Numero className={`text-[13px] md:hidden ${fecha.urgente ? 'text-rojo-texto' : 'text-pizarra-500'}`}>
                         {fecha.texto}
                         {pagada && inscripcion.medio && ` · ${nombreDelMedio[inscripcion.medio]}`}
                       </Numero>
                       {inscripcion.deLaListaDeEspera && (
-                        <span className="truncate font-mono text-xs text-pizarra-500">de la lista de espera</span>
+                        <span className="truncate text-[13px] text-pizarra-500">de la lista de espera</span>
                       )}
                     </div>
                   </div>

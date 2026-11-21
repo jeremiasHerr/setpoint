@@ -2,21 +2,21 @@ import type { PartidoDeLaFicha } from '@setpoint/shared';
 import { useState } from 'react';
 import { Boton } from '../../components/Boton';
 import { Numero } from '../../components/Numero';
-import { NOMBRE_DEL_CUADRO, rotuloDeRonda } from '../cuadros/cuadro';
+import { rotuloDeRonda } from '../cuadros/cuadro';
 
 // Los últimos, y el resto se despliega en el lugar.
 const VISIBLES = 5;
 
 // "zona C", "final", o en el cuadro consuelo "semis · Cuadro consuelo".
-function donde(partido: PartidoDeLaFicha) {
+export function donde(partido: Pick<PartidoDeLaFicha, 'grupo' | 'ronda' | 'rondas' | 'cuadro'>, consuelo: string) {
   if (partido.grupo) return `zona ${partido.grupo}`;
   const ronda = rotuloDeRonda(partido.ronda!, partido.rondas!);
-  return partido.cuadro === 'complementaria' ? `${ronda} · ${NOMBRE_DEL_CUADRO.complementaria}` : ronda;
+  return partido.cuadro === 'complementaria' ? `${ronda} · ${consuelo}` : ronda;
 }
 
 // Sus partidos con resultado, del más reciente al más viejo: el rival, dónde fue y el marcador desde
 // su lado. El punto verde es un partido ganado. El W.O. figura aunque no cuente en jugados (decisión 073).
-export function PartidosDeLaFicha({ partidos }: { partidos: PartidoDeLaFicha[] }) {
+export function PartidosDeLaFicha({ partidos, consuelo }: { partidos: PartidoDeLaFicha[]; consuelo: string }) {
   const [todos, setTodos] = useState(false);
   const hayMas = partidos.length > VISIBLES;
   const visibles = todos ? partidos : partidos.slice(0, VISIBLES);
@@ -41,7 +41,7 @@ export function PartidosDeLaFicha({ partidos }: { partidos: PartidoDeLaFicha[] }
                   {partido.rival.apellido}
                 </span>
                 <span className="truncate text-xs text-pizarra-500">
-                  {partido.torneo} · {donde(partido)}
+                  {partido.torneo} · {donde(partido, consuelo)}
                 </span>
               </div>
               <Numero className={`text-right text-sm ${partido.gano ? '' : 'text-pizarra-500'}`}>{partido.marcador}</Numero>

@@ -5,6 +5,7 @@ import { Numero } from '../../components/Numero';
 import { AvisosAtencion } from './AvisosAtencion';
 import { Columna } from './Columna';
 import { EncabezadoDelCircuito } from './EncabezadoDelCircuito';
+import { VinculacionesParaRevisar } from './VinculacionesParaRevisar';
 import { TarjetaBorrador } from './TarjetaBorrador';
 import { TarjetaInscripcionAbierta } from './TarjetaInscripcionAbierta';
 import { TarjetaParaSortear } from './TarjetaParaSortear';
@@ -17,7 +18,7 @@ const TERMINADOS_VISIBLES = 4;
 
 // Con torneos: arriba el circuito, y abajo sus torneos en cuatro columnas, por el momento en que
 // está cada uno (decisión 094).
-export function InicioConTorneos({ torneos }: { torneos: TorneosDeInicio }) {
+export function InicioConTorneos({ torneos, slug }: { torneos: TorneosDeInicio; slug: string }) {
   const { borradores, enJuego, conInscripcionAbierta, paraSortear, terminados, avisos } = torneos;
   const [todosLosTerminados, setTodosLosTerminados] = useState(false);
   const terminadosVisibles = todosLosTerminados ? terminados : terminados.slice(0, TERMINADOS_VISIBLES);
@@ -34,18 +35,21 @@ export function InicioConTorneos({ torneos }: { torneos: TorneosDeInicio }) {
         </div>
       )}
 
-      <main className="grid items-start gap-3.5 px-4 pt-6 pb-8 md:grid-cols-2 md:px-7 xl:grid-cols-4">
+      <div className="px-4 pt-6 empty:hidden md:px-7">
+        <VinculacionesParaRevisar slug={slug} />
+      </div>
+
+      <main className="grid items-start gap-4 px-4 pt-6 pb-8 md:grid-cols-2 md:px-7 xl:grid-cols-4">
         <Columna
           titulo="En preparación"
-          tono="amarillo"
-          marca="border-[1.5px] border-dashed border-amarillo"
+          marca="border-[1.5px] border-dashed border-amarillo-claro"
           cantidad={borradores.length}
           ayuda="Borradores: todavía no los ve nadie"
           vacia="No hay ninguno a medio armar."
           pie={
             <Link
               to="/torneos/nuevo"
-              className="flex min-h-[72px] items-center justify-center gap-2 rounded-tarjeta border-[1.5px] border-dashed border-borde-campo text-sm font-medium text-pizarra-700 hover:border-pizarra-500 hover:text-noche"
+              className="flex min-h-[72px] items-center justify-center gap-2 rounded-tarjeta border-[1.5px] border-dashed border-pizarra-400 text-sm font-medium text-white hover:border-white"
             >
               <IconoMas className="size-[13px] stroke-[2.4]" />
               Armar el próximo torneo
@@ -60,8 +64,7 @@ export function InicioConTorneos({ torneos }: { torneos: TorneosDeInicio }) {
         {/* Primero las que ya cerraron: el sorteo es lo próximo que hay que hacer con ellas. */}
         <Columna
           titulo="Inscripción"
-          tono="lona"
-          marca="bg-lona-texto"
+          marca="bg-lona"
           cantidad={paraSortear.length + conInscripcionAbierta.length}
           ayuda="Se cobra desde el link de cada una"
           vacia="Cuando publiques un torneo, la inscripción se sigue desde acá."
@@ -76,8 +79,7 @@ export function InicioConTorneos({ torneos }: { torneos: TorneosDeInicio }) {
 
         <Columna
           titulo="En juego"
-          tono="azul"
-          marca="bg-azul"
+          marca="bg-azul-claro"
           cantidad={enJuego.length}
           ayuda="Del sorteo al cierre"
           vacia="Cuando confirmes un sorteo, el torneo pasa acá."
@@ -89,8 +91,7 @@ export function InicioConTorneos({ torneos }: { torneos: TorneosDeInicio }) {
 
         <Columna
           titulo="Terminados"
-          tono="neutro"
-          marca="bg-pizarra-500"
+          marca="bg-pizarra-400"
           cantidad={terminados.length}
           ayuda={torneos.usaRanking ? 'Sus puntos ya están en el ranking' : 'Cada uno con sus posiciones finales'}
           vacia="Todavía no terminó ninguno."
@@ -99,7 +100,7 @@ export function InicioConTorneos({ torneos }: { torneos: TorneosDeInicio }) {
               <button
                 type="button"
                 onClick={() => setTodosLosTerminados(true)}
-                className="min-h-11 rounded-tarjeta text-sm font-medium text-pizarra-700 hover:text-noche"
+                className="min-h-11 rounded-tarjeta text-sm font-medium text-white underline-offset-4 hover:underline"
               >
                 Ver los <Numero>{ocultos}</Numero> anteriores
               </button>

@@ -1,6 +1,6 @@
 import type { JugadorPadron } from '@setpoint/shared';
-import { Link } from 'react-router-dom';
 import { Numero } from '../../components/Numero';
+import { EnlaceParaRevisar } from '../revisiones/piezas';
 import { MenuJugador } from './MenuJugador';
 import { diasDesde } from './vinculacion';
 
@@ -67,27 +67,22 @@ export function FilaJugador({ jugador, columnas, conRanking, seleccionado, slug,
           <span className="max-w-full shrink-0 truncate text-base font-medium md:shrink">
             {jugador.nombre} {jugador.apellido}
           </span>
-          {esNuevo && <span className="shrink-0 rounded-full bg-lona-fondo text-lona-texto px-[7px] py-0.5 font-mono text-[11px] whitespace-nowrap">nuevo</span>}
+          {esNuevo && <span className="shrink-0 rounded-full bg-lona-fondo text-lona-texto px-[7px] py-0.5 text-[12.5px] font-medium whitespace-nowrap">nuevo</span>}
           {jugador.cuenta && (
-            <span className="shrink-0 rounded-full bg-linea-suave px-[7px] py-0.5 font-mono text-[11px] whitespace-nowrap text-pizarra-500">
+            <span className="shrink-0 rounded-full bg-linea-suave px-[7px] py-0.5 text-[12.5px] font-medium whitespace-nowrap text-noche">
               con cuenta
             </span>
           )}
           {jugador.revision && (
-            <Link
-              to={`/padron/revisar/${jugador.id}`}
-              className="shrink-0 rounded-full border border-noche px-[7px] py-px font-mono text-[11px] whitespace-nowrap hover:bg-noche hover:text-white"
-            >
-              para revisar
-            </Link>
+            <EnlaceParaRevisar jugadorId={jugador.id} />
           )}
           {!jugador.activo && (
-            <span className="shrink-0 rounded-full bg-linea-suave px-[7px] py-0.5 font-mono text-[11px] whitespace-nowrap text-pizarra-500">
+            <span className="shrink-0 rounded-full bg-linea-suave px-[7px] py-0.5 text-[12.5px] font-medium whitespace-nowrap text-noche">
               de baja
             </span>
           )}
         </div>
-        <span className="truncate font-mono text-xs text-pizarra-500">{detalle}</span>
+        <span className="truncate text-[13px] text-pizarra-500">{detalle}</span>
       </div>
 
       <div className="hidden md:block">

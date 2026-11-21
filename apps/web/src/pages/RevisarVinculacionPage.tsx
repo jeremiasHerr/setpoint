@@ -93,7 +93,7 @@ function Revisar({ sesion }: { sesion: Sesion }) {
   const noEncontrado = caso.error instanceof ErrorApi && caso.error.codigo === 'CASO_NO_ENCONTRADO';
 
   return (
-    <div className="min-h-screen bg-cemento text-noche">
+    <div className="min-h-screen bg-papel text-noche">
       <EncabezadoOrganizador
         organizacion={organizacion}
         navegacion={navegacionOrganizador}
@@ -151,7 +151,7 @@ function Revisar({ sesion }: { sesion: Sesion }) {
           <div className="flex flex-col gap-4">
             <ColumnaRevisiones revisiones={revisiones.data} actual={resuelto ? null : Number(jugadorId)} />
             {caso.data?.motivo === 'homonimo' && !resuelto && (
-              <section className="flex flex-col gap-[9px] rounded-tarjeta border border-linea bg-niebla p-[18px]">
+              <section className="flex flex-col gap-[9px] rounded-tarjeta border border-linea bg-papel p-[18px]">
                 <h2 className="text-sm font-semibold">¿No sabés cuál es?</h2>
                 <p className="text-sm leading-normal text-pizarra-500">
                   Llamalos: el teléfono de cada perfil está en su tarjeta. Mientras tanto, la inscripción sigue confirmada.

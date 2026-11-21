@@ -20,7 +20,7 @@ Se definen una vez, al dar de alta el circuito.
 | ¿Cuentan todas las etapas o las mejores N? | `todas` \| `mejores_n` | `todas` |
 | Puntos de ingreso de jugador nuevo | Número | 0 |
 | **`quien_carga_resultados`** | `organizacion` \| `organizacion_y_jugadores` | `organizacion` |
-| **Nombre del cuadro consuelo** | Texto | "Complementaria" (por defecto: "cuadro consuelo") |
+| **Nombre del cuadro consuelo** | Texto, hasta 40 caracteres | "Complementaria" (por defecto: "Cuadro consuelo") |
 
 **`usa_ranking`** — si la organización administra un circuito con ranking acumulado o solo corre torneos sueltos.
 
@@ -58,10 +58,12 @@ Es lo que cierra la promesa de la puerta de entrada: el circuito nuevo empieza c
 
 | Concepto | Nombre por defecto | Configurable | POLENTA |
 |---|---|---|---|
-| Cuadro de los que no clasifican al principal | Cuadro consuelo | Sí, por organización. *Pendiente de código* | Complementaria |
+| Cuadro de los que no clasifican al principal | Cuadro consuelo | Sí, por organización, en *Tu circuito* ([decisión 120](decisiones/120-nombre-del-cuadro-consuelo.md)) | Complementaria |
 | Cuadro de los clasificados | Campeonato | A decidir (decisión abierta 16 del [README](README.md)) | Campeonato |
 | Torneo que se repite cada año (`Etapa`) | Torneo del calendario | No | Etapa |
 | Una vez que se juega, en una categoría (`Torneo`) | Edición | No | — |
+
+**Cómo se configura.** Es un campo de texto de la organización, en *Tu circuito* > *Quiénes son*. Vacío vale el nombre por defecto, y la API lo manda ya resuelto en cada respuesta que lo muestra: zonas, cuadros, tablero, cierre, ficha, resultados y Mi zona de la app.
 
 **Por qué solo el cuadro consuelo.** Es el único caso en que el término de POLENTA es un nombre propio del circuito (es el que usa su reglamento) y no hay uno único establecido: otros circuitos le dicen de otra forma a lo mismo. "Torneo del calendario" y "edición" no se configuran porque son vocabulario de la plataforma, y parametrizarlos multiplicaría los textos de cada pantalla sin que ningún circuito lo pida. Es el criterio de este documento: configurable lo que es barato y varía de verdad.
 

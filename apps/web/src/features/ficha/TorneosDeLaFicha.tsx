@@ -2,13 +2,12 @@ import type { TorneoDeLaFicha } from '@setpoint/shared';
 import { Fragment, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { Numero } from '../../components/Numero';
-import { NOMBRE_DEL_CUADRO } from '../cuadros/cuadro';
 import { hastaDonde } from './hastaDonde';
 
 // Debajo de la instancia: en el cuadro consuelo, el nombre del cuadro, y los puntos si los dio.
-function debajo(torneo: TorneoDeLaFicha): ReactNode[] {
+function debajo(torneo: TorneoDeLaFicha, consuelo: string): ReactNode[] {
   const partes: ReactNode[] = [];
-  if (torneo.instancia.tipo === 'cuadro' && torneo.instancia.cuadro === 'complementaria') partes.push(NOMBRE_DEL_CUADRO.complementaria);
+  if (torneo.instancia.tipo === 'cuadro' && torneo.instancia.cuadro === 'complementaria') partes.push(consuelo);
   if (torneo.puntos !== null) {
     partes.push(
       <>
@@ -22,9 +21,9 @@ function debajo(torneo: TorneoDeLaFicha): ReactNode[] {
 // Cada torneo que jugó, del más reciente al más viejo: hasta dónde llegó y cuántos puntos le dio.
 // La pantalla de referencia no tiene esta sección: está armada con las piezas de la ficha (decisión 071).
 // En el torneo que se está jugando y da puntos, el link a qué tiene en juego (F20, decisión 120).
-type Props = { torneos: TorneoDeLaFicha[]; slug: string; jugadorId: number };
+type Props = { torneos: TorneoDeLaFicha[]; consuelo: string; slug: string; jugadorId: number };
 
-export function TorneosDeLaFicha({ torneos, slug, jugadorId }: Props) {
+export function TorneosDeLaFicha({ torneos, consuelo, slug, jugadorId }: Props) {
   return (
     <section className="flex flex-col gap-2.5">
       <div className="flex items-baseline justify-between gap-3">
@@ -37,7 +36,7 @@ export function TorneosDeLaFicha({ torneos, slug, jugadorId }: Props) {
       ) : (
         <ul className="flex flex-col">
           {torneos.map((torneo) => {
-            const partes = debajo(torneo);
+            const partes = debajo(torneo, consuelo);
             return (
               <li
                 key={torneo.torneoId}

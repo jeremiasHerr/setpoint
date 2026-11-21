@@ -1,4 +1,4 @@
-import type { Contacto } from '@setpoint/shared';
+import { NOMBRE_CUADRO_CONSUELO, type Contacto } from '@setpoint/shared';
 import { MensajeError } from '../../components/Aviso';
 import { useState } from 'react';
 import { Boton } from '../../components/Boton';
@@ -10,8 +10,10 @@ import { Tarjeta } from '../../components/Tarjeta';
 type Props = {
   nombre: string;
   slug: string;
+  nombreCuadroConsuelo: string | null;
   contactos: Contacto[];
   alCambiarNombre: (nombre: string) => void;
+  alCambiarNombreCuadroConsuelo: (nombre: string | null) => void;
   alCambiarContactos: (contactos: Contacto[]) => void;
 };
 
@@ -30,7 +32,15 @@ function IconoQuitar({ className = '' }: { className?: string }) {
   );
 }
 
-export function SeccionQuienesSon({ nombre, slug, contactos, alCambiarNombre, alCambiarContactos }: Props) {
+export function SeccionQuienesSon({
+  nombre,
+  slug,
+  nombreCuadroConsuelo,
+  contactos,
+  alCambiarNombre,
+  alCambiarNombreCuadroConsuelo,
+  alCambiarContactos,
+}: Props) {
   return (
     <Tarjeta className="flex flex-col gap-4 p-5">
       <h2 className="text-[17px] font-semibold">Quiénes son</h2>
@@ -44,6 +54,19 @@ export function SeccionQuienesSon({ nombre, slug, contactos, alCambiarNombre, al
             /{slug}
           </span>
         </div>
+      </div>
+
+      {/* Es el nombre que ve todo el circuito en los cuadros; vacío vuelve al de por defecto (07 §1.2). */}
+      <div className="flex flex-col gap-2">
+        <Campo
+          id="circuito-cuadro-consuelo"
+          rotulo="Nombre del cuadro de los que no clasifican"
+          maxLength={40}
+          placeholder={NOMBRE_CUADRO_CONSUELO}
+          value={nombreCuadroConsuelo ?? ''}
+          onChange={(e) => alCambiarNombreCuadroConsuelo(e.target.value || null)}
+        />
+        <p className="text-[13px] text-pizarra-500">Si lo dejás vacío, se llama «{NOMBRE_CUADRO_CONSUELO}».</p>
       </div>
 
       <Contactos contactos={contactos} alCambiar={alCambiarContactos} />
@@ -90,7 +113,7 @@ function Contactos({ contactos, alCambiar }: { contactos: Contacto[]; alCambiar:
         <ul className="flex flex-col gap-2">
           {contactos.map((c, i) => (
             <li key={`${c.tipo}-${c.valor}`} className="flex h-11 items-center gap-3 rounded-control border border-linea pr-1.5 pl-3.5">
-              <span className="w-[78px] shrink-0 font-mono text-xs text-pizarra-500">{c.tipo === 'whatsapp' ? 'whatsapp' : 'red social'}</span>
+              <span className="w-[78px] shrink-0 text-[12.5px] font-medium text-noche">{c.tipo === 'whatsapp' ? 'whatsapp' : 'red social'}</span>
               <span className={`min-w-0 flex-1 truncate text-[15px] ${c.tipo === 'whatsapp' ? 'font-mono tabular-nums' : ''}`}>{c.valor}</span>
               <button
                 type="button"

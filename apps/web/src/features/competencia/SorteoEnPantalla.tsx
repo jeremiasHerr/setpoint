@@ -46,7 +46,7 @@ export function SorteoEnPantalla({ nombre, zonas, cantidadGrupos, ronda, error, 
     >
       <div className="flex items-center justify-between gap-6 px-10 pt-8">
         <div className="flex flex-col gap-1">
-          <p className="font-mono text-sm text-pizarra-400">sorteo de zonas</p>
+          <p className="text-[12.5px] font-medium text-pizarra-400">sorteo de zonas</p>
           <Numero className="text-xl font-semibold">{nombre}</Numero>
         </div>
         <BotonOscuro onClick={alCerrar}>Cerrar</BotonOscuro>
@@ -102,7 +102,7 @@ function Revelacion({ zonas, cantidadGrupos, alVolverASortear, alCerrar }: Props
       <div className="flex min-h-[220px] flex-col items-center justify-center gap-3 px-10 py-8 text-center" aria-live="polite">
         {ultimo ? (
           <div key={ultimo.jugadorId} className="flex flex-col items-center gap-3 motion-safe:animate-aparecer">
-            <p className="font-mono text-sm text-pizarra-400">
+            <p className="text-[12.5px] font-medium text-pizarra-400">
               bombo {bombo(ultimo.posicionSiembra)}
               {bombo(ultimo.posicionSiembra) === 1 && ' · cabezas de serie'} · siembra {ultimo.posicionSiembra}
             </p>
@@ -151,7 +151,7 @@ function Revelacion({ zonas, cantidadGrupos, alVolverASortear, alCerrar }: Props
               <button
                 type="button"
                 onClick={alCerrar}
-                className="inline-flex h-12 items-center rounded-control bg-papel px-5 text-[15px] font-semibold text-noche-900 hover:bg-linea-suave"
+                className="inline-flex h-12 items-center rounded-control bg-papel px-5 text-[15px] font-semibold text-noche-900 hover:bg-linea-suave focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
               >
                 Listo, revisar y confirmar
               </button>

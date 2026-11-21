@@ -102,7 +102,7 @@ export function InscribirAMano({ slug, torneoId, categoria, suelto, precio, libr
                     <span className={motivo ? 'text-pizarra-400' : 'font-medium'}>
                       {jugador.nombre} {jugador.apellido}
                     </span>
-                    {motivo && <span className="font-mono text-xs text-pizarra-400">{motivo}</span>}
+                    {motivo && <span className="text-[13px] text-pizarra-400">{motivo}</span>}
                   </button>
                 </li>
               );

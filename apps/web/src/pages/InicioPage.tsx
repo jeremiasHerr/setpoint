@@ -31,7 +31,7 @@ function Inicio({ sesion }: { sesion: Sesion }) {
   const cerrarSesion = useCerrarSesion();
 
   return (
-    <div className="min-h-screen bg-cemento text-noche">
+    <div className="min-h-screen bg-papel text-noche">
       <EncabezadoOrganizador
         organizacion={circuito.data?.nombre ?? sesion.organizacion.nombre}
         navegacion={navegacionOrganizador}
@@ -62,7 +62,7 @@ function Inicio({ sesion }: { sesion: Sesion }) {
           </div>
         )
       ) : torneos.data.length > 0 ? (
-        <InicioConTorneos torneos={aTorneosDeInicio(torneos.data, circuito.data)} />
+        <InicioConTorneos torneos={aTorneosDeInicio(torneos.data, circuito.data)} slug={slug} />
       ) : (
         <InicioSinTorneos
           nombre={primerNombre(sesion.usuario.nombre)}

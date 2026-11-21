@@ -56,7 +56,7 @@ function CargarCircuito({ sesion }: { sesion: Sesion }) {
   if (abierto && data) return <EditorCircuito sesion={sesion} inicial={data} />;
 
   return (
-    <div className="min-h-screen bg-cemento text-noche">
+    <div className="min-h-screen bg-papel text-noche">
       <Encabezado sesion={sesion} organizacion={sesion.organizacion.nombre} />
       <div className="flex flex-col items-start gap-3 px-4 md:px-7 pt-[26px]">
         {error && !sesionInvalida ? (
@@ -90,7 +90,7 @@ function EditorCircuito({ sesion, inicial }: { sesion: Sesion; inicial: Circuito
   const { usaRanking } = circuito;
 
   return (
-    <div className="min-h-screen bg-cemento text-noche">
+    <div className="min-h-screen bg-papel text-noche">
       <Encabezado sesion={sesion} organizacion={circuito.nombre || sesion.organizacion.nombre} />
 
       <div className="flex flex-wrap items-end justify-between gap-6 px-4 md:px-7 pt-[26px] pb-5">
@@ -100,7 +100,7 @@ function EditorCircuito({ sesion, inicial }: { sesion: Sesion; inicial: Circuito
             Podés crear un torneo sin configurar nada de esto. El ranking anual es opcional y lo activás cuando quieras.
           </p>
         </div>
-        <span aria-live="polite" className="shrink-0 font-mono text-[13px] text-pizarra-500 tabular-nums">
+        <span aria-live="polite" className="shrink-0 text-[13px] text-pizarra-500">
           {textoEstado[estadoGuardado]}
         </span>
       </div>
@@ -110,8 +110,10 @@ function EditorCircuito({ sesion, inicial }: { sesion: Sesion; inicial: Circuito
           <SeccionQuienesSon
             nombre={circuito.nombre}
             slug={circuito.slug}
+            nombreCuadroConsuelo={circuito.nombreCuadroConsuelo}
             contactos={circuito.contactos}
             alCambiarNombre={(nombre) => cambiar('nombre', nombre)}
+            alCambiarNombreCuadroConsuelo={(nombre) => cambiar('nombreCuadroConsuelo', nombre)}
             alCambiarContactos={(contactos) => cambiar('contactos', contactos)}
           />
           <SeccionCategorias categorias={circuito.categorias} alCambiar={(categorias) => cambiar('categorias', categorias)} />
@@ -144,8 +146,7 @@ function EditorCircuito({ sesion, inicial }: { sesion: Sesion; inicial: Circuito
           />
 
           {usaRanking && (
-            // Sin Tarjeta: su bg-papel le gana a bg-niebla.
-            <div className="flex flex-col gap-[9px] rounded-tarjeta border border-linea bg-niebla p-[18px]">
+            <div className="flex flex-col gap-[9px] rounded-tarjeta border border-linea bg-papel p-[18px]">
               <h2 className="text-sm font-semibold">¿Solo querés probar?</h2>
               <p className="text-sm leading-normal text-pizarra-500">
                 Apagá el ranking anual y creá un torneo suelto. Al terminar vas a tener la tabla de posiciones de ese torneo, sin

@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import { MensajeError } from '../../components/Aviso';
 import { Boton } from '../../components/Boton';
 import { Numero } from '../../components/Numero';
-import { nombreDelCuadro, nombresDelPartido } from '../resultados/resultado';
+import { nombreDelCuadro } from '../cuadros/cuadro';
+import { nombresDelPartido } from '../resultados/resultado';
 
 type Props = {
   torneoId: number;
+  consuelo: string;
   leido: Leido;
   // Solo en los que esperan a la organización.
   decidiendo?: boolean;
@@ -22,8 +24,8 @@ const ESTADO: Record<Leido['estado'], string> = {
 };
 
 // "Zona A", o "Campeonato · ronda 2".
-const donde = (p: PartidoDeLaLista) =>
-  p.fase === 'grupos' ? `Zona ${p.grupo}` : `${nombreDelCuadro(p.cuadro!)} · ronda ${p.ronda}`;
+const donde = (p: PartidoDeLaLista, consuelo: string) =>
+  p.fase === 'grupos' ? `Zona ${p.grupo}` : `${nombreDelCuadro(p.cuadro!, consuelo)} · ronda ${p.ronda}`;
 
 // Lo que se carga, con los nombres en el orden del partido: "Antileo 4-6 3-6 Sanhueza".
 function Marcador({ partido, resultado }: { partido: PartidoDeLaLista; resultado: DatosResultado }) {
@@ -41,12 +43,12 @@ function Marcador({ partido, resultado }: { partido: PartidoDeLaLista; resultado
 
 // Un resultado leído de los mensajes: la línea del chat tal como llegó y, al lado, lo que se entendió
 // de ella. Así se ve de un vistazo qué leyó la IA (decisión 119).
-export function ResultadoLeido({ torneoId, leido, decidiendo = false, error, alDecidir }: Props) {
+export function ResultadoLeido({ torneoId, consuelo, leido, decidiendo = false, error, alDecidir }: Props) {
   const aRevisar = leido.estado === 'a_revisar';
   return (
     <li className="grid gap-x-6 gap-y-3 border-b border-linea-suave px-4 py-4 last:border-b-0 sm:px-[18px] md:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
       <figure className="flex min-w-0 flex-col gap-1 border-l-2 border-linea pl-3">
-        <figcaption className="font-mono text-xs text-pizarra-500">
+        <figcaption className="text-[13px] text-pizarra-500">
           {[leido.hora, leido.remitente ?? 'sin remitente'].filter(Boolean).join(' · ')}
         </figcaption>
         <blockquote className="font-mono text-sm break-words whitespace-pre-line text-pizarra-700">{leido.texto}</blockquote>
@@ -60,7 +62,7 @@ export function ResultadoLeido({ torneoId, leido, decidiendo = false, error, alD
         ) : (
           <p className="text-[15px] font-semibold text-pizarra-500">Sin resultado para cargar</p>
         )}
-        {leido.partido && <p className="font-mono text-xs text-pizarra-500">{donde(leido.partido).toLowerCase()}</p>}
+        {leido.partido && <p className="text-[13px] text-pizarra-500">{donde(leido.partido, consuelo).toLowerCase()}</p>}
 
         {aRevisar ? (
           <>

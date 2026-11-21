@@ -4,7 +4,7 @@
 Proyecto: Setpoint — Plataforma de gestión de torneos de tenis amateur
 Caso de validación: POLENTA Team Tenis
 
-> **Actualizado tras la verificación del 25%** ([devolucion-25.md](devolucion-25.md)): F03 pasa a ser automática por excepción y detecta el calendario y las categorías; F19 pasa a ser la candidata a "IA en el uso diario", condicionada al tiempo. Los textos usan los términos genéricos de la interfaz ("torneo del calendario", "cuadro consuelo").
+> **Actualizado tras la verificación del 25%** ([devolucion-25.md](devolucion-25.md)): F03 pasa a ser automática por excepción y detecta el calendario y las categorías; F19 pasa a ser la candidata a "IA en el uso diario" y quedó implementada ([decisión 119](decisiones/119-resultados-desde-los-mensajes.md)). Los textos usan los términos genéricos de la interfaz ("torneo del calendario", "cuadro consuelo").
 
 > **Versión 2 — corrige la devolución de la cátedra.** Las features están numeradas en el orden cronológico real de uso del sistema, y las cuatro primeras explicitan quién da de alta la organización, los jugadores y los torneos, y en qué momento.
 
@@ -188,11 +188,11 @@ Al terminar la fase de grupos, el sistema armará automáticamente los cuadros e
 
 **Entrega: 50%**
 
-**Estado:** implementada, salvo el nombre configurable del cuadro consuelo.
+**Estado:** implementada.
 - La organización cierra las zonas (`POST .../torneos/:id/cuadros`) y en ese momento se arman los dos cuadros completos ([decisión 026](decisiones/026-cierre-de-zonas.md)). Dónde va cada uno sale de una siembra única de los clasificados ([decisión 022](decisiones/022-ubicacion-en-el-cuadro.md)), y los byes no generan partido ([decisión 023](decisiones/023-byes-sin-partido.md)). El ganador avanza al cargarse cada resultado de cuadro (F06), con `avanzarGanador()`.
 - `GET .../torneos/:id/cuadros` los devuelve a la organización, y `GET /api/publico/:slug/torneos/:id/cuadros`, a cualquiera ([decisión 019](decisiones/019-acceso-a-las-posiciones.md), [decisión 033](decisiones/033-ranking-publico.md)).
 - La pantalla *Los dos cuadros* es pública, en `/c/:slug/torneos/:id/cuadros` (`CuadrosPublicoPage`). En escritorio muestra los cuadros completos; en el celular, una ronda a la vez ([decisión 038](decisiones/038-cuadros-en-el-celular.md)). En las dos, quien pasa directo por un bye tiene su tarjeta en el lugar vacío de la primera ronda ([decisión 083](decisiones/083-el-bye-se-ve-en-el-cuadro.md)).
-- El segundo cuadro dice "Cuadro consuelo" fijo hasta que exista el nombre configurable ([07](07-configurabilidad.md) §1.2).
+- El nombre del segundo cuadro lo configura la organización en *Tu circuito* ("Cuadro consuelo" por defecto, POLENTA: "Complementaria"); lo llevan las respuestas de la API que lo muestran, y todas las pantallas lo usan ([decisión 120](decisiones/120-nombre-del-cuadro-consuelo.md)).
 - Las zonas se cierran desde el tablero (F15), cuando todos sus partidos tienen resultado.
 
 ---
@@ -246,7 +246,7 @@ El jugador dispondrá de una aplicación instalable en su teléfono donde ver su
 
 **Entrega: 50%**
 
-**Estado:** en curso. La app (`apps/mobile`, Expo) tiene el ingreso del jugador, la elección del circuito si juega en varios ([decisiones 039 a 042](decisiones/039-ingreso-del-jugador.md)), *Inscripciones en curso* para quien todavía no juega en ninguno, con el aviso arriba de Cuándo juego para quien ya juega en otro ([decisión 054](decisiones/054-perfil-pendiente.md)), el ranking, *Mi zona* (`GET /api/jugador/:slug/zona`, [decisión 044](decisiones/044-rutas-del-jugador.md)) y *Cuándo juego* (`GET /api/jugador/:slug/partidos`), con una barra de pestañas para pasar de una a otra ([decisión 045](decisiones/045-pestanas-de-la-app.md)). La app abre en Cuándo juego. "Escribirle" abre WhatsApp con el rival de un partido por jugar ([decisión 046](decisiones/046-telefono-del-rival.md)); anotar la fecha llega con F14 y "Cómo te fue con él", con F18. Avisos ([decisión 047](decisiones/047-avisos-push.md)): el fixture llega por push al confirmarse el sorteo, y la app programa un recordatorio antes de cada partido con fecha; el de la confirmación del rival llega con F14. Falta generar el APK con la cuenta de Expo y el proyecto de Firebase (pasos en el README de la raíz).
+**Estado:** en curso. La app (`apps/mobile`, Expo) tiene el ingreso del jugador, la elección del circuito si juega en varios ([decisiones 039 a 042](decisiones/039-ingreso-del-jugador.md)), *Inscripciones en curso* para quien todavía no juega en ninguno, con el aviso arriba de Cuándo juego para quien ya juega en otro ([decisión 054](decisiones/054-perfil-pendiente.md)), el ranking, la ficha de cada jugador (F17), *Mi zona* (`GET /api/jugador/:slug/zona`, [decisión 044](decisiones/044-rutas-del-jugador.md)) y *Cuándo juego* (`GET /api/jugador/:slug/partidos`), con una barra de pestañas para pasar de una a otra ([decisión 045](decisiones/045-pestanas-de-la-app.md)). La app abre en Cuándo juego. "Escribirle" abre WhatsApp con el rival de un partido por jugar ([decisión 046](decisiones/046-telefono-del-rival.md)); anotar la fecha llega con F14 y "Cómo te fue con él", con F18. Avisos ([decisión 047](decisiones/047-avisos-push.md)): el fixture llega por push al confirmarse el sorteo, y la app programa un recordatorio antes de cada partido con fecha; el de la confirmación del rival llega con F14. Los cuadros todavía se abren en la web: dibujarlos en la app (una ronda a la vez, [decisión 038](decisiones/038-cuadros-en-el-celular.md)) necesita las piezas del cuadro de la web, que no están en la app. Falta generar el APK con la cuenta de Expo y el proyecto de Firebase (pasos en el README de la raíz).
 
 ---
 
@@ -266,7 +266,7 @@ El jugador dispondrá de una aplicación instalable en su teléfono donde ver su
 
 **Entrega: 75%.** Diseño en [04-flujo-jugador.md](04-flujo-jugador.md) §5 y [decisiones 049 a 051](decisiones/049-identidad-e-ingreso-con-codigo.md).
 
-**Estado:** en curso. El ingreso con email y código está en la API y en la app ([decisión 052](decisiones/052-limite-de-pedidos.md) para los límites). La convocatoria pública del torneo está en la web, en `/c/:slug/torneos/:id` (`GET /api/publico/:slug/torneos/:id`), y el inicio del organizador copia ese link. La identificación también: en `/c/:slug/torneos/:id/inscripcion` se verifica el email con el código, se encuentra el perfil (el propio, el "¿Sos…?" o la búsqueda) y se reserva el lugar. El pago está en la API: preferencia de MercadoPago, webhook idempotente, vencimiento de reservas, vinculación al pagar y comprobante por email; sin credenciales, el pago es simulado ([decisión 053](decisiones/053-pago-sin-credenciales.md)). La pantalla de pago está en la web, en `/c/:slug/inscripciones/:id`: la reserva, la espera de la confirmación, el final y los errores. El link personal también: desde el menú de cada jugador del padrón se comparte por WhatsApp, se copia o se genera uno nuevo, y en `/i/:codigo` el jugador verifica su email y elige el torneo sin buscarse. El botón de reclamo también, y la organización resuelve los posibles homónimos y los perfiles reclamados en *Revisar vinculación* (`/padron/revisar/:jugadorId`), a la que se llega desde la marca "para revisar" del padrón. Los modos con aprobación y abierto están en la API ([decisión 054](decisiones/054-perfil-pendiente.md)): la solicitud y la reserva como jugador nuevo, con un perfil pendiente que entra al padrón al pagar; aprobar y rechazar solicitudes; y `GET /api/auth/cuenta` para la app, con las inscripciones en curso. En la web del jugador, quien no está en la lista deja su solicitud o reserva como jugador nuevo, y la pantalla de pago muestra la solicitud en revisión, la aprobada ("Reservar y pagar") y la no aprobada. En Inscripciones, la organización las aprueba o rechaza desde la pestaña Solicitudes. En la app, quien todavía no juega en ningún circuito ve sus inscripciones en curso y paga desde ahí; el checkout se abre con el sistema, para que Android pueda abrir la app de MercadoPago. En el padrón, el filtro "Nuevas" junta las vinculaciones desde la última visita de cada administrador, con cómo y cuándo se hizo cada una, y "Para revisar" junta las dudosas; el panel del jugador muestra su vinculación ([decisión 083](decisiones/083-ultima-visita-al-padron.md)). Falta la marca en Inicio y en Inscripciones.
+**Estado:** en curso. El ingreso con email y código está en la API y en la app ([decisión 052](decisiones/052-limite-de-pedidos.md) para los límites). La convocatoria pública del torneo está en la web, en `/c/:slug/torneos/:id` (`GET /api/publico/:slug/torneos/:id`), y el inicio del organizador copia ese link. La identificación también: en `/c/:slug/torneos/:id/inscripcion` se verifica el email con el código, se encuentra el perfil (el propio, el "¿Sos…?" o la búsqueda) y se reserva el lugar. El pago está en la API: preferencia de MercadoPago, webhook idempotente, vencimiento de reservas, vinculación al pagar y comprobante por email; sin credenciales, el pago es simulado ([decisión 053](decisiones/053-pago-sin-credenciales.md)). La pantalla de pago está en la web, en `/c/:slug/inscripciones/:id`: la reserva, la espera de la confirmación, el final y los errores. El link personal también: desde el menú de cada jugador del padrón se comparte por WhatsApp, se copia o se genera uno nuevo, y en `/i/:codigo` el jugador verifica su email y elige el torneo sin buscarse. El botón de reclamo también, y la organización resuelve los posibles homónimos y los perfiles reclamados en *Revisar vinculación* (`/padron/revisar/:jugadorId`), a la que se llega desde la marca "para revisar" del padrón. Los modos con aprobación y abierto están en la API ([decisión 054](decisiones/054-perfil-pendiente.md)): la solicitud y la reserva como jugador nuevo, con un perfil pendiente que entra al padrón al pagar; aprobar y rechazar solicitudes; y `GET /api/auth/cuenta` para la app, con las inscripciones en curso. En la web del jugador, quien no está en la lista deja su solicitud o reserva como jugador nuevo, y la pantalla de pago muestra la solicitud en revisión, la aprobada ("Reservar y pagar") y la no aprobada. En Inscripciones, la organización las aprueba o rechaza desde la pestaña Solicitudes. En la app, quien todavía no juega en ningún circuito ve sus inscripciones en curso y paga desde ahí; el checkout se abre con el sistema, para que Android pueda abrir la app de MercadoPago. En el padrón, el filtro "Nuevas" junta las vinculaciones desde la última visita de cada administrador, con cómo y cuándo se hizo cada una, y "Para revisar" junta las dudosas; el panel del jugador muestra su vinculación ([decisión 083](decisiones/083-ultima-visita-al-padron.md)). La marca "para revisar" también está en el Inicio, en una tarjeta con los primeros casos, y en cada fila de Inscripciones, y las dos llevan a *Revisar vinculación*.
 
 ---
 
@@ -291,7 +291,9 @@ La organización podrá seguir el estado de las inscripciones de cada torneo en 
 - La conciliación separa lo cobrado por MercadoPago de lo cobrado por fuera, sin comisión: Setpoint cobra un cargo por jugador inscripto, que todavía no se cobra en el sistema ([decisión 103](decisiones/103-cargo-por-jugador-inscripto.md), que reemplaza la [078](decisiones/078-comision-de-la-plataforma.md)).
 - Al cerrar, las reservas sin pagar no se tocan y no entran al sorteo ([decisión 024](decisiones/024-reservas-sin-pagar-al-cerrar.md)), y no se puede cerrar si los que pagaron no alcanzan para las zonas ([decisión 025](decisiones/025-no-se-cierra-sin-inscriptos-para-las-zonas.md)).
 - Con el cupo lleno, el link del torneo lleva a "Anotarme en la lista de espera", por el mismo camino que inscribirse y sin pagar. Se anota quien tiene perfil en el padrón ([decisión 081](decisiones/081-anotarse-en-la-lista-de-espera.md)). La pantalla de pago muestra su puesto en la lista, el lugar que le tocó con hasta cuándo es suyo, y que la lista terminó si se sorteó sin que le tocara ([decisión 082](decisiones/082-la-lista-termina-con-el-sorteo.md)). En el seed, la Copa Confluencia tiene a Sanhueza primero en la lista.
-- Faltan la lista de espera desde el link personal y en la app, y la marca de las vinculaciones para revisar.
+- Las inscripciones cuya vinculación quedó para revisar llevan la marca "para revisar", la misma del padrón, que lleva a *Revisar vinculación*.
+- En la app, quien espera en la lista ve su puesto en *Tus inscripciones* y arriba de *Cuándo juego*; anotarse sigue siendo desde la web ([decisión 123](decisiones/123-la-lista-de-espera-en-la-app.md)).
+- Falta la lista de espera desde el link personal.
 
 **Entrega: 75%**
 
@@ -381,7 +383,8 @@ Cada jugador tendrá una ficha con su historial completo: todos los partidos que
 - Los torneos van con la instancia que alcanzó y los puntos que le dio el cierre; es la sección que la referencia no dibuja ([decisión 071](decisiones/071-la-ficha-suma-los-torneos.md)). La instancia se calcula con sus partidos de cuadro, así que sirve también para torneos sin ranking y en juego ([decisión 072](decisiones/072-la-instancia-se-calcula-con-los-partidos.md)).
 - El W.O. figura en la lista pero no cuenta como jugado; el abandono sí ([decisión 073](decisiones/073-el-wo-no-cuenta-en-la-ficha.md)).
 - Se llega desde la fila abierta del ranking ("Ver la ficha") y desde los nombres de las zonas del torneo en vivo ([decisión 074](decisiones/074-entrada-a-la-ficha.md)).
-- La ficha en la app y el botón "Comparar con otro jugador", que abre el cara a cara (F18), quedan pendientes.
+- En la app, la fila abierta del ranking suma "Ver la ficha" y abre la misma ficha (`/ficha/[id]`, sobre la ruta pública), sin pestaña nueva ([decisión 045](decisiones/045-pestanas-de-la-app.md)).
+- El botón "Comparar con otro jugador", que abre el cara a cara (F18), queda pendiente.
 
 ---
 
@@ -396,6 +399,11 @@ Cualquier persona podrá comparar a dos jugadores del circuito y ver el historia
 - Se accede desde la ficha de cualquier jugador o desde un buscador por apellido.
 
 **Entrega: 100%**
+
+**Estado:** implementada en la web, sin el filtro por superficie ([decisión 122](decisiones/122-cara-a-cara-sin-superficie.md)).
+- *Cara a cara* (`/c/:slug/jugadores/:id/cara-a-cara/:rivalId`) muestra el cruce acumulado, cada partido con su torneo e instancia, y vuelve a la ficha. Sin rival, lista con quiénes jugó el jugador para elegir.
+- La API: `GET /api/publico/:slug/jugadores/:id/rivales` y `.../cara-a-cara/:rivalId`. El W.O. no cuenta como jugado y el abandono sí ([decisión 073](decisiones/073-el-wo-no-cuenta-en-la-ficha.md)). Sin teléfono ni email.
+- Falta el filtro por superficie, porque los clubes todavía no tienen el dato, y "Cómo te fue con él" en la app.
 
 ---
 

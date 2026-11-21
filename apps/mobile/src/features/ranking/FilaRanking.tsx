@@ -1,5 +1,7 @@
 import type { FilaDeRanking, TorneoDelCalendario } from '@setpoint/shared';
+import { router } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Boton } from '../../components/Boton';
 import { colores, fuentes, radios, tabular } from '../../lib/tokens';
 import { Casilleros } from './Casilleros';
 
@@ -34,9 +36,15 @@ export function FilaRanking({ fila, torneosDelCalendario, propia, abierta, alToc
         </View>
         <Text style={[estilos.total, propia && estilos.textoPropio]}>{fila.puntos}</Text>
       </Pressable>
-      {abierta && torneosDelCalendario.length > 0 && (
+      {abierta && (
         <View style={estilos.desglose}>
-          <Casilleros fila={fila} torneosDelCalendario={torneosDelCalendario} variante="clara" />
+          {torneosDelCalendario.length > 0 && (
+            <Casilleros fila={fila} torneosDelCalendario={torneosDelCalendario} variante="clara" />
+          )}
+          <Boton
+            texto="Ver la ficha"
+            onPress={() => router.push({ pathname: '/ficha/[id]', params: { id: String(fila.jugadorId) } })}
+          />
         </View>
       )}
     </View>
@@ -106,6 +114,7 @@ const estilos = StyleSheet.create({
     color: colores.noche,
   },
   desglose: {
+    gap: 10,
     paddingBottom: 12,
   },
 });

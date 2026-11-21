@@ -1,5 +1,5 @@
 import type { PartidoEnVivo, TorneoEnVivo } from '@setpoint/shared';
-import { NOMBRE_DEL_CUADRO, rotuloDeRonda } from '../cuadros/cuadro';
+import { nombreDelCuadro, rotuloDeRonda } from '../cuadros/cuadro';
 
 const CON_RESULTADO: PartidoEnVivo['estado'][] = ['jugada', 'walkover', 'abandono'];
 
@@ -9,7 +9,7 @@ export const tieneResultado = (partido: PartidoEnVivo) => CON_RESULTADO.includes
 export function dondeSeJuega(partido: PartidoEnVivo, torneo: TorneoEnVivo) {
   if (partido.grupo && !partido.cuadro) return `zona ${partido.grupo}`;
   const ronda = rotuloDeRonda(partido.ronda!, torneo.rondas[partido.cuadro!]!);
-  return `${ronda} · ${NOMBRE_DEL_CUADRO[partido.cuadro!]}`;
+  return `${ronda} · ${nombreDelCuadro(partido.cuadro!, torneo.nombreCuadroConsuelo)}`;
 }
 
 // El marcador desde el jugador A, como se lee en el calendario: "6-3 6-4", "W.O." o "abandono".

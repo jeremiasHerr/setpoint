@@ -17,7 +17,7 @@ export function ResumenListaDeEspera({ listaDeEspera, horasReserva }: Props) {
     <Tarjeta className="flex flex-col overflow-hidden">
       <div className="flex items-center justify-between gap-2.5 border-b border-linea px-4 py-3.5">
         <h2 className="text-[15px] font-semibold">Lista de espera</h2>
-        <span className="font-mono text-[13px] text-pizarra-500">por orden de llegada</span>
+        <span className="text-[13px] text-pizarra-500">por orden de llegada</span>
       </div>
       {listaDeEspera.length === 0 ? (
         <p className="px-4 py-3.5 text-sm text-pizarra-500">Nadie espera un lugar.</p>
