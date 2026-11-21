@@ -144,8 +144,7 @@ function EditorCircuito({ sesion, inicial }: { sesion: Sesion; inicial: Circuito
           />
 
           {usaRanking && (
-            // Sin Tarjeta: su bg-papel le gana a bg-niebla.
-            <div className="flex flex-col gap-[9px] rounded-tarjeta border border-linea bg-niebla p-[18px]">
+            <div className="flex flex-col gap-[9px] rounded-tarjeta border border-linea bg-papel p-[18px]">
               <h2 className="text-sm font-semibold">¿Solo querés probar?</h2>
               <p className="text-sm leading-normal text-pizarra-500">
                 Apagá el ranking anual y creá un torneo suelto. Al terminar vas a tener la tabla de posiciones de ese torneo, sin
