@@ -20,6 +20,7 @@ import { organizacionAdministrada } from '../../lib/permisos';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
 import { finalDelCuadro } from '../competencia/cierre';
+import { MINIMO_POR_ZONA } from '../competencia/sorteo';
 import { avanceDelTorneo } from '../competencia/tablero';
 import { avisarLugaresLiberados, promoverListaDeEspera } from '../inscripciones/lista-de-espera.service';
 import { convocatoriaEditable } from './navegacion';
@@ -368,6 +369,9 @@ async function partidosParaElInicio(enJuego: number[], cerrados: number[]) {
   return porTorneo;
 }
 
+// Días de un 'AAAA-MM-DD' a otro. Los dos son días, sin hora: la cuenta en UTC es exacta.
+const diasEntre = (desde: string, hasta: string) => Math.round((Date.parse(hasta) - Date.parse(desde)) / 86_400_000);
+
 // Una fila por convocatoria, de la más nueva a la más vieja.
 export async function listarConvocatorias(slug: string, usuarioId: number): Promise<ResumenConvocatoria[]> {
   const organizacionId = await organizacionAdministrada(slug, usuarioId);
@@ -422,10 +426,12 @@ export async function listarConvocatorias(slug: string, usuarioId: number): Prom
           estado: aClave<ClaveEstado>(t.estado),
           cupo: t.cupo,
           inscriptos: t._count.inscripciones,
+          minimoParaSortear: t.cantidadGrupos * MINIMO_POR_ZONA,
           avance: avance(t),
           terminado: terminado(t),
         })),
         cierreInscripcion: c.cierreInscripcion,
+        diasParaElCierre: c.cierreInscripcion === null ? null : diasEntre(dia, c.cierreInscripcion),
         fechaInicio: c.fechaInicio,
         precio: c.precio,
       };

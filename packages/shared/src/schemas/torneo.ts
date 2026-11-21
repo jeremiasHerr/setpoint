@@ -142,6 +142,9 @@ export type ResumenTorneo = {
   cupo: number;
   // Los que ya pagaron.
   inscriptos: number;
+  // Los que hacen falta para sortear las zonas: 3 por zona (decisión 025). Con menos no se puede
+  // cerrar la inscripción, y el inicio lo avisa antes del cierre (decisión 125).
+  minimoParaSortear: number;
   // Cómo viene, para su tarjeta en el inicio: desde que se confirma el sorteo hasta el cierre
   // (decisión 080). null en los demás estados.
   avance: AvanceDelTorneo | null;
@@ -183,6 +186,9 @@ export type ResumenConvocatoria = {
   sePuedeEditar: boolean;
   torneos: ResumenTorneo[];
   cierreInscripcion: string | null;
+  // Cuántos días faltan para el cierre de la inscripción, contados en Argentina: 0 si cierra hoy,
+  // negativo si la fecha ya pasó. null sin fecha de cierre.
+  diasParaElCierre: number | null;
   fechaInicio: string | null;
   precio: number;
 };

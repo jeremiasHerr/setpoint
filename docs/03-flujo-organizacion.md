@@ -82,7 +82,8 @@ La respuesta incluye un token de sesión (JWT), así la organización queda ingr
 - Las que cerraron y todavía no se sortearon van en "Para sortear", con "Sortear zonas" como acción principal. No van en "Necesita tu atención": ese bloque es rojo, y el rojo solo significa vencimiento.
 - Con el sorteo confirmado, y hasta que se cierra, la categoría va en "En juego": la fase, los partidos jugados y los vencidos, qué se está jugando y hasta cuándo, y "Ver tablero" (F15). Los vencidos y el plazo salen de la misma cuenta que el tablero ([decisión 080](decisiones/080-torneos-en-juego-y-terminados-en-el-inicio.md)).
 - Cerrado el torneo (F16), va en "Terminados", de la que se cerró último a la primera, con la fecha del cierre, el campeón del cuadro principal y los jugadores. Cada fila lleva al cierre. Se ven las últimas 5 y el resto se despliega en la misma tabla.
-- "Necesita tu atención" todavía no se calcula.
+- "Necesita tu atención", en rojo, junta los partidos vencidos y lleva al tablero para resolverlos.
+- Una categoría con la inscripción abierta que cierra en 3 días o menos sin los pagos para sortear las zonas (3 por zona) aparece en "Faltan inscriptos para sortear", sin rojo, con "Copiar link" para mandarlo de nuevo al grupo ([decisión 125](decisiones/125-aviso-de-pocos-inscriptos.md)).
 
 Después del alta, y en cualquier momento, se configura:
 
