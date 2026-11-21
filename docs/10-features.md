@@ -436,7 +436,7 @@ Antes y durante el torneo, cada jugador podrá ver cuántos puntos sumaría y qu
 
 **Entrega: 100%**
 
-**Estado:** la API está (`GET /api/publico/:slug/torneos/:id/proyeccion/:jugadorId`); falta la pantalla. Es una cuenta exacta, sin IA: aplica la tabla de puntos, reemplaza el casillero y vuelve a ordenar el ranking ([decisión 117](decisiones/117-las-proyecciones-no-son-ia.md)).
+**Estado: implementada en la web pública**, en `/c/:slug/torneos/:id/en-juego/:jugadorId`, sobre `GET /api/publico/:slug/torneos/:id/proyeccion/:jugadorId`. Se llega desde la ficha del jugador, y desde la vista del torneo por los nombres de las zonas, que abren la ficha; la app no la muestra ([decisión 120](decisiones/120-las-proyecciones-en-la-web-publica.md)). Es una cuenta exacta, sin IA: aplica la tabla de puntos, reemplaza el casillero y vuelve a ordenar el ranking ([decisión 117](decisiones/117-las-proyecciones-no-son-ia.md)).
 
 ---
 

@@ -19,6 +19,7 @@ export const escenarioDeProyeccionSchema = z.object({
 });
 
 export const proyeccionDelJugadorSchema = z.object({
+  organizacion: z.string(),
   torneoId: z.number().int(),
   // "Primavera 26 · Tercera"
   torneo: z.string(),

@@ -409,7 +409,7 @@ El canvas *Verde pelota* tiene **21 pantallas**, en el orden en que se usan, con
 | Código · *nueva* | Email | F12 |
 | Comprobante · *nueva* | Email | F12 |
 | Cuenta e ingreso | App del jugador: ingresar con email y código | F02, F12 |
-| Qué está en juego | App del jugador | F20 |
+| Qué está en juego | Web pública ([decisión 120](decisiones/120-las-proyecciones-en-la-web-publica.md)) | F20 |
 | Registrar la organización | Web del organizador | F01 |
 | Tu circuito | Web del organizador | F01 |
 | Padrón | Web del organizador | F02 |
