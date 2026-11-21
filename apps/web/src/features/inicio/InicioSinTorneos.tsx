@@ -144,8 +144,7 @@ export function InicioSinTorneos({ nombre, jugadores, usaRanking }: Props) {
             ]}
           />
 
-          {/* Sin Tarjeta: su bg-papel le gana a bg-niebla. */}
-          <div className="flex flex-col gap-[9px] rounded-tarjeta border border-linea bg-niebla p-[18px]">
+          <div className="flex flex-col gap-[9px] rounded-tarjeta border border-linea bg-papel p-[18px]">
             <h2 className="text-sm font-semibold">¿Ya tenés tus jugadores en un Excel?</h2>
             <p className="text-sm leading-normal text-pizarra-500">
               Subí una planilla por categoría y cargamos los jugadores al padrón, con sus puntos. Las categorías y los torneos
