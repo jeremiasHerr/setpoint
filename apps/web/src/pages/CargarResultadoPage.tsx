@@ -266,7 +266,7 @@ function TarjetaDelPartido({ sesion, partido }: { sesion: Sesion; partido: Parti
             <h1 className="text-[22px] font-display font-semibold tracking-[-0.02em]">
               {nombres[0]} · {nombres[1]}
             </h1>
-            <p className="font-mono text-[13px] text-pizarra-500">{rotuloDelPartido(partido)}</p>
+            <p className="text-[13px] text-pizarra-500">{rotuloDelPartido(partido)}</p>
           </div>
 
           {sinCarga ? (
@@ -301,7 +301,7 @@ function TarjetaDelPartido({ sesion, partido }: { sesion: Sesion; partido: Parti
                     <p className="text-[15px] font-semibold">
                       <TextoConNumeros frase={resumen.titulo} />
                     </p>
-                    {resumen.detalle && <p className="font-mono text-[13px] text-pizarra-500">{resumen.detalle}</p>}
+                    {resumen.detalle && <p className="text-[13px] text-pizarra-500">{resumen.detalle}</p>}
                   </div>
                 )}
 

@@ -100,11 +100,11 @@ function Perfil({ perfil, eligio = false, children }: { perfil: PerfilEnRevision
       <div className="flex items-start justify-between gap-3">
         <div className="flex flex-col gap-1">
           <h3 className="text-xl font-semibold tracking-[-0.02em]">{nombre(perfil)}</h3>
-          <span className="font-mono text-[13px] text-pizarra-500">
+          <span className="text-[13px] text-pizarra-500">
             {(perfil.categoria ?? 'sin categoría').toLowerCase()} · {desde(perfil.desde)}
           </span>
         </div>
-        {eligio && <span className="rounded-full bg-noche px-[9px] py-1 font-mono text-[11px] whitespace-nowrap text-white">eligió este</span>}
+        {eligio && <span className="rounded-full bg-noche px-[9px] py-1 text-[12.5px] font-medium whitespace-nowrap text-white">eligió este</span>}
       </div>
       <div className="grid grid-cols-3 gap-2.5">
         <Cifra rotulo="partidos" valor={perfil.partidos} />

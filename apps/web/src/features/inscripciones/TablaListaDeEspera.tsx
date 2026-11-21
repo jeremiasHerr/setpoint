@@ -11,9 +11,9 @@ export function TablaListaDeEspera({ listaDeEspera, horasReserva }: Props) {
   return (
     <Tarjeta className="flex flex-col overflow-hidden">
       <div className="grid grid-cols-[40px_minmax(0,1fr)_110px] gap-x-1 border-b border-linea bg-niebla px-4 md:px-[18px] py-[11px]">
-        <span className="font-mono text-[11px] text-pizarra-500">#</span>
+        <span className="text-[12.5px] font-medium text-noche">#</span>
         <span className="text-xs text-pizarra-500">jugador</span>
-        <span className="font-mono text-[11px] text-pizarra-500">se anotó</span>
+        <span className="text-[12.5px] font-medium text-noche">se anotó</span>
       </div>
       {listaDeEspera.length === 0 ? (
         <p className="px-4 md:px-[18px] py-4 text-sm text-pizarra-500">No hay nadie esperando un lugar.</p>

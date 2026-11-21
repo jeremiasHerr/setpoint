@@ -215,7 +215,7 @@ function Lectura({ slug, lectura, alPegarMas }: { slug: string; lectura: Lectura
             </span>
           ))}
         </h1>
-        <p className="font-mono text-sm text-pizarra-500">
+        <p className="text-sm text-pizarra-500">
           <Numero>{lectura.mensajes}</Numero> {lectura.mensajes === 1 ? 'mensaje leído' : 'mensajes leídos'}
           {conversacion > 0 && (
             <>

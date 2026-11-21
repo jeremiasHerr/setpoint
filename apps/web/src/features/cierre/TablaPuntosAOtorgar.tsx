@@ -80,7 +80,7 @@ export function TablaPuntosAOtorgar({ cierre }: { cierre: CierreDelTorneo }) {
   const conRanking = cierre.torneoDelCalendario !== null;
   const columnas = conRanking ? COLUMNAS_CON_RANKING : COLUMNAS_SIN_RANKING;
   const visibles = todos ? cierre.filas : cierre.filas.slice(0, VISIBLES);
-  const rotulo = 'font-mono text-[11px] text-pizarra-500';
+  const rotulo = 'text-[12.5px] font-medium text-noche';
 
   const titulo = !conRanking ? 'Posiciones finales' : cierre.cerrado ? 'Puntos otorgados' : 'Puntos que se van a otorgar';
 
@@ -88,7 +88,7 @@ export function TablaPuntosAOtorgar({ cierre }: { cierre: CierreDelTorneo }) {
     <Tarjeta className="overflow-hidden">
       <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-b border-linea px-4 py-4 md:px-[18px]">
         <h2 className="text-[17px] font-semibold">{titulo}</h2>
-        <p className="font-mono text-[13px] text-pizarra-500">
+        <p className="text-[13px] text-pizarra-500">
           <Numero>{cierre.filas.length}</Numero> jugadores
           {conRanking && ` · casillero ${cierre.torneoDelCalendario!.toLowerCase()}`}
         </p>
@@ -112,7 +112,7 @@ export function TablaPuntosAOtorgar({ cierre }: { cierre: CierreDelTorneo }) {
 
       {cierre.filas.length > VISIBLES && (
         <div className="flex items-center justify-between gap-4 bg-niebla px-4 py-[15px] md:px-[18px]">
-          <span className="font-mono text-[13px] text-pizarra-500">
+          <span className="text-[13px] text-pizarra-500">
             mostrando <Numero>{visibles.length}</Numero> de <Numero>{cierre.filas.length}</Numero>
           </span>
           <button type="button" aria-expanded={todos} onClick={() => setTodos(!todos)} className="text-sm font-medium">

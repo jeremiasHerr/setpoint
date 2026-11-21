@@ -77,7 +77,7 @@ export function EncabezadoDelTorneo({ sesion, torneoId, actual }: Props) {
                   <Migas anteriores={[{ etiqueta: 'Inicio', ruta: '/inicio' }]}>
                     <span className="font-medium text-noche">{datos.nombre}</span>
                   </Migas>
-                  <span className="flex h-7 items-center rounded-full border border-linea px-[11px] font-mono text-[13px] text-pizarra-500">
+                  <span className="flex h-7 items-center rounded-full border border-linea px-[11px] text-[12.5px] font-medium text-noche">
                     {ESTADO[datos.estado]}
                   </span>
                 </div>

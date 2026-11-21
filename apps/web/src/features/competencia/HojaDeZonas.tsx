@@ -56,7 +56,7 @@ export function HojaDeZonas({
               <div className="flex items-baseline justify-between gap-3 px-6 pt-[22px] pb-2.5">
                 <h3 className="font-display text-[22px] font-semibold tracking-[-0.02em]">Zona {zona.grupo}</h3>
                 <p className="flex items-baseline gap-[7px]">
-                  <Numero className="text-xs text-pizarra-500">suma</Numero>
+                  <span className="text-[12.5px] font-medium text-noche">suma</span>
                   <Numero className="text-[22px] font-medium tracking-[-0.02em]">{sumaDeSiembra(zona)}</Numero>
                 </p>
               </div>

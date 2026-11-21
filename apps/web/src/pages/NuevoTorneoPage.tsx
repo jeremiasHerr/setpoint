@@ -305,7 +305,7 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
             Los valores vienen de la configuración de tu circuito. Cambiá solo lo que sea distinto esta vez.
           </p>
         </div>
-        <span aria-live="polite" className="shrink-0 font-mono text-[13px] text-pizarra-500 tabular-nums">
+        <span aria-live="polite" className="shrink-0 text-[13px] text-pizarra-500">
           {guardado.estado === 'sin-cambios'
             ? `${enBorrador ? 'borrador' : 'publicado'} · ${textoEstado['sin-cambios']}`
             : textoEstado[guardado.estado]}

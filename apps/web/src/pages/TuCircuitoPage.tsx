@@ -100,7 +100,7 @@ function EditorCircuito({ sesion, inicial }: { sesion: Sesion; inicial: Circuito
             Podés crear un torneo sin configurar nada de esto. El ranking anual es opcional y lo activás cuando quieras.
           </p>
         </div>
-        <span aria-live="polite" className="shrink-0 font-mono text-[13px] text-pizarra-500 tabular-nums">
+        <span aria-live="polite" className="shrink-0 text-[13px] text-pizarra-500">
           {textoEstado[estadoGuardado]}
         </span>
       </div>
