@@ -6,8 +6,8 @@ import { BotonCopiarLink } from './BotonCopiarLink';
 import type { TorneosDeInicio } from './tiposDeInicio';
 
 // Arriba del inicio: de quién son los torneos de abajo (decisión 094), con las cifras del circuito.
-// Va sobre el mismo cemento que las columnas, sin una franja propia, y sin los torneos del calendario:
-// repetían lo que ya dicen las columnas (decisión 116).
+// Va sobre el fondo blanco de la página, sin una franja propia, y sin los torneos del calendario:
+// repetían lo que ya dicen las columnas (decisión 116). Sin rótulo arriba del nombre (decisión 123).
 export function EncabezadoDelCircuito({ torneos }: { torneos: TorneosDeInicio }) {
   const navegar = useNavigate();
   const cifras = [
@@ -23,7 +23,6 @@ export function EncabezadoDelCircuito({ torneos }: { torneos: TorneosDeInicio })
     <section className="px-4 pt-6 md:px-7">
       <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-6">
         <div className="flex min-w-0 flex-col gap-2">
-          <span className="font-mono text-xs text-pizarra-500">tu circuito</span>
           <h1 className="text-[32px] leading-[1.05] font-display font-semibold tracking-[-0.02em] text-noche">{torneos.organizacion}</h1>
           {!torneos.usaRanking && (
             <p className="text-sm text-pizarra-500">Sin ranking anual: cada torneo termina con su propia tabla de posiciones.</p>

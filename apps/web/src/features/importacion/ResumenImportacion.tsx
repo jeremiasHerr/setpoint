@@ -37,7 +37,7 @@ export function ResumenImportacion({ conteos, categoria, casilleros, jugadores }
         <h2 className="text-[15px] font-semibold">Los casilleros quedaron así</h2>
         <div className="flex flex-wrap items-center gap-2">
           {casilleros.map((c) => (
-            <span key={c} className="flex h-8 items-center rounded-lg bg-niebla px-[11px] font-mono text-xs text-pizarra-700">
+            <span key={c} className="flex h-8 items-center rounded-lg bg-niebla px-[11px] text-[12.5px] font-medium text-noche">
               {c}
             </span>
           ))}

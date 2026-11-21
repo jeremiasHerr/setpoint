@@ -7,6 +7,7 @@ import {
   type ResultadoLeido,
 } from '@setpoint/shared';
 import { intentarJson, MODELO, type Tokens } from '../../../lib/ia';
+import { reservarUsoIA, registrarTokensIA } from '../../../lib/limite-ia';
 import { organizacionAdministrada } from '../../../lib/permisos';
 import { prisma } from '../../../lib/prisma';
 import { ErrorHttp } from '../../../middleware/errores';
@@ -167,6 +168,9 @@ export async function leerMensajes(slug: string, usuarioId: number, torneoId: nu
   const mensajes = leerChat(texto);
   if (mensajes.length === 0) throw new ErrorHttp(400, 'DATOS_INVALIDOS', { texto: 'Pegá los mensajes del grupo' });
 
+  // Antes de llamar al modelo: si se pasó un límite, 429 sin gastar nada (decisión 121).
+  const usoId = await reservarUsoIA(organizacionId, usuarioId, 'RESULTADOS');
+
   const sistema = sistemaDeJuego(torneo);
   const jugadores = [...new Map(partidos.flatMap((p) => [p.jugadorA, p.jugadorB]).filter((j) => j !== null).map((j) => [j.id, j])).values()];
   const contexto: ContextoAuditoria = {
@@ -204,6 +208,7 @@ export async function leerMensajes(slug: string, usuarioId: number, torneoId: nu
     feedback = problemasGlobales(r.datos, contexto);
     if (feedback.length === 0) respuesta = r.datos;
   }
+  await registrarTokensIA(usoId, resumen.tokens);
   if (respuesta === null) resumen.error = feedback.join('. ') || 'No pudimos leer los mensajes';
 
   const lectura = await prisma.extraccionResultado.create({

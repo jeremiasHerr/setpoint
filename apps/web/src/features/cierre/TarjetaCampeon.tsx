@@ -19,7 +19,7 @@ export function TarjetaCampeon({ campeon, consuelo }: { campeon: CampeonDelCuadr
   const principal = campeon.cuadro === 'campeonato';
   return (
     <Tarjeta className="flex flex-col gap-[13px] p-[18px]">
-      <span className="font-mono text-[11px] text-pizarra-500">{nombreDelCuadro(campeon.cuadro, consuelo).toLowerCase()}</span>
+      <span className="text-[12.5px] font-medium text-noche">{nombreDelCuadro(campeon.cuadro, consuelo).toLowerCase()}</span>
       <div className="flex items-center gap-3">
         <span
           aria-hidden="true"

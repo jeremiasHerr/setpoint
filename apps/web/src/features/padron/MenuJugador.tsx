@@ -137,7 +137,7 @@ export function MenuJugador({ jugador, slug, organizacion, alEditar }: Props) {
             Editar jugador
           </button>
           {aviso && (
-            <p role="status" className="border-t border-linea-suave px-3.5 py-[11px] font-mono text-xs text-pizarra-500">
+            <p role="status" className="border-t border-linea-suave px-3.5 py-[11px] text-[13px] text-pizarra-500">
               {aviso}
             </p>
           )}

@@ -27,6 +27,7 @@ describe.skipIf(!process.env.DATABASE_URL)('la lista de espera desde el link, co
   const { inscripcionParaPagar } = await import('../../src/modules/pagos/pagos.service');
   const { darDeBaja } = await import('../../src/modules/inscripciones/inscripciones.service');
   const { alVencer } = await import('../../src/modules/inscripcion/estados');
+  const { cuentaDe } = await import('../../src/modules/auth/cuenta.service');
 
   const marca = `${Date.now()}-${Math.floor(Math.random() * 1000)}`;
   const slug = `prueba-espera-${marca}`;
@@ -176,6 +177,15 @@ describe.skipIf(!process.env.DATABASE_URL)('la lista de espera desde el link, co
     expect((await inscripcionParaPagar(slug, dario.inscripcionId, ids.dario)).listaDeEspera?.espera?.posicion).toBe(1);
   });
 
+  it('la app muestra a quien espera con su puesto, y a quien le tocó el lugar, reservando (decisión 123)', async () => {
+    const delQueEspera = (await cuentaDe(ids.dario)).enCurso.filter((i) => i.estado === 'en_lista_espera');
+    expect(delQueEspera).toEqual([expect.objectContaining({ torneo: 'Copa llena', listaDeEspera: { puesto: 1, horas: 24 } })]);
+
+    const delQueLeToco = (await cuentaDe(ids.lucas)).enCurso.find((i) => i.torneo === 'Copa llena');
+    expect(delQueLeToco).toMatchObject({ estado: 'reservando', listaDeEspera: null });
+    expect(delQueLeToco?.reservaVence).not.toBeNull();
+  });
+
   it('con el sorteo confirmado, quien seguía en la lista ve que terminó', async () => {
     await prisma.torneo.update({ where: { id: ids.lleno }, data: { sorteoConfirmado: true } });
     const dario = await prisma.inscripcion.findFirstOrThrow({ where: { torneoId: ids.lleno, jugadorId: ids.diaz } });
@@ -183,6 +193,8 @@ describe.skipIf(!process.env.DATABASE_URL)('la lista de espera desde el link, co
     const pago = await inscripcionParaPagar(slug, dario.id, ids.dario);
     expect(pago.estado).toBe('lista_terminada');
     expect(pago.listaDeEspera).toEqual({ horas: 24, espera: null });
+    // En la app deja de estar en curso: la lista terminó.
+    expect((await cuentaDe(ids.dario)).enCurso.filter((i) => i.estado === 'en_lista_espera')).toEqual([]);
   });
 
   it('una reserva sobre una fila vencida no se confunde con una solicitud aprobada al vencer', async () => {

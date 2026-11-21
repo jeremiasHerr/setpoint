@@ -54,8 +54,8 @@ export function FilaImportacion({
   const resumen = (
     <div className={COLUMNAS}>
       <div className="flex min-w-0 flex-col">
-        <span className="truncate font-mono text-sm text-pizarra-700">{fila.enLaPlanilla || nombreDe(fila)}</span>
-        <span className="font-mono text-xs text-pizarra-500">
+        <span className="truncate text-sm text-pizarra-700">{fila.enLaPlanilla || nombreDe(fila)}</span>
+        <span className="text-[13px] text-pizarra-500">
           {categoria ? `${categoria.toLowerCase()} · ` : ''}fila {fila.fila}
         </span>
         <div className="mt-1 md:hidden">
@@ -211,7 +211,7 @@ function Opcion({ elegida, onClick, titulo, detalle }: PropsOpcion) {
     >
       <span className="flex flex-col gap-[3px]">
         <span className={`text-[15px] ${elegida ? 'font-semibold' : 'font-medium'}`}>{titulo}</span>
-        <span className="font-mono text-xs text-pizarra-500">{detalle}</span>
+        <span className="text-[13px] text-pizarra-500">{detalle}</span>
       </span>
       {elegida ? (
         <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-noche">

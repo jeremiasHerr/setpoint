@@ -27,7 +27,7 @@ export function VinculacionesParaRevisar({ slug }: { slug: string }) {
               {caso.nombre} {caso.apellido}
             </span>
             <EnlaceParaRevisar jugadorId={caso.jugadorId} />
-            <span className="font-mono text-xs text-pizarra-500">{motivoCorto(caso.motivo, caso.nombre)}</span>
+            <span className="text-[13px] text-pizarra-500">{motivoCorto(caso.motivo, caso.nombre)}</span>
           </li>
         ))}
       </ul>

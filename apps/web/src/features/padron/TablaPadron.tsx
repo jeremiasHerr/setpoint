@@ -124,22 +124,22 @@ export function TablaPadron({ jugadores, categorias, conRanking, seleccionadoId,
 
       <div className={`grid h-[38px] items-center gap-x-3 md:gap-x-4 border-b border-linea bg-niebla px-4 md:px-[18px] ${columnas}`}>
         <span />
-        <span className="font-mono text-[11px] text-pizarra-500">jugador</span>
-        <span className="hidden font-mono text-[11px] text-pizarra-500 md:block">categoría</span>
+        <span className="text-[12.5px] font-medium text-noche">jugador</span>
+        <span className="hidden text-[12.5px] font-medium text-noche md:block">categoría</span>
         {enNuevas ? (
           <>
-            <span className="hidden font-mono text-[11px] text-pizarra-500 md:block">cómo se vinculó</span>
-            <span className="text-right font-mono text-[11px] text-pizarra-500">cuándo</span>
+            <span className="hidden text-[12.5px] font-medium text-noche md:block">cómo se vinculó</span>
+            <span className="text-right text-[12.5px] font-medium text-noche">cuándo</span>
           </>
         ) : (
           <>
             {conRanking && (
-              <span className="text-right font-mono text-[11px] text-pizarra-500 md:text-left">
+              <span className="text-right text-[12.5px] font-medium text-noche md:text-left">
                 <span className="md:hidden">puntos</span>
                 <span className="hidden md:inline">ranking</span>
               </span>
             )}
-            <span className="hidden text-right font-mono text-[11px] text-pizarra-500 xl:block">partidos</span>
+            <span className="hidden text-right text-[12.5px] font-medium text-noche xl:block">partidos</span>
           </>
         )}
         <span />
@@ -190,7 +190,7 @@ export function TablaPadron({ jugadores, categorias, conRanking, seleccionadoId,
         </p>
       ) : (
         <div className="rounded-b-tarjeta bg-niebla px-4 md:px-[18px] py-[15px]">
-          <span className="font-mono text-[13px] text-pizarra-500">
+          <span className="text-[13px] text-pizarra-500">
             mostrando <Numero>{visibles.length}</Numero> de <Numero>{jugadores.length}</Numero>
           </span>
         </div>

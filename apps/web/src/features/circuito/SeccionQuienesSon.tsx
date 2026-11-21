@@ -113,7 +113,7 @@ function Contactos({ contactos, alCambiar }: { contactos: Contacto[]; alCambiar:
         <ul className="flex flex-col gap-2">
           {contactos.map((c, i) => (
             <li key={`${c.tipo}-${c.valor}`} className="flex h-11 items-center gap-3 rounded-control border border-linea pr-1.5 pl-3.5">
-              <span className="w-[78px] shrink-0 font-mono text-xs text-pizarra-500">{c.tipo === 'whatsapp' ? 'whatsapp' : 'red social'}</span>
+              <span className="w-[78px] shrink-0 text-[12.5px] font-medium text-noche">{c.tipo === 'whatsapp' ? 'whatsapp' : 'red social'}</span>
               <span className={`min-w-0 flex-1 truncate text-[15px] ${c.tipo === 'whatsapp' ? 'font-mono tabular-nums' : ''}`}>{c.valor}</span>
               <button
                 type="button"

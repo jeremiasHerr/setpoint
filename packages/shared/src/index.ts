@@ -20,6 +20,7 @@ export * from './schemas/navegacion';
 export * from './schemas/en-vivo';
 export * from './schemas/ranking';
 export * from './schemas/ficha';
+export * from './schemas/cara-a-cara';
 export * from './schemas/proyeccion';
 export * from './schemas/mi-zona';
 export * from './schemas/mis-partidos';

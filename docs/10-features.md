@@ -246,7 +246,7 @@ El jugador dispondrá de una aplicación instalable en su teléfono donde ver su
 
 **Entrega: 50%**
 
-**Estado:** en curso. La app (`apps/mobile`, Expo) tiene el ingreso del jugador, la elección del circuito si juega en varios ([decisiones 039 a 042](decisiones/039-ingreso-del-jugador.md)), *Inscripciones en curso* para quien todavía no juega en ninguno, con el aviso arriba de Cuándo juego para quien ya juega en otro ([decisión 054](decisiones/054-perfil-pendiente.md)), el ranking, *Mi zona* (`GET /api/jugador/:slug/zona`, [decisión 044](decisiones/044-rutas-del-jugador.md)) y *Cuándo juego* (`GET /api/jugador/:slug/partidos`), con una barra de pestañas para pasar de una a otra ([decisión 045](decisiones/045-pestanas-de-la-app.md)). La app abre en Cuándo juego. "Escribirle" abre WhatsApp con el rival de un partido por jugar ([decisión 046](decisiones/046-telefono-del-rival.md)); anotar la fecha y confirmar la del rival llegaron con F14, y "Cómo te fue con él" llega con F18. Avisos ([decisión 047](decisiones/047-avisos-push.md)): el fixture llega por push al confirmarse el sorteo, y la app programa un recordatorio antes de cada partido con fecha; los de anotar, cambiar y confirmar una fecha salen desde F14. Falta generar el APK con la cuenta de Expo y el proyecto de Firebase (pasos en el README de la raíz).
+**Estado:** en curso. La app (`apps/mobile`, Expo) tiene el ingreso del jugador, la elección del circuito si juega en varios ([decisiones 039 a 042](decisiones/039-ingreso-del-jugador.md)), *Inscripciones en curso* para quien todavía no juega en ninguno, con el aviso arriba de Cuándo juego para quien ya juega en otro ([decisión 054](decisiones/054-perfil-pendiente.md)), el ranking, la ficha de cada jugador (F17), *Mi zona* (`GET /api/jugador/:slug/zona`, [decisión 044](decisiones/044-rutas-del-jugador.md)) y *Cuándo juego* (`GET /api/jugador/:slug/partidos`), con una barra de pestañas para pasar de una a otra ([decisión 045](decisiones/045-pestanas-de-la-app.md)). La app abre en Cuándo juego. "Escribirle" abre WhatsApp con el rival de un partido por jugar ([decisión 046](decisiones/046-telefono-del-rival.md)); anotar la fecha llega con F14 y "Cómo te fue con él", con F18. Avisos ([decisión 047](decisiones/047-avisos-push.md)): el fixture llega por push al confirmarse el sorteo, y la app programa un recordatorio antes de cada partido con fecha; el de la confirmación del rival llega con F14. Los cuadros todavía se abren en la web: dibujarlos en la app (una ronda a la vez, [decisión 038](decisiones/038-cuadros-en-el-celular.md)) necesita las piezas del cuadro de la web, que no están en la app. Falta generar el APK con la cuenta de Expo y el proyecto de Firebase (pasos en el README de la raíz).
 
 ---
 
@@ -292,7 +292,8 @@ La organización podrá seguir el estado de las inscripciones de cada torneo en 
 - Al cerrar, las reservas sin pagar no se tocan y no entran al sorteo ([decisión 024](decisiones/024-reservas-sin-pagar-al-cerrar.md)), y no se puede cerrar si los que pagaron no alcanzan para las zonas ([decisión 025](decisiones/025-no-se-cierra-sin-inscriptos-para-las-zonas.md)).
 - Con el cupo lleno, el link del torneo y el link personal llevan a "Anotarme en la lista de espera", por el mismo camino que inscribirse y sin pagar. Se anota quien tiene perfil en el padrón ([decisión 081](decisiones/081-anotarse-en-la-lista-de-espera.md)). La pantalla de pago muestra su puesto en la lista, el lugar que le tocó con hasta cuándo es suyo, y que la lista terminó si se sorteó sin que le tocara ([decisión 082](decisiones/082-la-lista-termina-con-el-sorteo.md)). En el seed, la Copa Confluencia tiene a Sanhueza primero en la lista.
 - Las inscripciones cuya vinculación quedó para revisar llevan la marca "para revisar", la misma del padrón, que lleva a *Revisar vinculación*.
-- Falta la lista de espera en la app.
+- En la app, quien espera en la lista ve su puesto en *Tus inscripciones* y arriba de *Cuándo juego*; anotarse sigue siendo desde la web ([decisión 123](decisiones/123-la-lista-de-espera-en-la-app.md)).
+- Falta la lista de espera desde el link personal.
 
 **Entrega: 75%**
 
@@ -382,7 +383,8 @@ Cada jugador tendrá una ficha con su historial completo: todos los partidos que
 - Los torneos van con la instancia que alcanzó y los puntos que le dio el cierre; es la sección que la referencia no dibuja ([decisión 071](decisiones/071-la-ficha-suma-los-torneos.md)). La instancia se calcula con sus partidos de cuadro, así que sirve también para torneos sin ranking y en juego ([decisión 072](decisiones/072-la-instancia-se-calcula-con-los-partidos.md)).
 - El W.O. figura en la lista pero no cuenta como jugado; el abandono sí ([decisión 073](decisiones/073-el-wo-no-cuenta-en-la-ficha.md)).
 - Se llega desde la fila abierta del ranking ("Ver la ficha") y desde los nombres de las zonas del torneo en vivo ([decisión 074](decisiones/074-entrada-a-la-ficha.md)).
-- La ficha en la app y el botón "Comparar con otro jugador", que abre el cara a cara (F18), quedan pendientes.
+- En la app, la fila abierta del ranking suma "Ver la ficha" y abre la misma ficha (`/ficha/[id]`, sobre la ruta pública), sin pestaña nueva ([decisión 045](decisiones/045-pestanas-de-la-app.md)).
+- El botón "Comparar con otro jugador", que abre el cara a cara (F18), queda pendiente.
 
 ---
 
@@ -397,6 +399,11 @@ Cualquier persona podrá comparar a dos jugadores del circuito y ver el historia
 - Se accede desde la ficha de cualquier jugador o desde un buscador por apellido.
 
 **Entrega: 100%**
+
+**Estado:** implementada en la web, sin el filtro por superficie ([decisión 122](decisiones/122-cara-a-cara-sin-superficie.md)).
+- *Cara a cara* (`/c/:slug/jugadores/:id/cara-a-cara/:rivalId`) muestra el cruce acumulado, cada partido con su torneo e instancia, y vuelve a la ficha. Sin rival, lista con quiénes jugó el jugador para elegir.
+- La API: `GET /api/publico/:slug/jugadores/:id/rivales` y `.../cara-a-cara/:rivalId`. El W.O. no cuenta como jugado y el abandono sí ([decisión 073](decisiones/073-el-wo-no-cuenta-en-la-ficha.md)). Sin teléfono ni email.
+- Falta el filtro por superficie, porque los clubes todavía no tienen el dato, y "Cómo te fue con él" en la app.
 
 ---
 
