@@ -44,7 +44,7 @@ function Cruce({ zona, fila, rival }: { zona: ZonaDelTablero; fila: FilaDePosici
   );
 }
 
-function Tabla({ zona }: { zona: ZonaDelTablero }) {
+function Tabla({ zona, consuelo }: { zona: ZonaDelTablero; consuelo: string }) {
   // Una columna por rival: el ancho depende de cuántos son, así que va en una variable.
   const columnas = { '--columnas': `200px repeat(${zona.filas.length}, minmax(0, 1fr)) 48px 58px 74px` } as CSSProperties;
   const grilla = 'grid grid-cols-[minmax(0,1fr)_40px_52px_64px] md:grid-cols-[var(--columnas)]';
@@ -88,7 +88,7 @@ function Tabla({ zona }: { zona: ZonaDelTablero }) {
 
       <div className="flex items-start gap-2.5 bg-niebla px-5 py-[13px]">
         <span className="mt-[7px] size-1.5 shrink-0 rounded-full bg-lona-texto" />
-        <p className="text-[13px] text-pizarra-500">{comoVieneLaZona(zona.filas)}</p>
+        <p className="text-[13px] text-pizarra-500">{comoVieneLaZona(zona.filas, consuelo)}</p>
       </div>
     </Tarjeta>
   );
@@ -123,7 +123,7 @@ export function ZonaPorZona({ tablero }: { tablero: Tablero }) {
           })}
         </div>
       </div>
-      <Tabla zona={zona} />
+      <Tabla zona={zona} consuelo={tablero.nombreCuadroConsuelo} />
     </section>
   );
 }

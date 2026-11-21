@@ -15,6 +15,8 @@ type Props = {
   cantidadGrupos: number;
   clasificanPorGrupo: number;
   tieneComplementaria: boolean;
+  // Cómo llama el circuito a su cuadro consuelo.
+  nombreConsuelo: string;
   errores: ErroresConvocatoria;
   alCambiarGrupos: (cantidadGrupos: number) => void;
   alCambiarClasificados: (clasificanPorGrupo: number) => void;
@@ -25,6 +27,7 @@ export function SeccionFormato({
   cantidadGrupos,
   clasificanPorGrupo,
   tieneComplementaria,
+  nombreConsuelo,
   errores,
   alCambiarGrupos,
   alCambiarClasificados,
@@ -79,7 +82,7 @@ export function SeccionFormato({
       <div className="flex items-center justify-between gap-4 pt-1">
         <div className="flex flex-col gap-[3px]">
           <h3 id="complementaria-titulo" className="text-[15px] font-medium">
-            Cuadro consuelo
+            {nombreConsuelo}
           </h3>
           <p className="text-sm text-pizarra-500">Los que no clasifican siguen jugando en un segundo cuadro. Nadie queda afuera.</p>
         </div>

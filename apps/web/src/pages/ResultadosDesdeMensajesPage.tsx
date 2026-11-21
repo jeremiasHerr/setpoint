@@ -190,6 +190,7 @@ function Lectura({ slug, lectura, alPegarMas }: { slug: string; lectura: Lectura
     <ResultadoLeido
       key={leido.n}
       torneoId={lectura.torneoId}
+      consuelo={lectura.nombreCuadroConsuelo}
       leido={leido}
       decidiendo={decidir.isPending}
       error={enCurso === leido.n && decidir.error ? textoDelError(decidir.error) : undefined}
