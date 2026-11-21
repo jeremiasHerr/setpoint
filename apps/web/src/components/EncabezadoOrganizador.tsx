@@ -47,16 +47,16 @@ export function EncabezadoOrganizador({ organizacion, navegacion = [], activo, i
 
   return (
     <header
-      className={`relative flex h-[60px] items-center justify-between gap-3 bg-noche-900 px-4 md:gap-6 md:px-7 ${
+      className={`relative flex h-[60px] items-center justify-between gap-2 bg-noche-900 px-4 md:gap-6 md:px-7 ${
         abierto ? 'z-40' : ''
       }`}
     >
-      <div className="flex min-w-0 items-center gap-3.5">
+      <div className="flex min-w-0 items-center gap-2.5 md:gap-3.5">
         <Link to="/inicio" aria-label="Ir al inicio" className="rounded-[7px]">
           <Logo sobreNoche />
         </Link>
         <div className="h-[18px] w-px bg-borde-noche" />
-        <span className="truncate text-sm whitespace-nowrap text-pizarra-400">{organizacion}</span>
+        <span title={organizacion} className="truncate text-[13px] whitespace-nowrap text-pizarra-400 md:text-sm">{organizacion}</span>
       </div>
 
       {hayAlgo && (
@@ -102,7 +102,7 @@ export function EncabezadoOrganizador({ organizacion, navegacion = [], activo, i
           aria-expanded={abierto}
           aria-controls={idPanel}
           onClick={() => setAbierto(!abierto)}
-          className={`flex h-9 shrink-0 items-center rounded-control border border-borde-noche px-3.5 text-sm font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white md:hidden ${abierto ? 'bg-noche-2' : ''}`}
+          className={`flex h-9 shrink-0 items-center rounded-control border border-borde-noche px-3 text-sm font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white md:hidden ${abierto ? 'bg-noche-2' : ''}`}
         >
           {abierto ? 'Cerrar' : 'Menú'}
         </button>
