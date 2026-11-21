@@ -56,6 +56,9 @@ function useRefrescarElCupo(slug: string, torneoId: string) {
   return (error: Error) => {
     if (error instanceof ErrorApi && (error.codigo === 'SIN_LUGARES' || error.codigo === 'HAY_LUGARES')) {
       void queryClient.invalidateQueries({ queryKey: ['torneo-publico', slug, torneoId] });
+      // Desde el link personal, el cupo llega con el link: sin esto el botón seguiría ofreciendo lo
+      // que la API acaba de rechazar.
+      void queryClient.invalidateQueries({ queryKey: ['link-personal'] });
     }
   };
 }
