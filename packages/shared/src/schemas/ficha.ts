@@ -21,6 +21,8 @@ export type TorneoDeLaFicha = {
   instancia: InstanciaDeLaFicha;
   // Los que le dio el cierre (F16). null si el torneo no da puntos o todavía no cerró.
   puntos: number | null;
+  // Si da puntos y todavía no cerró: se puede ver qué tiene en juego (F20, decisión 120).
+  conProyeccion: boolean;
 };
 
 export type PartidoDeLaFicha = {

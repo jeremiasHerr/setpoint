@@ -1,6 +1,6 @@
 # 116 — El organizador pasa al cemento, con las columnas del inicio por estado
 
-**Estado:** aceptada — 19 de noviembre de 2026. Reemplaza en parte la [decisión 113](113-columnas-del-inicio-con-borde.md) (el fondo niebla y las columnas sin relleno) y la franja negra de la [094](094-inicio-en-columnas.md).
+**Estado:** reemplazada por la [decisión 123](123-inicio-en-noche-y-rotulos-sin-mono.md) — aceptada el 19 de noviembre de 2026. Reemplaza en parte la [decisión 113](113-columnas-del-inicio-con-borde.md) (el fondo niebla y las columnas sin relleno) y la franja negra de la [094](094-inicio-en-columnas.md).
 
 ## Contexto
 

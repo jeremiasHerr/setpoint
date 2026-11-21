@@ -92,7 +92,8 @@ export async function caraACara(slug: string, params: unknown): Promise<CaraACar
     a: lado(a, rankingA),
     b: lado(b, rankingB),
     resumen: resumenDelCaraACara(aId, partidos),
-    partidos: partidosDelCaraACara(aId, torneos, partidos, partidosDeCuadro),
+    // El cara a cara no linkea a qué está en juego (F20): eso va en la ficha.
+    partidos: partidosDelCaraACara(aId, torneos.map((t) => ({ ...t, conProyeccion: false })), partidos, partidosDeCuadro),
   };
 }
 

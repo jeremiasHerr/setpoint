@@ -48,9 +48,9 @@ export function TablaInscriptos({ slug, torneoId, inscripciones, sePuedeDarDeBaj
       <Tarjeta className="flex flex-col overflow-hidden">
         <div className={`grid gap-x-3 border-b border-linea bg-niebla px-4 py-[11px] md:gap-x-1 md:px-[18px] ${COLUMNAS}`}>
           <span className="text-xs text-pizarra-500">jugador</span>
-          <span className="hidden font-mono text-[11px] text-pizarra-500 md:block">estado</span>
-          <span className="hidden font-mono text-[11px] text-pizarra-500 md:block">medio</span>
-          <span className="hidden font-mono text-[11px] text-pizarra-500 md:block">fecha</span>
+          <span className="hidden text-[12.5px] font-medium text-noche md:block">estado</span>
+          <span className="hidden text-[12.5px] font-medium text-noche md:block">medio</span>
+          <span className="hidden text-[12.5px] font-medium text-noche md:block">fecha</span>
           <span />
         </div>
 
@@ -83,7 +83,7 @@ export function TablaInscriptos({ slug, torneoId, inscripciones, sePuedeDarDeBaj
                         {pagada && inscripcion.medio && ` · ${nombreDelMedio[inscripcion.medio]}`}
                       </Numero>
                       {inscripcion.deLaListaDeEspera && (
-                        <span className="truncate font-mono text-xs text-pizarra-500">de la lista de espera</span>
+                        <span className="truncate text-[13px] text-pizarra-500">de la lista de espera</span>
                       )}
                     </div>
                   </div>

@@ -8,6 +8,7 @@ const ResultadosDesdeMensajesPage = lazy(() =>
   import('./pages/ResultadosDesdeMensajesPage').then((m) => ({ default: m.ResultadosDesdeMensajesPage })),
 );
 const CierrePage = lazy(() => import('./pages/CierrePage').then((m) => ({ default: m.CierrePage })));
+const EnJuegoPage = lazy(() => import('./pages/EnJuegoPage').then((m) => ({ default: m.EnJuegoPage })));
 const EnVivoPage = lazy(() => import('./pages/EnVivoPage').then((m) => ({ default: m.EnVivoPage })));
 const CaraACaraPage = lazy(() => import('./pages/CaraACaraPage').then((m) => ({ default: m.CaraACaraPage })));
 const FichaPublicaPage =lazy(() => import('./pages/FichaPublicaPage').then((m) => ({ default: m.FichaPublicaPage })));
@@ -94,6 +95,7 @@ export default function App() {
         <Route path="/i/:codigo" element={<LinkPersonalPage />} />
         <Route path="/c/:slug/torneos/:id/en-vivo" element={<EnVivoPage />} />
         <Route path="/c/:slug/torneos/:id/cuadros" element={<EnVivoPage pestanaInicial="cuadros" />} />
+        <Route path="/c/:slug/torneos/:torneoId/en-juego/:jugadorId" element={<EnJuegoPage />} />
         <Route path="*" element={<NoEncontradaPage />} />
       </Routes>
     </Suspense>

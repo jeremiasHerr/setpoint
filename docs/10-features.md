@@ -246,7 +246,7 @@ El jugador dispondrá de una aplicación instalable en su teléfono donde ver su
 
 **Entrega: 50%**
 
-**Estado:** en curso. La app (`apps/mobile`, Expo) tiene el ingreso del jugador, la elección del circuito si juega en varios ([decisiones 039 a 042](decisiones/039-ingreso-del-jugador.md)), *Inscripciones en curso* para quien todavía no juega en ninguno, con el aviso arriba de Cuándo juego para quien ya juega en otro ([decisión 054](decisiones/054-perfil-pendiente.md)), el ranking, *Mi zona* (`GET /api/jugador/:slug/zona`, [decisión 044](decisiones/044-rutas-del-jugador.md)) y *Cuándo juego* (`GET /api/jugador/:slug/partidos`), con una barra de pestañas para pasar de una a otra ([decisión 045](decisiones/045-pestanas-de-la-app.md)). La app abre en Cuándo juego. "Escribirle" abre WhatsApp con el rival de un partido por jugar ([decisión 046](decisiones/046-telefono-del-rival.md)); anotar la fecha llega con F14. "Cómo te fue con él" (F18) abre el historial con ese rival desde el próximo partido. Avisos ([decisión 047](decisiones/047-avisos-push.md)): el fixture llega por push al confirmarse el sorteo, y la app programa un recordatorio antes de cada partido con fecha; el de la confirmación del rival llega con F14. Falta generar el APK con la cuenta de Expo y el proyecto de Firebase (pasos en el README de la raíz).
+**Estado:** en curso. La app (`apps/mobile`, Expo) tiene el ingreso del jugador, la elección del circuito si juega en varios ([decisiones 039 a 042](decisiones/039-ingreso-del-jugador.md)), *Inscripciones en curso* para quien todavía no juega en ninguno, con el aviso arriba de Cuándo juego para quien ya juega en otro ([decisión 054](decisiones/054-perfil-pendiente.md)), el ranking, la ficha de cada jugador (F17), *Mi zona* (`GET /api/jugador/:slug/zona`, [decisión 044](decisiones/044-rutas-del-jugador.md)) y *Cuándo juego* (`GET /api/jugador/:slug/partidos`), con una barra de pestañas para pasar de una a otra ([decisión 045](decisiones/045-pestanas-de-la-app.md)). La app abre en Cuándo juego. "Escribirle" abre WhatsApp con el rival de un partido por jugar ([decisión 046](decisiones/046-telefono-del-rival.md)); anotar la fecha llega con F14. "Cómo te fue con él" (F18) abre el historial con ese rival desde el próximo partido. Avisos ([decisión 047](decisiones/047-avisos-push.md)): el fixture llega por push al confirmarse el sorteo, y la app programa un recordatorio antes de cada partido con fecha; el de la confirmación del rival llega con F14. Los cuadros todavía se abren en la web: dibujarlos en la app (una ronda a la vez, [decisión 038](decisiones/038-cuadros-en-el-celular.md)) necesita las piezas del cuadro de la web, que no están en la app. Falta generar el APK con la cuenta de Expo y el proyecto de Firebase (pasos en el README de la raíz).
 
 ---
 
@@ -283,16 +283,17 @@ La organización podrá seguir el estado de las inscripciones de cada torneo en 
 - En los torneos con aprobación, muestra las **solicitudes** de quienes no están en el padrón, para aprobarlas o rechazarlas. Al aprobar, el jugador recibe el link para pagar, y entra al padrón cuando paga.
 - Marca las inscripciones cuya vinculación quedó para revisar (un posible homónimo, o un perfil que reclama otra cuenta) y lleva a revisarla (F02).
 
-**Estado:** implementada (`/torneos/:id/inscripciones`, [03-flujo-organizacion.md](03-flujo-organizacion.md) §7), y del lado del jugador, anotarse en la lista de espera desde el link del torneo.
+**Estado:** implementada (`/torneos/:id/inscripciones`, [03-flujo-organizacion.md](03-flujo-organizacion.md) §7), y del lado del jugador, anotarse en la lista de espera desde el link del torneo y desde el link personal.
 - Pestañas Confirmados, Reservando, Lista de espera, Bajas y, con aprobación, Solicitudes, con un buscador por apellido. Al costado, la lista de espera, las devoluciones pendientes y la conciliación.
 - Dar de baja a quien pagó, diciendo si le corresponde la devolución; el sistema la anota y la organización la hace por fuera ([decisión 075](decisiones/075-la-devolucion-se-anota.md)). Se puede hasta que se confirma el sorteo ([decisión 077](decisiones/077-baja-hasta-el-sorteo.md)).
 - Un lugar que se libera (baja, reserva vencida, pago rechazado o cupo más grande) pasa al primero de la lista de espera, con 24 horas para pagar y un email; si no paga, pasa al siguiente ([decisión 076](decisiones/076-lista-de-espera-24-horas.md)).
 - Inscribir a mano a quien pagó por fuera, sin pasarse del cupo ([decisión 079](decisiones/079-inscribir-a-mano-sin-pasarse-del-cupo.md)), y "Recordarle" el pago a una reserva.
 - La conciliación separa lo cobrado por MercadoPago de lo cobrado por fuera, sin comisión: Setpoint cobra un cargo por jugador inscripto, que todavía no se cobra en el sistema ([decisión 103](decisiones/103-cargo-por-jugador-inscripto.md), que reemplaza la [078](decisiones/078-comision-de-la-plataforma.md)).
 - Al cerrar, las reservas sin pagar no se tocan y no entran al sorteo ([decisión 024](decisiones/024-reservas-sin-pagar-al-cerrar.md)), y no se puede cerrar si los que pagaron no alcanzan para las zonas ([decisión 025](decisiones/025-no-se-cierra-sin-inscriptos-para-las-zonas.md)).
-- Con el cupo lleno, el link del torneo lleva a "Anotarme en la lista de espera", por el mismo camino que inscribirse y sin pagar. Se anota quien tiene perfil en el padrón ([decisión 081](decisiones/081-anotarse-en-la-lista-de-espera.md)). La pantalla de pago muestra su puesto en la lista, el lugar que le tocó con hasta cuándo es suyo, y que la lista terminó si se sorteó sin que le tocara ([decisión 082](decisiones/082-la-lista-termina-con-el-sorteo.md)). En el seed, la Copa Confluencia tiene a Sanhueza primero en la lista.
+- Con el cupo lleno, el link del torneo y el link personal llevan a "Anotarme en la lista de espera", por el mismo camino que inscribirse y sin pagar. Se anota quien tiene perfil en el padrón ([decisión 081](decisiones/081-anotarse-en-la-lista-de-espera.md)). La pantalla de pago muestra su puesto en la lista, el lugar que le tocó con hasta cuándo es suyo, y que la lista terminó si se sorteó sin que le tocara ([decisión 082](decisiones/082-la-lista-termina-con-el-sorteo.md)). En el seed, la Copa Confluencia tiene a Sanhueza primero en la lista.
 - Las inscripciones cuya vinculación quedó para revisar llevan la marca "para revisar", la misma del padrón, que lleva a *Revisar vinculación*.
-- Falta la lista de espera desde el link personal y en la app.
+- En la app, quien espera en la lista ve su puesto en *Tus inscripciones* y arriba de *Cuándo juego*; anotarse sigue siendo desde la web ([decisión 123](decisiones/123-la-lista-de-espera-en-la-app.md)).
+- Falta la lista de espera desde el link personal.
 
 **Entrega: 75%**
 
@@ -382,7 +383,8 @@ Cada jugador tendrá una ficha con su historial completo: todos los partidos que
 - Los torneos van con la instancia que alcanzó y los puntos que le dio el cierre; es la sección que la referencia no dibuja ([decisión 071](decisiones/071-la-ficha-suma-los-torneos.md)). La instancia se calcula con sus partidos de cuadro, así que sirve también para torneos sin ranking y en juego ([decisión 072](decisiones/072-la-instancia-se-calcula-con-los-partidos.md)).
 - El W.O. figura en la lista pero no cuenta como jugado; el abandono sí ([decisión 073](decisiones/073-el-wo-no-cuenta-en-la-ficha.md)).
 - Se llega desde la fila abierta del ranking ("Ver la ficha") y desde los nombres de las zonas del torneo en vivo ([decisión 074](decisiones/074-entrada-a-la-ficha.md)).
-- "Comparar con otro jugador" abre el cara a cara (F18). La ficha en la app queda pendiente.
+- En la app, la fila abierta del ranking suma "Ver la ficha" y abre la misma ficha (`/ficha/[id]`, sobre la ruta pública), sin pestaña nueva ([decisión 045](decisiones/045-pestanas-de-la-app.md)).
+- El botón "Comparar con otro jugador", que abre el cara a cara (F18), queda pendiente.
 
 ---
 
@@ -435,7 +437,7 @@ Antes y durante el torneo, cada jugador podrá ver cuántos puntos sumaría y qu
 
 **Entrega: 100%**
 
-**Estado:** la API está (`GET /api/publico/:slug/torneos/:id/proyeccion/:jugadorId`); falta la pantalla. Es una cuenta exacta, sin IA: aplica la tabla de puntos, reemplaza el casillero y vuelve a ordenar el ranking ([decisión 117](decisiones/117-las-proyecciones-no-son-ia.md)).
+**Estado: implementada en la web pública**, en `/c/:slug/torneos/:id/en-juego/:jugadorId`, sobre `GET /api/publico/:slug/torneos/:id/proyeccion/:jugadorId`. Se llega desde la ficha del jugador, y desde la vista del torneo por los nombres de las zonas, que abren la ficha; la app no la muestra ([decisión 120](decisiones/120-las-proyecciones-en-la-web-publica.md)). Es una cuenta exacta, sin IA: aplica la tabla de puntos, reemplaza el casillero y vuelve a ordenar el ranking ([decisión 117](decisiones/117-las-proyecciones-no-son-ia.md)).
 
 ---
 

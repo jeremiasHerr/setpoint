@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSesion } from '../features/auth/SesionProvider';
 import { Pagar } from '../features/cuenta/Pagar';
 import { Reloj, Vence } from '../features/cuenta/piezas';
-import { colores, fuentes, radios } from '../lib/tokens';
+import { colores, fuentes, radios, tabular } from '../lib/tokens';
 
 // Estado 6 de docs/pantallas/jugador/inscripciones-en-curso.html: quien ya juega en un circuito ve
 // arriba de Cuándo juego sus inscripciones en curso en otro, y una vez los avisos de una solicitud
@@ -38,13 +38,19 @@ function EnCurso({ inscripcion }: { inscripcion: InscripcionEnCurso }) {
         <Text style={estilos.texto}>
           {inscripcion.estado === 'solicitada' && <>Tu solicitud para {torneo} está en revisión.</>}
           {inscripcion.estado === 'aprobada' && <>Te aprobaron la solicitud para {torneo}. Pagá para confirmar tu lugar.</>}
+          {inscripcion.listaDeEspera && (
+            <>
+              Estás <Text style={estilos.numero}>{inscripcion.listaDeEspera.puesto}°</Text> en la
+              lista de espera de {torneo}. Si te toca un lugar, te llega un email.
+            </>
+          )}
           {inscripcion.estado === 'reservando' && (
             <>
               Tenés un lugar reservado en {torneo}
               {inscripcion.reservaVence && (
                 <>
                   {' '}
-                  hasta las <Vence iso={inscripcion.reservaVence} />
+                  <Vence iso={inscripcion.reservaVence} />
                 </>
               )}
               .
@@ -52,7 +58,7 @@ function EnCurso({ inscripcion }: { inscripcion: InscripcionEnCurso }) {
           )}
         </Text>
       </View>
-      {inscripcion.estado !== 'solicitada' && <Pagar inscripcion={inscripcion} />}
+      {(inscripcion.estado === 'aprobada' || inscripcion.estado === 'reservando') && <Pagar inscripcion={inscripcion} />}
     </View>
   );
 }
@@ -80,6 +86,11 @@ function Terminada({ aviso, onEntendido }: { aviso: AvisoDeInscripcion; onEntend
 }
 
 const estilos = StyleSheet.create({
+  numero: {
+    fontFamily: fuentes.mono[500],
+    color: colores.noche,
+    ...tabular,
+  },
   lista: {
     gap: 12,
   },

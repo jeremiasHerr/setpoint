@@ -70,7 +70,7 @@ export function TarjetaPaseDirecto({ jugador, rotulo, className = '' }: { jugado
       <span className="truncate text-[13px] text-pizarra-500" title={`${jugador.nombre} ${jugador.apellido}`}>
         {jugador.apellido}
       </span>
-      <span className="truncate font-mono text-[11px] text-pizarra-400">{rotulo}</span>
+      <span className="truncate text-[12.5px] font-medium text-pizarra-400">{rotulo}</span>
     </div>
   );
 }

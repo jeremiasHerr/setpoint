@@ -74,7 +74,7 @@ function Ficha({ ficha, slug }: { ficha: FichaDelJugador; slug: string }) {
       </section>
 
       {ranking && <PuntosPorTorneo ranking={ranking} />}
-      <TorneosDeLaFicha torneos={ficha.torneos} consuelo={ficha.nombreCuadroConsuelo} />
+      <TorneosDeLaFicha torneos={ficha.torneos} consuelo={ficha.nombreCuadroConsuelo} slug={slug} jugadorId={ficha.jugadorId} />
       {/* Sin torneos no hay partidos: con el aviso de Torneos alcanza. */}
       {ficha.torneos.length > 0 && <PartidosDeLaFicha partidos={ficha.partidos} consuelo={ficha.nombreCuadroConsuelo} />}
 

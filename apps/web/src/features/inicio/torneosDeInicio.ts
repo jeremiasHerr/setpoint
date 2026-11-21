@@ -61,8 +61,11 @@ const fechaCompleta = (dia: string) => dia.split('-').reverse().join('/');
 const porCierre = (a: ResumenTorneo, b: ResumenTorneo) =>
   (b.terminado?.cerradoEl ?? '').localeCompare(a.terminado?.cerradoEl ?? '');
 
-// Arma la pantalla de inicio con lo que sabe la API. De los avisos de «Necesita tu atención»
-// solo se calculan los partidos vencidos.
+// Faltando esto o menos para el cierre, una inscripción que no llega al mínimo se avisa (decisión
+// 125). Antes, todavía hay tiempo de que se anoten; después de cerrar ya no se puede sortear.
+const DIAS_PARA_AVISAR = 3;
+
+// Arma la pantalla de inicio con lo que sabe la API.
 export function aTorneosDeInicio(convocatorias: ResumenConvocatoria[], circuito: Circuito): TorneosDeInicio {
   const borradores = convocatorias.filter((c) => c.estado === 'borrador');
   const abiertas = categoriasEn(convocatorias, ['publicado']);
@@ -128,6 +131,12 @@ export function aTorneosDeInicio(convocatorias: ResumenConvocatoria[], circuito:
         ? [{ tipo: 'partidos-vencidos' as const, torneoId: torneo.id, categoria: nombre, partidos: torneo.avance.vencidos }]
         : [],
     ),
+    pocosInscriptos: abiertas.flatMap(({ convocatoria, torneo, nombre }) => {
+      const dias = convocatoria.diasParaElCierre;
+      return dias !== null && dias >= 0 && dias <= DIAS_PARA_AVISAR && torneo.inscriptos < torneo.minimoParaSortear
+        ? [{ torneoId: torneo.id, nombre, pagaron: torneo.inscriptos, minimo: torneo.minimoParaSortear, diasParaElCierre: dias }]
+        : [];
+    }),
     organizacion: circuito.nombre,
     jugadores: circuito.jugadores,
     categorias: circuito.categorias.length,

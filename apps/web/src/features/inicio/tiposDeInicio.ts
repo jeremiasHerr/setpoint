@@ -55,10 +55,18 @@ export type TorneoTerminado = {
 };
 
 // `torneoId` es el de la categoría: «Resolver» lleva a su tablero.
-// El de pocos inscriptos todavía no se calcula.
-export type Aviso =
-  | { tipo: 'partidos-vencidos'; torneoId: number; categoria: string; partidos: number }
-  | { tipo: 'pocos-inscriptos'; torneo: string; pagaron: number; cupo: number; cierraEn: string };
+export type Aviso = { tipo: 'partidos-vencidos'; torneoId: number; categoria: string; partidos: number };
+
+// Una categoría con la inscripción abierta que cierra pronto y todavía no tiene los pagos para
+// sortear las zonas (decisión 125). No venció nada: va aparte de «Necesita tu atención», sin rojo.
+export type PocosInscriptos = {
+  torneoId: number;
+  nombre: string;
+  pagaron: number;
+  minimo: number;
+  // 0 si cierra hoy.
+  diasParaElCierre: number;
+};
 
 export type TorneosDeInicio = {
   borradores: TorneoEnBorrador[];
@@ -68,6 +76,7 @@ export type TorneosDeInicio = {
   // Todos, del último que terminó al primero. La columna muestra los últimos y despliega el resto.
   terminados: TorneoTerminado[];
   avisos: Aviso[];
+  pocosInscriptos: PocosInscriptos[];
   organizacion: string;
   jugadores: number;
   categorias: number;

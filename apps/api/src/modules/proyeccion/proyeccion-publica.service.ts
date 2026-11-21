@@ -17,7 +17,7 @@ const jugador = { select: { id: true, nombre: true, apellido: true } } as const;
 export async function proyeccionPublica(slug: string, torneoId: number, jugadorId: number): Promise<ProyeccionDelJugador> {
   const organizacion = await prisma.organizacion.findUnique({
     where: { slug },
-    select: { id: true, usaRanking: true, puntajes: { select: { instancia: true, puntos: true } } },
+    select: { id: true, nombre: true, usaRanking: true, puntajes: { select: { instancia: true, puntos: true } } },
   });
   if (!organizacion) throw new ErrorHttp(404, 'ORGANIZACION_NO_ENCONTRADA');
   if (!Number.isInteger(torneoId)) throw new ErrorHttp(404, 'TORNEO_NO_ENCONTRADO');
@@ -95,6 +95,7 @@ export async function proyeccionPublica(slug: string, torneoId: number, jugadorI
   const tabla: TablaDePuntos = Object.fromEntries(organizacion.puntajes.map((p) => [p.instancia.toLowerCase(), p.puntos]));
 
   return {
+    organizacion: organizacion.nombre,
     torneoId: torneo.id,
     torneo: `${torneo.edicion ?? torneo.nombre} · ${torneo.categoria.nombre}`,
     torneoDelCalendario: torneo.etapa.nombre,

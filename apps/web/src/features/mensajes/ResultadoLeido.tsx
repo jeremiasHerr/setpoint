@@ -48,7 +48,7 @@ export function ResultadoLeido({ torneoId, consuelo, leido, decidiendo = false, 
   return (
     <li className="grid gap-x-6 gap-y-3 border-b border-linea-suave px-4 py-4 last:border-b-0 sm:px-[18px] md:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
       <figure className="flex min-w-0 flex-col gap-1 border-l-2 border-linea pl-3">
-        <figcaption className="font-mono text-xs text-pizarra-500">
+        <figcaption className="text-[13px] text-pizarra-500">
           {[leido.hora, leido.remitente ?? 'sin remitente'].filter(Boolean).join(' · ')}
         </figcaption>
         <blockquote className="font-mono text-sm break-words whitespace-pre-line text-pizarra-700">{leido.texto}</blockquote>
@@ -62,7 +62,7 @@ export function ResultadoLeido({ torneoId, consuelo, leido, decidiendo = false, 
         ) : (
           <p className="text-[15px] font-semibold text-pizarra-500">Sin resultado para cargar</p>
         )}
-        {leido.partido && <p className="font-mono text-xs text-pizarra-500">{donde(leido.partido, consuelo).toLowerCase()}</p>}
+        {leido.partido && <p className="text-[13px] text-pizarra-500">{donde(leido.partido, consuelo).toLowerCase()}</p>}
 
         {aRevisar ? (
           <>

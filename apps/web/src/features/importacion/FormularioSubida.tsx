@@ -84,7 +84,7 @@ export function FormularioSubida({ categorias, enviando, error, alSubir }: Props
             >
               {archivos.length > 0 ? 'Elegir otros' : 'Elegir archivos'}
             </label>
-            <span className="truncate font-mono text-sm text-pizarra-700">
+            <span className="truncate text-sm text-pizarra-700">
               {archivos.length === 0
                 ? 'Ningún archivo elegido'
                 : archivos.length === 1
@@ -93,7 +93,7 @@ export function FormularioSubida({ categorias, enviando, error, alSubir }: Props
             </span>
           </div>
           {archivos.length > 1 && (
-            <ul className="flex flex-col gap-1 font-mono text-[13px] text-pizarra-700">
+            <ul className="flex flex-col gap-1 text-[13px] text-pizarra-700">
               {archivos.map((a) => (
                 <li key={a.name} className="truncate">
                   {a.name}
@@ -101,7 +101,7 @@ export function FormularioSubida({ categorias, enviando, error, alSubir }: Props
               ))}
             </ul>
           )}
-          <p id="importacion-ayuda" className="font-mono text-xs text-pizarra-500">
+          <p id="importacion-ayuda" className="text-[13px] text-pizarra-500">
             .xlsx, .xls o .csv · hasta {ARCHIVOS_MAXIMOS} archivos de 2 MB · una o varias hojas por archivo
           </p>
         </div>

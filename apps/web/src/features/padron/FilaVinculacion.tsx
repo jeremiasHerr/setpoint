@@ -46,10 +46,10 @@ export function FilaVinculacion({ jugador, columnas, seleccionado, slug, organiz
           {jugador.revision ? (
             <EnlaceParaRevisar jugadorId={jugador.id} />
           ) : (
-            <span className="shrink-0 rounded-full bg-lona-fondo text-lona-texto px-[7px] py-0.5 font-mono text-[11px] whitespace-nowrap">nueva</span>
+            <span className="shrink-0 rounded-full bg-lona-fondo text-lona-texto px-[7px] py-0.5 text-[12.5px] font-medium whitespace-nowrap">nueva</span>
           )}
         </div>
-        <span className="truncate font-mono text-xs text-pizarra-500">{detalle}</span>
+        <span className="truncate text-[13px] text-pizarra-500">{detalle}</span>
       </div>
 
       <div className="hidden md:block">

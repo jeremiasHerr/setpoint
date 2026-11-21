@@ -44,7 +44,7 @@ function errorDeLectura(error: Error | null) {
 
 function Marco({ sesion, torneoId, children }: { sesion: Sesion; torneoId: number; children: ReactNode }) {
   return (
-    <div className="min-h-screen bg-cemento text-noche">
+    <div className="min-h-screen bg-papel text-noche">
       <EncabezadoDelTorneo sesion={sesion} torneoId={torneoId} actual="resultados" />
       <div className="flex justify-center px-4 pt-6 pb-10 sm:pt-[34px] md:px-7">
         <div className="flex w-full max-w-[1240px] flex-col gap-5">
@@ -215,7 +215,7 @@ function Lectura({ slug, lectura, alPegarMas }: { slug: string; lectura: Lectura
             </span>
           ))}
         </h1>
-        <p className="font-mono text-sm text-pizarra-500">
+        <p className="text-sm text-pizarra-500">
           <Numero>{lectura.mensajes}</Numero> {lectura.mensajes === 1 ? 'mensaje leído' : 'mensajes leídos'}
           {conversacion > 0 && (
             <>

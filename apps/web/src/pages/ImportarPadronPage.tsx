@@ -172,7 +172,7 @@ function ImportarPadron({ sesion }: { sesion: Sesion }) {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-cemento text-noche">
+    <div className="flex min-h-screen flex-col bg-papel text-noche">
       <EncabezadoOrganizador
         organizacion={circuito.data?.nombre ?? sesion.organizacion.nombre}
         navegacion={navegacionOrganizador}
@@ -192,7 +192,7 @@ function ImportarPadron({ sesion }: { sesion: Sesion }) {
               <path d="M6 3h8l4 4v14H6z" />
               <path d="M14 3v4h4" />
             </svg>
-            <span className="font-mono text-sm text-pizarra-500">
+            <span className="text-sm text-pizarra-500">
               {importacion.data.archivoNombre} ·{' '}
               {importacion.data.hojas.reduce((suma, h) => suma + h.propuesta.length, 0)} jugadores leídos
             </span>
@@ -246,7 +246,7 @@ function HojasConError({ importacion }: { importacion: Importacion }) {
       </p>
       {conError.map((h) => (
         <p key={h.id} className="text-sm text-pizarra-700">
-          <span className="font-mono">{nombreDeHoja(h)}</span> · {h.error}
+          <span className="font-medium">{nombreDeHoja(h)}</span> · {h.error}
         </p>
       ))}
     </div>
@@ -391,7 +391,7 @@ function RevisarDudosas({ slug, importacion, padron, alConfirmar, alDeshacer }: 
   };
 
   const encabezado = (ultima: string) => (
-    <div className={`${COLUMNAS} h-[42px] border-b border-linea bg-niebla px-[18px] font-mono text-[11px] text-pizarra-500`}>
+    <div className={`${COLUMNAS} h-[42px] border-b border-linea bg-niebla px-[18px] text-[12.5px] font-medium text-noche`}>
       <span>como figura en la planilla</span>
       <span className={SOLO_COMPU}>jugador del padrón</span>
       <span className={SOLO_COMPU}>casilleros</span>
@@ -427,7 +427,7 @@ function RevisarDudosas({ slug, importacion, padron, alConfirmar, alDeshacer }: 
                 className="flex items-baseline gap-2.5 self-start text-left"
               >
                 <span className="text-[17px] font-semibold">{nombreDeHoja(h)}</span>
-                <span className="font-mono text-[13px] text-pizarra-500">
+                <span className="text-[13px] text-pizarra-500">
                   {h.categoria && <>{h.archivoNombre} · </>}
                   <Numero>{yaImportadas.length}</Numero> importados
                 </span>
@@ -580,7 +580,7 @@ function Final({ slug, importacion, confirmada, deshecha, alDeshacer, alSubirOtr
             {esError ? importacion.error : 'No se guardó nada. Podés subir la planilla de nuevo cuando quieras.'}
           </p>
           {esError && (
-            <p className="font-mono text-xs text-pizarra-500">{importacion.archivoNombre}</p>
+            <p className="text-[13px] text-pizarra-500">{importacion.archivoNombre}</p>
           )}
         </div>
         <Boton

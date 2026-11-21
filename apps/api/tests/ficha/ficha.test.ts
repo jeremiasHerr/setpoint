@@ -46,6 +46,7 @@ function torneo(datos: Partial<TorneoDeLaFichaLeido>): TorneoDeLaFichaLeido {
     fechaInicio: new Date('2026-09-01'),
     creadoEn: new Date('2026-08-01'),
     gruposCerrados: true,
+    conProyeccion: false,
     ...datos,
   };
 }

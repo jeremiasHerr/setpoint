@@ -111,7 +111,7 @@ function Padron({ sesion }: { sesion: Sesion }) {
   const error = circuito.error ?? padron.error;
 
   return (
-    <div className="min-h-screen bg-cemento text-noche">
+    <div className="min-h-screen bg-papel text-noche">
       <EncabezadoOrganizador
         organizacion={circuito.data?.nombre ?? sesion.organizacion.nombre}
         navegacion={navegacionOrganizador}
