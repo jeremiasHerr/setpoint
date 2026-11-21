@@ -213,6 +213,7 @@ CREATE TABLE jugadores (
     email           VARCHAR(255),
     foto_url        TEXT,
     activo          BOOLEAN      NOT NULL DEFAULT TRUE,
+    importacion_id  INTEGER,     -- la importación que lo creó (decisión 118). FK al final de F03
     creado_en       TIMESTAMPTZ  NOT NULL DEFAULT now(),
     actualizado_en  TIMESTAMPTZ  NOT NULL DEFAULT now(),
     CONSTRAINT uq_jugador_dni_org UNIQUE (organizacion_id, dni)
@@ -451,11 +452,13 @@ CREATE TABLE movimientos_ranking (
     instancia       instancia,
     motivo          motivo_movimiento NOT NULL,
     detalle         TEXT,
-    fecha           TIMESTAMPTZ       NOT NULL DEFAULT now()
+    fecha           TIMESTAMPTZ       NOT NULL DEFAULT now(),
+    importacion_id  INTEGER           -- de qué importación salió (decisión 118). FK al final de F03
 );
 CREATE INDEX ix_mov_ranking   ON movimientos_ranking (organizacion_id, categoria_id);     -- tabla de ranking
 CREATE INDEX ix_mov_casillero ON movimientos_ranking (jugador_id, categoria_id, etapa_id); -- casillero
 CREATE INDEX ix_mov_torneo    ON movimientos_ranking (torneo_id);                          -- revertir torneo
+CREATE INDEX ix_mov_import    ON movimientos_ranking (importacion_id);                     -- deshacer importación
 
 -- ============================================================================
 -- FUNCIONALIDADES ASISTIDAS POR IA
@@ -470,10 +473,18 @@ CREATE TABLE importaciones_padron (
     respuesta_cruda JSONB,
     resumen         JSONB,
     estado          estado_proceso_ia NOT NULL DEFAULT 'PENDIENTE',
+    aplicada_en     TIMESTAMPTZ,      -- cuándo se aplicó lo seguro, sin preguntar (decisión 118)
+    deshecha_en     TIMESTAMPTZ,
     confirmada_en   TIMESTAMPTZ,
     creado_en       TIMESTAMPTZ       NOT NULL DEFAULT now()
 );
 CREATE INDEX ix_importaciones_org ON importaciones_padron (organizacion_id);
+
+-- Deshacer una importación (decisión 118): sus movimientos y los jugadores que creó.
+ALTER TABLE jugadores ADD CONSTRAINT fk_jugador_importacion
+    FOREIGN KEY (importacion_id) REFERENCES importaciones_padron(id) ON DELETE SET NULL;
+ALTER TABLE movimientos_ranking ADD CONSTRAINT fk_mov_importacion
+    FOREIGN KEY (importacion_id) REFERENCES importaciones_padron(id) ON DELETE SET NULL;
 
 -- F19 — Registro de resultados a partir de mensajes.
 CREATE TABLE extracciones_resultado (

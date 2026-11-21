@@ -1,10 +1,13 @@
 import { EstadoProcesoIA, MotivoMovimiento, type Prisma } from '@prisma/client';
 import type {
+  DatosAplicarImportacion,
   DatosConfirmarImportacion,
+  DecisionImportacion,
   FilaExtraida,
   HojaImportada,
   Importacion,
   ResultadoConfirmacion,
+  ResultadoDeshacer,
 } from '@setpoint/shared';
 import { DEL_PADRON, DEL_PADRON_ACTIVOS } from '../../../lib/padron';
 import { organizacionAdministrada } from '../../../lib/permisos';
@@ -14,6 +17,7 @@ import { numerosDeFila, type Auditoria } from './auditar';
 import { contarFilas, planificarConfirmacion, yaExiste, type MovimientoAImportar, type PlanConfirmacion } from './confirmacion';
 import { controlarEntreHojas } from './entre-hojas';
 import { leerHojas, type FilaPlanilla } from './leer-planilla';
+import { apellidosNormalizados, decisionSegura, filasARevisar } from './por-excepcion';
 import { procesarHoja, type ContextoImportacion } from './procesar-planilla';
 
 // La importación es un lote de archivos y hojas (decisión 012). Lo que se guarda de cada hoja en
@@ -35,6 +39,10 @@ type ResumenHoja = {
   intentos: number;
   conteos: Importacion['conteos'];
   error: string | null;
+  // Importación por excepción (decisión 118): por número de fila, las que van a revisión y por qué,
+  // y las filas ya aplicadas (importadas, vinculadas o excluidas).
+  revisar: Record<number, string>;
+  aplicadas: number[];
 };
 
 type HojaLeida = { id: number; archivoNombre: string; hoja: string; estado: EstadoProcesoIA; resumen: Partial<ResumenHoja> };
@@ -109,24 +117,38 @@ async function vista(importacion: ImportacionConHojas): Promise<Importacion> {
   const nombreDe = new Map(categorias.map((c) => [c.id, c.nombre]));
   const leidas = hojas.filter(leida);
 
-  const vistas: HojaImportada[] = hojas.map(({ id, archivoNombre, hoja, estado, resumen }) => ({
-    id,
-    archivoNombre,
-    hoja,
-    estado,
-    error: resumen.error ?? null,
-    categoria: (resumen.categoriaId ? nombreDe.get(resumen.categoriaId) : null) ?? resumen.categoriaNueva ?? null,
-    propuesta: (resumen.propuesta ?? []).map((f) => ({ ...f, enLaPlanilla: resumen.textos?.[f.fila] ?? '' })),
-    problemas: [...(resumen.auditoria?.globales ?? []), ...(resumen.auditoria?.porFila ?? [])],
-    conteos: resumen.conteos ?? SIN_CONTEOS,
-  }));
+  const vistas: HojaImportada[] = hojas.map(({ id, archivoNombre, hoja, estado, resumen }) => {
+    const aplicadas = new Set(resumen.aplicadas ?? []);
+    return {
+      id,
+      archivoNombre,
+      hoja,
+      estado,
+      error: resumen.error ?? null,
+      categoria: (resumen.categoriaId ? nombreDe.get(resumen.categoriaId) : null) ?? resumen.categoriaNueva ?? null,
+      propuesta: (resumen.propuesta ?? []).map((f) => ({
+        ...f,
+        enLaPlanilla: resumen.textos?.[f.fila] ?? '',
+        revisar: resumen.revisar?.[f.fila] ?? null,
+        aplicada: aplicadas.has(f.fila),
+      })),
+      problemas: [...(resumen.auditoria?.globales ?? []), ...(resumen.auditoria?.porFila ?? [])],
+      conteos: resumen.conteos ?? SIN_CONTEOS,
+    };
+  });
+  const idsLeidas = new Set(leidas.map((h) => h.id));
+  const filasLeidas = vistas.filter((h) => idsLeidas.has(h.id)).flatMap((h) => h.propuesta);
 
   return {
     id: importacion.id,
     archivoNombre: importacion.archivoNombre,
     estado: importacion.estado,
     creadoEn: importacion.creadoEn.toISOString(),
+    aplicadaEn: importacion.aplicadaEn?.toISOString() ?? null,
+    deshechaEn: importacion.deshechaEn?.toISOString() ?? null,
     confirmadaEn: importacion.confirmadaEn?.toISOString() ?? null,
+    seguras: filasLeidas.filter((f) => f.revisar === null).length,
+    aRevisar: filasLeidas.filter((f) => f.revisar !== null).length,
     error:
       importacion.estado === EstadoProcesoIA.ERROR
         ? (hojas.length === 1 ? hojas[0].resumen.error : null) ?? 'No pudimos leer ninguna de las planillas'
@@ -317,6 +339,13 @@ export async function crearImportacion(slug: string, usuarioId: number, archivos
     resumen.auditoria = { globales: resumen.auditoria?.globales ?? [], porFila: [...(resumen.auditoria?.porFila ?? []), ...problemas] };
     resumen.conteos = contarFilas(resumen.propuesta ?? [], resumen.auditoria.porFila);
   }
+  // Qué va a revisión, con el control entre hojas ya sumado (decisión 118).
+  const apellidos = apellidosNormalizados(padron);
+  for (const { resumen } of procesadas) {
+    if (resumen.error) continue;
+    resumen.revisar = filasARevisar(resumen.propuesta ?? [], resumen.auditoria ?? { globales: [], porFila: [] }, apellidos);
+    resumen.aplicadas = [];
+  }
 
   const algunaLeida = procesadas.some((p) => !p.resumen.error);
   await prisma.$transaction([
@@ -337,7 +366,26 @@ export async function crearImportacion(slug: string, usuarioId: number, archivos
     }),
   ]);
 
+  // Lo seguro se aplica sin preguntar, salvo que haya que crear algo en el circuito o elegir una
+  // categoría: esa confirmación va antes (decisión 118). Si falla, queda para aplicar desde la revisión.
+  const leidaAhora = await importacionDe(organizacionId, importacion.id);
+  if (algunaLeida && !(await necesitaConfirmar(organizacionId, hojasDe(leidaAhora).filter(leida)))) {
+    try {
+      await aplicarEnUnaTransaccion(organizacionId, importacion.id, {}, null);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   return vista(await importacionDe(organizacionId, importacion.id));
+}
+
+// Si antes de aplicar hay que preguntar algo sobre el circuito: categorías o torneos del calendario
+// nuevos, encender el ranking, o una hoja que no dice su categoría.
+async function necesitaConfirmar(organizacionId: number, hojas: HojaLeida[]) {
+  const crea = await loQueSeCrea(organizacionId, hojas);
+  const sinCategoria = hojas.some((h) => !h.resumen.categoriaId && !h.resumen.categoriaNueva);
+  return crea.categorias.length > 0 || crea.etapas.length > 0 || crea.ranking || sinCategoria;
 }
 
 export async function obtenerImportacion(slug: string, usuarioId: number, id: number) {
@@ -345,35 +393,20 @@ export async function obtenerImportacion(slug: string, usuarioId: number, id: nu
   return vista(await importacionDe(organizacionId, id));
 }
 
-// Aplica las decisiones de la organización al lote entero en una sola transacción: crea en el
-// circuito las categorías y los torneos del calendario que las planillas traen y no tenía (decisión
-// 011), enciende el ranking si hay puntos (decisión 098), crea los jugadores nuevos, carga un
-// movimiento por casillero con puntos y deja la importación CONFIRMADO. Las hojas que no se pudieron
-// leer quedan afuera. Si algo falla, no queda nada creado.
-export async function confirmarImportacion(
-  slug: string,
-  usuarioId: number,
-  id: number,
-  { decisiones, categorias: elegidas = {} }: DatosConfirmarImportacion,
-): Promise<ResultadoConfirmacion> {
-  const organizacionId = await organizacionAdministrada(slug, usuarioId);
-  const importacion = await importacionDe(organizacionId, id);
-  if (importacion.estado !== EstadoProcesoIA.PROCESADO) throw new ErrorHttp(409, 'IMPORTACION_NO_PENDIENTE');
-
-  const hojas = hojasDe(importacion).filter(leida);
-  const idsHojas = new Set(hojas.map((h) => h.id));
-  if (decisiones.some((d) => !idsHojas.has(d.hoja))) {
-    throw new ErrorHttp(400, 'DATOS_INVALIDOS', { decisiones: 'Hay decisiones para una hoja que no está en la importación' });
-  }
-
-  // La categoría de cada hoja: la que se eligió o detectó al subir, y si la planilla no la decía, la
-  // que se eligió al revisar. La que ya existía pudo darse de baja entre la subida y la confirmación.
+// La categoría de cada hoja, por id de hoja: la que se eligió o detectó al subir, y si la planilla no
+// la decía, la que se eligió al revisar. La que ya existía pudo darse de baja entre la subida y ahora.
+async function categoriasDeLasHojas(
+  tx: Prisma.TransactionClient,
+  organizacionId: number,
+  hojas: HojaLeida[],
+  elegidas: Record<string, string>,
+) {
   const categoriaDe = new Map<number, string>();
   const faltan: Record<string, string> = {};
   for (const hoja of hojas) {
     let nombre = hoja.resumen.categoriaNueva ?? elegidas[String(hoja.id)]?.trim() ?? null;
     if (hoja.resumen.categoriaId) {
-      const categoria = await prisma.categoria.findFirst({
+      const categoria = await tx.categoria.findFirst({
         where: { id: hoja.resumen.categoriaId, organizacionId, activa: true, suelta: false },
         select: { nombre: true },
       });
@@ -384,30 +417,82 @@ export async function confirmarImportacion(
     else faltan[`categorias.${hoja.id}`] = 'Elegí la categoría de la planilla';
   }
   if (Object.keys(faltan).length > 0) throw new ErrorHttp(400, 'DATOS_INVALIDOS', faltan);
+  return categoriaDe;
+}
 
-  const jugadores = await prisma.jugador.findMany({ where: { organizacionId, ...DEL_PADRON }, select: { id: true } });
-  const idsJugadores = new Set(jugadores.map((j) => j.id));
-  const planes: { hoja: HojaLeida; plan: PlanConfirmacion }[] = hojas.map((hoja) => ({
-    hoja,
-    plan: planificarConfirmacion(hoja.resumen.propuesta ?? [], decisiones.filter((d) => d.hoja === hoja.id), idsJugadores),
-  }));
-  // Un jugador del padrón va en una sola categoría: no se vincula desde dos hojas.
-  const vinculados = planes.flatMap(({ plan }) => plan.vincular.map((v) => v.jugadorId));
-  if (new Set(vinculados).size < vinculados.length) {
-    throw new ErrorHttp(400, 'DATOS_INVALIDOS', { decisiones: 'Un mismo jugador está vinculado en dos hojas' });
-  }
+// Lo que se guarda de la hoja después de aplicar. Las importaciones de antes de la decisión 012 lo
+// tienen en el resumen del lote (hoja con id 0).
+async function guardarResumen(tx: Prisma.TransactionClient, importacionId: number, hoja: HojaLeida, resumen: Partial<ResumenHoja>) {
+  const datos = { resumen: resumen as Prisma.InputJsonValue };
+  if (hoja.id === 0) await tx.importacionPadron.update({ where: { id: importacionId }, data: datos });
+  else await tx.hojaImportacion.update({ where: { id: hoja.id }, data: datos });
+}
 
+// Aplica en una sola transacción lo que toca del lote (decisión 118). Sin decisiones de la
+// organización, solo las filas seguras: es lo que se hace sin preguntar. Con decisiones, además las
+// filas a revisar. La primera vez, la revisión se recalcula contra el padrón de ahora, que pudo
+// cambiar desde la subida, y se crean en el circuito las categorías y los torneos del calendario que
+// faltan (decisión 011) y se enciende el ranking si hay puntos (decisión 098).
+// Cuando no queda ninguna fila sin aplicar, la importación queda CONFIRMADO. Si algo falla, no queda
+// nada. Las hojas que no se pudieron leer quedan afuera.
+async function aplicarEnUnaTransaccion(
+  organizacionId: number,
+  id: number,
+  elegidas: Record<string, string>,
+  decisionesDeRevision: DecisionImportacion[] | null,
+): Promise<ResultadoConfirmacion> {
   return prisma.$transaction(async (tx) => {
-    // Con el estado en la condición, dos confirmaciones simultáneas no pasan las dos.
+    // Con el estado en la condición, dos aplicaciones simultáneas no pasan las dos: la segunda espera
+    // el bloqueo de la fila y ya no la encuentra. Al confirmar, la escritura solo toma el bloqueo.
+    const soloSeguras = decisionesDeRevision === null;
     const tomada = await tx.importacionPadron.updateMany({
-      where: { id: importacion.id, estado: EstadoProcesoIA.PROCESADO },
-      data: { estado: EstadoProcesoIA.CONFIRMADO, confirmadaEn: new Date() },
+      where: { id, organizacionId, estado: EstadoProcesoIA.PROCESADO, ...(soloSeguras ? { aplicadaEn: null } : {}) },
+      data: soloSeguras ? { aplicadaEn: new Date() } : { estado: EstadoProcesoIA.PROCESADO },
     });
     if (tomada.count === 0) throw new ErrorHttp(409, 'IMPORTACION_NO_PENDIENTE');
-    await tx.hojaImportacion.updateMany({
-      where: { importacionId: importacion.id, estado: EstadoProcesoIA.PROCESADO },
-      data: { estado: EstadoProcesoIA.CONFIRMADO },
+
+    const importacion = await tx.importacionPadron.findUniqueOrThrow({ where: { id }, include: CON_HOJAS });
+    const primeraVez = soloSeguras || importacion.aplicadaEn === null;
+    const hojas = hojasDe(importacion).filter(leida);
+    const idsHojas = new Set(hojas.map((h) => h.id));
+    if ((decisionesDeRevision ?? []).some((d) => !idsHojas.has(d.hoja))) {
+      throw new ErrorHttp(400, 'DATOS_INVALIDOS', { decisiones: 'Hay decisiones para una hoja que no está en la importación' });
+    }
+
+    const categoriaDe = await categoriasDeLasHojas(tx, organizacionId, hojas, elegidas);
+    const padron = await tx.jugador.findMany({ where: { organizacionId, ...DEL_PADRON }, select: { id: true, apellido: true, activo: true } });
+    const idsJugadores = new Set(padron.map((j) => j.id));
+    const apellidos = apellidosNormalizados(padron.filter((j) => j.activo));
+
+    const planes = hojas.map((hoja) => {
+      const propuesta = hoja.resumen.propuesta ?? [];
+      const auditoria = hoja.resumen.auditoria ?? { globales: [], porFila: [] };
+      const revisar = primeraVez ? filasARevisar(propuesta, auditoria, apellidos) : hoja.resumen.revisar ?? {};
+      const aplicadas = new Set(hoja.resumen.aplicadas ?? []);
+      const pendientes = propuesta.filter((f) => !aplicadas.has(f.fila));
+      const seguras = primeraVez ? pendientes.filter((f) => revisar[f.fila] === undefined) : [];
+      // Al confirmar, la organización decide todas las que quedan: las que no se aplicaron solas.
+      const aDecidir = soloSeguras ? [] : pendientes.filter((f) => !seguras.includes(f));
+      const decisiones = [
+        ...seguras.map((f) => decisionSegura(hoja.id, f)),
+        ...(decisionesDeRevision ?? []).filter((d) => d.hoja === hoja.id),
+      ];
+      const yaVinculados = propuesta.filter((f) => aplicadas.has(f.fila) && f.coincideCon !== null && revisar[f.fila] === undefined);
+      return {
+        hoja,
+        revisar,
+        aplicadas: [...aplicadas, ...seguras.map((f) => f.fila), ...aDecidir.map((f) => f.fila)],
+        yaVinculados: yaVinculados.map((f) => f.coincideCon!),
+        plan: planificarConfirmacion([...seguras, ...aDecidir], decisiones, idsJugadores),
+      };
     });
+
+    // Un jugador del padrón va en una sola categoría: no se vincula desde dos filas ni desde dos hojas,
+    // tampoco con una que ya se aplicó.
+    const vinculados = planes.flatMap((p) => [...p.yaVinculados, ...p.plan.vincular.map((v) => v.jugadorId)]);
+    if (new Set(vinculados).size < vinculados.length) {
+      throw new ErrorHttp(400, 'DATOS_INVALIDOS', { decisiones: 'Un mismo jugador está vinculado en dos filas' });
+    }
 
     const categoriaIds = await asegurarEnElCircuito(tx, 'categoria', organizacionId, sinRepetir([...categoriaDe.values()]));
     const etapaIds = await asegurarEnElCircuito(tx, 'etapa', organizacionId, sinRepetir(hojas.flatMap((h) => etapasDe(h.resumen))));
@@ -418,9 +503,11 @@ export async function confirmarImportacion(
     };
 
     // Una organización que importa puntos tiene un ranking: dejarlo apagado escondería lo que acaba
-    // de cargar (decisión 098).
+    // de cargar (decisión 098). Solo la primera vez que esta importación carga puntos: si después lo
+    // apagaron, confirmar lo que quedaba no lo vuelve a encender.
     const hayPuntos = planes.some(({ plan }) => [...plan.crear, ...plan.vincular].some((j) => j.movimientos.length > 0));
-    if (hayPuntos) await tx.organizacion.update({ where: { id: organizacionId }, data: { usaRanking: true } });
+    const yaCargoPuntos = (await tx.movimientoRanking.count({ where: { importacionId: id } })) > 0;
+    if (hayPuntos && !yaCargoPuntos) await tx.organizacion.update({ where: { id: organizacionId }, data: { usaRanking: true } });
 
     const resultado: ResultadoConfirmacion = {
       creados: 0,
@@ -430,7 +517,7 @@ export async function confirmarImportacion(
       movimientosSalteados: 0,
     };
 
-    for (const { hoja, plan } of planes) {
+    for (const { hoja, revisar, aplicadas, plan } of planes) {
       const categoriaId = categoriaIds.get(categoriaDe.get(hoja.id)!.toLowerCase())!;
       resultado.creados += plan.crear.length;
       resultado.vinculados += plan.vincular.length;
@@ -440,7 +527,7 @@ export async function confirmarImportacion(
       const nuevos = [];
       for (const j of plan.crear) {
         const { id: jugadorId } = await tx.jugador.create({
-          data: { organizacionId, categoriaId, nombre: j.nombre, apellido: j.apellido },
+          data: { organizacionId, categoriaId, nombre: j.nombre, apellido: j.apellido, importacionId: id },
           select: { id: true },
         });
         nuevos.push({ jugadorId, movimientos: j.movimientos });
@@ -459,21 +546,96 @@ export async function confirmarImportacion(
             resultado.movimientosSalteados++;
             continue;
           }
-          aCrear.push({ organizacionId, jugadorId, categoriaId, motivo: MotivoMovimiento.IMPORTACION_INICIAL, ...m });
+          aCrear.push({ organizacionId, jugadorId, categoriaId, motivo: MotivoMovimiento.IMPORTACION_INICIAL, importacionId: id, ...m });
         }
       }
       resultado.movimientosCreados += (await tx.movimientoRanking.createMany({ data: aCrear })).count;
+
+      // La categoría queda resuelta: la que se creó o se eligió al revisar ya existe en el circuito.
+      await guardarResumen(tx, id, hoja, { ...hoja.resumen, categoriaId, categoriaNueva: null, revisar, aplicadas });
+    }
+
+    const terminada = planes.every((p) => p.aplicadas.length === (p.hoja.resumen.propuesta ?? []).length);
+    if (terminada || importacion.aplicadaEn === null) {
+      await tx.importacionPadron.update({
+        where: { id },
+        data: {
+          aplicadaEn: importacion.aplicadaEn ?? new Date(),
+          ...(terminada ? { estado: EstadoProcesoIA.CONFIRMADO, confirmadaEn: new Date() } : {}),
+        },
+      });
+    }
+    if (terminada) {
+      await tx.hojaImportacion.updateMany({
+        where: { importacionId: id, estado: EstadoProcesoIA.PROCESADO },
+        data: { estado: EstadoProcesoIA.CONFIRMADO },
+      });
     }
 
     return resultado;
   }, { timeout: 30_000 });
 }
 
+// Confirma lo que se crea en el circuito (o la categoría de una hoja que no la decía) y aplica las
+// filas seguras. Es la única pregunta antes de importar (decisión 118).
+export async function aplicarImportacion(slug: string, usuarioId: number, id: number, { categorias = {} }: DatosAplicarImportacion) {
+  const organizacionId = await organizacionAdministrada(slug, usuarioId);
+  await importacionDe(organizacionId, id);
+  await aplicarEnUnaTransaccion(organizacionId, id, categorias, null);
+  return vista(await importacionDe(organizacionId, id));
+}
+
+// Aplica las decisiones de la organización sobre las filas a revisar, y si todavía no se aplicaron,
+// también lo que se crea en el circuito y las filas seguras. La importación queda CONFIRMADO.
+export async function confirmarImportacion(
+  slug: string,
+  usuarioId: number,
+  id: number,
+  { decisiones, categorias = {} }: DatosConfirmarImportacion,
+): Promise<ResultadoConfirmacion> {
+  const organizacionId = await organizacionAdministrada(slug, usuarioId);
+  await importacionDe(organizacionId, id);
+  return aplicarEnUnaTransaccion(organizacionId, id, categorias, decisiones);
+}
+
+// Como lo seguro se aplica sin que nadie lo mire, la importación entera se puede deshacer (decisión
+// 118): borra sus movimientos y los jugadores que creó, salvo los que ya tienen otra actividad
+// (una cuenta, inscripciones, partidos o puntos de otro origen). Lo que se creó en el circuito queda:
+// las categorías y los torneos del calendario se quitan desde Tu circuito.
+export async function deshacerImportacion(slug: string, usuarioId: number, id: number): Promise<ResultadoDeshacer> {
+  const organizacionId = await organizacionAdministrada(slug, usuarioId);
+  await importacionDe(organizacionId, id);
+
+  return prisma.$transaction(async (tx) => {
+    const tomada = await tx.importacionPadron.updateMany({
+      where: { id, organizacionId, aplicadaEn: { not: null }, deshechaEn: null },
+      data: { estado: EstadoProcesoIA.DESCARTADO, deshechaEn: new Date() },
+    });
+    if (tomada.count === 0) throw new ErrorHttp(409, 'IMPORTACION_NO_APLICADA');
+
+    const { count: movimientosBorrados } = await tx.movimientoRanking.deleteMany({ where: { organizacionId, importacionId: id } });
+    const creados = await tx.jugador.findMany({
+      where: { organizacionId, importacionId: id },
+      select: {
+        id: true,
+        usuarioId: true,
+        _count: { select: { inscripciones: true, partidosComoA: true, partidosComoB: true, movimientos: true } },
+      },
+    });
+    const sinActividad = creados.filter((j) => j.usuarioId === null && Object.values(j._count).every((n) => n === 0));
+    const { count: jugadoresBorrados } = await tx.jugador.deleteMany({ where: { id: { in: sinActividad.map((j) => j.id) } } });
+    return { movimientosBorrados, jugadoresBorrados, jugadoresQueQuedan: creados.length - jugadoresBorrados };
+  });
+}
+
+
 export async function descartarImportacion(slug: string, usuarioId: number, id: number) {
   const organizacionId = await organizacionAdministrada(slug, usuarioId);
   const importacion = await importacionDe(organizacionId, id);
 
   const descartable: EstadoProcesoIA[] = [EstadoProcesoIA.PROCESADO, EstadoProcesoIA.ERROR];
+  // Con algo aplicado ya no se descarta: se deshace (decisión 118).
+  if (importacion.aplicadaEn && !importacion.deshechaEn) throw new ErrorHttp(409, 'IMPORTACION_APLICADA');
   if (!descartable.includes(importacion.estado)) throw new ErrorHttp(409, 'IMPORTACION_NO_PENDIENTE');
 
   await prisma.importacionPadron.update({ where: { id: importacion.id }, data: { estado: EstadoProcesoIA.DESCARTADO } });

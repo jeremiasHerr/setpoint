@@ -88,11 +88,8 @@ describe.skipIf(!process.env.DATABASE_URL)('la importación de varias hojas, con
     expect(vista.crea).toEqual({ categorias: ['Segunda', 'Tercera'], etapas: ['Primavera'], ranking: true });
 
     const resultado = await confirmarImportacion(slug, admin, id, {
-      decisiones: [
-        { hoja: hojas[0], fila: 4, accion: 'crear' },
-        { hoja: hojas[1], fila: 4, accion: 'crear' },
-        { hoja: hojas[1], fila: 5, accion: 'crear' },
-      ],
+      // Los tres son claramente nuevos: se importan solos (decisión 118).
+      decisiones: [],
     });
     expect(resultado).toMatchObject({ creados: 3, movimientosCreados: 3 });
 
@@ -112,10 +109,8 @@ describe.skipIf(!process.env.DATABASE_URL)('la importación de varias hojas, con
 
     await expect(
       confirmarImportacion(slug, admin, id, {
-        decisiones: [
-          { hoja: hojas[0], fila: 4, accion: 'vincular', jugadorId },
-          { hoja: hojas[1], fila: 4, accion: 'vincular', jugadorId },
-        ],
+        // Las dos coinciden con confianza alta: se vincularían solas, y la confirmación lo frena.
+        decisiones: [],
       }),
     ).rejects.toMatchObject({ codigo: 'DATOS_INVALIDOS' });
   });

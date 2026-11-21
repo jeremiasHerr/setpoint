@@ -1,6 +1,13 @@
-import type { DatosConfirmarImportacion } from '@setpoint/shared';
+import type { DatosAplicarImportacion, DatosConfirmarImportacion } from '@setpoint/shared';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { confirmarImportacion, descartarImportacion, obtenerImportacion, subirPlanilla } from './api';
+import {
+  aplicarImportacion,
+  confirmarImportacion,
+  descartarImportacion,
+  deshacerImportacion,
+  obtenerImportacion,
+  subirPlanilla,
+} from './api';
 
 const clave = (slug: string, id: number | null) => ['importacion', slug, id];
 
@@ -27,6 +34,31 @@ export function useConfirmarImportacion(slug: string, id: number) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (datos: DatosConfirmarImportacion) => confirmarImportacion(slug, id, datos),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: clave(slug, id) });
+      void queryClient.invalidateQueries({ queryKey: ['padron', slug] });
+      void queryClient.invalidateQueries({ queryKey: ['circuito', slug] });
+    },
+  });
+}
+
+// Aplicar y deshacer también cambian el padrón y el ranking.
+export function useAplicarImportacion(slug: string, id: number) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (datos: DatosAplicarImportacion) => aplicarImportacion(slug, id, datos),
+    onSuccess: (importacion) => {
+      queryClient.setQueryData(clave(slug, id), importacion);
+      void queryClient.invalidateQueries({ queryKey: ['padron', slug] });
+      void queryClient.invalidateQueries({ queryKey: ['circuito', slug] });
+    },
+  });
+}
+
+export function useDeshacerImportacion(slug: string, id: number) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: () => deshacerImportacion(slug, id),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: clave(slug, id) });
       void queryClient.invalidateQueries({ queryKey: ['padron', slug] });

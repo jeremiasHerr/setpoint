@@ -446,13 +446,17 @@ model Jugador {
   reclamadoPorId Int?
   reclamadoEn    DateTime?
 
+  // La importación que lo creó, para poder deshacerla (decisión 118). Null si se cargó de otra forma.
+  importacionId Int?
+
   creadoEn      DateTime @default(now())
   actualizadoEn DateTime @updatedAt
 
-  organizacion Organizacion @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
-  categoria    Categoria?   @relation(fields: [categoriaId], references: [id])
-  usuario      Usuario?     @relation("PerfilDeJugador", fields: [usuarioId], references: [id])
-  reclamadoPor Usuario?     @relation("ReclamoDePerfil", fields: [reclamadoPorId], references: [id], onDelete: SetNull)
+  organizacion Organizacion       @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
+  categoria    Categoria?         @relation(fields: [categoriaId], references: [id])
+  usuario      Usuario?           @relation("PerfilDeJugador", fields: [usuarioId], references: [id])
+  reclamadoPor Usuario?           @relation("ReclamoDePerfil", fields: [reclamadoPorId], references: [id], onDelete: SetNull)
+  importacion  ImportacionPadron? @relation(fields: [importacionId], references: [id], onDelete: SetNull)
 
   inscripciones   Inscripcion[]
   movimientos     MovimientoRanking[]
@@ -768,16 +772,20 @@ model MovimientoRanking {
   motivo         MotivoMovimiento
   detalle        String?
   fecha          DateTime         @default(now())
+  // De qué importación salió: deshacerla borra sus movimientos (decisión 118).
+  importacionId  Int?
 
-  organizacion Organizacion @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
-  jugador      Jugador      @relation(fields: [jugadorId], references: [id], onDelete: Cascade)
-  categoria    Categoria    @relation(fields: [categoriaId], references: [id])
-  etapa        Etapa?       @relation(fields: [etapaId], references: [id])
-  torneo       Torneo?      @relation(fields: [torneoId], references: [id])
+  organizacion Organizacion       @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
+  jugador      Jugador            @relation(fields: [jugadorId], references: [id], onDelete: Cascade)
+  categoria    Categoria          @relation(fields: [categoriaId], references: [id])
+  etapa        Etapa?             @relation(fields: [etapaId], references: [id])
+  torneo       Torneo?            @relation(fields: [torneoId], references: [id])
+  importacion  ImportacionPadron? @relation(fields: [importacionId], references: [id], onDelete: SetNull)
 
   @@index([organizacionId, categoriaId]) // tabla de ranking de la categoría
   @@index([jugadorId, categoriaId, etapaId]) // el casillero de un jugador
   @@index([torneoId]) // revertir un torneo
+  @@index([importacionId]) // deshacer una importación
   @@map("movimientos_ranking")
 }
 
@@ -794,11 +802,17 @@ model ImportacionPadron {
   respuestaCruda Json?
   resumen        Json? // { existentes: 73, nuevos: 4, descartados: 2 }
   estado         EstadoProcesoIA @default(PENDIENTE)
+  // Importación por excepción (decisión 118): cuándo se aplicó lo seguro, sin preguntar, y cuándo se
+  // deshizo. Con aplicadaEn y estado PROCESADO, quedan filas por revisar.
+  aplicadaEn     DateTime?
+  deshechaEn     DateTime?
   confirmadaEn   DateTime?
   creadoEn       DateTime        @default(now())
 
-  organizacion Organizacion      @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
+  organizacion Organizacion        @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
   hojas        HojaImportacion[]
+  jugadores    Jugador[]
+  movimientos  MovimientoRanking[]
 
   @@index([organizacionId])
   @@map("importaciones_padron")

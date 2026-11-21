@@ -1,4 +1,10 @@
-import type { DatosConfirmarImportacion, Importacion, ResultadoConfirmacion } from '@setpoint/shared';
+import type {
+  DatosAplicarImportacion,
+  DatosConfirmarImportacion,
+  Importacion,
+  ResultadoConfirmacion,
+  ResultadoDeshacer,
+} from '@setpoint/shared';
 import { pedir } from '../../lib/api';
 
 const base = (slug: string) => `/api/organizaciones/${slug}/importaciones`;
@@ -15,6 +21,15 @@ export function subirPlanilla(slug: string, archivos: File[], categoria: string 
 
 export function obtenerImportacion(slug: string, id: number) {
   return pedir<Importacion>('GET', `${base(slug)}/${id}`);
+}
+
+// Crea lo que falta en el circuito e importa las filas seguras (decisión 118).
+export function aplicarImportacion(slug: string, id: number, datos: DatosAplicarImportacion) {
+  return pedir<Importacion>('POST', `${base(slug)}/${id}/aplicar`, datos);
+}
+
+export function deshacerImportacion(slug: string, id: number) {
+  return pedir<ResultadoDeshacer>('POST', `${base(slug)}/${id}/deshacer`);
 }
 
 export function confirmarImportacion(slug: string, id: number, datos: DatosConfirmarImportacion) {

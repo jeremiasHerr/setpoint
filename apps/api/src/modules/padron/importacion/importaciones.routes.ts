@@ -2,14 +2,16 @@ import { extname } from 'node:path';
 import { Router, type RequestHandler } from 'express';
 import multer from 'multer';
 import { z } from 'zod';
-import { confirmarImportacionSchema } from '@setpoint/shared';
+import { aplicarImportacionSchema, confirmarImportacionSchema } from '@setpoint/shared';
 import { autenticar } from '../../../middleware/autenticar';
 import { ErrorHttp } from '../../../middleware/errores';
 import { validar } from '../../../middleware/validar';
 import {
+  aplicarImportacion,
   confirmarImportacion,
   crearImportacion,
   descartarImportacion,
+  deshacerImportacion,
   obtenerImportacion,
 } from './importaciones.service';
 
@@ -86,6 +88,12 @@ importacionesRouter.get('/:id', async (req, res) => {
   res.json(await obtenerImportacion(slug, res.locals.usuarioId, Number(id)));
 });
 
+// Confirma lo que se crea en el circuito y aplica las filas seguras (decisión 118).
+importacionesRouter.post('/:id/aplicar', validar(aplicarImportacionSchema), async (req, res) => {
+  const { slug, id } = req.params as { slug: string; id: string };
+  res.json(await aplicarImportacion(slug, res.locals.usuarioId, Number(id), req.body));
+});
+
 importacionesRouter.post('/:id/confirmar', validar(confirmarImportacionSchema), async (req, res) => {
   const { slug, id } = req.params as { slug: string; id: string };
   res.json(await confirmarImportacion(slug, res.locals.usuarioId, Number(id), req.body));
@@ -94,4 +102,9 @@ importacionesRouter.post('/:id/confirmar', validar(confirmarImportacionSchema), 
 importacionesRouter.post('/:id/descartar', async (req, res) => {
   const { slug, id } = req.params as { slug: string; id: string };
   res.json(await descartarImportacion(slug, res.locals.usuarioId, Number(id)));
+});
+
+importacionesRouter.post('/:id/deshacer', async (req, res) => {
+  const { slug, id } = req.params as { slug: string; id: string };
+  res.json(await deshacerImportacion(slug, res.locals.usuarioId, Number(id)));
 });

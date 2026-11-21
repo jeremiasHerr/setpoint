@@ -18,18 +18,25 @@ export function problemasPorFila(hoja: HojaImportada) {
   return porFila;
 }
 
-// Lo que hay que mirar antes de confirmar: un número que no cierra o un nombre dudoso.
-export function necesitaRevision(fila: FilaPropuesta, problemas: string[] | undefined) {
-  return problemas !== undefined || (fila.coincideCon !== null && fila.confianza !== 'alta');
+// Lo que hay que mirar: lo que la API no pudo importar sola, con su motivo, y todavía no se aplicó
+// (decisión 118). Las demás se importan sin preguntar.
+export const necesitaRevision = (fila: FilaPropuesta) => fila.revisar !== null && !fila.aplicada;
+
+// Lo que se hace con una fila que se importa sola: vincularla a quien coincide, o darla de alta.
+export function decisionSegura(hoja: number, f: FilaPropuesta): DecisionImportacion {
+  return f.coincideCon !== null
+    ? { hoja, fila: f.fila, accion: 'vincular', jugadorId: f.coincideCon }
+    : { hoja, fila: f.fila, accion: 'crear' };
 }
 
-// Lo que propone la pantalla antes de que la organización toque nada. Una fila con
-// problemas arranca excluida: no se carga un número que no está en la planilla sin que alguien lo mire.
+// Lo que propone la pantalla para las filas a revisar, antes de que la organización toque nada. Una
+// fila con problemas arranca excluida: no se carga un número que no está en la planilla sin que
+// alguien lo mire.
 export function decisionesIniciales(importacion: Importacion): Decisiones {
   const decisiones: Decisiones = {};
   for (const hoja of hojasLeidas(importacion)) {
     const conProblemas = problemasPorFila(hoja);
-    for (const f of hoja.propuesta) {
+    for (const f of hoja.propuesta.filter(necesitaRevision)) {
       const base = { hoja: hoja.id, fila: f.fila };
       decisiones[claveDe(hoja.id, f.fila)] = conProblemas.has(f.fila)
         ? { ...base, accion: 'excluir' }

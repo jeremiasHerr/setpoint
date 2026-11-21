@@ -17,17 +17,25 @@ export const decisionImportacionSchema = z
     path: ['jugadorId'],
   });
 
+// Lo que se elige al revisar: la categoría de las hojas que no la decían y no se eligió al subir
+// (decisión 011), por id de hoja.
+const categoriasElegidas = z.record(z.string(), z.string().trim().min(1).max(40)).optional();
+
+// Confirma lo que se crea en el circuito y aplica las filas seguras (decisión 118).
+export const aplicarImportacionSchema = z.object({ categorias: categoriasElegidas });
+
+// Las decisiones van solo para las filas a revisar: las seguras se aplican sin preguntar (decisión 118).
 export const confirmarImportacionSchema = z.object(
   {
     decisiones: z.array(decisionImportacionSchema),
-    // Por id de hoja, solo las que no decían la categoría y no se eligió al subir (decisión 011).
-    categorias: z.record(z.string(), z.string().trim().min(1).max(40)).optional(),
+    categorias: categoriasElegidas,
   },
   { error: 'Faltan las decisiones' },
 );
 
 export type DecisionImportacion = z.infer<typeof decisionImportacionSchema>;
 export type DatosConfirmarImportacion = z.infer<typeof confirmarImportacionSchema>;
+export type DatosAplicarImportacion = z.infer<typeof aplicarImportacionSchema>;
 
 // --- Lo que devuelve la API ---
 
@@ -48,7 +56,9 @@ export type FilaExtraida = {
 
 // Lo que ve quien revisa: además, los textos de la fila tal como están en la planilla
 // ("J. Painemil"). La IA devuelve el nombre del padrón cuando lo reconoce.
-export type FilaPropuesta = FilaExtraida & { enLaPlanilla: string };
+// Con la importación por excepción (decisión 118), además: por qué va a revisión (null si se importa
+// sola) y si ya se aplicó.
+export type FilaPropuesta = FilaExtraida & { enLaPlanilla: string; revisar: string | null; aplicada: boolean };
 
 export type ProblemaImportacion = { fila: number | null; detalle: string };
 
@@ -76,12 +86,19 @@ export type Importacion = {
   archivoNombre: string;
   estado: EstadoImportacion;
   creadoEn: string;
+  // Cuándo se aplicaron las filas seguras (decisión 118). Con estado PROCESADO, quedan filas por revisar.
+  aplicadaEn: string | null;
+  // Cuándo se deshizo. Queda DESCARTADO.
+  deshechaEn: string | null;
   confirmadaEn: string | null;
   // Motivo, si terminó en ERROR: no se pudo leer ninguna hoja.
   error: string | null;
   hojas: HojaImportada[];
   // La suma de las hojas leídas.
   conteos: ConteosImportacion;
+  // Por excepción (decisión 118): las filas que se importan solas y las que van a revisión.
+  seguras: number;
+  aRevisar: number;
   // Lo que se crea en el circuito al confirmar (decisiones 011 y 098): las categorías y los torneos
   // del calendario que las planillas traen y el circuito no tiene, y si se enciende el ranking.
   crea: { categorias: string[]; etapas: string[]; ranking: boolean };
@@ -94,3 +111,7 @@ export type ResultadoConfirmacion = {
   movimientosCreados: number;
   movimientosSalteados: number;
 };
+
+// Deshacer borra los movimientos de la importación y los jugadores que creó, salvo los que ya tienen
+// otra actividad (decisión 118).
+export type ResultadoDeshacer = { movimientosBorrados: number; jugadoresBorrados: number; jugadoresQueQuedan: number };

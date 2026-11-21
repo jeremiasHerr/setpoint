@@ -88,6 +88,8 @@ Antes del listado, la secuencia operativa completa. Cada paso está cubierto por
 
 **Estado de la entrega del 25%:** implementada con revisión de todas las filas, para Excel y CSV, una hoja y una categoría por subida.
 
+**Estado actual:** automática por excepción, con deshacer ([decisión 118](decisiones/118-importacion-por-excepcion.md)), con varios archivos y hojas, y detectando el calendario y las categorías.
+
 **Alcance a partir de la devolución del 25%** ([devolucion-25.md](devolucion-25.md)):
 
 | Cambio | Estado |
