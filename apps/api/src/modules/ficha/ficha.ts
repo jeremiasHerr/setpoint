@@ -42,6 +42,8 @@ export type TorneoDeLaFichaLeido = {
   fechaInicio: Date | null;
   creadoEn: Date;
   gruposCerrados: boolean;
+  // Da puntos y todavía no cerró. Lo calcula quien lee, porque depende de la organización.
+  conProyeccion: boolean;
 };
 
 // Un partido de cuadro de cualquier jugador del torneo: hace falta para saber cuántas rondas tiene.
@@ -123,6 +125,7 @@ export function historialDelJugador(
       categoria: torneo.categoria.nombre,
       instancia: instanciaEnElTorneo(jugadorId, suyos, rondasPorCuadro, torneo.gruposCerrados),
       puntos: puntosPorTorneo.get(torneo.id) ?? null,
+      conProyeccion: torneo.conProyeccion,
     });
 
     for (const p of suyos.filter(tieneResultado).sort(ordenEnElTorneo)) {
