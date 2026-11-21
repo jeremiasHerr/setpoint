@@ -42,6 +42,8 @@ Monorepo con los tipos y validaciones compartidos (Zod). Todo levanta con `docke
 
 **Es automática por excepción.** La IA extrae, el código audita cada número contra el archivo, y lo que pasa todos los controles se importa solo. La organización revisa únicamente lo que falló o es dudoso: *"Importamos 74 jugadores. Revisá estos 3"*.
 
+**Lee los resultados de los mensajes del grupo.** La organización pega los mensajes de WhatsApp tal como los copia (con la hora y quién mandó cada uno) y la IA identifica los resultados y de qué partido son. El código controla que los dos jugadores estén en el mensaje, que cada set esté escrito y que el marcador sea válido; lo que pasa se carga solo, y lo dudoso queda para revisar. Funciona con texto pegado; las capturas de pantalla no están.
+
 **Lo que no hace la IA:** zonas, posiciones, desempates y ranking son reglas fijas, y se calculan con código testeado. La IA se usa donde los datos son ambiguos, no donde las reglas son claras.
 
 Detalle en [06-ia.md](06-ia.md).
