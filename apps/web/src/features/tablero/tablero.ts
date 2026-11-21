@@ -1,6 +1,6 @@
 import type { BloqueDelTablero, FilaDePosiciones, PartidoDelTablero, SituacionDelPartido, Tablero } from '@setpoint/shared';
 import { MARCA } from '../../components/marcas';
-import { NOMBRE_DEL_CUADRO, rotuloDeRonda } from '../cuadros/cuadro';
+import { NOMBRE_DEL_PRINCIPAL, nombreDelCuadro, rotuloDeRonda } from '../cuadros/cuadro';
 
 // Las fechas límite son días ('AAAA-MM-DD'): se leen y se muestran en UTC para que no se corran.
 const diaLargo = new Intl.DateTimeFormat('es-AR', { weekday: 'long', day: 'numeric', timeZone: 'UTC' });
@@ -36,14 +36,14 @@ export function partidosConFecha(tablero: Tablero) {
 // Cómo se nombra cada barra: la zona, o el cuadro y la ronda ("Campeonato · semis").
 export function nombreDelBloque(bloque: BloqueDelTablero, tablero: Tablero) {
   if (bloque.grupo) return bloque.grupo;
-  return `${NOMBRE_DEL_CUADRO[bloque.cuadro!]} · ${rotuloDeRonda(bloque.ronda!, tablero.rondas[bloque.cuadro!]!)}`;
+  return `${nombreDelCuadro(bloque.cuadro!, tablero.nombreCuadroConsuelo)} · ${rotuloDeRonda(bloque.ronda!, tablero.rondas[bloque.cuadro!]!)}`;
 }
 
 // Dónde se juega, para la columna de la izquierda de "Lo que falta": "zona D", o "semis" con el cuadro.
 export function dondeSeJuega(partido: PartidoDelTablero, tablero: Tablero) {
   if (partido.grupo) return `zona ${partido.grupo}`;
   const ronda = rotuloDeRonda(partido.ronda!, tablero.rondas[partido.cuadro!]!);
-  return partido.cuadro === 'campeonato' ? ronda : `${ronda} · consuelo`;
+  return partido.cuadro === 'campeonato' ? ronda : `${ronda} · ${tablero.nombreCuadroConsuelo.toLowerCase()}`;
 }
 
 // "venció ayer", "venció hace 3 días", "vence hoy", "quedan 6 días".
@@ -97,7 +97,7 @@ const enumerar = (nombres: string[]) =>
   nombres.length <= 1 ? (nombres[0] ?? '') : `${nombres.slice(0, -1).join(', ')} y ${nombres[nombres.length - 1]}`;
 
 // "Antileo y Roa están clasificando a Campeonato. Vera y Peralta van al cuadro consuelo."
-export function comoVieneLaZona(filas: FilaDePosiciones[]) {
+export function comoVieneLaZona(filas: FilaDePosiciones[], nombreConsuelo: string) {
   const de = (destino: FilaDePosiciones['destino']) => filas.filter((f) => f.destino === destino).map((f) => f.apellido);
   const principal = de('campeonato');
   const consuelo = de('complementaria');
@@ -105,8 +105,8 @@ export function comoVieneLaZona(filas: FilaDePosiciones[]) {
   const verbo = (n: string[], uno: string, varios: string) => (n.length === 1 ? uno : varios);
   return [
     principal.length > 0 &&
-      `${enumerar(principal)} ${verbo(principal, 'está', 'están')} clasificando a ${NOMBRE_DEL_CUADRO.campeonato}.`,
-    consuelo.length > 0 && `${enumerar(consuelo)} ${verbo(consuelo, 'va', 'van')} al ${NOMBRE_DEL_CUADRO.complementaria.toLowerCase()}.`,
+      `${enumerar(principal)} ${verbo(principal, 'está', 'están')} clasificando a ${NOMBRE_DEL_PRINCIPAL}.`,
+    consuelo.length > 0 && `${enumerar(consuelo)} ${verbo(consuelo, 'va', 'van')} al ${nombreConsuelo.toLowerCase()}.`,
     afuera.length > 0 && `${enumerar(afuera)} ${verbo(afuera, 'queda', 'quedan')} afuera.`,
   ]
     .filter(Boolean)

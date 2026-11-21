@@ -169,6 +169,8 @@ export type PartidoConResultado = {
   torneoId: number;
   // "Primavera 2026 · Tercera"
   nombre: string;
+  // Cómo llama la organización a su cuadro consuelo (07 §1.2).
+  nombreCuadroConsuelo: string;
   fase: 'grupos' | 'eliminatoria';
   grupo: string | null; // solo en fase de grupos
   cuadro: ClaveCuadro | null; // solo en eliminatorias
@@ -199,6 +201,8 @@ export type PartidosDelTorneo = {
   torneoId: number;
   // "Primavera 2026 · Tercera"
   nombre: string;
+  // Cómo llama la organización a su cuadro consuelo (07 §1.2).
+  nombreCuadroConsuelo: string;
   partidos: PartidoDeLaLista[];
 };
 

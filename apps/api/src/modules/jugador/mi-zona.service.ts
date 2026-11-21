@@ -1,5 +1,5 @@
 import { EstadoTorneo, FasePartido } from '@prisma/client';
-import type { RespuestaMiZona } from '@setpoint/shared';
+import { nombreCuadroConsuelo, type RespuestaMiZona } from '@setpoint/shared';
 import { perfilDeJugador } from '../../lib/permisos';
 import { prisma } from '../../lib/prisma';
 import { inscriptosYPartidos, INCLUIR_ZONAS } from '../competencia/posiciones.service';
@@ -35,7 +35,7 @@ export async function miZona(slug: string, usuarioId: number): Promise<Respuesta
   const [torneo, partidos] = await Promise.all([
     prisma.torneo.findUniqueOrThrow({
       where: { id: inscripcion.torneoId },
-      include: { categoria: { select: { nombre: true } }, organizacion: { select: { usaRanking: true } }, ...INCLUIR_ZONAS },
+      include: { categoria: { select: { nombre: true } }, organizacion: { select: { usaRanking: true, nombreCuadroConsuelo: true } }, ...INCLUIR_ZONAS },
     }),
     prisma.partido.findMany({
       where: { torneoId: inscripcion.torneoId, fase: FasePartido.GRUPOS, grupo },
@@ -65,6 +65,7 @@ export async function miZona(slug: string, usuarioId: number): Promise<Respuesta
     zona: {
       torneoId: torneo.id,
       nombre: `${torneo.edicion ?? torneo.nombre} · ${torneo.categoria.nombre}`,
+      nombreCuadroConsuelo: nombreCuadroConsuelo(torneo.organizacion.nombreCuadroConsuelo),
       grupo,
       usaRanking: torneo.organizacion.usaRanking,
       clasificanPorGrupo: torneo.clasificanPorGrupo,

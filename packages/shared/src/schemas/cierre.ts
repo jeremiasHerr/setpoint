@@ -41,6 +41,8 @@ export type CierreDelTorneo = {
   torneoId: number;
   // "Otoño 2026 · Tercera"
   nombre: string;
+  // Cómo llama la organización a su cuadro consuelo (07 §1.2).
+  nombreCuadroConsuelo: string;
   cerrado: boolean;
   // Los partidos con resultado, de las zonas y de los cuadros.
   partidosJugados: number;

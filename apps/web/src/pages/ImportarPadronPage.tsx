@@ -59,6 +59,10 @@ function errorDeSubida(error: Error | null) {
       return 'Subí hasta 10 archivos por vez.';
     case 'CATEGORIA_NO_ENCONTRADA':
       return 'Esa categoría ya no existe en tu circuito. Recargá la página.';
+    case 'LIMITE_DE_PEDIDOS_IA':
+      return 'Subiste muchas planillas en poco tiempo. Esperá un rato y probá de nuevo.';
+    case 'TOPE_DE_GASTO_IA':
+      return 'Hoy llegaron al tope de uso de la IA. Se renueva solo en unas horas; mientras tanto podés cargar jugadores a mano.';
     case 'SIN_CONEXION':
       return 'No pudimos conectarnos. Revisá tu conexión y probá de nuevo.';
     default:

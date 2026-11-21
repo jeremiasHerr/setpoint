@@ -1,5 +1,5 @@
 import { Cuadro, type Prisma } from '@prisma/client';
-import type { ClaveCuadro, EstadoPartido, PartidoEnVivo, TorneoEnVivo } from '@setpoint/shared';
+import { nombreCuadroConsuelo, type ClaveCuadro, type EstadoPartido, type PartidoEnVivo, type TorneoEnVivo } from '@setpoint/shared';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
 import { partidosDelCalendario, partidosSinFecha } from './en-vivo';
@@ -50,7 +50,7 @@ function aPartido(p: PartidoLeido): PartidoEnVivo {
 }
 
 export async function torneoEnVivo(slug: string, torneoId: number): Promise<TorneoEnVivo> {
-  const organizacion = await prisma.organizacion.findUnique({ where: { slug }, select: { id: true, nombre: true } });
+  const organizacion = await prisma.organizacion.findUnique({ where: { slug }, select: { id: true, nombre: true, nombreCuadroConsuelo: true } });
   if (!organizacion) throw new ErrorHttp(404, 'ORGANIZACION_NO_ENCONTRADA');
   if (!Number.isInteger(torneoId)) throw new ErrorHttp(404, 'TORNEO_NO_ENCONTRADO');
 
@@ -87,6 +87,7 @@ export async function torneoEnVivo(slug: string, torneoId: number): Promise<Torn
   return {
     torneoId: torneo.id,
     organizacion: organizacion.nombre,
+    nombreCuadroConsuelo: nombreCuadroConsuelo(organizacion.nombreCuadroConsuelo),
     nombre: `${torneo.edicion ?? torneo.nombre} · ${torneo.categoria.nombre}`,
     clasificanPorGrupo: torneo.clasificanPorGrupo,
     tieneComplementaria: torneo.tieneComplementaria,
