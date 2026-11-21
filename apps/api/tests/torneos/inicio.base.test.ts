@@ -1,6 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it as base } from 'vitest';
 
-// Contra Postgres: el listado del inicio con un torneo en juego y uno cerrado (decisión 080). Usa la
+// Contra Postgres: el listado del inicio con un torneo en juego y uno cerrado (decisión 080), y lo
+// que hace falta para avisar de pocos inscriptos (decisión 125). Usa la
 // del docker compose (`docker compose up -d db`) y se saltea si no hay DATABASE_URL o la base no
 // responde. Crea una organización propia y la borra al terminar.
 
@@ -27,6 +28,7 @@ describe.skipIf(!process.env.DATABASE_URL)('el inicio con torneos en juego y ter
   let admin: number;
   let enJuegoId: number;
   let aCerrarId: number;
+  let abiertoId: number;
 
   beforeAll(async () => {
     if (!conectada) return;
@@ -65,6 +67,24 @@ describe.skipIf(!process.env.DATABASE_URL)('el inicio con torneos en juego y ter
       ],
     });
 
+    // Con la inscripción abierta: 2 zonas piden 6, pagó uno solo y cierra en dos días.
+    const enDosDias = new Date(`${hoy()}T12:00:00.000Z`);
+    enDosDias.setUTCDate(enDosDias.getUTCDate() + 2);
+    abiertoId = (
+      await prisma.torneo.create({
+        data: {
+          organizacionId,
+          categoriaId,
+          nombre: 'Copa abierta',
+          cupo: 8,
+          cantidadGrupos: 2,
+          estado: 'PUBLICADO',
+          cierreInscripcion: enDosDias,
+          inscripciones: { create: [{ jugadorId: bravo, estado: 'PAGADA' }, { jugadorId: vera, estado: 'PENDIENTE_PAGO' }] },
+        },
+      })
+    ).id;
+
     // Con la final del cuadro principal jugada, lista para cerrar.
     aCerrarId = await torneo('Copa a cerrar', 'ELIMINATORIAS', [bravo, vera]);
     await prisma.partido.create({
@@ -87,6 +107,13 @@ describe.skipIf(!process.env.DATABASE_URL)('el inicio con torneos en juego y ter
     const torneo = await delListado(enJuegoId);
     expect(torneo.avance).toMatchObject({ fase: 'zonas', partidos: 2, jugados: 1, vencidos: 1, ronda: null });
     expect(torneo.terminado).toBeNull();
+  });
+
+  it('con la inscripción abierta trae cuántos hacen falta para sortear y cuántos días faltan para el cierre', async () => {
+    const convocatoria = (await listarConvocatorias(slug, admin)).find((c) => c.torneos.some((t) => t.id === abiertoId))!;
+    expect(convocatoria.diasParaElCierre).toBe(2);
+    // Solo cuenta el que pagó: la reserva todavía puede vencer.
+    expect(convocatoria.torneos[0]).toMatchObject({ inscriptos: 1, minimoParaSortear: 6 });
   });
 
   it('cada convocatoria dice su torneo del calendario, para la etiqueta de su tarjeta', async () => {

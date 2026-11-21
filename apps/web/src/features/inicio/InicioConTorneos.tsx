@@ -5,6 +5,7 @@ import { Numero } from '../../components/Numero';
 import { AvisosAtencion } from './AvisosAtencion';
 import { Columna } from './Columna';
 import { EncabezadoDelCircuito } from './EncabezadoDelCircuito';
+import { PocosInscriptos } from './PocosInscriptos';
 import { VinculacionesParaRevisar } from './VinculacionesParaRevisar';
 import { TarjetaBorrador } from './TarjetaBorrador';
 import { TarjetaInscripcionAbierta } from './TarjetaInscripcionAbierta';
@@ -19,7 +20,7 @@ const TERMINADOS_VISIBLES = 4;
 // Con torneos: arriba el circuito, y abajo sus torneos en cuatro columnas, por el momento en que
 // está cada uno (decisión 094).
 export function InicioConTorneos({ torneos, slug }: { torneos: TorneosDeInicio; slug: string }) {
-  const { borradores, enJuego, conInscripcionAbierta, paraSortear, terminados, avisos } = torneos;
+  const { borradores, enJuego, conInscripcionAbierta, paraSortear, terminados, avisos, pocosInscriptos } = torneos;
   const [todosLosTerminados, setTodosLosTerminados] = useState(false);
   const terminadosVisibles = todosLosTerminados ? terminados : terminados.slice(0, TERMINADOS_VISIBLES);
   const ocultos = terminados.length - terminadosVisibles.length;
@@ -32,6 +33,12 @@ export function InicioConTorneos({ torneos, slug }: { torneos: TorneosDeInicio; 
       {avisos.length > 0 && (
         <div className="px-4 pt-6 md:px-7">
           <AvisosAtencion avisos={avisos} />
+        </div>
+      )}
+
+      {pocosInscriptos.length > 0 && (
+        <div className="px-4 pt-6 md:px-7">
+          <PocosInscriptos avisos={pocosInscriptos} />
         </div>
       )}
 

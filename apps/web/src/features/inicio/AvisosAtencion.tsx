@@ -12,24 +12,13 @@ export function AvisosAtencion({ avisos }: { avisos: Aviso[] }) {
         {avisos.map((aviso, i) => (
           <li key={i} className="flex items-start gap-2.5">
             <span className="mt-[7px] size-[7px] shrink-0 rounded-full bg-rojo" />
-            {aviso.tipo === 'partidos-vencidos' ? (
-              <p className="text-sm leading-[1.45]">
-                <Numero>{aviso.partidos}</Numero> {aviso.partidos === 1 ? 'partido' : 'partidos'} de {aviso.categoria}{' '}
-                {aviso.partidos === 1 ? 'venció' : 'vencieron'} sin resultado.{' '}
-                <Link to={`/torneos/${aviso.torneoId}/tablero`} className="font-medium underline hover:text-pizarra-500">
-                  Resolver
-                </Link>
-              </p>
-            ) : (
-              // Todavía no se calcula: «Copiar link» se conecta cuando se calcule.
-              <p className="text-sm leading-[1.45]">
-                {aviso.torneo} tiene <Numero>{aviso.pagaron}</Numero> de <Numero>{aviso.cupo}</Numero> inscriptos y cierra en{' '}
-                {aviso.cierraEn}.{' '}
-                <button type="button" className="font-medium underline hover:text-pizarra-500">
-                  Copiar link
-                </button>
-              </p>
-            )}
+            <p className="text-sm leading-[1.45]">
+              <Numero>{aviso.partidos}</Numero> {aviso.partidos === 1 ? 'partido' : 'partidos'} de {aviso.categoria}{' '}
+              {aviso.partidos === 1 ? 'venció' : 'vencieron'} sin resultado.{' '}
+              <Link to={`/torneos/${aviso.torneoId}/tablero`} className="font-medium underline hover:text-pizarra-500">
+                Resolver
+              </Link>
+            </p>
           </li>
         ))}
       </ul>
