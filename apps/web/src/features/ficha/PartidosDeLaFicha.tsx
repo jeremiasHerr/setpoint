@@ -8,7 +8,7 @@ import { NOMBRE_DEL_CUADRO, rotuloDeRonda } from '../cuadros/cuadro';
 const VISIBLES = 5;
 
 // "zona C", "final", o en el cuadro consuelo "semis · Cuadro consuelo".
-function donde(partido: PartidoDeLaFicha) {
+export function donde(partido: Pick<PartidoDeLaFicha, 'grupo' | 'ronda' | 'rondas' | 'cuadro'>) {
   if (partido.grupo) return `zona ${partido.grupo}`;
   const ronda = rotuloDeRonda(partido.ronda!, partido.rondas!);
   return partido.cuadro === 'complementaria' ? `${ronda} · ${NOMBRE_DEL_CUADRO.complementaria}` : ronda;

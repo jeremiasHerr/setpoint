@@ -1,6 +1,6 @@
 import type { FichaDelJugador, RecordDelJugador } from '@setpoint/shared';
 import type { ReactNode } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { EncabezadoPublico } from '../components/EncabezadoPublico';
 import { LinkDeVuelta } from '../components/LinkDeVuelta';
 import { Numero } from '../components/Numero';
@@ -77,6 +77,16 @@ function Ficha({ ficha, slug }: { ficha: FichaDelJugador; slug: string }) {
       <TorneosDeLaFicha torneos={ficha.torneos} />
       {/* Sin torneos no hay partidos: con el aviso de Torneos alcanza. */}
       {ficha.torneos.length > 0 && <PartidosDeLaFicha partidos={ficha.partidos} />}
+
+      {/* Con partidos hay con quién comparar; sin ellos, el botón llevaría a una lista vacía. */}
+      {ficha.partidos.length > 0 && (
+        <Link
+          to={`/c/${slug}/jugadores/${ficha.jugadorId}/cara-a-cara`}
+          className="inline-flex h-[52px] items-center justify-center rounded-control border border-noche text-base font-semibold hover:bg-linea-suave focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-noche"
+        >
+          Comparar con otro jugador
+        </Link>
+      )}
 
       <p className="text-sm leading-[1.42] text-pizarra-500">Ninguna pantalla pública muestra datos de contacto.</p>
     </>

@@ -101,7 +101,7 @@ type JugadorLeido = { id: number; categoriaId: number | null; categoria: { activ
 
 // Su puesto, sus puntos y sus casilleros en la categoría en la que juega hoy. Salen de la misma tabla
 // que el ranking público (F09), para que las dos pantallas digan lo mismo.
-async function rankingDelJugador(organizacion: OrganizacionLeida, elJugador: JugadorLeido): Promise<RankingDeLaFicha | null> {
+export async function rankingDelJugador(organizacion: OrganizacionLeida, elJugador: JugadorLeido): Promise<RankingDeLaFicha | null> {
   if (!organizacion.usaRanking || elJugador.categoriaId === null || !elJugador.categoria?.activa) return null;
   const organizacionId = organizacion.id;
   const categoriaId = elJugador.categoriaId;
