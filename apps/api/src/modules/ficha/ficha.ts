@@ -89,13 +89,13 @@ export function instanciaEnElTorneo(
 }
 
 // Del más reciente al más viejo: por la fecha de inicio, o por cuándo se creó si no tiene.
-const ordenDeTorneos = (a: TorneoDeLaFichaLeido, b: TorneoDeLaFichaLeido) =>
+export const ordenDeTorneos = (a: TorneoDeLaFichaLeido, b: TorneoDeLaFichaLeido) =>
   (b.fechaInicio ?? b.creadoEn).getTime() - (a.fechaInicio ?? a.creadoEn).getTime() || b.id - a.id;
 
 // Dentro de un torneo, del más reciente al más viejo. No se guarda cuándo se cargó cada resultado:
 // los cuadros van después de la zona y cada ronda después de la anterior; en la zona, por la fecha
 // que anotaron, y los que no tienen, al final.
-const ordenEnElTorneo = (a: PartidoDeLaFichaLeido, b: PartidoDeLaFichaLeido) =>
+export const ordenEnElTorneo = (a: PartidoDeLaFichaLeido, b: PartidoDeLaFichaLeido) =>
   (b.ronda ?? 0) - (a.ronda ?? 0) ||
   (b.fechaAcordada?.getTime() ?? 0) - (a.fechaAcordada?.getTime() ?? 0) ||
   b.id - a.id;

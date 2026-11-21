@@ -381,7 +381,7 @@ Cada jugador tendrá una ficha con su historial completo: todos los partidos que
 - Los torneos van con la instancia que alcanzó y los puntos que le dio el cierre; es la sección que la referencia no dibuja ([decisión 071](decisiones/071-la-ficha-suma-los-torneos.md)). La instancia se calcula con sus partidos de cuadro, así que sirve también para torneos sin ranking y en juego ([decisión 072](decisiones/072-la-instancia-se-calcula-con-los-partidos.md)).
 - El W.O. figura en la lista pero no cuenta como jugado; el abandono sí ([decisión 073](decisiones/073-el-wo-no-cuenta-en-la-ficha.md)).
 - Se llega desde la fila abierta del ranking ("Ver la ficha") y desde los nombres de las zonas del torneo en vivo ([decisión 074](decisiones/074-entrada-a-la-ficha.md)).
-- La ficha en la app y el botón "Comparar con otro jugador", que abre el cara a cara (F18), quedan pendientes.
+- "Comparar con otro jugador" abre el cara a cara (F18). La ficha en la app queda pendiente.
 
 ---
 
@@ -396,6 +396,11 @@ Cualquier persona podrá comparar a dos jugadores del circuito y ver el historia
 - Se accede desde la ficha de cualquier jugador o desde un buscador por apellido.
 
 **Entrega: 100%**
+
+**Estado:** implementada en la web, sin el filtro por superficie ([decisión 122](decisiones/122-cara-a-cara-sin-superficie.md)).
+- *Cara a cara* (`/c/:slug/jugadores/:id/cara-a-cara/:rivalId`) muestra el cruce acumulado, cada partido con su torneo e instancia, y vuelve a la ficha. Sin rival, lista con quiénes jugó el jugador para elegir.
+- La API: `GET /api/publico/:slug/jugadores/:id/rivales` y `.../cara-a-cara/:rivalId`. El W.O. no cuenta como jugado y el abandono sí ([decisión 073](decisiones/073-el-wo-no-cuenta-en-la-ficha.md)). Sin teléfono ni email.
+- Falta el filtro por superficie, porque los clubes todavía no tienen el dato, y "Cómo te fue con él" en la app.
 
 ---
 
