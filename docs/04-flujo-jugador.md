@@ -205,7 +205,7 @@ La primera vez, el padrón no tiene con qué comparar: alguien puede elegir el p
 
 En el padrón, al lado de cada jugador, la organización tiene "Compartir link": abre WhatsApp con el mensaje armado (*"Hola Lucas, inscribite al Primavera 26 desde acá: …"*), en el chat del jugador si tiene teléfono cargado o para elegir el contacto si no. También "Copiar link".
 
-- **Quien entra se saltea la búsqueda:** escribe su email, verifica el código (o ya tiene la sesión) y queda vinculado a ese perfil. Después ve los torneos de su categoría con la inscripción abierta y elige uno. Si no hay ninguno abierto, el mismo link le sirve para el próximo.
+- **Quien entra se saltea la búsqueda:** escribe su email, verifica el código (o ya tiene la sesión) y queda vinculado a ese perfil. Después ve los torneos de su categoría con la inscripción abierta y elige uno. Si no hay ninguno abierto, el mismo link le sirve para el próximo. Si el que elige tiene el cupo lleno, se anota en la lista de espera, como desde el link del torneo ([decisión 081](decisiones/081-anotarse-en-la-lista-de-espera.md)).
 - **No hay revisión de homónimo:** el perfil lo eligió la organización.
 - **El link lleva un código aleatorio**, no el id del jugador: no se puede adivinar el de otro. Es del jugador, no de un torneo.
 - **La organización puede generar uno nuevo**, y el anterior deja de andar.

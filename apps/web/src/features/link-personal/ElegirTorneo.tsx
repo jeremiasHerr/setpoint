@@ -1,9 +1,9 @@
 import type { LinkPersonal, TorneoPublico } from '@setpoint/shared';
 import { useState } from 'react';
 import { Numero } from '../../components/Numero';
-import { Aviso, AvisoReserva, Ayuda, BotonPrincipal, Consentimiento, Titulo } from '../inscripcion/piezas';
+import { Aviso, AvisoLista, AvisoReserva, Ayuda, BotonPrincipal, Consentimiento, Titulo } from '../inscripcion/piezas';
 import { mensajeReserva } from '../inscripcion/mensajeReserva';
-import { useReservar } from '../inscripcion/useInscripcion';
+import { useAnotarEnListaDeEspera, useReservar } from '../inscripcion/useInscripcion';
 import { diaLargo, importe, lugaresLibres } from '../torneo-publico/convocatoria';
 
 type Props = {
@@ -16,12 +16,14 @@ type Props = {
 };
 
 // Paso 3 de link-personal.html: las ediciones de su categoría con la inscripción abierta. El perfil
-// ya lo eligió la organización, así que se reserva directo (decisión 050).
+// ya lo eligió la organización, así que se reserva directo (decisión 050). Con el cupo lleno, se anota
+// en la lista de espera por el mismo camino, como desde el link del torneo (decisión 081).
 export function ElegirTorneo({ link, codigo, token, propio, onReservado }: Props) {
   // Arranca en la primera con lugares: una completa no se puede pagar.
   const [elegidoId, setElegidoId] = useState((link.torneos.find((t) => lugaresLibres(t) > 0) ?? link.torneos[0])?.id);
   const elegido = link.torneos.find((t) => t.id === elegidoId);
   const reservar = useReservar(link.organizacion.slug, String(elegidoId ?? ''), token);
+  const anotar = useAnotarEnListaDeEspera(link.organizacion.slug, String(elegidoId ?? ''), token);
   const categoria = link.jugador.categoria ?? 'tu categoría';
 
   if (!elegido) {
@@ -34,11 +36,15 @@ export function ElegirTorneo({ link, codigo, token, propio, onReservado }: Props
   }
 
   const libres = lugaresLibres(elegido);
-  const pagar = () =>
-    reservar.mutate(
-      { jugadorId: link.jugador.id, vinculaPor: propio ? undefined : 'link_personal', codigoLink: propio ? undefined : codigo },
-      { onSuccess: (reserva) => onReservado(reserva.inscripcionId) },
-    );
+  // La lista de espera, si no quedan lugares y el torneo tiene.
+  const lista = libres === 0 ? elegido.listaDeEspera : null;
+  const enCurso = reservar.isPending || anotar.isPending;
+  const seguir = () => {
+    const datos = { jugadorId: link.jugador.id, vinculaPor: propio ? undefined : ('link_personal' as const), codigoLink: propio ? undefined : codigo };
+    const alTerminar = { onSuccess: ({ inscripcionId }: { inscripcionId: number }) => onReservado(inscripcionId) };
+    if (lista) anotar.mutate(datos, alTerminar);
+    else reservar.mutate(datos, alTerminar);
+  };
 
   return (
     <>
@@ -54,6 +60,7 @@ export function ElegirTorneo({ link, codigo, token, propio, onReservado }: Props
                 elegido={torneo.id === elegidoId}
                 onElegir={() => {
                   reservar.reset();
+                  anotar.reset();
                   setElegidoId(torneo.id);
                 }}
               />
@@ -64,18 +71,24 @@ export function ElegirTorneo({ link, codigo, token, propio, onReservado }: Props
       <Ayuda>Cuando se abra otra inscripción de {categoria}, este mismo link te sirve.</Ayuda>
 
       <div className="mt-auto flex flex-col gap-3">
-        {libres === 0 ? (
+        {libres === 0 && !lista ? (
           <p className="rounded-[12px] bg-niebla px-4 py-3.5 text-[15px] leading-[1.42] text-pizarra-700">
-            El cupo está completo. Si se libera un lugar, la organización lo avisa en el grupo.
+            El cupo está completo y este torneo no tiene lista de espera.
           </p>
         ) : (
           <>
-            {!propio && <Consentimiento organizacion={link.organizacion.nombre} />}
-            <Aviso mensaje={mensajeReserva(reservar.error)} />
-            <BotonPrincipal onClick={pagar} disabled={reservar.isPending}>
-              {reservar.isPending ? 'Reservando…' : 'Ir a pagar con MercadoPago'}
+            {!propio && <Consentimiento organizacion={link.organizacion.nombre} al={lista ? 'Al anotarte' : undefined} />}
+            <Aviso mensaje={mensajeReserva(reservar.error ?? anotar.error)} />
+            <BotonPrincipal onClick={seguir} disabled={enCurso}>
+              {lista
+                ? enCurso
+                  ? 'Anotándote…'
+                  : 'Anotarme en la lista de espera'
+                : enCurso
+                  ? 'Reservando…'
+                  : 'Ir a pagar con MercadoPago'}
             </BotonPrincipal>
-            <AvisoReserva minutos={elegido.minutosReserva} />
+            {lista ? <AvisoLista horas={lista.horas} /> : <AvisoReserva minutos={elegido.minutosReserva} />}
           </>
         )}
       </div>
