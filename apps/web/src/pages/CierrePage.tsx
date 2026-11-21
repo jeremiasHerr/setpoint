@@ -95,7 +95,7 @@ function AvisoParticipacion({ cierre }: { cierre: CierreDelTorneo }) {
   const puntos = participacion[0]?.ranking?.puntos;
   if (cierre.cerrado || puntos === undefined) return null;
   return (
-    <div className="flex items-start gap-[11px] rounded-tarjeta border border-linea bg-niebla px-[18px] py-4">
+    <div className="flex items-start gap-[11px] rounded-tarjeta border border-linea bg-papel px-[18px] py-4">
       <svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" className="mt-px shrink-0 text-pizarra-500">
         <circle cx="12" cy="12" r="9" />
         <path d="M12 8v5M12 16v.01" />
