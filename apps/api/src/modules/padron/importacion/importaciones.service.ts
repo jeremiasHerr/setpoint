@@ -9,6 +9,7 @@ import type {
   ResultadoConfirmacion,
   ResultadoDeshacer,
 } from '@setpoint/shared';
+import { reservarUsoIA, registrarTokensIA } from '../../../lib/limite-ia';
 import { DEL_PADRON, DEL_PADRON_ACTIVOS } from '../../../lib/padron';
 import { organizacionAdministrada } from '../../../lib/permisos';
 import { prisma } from '../../../lib/prisma';
@@ -304,6 +305,8 @@ async function procesarUnaHoja(
 export async function crearImportacion(slug: string, usuarioId: number, archivos: ArchivoSubido[], categoria: string | null) {
   const organizacionId = await organizacionAdministrada(slug, usuarioId);
   const categoriaElegida = categoria ? await idDeCategoria(organizacionId, categoria) : null;
+  // Antes de llamar al modelo: si se pasó un límite, 429 sin gastar nada (decisión 121).
+  const usoId = await reservarUsoIA(organizacionId, usuarioId, 'IMPORTACION');
 
   const importacion = await prisma.importacionPadron.create({
     data: {
@@ -327,6 +330,11 @@ export async function crearImportacion(slug: string, usuarioId: number, archivos
         ? procesarUnaHoja(organizacionId, { archivo, hoja }, contexto, fija)
         : { archivoNombre: archivo.nombre, hoja: '', crudos: null, resumen: { categoriaId: null, error } },
     ),
+  );
+
+  await registrarTokensIA(
+    usoId,
+    procesadas.reduce((suma, p) => ({ entrada: suma.entrada + (p.resumen.tokens?.entrada ?? 0), salida: suma.salida + (p.resumen.tokens?.salida ?? 0) }), { entrada: 0, salida: 0 }),
   );
 
   // Un jugador va en una sola categoría: si aparece en dos hojas, va a revisión en las dos.

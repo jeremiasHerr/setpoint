@@ -226,6 +226,7 @@ model Usuario {
   partidosAnotados    Partido[]             @relation("PartidoAnotadoPor")
   partidosConfirmados Partido[]             @relation("PartidoConfirmadoPor")
   lecturasDeMensajes  ExtraccionResultado[] @relation("LecturaCreadaPor")
+  usosIA              UsoIA[]
   dispositivos        DispositivoAviso[]
   eventosCoordinacion EventoCoordinacion[]
 
@@ -290,6 +291,7 @@ model Organizacion {
   cuentaCobro   CuentaCobro?
   importaciones ImportacionPadron[]
   lecturas      ExtraccionResultado[]
+  usosIA        UsoIA[]
   contactos     ContactoOrganizacion[]
 
   @@map("organizaciones")
@@ -842,6 +844,30 @@ model HojaImportacion {
 
 /// F19 — Registro de resultados a partir de mensajes. Una fila por cada vez que la organización
 /// pega los mensajes del grupo (decisión 119): los resultados que se leyeron van en el resumen.
+enum FuncionIA {
+  IMPORTACION
+  RESULTADOS
+}
+
+/// Cada pedido a un modelo de IA, con los tokens que devolvió la respuesta (decisión 121). De acá
+/// salen el límite de pedidos por usuario y el tope de gasto por organización.
+model UsoIA {
+  id             Int       @id @default(autoincrement())
+  organizacionId Int
+  usuarioId      Int?
+  funcion        FuncionIA
+  tokensEntrada  Int       @default(0)
+  tokensSalida   Int       @default(0)
+  creadoEn       DateTime  @default(now())
+
+  organizacion Organizacion @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
+  usuario      Usuario?     @relation(fields: [usuarioId], references: [id], onDelete: SetNull)
+
+  @@index([organizacionId, creadoEn])
+  @@index([usuarioId, creadoEn])
+  @@map("usos_ia")
+}
+
 model ExtraccionResultado {
   id             Int             @id @default(autoincrement())
   organizacionId Int

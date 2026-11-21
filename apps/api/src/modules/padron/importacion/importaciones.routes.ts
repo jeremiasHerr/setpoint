@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { aplicarImportacionSchema, confirmarImportacionSchema } from '@setpoint/shared';
 import { autenticar } from '../../../middleware/autenticar';
 import { ErrorHttp } from '../../../middleware/errores';
+import { limiteDeIaPorUsuario } from '../../../middleware/limite';
 import { validar } from '../../../middleware/validar';
 import {
   aplicarImportacion,
@@ -64,6 +65,7 @@ importacionesRouter.use(autenticar);
 
 importacionesRouter.post(
   '/',
+  limiteDeIaPorUsuario,
   (req, res, next) => {
     req.setTimeout(TIEMPO_MAXIMO_MS);
     res.setTimeout(TIEMPO_MAXIMO_MS);
