@@ -19,7 +19,7 @@ const categorias = ['Todas', 'Segunda', 'Tercera'];
 function Seccion({ titulo, children }: { titulo: string; children: ReactNode }) {
   return (
     <section className="flex flex-col gap-4">
-      <h2 className="font-mono text-xs text-pizarra-500">{titulo}</h2>
+      <h2 className="text-[13px] text-pizarra-500">{titulo}</h2>
       {children}
     </section>
   );

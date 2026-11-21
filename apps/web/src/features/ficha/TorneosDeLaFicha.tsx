@@ -1,25 +1,8 @@
-import { instancias, type Instancia, type InstanciaDeLaFicha, type TorneoDeLaFicha } from '@setpoint/shared';
+import type { TorneoDeLaFicha } from '@setpoint/shared';
 import { Fragment, type ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 import { Numero } from '../../components/Numero';
-import { rotuloDeRonda } from '../cuadros/cuadro';
-
-// Con los mismos nombres que la tabla de puntos de Tu circuito: "Finalista", "Cuartos de final".
-const etiqueta = (clave: Instancia) => instancias.find((i) => i.clave === clave)!.etiqueta;
-const PERDIO_EN: Instancia[] = ['finalista', 'semifinalista', 'cuartos', 'octavos'];
-
-// Hasta dónde llegó (decisión 072): "Finalista", "En semis", "Quedó en la zona".
-function hastaDonde(instancia: InstanciaDeLaFicha) {
-  if (instancia.tipo === 'zona') return instancia.enJuego ? 'En la zona' : 'Quedó en la zona';
-
-  const { ronda, rondas } = instancia;
-  if (instancia.campeon) return etiqueta('campeon');
-  if (instancia.enJuego) {
-    const enLaRonda = rotuloDeRonda(ronda, rondas);
-    return enLaRonda === 'final' || enLaRonda.startsWith('ronda') ? `En la ${enLaRonda}` : `En ${enLaRonda}`;
-  }
-  const clave = PERDIO_EN[rondas - ronda];
-  return clave ? etiqueta(clave) : `Ronda ${ronda}`;
-}
+import { hastaDonde } from './hastaDonde';
 
 // Debajo de la instancia: en el cuadro consuelo, el nombre del cuadro, y los puntos si los dio.
 function debajo(torneo: TorneoDeLaFicha, consuelo: string): ReactNode[] {
@@ -37,7 +20,10 @@ function debajo(torneo: TorneoDeLaFicha, consuelo: string): ReactNode[] {
 
 // Cada torneo que jugó, del más reciente al más viejo: hasta dónde llegó y cuántos puntos le dio.
 // La pantalla de referencia no tiene esta sección: está armada con las piezas de la ficha (decisión 071).
-export function TorneosDeLaFicha({ torneos, consuelo }: { torneos: TorneoDeLaFicha[]; consuelo: string }) {
+// En el torneo que se está jugando y da puntos, el link a qué tiene en juego (F20, decisión 120).
+type Props = { torneos: TorneoDeLaFicha[]; consuelo: string; slug: string; jugadorId: number };
+
+export function TorneosDeLaFicha({ torneos, consuelo, slug, jugadorId }: Props) {
   return (
     <section className="flex flex-col gap-2.5">
       <div className="flex items-baseline justify-between gap-3">
@@ -59,6 +45,14 @@ export function TorneosDeLaFicha({ torneos, consuelo }: { torneos: TorneoDeLaFic
                 <div className="flex min-w-0 flex-col gap-0.5">
                   <span className="truncate text-base font-medium">{torneo.nombre}</span>
                   <span className="text-xs text-pizarra-500">{torneo.categoria}</span>
+                  {torneo.conProyeccion && (
+                    <Link
+                      to={`/c/${slug}/torneos/${torneo.torneoId}/en-juego/${jugadorId}`}
+                      className="self-start py-1 text-sm font-medium text-noche underline underline-offset-2 hover:text-pizarra-700"
+                    >
+                      Ver qué tiene en juego
+                    </Link>
+                  )}
                 </div>
                 <div className="flex flex-col items-end gap-0.5 text-right">
                   <span className="text-[15px]">{hastaDonde(torneo.instancia)}</span>

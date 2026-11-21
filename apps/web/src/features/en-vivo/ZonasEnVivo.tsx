@@ -7,7 +7,7 @@ import { NOMBRE_DEL_PRINCIPAL } from '../cuadros/cuadro';
 import { comoVieneLaZona, marcadorDesde } from '../tablero/tablero';
 import { laHora, elDia, tieneResultado } from './enVivo';
 
-const rotulo = 'font-mono text-[11px] text-pizarra-500';
+const rotulo = 'text-[12.5px] font-medium text-noche';
 
 // La tabla de una zona: quién clasifica a cada cuadro se ve con el punto verde y la negrita,
 // como en el tablero y en Mi zona. Cada nombre lleva a la ficha del jugador (decisión 074), que

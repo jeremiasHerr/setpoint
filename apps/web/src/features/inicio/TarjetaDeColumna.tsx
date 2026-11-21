@@ -20,7 +20,7 @@ export function TarjetaDeColumna({ calendario, nombre, detalle, etiqueta, esquin
   return (
     <Tarjeta className="flex flex-col gap-3.5 p-4">
       <div className="flex items-start justify-between gap-2">
-        <span className="rounded-md bg-linea-suave px-2 py-[3px] font-mono text-xs text-pizarra-700">{calendario}</span>
+        <span className="rounded-md bg-linea-suave px-2 py-[3px] text-[12.5px] font-medium text-noche">{calendario}</span>
         {esquina}
       </div>
       <div className="flex flex-col gap-0.5">

@@ -70,7 +70,7 @@ function Fila({ slug, partido, tablero, lista }: { slug: string; partido: Partid
             {dondeSeJuega(partido, tablero)}
           </Numero>
         ) : (
-          <Numero className="text-xs text-pizarra-500">{dondeSeJuega(partido, tablero)}</Numero>
+          <span className="text-[12.5px] font-medium text-noche">{dondeSeJuega(partido, tablero)}</span>
         )}
         <span className={`text-base ${vencido ? 'font-semibold' : ''}`}>{nombresDelPartido(partido)}</span>
         <span className="flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1">

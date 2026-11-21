@@ -5,7 +5,7 @@ import { Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
 import { comoVieneLaZona, elDiaCorto, marcadorDesde, partidoEntre } from './tablero';
 
-const rotulo = 'font-mono text-[11px] text-pizarra-500';
+const rotulo = 'text-[12.5px] font-medium text-noche';
 
 // Lo que va en el cruce de dos jugadores, desde quien está en la fila.
 function Cruce({ zona, fila, rival }: { zona: ZonaDelTablero; fila: FilaDePosiciones; rival: FilaDePosiciones }) {

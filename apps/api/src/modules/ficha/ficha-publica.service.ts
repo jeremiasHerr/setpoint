@@ -61,6 +61,8 @@ export async function fichaPublica(slug: string, jugadorId: number): Promise<Fic
         fechaInicio: true,
         creadoEn: true,
         gruposCerrados: true,
+        estado: true,
+        etapaId: true,
         categoria: { select: { nombre: true } },
       },
     }),
@@ -79,7 +81,12 @@ export async function fichaPublica(slug: string, jugadorId: number): Promise<Fic
 
   const historial = historialDelJugador(
     jugadorId,
-    torneos,
+    // Como en la proyección (F20): da puntos si la organización lleva ranking y es de un torneo del
+    // calendario, y hay algo que proyectar mientras no cerró.
+    torneos.map(({ estado, etapaId, ...torneo }) => ({
+      ...torneo,
+      conProyeccion: organizacion.usaRanking && etapaId !== null && estado !== EstadoTorneo.FINALIZADO,
+    })),
     partidos,
     partidosDeCuadro,
     new Map(puntos.map((m) => [m.torneoId!, m.puntos])),

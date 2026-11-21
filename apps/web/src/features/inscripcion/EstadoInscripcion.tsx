@@ -34,7 +34,7 @@ export function EstadoInscripcion({ torneo, perfil, inscripcion, email }: Props)
               <span className="text-xl font-semibold tracking-[-0.025em]">
                 {perfil.nombre} {perfil.apellido}
               </span>
-              <span className="font-mono text-[15px] text-pizarra-500">{perfil.categoria}</span>
+              <span className="text-[15px] text-pizarra-500">{perfil.categoria}</span>
             </div>
           )}
           <div className="h-px bg-linea-suave" />

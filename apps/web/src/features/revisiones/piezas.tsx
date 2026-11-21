@@ -7,7 +7,7 @@ import { Numero } from '../../components/Numero';
 // La marca es un chip con borde noche, no rojo: no venció nada (design.md §7).
 export function MarcaParaRevisar() {
   return (
-    <span className="inline-flex h-[22px] items-center rounded-full border border-noche px-2 font-mono text-[11px] whitespace-nowrap">
+    <span className="inline-flex h-[22px] items-center rounded-full border border-noche px-2 text-[12.5px] font-medium whitespace-nowrap">
       para revisar
     </span>
   );
@@ -18,7 +18,7 @@ export function EnlaceParaRevisar({ jugadorId }: { jugadorId: number }) {
   return (
     <Link
       to={`/padron/revisar/${jugadorId}`}
-      className="shrink-0 rounded-full border border-noche px-[7px] py-px font-mono text-[11px] whitespace-nowrap hover:bg-noche hover:text-white"
+      className="shrink-0 rounded-full border border-noche px-[7px] py-px text-[12.5px] font-medium whitespace-nowrap hover:bg-noche hover:text-white"
     >
       para revisar
     </Link>
@@ -26,7 +26,7 @@ export function EnlaceParaRevisar({ jugadorId }: { jugadorId: number }) {
 }
 
 export function Rotulo({ children }: { children: ReactNode }) {
-  return <span className="font-mono text-[11px] text-pizarra-500">{children}</span>;
+  return <span className="text-[12.5px] font-medium text-noche">{children}</span>;
 }
 
 export function Dato({ rotulo, children }: { rotulo: string; children: ReactNode }) {
