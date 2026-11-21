@@ -14,7 +14,8 @@ type Props = {
   alDecidir?: (accion: 'cargar' | 'descartar') => void;
 };
 
-const ESTADO: Record<Exclude<Leido['estado'], 'a_revisar'>, string> = {
+const ESTADO: Record<Leido['estado'], string> = {
+  a_revisar: 'Para revisar',
   cargado: 'Cargado',
   ya_estaba: 'Ya estaba cargado',
   descartado: 'Descartado',
