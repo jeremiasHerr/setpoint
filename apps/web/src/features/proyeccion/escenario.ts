@@ -1,5 +1,5 @@
 import type { Instancia } from '@setpoint/shared';
-import { NOMBRE_DEL_CUADRO } from '../cuadros/cuadro';
+import { NOMBRE_DEL_PRINCIPAL } from '../cuadros/cuadro';
 
 // Como se lee después de "Si llega a…": hasta dónde llega y ahí pierde, o gana el torneo.
 const HASTA: Record<Instancia, string> = {
@@ -17,7 +17,7 @@ const PIERDE_EN: Partial<Record<Instancia, string>> = {
   semifinalista: 'Pierde en semis',
   cuartos: 'Pierde en cuartos',
   octavos: 'Pierde en octavos',
-  participacion: `No pasa al ${NOMBRE_DEL_CUADRO.campeonato}`,
+  participacion: `No pasa al ${NOMBRE_DEL_PRINCIPAL}`,
 };
 
 export function nombreDelEscenario(instancia: Instancia, esLaAsegurada: boolean) {
