@@ -40,7 +40,7 @@ export function CargarResultadoPage() {
 
 function Marco({ sesion, torneoId, children }: { sesion: Sesion; torneoId: number; children: ReactNode }) {
   return (
-    <div className="min-h-screen bg-cemento text-noche">
+    <div className="min-h-screen bg-papel text-noche">
       <EncabezadoDelTorneo sesion={sesion} torneoId={torneoId} actual="resultados" />
       <div className="flex justify-center px-4 pt-6 pb-10 sm:pt-[34px] md:px-7">
         <div className="flex w-full max-w-[1240px] flex-col gap-4">

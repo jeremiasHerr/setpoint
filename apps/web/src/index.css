@@ -19,9 +19,6 @@
   --color-linea-suave: #ECEEF3;
   --color-niebla: #F4F5F8;
   --color-papel: #FFFFFF;
-  /* El cemento: el fondo de las pantallas del organizador, debajo de la barra, y su línea (decisión 116). */
-  --color-cemento: #DFE3EA;
-  --color-linea-cemento: #C3C9D4;
   --color-cal: #E9E2D6;
 
   /* La lona: la acción del jugador, lo ganado y lo que clasifica. La pelota, solo en el logo. */
@@ -40,6 +37,9 @@
   --color-amarillo: #B7801F;
   --color-amarillo-fondo: #FDF7E6;
   --color-amarillo-borde: #E6CF94;
+  /* Las marcas de las columnas del inicio, que van sobre noche (decisión 123). */
+  --color-amarillo-claro: #D9A441;
+  --color-azul-claro: #6F97F0;
   --color-rojo: #E5484D;
   --color-rojo-texto: #C62A2F;
   --color-rojo-fondo: #FEF6F6;

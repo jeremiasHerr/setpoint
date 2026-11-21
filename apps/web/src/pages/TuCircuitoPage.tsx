@@ -56,7 +56,7 @@ function CargarCircuito({ sesion }: { sesion: Sesion }) {
   if (abierto && data) return <EditorCircuito sesion={sesion} inicial={data} />;
 
   return (
-    <div className="min-h-screen bg-cemento text-noche">
+    <div className="min-h-screen bg-papel text-noche">
       <Encabezado sesion={sesion} organizacion={sesion.organizacion.nombre} />
       <div className="flex flex-col items-start gap-3 px-4 md:px-7 pt-[26px]">
         {error && !sesionInvalida ? (
@@ -90,7 +90,7 @@ function EditorCircuito({ sesion, inicial }: { sesion: Sesion; inicial: Circuito
   const { usaRanking } = circuito;
 
   return (
-    <div className="min-h-screen bg-cemento text-noche">
+    <div className="min-h-screen bg-papel text-noche">
       <Encabezado sesion={sesion} organizacion={circuito.nombre || sesion.organizacion.nombre} />
 
       <div className="flex flex-wrap items-end justify-between gap-6 px-4 md:px-7 pt-[26px] pb-5">

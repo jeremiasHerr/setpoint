@@ -68,7 +68,7 @@ export function EncabezadoDelTorneo({ sesion, torneoId, actual }: Props) {
       {/* Sin la respuesta, la franja ocupa su lugar vacía: al llegar no empuja la pantalla. Si falla, la
           pantalla ya dice lo suyo. */}
       {!navegacion.isError && (
-        <div className="border-b border-linea-cemento px-4 pt-[18px] md:px-7">
+        <div className="border-b border-linea px-4 pt-[18px] md:px-7">
           <div className="flex min-h-10 flex-wrap items-center justify-between gap-x-6 gap-y-3">
             {datos && (
               <>
