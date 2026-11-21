@@ -18,7 +18,7 @@ Desde la devolución del 25% ([devolucion-25.md](devolucion-25.md), cambios A3 y
 | `Torneo` | **Edición** (si pertenece a un torneo del calendario) | "Primavera 26 · Tercera" | Torneo, etapa |
 | `Torneo` con `etapaId` null | Torneo (suelto) — *decisión abierta 15* | "Abierto de verano" | — |
 | `Torneo.edicion` (texto) | Nombre de la convocatoria que agrupa las categorías | "Primavera 2026" | — |
-| `Cuadro.COMPLEMENTARIA`, `tieneComplementaria` | **Cuadro consuelo**, nombre configurable | — | Complementaria |
+| `Cuadro.COMPLEMENTARIA`, `tieneComplementaria` | **Cuadro consuelo**, nombre configurable (`Organizacion.nombreCuadroConsuelo`; null es el de por defecto) | — | Complementaria |
 | `Cuadro.CAMPEONATO` | Campeonato — *decisión abierta 16* | — | Campeonato |
 | `Categoria` | Categoría | "Tercera" | Categoría |
 | `MovimientoRanking` (por `etapaId`) | Puntos de un torneo del calendario | "Primavera 25: 15" | Casillero |

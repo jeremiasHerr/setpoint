@@ -62,6 +62,8 @@ export type RankingDeLaFicha = {
 
 export type FichaDelJugador = {
   organizacion: string;
+  // Cómo llama la organización a su cuadro consuelo (07 §1.2).
+  nombreCuadroConsuelo: string;
   jugadorId: number;
   nombre: string;
   apellido: string;

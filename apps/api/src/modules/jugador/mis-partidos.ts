@@ -1,5 +1,5 @@
 // Los partidos del jugador desde su lado (F11). Lógica pura: recibe los partidos ya leídos.
-import type { PartidoDelJugador } from '@setpoint/shared';
+import { NOMBRE_CUADRO_CONSUELO, type PartidoDelJugador } from '@setpoint/shared';
 import type { EstadoPartido } from '../competencia/clasificacion';
 import { accionDeFecha, quienAnoto, type ReglasDeReprogramacion } from '../coordinacion/coordinacion';
 
@@ -35,10 +35,14 @@ function nombreDeRonda(ronda: number, rondas: number) {
   return ['final', 'semifinales', 'cuartos de final', 'octavos de final'][rondas - ronda] ?? `ronda ${ronda}`;
 }
 
-// En la interfaz, el cuadro consuelo no se llama "Complementaria" (design.md §9).
-export function instancia(p: Pick<PartidoLeido, 'fase' | 'grupo' | 'cuadro' | 'ronda'>, rondasPorCuadro: Map<string, number>) {
+// En la interfaz, el cuadro consuelo no se llama "Complementaria" sino como lo llame la organización (07 §1.2).
+export function instancia(
+  p: Pick<PartidoLeido, 'fase' | 'grupo' | 'cuadro' | 'ronda'>,
+  rondasPorCuadro: Map<string, number>,
+  consuelo: string = NOMBRE_CUADRO_CONSUELO,
+) {
   if (p.fase === 'GRUPOS') return `zona ${p.grupo}`;
-  const cuadro = p.cuadro === 'CAMPEONATO' ? 'campeonato' : 'cuadro consuelo';
+  const cuadro = p.cuadro === 'CAMPEONATO' ? 'campeonato' : consuelo.toLowerCase();
   return `${cuadro} · ${nombreDeRonda(p.ronda!, rondasPorCuadro.get(p.cuadro!)!)}`;
 }
 
@@ -66,6 +70,8 @@ const REGLAS_POR_DEFECTO: ReglasDeReprogramacion = { reprogramacionesPermitidas:
 type Opciones = {
   // Con el nombre del torneo, la instancia lo lleva adelante: "Copa Confluencia 2026 · zona B".
   torneo?: string;
+  // Cómo llama la organización a su cuadro consuelo.
+  consuelo?: string;
   reglas?: ReglasDeReprogramacion;
   ahora?: Date;
 };
@@ -75,7 +81,7 @@ type Opciones = {
 export function partidosDelJugador(
   jugadorId: number,
   partidosDelTorneo: PartidoLeido[],
-  { torneo, reglas = REGLAS_POR_DEFECTO, ahora = new Date() }: Opciones = {},
+  { torneo, consuelo, reglas = REGLAS_POR_DEFECTO, ahora = new Date() }: Opciones = {},
 ): PartidoDelJugador[] {
   const rondasPorCuadro = rondasDeLosCuadros(partidosDelTorneo);
 
@@ -91,7 +97,7 @@ export function partidosDelJugador(
 
       return {
         id: p.id,
-        instancia: torneo ? `${torneo} · ${instancia(p, rondasPorCuadro)}` : instancia(p, rondasPorCuadro),
+        instancia: torneo ? `${torneo} · ${instancia(p, rondasPorCuadro, consuelo)}` : instancia(p, rondasPorCuadro, consuelo),
         rival: rival && {
           nombre: rival.nombre,
           apellido: rival.apellido,

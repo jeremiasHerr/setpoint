@@ -74,9 +74,9 @@ function Ficha({ ficha, slug }: { ficha: FichaDelJugador; slug: string }) {
       </section>
 
       {ranking && <PuntosPorTorneo ranking={ranking} />}
-      <TorneosDeLaFicha torneos={ficha.torneos} />
+      <TorneosDeLaFicha torneos={ficha.torneos} consuelo={ficha.nombreCuadroConsuelo} />
       {/* Sin torneos no hay partidos: con el aviso de Torneos alcanza. */}
-      {ficha.torneos.length > 0 && <PartidosDeLaFicha partidos={ficha.partidos} />}
+      {ficha.torneos.length > 0 && <PartidosDeLaFicha partidos={ficha.partidos} consuelo={ficha.nombreCuadroConsuelo} />}
 
       {/* Con partidos hay con quién comparar; sin ellos, el botón llevaría a una lista vacía. */}
       {ficha.partidos.length > 0 && (

@@ -1,5 +1,5 @@
 import { EstadoPartido as EstadoPrisma, EstadoTorneo, type Prisma } from '@prisma/client';
-import type { AccionDeFecha, CoordinacionDelPartido, DatosFechaAcordada } from '@setpoint/shared';
+import { nombreCuadroConsuelo, type AccionDeFecha, type CoordinacionDelPartido, type DatosFechaAcordada } from '@setpoint/shared';
 import { hoy } from '../../lib/fechas';
 import { organizacionAdministrada, perfilDeJugador } from '../../lib/permisos';
 import { prisma } from '../../lib/prisma';
@@ -101,11 +101,15 @@ async function partidoDeLaOrganizacion(slug: string, usuarioId: number, torneoId
 
 async function nombreDeLaInstancia(partido: Partido) {
   if (partido.cuadro === null) return instancia(partido, new Map());
+  const { organizacion } = await prisma.torneo.findUniqueOrThrow({
+    where: { id: partido.torneoId },
+    select: { organizacion: { select: { nombreCuadroConsuelo: true } } },
+  });
   const rondas = await prisma.partido.findMany({
     where: { torneoId: partido.torneoId, cuadro: partido.cuadro },
     select: { cuadro: true, ronda: true },
   });
-  return instancia(partido, rondasDeLosCuadros(rondas));
+  return instancia(partido, rondasDeLosCuadros(rondas), nombreCuadroConsuelo(organizacion.nombreCuadroConsuelo));
 }
 
 function reglas(partido: Partido) {

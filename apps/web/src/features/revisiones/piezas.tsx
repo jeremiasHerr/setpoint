@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 import { Numero } from '../../components/Numero';
 
 // Piezas de Revisar vinculación (docs/pantallas/organizador/revisar-vinculacion.html).
@@ -9,6 +10,18 @@ export function MarcaParaRevisar() {
     <span className="inline-flex h-[22px] items-center rounded-full border border-noche px-2 font-mono text-[11px] whitespace-nowrap">
       para revisar
     </span>
+  );
+}
+
+// La misma marca, como enlace a Revisar vinculación: la usan el padrón, el inicio e Inscripciones.
+export function EnlaceParaRevisar({ jugadorId }: { jugadorId: number }) {
+  return (
+    <Link
+      to={`/padron/revisar/${jugadorId}`}
+      className="shrink-0 rounded-full border border-noche px-[7px] py-px font-mono text-[11px] whitespace-nowrap hover:bg-noche hover:text-white"
+    >
+      para revisar
+    </Link>
   );
 }
 

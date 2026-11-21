@@ -1,11 +1,13 @@
 import { EstadoPartido, EstadoProcesoIA, FasePartido, type Prisma } from '@prisma/client';
 import {
+  nombreCuadroConsuelo,
   type DatosResultado,
   type EstadoResultadoLeido,
   type LecturaDeMensajes,
   type ResultadoLeido,
 } from '@setpoint/shared';
 import { intentarJson, MODELO, type Tokens } from '../../../lib/ia';
+import { reservarUsoIA, registrarTokensIA } from '../../../lib/limite-ia';
 import { organizacionAdministrada } from '../../../lib/permisos';
 import { prisma } from '../../../lib/prisma';
 import { ErrorHttp } from '../../../middleware/errores';
@@ -67,11 +69,12 @@ const CON_RESULTADO: Partial<Record<EstadoPartido, PartidoAuditable['estado']>> 
   [EstadoPartido.ABANDONO]: 'abandono',
 };
 
-const CUADRO = { CAMPEONATO: 'Campeonato', COMPLEMENTARIA: 'cuadro consuelo' } as const;
-
 // Dónde se juega, para que la IA ubique el partido: "Zona B", "Campeonato, ronda 2".
-const donde = (p: PartidoLeido) =>
-  p.fase === FasePartido.GRUPOS ? `Zona ${p.grupo}` : `${p.cuadro ? CUADRO[p.cuadro] : 'Cuadro'}, ronda ${p.ronda}`;
+// El cuadro consuelo lleva el nombre que le da la organización, que es el que usan los jugadores en sus mensajes.
+const donde = (p: PartidoLeido, consuelo: string) =>
+  p.fase === FasePartido.GRUPOS
+    ? `Zona ${p.grupo}`
+    : `${p.cuadro ? (p.cuadro === 'CAMPEONATO' ? 'Campeonato' : consuelo) : 'Cuadro'}, ronda ${p.ronda}`;
 
 const nombre = (j: { nombre: string; apellido: string } | null) => (j ? `${j.nombre} ${j.apellido}` : 'a definir');
 
@@ -115,7 +118,7 @@ async function lecturaDe(organizacionId: number, torneoId: number, id: number) {
   return lectura;
 }
 
-async function vista(lectura: { id: number; torneoId: number; estado: EstadoProcesoIA; resumen: Prisma.JsonValue; creadoEn: Date }, nombreTorneo: string): Promise<LecturaDeMensajes> {
+async function vista(lectura: { id: number; torneoId: number; estado: EstadoProcesoIA; resumen: Prisma.JsonValue; creadoEn: Date }, nombreTorneo: string, consuelo: string): Promise<LecturaDeMensajes> {
   const resumen = (lectura.resumen ?? {}) as Partial<ResumenLectura>;
   const mensajes = new Map((resumen.mensajes ?? []).map((m) => [m.numero, m]));
   const ids = (resumen.resultados ?? []).flatMap((r) => (r.partidoId === null ? [] : [r.partidoId]));
@@ -145,6 +148,7 @@ async function vista(lectura: { id: number; torneoId: number; estado: EstadoProc
     id: lectura.id,
     torneoId: lectura.torneoId,
     nombre: nombreTorneo,
+    nombreCuadroConsuelo: consuelo,
     estado: lectura.estado === EstadoProcesoIA.ERROR ? 'ERROR' : 'PROCESADO',
     error: resumen.error ?? null,
     mensajes: resumen.mensajes?.length ?? 0,
@@ -164,6 +168,9 @@ export async function leerMensajes(slug: string, usuarioId: number, torneoId: nu
   const mensajes = leerChat(texto);
   if (mensajes.length === 0) throw new ErrorHttp(400, 'DATOS_INVALIDOS', { texto: 'Pegá los mensajes del grupo' });
 
+  // Antes de llamar al modelo: si se pasó un límite, 429 sin gastar nada (decisión 121).
+  const usoId = await reservarUsoIA(organizacionId, usuarioId, 'RESULTADOS');
+
   const sistema = sistemaDeJuego(torneo);
   const jugadores = [...new Map(partidos.flatMap((p) => [p.jugadorA, p.jugadorB]).filter((j) => j !== null).map((j) => [j.id, j])).values()];
   const contexto: ContextoAuditoria = {
@@ -175,7 +182,7 @@ export async function leerMensajes(slug: string, usuarioId: number, torneoId: nu
   const pedido = armarMensaje({
     torneo: nombreDelTorneo(torneo),
     sistema,
-    partidos: partidos.map((p) => ({ id: p.id, donde: donde(p), a: nombre(p.jugadorA), b: nombre(p.jugadorB), conResultado: p.estado in CON_RESULTADO })),
+    partidos: partidos.map((p) => ({ id: p.id, donde: donde(p, nombreCuadroConsuelo(torneo.organizacion.nombreCuadroConsuelo)), a: nombre(p.jugadorA), b: nombre(p.jugadorB), conResultado: p.estado in CON_RESULTADO })),
     mensajes,
   });
 
@@ -201,6 +208,7 @@ export async function leerMensajes(slug: string, usuarioId: number, torneoId: nu
     feedback = problemasGlobales(r.datos, contexto);
     if (feedback.length === 0) respuesta = r.datos;
   }
+  await registrarTokensIA(usoId, resumen.tokens);
   if (respuesta === null) resumen.error = feedback.join('. ') || 'No pudimos leer los mensajes';
 
   const lectura = await prisma.extraccionResultado.create({
@@ -241,13 +249,13 @@ export async function leerMensajes(slug: string, usuarioId: number, torneoId: nu
     await prisma.extraccionResultado.update({ where: { id: lectura.id }, data: { resumen: resumen as unknown as Prisma.InputJsonValue } });
   }
 
-  return vista({ ...lectura, resumen: resumen as unknown as Prisma.JsonValue }, nombreDelTorneo(torneo));
+  return vista({ ...lectura, resumen: resumen as unknown as Prisma.JsonValue }, nombreDelTorneo(torneo), nombreCuadroConsuelo(torneo.organizacion.nombreCuadroConsuelo));
 }
 
 export async function obtenerLectura(slug: string, usuarioId: number, torneoId: number, id: number) {
   const organizacionId = await organizacionAdministrada(slug, usuarioId);
   const torneo = await torneoDeLaOrganizacion(organizacionId, torneoId);
-  return vista(await lecturaDe(organizacionId, torneo.id, id), nombreDelTorneo(torneo));
+  return vista(await lecturaDe(organizacionId, torneo.id, id), nombreDelTorneo(torneo), nombreCuadroConsuelo(torneo.organizacion.nombreCuadroConsuelo));
 }
 
 // La organización carga tal como se leyó, o descarta, un resultado que quedó para revisar. Para
@@ -281,5 +289,5 @@ export async function decidirResultado(
     where: { id: lectura.id },
     data: { resumen: resumen as unknown as Prisma.InputJsonValue },
   });
-  return vista(guardada, nombreDelTorneo(torneo));
+  return vista(guardada, nombreDelTorneo(torneo), nombreCuadroConsuelo(torneo.organizacion.nombreCuadroConsuelo));
 }

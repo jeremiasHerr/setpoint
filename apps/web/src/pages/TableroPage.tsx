@@ -7,7 +7,7 @@ import { Numero } from '../components/Numero';
 import { Tarjeta } from '../components/Tarjeta';
 import { leerSesion, type Sesion } from '../features/auth/sesion';
 import { useSesionInvalida } from '../features/auth/useSesionInvalida';
-import { NOMBRE_DEL_CUADRO } from '../features/cuadros/cuadro';
+import { NOMBRE_DEL_PRINCIPAL } from '../features/cuadros/cuadro';
 import { BotonCopiarLink } from '../features/inicio/BotonCopiarLink';
 import { BarrasDelTorneo } from '../features/tablero/BarrasDelTorneo';
 import { LoQueFalta } from '../features/tablero/LoQueFalta';
@@ -51,7 +51,7 @@ function TableroDelTorneo({ sesion, torneoId }: { sesion: Sesion; torneoId: numb
   const codigo = tablero.error?.message ?? '';
   return (
     <Marco sesion={sesion} torneoId={torneoId}>
-      <div className="flex flex-col items-start gap-3 px-7 pt-[34px]">
+      <div className="flex flex-col items-start gap-3 px-4 md:px-7 pt-[34px]">
         {tablero.error && !sesionInvalida ? (
           <>
             <p className="text-[15px] text-pizarra-500">{ERRORES[codigo] ?? 'No pudimos cargar el tablero.'}</p>
@@ -80,8 +80,8 @@ function bajada(tablero: Tablero): string {
   if (tablero.fase === 'terminado') return 'El torneo está cerrado y los puntos ya están en el ranking.';
   if (tablero.fase === 'cuadros') {
     const cuadros = tablero.tieneComplementaria
-      ? `${NOMBRE_DEL_CUADRO.campeonato} y ${NOMBRE_DEL_CUADRO.complementaria.toLowerCase()}`
-      : NOMBRE_DEL_CUADRO.campeonato;
+      ? `${NOMBRE_DEL_PRINCIPAL} y ${tablero.nombreCuadroConsuelo.toLowerCase()}`
+      : NOMBRE_DEL_PRINCIPAL;
     return `${cuadros}${elPlazo('la ronda en curso termina')}`;
   }
   const tamanos = [...new Set(tablero.zonas.map((z) => z.filas.length))].sort((a, b) => b - a);
@@ -100,12 +100,12 @@ function alCerrarLasZonas(tablero: Tablero): ReactNode[] {
   return [
     alConsuelo > 0 ? (
       <>
-        Se arman los cuadros: <Numero>{alPrincipal}</Numero> jugadores van a {NOMBRE_DEL_CUADRO.campeonato} y{' '}
-        <Numero>{alConsuelo}</Numero> al {NOMBRE_DEL_CUADRO.complementaria.toLowerCase()}.
+        Se arman los cuadros: <Numero>{alPrincipal}</Numero> jugadores van a {NOMBRE_DEL_PRINCIPAL} y{' '}
+        <Numero>{alConsuelo}</Numero> al {tablero.nombreCuadroConsuelo.toLowerCase()}.
       </>
     ) : (
       <>
-        Se arma el cuadro de {NOMBRE_DEL_CUADRO.campeonato} con <Numero>{alPrincipal}</Numero> jugadores.
+        Se arma el cuadro de {NOMBRE_DEL_PRINCIPAL} con <Numero>{alPrincipal}</Numero> jugadores.
       </>
     ),
     'Después, un resultado de zona solo se puede corregir si los cuadros quedan iguales.',
@@ -138,7 +138,7 @@ function Contenido({ sesion, tablero }: { sesion: Sesion; tablero: Tablero }) {
 
   return (
     <Marco sesion={sesion} torneoId={torneoId}>
-      <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-4 px-7 pt-[26px] pb-5">
+      <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-4 px-4 md:px-7 pt-[26px] pb-5">
         <div className="flex flex-col gap-[7px]">
           <h1 className="text-[28px] font-display font-semibold tracking-[-0.02em]">{titulo}</h1>
           <p className="text-[15px] text-pizarra-500">{bajada(tablero)}</p>
@@ -159,7 +159,7 @@ function Contenido({ sesion, tablero }: { sesion: Sesion; tablero: Tablero }) {
         </div>
       </div>
 
-      <div className="flex flex-col gap-[26px] px-7 pb-7">
+      <div className="flex flex-col gap-[26px] px-4 md:px-7 pb-7">
         {tablero.sePuedenCerrarLasZonas && (
           <Siguiente
             titulo="Todas las zonas tienen sus resultados"
