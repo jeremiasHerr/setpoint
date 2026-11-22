@@ -167,6 +167,9 @@ async function main() {
       nombreCuadroConsuelo: 'Complementaria',
       usaRanking: true,
       ventanaRankingMeses: 12,
+      // Para la demo: así se ve la carga de resultados desde la app con Sanhueza, que juega la Copa
+      // Alta Barda (decisión 127). El POLENTA real carga solo la organización; se apaga en Tu circuito.
+      quienCargaResultados: 'ORGANIZACION_Y_JUGADORES',
       admins: administrador('organizador@polenta.example', 'Eduardo', 'Salinas'),
       categorias: {
         create: [
