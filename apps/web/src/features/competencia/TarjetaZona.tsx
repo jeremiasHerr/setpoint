@@ -14,9 +14,12 @@ export function TarjetaZona({ zona }: { zona: ZonaSorteada }) {
       <ul>
         {/* Cada jugador entra con una animación: al sortear de nuevo, se nota quién cambió de zona. */}
         {zona.integrantes.map(({ jugadorId, posicionSiembra, apellido }) => (
-          <li key={jugadorId} className="flex h-[34px] items-center gap-2.5 motion-safe:animate-aparecer">
-            <Numero className="w-5 text-xs text-pizarra-400">{String(posicionSiembra).padStart(2, '0')}</Numero>
-            <span className="truncate text-sm">{apellido}</span>
+          <li key={jugadorId} className="flex h-[34px] min-w-0 items-center gap-2.5 motion-safe:animate-aparecer">
+            <Numero className="w-5 shrink-0 text-xs text-pizarra-400">{String(posicionSiembra).padStart(2, '0')}</Numero>
+            {/* min-w-0: sin él, un apellido largo no se recorta y se sale de la tarjeta a 375. */}
+            <span className="min-w-0 truncate text-sm" title={apellido}>
+              {apellido}
+            </span>
           </li>
         ))}
       </ul>
