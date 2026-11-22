@@ -106,7 +106,7 @@ function Revelacion({ zonas, cantidadGrupos, alVolverASortear, alCerrar }: Props
               bombo {bombo(ultimo.posicionSiembra)}
               {bombo(ultimo.posicionSiembra) === 1 && ' · cabezas de serie'} · siembra {ultimo.posicionSiembra}
             </p>
-            <p className="text-[56px] leading-none font-semibold tracking-[-0.035em]">
+            <p className="text-[56px] leading-none font-semibold tracking-[-0.035em] break-words">
               {ultimo.nombre} {ultimo.apellido}
             </p>
             <p className="text-2xl text-pizarra-400">
@@ -124,11 +124,14 @@ function Revelacion({ zonas, cantidadGrupos, alVolverASortear, alCerrar }: Props
             <h3 className="border-b border-borde-noche pb-[7px] text-[15px] font-semibold">Zona {zona.grupo}</h3>
             <ul>
               {zona.integrantes.map((integrante) => (
-                <li key={integrante.jugadorId} className="flex h-[34px] items-center gap-2.5">
+                <li key={integrante.jugadorId} className="flex h-[34px] min-w-0 items-center gap-2.5">
                   {visibles.has(integrante.jugadorId) ? (
-                    <span className="flex items-center gap-2.5 motion-safe:animate-aparecer">
-                      <Numero className="w-5 text-xs text-pizarra-400">{String(integrante.posicionSiembra).padStart(2, '0')}</Numero>
-                      <span className="truncate text-sm">{integrante.apellido}</span>
+                    <span className="flex min-w-0 items-center gap-2.5 motion-safe:animate-aparecer">
+                      <Numero className="w-5 shrink-0 text-xs text-pizarra-400">{String(integrante.posicionSiembra).padStart(2, '0')}</Numero>
+                      {/* min-w-0 en la cadena de flex: si no, el apellido largo no se recorta a 375. */}
+                      <span className="min-w-0 truncate text-sm" title={integrante.apellido}>
+                        {integrante.apellido}
+                      </span>
                     </span>
                   ) : (
                     <span className="h-px w-16 bg-borde-noche" aria-hidden="true" />

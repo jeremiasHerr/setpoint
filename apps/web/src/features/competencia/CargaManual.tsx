@@ -213,14 +213,14 @@ function Ficha({ jugador, suelta = false }: { jugador: JugadorDelSorteo; suelta?
 function Contenido({ jugador, levantado = false }: { jugador: JugadorDelSorteo; levantado?: boolean }) {
   return (
     <span
-      className={`flex h-[34px] items-center gap-2.5 ${
+      className={`flex h-[34px] min-w-0 items-center gap-2.5 ${
         levantado ? 'cursor-grabbing rounded-control border-2 border-noche bg-papel px-3' : ''
       }`}
     >
-      <Numero className="w-5 text-xs text-pizarra-400">
+      <Numero className="w-5 shrink-0 text-xs text-pizarra-400">
         {jugador.posicionSiembra === null ? '—' : String(jugador.posicionSiembra).padStart(2, '0')}
       </Numero>
-      <span className="truncate text-sm">{jugador.apellido}</span>
+      <span className="min-w-0 truncate text-sm">{jugador.apellido}</span>
     </span>
   );
 }
