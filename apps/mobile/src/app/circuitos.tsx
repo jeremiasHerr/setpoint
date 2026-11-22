@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Boton } from '../components/Boton';
 import { Logo } from '../components/Logo';
 import { useSesion } from '../features/auth/SesionProvider';
+import { useGuardarTelefono, useMisPartidos } from '../features/partidos/useMisPartidos';
 import { colores, fuentes, medidas, radios } from '../lib/tokens';
 
 export default function Circuitos() {
@@ -62,6 +63,9 @@ export default function Circuitos() {
           })}
         </View>
 
+        {/* Si sus rivales ven su teléfono (decisión 128). Solo con un circuito elegido y el teléfono en el padrón. */}
+        {perfil && <Telefono />}
+
         <View style={estilos.pie}>
           <Boton texto="Cerrar sesión" onPress={cerrarSesion} />
           <Text style={estilos.cuenta}>Entraste como {sesion.usuario.email}</Text>
@@ -71,7 +75,46 @@ export default function Circuitos() {
   );
 }
 
+function Telefono() {
+  const consulta = useMisPartidos();
+  const guardar = useGuardarTelefono();
+  const telefono = consulta.data?.miTelefono;
+  if (!telefono?.cargado) return null;
+  // Sin elegir todavía, se muestra, como antes del aviso.
+  const visible = telefono.mostrar !== false;
+
+  return (
+    <View style={estilos.telefono}>
+      <Text style={estilos.circuito}>Tu teléfono</Text>
+      <Text style={estilos.categoria}>
+        {visible
+          ? 'Lo ven tus rivales de partidos por jugar, para escribirte por WhatsApp.'
+          : 'Tus rivales no lo ven: te tienen que encontrar por otro lado o por la organización.'}
+      </Text>
+      <Boton
+        texto={guardar.isPending ? 'Guardando…' : visible ? 'No mostrar mi teléfono' : 'Mostrar mi teléfono'}
+        disabled={guardar.isPending}
+        onPress={() => guardar.mutate({ mostrar: !visible })}
+      />
+      {guardar.error && <Text style={estilos.error}>No pudimos guardar el cambio. Probá de nuevo.</Text>}
+    </View>
+  );
+}
+
 const estilos = StyleSheet.create({
+  telefono: {
+    borderWidth: 1,
+    backgroundColor: colores.papel,
+    borderColor: colores.linea,
+    borderRadius: radios.tarjeta,
+    padding: 16,
+    gap: 8,
+  },
+  error: {
+    fontFamily: fuentes.sans[400],
+    fontSize: 14,
+    color: colores.rojoTexto,
+  },
   pantalla: {
     flex: 1,
     backgroundColor: colores.niebla,

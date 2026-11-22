@@ -209,14 +209,17 @@ enum EstadoProcesoIA {
 
 /// Credencial de acceso. NO es la entidad del dominio: eso es Jugador.
 model Usuario {
-  id            Int      @id @default(autoincrement())
-  email         String   @unique
+  id                      Int      @id @default(autoincrement())
+  email                   String   @unique
   // Solo los administradores tienen contraseña: el jugador entra con un código (decisión 049).
-  passwordHash  String?
-  nombre        String
-  apellido      String
-  creadoEn      DateTime @default(now())
-  actualizadoEn DateTime @updatedAt
+  passwordHash            String?
+  nombre                  String
+  // Si sus rivales ven su teléfono para escribirle (decisión 128). null: todavía no vio el aviso, y
+  // mientras tanto se muestra, como antes. Vale para todos sus circuitos.
+  muestraTelefonoARivales Boolean?
+  apellido                String
+  creadoEn                DateTime @default(now())
+  actualizadoEn           DateTime @updatedAt
 
   jugadores           Jugador[]             @relation("PerfilDeJugador")
   // Perfiles de otras cuentas que esta persona dijo que son suyos (decisión 051).
@@ -266,10 +269,10 @@ model DispositivoAviso {
 
 /// Circuito o grupo organizador. Clave de aislamiento de todo el sistema.
 model Organizacion {
-  id          Int     @id @default(autoincrement())
-  nombre      String
-  slug        String  @unique
-  descripcion String?
+  id                   Int     @id @default(autoincrement())
+  nombre               String
+  slug                 String  @unique
+  descripcion          String?
   // Cómo llama el circuito a su cuadro consuelo. null es "Cuadro consuelo" (07 §1.2).
   nombreCuadroConsuelo String?
 

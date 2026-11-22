@@ -66,6 +66,14 @@ describe('partidosDelJugador', () => {
     expect(jugado.rival?.telefono).toBeNull();
   });
 
+  it('si el rival eligió ocultar su teléfono, no sale; si todavía no eligió, sale como antes (decisión 128)', () => {
+    const conPreferencia = (muestraTelefonoARivales: boolean | null) =>
+      partidosDelJugador(1, [partido({ jugadorB: { ...roa, usuario: { muestraTelefonoARivales } } })])[0]!.rival?.telefono;
+    expect(conPreferencia(false)).toBeNull();
+    expect(conPreferencia(true)).toBe('2994000000');
+    expect(conPreferencia(null)).toBe('2994000000');
+  });
+
   it('nombra la ronda contando desde la final, y el cuadro consuelo por su nombre genérico', () => {
     const cuadro = { fase: 'ELIMINATORIA' as const, grupo: null };
     const partidos = partidosDelJugador(1, [

@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { dispositivoSchema, fechaAcordadaSchema } from '@setpoint/shared';
+import { dispositivoSchema, fechaAcordadaSchema, preferenciaTelefonoSchema } from '@setpoint/shared';
 import { autenticar } from '../../middleware/autenticar';
 import { validar } from '../../middleware/validar';
 import { borrarDispositivo, guardarDispositivo } from '../avisos/avisos.service';
 import { anotarFecha, confirmarFecha, coordinacionDelJugador } from '../coordinacion/coordinacion.service';
 import { miZona } from './mi-zona.service';
-import { misPartidos } from './mis-partidos.service';
+import { guardarPreferenciaTelefono, misPartidos } from './mis-partidos.service';
 
 // Se monta en /api/jugador/:slug. Lo que ve el jugador de sí mismo en la app: pide login y un
 // perfil de jugador activo en la organización (decisión 044).
@@ -39,6 +39,12 @@ jugadorRouter.put('/partidos/:partidoId/fecha', validar(fechaAcordadaSchema), as
 jugadorRouter.post('/partidos/:partidoId/confirmacion', async (req, res) => {
   const { slug, partidoId } = req.params as { slug: string; partidoId: string };
   res.json(await confirmarFecha(slug, res.locals.usuarioId, Number(partidoId)));
+});
+
+// Si sus rivales ven su teléfono para escribirle (decisión 128). Devuelve Cuándo juego actualizado.
+jugadorRouter.put('/telefono', validar(preferenciaTelefonoSchema), async (req, res) => {
+  const { slug } = req.params as { slug: string };
+  res.json(await guardarPreferenciaTelefono(slug, res.locals.usuarioId, req.body));
 });
 
 // El celular donde recibe los avisos (decisión 047). La app lo manda al entrar y lo borra al salir.

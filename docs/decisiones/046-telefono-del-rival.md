@@ -1,6 +1,6 @@
 # 046 — A quién se le muestra el teléfono de un jugador
 
-**Estado:** aceptada — 19 de octubre de 2026
+**Estado:** aceptada — 19 de octubre de 2026. El aviso previo que dejaba pendiente lo completa la [decisión 128](128-aviso-del-telefono.md)
 
 ## Contexto
 
