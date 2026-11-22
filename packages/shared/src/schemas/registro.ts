@@ -159,7 +159,7 @@ export type InscripcionEnCurso = {
   torneo: string;
   categoria: string;
   // en_lista_espera: anotado con el cupo lleno, hasta que le toca un lugar o se confirma el sorteo
-  // (decisión 123). Cuando le toca, pasa a reservando.
+  // (decisión 132). Cuando le toca, pasa a reservando.
   estado: 'solicitada' | 'aprobada' | 'reservando' | 'en_lista_espera';
   reservaVence: string | null;
   // En la lista de espera: su puesto (1 es el próximo) y las horas que tendrá para pagar cuando le

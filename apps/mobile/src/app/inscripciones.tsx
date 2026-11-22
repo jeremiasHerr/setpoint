@@ -80,7 +80,7 @@ export default function Inscripciones() {
 }
 
 // 1 a 3 · Una inscripción en curso: en revisión, aprobada o reservando. Y en la lista de espera, que
-// la referencia no dibuja (decisión 123): el puesto va en la marca, y no hay nada que hacer hasta que
+// la referencia no dibuja (decisión 132): el puesto va en la marca, y no hay nada que hacer hasta que
 // le toque.
 function Tarjeta({ inscripcion }: { inscripcion: InscripcionEnCurso }) {
   return (

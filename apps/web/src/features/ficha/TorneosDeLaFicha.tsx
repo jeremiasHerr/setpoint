@@ -20,7 +20,7 @@ function debajo(torneo: TorneoDeLaFicha, consuelo: string): ReactNode[] {
 
 // Cada torneo que jugó, del más reciente al más viejo: hasta dónde llegó y cuántos puntos le dio.
 // La pantalla de referencia no tiene esta sección: está armada con las piezas de la ficha (decisión 071).
-// En el torneo que se está jugando y da puntos, el link a qué tiene en juego (F20, decisión 120).
+// En el torneo que se está jugando y da puntos, el link a qué tiene en juego (F20, decisión 131).
 type Props = { torneos: TorneoDeLaFicha[]; consuelo: string; slug: string; jugadorId: number };
 
 export function TorneosDeLaFicha({ torneos, consuelo, slug, jugadorId }: Props) {
