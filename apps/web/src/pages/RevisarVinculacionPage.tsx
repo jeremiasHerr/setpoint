@@ -97,13 +97,13 @@ function Revisar({ sesion }: { sesion: Sesion }) {
       <EncabezadoOrganizador
         organizacion={organizacion}
         navegacion={navegacionOrganizador}
-        activo="Padrón"
+        activo="Jugadores"
         iniciales={iniciales(sesion.usuario.nombre)}
         alSalir={cerrarSesion}
       />
 
       <div className="flex flex-col gap-[7px] px-4 md:px-7 pt-6 pb-5">
-        <Migas anteriores={[{ etiqueta: 'Padrón', ruta: '/padron' }]}>Revisar vinculación</Migas>
+        <Migas anteriores={[{ etiqueta: 'Jugadores', ruta: '/padron' }]}>Revisar vinculación</Migas>
         <div className="flex flex-wrap items-center gap-3">
           <h1 className="text-[28px] font-display font-semibold tracking-[-0.02em]">Revisar vinculación</h1>
           {caso.data && !resuelto && <MarcaParaRevisar />}

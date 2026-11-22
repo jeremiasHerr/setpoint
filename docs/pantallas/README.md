@@ -87,7 +87,7 @@ Desde la devolución del 25% ([../devolucion-25.md](../devolucion-25.md)) la int
 | [Ficha y cara a cara](publico/ficha-y-cara-a-cara.html) | "Puntos por etapa" | Título de la sección de casilleros | Actualizado: "Puntos por torneo del calendario" (`PuntosPorTorneo`) |
 | [Landing](publico/landing.html) | "Campeonato y Complementaria", "cada etapa tiene su casillero" | Bloques de funcionalidades | Actualizado (`LandingPage`) |
 
-"Campeonato" sigue en *Tu circuito* (tabla de puntos) y *Nuevo torneo* hasta cerrar la decisión abierta 16 del [README](../README.md). "Cuadro consuelo" está escrito fijo: que salga del nombre configurado por la organización llega con ese campo ([07](../07-configurabilidad.md) §1.2).
+"Campeonato" queda en *Tu circuito* (tabla de puntos) y *Nuevo torneo* ([decisión 129](../decisiones/129-nombres-que-quedaban-abiertos.md)). "Cuadro consuelo" está escrito fijo: que salga del nombre configurado por la organización llega con ese campo ([07](../07-configurabilidad.md) §1.2).
 
 > Las pantallas que muestran a **POLENTA** con sus datos pueden decir "Complementaria", porque es el nombre que esa organización configuró. Lo que cambia es el texto por defecto y que el nombre salga de la configuración, no de un literal.
 
