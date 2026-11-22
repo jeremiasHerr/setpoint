@@ -71,6 +71,21 @@ describe.skipIf(!process.env.DATABASE_URL)('el torneo suelto, contra la base', a
     expect(await prisma.categoria.count({ where: { organizacion: { slug }, suelta: true } })).toBe(1);
   });
 
+  it('guarda las reprogramaciones, la antelación y las horas de la lista de espera (decisiones 067 y 076)', async () => {
+    const { obtenerConvocatoria } = await import('../../src/modules/torneos/torneos.service');
+    const sinTocar = convocatoria('Valores de POLENTA', true, 'Libre');
+    expect(sinTocar).toMatchObject({ reprogramacionesPermitidas: 1, horasAntelacionReprogramar: 24, horasReservaListaEspera: 24 });
+
+    const datos = { ...convocatoria('Otro circuito', true, 'Libre'), reprogramacionesPermitidas: 0, horasAntelacionReprogramar: 48, horasReservaListaEspera: 12 };
+    const { id } = await crearConvocatoria(slug, admin, datos);
+    expect(await obtenerConvocatoria(slug, admin, id)).toMatchObject({
+      reprogramacionesPermitidas: 0,
+      horasAntelacionReprogramar: 48,
+      horasReservaListaEspera: 12,
+    });
+    expect(await prisma.torneo.findUniqueOrThrow({ where: { id } })).toMatchObject({ reprogramacionesPermitidas: 0, horasReservaListaEspera: 12 });
+  });
+
   it('se anota cualquiera del padrón, sea de la categoría que sea', async () => {
     const { id } = await crearConvocatoria(slug, admin, convocatoria('Torneo del club', true, 'Mixto'));
     await prisma.torneo.update({ where: { id }, data: { estado: 'PUBLICADO' } });

@@ -1,6 +1,6 @@
 # 067 — Los parámetros de reprogramación van en el torneo, sin campo en la convocatoria
 
-**Estado:** aceptada — 3 de noviembre de 2026
+**Estado:** aceptada — 3 de noviembre de 2026. El 22 de noviembre se sumaron los campos en *Nuevo torneo*, en Plazos: "Reprogramaciones por partido" (0 a 3) y "Avisando con" (0 a 72 horas). La decisión no cambia: los valores siguen en el torneo, con los de POLENTA por defecto
 
 ## Contexto
 

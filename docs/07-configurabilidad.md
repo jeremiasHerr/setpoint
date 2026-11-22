@@ -114,7 +114,7 @@ Estos parámetros solo afectan la **validación** al cargar un resultado y el c�
 | Reprogramaciones permitidas por partido | 1 |
 | Antelación mínima para reprogramar | 24 horas |
 
-Las dos de reprogramación están en el torneo, con los valores de POLENTA por defecto, y todavía no tienen campo en *Nuevo torneo* ([decisión 067](decisiones/067-parametros-de-reprogramacion.md)).
+Las dos de reprogramación están en el torneo, con los valores de POLENTA por defecto, y se eligen en *Nuevo torneo*, en Plazos ([decisión 067](decisiones/067-parametros-de-reprogramacion.md)).
 
 ### 2.4 Sedes y costos
 
@@ -154,7 +154,7 @@ Que un circuito devuelva o no cuando alguien se baja después del sorteo es **re
 | Minutos de reserva de cupo | Número | 15 |
 | Horas de reserva para el primero de la lista de espera | Número | 24 |
 
-Las horas de la lista de espera están en el torneo, con 24 por defecto, y todavía no tienen campo en *Nuevo torneo* ([decisión 076](decisiones/076-lista-de-espera-24-horas.md)). En la lista se anota quien tiene perfil en el padrón, en cualquier modo: en los modos con aprobación y abierto, quien no está en el padrón no tiene lista de espera ([decisión 081](decisiones/081-anotarse-en-la-lista-de-espera.md)).
+Las horas de la lista de espera están en el torneo, con 24 por defecto, y se eligen en *Nuevo torneo*, en Inscripción ([decisión 076](decisiones/076-lista-de-espera-24-horas.md)). En la lista se anota quien tiene perfil en el padrón, en cualquier modo: en los modos con aprobación y abierto, quien no está en el padrón no tiene lista de espera ([decisión 081](decisiones/081-anotarse-en-la-lista-de-espera.md)).
 
 **`modo_inscripcion`** — quién puede anotarse a un torneo:
 

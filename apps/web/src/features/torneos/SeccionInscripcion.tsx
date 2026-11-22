@@ -10,6 +10,7 @@ import type { ErroresConvocatoria } from './useConvocatoria';
 // Los mismos topes que convocatoriaSchema.
 const MAXIMO_PRECIO = 10_000_000;
 const MAXIMO_CUPO = 256;
+const MAXIMO_HORAS_LISTA = 72;
 
 const MODOS: { valor: DatosConvocatoria['modoInscripcion']; etiqueta: string }[] = [
   { valor: 'cerrada', etiqueta: 'Solo el padrón' },
@@ -17,7 +18,10 @@ const MODOS: { valor: DatosConvocatoria['modoInscripcion']; etiqueta: string }[]
   { valor: 'abierta', etiqueta: 'Cualquiera' },
 ];
 
-type Inscripcion = Pick<DatosConvocatoria, 'precio' | 'categorias' | 'cierreInscripcion' | 'modoInscripcion'>;
+type Inscripcion = Pick<
+  DatosConvocatoria,
+  'precio' | 'categorias' | 'cierreInscripcion' | 'modoInscripcion' | 'tieneListaEspera' | 'horasReservaListaEspera'
+>;
 
 type Props = Inscripcion & {
   cantidadGrupos: number;
@@ -31,6 +35,8 @@ export function SeccionInscripcion({
   categorias,
   cierreInscripcion,
   modoInscripcion,
+  tieneListaEspera,
+  horasReservaListaEspera,
   cantidadGrupos,
   padronVacio,
   errores,
@@ -131,6 +137,30 @@ export function SeccionInscripcion({
           </p>
         )}
       </div>
+
+      {/* Cuando se libera un lugar, el primero de la lista lo tiene guardado este tiempo para pagar (decisión 076). */}
+      {tieneListaEspera && (
+        <div className="grid gap-3.5 sm:grid-cols-3">
+          <div className="flex flex-col gap-2">
+            <Campo
+              id="torneo-horas-lista"
+              rotulo="Para pagar un lugar liberado"
+              numerico
+              inputMode="numeric"
+              sufijo={horasReservaListaEspera === 1 ? 'hora' : 'horas'}
+              value={horasReservaListaEspera || ''}
+              onChange={(e) => alCambiar('horasReservaListaEspera', aEntero(e.target.value, MAXIMO_HORAS_LISTA))}
+              aria-invalid={errores.horasReservaListaEspera ? true : undefined}
+              aria-describedby={errores.horasReservaListaEspera ? 'torneo-horas-lista-error' : 'torneo-horas-lista-ayuda'}
+            />
+            <MensajeError id="torneo-horas-lista-error">{errores.horasReservaListaEspera}</MensajeError>
+          </div>
+          <p id="torneo-horas-lista-ayuda" className="self-center text-[13px] text-pizarra-500 sm:col-span-2">
+            Cuando alguien se baja, el primero de la lista de espera recibe un email y tiene este tiempo para pagar. Si no paga, pasa al
+            siguiente.
+          </p>
+        </div>
+      )}
     </Tarjeta>
   );
 }
