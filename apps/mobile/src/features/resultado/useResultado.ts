@@ -16,6 +16,25 @@ export function useCargaDelResultado(partidoId: number) {
   });
 }
 
+// El rival responde el resultado que le cargaron: lo confirma, y cuenta, o dice que no fue así.
+// También si falla se vuelve a pedir Cuándo juego: el otro pudo cambiarlo mientras tanto.
+export function useResponderResultado(respuesta: 'confirmacion' | 'rechazo') {
+  const { sesion, perfil } = useSesion();
+  const slug = perfil?.organizacion.slug ?? '';
+  const cliente = useQueryClient();
+
+  return useMutation({
+    mutationFn: (partidoId: number) =>
+      pedir<RespuestaMisPartidos>('POST', `/api/jugador/${slug}/partidos/${partidoId}/resultado/${respuesta}`, undefined, sesion?.token),
+    onSuccess: (misPartidos) => cliente.setQueryData(['mis-partidos', slug], misPartidos),
+    onSettled: () => {
+      void cliente.invalidateQueries({ queryKey: ['mis-partidos', slug] });
+      // Confirmado, la tabla de la zona cambia.
+      void cliente.invalidateQueries({ queryKey: ['mi-zona', slug] });
+    },
+  });
+}
+
 // Manda el resultado: queda esperando que el rival lo confirme. La API devuelve Cuándo juego
 // actualizado, así que se guarda sin volver a pedirlo.
 export function useCargarResultado(partidoId: number) {
