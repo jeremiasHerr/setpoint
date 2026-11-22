@@ -99,6 +99,7 @@ export function partidosDelJugador(
         id: p.id,
         instancia: torneo ? `${torneo} · ${instancia(p, rondasPorCuadro, consuelo)}` : instancia(p, rondasPorCuadro, consuelo),
         rival: rival && {
+          jugadorId: (esA ? p.jugadorBId : p.jugadorAId)!,
           nombre: rival.nombre,
           apellido: rival.apellido,
           // Solo mientras hay que coordinar (decisión 046).

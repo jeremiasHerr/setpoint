@@ -3,6 +3,8 @@
 import type { AccionDeFecha, QuienAnoto } from './coordinacion';
 
 export type RivalDelPartido = {
+  // Para pedir el cara a cara con él (F18).
+  jugadorId: number;
   nombre: string;
   apellido: string;
   // Solo para un partido que todavía no se jugó: es para escribirle y coordinar (decisión 046).

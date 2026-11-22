@@ -81,6 +81,8 @@ function Navegacion({ fuentesListas }: { fuentesListas: boolean }) {
           <Stack.Screen name="partido/[id]/fecha" />
           {/* La ficha de un jugador (F17), desde el ranking. */}
           <Stack.Screen name="ficha/[id]" />
+          {/* Cómo te fue con el rival de un partido (F18). */}
+          <Stack.Screen name="rival/[id]/index" />
         </Stack.Protected>
         <Stack.Protected guard={sesion !== null && !sinCircuitos} redirectTo="/">
           <Stack.Screen name="circuitos" />
