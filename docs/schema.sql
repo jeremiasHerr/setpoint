@@ -87,6 +87,8 @@ CREATE TABLE usuarios (
     password_hash  VARCHAR(255) NOT NULL,
     nombre         VARCHAR(100) NOT NULL,
     apellido       VARCHAR(100) NOT NULL,
+    -- Si sus rivales ven su teléfono (decisión 128). NULL: todavía no vio el aviso, y se muestra.
+    muestra_telefono_a_rivales BOOLEAN,
     creado_en      TIMESTAMPTZ  NOT NULL DEFAULT now(),
     actualizado_en TIMESTAMPTZ  NOT NULL DEFAULT now()
 );

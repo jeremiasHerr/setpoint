@@ -1,5 +1,6 @@
 // Cuándo juego, en la app del jugador (F11): docs/pantallas/jugador/cuando-juego.html. Sus
 // partidos del torneo en curso, desde su lado: el rival, la fecha, dónde y cómo le fue.
+import { z } from 'zod';
 import type { AccionDeFecha, QuienAnoto } from './coordinacion';
 import type { SistemaDeJuego } from './resultado';
 
@@ -66,5 +67,13 @@ export type MisPartidos = {
   partidos: PartidoDelJugador[];
 };
 
+// Su teléfono frente a sus rivales (decisión 128). cargado: si la organización tiene su teléfono en
+// el padrón; mostrar: lo que eligió, o null si todavía no vio el aviso.
+export type MiTelefono = { cargado: boolean; mostrar: boolean | null };
+
 // partidos null: el jugador no está en ningún torneo en juego.
-export type RespuestaMisPartidos = { partidos: MisPartidos | null };
+export type RespuestaMisPartidos = { partidos: MisPartidos | null; miTelefono: MiTelefono };
+
+// Mostrar o no su teléfono a los rivales (decisión 128).
+export const preferenciaTelefonoSchema = z.object({ mostrar: z.boolean() });
+export type PreferenciaTelefono = z.infer<typeof preferenciaTelefonoSchema>;

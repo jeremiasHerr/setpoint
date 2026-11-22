@@ -11,6 +11,7 @@ import { ErrorDeCarga } from '../../features/auth/ErrorDeCarga';
 import { useSesion } from '../../features/auth/SesionProvider';
 import { programarRecordatorios } from '../../features/avisos/recordatorios';
 import { agruparPartidos } from '../../features/partidos/agrupar';
+import { AvisoTelefono } from '../../features/partidos/AvisoTelefono';
 import { OtrosPartidos } from '../../features/partidos/OtrosPartidos';
 import { PorConfirmar } from '../../features/partidos/PorConfirmar';
 import { SinCoordinar } from '../../features/partidos/SinCoordinar';
@@ -63,7 +64,11 @@ export default function CuandoJuego() {
         {consulta.error && <ErrorDeCarga error={consulta.error} que="tus partidos" />}
         {consulta.data &&
           (consulta.data.partidos ? (
-            <Contenido datos={consulta.data.partidos} />
+            <>
+              {/* El aviso del teléfono va antes que los partidos: es lo que ve el rival (decisión 128). */}
+              {consulta.data.miTelefono.cargado && consulta.data.miTelefono.mostrar === null && <AvisoTelefono />}
+              <Contenido datos={consulta.data.partidos} />
+            </>
           ) : (
             <Text style={estilos.aviso}>
               Todavía no estás en ningún torneo en juego. Cuando se confirme el sorteo, tus partidos aparecen acá.

@@ -11,7 +11,14 @@ import {
 } from '../resultado-del-jugador/resultado-del-jugador';
 
 type SetLeido = { gamesA: number; gamesB: number };
-type JugadorLeido = { nombre: string; apellido: string; telefono: string | null; usuarioId: number | null };
+// usuario: su cuenta, si tiene, con lo que eligió sobre su teléfono (decisión 128).
+type JugadorLeido = {
+  nombre: string;
+  apellido: string;
+  telefono: string | null;
+  usuarioId: number | null;
+  usuario?: { muestraTelefonoARivales: boolean | null } | null;
+};
 
 export type PartidoLeido = {
   id: number;
@@ -128,8 +135,8 @@ export function partidosDelJugador(
           jugadorId: (esA ? p.jugadorBId : p.jugadorAId)!,
           nombre: rival.nombre,
           apellido: rival.apellido,
-          // Solo mientras hay que coordinar (decisión 046).
-          telefono: jugado ? null : rival.telefono,
+          // Solo mientras hay que coordinar (decisión 046), y si no eligió ocultarlo (decisión 128).
+          telefono: jugado || rival.usuario?.muestraTelefonoARivales === false ? null : rival.telefono,
         },
         estado: p.estado,
         fechaAcordada: p.fechaAcordada?.toISOString() ?? null,

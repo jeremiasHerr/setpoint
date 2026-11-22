@@ -353,7 +353,7 @@ Con la confirmación desactivada, `anotada` es el estado previo a jugar y `confi
 
 Los rivales de zona pueden ver el teléfono del jugador, con aviso previo. Nadie más. Para hablar, un botón que abra WhatsApp con el rival: **no se construye un chat.**
 
-**Implementado:** la API da el teléfono solo al rival de un partido que todavía no se jugó ([decisión 046](decisiones/046-telefono-del-rival.md)). El aviso previo todavía no existe.
+**Implementado:** la API da el teléfono solo al rival de un partido que todavía no se jugó ([decisión 046](decisiones/046-telefono-del-rival.md)). El aviso previo va arriba de *Cuándo juego* la primera vez, con "Entendido" o "No mostrar mi teléfono", y se cambia desde *Circuitos*; mientras el jugador no responde, el teléfono se sigue mostrando ([decisión 128](decisiones/128-aviso-del-telefono.md)). Oculto, al rival le aparece lo mismo que sin teléfono en el padrón.
 
 ### 6.7 El resultado, si lo carga el jugador
 
