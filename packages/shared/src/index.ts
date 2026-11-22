@@ -29,3 +29,4 @@ export * from './schemas/avisos';
 export * from './schemas/salud';
 export * from './formato';
 export * from './desempate';
+export * from './superficie';
