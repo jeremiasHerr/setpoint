@@ -60,6 +60,8 @@ export const convocatoriaSchema = z
     precio: z.number({ error: 'Tiene que ser un número' }).min(0, 'No puede ser negativo').max(10_000_000).default(0),
     modoInscripcion: z.enum(['cerrada', 'con_aprobacion', 'abierta']).default('cerrada'),
     tieneListaEspera: z.boolean().default(true),
+    // Cuánto se le guarda el lugar al primero de la lista cuando se libera uno (decisión 076).
+    horasReservaListaEspera: entero(1, 72).default(24),
     cierreInscripcion: fecha,
     fechaInicio: fecha,
 
@@ -79,6 +81,9 @@ export const convocatoriaSchema = z
     // --- plazos, en días ---
     plazoGruposDias: entero(1, 90).default(21),
     plazoPorRondaDias: entero(1, 30).default(7),
+    // Reprogramar una fecha confirmada: cuántas veces por partido y con cuánta antelación (decisión 067).
+    reprogramacionesPermitidas: entero(0, 3).default(1),
+    horasAntelacionReprogramar: entero(0, 72).default(24),
 
     // --- sedes ---
     sedeGrupos: z.enum(['libre', 'designada']).default('libre'),

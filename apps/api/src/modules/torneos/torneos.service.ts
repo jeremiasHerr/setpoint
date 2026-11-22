@@ -76,6 +76,7 @@ function aConvocatoria(torneos: TorneoConRelaciones[]): Convocatoria {
     precio: t.precio.toNumber(),
     modoInscripcion: aClave(t.modoInscripcion),
     tieneListaEspera: t.tieneListaEspera,
+    horasReservaListaEspera: t.horasReservaListaEspera,
     cierreInscripcion: aDia(t.cierreInscripcion),
     fechaInicio: aDia(t.fechaInicio),
 
@@ -92,6 +93,8 @@ function aConvocatoria(torneos: TorneoConRelaciones[]): Convocatoria {
 
     plazoGruposDias: t.plazoGruposDias,
     plazoPorRondaDias: t.plazoPorRondaDias,
+    reprogramacionesPermitidas: t.reprogramacionesPermitidas,
+    horasAntelacionReprogramar: t.horasAntelacionReprogramar,
 
     sedeGrupos: aClave(t.sedeGrupos),
     sedeEliminatorias: aClave(t.sedeEliminatorias),
@@ -174,6 +177,7 @@ function columnasCompartidas(datos: DatosConvocatoria, etapaId: number | null, c
     precio: datos.precio,
     modoInscripcion: aEnum<ModoInscripcion>(datos.modoInscripcion),
     tieneListaEspera: datos.tieneListaEspera,
+    horasReservaListaEspera: datos.horasReservaListaEspera,
     cierreInscripcion: aFecha(datos.cierreInscripcion),
     fechaInicio: aFecha(datos.fechaInicio),
 
@@ -190,6 +194,8 @@ function columnasCompartidas(datos: DatosConvocatoria, etapaId: number | null, c
 
     plazoGruposDias: datos.plazoGruposDias,
     plazoPorRondaDias: datos.plazoPorRondaDias,
+    reprogramacionesPermitidas: datos.reprogramacionesPermitidas,
+    horasAntelacionReprogramar: datos.horasAntelacionReprogramar,
 
     sedeGrupos: aEnum<ModoSede>(datos.sedeGrupos),
     sedeEliminatorias: aEnum<ModoSede>(datos.sedeEliminatorias),
