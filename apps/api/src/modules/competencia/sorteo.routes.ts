@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { cargarZonasSchema, sortearSchema } from '@setpoint/shared';
+import { cargarZonasSchema, ordenarSiembraSchema, sortearSchema } from '@setpoint/shared';
 import { autenticar } from '../../middleware/autenticar';
 import { validar } from '../../middleware/validar';
-import { cargarZonas, confirmarSorteo, obtenerSorteo, sortear } from './sorteo.service';
+import { cargarZonas, confirmarSorteo, obtenerSorteo, ordenarSiembraAMano, sortear } from './sorteo.service';
 
 // Se monta en /api/organizaciones/:slug/torneos/:id/sorteo: mergeParams trae el slug y el id.
 // El id es el de un torneo (una categoría), no el de la convocatoria.
@@ -25,6 +25,12 @@ sorteoRouter.post('/', validar(sortearSchema), async (req, res) => {
 sorteoRouter.post('/manual', validar(cargarZonasSchema), async (req, res) => {
   const { slug, id } = req.params as { slug: string; id: string };
   res.json(await cargarZonas(slug, res.locals.usuarioId, Number(id), req.body));
+});
+
+// La siembra ordenada a mano, en un torneo sin ranking (decisión 133). null vuelve al azar.
+sorteoRouter.put('/siembra', validar(ordenarSiembraSchema), async (req, res) => {
+  const { slug, id } = req.params as { slug: string; id: string };
+  res.json(await ordenarSiembraAMano(slug, res.locals.usuarioId, Number(id), req.body));
 });
 
 // Confirma el borrador y genera los partidos de zona. No se deshace.

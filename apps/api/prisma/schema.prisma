@@ -535,6 +535,9 @@ model Torneo {
   modoDistribucion    ModoDistribucion @default(SERPENTINA)
   modoSorteo          ModoSorteo       @default(MANUAL)
   sorteoConfirmado    Boolean          @default(false)
+  // La organización ordenó a mano la siembra, en un torneo sin ranking (decisión 133): el sorteo la usa
+  // tal cual y "Volver a sortear" no la mezcla.
+  siembraManual       Boolean          @default(false)
   gruposCerrados      Boolean          @default(false)
 
   // --- sistema de juego ---

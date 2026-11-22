@@ -126,7 +126,7 @@ Con las inscripciones cerradas, el sistema distribuirá a los jugadores en grupo
 
 **Precisiones de alcance:**
 - La distribución por serpentina reparte a los jugadores de manera que todos los grupos sumen el mismo ranking acumulado.
-- En torneos sin ranking, el orden de siembra lo define la organización manualmente o se sortea al azar.
+- En torneos sin ranking, el orden de siembra lo define la organización manualmente o se sortea al azar. Se ordena la lista entera arrastrando, y el sorteo reparte con ese orden ([decisión 133](decisiones/133-siembra-a-mano-sin-ranking.md)).
 - La organización puede elegir entre distribución serpentina, directa o por bombos.
 - También puede cargar a mano el resultado de un sorteo hecho presencialmente, para circuitos que lo hacen como ceremonia.
 - Con treinta y dos jugadores en ocho grupos de cuatro se generan cuarenta y ocho partidos de zona.

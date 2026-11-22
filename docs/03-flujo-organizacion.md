@@ -267,6 +267,8 @@ El sistema genera los grupos y los partidos de zona. La organización puede revi
 
 **Si no se llenó el cupo**, se respeta la cantidad de zonas del formato y algunas quedan de 3. Con menos de 3 por zona no se puede sortear ([decisión 015](decisiones/015-zonas-con-menos-inscriptos.md)).
 
+**La siembra a mano** ([decisión 133](decisiones/133-siembra-a-mano-sin-ranking.md)). Sin ranking, o en un torneo suelto, todos empatan en 0 y la siembra sale al azar. Ahí, "Orden de siembra" ofrece "Lo ordeno yo": la organización arrastra a cada inscripto a su lugar y guarda el orden. El sorteo reparte con ese orden, "Volver a sortear" no lo mezcla, y si entró o se bajó alguien pide ordenarlo de nuevo.
+
 **En el modo `manual`** la organización arrastra a cada jugador a la zona que le tocó en el sorteo presencial ([decisión 020](decisiones/020-carga-manual-del-sorteo.md)). La API comprueba que estén todos los que pagaron, una sola vez, y que las zonas tengan los tamaños que daría el sorteo. La posición de siembra la calcula la API con el ranking, igual que en el automático. Al confirmar, lo cargado se guarda como borrador y se confirma en el mismo paso.
 
 **En el modo `asistido`** el sorteo se hace frente a todos ([decisión 021](decisiones/021-sorteo-en-pantalla.md)). La organización elige el reparto y toca "Sortear en pantalla": la API hace un sorteo nuevo, siembra incluida, y la web lo muestra en pantalla completa, de a un jugador y bombo por bombo. Mientras no se sorteó en pantalla, la página no muestra zonas. Al terminar se puede volver a sortear o volver a la página para revisar y confirmar.

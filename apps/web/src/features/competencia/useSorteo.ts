@@ -1,6 +1,6 @@
-import type { DatosCargarZonas, DatosSortearEntrada, Sorteo } from '@setpoint/shared';
+import type { DatosCargarZonas, DatosOrdenarSiembra, DatosSortearEntrada, Sorteo } from '@setpoint/shared';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { cargarZonas, confirmarSorteo, obtenerSorteo, sortear } from './api';
+import { cargarZonas, confirmarSorteo, obtenerSorteo, ordenarSiembra, sortear } from './api';
 import { claveNavegacion } from '../torneos/useNavegacionDelTorneo';
 
 const claveSorteo = (slug: string, id: number) => ['sorteo', slug, id];
@@ -32,6 +32,15 @@ export function useCargarZonas(slug: string, id: number) {
   const guardar = useGuardarEnCache(slug, id);
   return useMutation({
     mutationFn: (datos: DatosCargarZonas) => cargarZonas(slug, id, datos),
+    onSuccess: guardar,
+  });
+}
+
+// La siembra ordenada a mano en un torneo sin ranking, o null para volver al azar (decisión 133).
+export function useOrdenarSiembra(slug: string, id: number) {
+  const guardar = useGuardarEnCache(slug, id);
+  return useMutation({
+    mutationFn: (datos: DatosOrdenarSiembra) => ordenarSiembra(slug, id, datos),
     onSuccess: guardar,
   });
 }

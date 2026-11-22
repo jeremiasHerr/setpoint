@@ -9,6 +9,7 @@ import {
 import {
   calcularFormato,
   type DatosCargarZonas,
+  type DatosOrdenarSiembra,
   type DatosSortear,
   type EstadoTorneo as ClaveEstado,
   type ModoDistribucion,
@@ -38,7 +39,7 @@ import {
 // Inscripcion.grupo y posicionSiembra: lo que se confirma es lo que se vio (decisión 014).
 
 const CON_INSCRIPTOS = {
-  categoria: { select: { nombre: true } },
+  categoria: { select: { nombre: true, suelta: true } },
   organizacion: { select: { usaRanking: true } },
   // Solo las pagadas entran al sorteo: una reserva sin pagar todavía puede vencer. Una pagada ya es
   // del padrón; el filtro lo asegura igual (decisión 054).
@@ -95,12 +96,20 @@ function zonasGuardadas(torneo: TorneoConInscriptos) {
   }));
 }
 
+// Sin ranking, o en un torneo suelto, todos empatan en 0 y la siembra saldría entera al azar: ahí
+// la organización puede ordenarla a mano (decisión 133). Con ranking, la siembra es el ranking.
+function permiteSiembraAMano(torneo: TorneoConInscriptos) {
+  return !torneo.organizacion.usaRanking || torneo.categoria.suelta;
+}
+
 function aSorteo(torneo: TorneoConInscriptos): Sorteo {
   return {
     torneoId: torneo.id,
     nombre: `${torneo.edicion ?? torneo.nombre} · ${torneo.categoria.nombre}`,
     estado: torneo.estado.toLowerCase() as ClaveEstado,
     usaRanking: torneo.organizacion.usaRanking,
+    siembraAMano: permiteSiembraAMano(torneo),
+    siembraManual: torneo.siembraManual,
     modoDistribucion: torneo.modoDistribucion.toLowerCase() as ModoDistribucion,
     modoSorteo: torneo.modoSorteo.toLowerCase() as ModoSorteo,
     confirmado: torneo.sorteoConfirmado,
@@ -153,8 +162,15 @@ async function torneoParaSortear(slug: string, usuarioId: number, torneoId: numb
   return torneo;
 }
 
-// La siembra del borrador si sigue sirviendo; si no, una nueva según el ranking.
+// La siembra del borrador si sigue sirviendo; si no, una nueva según el ranking. La que ordenó a
+// mano la organización se usa siempre, aunque se pida volver a sortear: si cambiaron los
+// inscriptos, hay que ordenarla de nuevo (decisión 133).
 async function siembraDelTorneo(torneo: TorneoConInscriptos, nueva: boolean) {
+  if (torneo.siembraManual) {
+    const ordenada = siembraGuardada(torneo.inscripciones);
+    if (ordenada === null) throw new ErrorHttp(409, 'SIEMBRA_DESACTUALIZADA');
+    return ordenada;
+  }
   const guardada = nueva ? null : siembraGuardada(torneo.inscripciones);
   return guardada ?? ordenarSiembra(await puntosDeLosInscriptos(torneo), Math.random);
 }
@@ -184,6 +200,39 @@ export async function cargarZonas(slug: string, usuarioId: number, torneoId: num
   }
 
   await guardarBorrador(torneo, resultado.zonas, { modoSorteo: ModoSorteoPrisma.MANUAL });
+  return obtenerSorteo(slug, usuarioId, torneoId);
+}
+
+// Guarda la siembra que ordenó la organización, o vuelve a la siembra al azar con null. Cualquier
+// borrador de zonas se descarta: se armó con otra siembra (decisión 133).
+export async function ordenarSiembraAMano(slug: string, usuarioId: number, torneoId: number, datos: DatosOrdenarSiembra) {
+  const organizacionId = await organizacionAdministrada(slug, usuarioId);
+  const torneo = await torneoDeLaOrganizacion(organizacionId, torneoId);
+  verificarSorteable(torneo);
+  if (!permiteSiembraAMano(torneo)) throw new ErrorHttp(409, 'SIEMBRA_CON_RANKING');
+
+  const { jugadorIds } = datos;
+  const inscripcionDe = new Map(torneo.inscripciones.map((i) => [i.jugadorId, i.id]));
+  // Tienen que estar todos los inscriptos, una vez cada uno: si no, alguien entró o se bajó mientras se ordenaba.
+  const sonLosInscriptos =
+    jugadorIds === null ||
+    (jugadorIds.length === inscripcionDe.size &&
+      new Set(jugadorIds).size === jugadorIds.length &&
+      jugadorIds.every((id) => inscripcionDe.has(id)));
+  if (!sonLosInscriptos) throw new ErrorHttp(409, 'SORTEO_DESACTUALIZADO');
+
+  await prisma.$transaction(async (tx) => {
+    const { count } = await tx.torneo.updateMany({
+      where: { id: torneo.id, estado: EstadoTorneo.INSCRIPCIONES_CERRADAS, sorteoConfirmado: false },
+      data: { siembraManual: jugadorIds !== null },
+    });
+    if (count === 0) throw new ErrorHttp(409, 'TORNEO_NO_SORTEABLE');
+
+    await tx.inscripcion.updateMany({ where: { torneoId: torneo.id }, data: { grupo: null, posicionSiembra: null } });
+    for (const [indice, jugadorId] of (jugadorIds ?? []).entries()) {
+      await tx.inscripcion.update({ where: { id: inscripcionDe.get(jugadorId)! }, data: { posicionSiembra: indice + 1 } });
+    }
+  });
   return obtenerSorteo(slug, usuarioId, torneoId);
 }
 
