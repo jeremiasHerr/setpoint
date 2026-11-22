@@ -1,5 +1,10 @@
 import { EstadoResultadoPropuesto, EstadoTorneo, QuienCargaResultados, type Prisma } from '@prisma/client';
-import { resultadoDelTorneoSchema, type DatosResultadoDelJugador, type RespuestaMisPartidos } from '@setpoint/shared';
+import {
+  resultadoDelTorneoSchema,
+  type CargaDelResultado,
+  type DatosResultadoDelJugador,
+  type RespuestaMisPartidos,
+} from '@setpoint/shared';
 import { organizacionAdministrada, perfilDeJugador } from '../../lib/permisos';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
@@ -67,6 +72,22 @@ function marcadorDesde(datos: DatosResultadoDelJugador, esA: boolean) {
 
 const propuestasLeidas = (partido: Partido) =>
   partido.resultadosPropuestos.map((p) => ({ ...p, estado: p.estado as 'PENDIENTE' | 'RECHAZADO' }));
+
+// Lo que necesita la pantalla Cargar el resultado: el partido como lo ve en Cuándo juego, quién es
+// él y el sistema de juego del torneo, para validar los sets antes de mandarlos.
+export async function cargaDelResultado(slug: string, usuarioId: number, partidoId: number): Promise<CargaDelResultado> {
+  const { organizacionId, jugadorId, partido } = await partidoDelJugador(slug, usuarioId, partidoId);
+  const torneo = await torneoDeLaOrganizacion(organizacionId, partido.torneoId);
+  const enCuandoJuego = (await misPartidos(slug, usuarioId)).partidos?.partidos.find((p) => p.id === partido.id);
+  if (!enCuandoJuego) throw new ErrorHttp(404, 'PARTIDO_NO_ENCONTRADO');
+  const yo = await prisma.jugador.findUniqueOrThrow({ where: { id: jugadorId }, select: { id: true, nombre: true, apellido: true } });
+  return {
+    partido: enCuandoJuego,
+    yo: { jugadorId: yo.id, nombre: yo.nombre, apellido: yo.apellido },
+    esA: partido.jugadorAId === jugadorId,
+    sistema: sistemaDeJuego(torneo),
+  };
+}
 
 // Un jugador carga el resultado de su partido. Queda pendiente hasta que el rival lo confirme; si
 // ya había cargado otro que seguía pendiente, este lo reemplaza.

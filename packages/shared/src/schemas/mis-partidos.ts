@@ -1,6 +1,7 @@
 // Cuándo juego, en la app del jugador (F11): docs/pantallas/jugador/cuando-juego.html. Sus
 // partidos del torneo en curso, desde su lado: el rival, la fecha, dónde y cómo le fue.
 import type { AccionDeFecha, QuienAnoto } from './coordinacion';
+import type { SistemaDeJuego } from './resultado';
 
 export type RivalDelPartido = {
   // Para pedir el cara a cara con él (F18).
@@ -46,6 +47,16 @@ export type ResultadoPropuestoDelPartido = {
   // Desde su lado, como `resultado`.
   gano: boolean;
   marcador: string;
+};
+
+// Lo que necesita la pantalla Cargar el resultado (decisión 127): el partido desde el lado del
+// jugador, y el sistema de juego del torneo para validar los sets antes de mandarlos.
+export type CargaDelResultado = {
+  partido: PartidoDelJugador;
+  yo: { jugadorId: number; nombre: string; apellido: string };
+  // Si el jugador es el A del partido: los sets se mandan con los games de A primero.
+  esA: boolean;
+  sistema: SistemaDeJuego;
 };
 
 export type MisPartidos = {

@@ -5,6 +5,7 @@ import { validar } from '../../middleware/validar';
 import { borrarDispositivo, guardarDispositivo } from '../avisos/avisos.service';
 import { anotarFecha, confirmarFecha, coordinacionDelJugador } from '../coordinacion/coordinacion.service';
 import {
+  cargaDelResultado,
   cargarResultadoDelJugador,
   confirmarResultadoDelJugador,
   rechazarResultadoDelJugador,
@@ -48,6 +49,11 @@ jugadorRouter.post('/partidos/:partidoId/confirmacion', async (req, res) => {
 
 // El resultado de un partido suyo, si la organización lo permite (decisión 127): queda pendiente
 // hasta que el rival lo confirme. Devuelven Cuándo juego actualizado.
+jugadorRouter.get('/partidos/:partidoId/resultado', async (req, res) => {
+  const { slug, partidoId } = req.params as { slug: string; partidoId: string };
+  res.json(await cargaDelResultado(slug, res.locals.usuarioId, Number(partidoId)));
+});
+
 jugadorRouter.put('/partidos/:partidoId/resultado', validar(resultadoDelJugadorSchema), async (req, res) => {
   const { slug, partidoId } = req.params as { slug: string; partidoId: string };
   res.json(await cargarResultadoDelJugador(slug, res.locals.usuarioId, Number(partidoId), req.body));

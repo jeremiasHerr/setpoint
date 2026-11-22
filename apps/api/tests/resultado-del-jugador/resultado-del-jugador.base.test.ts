@@ -17,7 +17,7 @@ describe.skipIf(!process.env.DATABASE_URL)('el resultado de los jugadores, contr
     () => false,
   );
   const it = conectada ? base : base.skip;
-  const { cargarResultadoDelJugador, confirmarResultadoDelJugador, rechazarResultadoDelJugador, confirmarResultadoPorLaOrganizacion } =
+  const { cargaDelResultado, cargarResultadoDelJugador, confirmarResultadoDelJugador, rechazarResultadoDelJugador, confirmarResultadoPorLaOrganizacion } =
     await import('../../src/modules/resultado-del-jugador/resultado-del-jugador.service');
   const { guardarResultado } = await import('../../src/modules/competencia/resultados.service');
   const { obtenerTablero } = await import('../../src/modules/competencia/tablero.service');
@@ -96,6 +96,14 @@ describe.skipIf(!process.env.DATABASE_URL)('el resultado de los jugadores, contr
     await prisma.torneo.deleteMany({ where: { organizacion: { slug } } });
     await prisma.organizacion.deleteMany({ where: { slug } });
     await prisma.usuario.deleteMany({ where: { email: { endsWith: `.${marca}@example.com` } } });
+  });
+
+  it('la pantalla recibe el sistema de juego y de qué lado está el jugador', async () => {
+    const carga = await cargaDelResultado(slug, cuenta.rival, partido.conRival);
+    expect(carga.esA).toBe(false);
+    expect(carga.yo.apellido).toBe('Roa');
+    expect(carga.sistema).toMatchObject({ setsPorPartido: 3, terceroSet: 'super_tiebreak' });
+    expect(carga.partido.puedeCargarResultado).toBe(true);
   });
 
   it('el resultado cargado no cuenta hasta que lo confirma el rival', async () => {
