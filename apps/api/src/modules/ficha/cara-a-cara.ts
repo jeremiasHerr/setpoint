@@ -1,6 +1,14 @@
 // El cara a cara entre dos jugadores (F18). Lógica pura: recibe los partidos que jugaron entre ellos
 // y sus torneos ya leídos. No toca la base.
-import type { ClaveCuadro, PartidoDelCaraACara, ResumenDelCaraACara } from '@setpoint/shared';
+import {
+  superficies,
+  type ClaveCuadro,
+  type CruceEnSuperficie,
+  type PartidoDelCaraACara,
+  type ResumenDelCaraACara,
+  type Superficie,
+} from '@setpoint/shared';
+import type { Superficie as SuperficiePrisma } from '@prisma/client';
 import { marcador, rondasDeLosCuadros } from '../jugador/mis-partidos';
 import {
   ordenDeTorneos,
@@ -28,12 +36,40 @@ export function resumenDelCaraACara(aId: number, partidos: ConResultado[]): Resu
   };
 }
 
+// Dónde se jugó, para la superficie. Opcional: los partidos sin club ni cancha no la tienen.
+export type SedeDelPartidoLeida = {
+  cancha?: { superficie: SuperficiePrisma } | null;
+  club?: { canchas: { superficie: SuperficiePrisma }[] } | null;
+};
+
+// La superficie de un partido (decisión 126). Si guardó la cancha, la de la cancha. Si no, la de su
+// club, siempre que todas sus canchas sean de la misma: con canchas distintas no se sabe en cuál se
+// jugó. Sin club, o con un club sin canchas cargadas, null.
+export function superficieDelPartido(sede: SedeDelPartidoLeida): Superficie | null {
+  if (sede.cancha) return sede.cancha.superficie.toLowerCase() as Superficie;
+  const distintas = new Set(sede.club?.canchas.map((c) => c.superficie) ?? []);
+  if (distintas.size !== 1) return null;
+  return [...distintas][0]!.toLowerCase() as Superficie;
+}
+
+// El cruce en cada superficie con algún partido jugado, en el orden de `superficies`. Cuenta como
+// el resumen: el W.O. no suma. Los partidos sin superficie solo entran en el total.
+export function cruceEnCadaSuperficie(aId: number, partidos: (ConResultado & SedeDelPartidoLeida)[]): CruceEnSuperficie[] {
+  const cruces: CruceEnSuperficie[] = [];
+  for (const { clave } of superficies) {
+    const resumen = resumenDelCaraACara(aId, partidos.filter((p) => superficieDelPartido(p) === clave));
+    if (resumen.jugados === 0) continue;
+    cruces.push({ superficie: clave, jugados: resumen.jugados, ganadosA: resumen.ganadosA, ganadosB: resumen.ganadosB });
+  }
+  return cruces;
+}
+
 // Los partidos con resultado entre A y B, del más reciente al más viejo, con el marcador desde el
 // lado de A. `partidosDeCuadro` son todos los de cuadro de esos torneos, para nombrar la ronda.
 export function partidosDelCaraACara(
   aId: number,
   torneos: TorneoDeLaFichaLeido[],
-  partidos: PartidoDeLaFichaLeido[],
+  partidos: (PartidoDeLaFichaLeido & SedeDelPartidoLeida)[],
   partidosDeCuadro: PartidoDeCuadroLeido[],
 ): PartidoDelCaraACara[] {
   const lista: PartidoDelCaraACara[] = [];
@@ -54,6 +90,7 @@ export function partidosDelCaraACara(
         estado: p.estado.toLowerCase() as PartidoDelCaraACara['estado'],
         ganador: p.ganadorId === aId ? 'a' : 'b',
         marcador: marcador(p, p.jugadorAId === aId),
+        superficie: superficieDelPartido(p),
       });
     }
   }

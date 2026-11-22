@@ -1,10 +1,12 @@
-import type { CaraACara, JugadorDelCaraACara, RivalesDelJugador } from '@setpoint/shared';
+import type { CaraACara, CruceEnSuperficie, JugadorDelCaraACara, RivalesDelJugador, Superficie } from '@setpoint/shared';
+import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { Chip } from '../components/Chip';
 import { EncabezadoPublico } from '../components/EncabezadoPublico';
 import { Esqueleto } from '../components/Esqueleto';
 import { LinkDeVuelta } from '../components/LinkDeVuelta';
 import { Numero } from '../components/Numero';
-import { PartidosDelCaraACara } from '../features/ficha/PartidosDelCaraACara';
+import { cortaDe, PartidosDelCaraACara } from '../features/ficha/PartidosDelCaraACara';
 import { useCaraACara, useRivales } from '../features/ficha/useCaraACara';
 import { ErrorApi } from '../lib/api';
 
@@ -99,8 +101,28 @@ function Lado({ jugador, derecha }: { jugador: JugadorDelCaraACara; derecha?: bo
   );
 }
 
+// Cómo están en cada superficie, en una frase por superficie: "En polvo están 2 a 2. La única vez
+// que jugaron en cemento ganó Sanhueza." Es la respuesta que busca quien abre la comparativa antes
+// de jugar en una cancha que conoce.
+function cruceEnPalabras(cruces: CruceEnSuperficie[], apellidoA: string, apellidoB: string) {
+  return cruces
+    .map(({ superficie, jugados, ganadosA, ganadosB }) => {
+      const en = cortaDe(superficie);
+      if (jugados === 1) return `La única vez que jugaron en ${en} ganó ${ganadosA === 1 ? apellidoA : apellidoB}.`;
+      if (ganadosA === ganadosB) return `En ${en} están ${ganadosA} a ${ganadosB}.`;
+      const [lider, mas, menos] = ganadosA > ganadosB ? [apellidoA, ganadosA, ganadosB] : [apellidoB, ganadosB, ganadosA];
+      return `En ${en} gana ${lider} ${mas} a ${menos}.`;
+    })
+    .join(' ');
+}
+
+const conMayuscula = (texto: string) => texto.charAt(0).toUpperCase() + texto.slice(1);
+
 function Comparativa({ cara, slug }: { cara: CaraACara; slug: string }) {
   const { a, b, resumen } = cara;
+  // El filtro solo achica la lista: el panel sigue mostrando el cruce de todas las canchas.
+  const [superficie, setSuperficie] = useState<Superficie | null>(null);
+  const partidos = superficie ? cara.partidos.filter((p) => p.superficie === superficie) : cara.partidos;
   const titulo = `${a.apellido} y ${b.apellido}`;
   const { jugados, ganadosA, ganadosB, walkovers } = resumen;
   // Quien lidera va en verde sobre el panel; con el cruce igualado, nadie.
@@ -144,12 +166,31 @@ function Comparativa({ cara, slug }: { cara: CaraACara; slug: string }) {
 
       <section className="flex flex-col gap-2.5">
         <h2 className="text-[17px] font-semibold tracking-[-0.015em]">Partidos</h2>
+        {/* Solo las superficies en las que jugaron: sin el dato del club, no hay filtro (decisión 126). */}
+        {cara.porSuperficie.length > 0 && (
+          <div role="group" aria-label="Filtrar por superficie" className="flex flex-wrap gap-2">
+            <Chip activo={superficie === null} onClick={() => setSuperficie(null)}>
+              Todas
+            </Chip>
+            {cara.porSuperficie.map((cruce) => (
+              <Chip key={cruce.superficie} activo={superficie === cruce.superficie} onClick={() => setSuperficie(cruce.superficie)}>
+                {conMayuscula(cortaDe(cruce.superficie))}
+              </Chip>
+            ))}
+          </div>
+        )}
         {cara.partidos.length === 0 ? (
           <p className="text-[15px] text-pizarra-500">Todavía no hay partidos con resultado entre los dos.</p>
         ) : (
-          <PartidosDelCaraACara partidos={cara.partidos} apellidoA={a.apellido} apellidoB={b.apellido} consuelo={cara.nombreCuadroConsuelo} />
+          <PartidosDelCaraACara partidos={partidos} apellidoA={a.apellido} apellidoB={b.apellido} consuelo={cara.nombreCuadroConsuelo} />
         )}
       </section>
+
+      {cara.porSuperficie.length > 0 && (
+        <p className="max-w-[60ch] text-[15px] leading-[1.45] text-pizarra-700">
+          {cruceEnPalabras(cara.porSuperficie, a.apellido, b.apellido)}
+        </p>
+      )}
 
       <Link
         to={`/c/${slug}/jugadores/${a.jugadorId}/cara-a-cara`}

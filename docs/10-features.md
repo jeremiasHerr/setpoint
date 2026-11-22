@@ -293,7 +293,6 @@ La organización podrá seguir el estado de las inscripciones de cada torneo en 
 - Con el cupo lleno, el link del torneo y el link personal llevan a "Anotarme en la lista de espera", por el mismo camino que inscribirse y sin pagar. Se anota quien tiene perfil en el padrón ([decisión 081](decisiones/081-anotarse-en-la-lista-de-espera.md)). La pantalla de pago muestra su puesto en la lista, el lugar que le tocó con hasta cuándo es suyo, y que la lista terminó si se sorteó sin que le tocara ([decisión 082](decisiones/082-la-lista-termina-con-el-sorteo.md)). En el seed, la Copa Confluencia tiene a Sanhueza primero en la lista.
 - Las inscripciones cuya vinculación quedó para revisar llevan la marca "para revisar", la misma del padrón, que lleva a *Revisar vinculación*.
 - En la app, quien espera en la lista ve su puesto en *Tus inscripciones* y arriba de *Cuándo juego*; anotarse sigue siendo desde la web ([decisión 123](decisiones/123-la-lista-de-espera-en-la-app.md)).
-- Falta la lista de espera desde el link personal.
 
 **Entrega: 75%**
 
@@ -384,7 +383,7 @@ Cada jugador tendrá una ficha con su historial completo: todos los partidos que
 - El W.O. figura en la lista pero no cuenta como jugado; el abandono sí ([decisión 073](decisiones/073-el-wo-no-cuenta-en-la-ficha.md)).
 - Se llega desde la fila abierta del ranking ("Ver la ficha") y desde los nombres de las zonas del torneo en vivo ([decisión 074](decisiones/074-entrada-a-la-ficha.md)).
 - En la app, la fila abierta del ranking suma "Ver la ficha" y abre la misma ficha (`/ficha/[id]`, sobre la ruta pública), sin pestaña nueva ([decisión 045](decisiones/045-pestanas-de-la-app.md)).
-- El botón "Comparar con otro jugador", que abre el cara a cara (F18), queda pendiente.
+- "Comparar con otro jugador" abre el cara a cara (F18).
 
 ---
 
@@ -400,10 +399,11 @@ Cualquier persona podrá comparar a dos jugadores del circuito y ver el historia
 
 **Entrega: 100%**
 
-**Estado:** implementada en la web, sin el filtro por superficie ([decisión 122](decisiones/122-cara-a-cara-sin-superficie.md)).
+**Estado:** implementada en la web, con el filtro por superficie ([decisión 126](decisiones/126-superficie-del-partido-por-el-club.md)).
 - *Cara a cara* (`/c/:slug/jugadores/:id/cara-a-cara/:rivalId`) muestra el cruce acumulado, cada partido con su torneo e instancia, y vuelve a la ficha. Sin rival, lista con quiénes jugó el jugador para elegir.
 - La API: `GET /api/publico/:slug/jugadores/:id/rivales` y `.../cara-a-cara/:rivalId`. El W.O. no cuenta como jugado y el abandono sí ([decisión 073](decisiones/073-el-wo-no-cuenta-en-la-ficha.md)). Sin teléfono ni email.
-- Falta el filtro por superficie, porque los clubes todavía no tienen el dato, y "Cómo te fue con él" en la app.
+- El filtro por superficie usa la del club de cada partido, si todas sus canchas son de la misma; los partidos sin ese dato solo cuentan en "Todas". Abajo, una frase dice cómo están en cada superficie ([decisión 126](decisiones/126-superficie-del-partido-por-el-club.md)).
+- Falta "Cómo te fue con él" en la app.
 
 ---
 

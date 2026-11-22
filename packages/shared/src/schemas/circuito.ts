@@ -30,12 +30,13 @@ const listaDeNombres = (siHayRepetidos: string) =>
     );
 
 // Superficies de cancha, en el orden en que se ofrecen. Las claves son las del enum de Prisma en minúscula.
+// `corta` es la que va dentro de una frase o en un filtro: "Invierno 26 · semifinal · polvo".
 export const superficies = [
-  { clave: 'polvo_ladrillo', etiqueta: 'Polvo de ladrillo' },
-  { clave: 'cemento', etiqueta: 'Cemento' },
-  { clave: 'sintetico', etiqueta: 'Sintético' },
-  { clave: 'carpeta', etiqueta: 'Carpeta' },
-  { clave: 'otra', etiqueta: 'Otra' },
+  { clave: 'polvo_ladrillo', etiqueta: 'Polvo de ladrillo', corta: 'polvo' },
+  { clave: 'cemento', etiqueta: 'Cemento', corta: 'cemento' },
+  { clave: 'sintetico', etiqueta: 'Sintético', corta: 'sintético' },
+  { clave: 'carpeta', etiqueta: 'Carpeta', corta: 'carpeta' },
+  { clave: 'otra', etiqueta: 'Otra', corta: 'otra superficie' },
 ] as const;
 
 export type Superficie = (typeof superficies)[number]['clave'];
