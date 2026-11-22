@@ -40,6 +40,7 @@ CREATE TYPE modo_sede              AS ENUM ('LIBRE', 'DESIGNADA');
 CREATE TYPE superficie             AS ENUM ('POLVO_LADRILLO', 'CEMENTO', 'SINTETICO', 'CARPETA', 'OTRA');
 CREATE TYPE tercero_set            AS ENUM ('SET_COMPLETO', 'SUPER_TIEBREAK');
 CREATE TYPE tipo_contacto          AS ENUM ('WHATSAPP', 'RED_SOCIAL');
+CREATE TYPE estado_resultado_propuesto AS ENUM ('PENDIENTE', 'CONFIRMADO', 'RECHAZADO', 'REEMPLAZADO');
 
 CREATE TYPE estado_torneo AS ENUM (
     'BORRADOR', 'PUBLICADO', 'INSCRIPCIONES_CERRADAS', 'ZONAS_GENERADAS',
@@ -428,6 +429,23 @@ CREATE TABLE sets_partido (
     CONSTRAINT ck_set_numero CHECK (numero BETWEEN 1 AND 5),
     CONSTRAINT ck_set_games  CHECK (games_a >= 0 AND games_b >= 0)
 );
+
+-- El resultado que carga un jugador desde la app (decisión 127). No cuenta hasta que lo confirma
+-- el rival, o la organización: hasta entonces el partido no tiene resultado. Se guardan todos,
+-- también los rechazados, para que quede registro de los desacuerdos.
+CREATE TABLE resultados_propuestos (
+    id              SERIAL PRIMARY KEY,
+    organizacion_id INTEGER NOT NULL REFERENCES organizaciones(id) ON DELETE CASCADE,
+    partido_id      INTEGER NOT NULL REFERENCES partidos(id)       ON DELETE CASCADE,
+    jugador_id      INTEGER NOT NULL,                              -- el perfil que lo cargó
+    cargado_por_id  INTEGER NOT NULL REFERENCES usuarios(id),
+    datos           JSONB   NOT NULL,                              -- jugado con sets, o abandono
+    estado          estado_resultado_propuesto NOT NULL DEFAULT 'PENDIENTE',
+    resuelto_por_id INTEGER REFERENCES usuarios(id) ON DELETE SET NULL,
+    resuelto_en     TIMESTAMPTZ,
+    creado_en       TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX ix_resultados_propuestos_partido ON resultados_propuestos (partido_id, estado);
 
 -- ============================================================================
 -- RANKING

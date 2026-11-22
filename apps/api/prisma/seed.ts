@@ -167,6 +167,9 @@ async function main() {
       nombreCuadroConsuelo: 'Complementaria',
       usaRanking: true,
       ventanaRankingMeses: 12,
+      // Para la demo: así se ve la carga de resultados desde la app con Sanhueza, que juega la Copa
+      // Alta Barda (decisión 127). El POLENTA real carga solo la organización; se apaga en Tu circuito.
+      quienCargaResultados: 'ORGANIZACION_Y_JUGADORES',
       admins: administrador('organizador@polenta.example', 'Eduardo', 'Salinas'),
       categorias: {
         create: [
@@ -620,7 +623,8 @@ async function repartirClubes(organizacionId: number) {
 }
 
 // Segunda organización, con la configuración opuesta a POLENTA: sin ranking (sin
-// etapas ni tabla de puntos), inscripción abierta y sin cuadro consuelo.
+// etapas ni tabla de puntos), inscripción abierta, sin cuadro consuelo, y los jugadores cargan sus
+// resultados desde la app (decisión 127).
 async function crearLigaDelValle() {
   const liga = await prisma.organizacion.create({
     data: {
@@ -628,6 +632,7 @@ async function crearLigaDelValle() {
       slug: 'liga-amateur-del-valle',
       descripcion: 'Torneos sueltos de tenis amateur en el Alto Valle',
       usaRanking: false,
+      quienCargaResultados: 'ORGANIZACION_Y_JUGADORES',
       admins: administrador('organizador@valle.example', 'Silvina', 'Ortúzar'),
       categorias: {
         create: [

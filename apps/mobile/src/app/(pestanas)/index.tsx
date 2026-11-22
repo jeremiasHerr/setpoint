@@ -17,6 +17,8 @@ import { PorConfirmar } from '../../features/partidos/PorConfirmar';
 import { SinCoordinar } from '../../features/partidos/SinCoordinar';
 import { TarjetaProximo } from '../../features/partidos/TarjetaProximo';
 import { useMisPartidos } from '../../features/partidos/useMisPartidos';
+import { FaltaElResultado } from '../../features/resultado/FaltaElResultado';
+import { ResultadoPorConfirmar } from '../../features/resultado/ResultadoPorConfirmar';
 import { colores, fuentes, medidas, radios, tabular } from '../../lib/tokens';
 
 export default function CuandoJuego() {
@@ -78,17 +80,22 @@ export default function CuandoJuego() {
 }
 
 function Contenido({ datos }: { datos: MisPartidos }) {
-  const { porConfirmar, proximo, sinCoordinar, resto, porJugar } = agruparPartidos(datos.partidos);
+  const { porConfirmar, resultadosPorConfirmar, faltaElResultado, proximo, sinCoordinar, resto, porJugar } = agruparPartidos(datos.partidos);
+  const aConfirmar = porConfirmar.length + resultadosPorConfirmar.length;
 
   return (
     <>
-      {/* Lo que le pide una acción va primero: confirmar la fecha que anotó el rival (decisión 068). */}
-      {porConfirmar.length > 0 && (
+      {/* Lo que le pide una acción va primero: confirmar el resultado o la fecha que cargó el rival
+          (decisiones 068 y 127). */}
+      {aConfirmar > 0 && (
         <>
           <View style={estilos.subtitulo}>
             <Text style={estilos.textoSubtitulo}>Te falta confirmar</Text>
-            <Text style={estilos.cantidad}>{porConfirmar.length}</Text>
+            <Text style={estilos.cantidad}>{aConfirmar}</Text>
           </View>
+          {resultadosPorConfirmar.map((p) => (
+            <ResultadoPorConfirmar key={p.id} partido={p} />
+          ))}
           {porConfirmar.map((p) => (
             <PorConfirmar key={p.id} partido={p} />
           ))}
@@ -99,6 +106,18 @@ function Contenido({ datos }: { datos: MisPartidos }) {
         <TarjetaProximo partido={proximo} />
       ) : (
         <Text style={estilos.aviso}>No tenés ningún partido con fecha acordada.</Text>
+      )}
+
+      {faltaElResultado.length > 0 && (
+        <>
+          <View style={estilos.subtitulo}>
+            <Text style={estilos.textoSubtitulo}>Falta el resultado</Text>
+            <Text style={estilos.cantidad}>{faltaElResultado.length}</Text>
+          </View>
+          {faltaElResultado.map((p) => (
+            <FaltaElResultado key={p.id} partido={p} />
+          ))}
+        </>
       )}
 
       {sinCoordinar.length > 0 && (

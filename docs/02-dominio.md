@@ -99,7 +99,7 @@ Con 32 jugadores en 8 grupos de 4:
 | Complementaria (16 jugadores) | 15 |
 | **Total** | **78** |
 
-> Este número es el que dimensiona el proyecto. Dos cuadros paralelos duplican el motor de eliminatorias y es la razón de la decisión abierta 4 del [README](README.md).
+> Este número es el que dimensiona el proyecto. Dos cuadros paralelos duplican el motor de eliminatorias: por eso el cuadro consuelo estuvo en duda (abierta 4 del [README](README.md), cerrada: está implementado completo).
 
 ---
 
@@ -328,6 +328,8 @@ Consecuencia: **un torneo es multisede en fase de grupos** — cada partido pued
 ## 10. Reporte de resultados
 
 **Hoy:** al terminar el partido, alguno de los dos jugadores manda un mensaje al grupo de WhatsApp con el resultado. **No hay planilla de papel.** El organizador lo ve en el grupo y lo anota en su Excel.
+
+**En la plataforma:** la organización carga el resultado, a mano o desde los mensajes del grupo (F19). Si el circuito lo activa, también cada jugador desde la app, y cuenta cuando lo confirma el rival ([decisión 127](decisiones/127-resultados-de-los-jugadores.md)). POLENTA carga sola.
 
 Además, el reglamento de POLENTA **obliga a enviar un registro fotográfico de ambos jugadores** junto con el resultado.
 

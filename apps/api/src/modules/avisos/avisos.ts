@@ -48,6 +48,37 @@ export function avisosDeFechaDeLaOrganizacion(a: Persona, b: Persona, cuando: st
   );
 }
 
+// Un jugador cargó el resultado desde la app (decisión 127): el rival lo confirma o lo rechaza. El
+// marcador va desde el lado de quien recibe el aviso.
+export function avisoDeResultadoCargado(quien: Persona, rival: Persona, marcador: string): Aviso[] {
+  if (rival.usuarioId === null) return [];
+  return [
+    {
+      usuarioId: rival.usuarioId,
+      titulo: `${quien.nombre} cargó el resultado`,
+      cuerpo: `${marcador}. Confirmalo en la app para que cuente.`,
+    },
+  ];
+}
+
+// El rival confirmó el resultado: le avisa a quien lo cargó.
+export function avisoDeResultadoConfirmado(quien: Persona, cargo: Persona): Aviso[] {
+  if (cargo.usuarioId === null) return [];
+  return [{ usuarioId: cargo.usuarioId, titulo: `${quien.nombre} confirmó el resultado`, cuerpo: 'Ya cuenta para el torneo.' }];
+}
+
+// El rival dice que no fue así: quien lo cargó puede volver a cargarlo, o lo resuelve la organización.
+export function avisoDeResultadoRechazado(quien: Persona, cargo: Persona): Aviso[] {
+  if (cargo.usuarioId === null) return [];
+  return [
+    {
+      usuarioId: cargo.usuarioId,
+      titulo: `${quien.nombre} dice que el resultado no fue así`,
+      cuerpo: `Hablalo con ${quien.nombre} y cargalo de nuevo, o pedile a la organización que lo cargue.`,
+    },
+  ];
+}
+
 type Ticket ={ status: 'ok' } | { status: 'error'; details?: { error?: string } };
 
 // Los tokens que el servicio de Expo dice que ya no sirven: la app se desinstaló o se le quitó

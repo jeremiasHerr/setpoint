@@ -3,6 +3,7 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Boton } from '../../components/Boton';
 import { Esqueleto } from '../../components/Esqueleto';
 import { useSesion } from '../../features/auth/SesionProvider';
 import { PartidosDeLaFicha } from '../../features/ficha/PartidosDeLaFicha';
@@ -68,6 +69,13 @@ export default function Ficha() {
                 </View>
               )}
             </View>
+            {/* En la ficha de otro, su historial con quien la abre (F18). En la propia, no. */}
+            {perfil && perfil.jugador.id !== ficha.jugadorId && (
+              <Boton
+                texto={`Cómo te fue con ${ficha.nombre}`}
+                onPress={() => router.push({ pathname: '/rival/[id]', params: { id: String(ficha.jugadorId) } })}
+              />
+            )}
             <RecordDeLaFicha record={ficha.record} />
             {ficha.ranking && <PuntosPorTorneo ranking={ficha.ranking} />}
             <TorneosDeLaFicha torneos={ficha.torneos} />

@@ -5,6 +5,12 @@ export type PartidosAgrupados = {
   // Los que tienen una fecha que anotó el rival y falta que confirme (F14). Van arriba de todo:
   // es lo único que le pide una acción, y sin confirmar todavía no es un turno pactado.
   porConfirmar: PartidoDelJugador[];
+  // Los que tienen un resultado que cargó el rival y espera su respuesta (decisión 127). También
+  // arriba: le piden una acción.
+  resultadosPorConfirmar: PartidoDelJugador[];
+  // Los que tienen la fecha pasada y el resultado lo puede cargar él, o un resultado suyo pendiente
+  // o uno rechazado: falta que alguien cargue cómo terminó.
+  faltaElResultado: PartidoDelJugador[];
   // El primero con fecha acordada desde hoy: va en la tarjeta noche.
   proximo: PartidoDelJugador | null;
   // Sin fecha y con rival, del que vence antes al que vence después.
@@ -23,7 +29,18 @@ const porFecha = (campo: 'fechaAcordada' | 'fechaLimite') => (a: PartidoDelJugad
 // con su plazo, y el resto del torneo.
 export function agruparPartidos(partidos: PartidoDelJugador[], ahora = new Date()): PartidosAgrupados {
   const conRival = partidos.filter((p) => p.rival !== null);
-  const porJugar = conRival.filter((p) => p.resultado === null);
+  const sinResultado = conRival.filter((p) => p.resultado === null);
+
+  // El resultado que cargó el rival va arriba; los que esperan un resultado, en su sección. Ninguno
+  // se repite en las demás.
+  const propuesta = (p: PartidoDelJugador) => p.resultadoPropuesto;
+  const resultadosPorConfirmar = sinResultado.filter((p) => propuesta(p)?.cargadoPor === 'rival' && propuesta(p)?.estado === 'pendiente');
+  const faltaElResultado = sinResultado.filter(
+    (p) =>
+      !resultadosPorConfirmar.includes(p) &&
+      (propuesta(p) !== null || (p.puedeCargarResultado && p.fechaAcordada !== null && diasHasta(p.fechaAcordada, ahora) < 0)),
+  );
+  const porJugar = sinResultado.filter((p) => !resultadosPorConfirmar.includes(p) && !faltaElResultado.includes(p));
 
   const esPorConfirmar = (p: PartidoDelJugador) =>
     p.estado === 'ANOTADA' && p.anotadaPor === 'rival' && p.fechaAcordada !== null && diasHasta(p.fechaAcordada, ahora) >= 0;
@@ -39,10 +56,12 @@ export function agruparPartidos(partidos: PartidoDelJugador[], ahora = new Date(
 
   return {
     porConfirmar,
+    resultadosPorConfirmar,
+    faltaElResultado,
     proximo: agendados[0] ?? null,
     sinCoordinar: porJugar.filter((p) => p.fechaAcordada === null).sort(porFecha('fechaLimite')),
     resto: [...agendados.slice(1), ...pasados, ...jugados],
-    porJugar: porJugar.length,
+    porJugar: sinResultado.length,
   };
 }
 

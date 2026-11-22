@@ -1,4 +1,4 @@
-import { Cuadro, EstadoPartido as EstadoPrisma, EstadoTorneo, FasePartido, type Prisma } from '@prisma/client';
+import { Cuadro, EstadoPartido as EstadoPrisma, EstadoResultadoPropuesto, EstadoTorneo, FasePartido, type Prisma } from '@prisma/client';
 import { nombreCuadroConsuelo, type BloqueDelTablero, type ClaveCuadro, type EstadoPartido, type PartidoDelTablero, type Tablero } from '@setpoint/shared';
 import { hoy } from '../../lib/fechas';
 import { organizacionAdministrada } from '../../lib/permisos';
@@ -8,6 +8,8 @@ import { cuadrosTerminados } from './cierre';
 import { partidosSinResultado } from './cuadros';
 import { zonasConPosiciones } from './posiciones';
 import { INCLUIR_ZONAS, inscriptosYPartidos } from './posiciones.service';
+import { marcador } from '../jugador/mis-partidos';
+import { datosDeLaPropuesta, ganadorDeLaPropuesta, propuestaVigente } from '../resultado-del-jugador/resultado-del-jugador';
 import { diasHasta, plazoQueCorre, porUrgencia, situacionDelPartido } from './tablero';
 
 // Tablero del torneo (F15): la pantalla de la organización mientras se juega. Todo se calcula
@@ -31,6 +33,10 @@ const DEL_PARTIDO = {
   jugadorA: jugador,
   jugadorB: jugador,
   sets: { select: { gamesA: true, gamesB: true, esSuperTieBreak: true }, orderBy: { numero: 'asc' } },
+  resultadosPropuestos: {
+    where: { estado: { in: [EstadoResultadoPropuesto.PENDIENTE, EstadoResultadoPropuesto.RECHAZADO] } },
+    select: { id: true, jugadorId: true, estado: true, datos: true },
+  },
 } satisfies Prisma.PartidoSelect;
 
 type PartidoLeido = Prisma.PartidoGetPayload<{ select: typeof DEL_PARTIDO }>;
@@ -40,6 +46,21 @@ const CON_TABLERO = [EstadoTorneo.ZONAS_GENERADAS, EstadoTorneo.GRUPOS_EN_CURSO,
 
 const aJugador = (j: PartidoLeido['jugadorA']) =>
   j && { jugadorId: j.id, nombre: j.nombre, apellido: j.apellido, telefono: j.telefono };
+
+// El que cargó un jugador y todavía no cuenta, desde el lado de A (decisión 127). Con resultado, nada.
+function propuestaDelPartido(p: PartidoLeido): PartidoDelTablero['resultadoPropuesto'] {
+  if (p.ganadorId !== null || p.jugadorAId === null || p.jugadorBId === null) return null;
+  const propuesta = propuestaVigente(p.resultadosPropuestos.map((r) => ({ ...r, estado: r.estado as 'PENDIENTE' | 'RECHAZADO' })));
+  if (!propuesta) return null;
+  const datos = datosDeLaPropuesta(propuesta);
+  const estado = datos.tipo === 'jugado' ? ('JUGADA' as const) : ('ABANDONO' as const);
+  return {
+    cargadoPor: propuesta.jugadorId === p.jugadorAId ? 'a' : 'b',
+    estado: propuesta.estado === 'PENDIENTE' ? 'pendiente' : 'rechazado',
+    ganador: ganadorDeLaPropuesta(datos, p.jugadorAId, p.jugadorBId) === p.jugadorAId ? 'a' : 'b',
+    marcador: marcador({ estado, sets: datos.tipo === 'jugado' ? datos.sets : [] }, true),
+  };
+}
 
 function aPartido(p: PartidoLeido, dia: string): PartidoDelTablero {
   return {
@@ -56,6 +77,7 @@ function aPartido(p: PartidoLeido, dia: string): PartidoDelTablero {
     dias: p.fechaLimite ? diasHasta(p.fechaLimite, dia) : null,
     fechaAcordada: p.fechaAcordada?.toISOString() ?? null,
     sets: p.sets,
+    resultadoPropuesto: propuestaDelPartido(p),
   };
 }
 

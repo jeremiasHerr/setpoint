@@ -1,18 +1,26 @@
 // Cómo te fue con él (F18): el historial del jugador con el rival de un partido, para mirarlo antes
 // de jugar. Usa las mismas rutas públicas que el cara a cara de la web (decisión 122).
+import { cortaDe, cruceEnPalabras, type Superficie } from '@setpoint/shared';
 import { router, useLocalSearchParams } from 'expo-router';
+import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Chip } from '../../../components/Chip';
 import { Esqueleto } from '../../../components/Esqueleto';
 import { ErrorDeCarga } from '../../../features/auth/ErrorDeCarga';
 import { PartidosDelCruce } from '../../../features/caraACara/PartidosDelCruce';
 import { useCaraACara } from '../../../features/caraACara/useCaraACara';
 import { colores, fuentes, medidas, radios, tabular } from '../../../lib/tokens';
 
+const conMayuscula = (texto: string) => texto.charAt(0).toUpperCase() + texto.slice(1);
+
 export default function ComoTeFueConEl() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const consulta = useCaraACara(Number(id));
   const cara = consulta.data;
+  // El filtro solo achica la lista: el panel sigue con el cruce de todas las canchas (decisión 126).
+  const [superficie, setSuperficie] = useState<Superficie | null>(null);
+  const partidos = cara && superficie ? cara.partidos.filter((p) => p.superficie === superficie) : (cara?.partidos ?? []);
 
   return (
     <SafeAreaView style={estilos.pantalla}>
@@ -69,7 +77,24 @@ export default function ComoTeFueConEl() {
             ) : (
               <>
                 <Text style={estilos.subtitulo}>Partidos</Text>
-                <PartidosDelCruce partidos={cara.partidos} apellidoRival={cara.b.apellido} consuelo={cara.nombreCuadroConsuelo} />
+                {/* Solo las superficies en las que jugaron: sin el dato del club, no hay filtro (decisión 126). */}
+                {cara.porSuperficie.length > 0 && (
+                  <View accessibilityLabel="Filtrar por superficie" style={estilos.filtro}>
+                    <Chip texto="Todas" activo={superficie === null} onPress={() => setSuperficie(null)} />
+                    {cara.porSuperficie.map((cruce) => (
+                      <Chip
+                        key={cruce.superficie}
+                        texto={conMayuscula(cortaDe(cruce.superficie))}
+                        activo={superficie === cruce.superficie}
+                        onPress={() => setSuperficie(cruce.superficie)}
+                      />
+                    ))}
+                  </View>
+                )}
+                <PartidosDelCruce partidos={partidos} apellidoRival={cara.b.apellido} consuelo={cara.nombreCuadroConsuelo} />
+                {cara.porSuperficie.length > 0 && (
+                  <Text style={estilos.nota}>{cruceEnPalabras(cara.porSuperficie, cara.a.apellido, cara.b.apellido)}</Text>
+                )}
               </>
             )}
           </>
@@ -117,5 +142,6 @@ const estilos = StyleSheet.create({
   guion: { fontFamily: fuentes.mono[400], fontSize: 32, color: colores.pizarra400 },
   leyenda: { fontFamily: fuentes.sans[400], fontSize: 15, color: colores.pizarra400 },
   nota: { fontFamily: fuentes.sans[400], fontSize: 15, lineHeight: 22, color: colores.pizarra700 },
+  filtro: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   subtitulo: { fontFamily: fuentes.sans[600], fontSize: 20, letterSpacing: -0.4, color: colores.noche },
 });

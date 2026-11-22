@@ -1,4 +1,11 @@
-import type { CaraACara, CruceEnSuperficie, JugadorDelCaraACara, RivalesDelJugador, Superficie } from '@setpoint/shared';
+import {
+  cortaDe,
+  cruceEnPalabras,
+  type CaraACara,
+  type JugadorDelCaraACara,
+  type RivalesDelJugador,
+  type Superficie,
+} from '@setpoint/shared';
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Chip } from '../components/Chip';
@@ -6,7 +13,7 @@ import { EncabezadoPublico } from '../components/EncabezadoPublico';
 import { Esqueleto } from '../components/Esqueleto';
 import { LinkDeVuelta } from '../components/LinkDeVuelta';
 import { Numero } from '../components/Numero';
-import { cortaDe, PartidosDelCaraACara } from '../features/ficha/PartidosDelCaraACara';
+import { PartidosDelCaraACara } from '../features/ficha/PartidosDelCaraACara';
 import { useCaraACara, useRivales } from '../features/ficha/useCaraACara';
 import { ErrorApi } from '../lib/api';
 
@@ -99,21 +106,6 @@ function Lado({ jugador, derecha }: { jugador: JugadorDelCaraACara; derecha?: bo
       )}
     </div>
   );
-}
-
-// Cómo están en cada superficie, en una frase por superficie: "En polvo están 2 a 2. La única vez
-// que jugaron en cemento ganó Sanhueza." Es la respuesta que busca quien abre la comparativa antes
-// de jugar en una cancha que conoce.
-function cruceEnPalabras(cruces: CruceEnSuperficie[], apellidoA: string, apellidoB: string) {
-  return cruces
-    .map(({ superficie, jugados, ganadosA, ganadosB }) => {
-      const en = cortaDe(superficie);
-      if (jugados === 1) return `La única vez que jugaron en ${en} ganó ${ganadosA === 1 ? apellidoA : apellidoB}.`;
-      if (ganadosA === ganadosB) return `En ${en} están ${ganadosA} a ${ganadosB}.`;
-      const [lider, mas, menos] = ganadosA > ganadosB ? [apellidoA, ganadosA, ganadosB] : [apellidoB, ganadosB, ganadosA];
-      return `En ${en} gana ${lider} ${mas} a ${menos}.`;
-    })
-    .join(' ');
 }
 
 const conMayuscula = (texto: string) => texto.charAt(0).toUpperCase() + texto.slice(1);

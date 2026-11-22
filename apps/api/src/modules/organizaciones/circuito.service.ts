@@ -1,4 +1,4 @@
-import { Instancia, type Prisma, type Superficie, type TipoContacto } from '@prisma/client';
+import { Instancia, QuienCargaResultados, type Prisma, type Superficie, type TipoContacto } from '@prisma/client';
 import type {
   Circuito,
   ConfiguracionCircuito,
@@ -52,6 +52,7 @@ export async function obtenerCircuito(slug: string, usuarioId: number): Promise<
     slug: organizacion.slug,
     contactos: organizacion.contactos.map((c) => ({ tipo: c.tipo.toLowerCase() as Contacto['tipo'], valor: c.valor })),
     usaRanking: organizacion.usaRanking,
+    jugadoresCarganResultados: organizacion.quienCargaResultados === QuienCargaResultados.ORGANIZACION_Y_JUGADORES,
     categorias: organizacion.categorias.map((c) => c.nombre),
     etapas: organizacion.etapas.map((e) => e.nombre),
     puntos,
@@ -172,7 +173,16 @@ export async function guardarCircuito(slug: string, usuarioId: number, datos: Co
   await prisma.$transaction(async (tx) => {
     await tx.organizacion.update({
       where: { id: organizacionId },
-      data: { nombre: datos.nombre, nombreCuadroConsuelo: datos.nombreCuadroConsuelo, usaRanking: datos.usaRanking },
+      data: {
+        nombre: datos.nombre,
+        nombreCuadroConsuelo: datos.nombreCuadroConsuelo,
+        usaRanking: datos.usaRanking,
+        ...(datos.jugadoresCarganResultados !== undefined && {
+          quienCargaResultados: datos.jugadoresCarganResultados
+            ? QuienCargaResultados.ORGANIZACION_Y_JUGADORES
+            : QuienCargaResultados.ORGANIZACION,
+        }),
+      },
     });
 
     // Son pocos y no tienen nada colgando: se reemplazan enteros, en el orden de la pantalla.

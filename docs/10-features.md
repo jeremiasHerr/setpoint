@@ -154,7 +154,7 @@ La organización podrá registrar el resultado de cada partido indicando los gam
 - El W.O. no guarda sets ([decisión 016](decisiones/016-walkover-sin-sets-guardados.md)). El abandono tampoco: se elige quién siguió y se computa como un W.O. ([decisión 059](decisiones/059-abandono-sin-sets.md), que reemplaza a la 027).
 - Corregir es volver a cargar: se puede mientras no cambie lo que ya se armó con ese resultado ([decisión 028](decisiones/028-correccion-de-resultados.md)).
 - Un resultado de cuadro hace avanzar al ganador en la misma transacción.
-- La carga es solo de la organización: que también puedan cargar los jugadores sigue abierto (decisión abierta 12).
+- Si el circuito lo activa, los jugadores también cargan su resultado desde la app, y cuenta cuando lo confirma el rival o la organización ([decisión 127](decisiones/127-resultados-de-los-jugadores.md)). Se activa en *Tu circuito*; en la app, *Cargar el resultado* y la confirmación en *Cuándo juego*; en el tablero, "Resultados por confirmar", donde la organización confirma por el rival que no tiene la app.
 - La pantalla *Cargar resultado* (`/torneos/:id/resultados/:partidoId?`) se abre desde el tablero ([decisión 063](decisiones/063-entrada-al-tablero.md)). El partido se elige arriba, en una pestaña por zona y una por cuadro, con los cuadros dibujados como rama; la carga queda abajo ([decisión 070](decisiones/070-elegir-el-partido-desde-el-cuadro.md)).
 - Antes de guardar, la pantalla dice dónde queda cada jugador en la zona y a qué cuadro va: la API simula el resultado sin guardarlo ([decisión 032](decisiones/032-vista-previa-del-resultado.md)). En un cuadro dice quién pasa de ronda o quién es campeón. Lo que la API rechazaría por los cuadros ya armados se avisa antes.
 
@@ -399,11 +399,11 @@ Cualquier persona podrá comparar a dos jugadores del circuito y ver el historia
 
 **Entrega: 100%**
 
-**Estado:** implementada en la web, con el filtro por superficie ([decisión 126](decisiones/126-superficie-del-partido-por-el-club.md)).
+**Estado:** implementada en la web y en la app, con el filtro por superficie ([decisión 126](decisiones/126-superficie-del-partido-por-el-club.md)).
 - *Cara a cara* (`/c/:slug/jugadores/:id/cara-a-cara/:rivalId`) muestra el cruce acumulado, cada partido con su torneo e instancia, y vuelve a la ficha. Sin rival, lista con quiénes jugó el jugador para elegir.
 - La API: `GET /api/publico/:slug/jugadores/:id/rivales` y `.../cara-a-cara/:rivalId`. El W.O. no cuenta como jugado y el abandono sí ([decisión 073](decisiones/073-el-wo-no-cuenta-en-la-ficha.md)). Sin teléfono ni email.
 - El filtro por superficie usa la del club de cada partido, si todas sus canchas son de la misma; los partidos sin ese dato solo cuentan en "Todas". Abajo, una frase dice cómo están en cada superficie ([decisión 126](decisiones/126-superficie-del-partido-por-el-club.md)).
-- Falta "Cómo te fue con él" en la app.
+- En la app, *Cómo te fue con…* (`/rival/[id]`) muestra el historial entre quien tiene la sesión y un rival, con el mismo filtro y la misma frase, que viven en `packages/shared`. Se abre desde el próximo partido en *Cuándo juego* y desde la ficha de otro jugador. No tiene el buscador de rivales de la web.
 
 ---
 

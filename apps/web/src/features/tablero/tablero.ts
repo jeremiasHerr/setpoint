@@ -23,6 +23,34 @@ export function elDiaYHora(fechaHora: string) {
   return `${elDiaCorto(fechaHora)} · ${hora.format(new Date(fechaHora))}`;
 }
 
+// Los partidos con un resultado que cargó un jugador desde la app y todavía no cuenta (decisión 127):
+// pendiente de que lo confirme el rival, o rechazado. La organización los confirma o los carga.
+export function partidosConResultadoPropuesto(tablero: Tablero) {
+  return tablero.bloques.flatMap((b) => b.partidos).filter((p) => p.resultadoPropuesto !== null);
+}
+
+// "6-3 4-6 10-7" dado vuelta, para leerlo desde el otro lado. "ab." queda igual.
+const darVuelta = (marcador: string) => marcador.replace(/(\d+)-(\d+)/g, '$2-$1');
+
+// El resultado que cargó un jugador, en palabras: quién lo cargó y cómo quedó desde el lado del que
+// gana. "Bravo cargó: gana Roa 6-3 6-4", y lo que falta: que confirme el otro, o que lo resuelva la
+// organización si el otro dijo que no fue así.
+export function resultadoPropuestoEnPalabras(partido: PartidoDelTablero) {
+  const propuesta = partido.resultadoPropuesto!;
+  const a = partido.jugadorA!.apellido;
+  const b = partido.jugadorB!.apellido;
+  const [cargo, otro] = propuesta.cargadoPor === 'a' ? [a, b] : [b, a];
+  const ganador = propuesta.ganador === 'a' ? a : b;
+  const marcador = propuesta.ganador === 'a' ? propuesta.marcador : darVuelta(propuesta.marcador);
+  const abandono = marcador === 'ab.';
+  return {
+    // El marcador va aparte, para mostrarlo con los números en mono.
+    cargado: `${cargo} cargó: gana ${ganador}${abandono ? ' por abandono' : ''}`,
+    marcador: abandono ? null : marcador,
+    falta: propuesta.estado === 'pendiente' ? `falta que confirme ${otro}` : `${otro} dijo que no fue así`,
+  };
+}
+
 // Los partidos con fecha acordada que todavía no se jugaron, del más cercano al más lejano. No
 // están en "Lo que falta", pero la organización puede cambiarles la fecha o confirmarla por un
 // jugador sin la app (F14).

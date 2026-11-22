@@ -30,6 +30,18 @@ export type PartidoDelTablero = {
   fechaAcordada: string | null;
   // En un super tie-break, gamesA y gamesB son los puntos. El W.O. y el abandono no tienen sets.
   sets: { gamesA: number; gamesB: number; esSuperTieBreak: boolean }[];
+  // El resultado que cargó un jugador desde la app y todavía no cuenta (decisión 127): pendiente de
+  // que lo confirme el rival, o rechazado. La organización lo puede confirmar ella.
+  resultadoPropuesto: ResultadoPropuestoDelTablero | null;
+};
+
+export type ResultadoPropuestoDelTablero = {
+  // El que lo cargó: 'a' o 'b' del partido.
+  cargadoPor: 'a' | 'b';
+  estado: 'pendiente' | 'rechazado';
+  ganador: 'a' | 'b';
+  // Desde el lado del jugador A, como los sets: "6-3 6-4" o "ab.".
+  marcador: string;
 };
 
 // Un grupo de partidos para las barras del tablero: una zona ("A"), o una ronda de un cuadro.

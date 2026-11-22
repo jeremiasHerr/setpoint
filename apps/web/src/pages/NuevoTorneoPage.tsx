@@ -60,6 +60,9 @@ const CON_MENSAJE = new Set([
   'clasificanPorGrupo',
   'plazoGruposDias',
   'plazoPorRondaDias',
+  'reprogramacionesPermitidas',
+  'horasAntelacionReprogramar',
+  'horasReservaListaEspera',
   'fechaInicio',
   'precio',
   'cierreInscripcion',
@@ -350,6 +353,8 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
           <SeccionPlazos
             plazoGruposDias={datos.plazoGruposDias}
             plazoPorRondaDias={datos.plazoPorRondaDias}
+            reprogramacionesPermitidas={datos.reprogramacionesPermitidas}
+            horasAntelacionReprogramar={datos.horasAntelacionReprogramar}
             fechaInicio={datos.fechaInicio}
             cronograma={formato.cronograma}
             errores={errores}
@@ -360,6 +365,8 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
             categorias={datos.categorias}
             cierreInscripcion={datos.cierreInscripcion}
             modoInscripcion={datos.modoInscripcion}
+            tieneListaEspera={datos.tieneListaEspera}
+            horasReservaListaEspera={datos.horasReservaListaEspera}
             cantidadGrupos={datos.cantidadGrupos}
             padronVacio={circuito.jugadores === 0}
             errores={errores}

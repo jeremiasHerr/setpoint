@@ -2,6 +2,7 @@
 // partidos del torneo en curso, desde su lado: el rival, la fecha, dónde y cómo le fue.
 import { z } from 'zod';
 import type { AccionDeFecha, QuienAnoto } from './coordinacion';
+import type { SistemaDeJuego } from './resultado';
 
 export type RivalDelPartido = {
   // Para pedir el cara a cara con él (F18).
@@ -31,6 +32,32 @@ export type PartidoDelJugador = {
   sede: string | null;
   // Con resultado: si ganó y el marcador desde su lado, "6-3 4-6 10-7" o "W.O.".
   resultado: { gano: boolean; marcador: string } | null;
+  // El resultado que cargó uno de los dos y todavía no cuenta (decisión 127): pendiente de que lo
+  // confirme el otro, o rechazado. null si no hay, o si el partido ya tiene resultado.
+  resultadoPropuesto: ResultadoPropuestoDelPartido | null;
+  // Si puede cargar el resultado desde la app: la organización lo permite, el partido tiene a los
+  // dos jugadores y todavía no tiene resultado, y el rival no cargó uno que esté esperando su respuesta.
+  puedeCargarResultado: boolean;
+};
+
+export type ResultadoPropuestoDelPartido = {
+  id: number;
+  // Quién lo cargó: si es 'rival' y está pendiente, le toca confirmarlo o rechazarlo.
+  cargadoPor: 'yo' | 'rival';
+  estado: 'pendiente' | 'rechazado';
+  // Desde su lado, como `resultado`.
+  gano: boolean;
+  marcador: string;
+};
+
+// Lo que necesita la pantalla Cargar el resultado (decisión 127): el partido desde el lado del
+// jugador, y el sistema de juego del torneo para validar los sets antes de mandarlos.
+export type CargaDelResultado = {
+  partido: PartidoDelJugador;
+  yo: { jugadorId: number; nombre: string; apellido: string };
+  // Si el jugador es el A del partido: los sets se mandan con los games de A primero.
+  esA: boolean;
+  sistema: SistemaDeJuego;
 };
 
 export type MisPartidos = {

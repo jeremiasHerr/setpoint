@@ -1,4 +1,4 @@
-import { EstadoTorneo } from '@prisma/client';
+import { EstadoResultadoPropuesto, EstadoTorneo, QuienCargaResultados } from '@prisma/client';
 import { nombreCuadroConsuelo, type MiTelefono, type PreferenciaTelefono, type RespuestaMisPartidos } from '@setpoint/shared';
 import { perfilDeJugador } from '../../lib/permisos';
 import { prisma } from '../../lib/prisma';
@@ -33,7 +33,7 @@ export async function misPartidos(slug: string, usuarioId: number): Promise<Resp
   const { organizacionId, jugadorId } = await perfilDeJugador(slug, usuarioId);
   const miTelefono = await telefonoDelJugador(jugadorId, usuarioId);
 
-  const organizacion = await prisma.organizacion.findUniqueOrThrow({ where: { id: organizacionId }, select: { nombreCuadroConsuelo: true } });
+  const organizacion = await prisma.organizacion.findUniqueOrThrow({ where: { id: organizacionId }, select: { nombreCuadroConsuelo: true, quienCargaResultados: true } });
   const consuelo = nombreCuadroConsuelo(organizacion.nombreCuadroConsuelo);
   const torneos = await prisma.torneo.findMany({
     where: {
@@ -71,11 +71,17 @@ export async function misPartidos(slug: string, usuarioId: number): Promise<Resp
       jugadorA: JUGADOR,
       jugadorB: JUGADOR,
       sets: { select: { gamesA: true, gamesB: true }, orderBy: { numero: 'asc' } },
+      // Los que cargaron los jugadores y todavía dicen algo (decisión 127).
+      resultadosPropuestos: {
+        where: { estado: { in: [EstadoResultadoPropuesto.PENDIENTE, EstadoResultadoPropuesto.RECHAZADO] } },
+        select: { id: true, jugadorId: true, estado: true, datos: true },
+      },
     },
   });
 
   const nombres = torneos.map((t) => t.edicion ?? t.nombre);
   const ahora = new Date();
+  const jugadoresCarganResultados = organizacion.quienCargaResultados === QuienCargaResultados.ORGANIZACION_Y_JUGADORES;
   return {
     miTelefono,
     partidos: {
@@ -85,7 +91,7 @@ export async function misPartidos(slug: string, usuarioId: number): Promise<Resp
           jugadorId,
           partidos.filter((p) => p.torneoId === t.id),
           // Con más de un torneo, cada partido dice de cuál es.
-          { torneo: torneos.length > 1 ? nombres[i] : undefined, reglas: t, consuelo, ahora },
+          { torneo: torneos.length > 1 ? nombres[i] : undefined, reglas: t, consuelo, ahora, jugadoresCarganResultados },
         ),
       ),
     },

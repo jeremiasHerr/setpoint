@@ -1,9 +1,15 @@
 import { Router } from 'express';
-import { dispositivoSchema, fechaAcordadaSchema, preferenciaTelefonoSchema } from '@setpoint/shared';
+import { dispositivoSchema, fechaAcordadaSchema, preferenciaTelefonoSchema, resultadoDelJugadorSchema } from '@setpoint/shared';
 import { autenticar } from '../../middleware/autenticar';
 import { validar } from '../../middleware/validar';
 import { borrarDispositivo, guardarDispositivo } from '../avisos/avisos.service';
 import { anotarFecha, confirmarFecha, coordinacionDelJugador } from '../coordinacion/coordinacion.service';
+import {
+  cargaDelResultado,
+  cargarResultadoDelJugador,
+  confirmarResultadoDelJugador,
+  rechazarResultadoDelJugador,
+} from '../resultado-del-jugador/resultado-del-jugador.service';
 import { miZona } from './mi-zona.service';
 import { guardarPreferenciaTelefono, misPartidos } from './mis-partidos.service';
 
@@ -45,6 +51,28 @@ jugadorRouter.post('/partidos/:partidoId/confirmacion', async (req, res) => {
 jugadorRouter.put('/telefono', validar(preferenciaTelefonoSchema), async (req, res) => {
   const { slug } = req.params as { slug: string };
   res.json(await guardarPreferenciaTelefono(slug, res.locals.usuarioId, req.body));
+});
+
+// El resultado de un partido suyo, si la organización lo permite (decisión 127): queda pendiente
+// hasta que el rival lo confirme. Devuelven Cuándo juego actualizado.
+jugadorRouter.get('/partidos/:partidoId/resultado', async (req, res) => {
+  const { slug, partidoId } = req.params as { slug: string; partidoId: string };
+  res.json(await cargaDelResultado(slug, res.locals.usuarioId, Number(partidoId)));
+});
+
+jugadorRouter.put('/partidos/:partidoId/resultado', validar(resultadoDelJugadorSchema), async (req, res) => {
+  const { slug, partidoId } = req.params as { slug: string; partidoId: string };
+  res.json(await cargarResultadoDelJugador(slug, res.locals.usuarioId, Number(partidoId), req.body));
+});
+
+jugadorRouter.post('/partidos/:partidoId/resultado/confirmacion', async (req, res) => {
+  const { slug, partidoId } = req.params as { slug: string; partidoId: string };
+  res.json(await confirmarResultadoDelJugador(slug, res.locals.usuarioId, Number(partidoId)));
+});
+
+jugadorRouter.post('/partidos/:partidoId/resultado/rechazo', async (req, res) => {
+  const { slug, partidoId } = req.params as { slug: string; partidoId: string };
+  res.json(await rechazarResultadoDelJugador(slug, res.locals.usuarioId, Number(partidoId)));
 });
 
 // El celular donde recibe los avisos (decisión 047). La app lo manda al entrar y lo borra al salir.

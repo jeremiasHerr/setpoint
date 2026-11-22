@@ -23,3 +23,9 @@ export function obtenerCoordinacion(slug: string, id: number, partidoId: number)
 export function anotarFecha(slug: string, id: number, partidoId: number, datos: DatosFechaAcordadaEntrada) {
   return pedir<CoordinacionDelPartido>('PUT', `${ruta(slug, id)}/partidos/${partidoId}/fecha`, datos);
 }
+
+// Confirma el resultado que cargó un jugador y el rival no confirmó: cuenta como si lo hubiera
+// cargado la organización (decisión 127).
+export function confirmarResultadoPropuesto(slug: string, id: number, partidoId: number) {
+  return pedir('POST', `${ruta(slug, id)}/partidos/${partidoId}/resultado-propuesto/confirmacion`);
+}

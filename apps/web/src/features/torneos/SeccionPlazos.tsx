@@ -10,8 +10,14 @@ const DIAS_POR_SEMANA = 7;
 // Los topes de convocatoriaSchema (90 y 30 días), en semanas enteras.
 const MAXIMO_SEMANAS_GRUPOS = 12;
 const MAXIMO_SEMANAS_RONDA = 4;
+// Los topes de convocatoriaSchema para reprogramar (decisión 067).
+const MAXIMO_REPROGRAMACIONES = 3;
+const MAXIMO_HORAS_ANTELACION = 72;
 
-type Plazos = Pick<DatosConvocatoria, 'plazoGruposDias' | 'plazoPorRondaDias' | 'fechaInicio'>;
+type Plazos = Pick<
+  DatosConvocatoria,
+  'plazoGruposDias' | 'plazoPorRondaDias' | 'reprogramacionesPermitidas' | 'horasAntelacionReprogramar' | 'fechaInicio'
+>;
 
 type Props = Plazos & {
   // Sale de calcularFormato: una instancia por línea, con sus fechas si ya hay fecha de inicio.
@@ -23,7 +29,16 @@ type Props = Plazos & {
 // La organización piensa los plazos en semanas; el schema los guarda en días.
 const aSemanas = (dias: number) => Math.round(dias / DIAS_POR_SEMANA);
 
-export function SeccionPlazos({ plazoGruposDias, plazoPorRondaDias, fechaInicio, cronograma, errores, alCambiar }: Props) {
+export function SeccionPlazos({
+  plazoGruposDias,
+  plazoPorRondaDias,
+  reprogramacionesPermitidas,
+  horasAntelacionReprogramar,
+  fechaInicio,
+  cronograma,
+  errores,
+  alCambiar,
+}: Props) {
   const semanasGrupos = aSemanas(plazoGruposDias);
   const semanasRonda = aSemanas(plazoPorRondaDias);
 
@@ -74,6 +89,44 @@ export function SeccionPlazos({ plazoGruposDias, plazoPorRondaDias, fechaInicio,
           <MensajeError id="torneo-fecha-inicio-error">{errores.fechaInicio}</MensajeError>
         </div>
       </div>
+
+      {/* Reprogramar una fecha que ya confirmaron los dos: cambiar una sin confirmar no cuenta (decisiones 065 y 067). */}
+      <div className="grid gap-3.5 sm:grid-cols-3">
+        <div className="flex flex-col gap-2">
+          <Campo
+            id="torneo-reprogramaciones"
+            rotulo="Reprogramaciones por partido"
+            numerico
+            inputMode="numeric"
+            sufijo={reprogramacionesPermitidas === 1 ? 'vez' : 'veces'}
+            value={String(reprogramacionesPermitidas)}
+            onChange={(e) => alCambiar('reprogramacionesPermitidas', aEntero(e.target.value, MAXIMO_REPROGRAMACIONES))}
+            aria-invalid={errores.reprogramacionesPermitidas ? true : undefined}
+            aria-describedby={errores.reprogramacionesPermitidas ? 'torneo-reprogramaciones-error' : 'torneo-reprogramaciones-ayuda'}
+          />
+          <MensajeError id="torneo-reprogramaciones-error">{errores.reprogramacionesPermitidas}</MensajeError>
+        </div>
+        <div className="flex flex-col gap-2">
+          <Campo
+            id="torneo-antelacion"
+            rotulo="Avisando con"
+            numerico
+            inputMode="numeric"
+            sufijo={horasAntelacionReprogramar === 1 ? 'hora' : 'horas'}
+            value={String(horasAntelacionReprogramar)}
+            disabled={reprogramacionesPermitidas === 0}
+            onChange={(e) => alCambiar('horasAntelacionReprogramar', aEntero(e.target.value, MAXIMO_HORAS_ANTELACION))}
+            aria-invalid={errores.horasAntelacionReprogramar ? true : undefined}
+            aria-describedby={errores.horasAntelacionReprogramar ? 'torneo-antelacion-error' : 'torneo-reprogramaciones-ayuda'}
+          />
+          <MensajeError id="torneo-antelacion-error">{errores.horasAntelacionReprogramar}</MensajeError>
+        </div>
+      </div>
+      <p id="torneo-reprogramaciones-ayuda" className="-mt-1 text-[13px] text-pizarra-500">
+        {reprogramacionesPermitidas === 0
+          ? 'Una fecha que confirmaron los dos no se puede cambiar.'
+          : 'Cuántas veces se puede cambiar una fecha que ya confirmaron los dos, y con cuánta anticipación.'}
+      </p>
 
       <div className="flex flex-col gap-[7px] rounded-control bg-niebla px-[15px] py-[13px]">
         {fechaInicio === null ? (

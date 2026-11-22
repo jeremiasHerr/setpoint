@@ -10,7 +10,7 @@
 |---|---|
 | Ver el ranking, las fichas, el historial, los cuadros, las zonas y el calendario | Inscribirse y pagar |
 | | Coordinar las fechas de sus partidos |
-| | Cargar y confirmar resultados, si la organización lo permite (`quien_carga_resultados`, decisión abierta 12 del [README](README.md)) |
+| | Cargar y confirmar resultados, si la organización lo permite (`quien_carga_resultados`, [decisión 127](decisiones/127-resultados-de-los-jugadores.md)) |
 | | Recibir avisos en el celular |
 
 **Mirar no pide cuenta.** Las páginas públicas se abren por link: la organización comparte la URL en el grupo de WhatsApp donde ya se comunican, el jugador la toca y ve lo que necesita.
@@ -354,6 +354,18 @@ Con la confirmación desactivada, `anotada` es el estado previo a jugar y `confi
 Los rivales de zona pueden ver el teléfono del jugador, con aviso previo. Nadie más. Para hablar, un botón que abra WhatsApp con el rival: **no se construye un chat.**
 
 **Implementado:** la API da el teléfono solo al rival de un partido que todavía no se jugó ([decisión 046](decisiones/046-telefono-del-rival.md)). El aviso previo va arriba de *Cuándo juego* la primera vez, con "Entendido" o "No mostrar mi teléfono", y se cambia desde *Circuitos*; mientras el jugador no responde, el teléfono se sigue mostrando ([decisión 128](decisiones/128-aviso-del-telefono.md)). Oculto, al rival le aparece lo mismo que sin teléfono en el padrón.
+
+### 6.7 El resultado, si lo carga el jugador
+
+Si el circuito lo activa en *Tu circuito* ([decisión 127](decisiones/127-resultados-de-los-jugadores.md)), cualquiera de los dos jugadores carga el resultado de su partido desde la app, con la sesión iniciada. Es el mismo ida y vuelta que la fecha:
+
+1. Uno carga el resultado: un partido jugado, con sus sets, o un abandono. El W.O. no, porque lo decide la organización.
+2. El rival recibe un aviso y lo confirma o dice que no fue así.
+3. **Confirmado, cuenta:** se mueven la tabla de la zona o el cuadro, como si lo hubiera cargado la organización. Rechazado, no cuenta, y cualquiera de los dos lo vuelve a cargar.
+
+Mientras está pendiente, el partido no tiene resultado. Si el rival no tiene la app, o no contesta, la organización lo ve en el tablero y lo confirma ella. Un resultado que ya cuenta lo corrige solo la organización.
+
+**Implementado en la API:** `PUT /api/jugador/:slug/partidos/:partidoId/resultado`, `POST .../resultado/confirmacion` y `.../resultado/rechazo`; la organización confirma con `POST /api/organizaciones/:slug/torneos/:id/partidos/:partidoId/resultado-propuesto/confirmacion`. La app tiene *Cargar el resultado* (`/partido/[id]/resultado`): "Se jugó" o "Hubo abandono", los games de cada set desde el lado del jugador, con las filas que hacen falta, y las reglas del torneo validadas antes de mandar con el mismo schema que la API (`GET .../resultado` le da el sistema de juego). En *Cuándo juego*, el resultado que cargó el rival va arriba, en "Te falta confirmar", con "Confirmar" y "No fue así"; los partidos con la fecha pasada, o con un resultado propio pendiente o rechazado, van en "Falta el resultado". Las tarjetas sin coordinar y la del próximo partido suman "¿Ya lo jugaron? Cargar el resultado". En un circuito que no lo activa, *Cuándo juego* queda como estaba. La organización los ve en el tablero, en "Resultados por confirmar" ([03](03-flujo-organizacion.md) §9).
 
 ## 7. Mis partidos
 
