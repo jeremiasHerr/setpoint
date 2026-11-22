@@ -99,7 +99,7 @@ Con 32 jugadores en 8 grupos de 4:
 | Complementaria (16 jugadores) | 15 |
 | **Total** | **78** |
 
-> Este número es el que dimensiona el proyecto. Dos cuadros paralelos duplican el motor de eliminatorias y es la razón de la decisión abierta 4 del [README](README.md).
+> Este número es el que dimensiona el proyecto. Dos cuadros paralelos duplican el motor de eliminatorias: por eso el cuadro consuelo estuvo en duda (abierta 4 del [README](README.md), cerrada: está implementado completo).
 
 ---
 

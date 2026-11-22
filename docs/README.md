@@ -70,7 +70,6 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 | 1 | ¿Qué `modo_sorteo` usa POLENTA: automático, asistido o manual? (ver [07](07-configurabilidad.md) §2.1) | Nada: se implementan los tres. Solo define cuál le mostramos en la demo | Consultar |
 | 2 | ¿Desde qué instancia paga las canchas la organización? El reglamento dice "fases de Campeonato y Complementaria", la respuesta 9 dice cuartos y la 23 dice octavos | Modelo de sedes | Consultar |
 | 3 | El ranking del PDF tiene 5 casilleros (incluye "Pretemporada"), pero la respuesta 15 menciona 4 torneos + Master. ¿Pretemporada **es** el Master? | Modelo de ranking | Consultar |
-| 4 | ¿Se implementa el cuadro consuelo (la "Complementaria" de POLENTA) completo, o se recorta el alcance para llegar a noviembre? | Alcance del proyecto | **Decidir en grupo** |
 | 5 | ¿El resultado lo carga la organización a mano, o se extrae del mensaje de WhatsApp con IA? F19 es la segunda funcionalidad de IA y la de uso diario ([decisión 117](decisiones/117-las-proyecciones-no-son-ia.md)), implementada para texto pegado ([decisión 119](decisiones/119-resultados-desde-los-mensajes.md)); la carga a mano sigue ([devolucion-25.md](devolucion-25.md), cambio I) | Alcance de [06](06-ia.md) | **Confirmar el alcance con el profesor** |
 | 7 | **Cambio de categoría:** si un jugador de Tercera pasa a Segunda, ¿qué pasa con sus puntos de Tercera? ¿Se transfieren, quedan congelados, o el jugador desaparece de esa tabla? | Modelo de ranking | Consultar |
 | 10 | ¿Se implementan las **proyecciones pre-torneo** sugeridas por la cátedra? ("si llegás a semis sumás 50 y pasás al puesto 4") | Alcance | **Decidir en grupo** |
@@ -89,6 +88,7 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 - ~~¿Distribución directa o serpentina?~~ **Serpentina**, configurable
 - ~~¿Cuántos clasifican por grupo?~~ **Dos a Campeonato, dos a Complementaria**
 - ~~¿El cuadro final es eliminación simple?~~ **Sí**, ambos cuadros
+- ~~¿Se implementa el cuadro consuelo completo o se recorta el alcance? (abierta 4)~~ **Completo** (F08): los dos cuadros se arman al cerrar las zonas y corren en paralelo, cada uno con su campeón, con byes si hacen falta ([decisiones 022, 023 y 026](decisiones/022-ubicacion-en-el-cuadro.md)); se puede desactivar por torneo y su nombre lo elige cada circuito ([decisión 120](decisiones/120-nombre-del-cuadro-consuelo.md)); al cerrar, quien juega el consuelo suma participación. El riesgo que la tenía abierta era el tamaño del motor, y el motor ya está
 - ~~¿Se soporta dobles?~~ **No.** Solo single
 - ~~¿Quién carga los resultados?~~ **La organización**
 - ~~Tabla de puntos~~ **100 / 75 / 50 / 25 / 15 / 10**
@@ -278,7 +278,7 @@ Lista para llevar a la próxima charla. Las respondidas se tachan.
 
 | Riesgo | Mitigación |
 |---|---|
-| **78 partidos por torneo y dos cuadros paralelos.** El motor de competencia es más grande de lo estimado | Priorizar el cuadro principal; el cuadro consuelo como incremento posterior (decisión abierta 4). Es parámetro del torneo, no supuesto fijo |
+| **78 partidos por torneo y dos cuadros paralelos.** El motor de competencia es más grande de lo estimado | Resuelto: los dos cuadros están implementados y el consuelo es parámetro del torneo, no supuesto fijo (abierta 4, cerrada) |
 | **Los cambios de la devolución del 25% compiten por tiempo** con el motor de competencia y la app móvil | Se ordenan por costo: textos de la interfaz y seed primero; importación por excepción y detección del calendario después; varios formatos (PDF, texto, imágenes) solo si sobra tiempo. F19 ya está, para texto pegado ([decisión 119](decisiones/119-resultados-desde-los-mensajes.md)) |
 | **Sobregeneralizar la configurabilidad** y no llegar a noviembre | [07](07-configurabilidad.md) fija el límite: solo se parametriza lo barato y lo que varía de verdad |
 | Partidos que nunca se coordinan y bloquean el cierre de la zona | Tablero de avance con alertas de plazo; W.O. según reglamento |
