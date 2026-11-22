@@ -63,6 +63,17 @@ export function TarjetaProximo({ partido }: { partido: PartidoDelJugador }) {
           <Text style={estilos.textoEnlace}>{partido.accionDeFecha === 'cambiar' ? 'Cambiar la fecha' : 'Reprogramar'}</Text>
         </Pressable>
       )}
+      {/* Si lo jugaron antes, o es hoy: el resultado lo carga cualquiera de los dos (decisión 127). */}
+      {partido.puedeCargarResultado && (
+        <Pressable
+          accessibilityRole="button"
+          hitSlop={12}
+          onPress={() => router.push({ pathname: '/partido/[id]/resultado', params: { id: String(partido.id) } })}
+          style={({ pressed }) => [estilos.enlace, pressed && estilos.apretado]}
+        >
+          <Text style={estilos.textoEnlace}>¿Ya lo jugaron? Cargar el resultado</Text>
+        </Pressable>
+      )}
     </View>
   );
 }

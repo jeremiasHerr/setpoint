@@ -1,6 +1,6 @@
 import type { PartidoDelJugador } from '@setpoint/shared';
 import { router } from 'expo-router';
-import { Linking, StyleSheet, Text, View } from 'react-native';
+import { Linking, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Boton } from '../../components/Boton';
 import { diasHasta } from '../../lib/fechas';
 import { colores, fuentes, tabular } from '../../lib/tokens';
@@ -53,6 +53,17 @@ export function SinCoordinar({ partido, urgente }: { partido: PartidoDelJugador;
           )}
         </View>
         {!rival.telefono && <SinTelefono nombre={rival.nombre} />}
+        {/* Hay quien juega sin anotar la fecha: el resultado lo carga igual (decisión 127). */}
+        {partido.puedeCargarResultado && (
+          <Pressable
+            accessibilityRole="button"
+            hitSlop={12}
+            onPress={() => router.push({ pathname: '/partido/[id]/resultado', params: { id: String(partido.id) } })}
+            style={({ pressed }) => [estilos.enlace, pressed && estilos.apretado]}
+          >
+            <Text style={estilos.textoEnlace}>¿Ya lo jugaron? Cargar el resultado</Text>
+          </Pressable>
+        )}
       </View>
     </View>
   );
@@ -109,5 +120,18 @@ const estilos = StyleSheet.create({
     fontSize: 16,
     lineHeight: 22,
     color: colores.pizarra500,
+  },
+  enlace: {
+    alignSelf: 'center',
+    paddingVertical: 4,
+  },
+  apretado: {
+    opacity: 0.7,
+  },
+  textoEnlace: {
+    fontFamily: fuentes.sans[500],
+    fontSize: 15,
+    color: colores.noche,
+    textDecorationLine: 'underline',
   },
 });
