@@ -297,6 +297,9 @@ Pantalla central durante el torneo, en `/torneos/:id/tablero`. Reemplaza el trab
 | `GET /api/organizaciones/:slug/torneos/:id/tablero` | Todo lo del tablero en una respuesta: la situación de cada partido, el plazo, lo que falta, la tabla de cada zona y si se pueden cerrar las zonas o el torneo. Incluye el teléfono de los jugadores, para Escribirles. Solo para quien administra. `409 TABLERO_NO_DISPONIBLE` antes de confirmar el sorteo o con el torneo cancelado |
 | `GET /api/organizaciones/:slug/torneos/:id/partidos/:partidoId/fecha` | Lo que necesita *Anotar fecha*: los días del plazo, los clubes o la sede designada, y si se puede (F14) |
 | `PUT /api/organizaciones/:slug/torneos/:id/partidos/:partidoId/fecha` | Carga la fecha en nombre de los jugadores: queda confirmada, dentro del plazo, y les avisa a los dos. `409 PLAZO_VENCIDO` en un vencido, que se resuelve con el resultado |
+| `POST /api/organizaciones/:slug/torneos/:id/partidos/:partidoId/resultado-propuesto/confirmacion` | Confirma el resultado que cargó un jugador desde la app y el rival no confirmó: cuenta como si lo hubiera cargado la organización ([decisión 127](decisiones/127-resultados-de-los-jugadores.md)). `409 SIN_RESULTADO_PENDIENTE` si ya no está pendiente |
+
+**Resultados por confirmar** ([decisión 127](decisiones/127-resultados-de-los-jugadores.md)). Si el circuito deja que los jugadores carguen sus resultados, *Lo que falta* abre con los que cargó un jugador y todavía no cuentan: "Bravo cargó: gana Roa 6-3 6-4 · falta que confirme Roa", con *Confirmar el resultado*. Si el rival dijo que no fue así, la acción es *Cargar el resultado*, que abre la carga de la organización. Esos partidos no se repiten en los vencidos ni en los sin coordinar.
 
 ---
 
