@@ -7,7 +7,18 @@ import { Tarjeta } from '../../components/Tarjeta';
 import { urlDeWhatsApp } from '../padron/linkPersonal';
 import { TextoConNumeros } from '../resultados/AlGuardar';
 import { AnotarFecha } from './AnotarFecha';
-import { dondeSeJuega, elDiaYHora, mensajeParaCoordinar, nombresDelPartido, partidosConFecha, textoDeLosDias } from './tablero';
+import {
+  dondeSeJuega,
+  elDiaYHora,
+  mensajeParaCoordinar,
+  nombresDelPartido,
+  partidosConFecha,
+  partidosConResultadoPropuesto,
+  resultadoPropuestoEnPalabras,
+  textoDeLosDias,
+} from './tablero';
+import { useConfirmarResultadoPropuesto } from './useTablero';
+import { MensajeError } from '../../components/Aviso';
 
 const accion = 'inline-flex h-8 items-center justify-center rounded-control px-3 text-[13px] font-medium';
 
@@ -125,6 +136,56 @@ function Fila({ slug, partido, tablero, lista }: { slug: string; partido: Partid
   );
 }
 
+// Un resultado que cargó un jugador desde la app (decisión 127). Pendiente, la organización lo
+// confirma por el rival que no tiene la app o no contesta; rechazado, lo carga ella.
+function FilaDelResultado({ slug, partido, tablero }: { slug: string; partido: PartidoDelTablero; tablero: Tablero }) {
+  const confirmar = useConfirmarResultadoPropuesto(slug, tablero.torneoId);
+  const { cargado, marcador, falta } = resultadoPropuestoEnPalabras(partido);
+  const pendiente = partido.resultadoPropuesto!.estado === 'pendiente';
+
+  return (
+    <li className="border-b border-linea-suave last:border-b-0">
+      <div
+        className={`grid gap-x-3 gap-y-2 px-5 py-3.5 md:min-h-[52px] md:items-center md:py-2 ${
+          tablero.fase === 'grupos' ? 'md:grid-cols-[76px_minmax(0,1fr)_300px_auto]' : 'md:grid-cols-[150px_minmax(0,1fr)_300px_auto]'
+        }`}
+      >
+        <span className="text-[12.5px] font-medium text-noche">{dondeSeJuega(partido, tablero)}</span>
+        <span className="text-base">{nombresDelPartido(partido)}</span>
+        <span className="flex min-w-0 flex-col gap-0.5">
+          <span className="text-[13px] text-noche">
+            {cargado}
+            {marcador && <Numero> {marcador}</Numero>}
+          </span>
+          <span className="text-[13px] text-pizarra-500">{falta}</span>
+        </span>
+        <div className="grid grid-cols-[100px_152px] gap-2 md:justify-end">
+          <span />
+          {pendiente ? (
+            <button
+              type="button"
+              disabled={confirmar.isPending}
+              onClick={() => confirmar.mutate(partido.id)}
+              className={`${accion} w-full bg-noche font-semibold text-white disabled:opacity-60`}
+            >
+              {confirmar.isPending ? 'Confirmando…' : 'Confirmar el resultado'}
+            </button>
+          ) : (
+            <Link to={`/torneos/${tablero.torneoId}/resultados/${partido.id}`} className={`${accion} w-full border border-linea hover:bg-niebla`}>
+              Cargar el resultado
+            </Link>
+          )}
+        </div>
+      </div>
+      {confirmar.error && (
+        <div className="px-5 pb-4">
+          <MensajeError>No pudimos confirmarlo: el resultado cambió mientras tanto o se cortó la conexión. Recargá el tablero.</MensajeError>
+        </div>
+      )}
+    </li>
+  );
+}
+
 function Encabezado({ rojo = false, titulo, cantidad, children }: { rojo?: boolean; titulo: string; cantidad: number; children: ReactNode }) {
   return (
     <div
@@ -144,11 +205,16 @@ function Encabezado({ rojo = false, titulo, cantidad, children }: { rojo?: boole
 // La lista de trabajo, ordenada por urgencia: primero los vencidos, que resuelve la organización
 // (02-dominio.md §8.4), y después los que nadie coordinó.
 export function LoQueFalta({ slug, tablero }: { slug: string; tablero: Tablero }) {
-  const { vencidos, sinCoordinar, totales } = tablero;
-  const nada = vencidos.length === 0 && sinCoordinar.length === 0;
+  // Los que tienen un resultado cargado por un jugador ya se jugaron: van en su lista, no en las otras.
+  const conResultado = partidosConResultadoPropuesto(tablero);
+  const yaJugados = new Set(conResultado.map((p) => p.id));
+  const vencidos = tablero.vencidos.filter((p) => !yaJugados.has(p.id));
+  const sinCoordinar = tablero.sinCoordinar.filter((p) => !yaJugados.has(p.id));
+  const { totales } = tablero;
+  const nada = conResultado.length === 0 && vencidos.length === 0 && sinCoordinar.length === 0;
   // Los con fecha no son urgentes: se despliegan desde el pie, para cambiarlos o confirmarlos (F14).
   const [verConFecha, setVerConFecha] = useState(false);
-  const conFecha = partidosConFecha(tablero);
+  const conFecha = partidosConFecha(tablero).filter((p) => !yaJugados.has(p.id));
 
   return (
     <section className="flex flex-col gap-3">
@@ -158,6 +224,19 @@ export function LoQueFalta({ slug, tablero }: { slug: string; tablero: Tablero }
       </div>
 
       <Tarjeta className="overflow-hidden">
+        {conResultado.length > 0 && (
+          <>
+            <Encabezado titulo="Resultados por confirmar" cantidad={conResultado.length}>
+              Los cargó un jugador desde la app. Si el rival no tiene la app, confirmalo vos
+            </Encabezado>
+            <ul>
+              {conResultado.map((partido) => (
+                <FilaDelResultado key={partido.id} slug={slug} partido={partido} tablero={tablero} />
+              ))}
+            </ul>
+          </>
+        )}
+
         {vencidos.length > 0 && (
           <>
             <Encabezado rojo titulo="Vencidos sin jugarse" cantidad={vencidos.length}>

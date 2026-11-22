@@ -1,6 +1,6 @@
 import type { DatosFechaAcordadaEntrada } from '@setpoint/shared';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { anotarFecha, cerrarZonas, obtenerCoordinacion, obtenerTablero } from './api';
+import { anotarFecha, cerrarZonas, confirmarResultadoPropuesto, obtenerCoordinacion, obtenerTablero } from './api';
 import { claveNavegacion } from '../torneos/useNavegacionDelTorneo';
 
 const claveTablero = (slug: string, id: number) => ['tablero', slug, id];
@@ -40,5 +40,17 @@ export function useAnotarFecha(slug: string, id: number, partidoId: number) {
     mutationFn: (datos: DatosFechaAcordadaEntrada) => anotarFecha(slug, id, partidoId, datos),
     // Con fecha, el partido deja de estar sin coordinar.
     onSuccess: () => queryClient.invalidateQueries({ queryKey: claveTablero(slug, id) }),
+  });
+}
+
+// Con el resultado confirmado, el partido se jugó: cambian las barras, las tablas y lo que falta.
+export function useConfirmarResultadoPropuesto(slug: string, id: number) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (partidoId: number) => confirmarResultadoPropuesto(slug, id, partidoId),
+    onSettled: () => {
+      void queryClient.invalidateQueries({ queryKey: claveTablero(slug, id) });
+      void queryClient.invalidateQueries({ queryKey: claveNavegacion(slug, id) });
+    },
   });
 }
