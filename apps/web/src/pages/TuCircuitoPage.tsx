@@ -12,6 +12,7 @@ import { SeccionCategorias } from '../features/circuito/SeccionCategorias';
 import { SeccionClubes } from '../features/circuito/SeccionClubes';
 import { SeccionQuienesSon } from '../features/circuito/SeccionQuienesSon';
 import { SeccionRanking } from '../features/circuito/SeccionRanking';
+import { SeccionResultados } from '../features/circuito/SeccionResultados';
 import { TablaPuntos } from '../features/circuito/TablaPuntos';
 import { iniciales, navegacionOrganizador } from '../features/organizador/encabezado';
 import { Esqueleto } from '../components/Esqueleto';
@@ -129,6 +130,10 @@ function EditorCircuito({ sesion, inicial }: { sesion: Sesion; inicial: Circuito
               alCambiar={(instancia, puntos) => cambiar('puntos', { ...circuito.puntos, [instancia]: puntos })}
             />
           )}
+          <SeccionResultados
+            jugadoresCarganResultados={circuito.jugadoresCarganResultados ?? false}
+            alCambiar={(valor) => cambiar('jugadoresCarganResultados', valor)}
+          />
           <SeccionClubes
             usaClubes={usaClubes}
             clubes={circuito.clubes}

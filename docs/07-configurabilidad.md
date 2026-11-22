@@ -39,7 +39,7 @@ Se definen una vez, al dar de alta el circuito.
 
 > Es la puerta de entrada al producto: una organización puede probar la plataforma creando un torneo suelto en dos minutos, y activar el ranking más adelante sin rehacer nada.
 
-**`quien_carga_resultados`** — si los jugadores pueden reportar el resultado de su partido con confirmación del rival, o si la carga es exclusiva de la organización. POLENTA usa el modo restringido, alineado con el principio de mínima carga. Con el otro modo, el resultado que carga un jugador desde la app cuenta cuando lo confirma el rival o la organización, y el W.O. lo sigue dando solo la organización ([decisión 127](decisiones/127-resultados-de-los-jugadores.md)). Toda organización arranca en `organizacion`.
+**`quien_carga_resultados`** — si los jugadores pueden reportar el resultado de su partido con confirmación del rival, o si la carga es exclusiva de la organización. POLENTA usa el modo restringido, alineado con el principio de mínima carga. Con el otro modo, el resultado que carga un jugador desde la app cuenta cuando lo confirma el rival o la organización, y el W.O. lo sigue dando solo la organización ([decisión 127](decisiones/127-resultados-de-los-jugadores.md)). Toda organización arranca en `organizacion`, y lo cambia en *Tu circuito*, en "Los jugadores cargan sus resultados".
 
 ### 1.1 Configurar el circuito desde la planilla
 

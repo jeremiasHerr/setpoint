@@ -182,6 +182,22 @@ describe.skipIf(!process.env.DATABASE_URL)('el resultado de los jugadores, contr
     expect((await delPartido(partido.entreEllos)).ganadorId).toBe(perfil.otro);
   });
 
+  it('Tu circuito lo apaga y lo prende; si no manda el campo, no lo toca', async () => {
+    const { obtenerCircuito, guardarCircuito } = await import('../../src/modules/organizaciones/circuito.service');
+    const { configuracionCircuitoSchema } = await import('@setpoint/shared');
+    const circuito = await obtenerCircuito(slug, admin);
+    expect(circuito.jugadoresCarganResultados).toBe(true);
+    const quien = async () => (await prisma.organizacion.findUniqueOrThrow({ where: { id: organizacionId } })).quienCargaResultados;
+
+    await guardarCircuito(slug, admin, configuracionCircuitoSchema.parse({ ...circuito, jugadoresCarganResultados: false }));
+    expect(await quien()).toBe('ORGANIZACION');
+    const { jugadoresCarganResultados: _, ...sinElCampo } = circuito;
+    await guardarCircuito(slug, admin, configuracionCircuitoSchema.parse(sinElCampo));
+    expect(await quien()).toBe('ORGANIZACION');
+    await guardarCircuito(slug, admin, configuracionCircuitoSchema.parse({ ...circuito, jugadoresCarganResultados: true }));
+    expect(await quien()).toBe('ORGANIZACION_Y_JUGADORES');
+  });
+
   it('con la carga solo de la organización, el jugador no puede cargar', async () => {
     await prisma.organizacion.update({ where: { id: organizacionId }, data: { quienCargaResultados: 'ORGANIZACION' } });
     const nuevo = await prisma.partido.create({
