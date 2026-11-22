@@ -2,6 +2,13 @@
 import { NOMBRE_CUADRO_CONSUELO, type PartidoDelJugador } from '@setpoint/shared';
 import type { EstadoPartido } from '../competencia/clasificacion';
 import { accionDeFecha, quienAnoto, type ReglasDeReprogramacion } from '../coordinacion/coordinacion';
+import {
+  datosDeLaPropuesta,
+  ganadorDeLaPropuesta,
+  problemaAlCargar,
+  propuestaVigente,
+  type PropuestaLeida,
+} from '../resultado-del-jugador/resultado-del-jugador';
 
 type SetLeido = { gamesA: number; gamesB: number };
 type JugadorLeido = { nombre: string; apellido: string; telefono: string | null; usuarioId: number | null };
@@ -26,6 +33,8 @@ export type PartidoLeido = {
   jugadorA: JugadorLeido | null;
   jugadorB: JugadorLeido | null;
   sets: SetLeido[];
+  // Los resultados que cargaron los jugadores (decisión 127). Opcional: sin él, no hay ninguno.
+  resultadosPropuestos?: PropuestaLeida[];
 };
 
 const CON_RESULTADO = new Set(['JUGADA', 'WALKOVER', 'ABANDONO']);
@@ -55,6 +64,21 @@ export function marcador(p: Pick<PartidoLeido, 'estado' | 'sets'>, esA: boolean)
   return sets;
 }
 
+// El resultado que cargó uno de los dos y todavía no cuenta, desde el lado del jugador (decisión 127).
+function propuestaDesdeSuLado(p: PartidoLeido, jugadorId: number, esA: boolean): PartidoDelJugador['resultadoPropuesto'] {
+  const propuesta = propuestaVigente(p.resultadosPropuestos ?? []);
+  if (!propuesta || p.jugadorAId === null || p.jugadorBId === null) return null;
+  const datos = datosDeLaPropuesta(propuesta);
+  const comoPartido = { estado: datos.tipo === 'jugado' ? ('JUGADA' as const) : ('ABANDONO' as const), sets: datos.tipo === 'jugado' ? datos.sets : [] };
+  return {
+    id: propuesta.id,
+    cargadoPor: propuesta.jugadorId === jugadorId ? 'yo' : 'rival',
+    estado: propuesta.estado === 'PENDIENTE' ? 'pendiente' : 'rechazado',
+    gano: ganadorDeLaPropuesta(datos, p.jugadorAId, p.jugadorBId) === jugadorId,
+    marcador: marcador(comoPartido, esA),
+  };
+}
+
 // Cuántas rondas tiene cada cuadro, para nombrar la ronda desde la final.
 export function rondasDeLosCuadros(partidos: Pick<PartidoLeido, 'cuadro' | 'ronda'>[]) {
   const rondasPorCuadro = new Map<string, number>();
@@ -74,6 +98,8 @@ type Opciones = {
   consuelo?: string;
   reglas?: ReglasDeReprogramacion;
   ahora?: Date;
+  // Si la organización deja que los jugadores carguen sus resultados (decisión 127).
+  jugadoresCarganResultados?: boolean;
 };
 
 // Cada partido del torneo en el que juega, visto desde su lado. Todos los del torneo hacen falta
@@ -81,7 +107,7 @@ type Opciones = {
 export function partidosDelJugador(
   jugadorId: number,
   partidosDelTorneo: PartidoLeido[],
-  { torneo, consuelo, reglas = REGLAS_POR_DEFECTO, ahora = new Date() }: Opciones = {},
+  { torneo, consuelo, reglas = REGLAS_POR_DEFECTO, ahora = new Date(), jugadoresCarganResultados = false }: Opciones = {},
 ): PartidoDelJugador[] {
   const rondasPorCuadro = rondasDeLosCuadros(partidosDelTorneo);
 
@@ -112,6 +138,8 @@ export function partidosDelJugador(
         accionDeFecha: 'accion' in fecha ? fecha.accion : null,
         sede,
         resultado: jugado ? { gano: p.ganadorId === jugadorId, marcador: marcador(p, esA) } : null,
+        resultadoPropuesto: jugado ? null : propuestaDesdeSuLado(p, jugadorId, esA),
+        puedeCargarResultado: problemaAlCargar(p, jugadorId, jugadoresCarganResultados, p.resultadosPropuestos ?? []) === null,
       };
     });
 }

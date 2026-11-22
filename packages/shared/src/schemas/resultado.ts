@@ -34,6 +34,15 @@ export const resultadoSchema = z.discriminatedUnion('tipo', [
   z.object({ tipo: z.literal('abandono'), ganadorId }),
 ]);
 
+// Lo que puede cargar un jugador desde la app (decisión 127): un partido jugado o un abandono. El
+// W.O. no, porque lo decide la organización (02-dominio §8.4). Las reglas del sistema de juego se
+// validan después, con las del torneo, igual que cuando carga la organización.
+export const resultadoDelJugadorSchema = z.discriminatedUnion('tipo', [
+  z.object({ tipo: z.literal('jugado'), sets }),
+  z.object({ tipo: z.literal('abandono'), ganadorId }),
+]);
+export type DatosResultadoDelJugador = z.output<typeof resultadoDelJugadorSchema>;
+
 export type DatosResultadoEntrada = z.input<typeof resultadoSchema>;
 export type DatosResultado = z.output<typeof resultadoSchema>;
 export type SetCargado = z.output<typeof setCargadoSchema>;

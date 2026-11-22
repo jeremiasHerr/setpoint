@@ -2,11 +2,12 @@ import { Router } from 'express';
 import { resultadoSchema } from '@setpoint/shared';
 import { autenticar } from '../../middleware/autenticar';
 import { validar } from '../../middleware/validar';
+import { confirmarResultadoPorLaOrganizacion } from '../resultado-del-jugador/resultado-del-jugador.service';
 import { guardarResultado, listarPartidos, obtenerPartido, simularResultado } from './resultados.service';
 
 // Se monta en /api/organizaciones/:slug/torneos/:id/partidos: mergeParams trae el slug y el id.
-// Los resultados los carga solo la organización (03-flujo-organizacion.md §10). Que también
-// puedan cargarlos los jugadores es la decisión abierta 12.
+// Los resultados los carga la organización (03-flujo-organizacion.md §10). Si lo permite, también
+// los jugadores desde la app, con la confirmación del rival (decisión 127).
 export const resultadosRouter = Router({ mergeParams: true });
 
 resultadosRouter.use(autenticar);
@@ -34,4 +35,10 @@ resultadosRouter.put('/:partidoId/resultado', validar(resultadoSchema), async (r
 resultadosRouter.post('/:partidoId/simulacion', validar(resultadoSchema), async (req, res) => {
   const { slug, id, partidoId } = req.params as { slug: string; id: string; partidoId: string };
   res.json(await simularResultado(slug, res.locals.usuarioId, Number(id), Number(partidoId), req.body));
+});
+
+// La organización confirma el resultado que cargó un jugador y el rival no confirmó (decisión 127).
+resultadosRouter.post('/:partidoId/resultado-propuesto/confirmacion', async (req, res) => {
+  const { slug, id, partidoId } = req.params as { slug: string; id: string; partidoId: string };
+  res.json(await confirmarResultadoPorLaOrganizacion(slug, res.locals.usuarioId, Number(id), Number(partidoId)));
 });

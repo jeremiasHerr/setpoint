@@ -1,4 +1,4 @@
-import { EstadoPartido as EstadoPrisma, EstadoTorneo, FasePartido, type Prisma } from '@prisma/client';
+import { EstadoPartido as EstadoPrisma, EstadoResultadoPropuesto, EstadoTorneo, FasePartido, type Prisma } from '@prisma/client';
 import {
   ganadorDeLosSets,
   nombreCuadroConsuelo,
@@ -22,7 +22,8 @@ import { avanzarGanador } from './cuadros.service';
 import { simularZona } from './posiciones';
 import { INCLUIR_ZONAS, inscriptosYPartidos } from './posiciones.service';
 
-// Carga y corrección de resultados (F06). Los carga la organización (03-flujo-organizacion.md §10).
+// Carga y corrección de resultados (F06). Los carga la organización (03-flujo-organizacion.md §10),
+// o un jugador desde la app con la confirmación del rival (decisión 127, ver resultado-del-jugador).
 // Las tablas de las zonas se calculan en cada consulta, así que guardar un resultado de zona ya
 // las actualiza. Uno de cuadro, además, hace avanzar al ganador.
 
@@ -242,6 +243,20 @@ export async function guardarResultado(
   datos: DatosResultado,
 ): Promise<PartidoConResultado> {
   const organizacionId = await organizacionAdministrada(slug, usuarioId);
+  return aplicarResultado(organizacionId, torneoId, partidoId, datos);
+}
+
+// Lo que hace un resultado que cuenta, lo cargue la organización o lo confirme el rival
+// (decisión 127): valida, guarda los sets, avanza el cuadro y recalcula los puntos. Quien llama ya
+// comprobó el permiso. `enLaTransaccion` corre junto con el guardado: si falla, no se guarda nada.
+// Los resultados que cargaron los jugadores y seguían pendientes quedan reemplazados.
+export async function aplicarResultado(
+  organizacionId: number,
+  torneoId: number,
+  partidoId: number,
+  datos: DatosResultado,
+  enLaTransaccion?: (tx: Prisma.TransactionClient) => Promise<void>,
+): Promise<PartidoConResultado> {
   const torneo = await torneoDeLaOrganizacion(organizacionId, torneoId);
   const partido = await partidoDelTorneo(torneo.id, partidoId);
   const resultado = resultadoAGuardar(torneo, partido, datos);
@@ -269,6 +284,13 @@ export async function guardarResultado(
       data: { estado, ganadorId },
     });
     if (torneoSinCambios.count === 0 || partidoSinCambios.count === 0) throw new ErrorHttp(409, 'RESULTADO_DESACTUALIZADO');
+
+    // El que se confirma se marca primero; los demás pendientes ya no hacen falta.
+    await enLaTransaccion?.(tx);
+    await tx.resultadoPropuesto.updateMany({
+      where: { partidoId: partido.id, estado: EstadoResultadoPropuesto.PENDIENTE },
+      data: { estado: EstadoResultadoPropuesto.REEMPLAZADO, resueltoEn: new Date() },
+    });
 
     // Los sets y el ganador se escriben juntos: Partido.ganadorId es una redundancia de los sets.
     await tx.setPartido.deleteMany({ where: { partidoId: partido.id } });
