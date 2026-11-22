@@ -11,7 +11,7 @@ const PESTANAS = ['Inscripciones', 'Zonas', 'Tablero', 'Resultados', 'Cierre'];
 // El encabezado del organizador y la franja del torneo: lo que comparten el Tablero y Cargar resultado.
 // Es una foto del producto, con "Liga Amateur del Valle" como organización de ejemplo.
 export function EncabezadoDelProducto({ activa }: { activa: 'Tablero' | 'Resultados' }) {
-  const menu = ['Inicio', 'Torneos', 'Circuito', 'Padrón'];
+  const menu = ['Inicio', 'Torneos', 'Circuito', 'Jugadores'];
   return (
     <>
       <div className="flex h-14 items-center gap-4 bg-noche px-7 text-white">

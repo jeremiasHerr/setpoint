@@ -59,7 +59,7 @@ Es lo que cierra la promesa de la puerta de entrada: el circuito nuevo empieza c
 | Concepto | Nombre por defecto | Configurable | POLENTA |
 |---|---|---|---|
 | Cuadro de los que no clasifican al principal | Cuadro consuelo | Sí, por organización, en *Tu circuito* ([decisión 120](decisiones/120-nombre-del-cuadro-consuelo.md)) | Complementaria |
-| Cuadro de los clasificados | Campeonato | A decidir (decisión abierta 16 del [README](README.md)) | Campeonato |
+| Cuadro de los clasificados | Campeonato | No ([decisión 129](decisiones/129-nombres-que-quedaban-abiertos.md)) | Campeonato |
 | Torneo que se repite cada año (`Etapa`) | Torneo del calendario | No | Etapa |
 | Una vez que se juega, en una categoría (`Torneo`) | Edición | No | — |
 

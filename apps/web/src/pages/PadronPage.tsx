@@ -115,14 +115,14 @@ function Padron({ sesion }: { sesion: Sesion }) {
       <EncabezadoOrganizador
         organizacion={circuito.data?.nombre ?? sesion.organizacion.nombre}
         navegacion={navegacionOrganizador}
-        activo="Padrón"
+        activo="Jugadores"
         iniciales={iniciales(sesion.usuario.nombre)}
         alSalir={cerrarSesion}
       />
 
       <div className="flex flex-wrap items-end justify-between gap-6 px-4 md:px-7 pt-[26px] pb-[18px]">
         <div className="flex flex-col gap-[7px]">
-          <h1 className="text-[28px] font-display font-semibold tracking-[-0.02em]">Padrón</h1>
+          <h1 className="text-[28px] font-display font-semibold tracking-[-0.02em]">Jugadores</h1>
           <p className="text-[15px] text-pizarra-500">
             Los jugadores de tu circuito. De acá salen las inscripciones, el ranking y el historial.
           </p>

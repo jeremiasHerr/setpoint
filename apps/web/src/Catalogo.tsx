@@ -9,7 +9,7 @@ import { Numero } from './components/Numero';
 import { Tarjeta } from './components/Tarjeta';
 
 const navegacion = [
-  { etiqueta: 'Padrón', href: '#padron' },
+  { etiqueta: 'Jugadores', href: '#padron' },
   { etiqueta: 'Torneos', href: '#torneos' },
   { etiqueta: 'Tablero', href: '#tablero' },
 ];
@@ -31,7 +31,7 @@ export function Catalogo() {
 
   return (
     <div className="min-h-screen bg-papel">
-      <EncabezadoOrganizador organizacion="Liga Amateur del Valle" navegacion={navegacion} activo="Padrón" />
+      <EncabezadoOrganizador organizacion="Liga Amateur del Valle" navegacion={navegacion} activo="Jugadores" />
 
       <main className="mx-auto flex max-w-4xl flex-col gap-10 px-7 py-8">
         <div className="flex flex-col gap-2">

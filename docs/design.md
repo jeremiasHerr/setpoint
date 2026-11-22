@@ -368,11 +368,12 @@ La interfaz usa términos genéricos, no los del código ni los de un circuito e
 | Se dice | No se dice | Nota |
 |---|---|---|
 | **Torneo del calendario** | Etapa | "El Primavera es un torneo del calendario" |
-| **Edición** | Torneo (para una categoría de un torneo del calendario) | "Primavera 26 · Tercera". Un torneo suelto sigue siendo "torneo" (decisión abierta 15 del [README](README.md)) |
+| **Edición** | Torneo (para una categoría de un torneo del calendario) | "Primavera 26 · Tercera". Un torneo suelto es un "torneo suelto", y la convocatoria que crea varias categorías es un "torneo" ([decisión 129](decisiones/129-nombres-que-quedaban-abiertos.md)) |
 | **Cuadro consuelo**, o el nombre que configure la organización | Complementaria | POLENTA lo configura como "Complementaria"; en sus pantallas se ve así |
-| Campeonato | — | Decisión abierta 16: puede pasar a "cuadro principal" |
+| Campeonato | — | Queda así ([decisión 129](decisiones/129-nombres-que-quedaban-abiertos.md)) |
+| Jugadores | Padrón | En el menú, las migas y el título de la pantalla. En las frases sigue "padrón" ([decisión 129](decisiones/129-nombres-que-quedaban-abiertos.md)) |
 
-**Estado.** Las pantallas implementadas ya usan estos términos, salvo "Campeonato" (decisión abierta 16); el nombre configurable del cuadro consuelo está pendiente. Los HTML de referencia no se rehacen y conservan los términos viejos: cuáles, en [pantallas/README.md](pantallas/README.md).
+**Estado.** Las pantallas implementadas ya usan estos términos, y el cuadro consuelo usa el nombre que configura cada organización ([decisión 120](decisiones/120-nombre-del-cuadro-consuelo.md)). Los HTML de referencia no se rehacen y conservan los términos viejos: cuáles, en [pantallas/README.md](pantallas/README.md).
 
 ### Ayuda en contexto
 

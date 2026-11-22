@@ -176,13 +176,13 @@ function ImportarPadron({ sesion }: { sesion: Sesion }) {
       <EncabezadoOrganizador
         organizacion={circuito.data?.nombre ?? sesion.organizacion.nombre}
         navegacion={navegacionOrganizador}
-        activo="Padrón"
+        activo="Jugadores"
         iniciales={iniciales(sesion.usuario.nombre)}
         alSalir={cerrarSesion}
       />
 
       <div className="flex flex-col gap-2 px-4 md:px-7 pt-[26px] pb-5">
-        <Migas anteriores={[{ etiqueta: 'Padrón', ruta: '/padron' }]}>Importar planilla</Migas>
+        <Migas anteriores={[{ etiqueta: 'Jugadores', ruta: '/padron' }]}>Importar planilla</Migas>
         <h1 className="max-w-[24ch] text-[28px] font-display font-semibold tracking-[-0.02em] text-balance">
           {enRevision && importacion.data ? tituloDeRevision(importacion.data) : 'Importar planilla'}
         </h1>
