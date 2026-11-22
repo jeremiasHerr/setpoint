@@ -1,4 +1,4 @@
-import type { PartidoDelCaraACara } from '@setpoint/shared';
+import { cortaDe, type PartidoDelCaraACara } from '@setpoint/shared';
 import { StyleSheet, Text, View } from 'react-native';
 import { colores, fuentes, tabular } from '../../lib/tokens';
 import { rotuloDeRonda } from '../ficha/textos';
@@ -31,6 +31,7 @@ export function PartidosDelCruce({ partidos, apellidoRival, consuelo }: Props) {
               </Text>
               <Text style={estilos.detalle}>
                 {p.torneo} · {donde(p, consuelo)}
+                {p.superficie && ` · ${cortaDe(p.superficie)}`}
               </Text>
             </View>
             <Text style={[estilos.marcador, gane && estilos.ganado]}>{p.marcador}</Text>

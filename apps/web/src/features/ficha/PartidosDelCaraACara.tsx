@@ -1,9 +1,6 @@
-import { superficies, type PartidoDelCaraACara, type Superficie } from '@setpoint/shared';
+import { cortaDe, type PartidoDelCaraACara } from '@setpoint/shared';
 import { Numero } from '../../components/Numero';
 import { donde } from './PartidosDeLaFicha';
-
-// "polvo", "cemento": la etiqueta que va dentro de una frase (decisión 126).
-export const cortaDe = (superficie: Superficie) => superficies.find((s) => s.clave === superficie)!.corta;
 
 const TEXTO_DEL_ESTADO = { jugada: '', walkover: ' por W.O.', abandono: ' por abandono' } as const;
 

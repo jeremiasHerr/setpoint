@@ -399,11 +399,11 @@ Cualquier persona podrá comparar a dos jugadores del circuito y ver el historia
 
 **Entrega: 100%**
 
-**Estado:** implementada en la web, con el filtro por superficie ([decisión 126](decisiones/126-superficie-del-partido-por-el-club.md)).
+**Estado:** implementada en la web y en la app, con el filtro por superficie ([decisión 126](decisiones/126-superficie-del-partido-por-el-club.md)).
 - *Cara a cara* (`/c/:slug/jugadores/:id/cara-a-cara/:rivalId`) muestra el cruce acumulado, cada partido con su torneo e instancia, y vuelve a la ficha. Sin rival, lista con quiénes jugó el jugador para elegir.
 - La API: `GET /api/publico/:slug/jugadores/:id/rivales` y `.../cara-a-cara/:rivalId`. El W.O. no cuenta como jugado y el abandono sí ([decisión 073](decisiones/073-el-wo-no-cuenta-en-la-ficha.md)). Sin teléfono ni email.
 - El filtro por superficie usa la del club de cada partido, si todas sus canchas son de la misma; los partidos sin ese dato solo cuentan en "Todas". Abajo, una frase dice cómo están en cada superficie ([decisión 126](decisiones/126-superficie-del-partido-por-el-club.md)).
-- Falta "Cómo te fue con él" en la app.
+- En la app, *Cómo te fue con…* (`/rival/[id]`) muestra el historial entre quien tiene la sesión y un rival, con el mismo filtro y la misma frase, que viven en `packages/shared`. Se abre desde el próximo partido en *Cuándo juego* y desde la ficha de otro jugador. No tiene el buscador de rivales de la web.
 
 ---
 
