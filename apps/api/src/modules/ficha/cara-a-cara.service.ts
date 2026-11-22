@@ -3,7 +3,7 @@ import { caraACaraParamsSchema, nombreCuadroConsuelo, type CaraACara, type Jugad
 import { DEL_PADRON_ACTIVOS } from '../../lib/padron';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
-import { partidosDelCaraACara, resumenDelCaraACara, rivalesConPartidos } from './cara-a-cara';
+import { cruceEnCadaSuperficie, partidosDelCaraACara, resumenDelCaraACara, rivalesConPartidos } from './cara-a-cara';
 import { rankingDelJugador } from './ficha-publica.service';
 
 // El cara a cara y la lista de rivales (F18), sin login. Ningún dato de contacto.
@@ -60,6 +60,9 @@ export async function caraACara(slug: string, params: unknown): Promise<CaraACar
       jugadorA: { select: { id: true, nombre: true, apellido: true } },
       jugadorB: { select: { id: true, nombre: true, apellido: true } },
       sets: { select: { gamesA: true, gamesB: true }, orderBy: { numero: 'asc' } },
+      // Para la superficie (decisión 126): la cancha si la guardó, o las canchas de su club.
+      cancha: { select: { superficie: true } },
+      club: { select: { canchas: { select: { superficie: true } } } },
     },
   });
   const torneoIds = [...new Set(partidos.map((p) => p.torneoId))];
@@ -92,6 +95,7 @@ export async function caraACara(slug: string, params: unknown): Promise<CaraACar
     a: lado(a, rankingA),
     b: lado(b, rankingB),
     resumen: resumenDelCaraACara(aId, partidos),
+    porSuperficie: cruceEnCadaSuperficie(aId, partidos),
     // El cara a cara no linkea a qué está en juego (F20): eso va en la ficha.
     partidos: partidosDelCaraACara(aId, torneos.map((t) => ({ ...t, conProyeccion: false })), partidos, partidosDeCuadro),
   };
