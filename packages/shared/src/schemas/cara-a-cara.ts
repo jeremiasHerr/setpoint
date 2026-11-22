@@ -2,6 +2,7 @@
 // la API con los partidos que jugaron entre ellos; la web y la app solo la muestran. Como toda
 // pantalla pública, sin teléfono ni email.
 import { z } from 'zod';
+import type { Superficie } from './circuito';
 import type { ClaveCuadro } from './cuadros';
 import type { PartidoDeLaFicha } from './ficha';
 
@@ -38,6 +39,17 @@ export type PartidoDelCaraACara = Pick<PartidoDeLaFicha, 'id' | 'torneoId' | 'to
   ganador: 'a' | 'b';
   // Desde el lado de A: "6-3 4-6 10-7", "W.O." o "ab.".
   marcador: string;
+  // La del club donde se jugó, si todas sus canchas son de la misma; null si no se sabe (decisión 126).
+  superficie: Superficie | null;
+};
+
+// El cruce en una superficie, contado como el resumen: el W.O. no suma. Solo las superficies con algún
+// partido jugado, en el orden de `superficies`.
+export type CruceEnSuperficie = {
+  superficie: Superficie;
+  jugados: number;
+  ganadosA: number;
+  ganadosB: number;
 };
 
 export type CaraACara = {
@@ -47,6 +59,7 @@ export type CaraACara = {
   a: JugadorDelCaraACara;
   b: JugadorDelCaraACara;
   resumen: ResumenDelCaraACara;
+  porSuperficie: CruceEnSuperficie[];
   // Del más reciente al más viejo, solo los que tienen resultado.
   partidos: PartidoDelCaraACara[];
 };

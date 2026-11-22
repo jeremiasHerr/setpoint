@@ -36,6 +36,7 @@ import {
   EstadoPago,
   EstadoPartido,
   FasePartido,
+  Superficie,
 } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import { ganadorDeLosSets, resultadoDelTorneoSchema, type ClaveCuadro, type DatosResultadoEntrada } from '@setpoint/shared';
@@ -179,9 +180,18 @@ async function main() {
       puntajes: {
         create: PUNTAJES.map(([instancia, puntos]) => ({ instancia, puntos })),
       },
-      // Donde se juegan las zonas: los jugadores eligen entre estos al anotar la fecha (F14).
+      // Donde se juegan las zonas: los jugadores eligen entre estos al anotar la fecha (F14). Las
+      // canchas dan la superficie del cara a cara (decisión 126): el Neuquén Tenis Club tiene de dos
+      // superficies, así que sus partidos quedan sin dato.
       clubes: {
-        create: [{ nombre: 'Club Alta Barda' }, { nombre: 'Club Independiente' }, { nombre: 'Neuquén Tenis Club' }],
+        create: [
+          { nombre: 'Club Alta Barda', canchas: { create: [{ nombre: 'Cancha 1' }, { nombre: 'Cancha 2' }] } },
+          { nombre: 'Club Independiente', canchas: { create: [{ nombre: 'Cancha 1', superficie: Superficie.CEMENTO }] } },
+          {
+            nombre: 'Neuquén Tenis Club',
+            canchas: { create: [{ nombre: 'Central' }, { nombre: 'Cancha 2', superficie: Superficie.CEMENTO }] },
+          },
+        ],
       },
     },
     include: { categorias: true, etapas: true },
@@ -308,6 +318,7 @@ async function main() {
   const organizador = await prisma.usuario.findUniqueOrThrow({ where: { email: 'organizador@polenta.example' } });
   await crearCopaAltaBarda(org.id, tercera.id, organizador.id);
   await crearPrimavera26(org.id, tercera.id, etapas[0].id, organizador.id);
+  await repartirClubes(org.id);
 
   // --- verificación ---
   // Suma simple: vale porque en el seed hay un solo movimiento por etapa.
@@ -571,6 +582,41 @@ async function crearPrimavera26(organizacionId: number, categoriaId: number, eta
 
   console.log(`Finales por jugar en /torneos/${torneo.id}/tablero (Primavera 26 · Tercera): al cerrarlo, el ranking se actualiza
 `);
+}
+
+// --- dónde se jugó cada partido con resultado, para el filtro por superficie del cara a cara (F18) ---
+// Los clubes se reparten por turno, como si los hubieran elegido los jugadores al anotar la fecha.
+// Al final se busca un par que se cruzó en dos superficies, para mostrar el filtro.
+async function repartirClubes(organizacionId: number) {
+  const clubes = await prisma.club.findMany({ where: { organizacionId }, orderBy: { id: 'asc' } });
+  const conResultado = await prisma.partido.findMany({
+    where: {
+      torneo: { organizacionId },
+      estado: { in: [EstadoPartido.JUGADA, EstadoPartido.WALKOVER, EstadoPartido.ABANDONO] },
+      clubId: null,
+      sedeTexto: null,
+    },
+    orderBy: { id: 'asc' },
+    select: { id: true, jugadorAId: true, jugadorBId: true },
+  });
+  for (const [i, partido] of conResultado.entries()) {
+    await prisma.partido.update({ where: { id: partido.id }, data: { clubId: clubes[i % clubes.length].id } });
+  }
+
+  // Alta Barda es polvo e Independiente, cemento: un par con partidos en los dos tiene filtro.
+  const [polvo, cemento] = [clubes[0].id, clubes[1].id];
+  const clubesDelPar = new Map<string, Set<number>>();
+  for (const [i, p] of conResultado.entries()) {
+    const par = [p.jugadorAId, p.jugadorBId].sort((x, y) => x! - y!).join('/');
+    clubesDelPar.set(par, (clubesDelPar.get(par) ?? new Set()).add(clubes[i % clubes.length].id));
+  }
+  const conFiltro = [...clubesDelPar].find(([, ids]) => ids.has(polvo) && ids.has(cemento))?.[0];
+  if (conFiltro) {
+    const [a, b] = conFiltro.split('/');
+    console.log(`Cara a cara con partidos en polvo y en cemento en /c/polenta/jugadores/${a}/cara-a-cara/${b}\n`);
+  } else {
+    console.log('Ningún par se cruzó en polvo y en cemento: el filtro del cara a cara no se ve en el seed.\n');
+  }
 }
 
 // Segunda organización, con la configuración opuesta a POLENTA: sin ranking (sin

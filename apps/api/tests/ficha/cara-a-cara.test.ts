@@ -1,6 +1,13 @@
 import { caraACaraParamsSchema } from '@setpoint/shared';
 import { describe, expect, it } from 'vitest';
-import { partidosDelCaraACara, resumenDelCaraACara, rivalesConPartidos } from '../../src/modules/ficha/cara-a-cara';
+import {
+  cruceEnCadaSuperficie,
+  partidosDelCaraACara,
+  resumenDelCaraACara,
+  rivalesConPartidos,
+  superficieDelPartido,
+  type SedeDelPartidoLeida,
+} from '../../src/modules/ficha/cara-a-cara';
 import type { PartidoDeLaFichaLeido, TorneoDeLaFichaLeido } from '../../src/modules/ficha/ficha';
 
 const A = 1;
@@ -10,7 +17,9 @@ const el = { id: B, nombre: 'Lucas', apellido: 'Bravo' };
 
 let proximoId = 1;
 // Por defecto, A es el jugador A del partido; con `alReves`, B figura como jugador A.
-function partido(datos: Partial<PartidoDeLaFichaLeido> & { alReves?: boolean }): PartidoDeLaFichaLeido {
+function partido(
+  datos: Partial<PartidoDeLaFichaLeido> & SedeDelPartidoLeida & { alReves?: boolean },
+): PartidoDeLaFichaLeido & SedeDelPartidoLeida {
   const { alReves, ...resto } = datos;
   return {
     id: proximoId++,
@@ -82,7 +91,12 @@ describe('partidosDelCaraACara', () => {
   it('da el marcador desde el lado de A y quién ganó', () => {
     const lista = partidosDelCaraACara(A, [torneo({})], [partido({ ganadorId: B, alReves: true, sets: set63 })], []);
     // B figuraba como jugador A y ganó 6-3 6-4: desde el lado de A son los games al revés.
-    expect(lista[0]).toMatchObject({ ganador: 'b', marcador: '3-6 4-6', grupo: 'C', cuadro: null });
+    expect(lista[0]).toMatchObject({ ganador: 'b', marcador: '3-6 4-6', grupo: 'C', cuadro: null, superficie: null });
+  });
+
+  it('cada partido lleva la superficie de su club', () => {
+    const lista = partidosDelCaraACara(A, [torneo({})], [partido({ ganadorId: A, club: { canchas: [cemento] } })], []);
+    expect(lista[0]!.superficie).toBe('cemento');
   });
 
   it('ordena del torneo más reciente al más viejo, y dentro del torneo por ronda', () => {
@@ -127,6 +141,48 @@ describe('partidosDelCaraACara', () => {
     const lista = partidosDelCaraACara(A, [torneo({})], [partido({ ganadorId: A, sets: set63 })], []);
     expect(Object.keys(lista[0]!)).not.toContain('rival');
     expect(JSON.stringify(lista)).not.toMatch(/telefono|email/i);
+  });
+});
+
+const polvo = { superficie: 'POLVO_LADRILLO' as const };
+const cemento = { superficie: 'CEMENTO' as const };
+
+describe('superficieDelPartido', () => {
+  it('es la del club si todas sus canchas son de la misma', () => {
+    expect(superficieDelPartido({ club: { canchas: [polvo, polvo] } })).toBe('polvo_ladrillo');
+  });
+
+  it('no se sabe si el club tiene canchas de distintas superficies', () => {
+    expect(superficieDelPartido({ club: { canchas: [polvo, cemento] } })).toBeNull();
+  });
+
+  it('no se sabe sin club, ni con un club sin canchas cargadas', () => {
+    expect(superficieDelPartido({})).toBeNull();
+    expect(superficieDelPartido({ club: null, cancha: null })).toBeNull();
+    expect(superficieDelPartido({ club: { canchas: [] } })).toBeNull();
+  });
+
+  it('si el partido guardó la cancha, manda la cancha', () => {
+    expect(superficieDelPartido({ cancha: cemento, club: { canchas: [polvo, cemento] } })).toBe('cemento');
+  });
+});
+
+describe('cruceEnCadaSuperficie', () => {
+  it('cuenta el cruce en cada superficie, en el orden de la lista, y deja afuera los partidos sin dato', () => {
+    const cruces = cruceEnCadaSuperficie(A, [
+      partido({ ganadorId: B, club: { canchas: [cemento] } }),
+      partido({ ganadorId: A, club: { canchas: [polvo] } }),
+      partido({ ganadorId: B, alReves: true, club: { canchas: [polvo] } }),
+      partido({ ganadorId: A, club: { canchas: [polvo, cemento] } }),
+    ]);
+    expect(cruces).toEqual([
+      { superficie: 'polvo_ladrillo', jugados: 2, ganadosA: 1, ganadosB: 1 },
+      { superficie: 'cemento', jugados: 1, ganadosA: 0, ganadosB: 1 },
+    ]);
+  });
+
+  it('una superficie con solo W.O. no aparece, porque no se jugó', () => {
+    expect(cruceEnCadaSuperficie(A, [partido({ ganadorId: A, estado: 'WALKOVER', club: { canchas: [polvo] } })])).toEqual([]);
   });
 });
 

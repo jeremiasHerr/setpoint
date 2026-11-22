@@ -1,6 +1,6 @@
 # 122 — El cara a cara es una pantalla con dos pasos, y todavía no filtra por superficie
 
-**Estado:** aceptada — 21 de noviembre de 2026
+**Estado:** aceptada — 21 de noviembre de 2026. Reemplazada en parte por la [decisión 126](126-superficie-del-partido-por-el-club.md): el cara a cara filtra por superficie, con la del club de cada partido.
 
 *Tomada durante la implementación: revisar*
 

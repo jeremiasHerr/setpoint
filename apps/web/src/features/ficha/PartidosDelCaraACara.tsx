@@ -1,6 +1,9 @@
-import type { PartidoDelCaraACara } from '@setpoint/shared';
+import { superficies, type PartidoDelCaraACara, type Superficie } from '@setpoint/shared';
 import { Numero } from '../../components/Numero';
 import { donde } from './PartidosDeLaFicha';
+
+// "polvo", "cemento": la etiqueta que va dentro de una frase (decisión 126).
+export const cortaDe = (superficie: Superficie) => superficies.find((s) => s.clave === superficie)!.corta;
 
 const TEXTO_DEL_ESTADO = { jugada: '', walkover: ' por W.O.', abandono: ' por abandono' } as const;
 
@@ -27,6 +30,7 @@ export function PartidosDelCaraACara({ partidos, apellidoA, apellidoB, consuelo 
               </span>
               <span className="text-xs text-pizarra-500">
                 {partido.torneo} · {donde(partido, consuelo)}
+                {partido.superficie && ` · ${cortaDe(partido.superficie)}`}
               </span>
             </div>
             <Numero className={`text-right text-sm ${gana ? '' : 'text-pizarra-500'}`}>{partido.marcador}</Numero>
