@@ -365,7 +365,7 @@ Si el circuito lo activa en *Tu circuito* ([decisión 127](decisiones/127-result
 
 Mientras está pendiente, el partido no tiene resultado. Si el rival no tiene la app, o no contesta, la organización lo ve en el tablero y lo confirma ella. Un resultado que ya cuenta lo corrige solo la organización.
 
-**Implementado en la API:** `PUT /api/jugador/:slug/partidos/:partidoId/resultado`, `POST .../resultado/confirmacion` y `.../resultado/rechazo`; la organización confirma con `POST /api/organizaciones/:slug/torneos/:id/partidos/:partidoId/resultado-propuesto/confirmacion`. Las pantallas de la app y del tablero llegan aparte.
+**Implementado en la API:** `PUT /api/jugador/:slug/partidos/:partidoId/resultado`, `POST .../resultado/confirmacion` y `.../resultado/rechazo`; la organización confirma con `POST /api/organizaciones/:slug/torneos/:id/partidos/:partidoId/resultado-propuesto/confirmacion`. La app tiene *Cargar el resultado* (`/partido/[id]/resultado`): "Se jugó" o "Hubo abandono", los games de cada set desde el lado del jugador, con las filas que hacen falta, y las reglas del torneo validadas antes de mandar con el mismo schema que la API (`GET .../resultado` le da el sistema de juego). La confirmación en *Cuándo juego* y la marca en el tablero llegan aparte.
 
 ## 7. Mis partidos
 

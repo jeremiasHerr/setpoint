@@ -79,6 +79,8 @@ function Navegacion({ fuentesListas }: { fuentesListas: boolean }) {
           <Stack.Screen name="(pestanas)" />
           {/* Anotar la fecha de un partido (F14): pide lo mismo que las pestañas. */}
           <Stack.Screen name="partido/[id]/fecha" />
+          {/* Cargar el resultado (decisión 127): queda esperando que el rival lo confirme. */}
+          <Stack.Screen name="partido/[id]/resultado" />
           {/* La ficha de un jugador (F17), desde el ranking. */}
           <Stack.Screen name="ficha/[id]" />
           {/* Cómo te fue con el rival de un partido (F18). */}
