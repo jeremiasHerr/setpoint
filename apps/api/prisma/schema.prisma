@@ -225,6 +225,8 @@ model Usuario {
   administra          AdminOrganizacion[]
   partidosAnotados    Partido[]             @relation("PartidoAnotadoPor")
   partidosConfirmados Partido[]             @relation("PartidoConfirmadoPor")
+  resultadosCargados  ResultadoPropuesto[]  @relation("ResultadoCargadoPor")
+  resultadosResueltos ResultadoPropuesto[]  @relation("ResultadoResueltoPor")
   lecturasDeMensajes  ExtraccionResultado[] @relation("LecturaCreadaPor")
   usosIA              UsoIA[]
   dispositivos        DispositivoAviso[]
@@ -266,10 +268,10 @@ model DispositivoAviso {
 
 /// Circuito o grupo organizador. Clave de aislamiento de todo el sistema.
 model Organizacion {
-  id          Int     @id @default(autoincrement())
-  nombre      String
-  slug        String  @unique
-  descripcion String?
+  id                   Int     @id @default(autoincrement())
+  nombre               String
+  slug                 String  @unique
+  descripcion          String?
   // Cómo llama el circuito a su cuadro consuelo. null es "Cuadro consuelo" (07 §1.2).
   nombreCuadroConsuelo String?
 
@@ -282,19 +284,20 @@ model Organizacion {
   creadoEn      DateTime @default(now())
   actualizadoEn DateTime @updatedAt
 
-  admins        AdminOrganizacion[]
-  categorias    Categoria[]
-  etapas        Etapa[]
-  clubes        Club[]
-  jugadores     Jugador[]
-  torneos       Torneo[]
-  puntajes      PuntajeInstancia[]
-  movimientos   MovimientoRanking[]
-  cuentaCobro   CuentaCobro?
-  importaciones ImportacionPadron[]
-  lecturas      ExtraccionResultado[]
-  usosIA        UsoIA[]
-  contactos     ContactoOrganizacion[]
+  admins               AdminOrganizacion[]
+  categorias           Categoria[]
+  etapas               Etapa[]
+  clubes               Club[]
+  jugadores            Jugador[]
+  torneos              Torneo[]
+  puntajes             PuntajeInstancia[]
+  movimientos          MovimientoRanking[]
+  cuentaCobro          CuentaCobro?
+  importaciones        ImportacionPadron[]
+  lecturas             ExtraccionResultado[]
+  usosIA               UsoIA[]
+  resultadosPropuestos ResultadoPropuesto[]
+  contactos            ContactoOrganizacion[]
 
   @@map("organizaciones")
 }
@@ -700,8 +703,9 @@ model Partido {
   siguientePartido Partido?  @relation("AvanceCuadro", fields: [siguientePartidoId], references: [id])
   partidosPrevios  Partido[] @relation("AvanceCuadro")
 
-  sets    SetPartido[]
-  eventos EventoCoordinacion[]
+  sets                 SetPartido[]
+  eventos              EventoCoordinacion[]
+  resultadosPropuestos ResultadoPropuesto[]
 
   @@index([torneoId, fase]) // armar zonas y cuadros
   @@index([torneoId, estado]) // tablero de avance
@@ -750,6 +754,41 @@ model EventoCoordinacion {
 
   @@index([partidoId])
   @@map("eventos_coordinacion")
+}
+
+// Un resultado que cargó uno de los jugadores desde la app (decisión 127). No cuenta hasta que lo
+// confirma el rival, o la organización: hasta entonces el partido no tiene resultado y ninguna tabla
+// se mueve. Se guardan todos, también los rechazados, para que quede registro de los desacuerdos.
+enum EstadoResultadoPropuesto {
+  PENDIENTE
+  CONFIRMADO
+  RECHAZADO
+  // Lo reemplazó otro: uno nuevo del mismo jugador, o el que cargó la organización.
+  REEMPLAZADO
+}
+
+model ResultadoPropuesto {
+  id             Int                      @id @default(autoincrement())
+  organizacionId Int
+  partidoId      Int
+  // El perfil del jugador que lo cargó, y su cuenta.
+  jugadorId      Int
+  cargadoPorId   Int
+  // El resultado como lo mandó la app, validado con resultadoDelJugadorSchema: jugado o abandono.
+  datos          Json
+  estado         EstadoResultadoPropuesto @default(PENDIENTE)
+  // Quién lo confirmó o lo rechazó: el rival, o un administrador de la organización.
+  resueltoPorId  Int?
+  resueltoEn     DateTime?
+  creadoEn       DateTime                 @default(now())
+
+  organizacion Organizacion @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
+  partido      Partido      @relation(fields: [partidoId], references: [id], onDelete: Cascade)
+  cargadoPor   Usuario      @relation("ResultadoCargadoPor", fields: [cargadoPorId], references: [id])
+  resueltoPor  Usuario?     @relation("ResultadoResueltoPor", fields: [resueltoPorId], references: [id], onDelete: SetNull)
+
+  @@index([partidoId, estado])
+  @@map("resultados_propuestos")
 }
 
 // ============================================================================

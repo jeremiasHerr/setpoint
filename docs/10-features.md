@@ -154,7 +154,7 @@ La organización podrá registrar el resultado de cada partido indicando los gam
 - El W.O. no guarda sets ([decisión 016](decisiones/016-walkover-sin-sets-guardados.md)). El abandono tampoco: se elige quién siguió y se computa como un W.O. ([decisión 059](decisiones/059-abandono-sin-sets.md), que reemplaza a la 027).
 - Corregir es volver a cargar: se puede mientras no cambie lo que ya se armó con ese resultado ([decisión 028](decisiones/028-correccion-de-resultados.md)).
 - Un resultado de cuadro hace avanzar al ganador en la misma transacción.
-- La carga es solo de la organización: que también puedan cargar los jugadores sigue abierto (decisión abierta 12).
+- Si el circuito lo activa, los jugadores también cargan su resultado desde la app, y cuenta cuando lo confirma el rival o la organización ([decisión 127](decisiones/127-resultados-de-los-jugadores.md)). La API está; faltan el interruptor en *Tu circuito*, las pantallas de la app y la marca en el tablero.
 - La pantalla *Cargar resultado* (`/torneos/:id/resultados/:partidoId?`) se abre desde el tablero ([decisión 063](decisiones/063-entrada-al-tablero.md)). El partido se elige arriba, en una pestaña por zona y una por cuadro, con los cuadros dibujados como rama; la carga queda abajo ([decisión 070](decisiones/070-elegir-el-partido-desde-el-cuadro.md)).
 - Antes de guardar, la pantalla dice dónde queda cada jugador en la zona y a qué cuadro va: la API simula el resultado sin guardarlo ([decisión 032](decisiones/032-vista-previa-del-resultado.md)). En un cuadro dice quién pasa de ronda o quién es campeón. Lo que la API rechazaría por los cuadros ya armados se avisa antes.
 

@@ -75,7 +75,6 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 | 7 | **Cambio de categoría:** si un jugador de Tercera pasa a Segunda, ¿qué pasa con sus puntos de Tercera? ¿Se transfieren, quedan congelados, o el jugador desaparece de esa tabla? | Modelo de ranking | Consultar |
 | 10 | ¿Se implementan las **proyecciones pre-torneo** sugeridas por la cátedra? ("si llegás a semis sumás 50 y pasás al puesto 4") | Alcance | **Decidir en grupo** |
 | 11 | **Política de devolución:** ¿POLENTA devuelve el dinero si alguien se baja después de pagar? ¿Cambia si ya se hizo el sorteo? | Nada: en cada baja la organización anota si corresponde la devolución, y la hace ella por fuera ([decisión 075](decisiones/075-la-devolucion-se-anota.md)). Solo define qué elige POLENTA en la demo | Consultar |
-| 12 | ¿Los jugadores pueden cargar resultados con confirmación del rival, o la carga es exclusiva de la organización? Está parametrizado como `quien_carga_resultados` | Permisos | **Decidir en grupo** |
 | 14 | **¿"Todo automático" se refiere a la importación o al uso diario?** La importación por excepción responde lo primero; F19, lo segundo. Ver las preguntas de [devolucion-25.md](devolucion-25.md) §4 | Prioridad de F19 | **Preguntar al profesor** |
 | 15 | **Casos sin nombre cerrado para "edición".** "Edición" es un `Torneo` de un torneo del calendario. ¿Un torneo suelto (sin etapa) se muestra como "torneo"? ¿Y cómo se llama la convocatoria que crea varias ediciones a la vez ("Primavera 26", Segunda y Tercera), que en código es el campo `Torneo.edicion`? ([decisión 010](decisiones/010-torneo-del-calendario-en-la-interfaz.md)) | Textos de *Nuevo torneo* | **Decidir en grupo** |
 | 16 | **¿"Campeonato" también pasa a genérico** ("cuadro principal", configurable), como el cuadro consuelo? ([devolucion-25.md](devolucion-25.md) §3.1) | Textos de la interfaz | **Decidir en grupo** |
@@ -91,6 +90,7 @@ Monorepo con workspaces: `apps/api`, `apps/web`, `apps/mobile`, `packages/shared
 - ~~¿El cuadro final es eliminación simple?~~ **Sí**, ambos cuadros
 - ~~¿Se soporta dobles?~~ **No.** Solo single
 - ~~¿Quién carga los resultados?~~ **La organización**
+- ~~¿Los jugadores pueden cargar resultados con confirmación del rival? (abierta 12)~~ **Sí, desde la app y con sesión, si el circuito lo activa en *Tu circuito*; cuenta cuando lo confirma el rival o la organización** ([decisión 127](decisiones/127-resultados-de-los-jugadores.md)). Nada entra a las tablas sin que lo vean los dos, y confirmar usa el mismo camino que la carga de la organización. POLENTA sigue cargando sola. El W.O. lo sigue dando solo la organización
 - ~~Tabla de puntos~~ **100 / 75 / 50 / 25 / 15 / 10**
 - ~~Ventana del ranking~~ **12 meses, por reemplazo de casillero**
 - ~~Cómputo de W.O.~~ **6-0 6-0 a favor del rival**

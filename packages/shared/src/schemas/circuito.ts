@@ -91,6 +91,10 @@ export const configuracionCircuitoSchema = z.object({
     .nullish()
     .transform((v) => v || null),
   usaRanking: z.boolean(),
+  // Si los jugadores pueden cargar sus resultados desde la app, con la confirmación del rival
+  // (decisión 127). Apagado, los carga solo la organización, como en POLENTA. Sin el campo, queda
+  // como estaba.
+  jugadoresCarganResultados: z.boolean().optional(),
   categorias: listaDeNombres('Hay categorías repetidas'),
   etapas: listaDeNombres('Hay torneos del calendario repetidos'),
   puntos: z.object({

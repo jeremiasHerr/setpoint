@@ -620,7 +620,8 @@ async function repartirClubes(organizacionId: number) {
 }
 
 // Segunda organización, con la configuración opuesta a POLENTA: sin ranking (sin
-// etapas ni tabla de puntos), inscripción abierta y sin cuadro consuelo.
+// etapas ni tabla de puntos), inscripción abierta, sin cuadro consuelo, y los jugadores cargan sus
+// resultados desde la app (decisión 127).
 async function crearLigaDelValle() {
   const liga = await prisma.organizacion.create({
     data: {
@@ -628,6 +629,7 @@ async function crearLigaDelValle() {
       slug: 'liga-amateur-del-valle',
       descripcion: 'Torneos sueltos de tenis amateur en el Alto Valle',
       usaRanking: false,
+      quienCargaResultados: 'ORGANIZACION_Y_JUGADORES',
       admins: administrador('organizador@valle.example', 'Silvina', 'Ortúzar'),
       categorias: {
         create: [

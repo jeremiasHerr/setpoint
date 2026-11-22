@@ -329,6 +329,8 @@ Consecuencia: **un torneo es multisede en fase de grupos** — cada partido pued
 
 **Hoy:** al terminar el partido, alguno de los dos jugadores manda un mensaje al grupo de WhatsApp con el resultado. **No hay planilla de papel.** El organizador lo ve en el grupo y lo anota en su Excel.
 
+**En la plataforma:** la organización carga el resultado, a mano o desde los mensajes del grupo (F19). Si el circuito lo activa, también cada jugador desde la app, y cuenta cuando lo confirma el rival ([decisión 127](decisiones/127-resultados-de-los-jugadores.md)). POLENTA carga sola.
+
 Además, el reglamento de POLENTA **obliga a enviar un registro fotográfico de ambos jugadores** junto con el resultado.
 
 > **Esto es regla interna del circuito, no requisito de la plataforma.** El sistema permite adjuntar fotos a un partido de forma **opcional**; si un circuito quiere obligar, lo hace su propio reglamento. Ver [07-configurabilidad.md](07-configurabilidad.md) §4.

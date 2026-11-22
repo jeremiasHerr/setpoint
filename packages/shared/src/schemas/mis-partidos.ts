@@ -30,6 +30,22 @@ export type PartidoDelJugador = {
   sede: string | null;
   // Con resultado: si ganó y el marcador desde su lado, "6-3 4-6 10-7" o "W.O.".
   resultado: { gano: boolean; marcador: string } | null;
+  // El resultado que cargó uno de los dos y todavía no cuenta (decisión 127): pendiente de que lo
+  // confirme el otro, o rechazado. null si no hay, o si el partido ya tiene resultado.
+  resultadoPropuesto: ResultadoPropuestoDelPartido | null;
+  // Si puede cargar el resultado desde la app: la organización lo permite, el partido tiene a los
+  // dos jugadores y todavía no tiene resultado, y el rival no cargó uno que esté esperando su respuesta.
+  puedeCargarResultado: boolean;
+};
+
+export type ResultadoPropuestoDelPartido = {
+  id: number;
+  // Quién lo cargó: si es 'rival' y está pendiente, le toca confirmarlo o rechazarlo.
+  cargadoPor: 'yo' | 'rival';
+  estado: 'pendiente' | 'rechazado';
+  // Desde su lado, como `resultado`.
+  gano: boolean;
+  marcador: string;
 };
 
 export type MisPartidos = {
