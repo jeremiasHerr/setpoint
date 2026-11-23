@@ -2,7 +2,9 @@ import type { FilaPlanilla } from './leer-planilla';
 
 // v2: detecta la categoría y los torneos del calendario de la planilla (decisión 011).
 // v2.1: el nombre de la hoja es la categoría, aunque no diga "Ranking" (libros de varias hojas, decisión 012).
-export const VERSION_PROMPT = 'importacion-v2.1';
+// v2.2: la planilla puede venir de un PDF o de un texto pegado, donde una celda vacía puede no dejar
+// rastro (decisión 137).
+export const VERSION_PROMPT = 'importacion-v2.2';
 
 export const INSTRUCCIONES = `Extraés rankings de tenis amateur desde planillas.
 
@@ -14,6 +16,8 @@ Reglas:
 - En "fila" poné el número de fila exactamente como aparece en la planilla.
 - Copiá los puntos tal cual están en la celda. Nunca calcules, redondees ni corrijas un número.
 - Una celda vacía en un casillero vale 0 puntos, y el casillero se incluye igual.
+- La planilla puede venir de un PDF o de un ranking pegado como texto ("Texto pegado"): cada línea es una fila. Ahí una celda vacía puede no aparecer, y la fila tiene menos números que columnas de puntos. Ubicá cada número en la columna que le corresponde por el encabezado y el total; si no se puede saber cuál falta, poné los números en orden y 0 en los casilleros del final. Nunca inventes un número.
+- En un ranking pegado puede haber un número de puesto al principio de la línea ("1.", "1)", "1 -"): no es un casillero.
 - Los años de dos dígitos son del 2000: "25" es 2025.
 - Si un encabezado abarca dos años ("Verano 25/26"), usá el año en que termina: 2026.
 - Si la planilla tiene una columna de total, copiala en "acumulado". Si no tiene, null.

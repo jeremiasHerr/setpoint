@@ -9,7 +9,8 @@ import { normalizar } from './entre-hojas';
 //   2. su identidad es segura: coincide con el padrón con confianza alta, o es claramente nueva. Que
 //      sea nueva lo dice el modelo, pero lo verifica el código: si ya hay un jugador activo con ese
 //      apellido, un existente que la IA tomó por nuevo quedaría duplicado, con el ranking partido.
-// La fuente es siempre auditable: hoy solo se importan Excel y CSV.
+// La fuente es siempre auditable: Excel, CSV, PDF con texto o texto pegado, todos con texto contra el
+// cual verificar cada número (decisión 137). Las imágenes todavía no se importan.
 export function motivoDeRevision(fila: FilaExtraida, auditoria: Auditoria, apellidosDelPadron: Set<string>): string | null {
   if (auditoria.globales.length > 0) return 'La planilla entera tuvo un problema al leerla';
   const problema = auditoria.porFila.find((p) => p.fila === fila.fila);

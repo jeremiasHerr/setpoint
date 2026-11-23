@@ -74,6 +74,12 @@ export function auditar(
 
     const numeros = numerosDeFila(fila.celdas);
     const tieneVacias = fila.celdas.some((c) => c === null);
+    // En un texto pegado sin columnas la celda vacía no deja rastro: la línea tiene menos números que
+    // casilleros y acumulado, y no hay cómo verificar en qué torneo va cada uno. La suma no lo detecta
+    // ("50 75 125" puede ser 50, 0, 75 o 50, 75, 0): va a revisión (decisión 137).
+    const esperados = etapas.size + (jugador.acumulado !== null ? 1 : 0);
+    const ambigua = !tieneVacias && numeros.length < esperados;
+    if (ambigua) problema(`la línea tiene ${numeros.length} números para ${esperados} lugares: revisá en qué torneo va cada uno`);
 
     // Una celda vacía también lleva su casillero: cada jugador tiene uno por etapa.
     const suyas = new Set(jugador.casilleros.map((c) => c.etapa));
@@ -82,7 +88,8 @@ export function auditar(
     }
 
     for (const { etapa, anio, puntos } of jugador.casilleros) {
-      const estaEnLaFila = numeros.includes(puntos) || (puntos === 0 && tieneVacias);
+      // En una línea ambigua el 0 ya tiene su problema: no se repite por cada casillero.
+      const estaEnLaFila = numeros.includes(puntos) || (puntos === 0 && (tieneVacias || ambigua));
       if (!estaEnLaFila) problema(`el ${puntos} de ${etapa} ${anio} no está en la planilla`);
     }
 

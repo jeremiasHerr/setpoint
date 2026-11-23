@@ -98,7 +98,8 @@ Antes del listado, la secuencia operativa completa. Cada paso está cubierto por
 | **Detecta los torneos del calendario y las categorías** en la planilla y los crea al confirmar. Una organización recién registrada sube su archivo y el circuito queda configurado | Decidido |
 | **Varios archivos** (uno por categoría) **y varias hojas** (una por categoría), hasta 10 archivos de 2 MB | Decidido |
 | Un archivo por torneo del calendario | Fuera de alcance en esta versión |
-| **Más formatos**, en este orden: PDF con texto, texto pegado, imágenes y PDF escaneados. Las imágenes no se pueden auditar contra el origen: todas sus filas pasan por revisión | Propuesto, alcance futuro |
+| **Más formatos:** PDF con texto y texto pegado, auditados igual que un Excel ([decisión 137](decisiones/137-pdf-y-texto-pegado-en-la-importacion.md)) | Hecho |
+| Imágenes y PDF escaneados. No se pueden auditar contra el origen: todas sus filas pasarían por revisión | Propuesto, alcance futuro |
 
 **Funcionalidad asistida por IA. Entrega: 25% (base) · cambios de la devolución: entrega a asignar**
 

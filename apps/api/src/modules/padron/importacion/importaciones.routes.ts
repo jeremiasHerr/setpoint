@@ -8,6 +8,7 @@ import { ErrorHttp } from '../../../middleware/errores';
 import { limiteDeIaPorUsuario } from '../../../middleware/limite';
 import { validar } from '../../../middleware/validar';
 import {
+  type ArchivoSubido,
   aplicarImportacion,
   confirmarImportacion,
   crearImportacion,
@@ -19,7 +20,10 @@ import {
 const TAMANIO_MAXIMO = 2 * 1024 * 1024;
 // Un lote: uno o varios archivos por categoría (decisión 012).
 const ARCHIVOS_MAXIMOS = 10;
-const EXTENSIONES = ['.xlsx', '.xls', '.csv'];
+// El PDF con texto se lee como una planilla de una hoja (decisión 137).
+const EXTENSIONES = ['.xlsx', '.xls', '.csv', '.pdf'];
+// Un ranking pegado: 77 jugadores con sus casilleros entran de sobra.
+const TEXTO_MAXIMO = 50_000;
 // La IA tarda ~20 s por planilla y puede reintentar una vez. Las hojas se procesan en paralelo, así
 // que un lote tarda lo que su hoja más lenta: se deja margen de sobra.
 const TIEMPO_MAXIMO_MS = 180_000;
@@ -47,8 +51,11 @@ const recibirArchivo: RequestHandler = (req, res, next) => {
       return;
     }
     if (err) return next(err);
-    if (!Array.isArray(req.files) || req.files.length === 0) {
-      return next(new ErrorHttp(400, 'DATOS_INVALIDOS', { archivos: 'Elegí al menos una planilla' }));
+    // Los archivos o el texto pegado: alguno de los dos.
+    const sinArchivos = !Array.isArray(req.files) || req.files.length === 0;
+    const sinTexto = typeof req.body?.texto !== 'string' || req.body.texto.trim() === '';
+    if (sinArchivos && sinTexto) {
+      return next(new ErrorHttp(400, 'DATOS_INVALIDOS', { archivos: 'Elegí al menos una planilla o pegá el ranking' }));
     }
     next();
   });
@@ -56,7 +63,10 @@ const recibirArchivo: RequestHandler = (req, res, next) => {
 
 // La categoría viaja por nombre, igual que en el alta de jugadores. Vacía, se toma la que diga la
 // planilla (decisión 011).
-const subirSchema = z.object({ categoria: z.string().trim().max(40).optional() });
+const subirSchema = z.object({
+  categoria: z.string().trim().max(40).optional(),
+  texto: z.string().max(TEXTO_MAXIMO, 'El texto es muy largo').optional(),
+});
 
 // Se monta en /api/organizaciones/:slug/importaciones: mergeParams trae el slug del padre.
 export const importacionesRouter = Router({ mergeParams: true });
@@ -76,10 +86,13 @@ importacionesRouter.post(
   async (req, res) => {
     const { slug } = req.params as { slug: string };
     // multer entrega el nombre en latin1: así no se rompen las tildes y las eñes.
-    const archivos = (req.files as Express.Multer.File[]).map((archivo) => ({
+    const archivos: ArchivoSubido[] = ((req.files ?? []) as Express.Multer.File[]).map((archivo) => ({
       nombre: Buffer.from(archivo.originalname, 'latin1').toString('utf8'),
       contenido: archivo.buffer,
     }));
+    // El texto pegado se procesa como un archivo más del lote (decisión 137).
+    const texto: string | undefined = req.body.texto?.trim();
+    if (texto) archivos.push({ nombre: 'Texto pegado', contenido: Buffer.from(texto, 'utf8'), esTexto: true });
     const importacion = await crearImportacion(slug, res.locals.usuarioId, archivos, req.body.categoria || null);
     res.status(201).json(importacion);
   },

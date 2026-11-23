@@ -1,3 +1,4 @@
+import { extname } from 'node:path';
 import { EstadoProcesoIA, MotivoMovimiento, type Prisma } from '@prisma/client';
 import type {
   DatosAplicarImportacion,
@@ -17,7 +18,9 @@ import { ErrorHttp } from '../../../middleware/errores';
 import { numerosDeFila, type Auditoria } from './auditar';
 import { contarFilas, planificarConfirmacion, yaExiste, type MovimientoAImportar, type PlanConfirmacion } from './confirmacion';
 import { controlarEntreHojas } from './entre-hojas';
+import { PdfSinTexto, leerPdf } from './leer-pdf';
 import { leerHojas, type FilaPlanilla } from './leer-planilla';
+import { leerTexto } from './leer-texto';
 import { apellidosNormalizados, decisionSegura, filasARevisar } from './por-excepcion';
 import { procesarHoja, type ContextoImportacion } from './procesar-planilla';
 
@@ -214,24 +217,40 @@ async function asegurarEnElCircuito(
   return ids;
 }
 
-export type ArchivoSubido = { nombre: string; contenido: Buffer };
+// Un archivo subido, o el texto pegado (decisión 137), que se procesa como un archivo más.
+export type ArchivoSubido = { nombre: string; contenido: Buffer; esTexto?: boolean };
 
 type HojaPorProcesar = { archivo: ArchivoSubido; hoja: { nombre: string; filas: FilaPlanilla[] } | null; error: string | null };
 
 type HojaProcesada = { archivoNombre: string; hoja: string; resumen: Partial<ResumenHoja>; crudos: string[] | null };
 
+// Las hojas de un archivo: una por hoja de la planilla, y una sola en un PDF o un texto pegado, que
+// se leen como una planilla de una hoja (decisión 137).
+async function leerArchivo(archivo: ArchivoSubido) {
+  if (archivo.esTexto) return [{ nombre: '', filas: leerTexto(archivo.contenido.toString('utf8')) }];
+  if (extname(archivo.nombre).toLowerCase() === '.pdf') return [{ nombre: '', filas: await leerPdf(archivo.contenido) }];
+  return leerHojas(archivo.contenido);
+}
+
 // Las hojas con datos de cada archivo. Un archivo que no se puede abrir o no tiene datos queda como
 // una hoja con error: no frena a los demás.
-function hojasPorProcesar(archivos: ArchivoSubido[]): HojaPorProcesar[] {
-  return archivos.flatMap((archivo): HojaPorProcesar[] => {
-    try {
-      const hojas = leerHojas(archivo.contenido);
-      if (hojas.length === 0) return [{ archivo, hoja: null, error: 'El archivo no tiene datos' }];
-      return hojas.map((hoja) => ({ archivo, hoja, error: null }));
-    } catch {
-      return [{ archivo, hoja: null, error: 'No pudimos abrir el archivo' }];
-    }
-  });
+async function hojasPorProcesar(archivos: ArchivoSubido[]): Promise<HojaPorProcesar[]> {
+  const porArchivo = await Promise.all(
+    archivos.map(async (archivo): Promise<HojaPorProcesar[]> => {
+      try {
+        const hojas = (await leerArchivo(archivo)).filter((h) => h.filas.length > 0);
+        if (hojas.length === 0) return [{ archivo, hoja: null, error: archivo.esTexto ? 'El texto está vacío' : 'El archivo no tiene datos' }];
+        return hojas.map((hoja) => ({ archivo, hoja, error: null }));
+      } catch (err) {
+        // Un PDF escaneado es una imagen: no hay texto contra el cual auditar los números.
+        const error = err instanceof PdfSinTexto
+          ? 'El PDF no tiene texto: parece escaneado. Subí el Excel o pegá el ranking como texto'
+          : 'No pudimos abrir el archivo';
+        return [{ archivo, hoja: null, error }];
+      }
+    }),
+  );
+  return porArchivo.flat();
 }
 
 // Una hoja con IA: la categoría, la propuesta, la auditoría y los textos de cada fila. Un fallo de
@@ -322,7 +341,7 @@ export async function crearImportacion(slug: string, usuarioId: number, archivos
   ]);
   const contexto = { padron, etapas: etapas.map((e) => e.nombre), categorias: categorias.map((c) => c.nombre), hoy: new Date() };
 
-  const porProcesar = hojasPorProcesar(archivos);
+  const porProcesar = await hojasPorProcesar(archivos);
   const fija = porProcesar.length === 1 ? categoriaElegida : null;
   const procesadas = await Promise.all(
     porProcesar.map(({ archivo, hoja, error }): Promise<HojaProcesada> | HojaProcesada =>
