@@ -108,7 +108,7 @@ function Resumen({ datos }: { datos: InscripcionParaPagar }) {
   );
 }
 
-// Ir al checkout de MercadoPago, o simular el pago en una instalación sin credenciales (decisión 053).
+// Ir al checkout de MercadoPago, o simular el pago con PAGO_SIMULADO (decisiones 053 y 138).
 function usePagar(datos: InscripcionParaPagar, token: string) {
   const slug = datos.torneo.organizacion.slug;
   const iniciar = useIniciarPago(slug, String(datos.id), token);
@@ -119,11 +119,21 @@ function usePagar(datos: InscripcionParaPagar, token: string) {
         if (url) window.location.assign(url);
       },
     });
-  const error = iniciar.error || simular.error ? 'No pudimos seguir con el pago. Probá de nuevo en unos minutos.' : null;
+  const error = mensajeDelPago(iniciar.error ?? simular.error, datos.torneo.organizacion.nombre);
   return { pagar, iniciar, simular, error };
 }
 
-// Sin credenciales de MercadoPago (decisión 053). Ningún jugador real ve esto.
+function mensajeDelPago(error: Error | null, organizacion: string) {
+  if (!error) return null;
+  // La organización no tiene MercadoPago conectado: lo desconectó, o publicó antes de que hiciera
+  // falta (decisión 137). El lugar sigue reservado hasta que vence.
+  if (error instanceof ErrorApi && error.codigo === 'SIN_MERCADOPAGO') {
+    return `${organizacion} todavía no puede cobrar con MercadoPago. Escribile para pagar de otra forma.`;
+  }
+  return 'No pudimos seguir con el pago. Probá de nuevo en unos minutos.';
+}
+
+// Con PAGO_SIMULADO (decisión 138). Ningún jugador real ve esto.
 function PagoSimulado({ datos, simular }: { datos: InscripcionParaPagar; simular: ReturnType<typeof usePagar>['simular'] }) {
   return (
     <>

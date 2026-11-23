@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { CuentaMercadoPago } from './pago';
 
 // Instancias que muestra la tabla de puntos, en orden. Las claves son las del contrato;
 // la API las traduce al enum Instancia de Prisma.
@@ -115,4 +116,6 @@ export type ConfiguracionCircuito = z.infer<typeof configuracionCircuitoSchema>;
 export type Circuito = ConfiguracionCircuito & {
   slug: string;
   jugadores: number;
+  // Se conecta y se desconecta con sus propias rutas, no con el PUT del circuito.
+  mercadopago: CuentaMercadoPago;
 };

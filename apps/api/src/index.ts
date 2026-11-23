@@ -2,7 +2,8 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import type { RespuestaSalud } from '@setpoint/shared';
-import { hayMercadoPago } from './lib/mercadopago';
+import { hayClaveDeCifrado } from './lib/cifrado';
+import { pagoSimulado, sePuedeConectarMercadoPago } from './lib/mercadopago';
 import { manejarErrores } from './middleware/errores';
 import { authRouter } from './modules/auth/auth.routes';
 import { cierreRouter } from './modules/competencia/cierre.routes';
@@ -24,6 +25,8 @@ import { reclamoRouter } from './modules/inscripcion/reclamo.routes';
 import { jugadorRouter } from './modules/jugador/jugador.routes';
 import { jugadoresRouter } from './modules/jugadores/jugadores.routes';
 import { linkPersonalRouter } from './modules/link-personal/link-personal.routes';
+import { programarRenovacionDeTokens } from './modules/mercadopago/cuenta.service';
+import { cuentaMercadoPagoRouter, vueltaMercadoPagoRouter } from './modules/mercadopago/mercadopago.routes';
 import { organizacionesRouter } from './modules/organizaciones/organizaciones.routes';
 import { pagoRouter } from './modules/pagos/pago.routes';
 import { programarVencimientoDeReservas } from './modules/pagos/vencimiento';
@@ -65,6 +68,7 @@ app.use('/api/organizaciones/:slug/torneos/:id/navegacion', navegacionRouter);
 app.use('/api/organizaciones/:slug/torneos', torneosRouter);
 app.use('/api/organizaciones/:slug/importaciones', importacionesRouter);
 app.use('/api/organizaciones/:slug/revisiones', revisionesRouter);
+app.use('/api/organizaciones/:slug/mercadopago', cuentaMercadoPagoRouter);
 app.use('/api/organizaciones', organizacionesRouter);
 // Sin login. Nada de acá devuelve datos de contacto.
 app.use('/api/publico/:slug/ranking', rankingPublicoRouter);
@@ -81,6 +85,8 @@ app.use('/api/inscripcion/:slug/inscripciones/:id', pagoRouter);
 app.use('/api/inscripcion/:slug/reclamos', reclamoRouter);
 // MercadoPago avisa los pagos acá (05-pagos §3).
 app.use('/api/webhooks/mercadopago', webhookRouter);
+// Y devuelve acá a la organización que conectó su cuenta (decisión 137).
+app.use('/api/mercadopago/vuelta', vueltaMercadoPagoRouter);
 // Con login de jugador: lo suyo, en la app.
 app.use('/api/jugador/:slug', jugadorRouter);
 
@@ -93,7 +99,12 @@ app.listen(PORT, () => {
 
 programarInicioDeGrupos();
 programarVencimientoDeReservas();
+programarRenovacionDeTokens();
 
-if (!hayMercadoPago()) {
-  console.log('Sin MERCADOPAGO_ACCESS_TOKEN: el pago de las inscripciones es simulado (decisión 053).');
+if (pagoSimulado()) {
+  console.log('PAGO_SIMULADO=1: el pago de las inscripciones es simulado (decisión 138).');
+} else if (!sePuedeConectarMercadoPago() || !hayClaveDeCifrado()) {
+  console.log(
+    'Sin MERCADOPAGO_CLIENT_ID, MERCADOPAGO_CLIENT_SECRET, API_URL_PUBLICA o CLAVE_TOKENS_MERCADOPAGO: las organizaciones no pueden conectar MercadoPago y solo se publican torneos gratis (decisión 137).',
+  );
 }

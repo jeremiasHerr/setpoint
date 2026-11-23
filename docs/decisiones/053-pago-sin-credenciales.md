@@ -1,6 +1,6 @@
 # 053 — El pago sin credenciales de MercadoPago
 
-**Estado:** aceptada — 25 de octubre de 2026. Tomada durante la implementación, sin consultar al grupo: revisarla en el PR.
+**Estado:** aceptada — 25 de octubre de 2026. Tomada durante la implementación, sin consultar al grupo: revisarla en el PR. **Reemplazada en parte por la [138](138-el-pago-simulado-se-activa-a-proposito.md):** el pago ya no se simula porque falte el token, sino solo con `PAGO_SIMULADO=1`. Cómo se simula no cambia.
 
 ## Contexto
 

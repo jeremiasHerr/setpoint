@@ -26,7 +26,7 @@ export type InscripcionParaPagar = {
   precio: number;
   // El email verificado de la persona, al que va el comprobante.
   email: string;
-  // Sin credenciales de MercadoPago, la pantalla ofrece un pago simulado (decisión 053).
+  // Con PAGO_SIMULADO, la pantalla ofrece aprobar o rechazar el pago (decisiones 053 y 138).
   pagoSimulado: boolean;
   // Si se anotó en la lista de espera (F13): las horas que tiene para pagar cuando le toca un lugar
   // (decisión 076) y, mientras espera, en qué puesto está y cómo está el cupo. null si nunca estuvo.
@@ -35,6 +35,22 @@ export type InscripcionParaPagar = {
 
 // El link del checkout de MercadoPago. null si el pago es simulado o si el torneo es gratis.
 export type InicioDePago = { url: string | null };
+
+// La cuenta de MercadoPago con la que cobra la organización (decisión 137). Va en Tu circuito.
+export type CuentaMercadoPago = {
+  // Si esta instalación tiene las credenciales de la aplicación de Setpoint en MercadoPago.
+  disponible: boolean;
+  // Con PAGO_SIMULADO, ningún pago pasa por MercadoPago (decisión 138).
+  pagoSimulado: boolean;
+  conectada: { nombre: string | null; desde: string } | null;
+};
+
+// El link para autorizar a Setpoint en MercadoPago.
+export type ConexionMercadoPago = { url: string };
+
+// Cómo volvió la organización de MercadoPago: la API redirige a Tu circuito con ?mercadopago=.
+export const VUELTAS_DE_MERCADOPAGO = ['conectada', 'cancelada', 'vencida', 'otra-cuenta-con-pagos', 'error'] as const;
+export type VueltaDeMercadoPago = (typeof VUELTAS_DE_MERCADOPAGO)[number];
 
 export const pagoSimuladoSchema = z.object({ resultado: z.enum(['aprobado', 'rechazado']) }, { error: 'Falta el resultado' });
 export type DatosPagoSimulado = z.infer<typeof pagoSimuladoSchema>;

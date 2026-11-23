@@ -10,6 +10,7 @@ import { useAutoguardadoCircuito, useCircuito, type EstadoGuardado } from '../fe
 import { ResumenCircuito } from '../features/circuito/ResumenCircuito';
 import { SeccionCategorias } from '../features/circuito/SeccionCategorias';
 import { SeccionClubes } from '../features/circuito/SeccionClubes';
+import { SeccionMercadoPago } from '../features/circuito/SeccionMercadoPago';
 import { SeccionQuienesSon } from '../features/circuito/SeccionQuienesSon';
 import { SeccionRanking } from '../features/circuito/SeccionRanking';
 import { SeccionResultados } from '../features/circuito/SeccionResultados';
@@ -117,6 +118,7 @@ function EditorCircuito({ sesion, inicial }: { sesion: Sesion; inicial: Circuito
             alCambiarNombreCuadroConsuelo={(nombre) => cambiar('nombreCuadroConsuelo', nombre)}
             alCambiarContactos={(contactos) => cambiar('contactos', contactos)}
           />
+          <SeccionMercadoPago slug={slug} inicial={inicial.mercadopago} />
           <SeccionCategorias categorias={circuito.categorias} alCambiar={(categorias) => cambiar('categorias', categorias)} />
           <SeccionRanking
             usaRanking={usaRanking}

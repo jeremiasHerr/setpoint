@@ -23,6 +23,7 @@ import { finalDelCuadro } from '../competencia/cierre';
 import { MINIMO_POR_ZONA } from '../competencia/sorteo';
 import { avanceDelTorneo } from '../competencia/tablero';
 import { avisarLugaresLiberados, promoverListaDeEspera } from '../inscripciones/lista-de-espera.service';
+import { exigirCobroDisponible } from '../mercadopago/cuenta.service';
 import { convocatoriaEditable } from './navegacion';
 
 // Las claves del contrato son los valores de los enums de Prisma en minúscula.
@@ -253,6 +254,8 @@ export async function editarConvocatoria(slug: string, usuarioId: number, torneo
   await verificarNombreLibre(organizacionId, datos.nombre, principal.edicion ?? principal.nombre);
 
   if (publicado) {
+    // Con la inscripción abierta, pasar a cobrar pide MercadoPago conectado, como publicar.
+    if (principal.precio.toNumber() === 0) await exigirCobroDisponible(organizacionId, datos.precio);
     await editarPublicada(torneos, datos);
     return obtenerConvocatoria(slug, usuarioId, principal.id);
   }
@@ -334,6 +337,8 @@ export async function publicarConvocatoria(slug: string, usuarioId: number, torn
   else if (cierreInscripcion < hoy()) campos.cierreInscripcion = 'La inscripción no puede cerrar en una fecha pasada';
   if (fechaInicio === null) campos.fechaInicio = 'Elegí cuándo empieza el torneo';
   if (Object.keys(campos).length > 0) throw new ErrorHttp(400, 'DATOS_INCOMPLETOS', campos);
+  // Sin MercadoPago conectado, solo se publican torneos gratis (decisión 137).
+  await exigirCobroDisponible(organizacionId, torneos[0].precio.toNumber());
 
   await prisma.torneo.updateMany({
     where: { id: { in: torneos.map((t) => t.id) }, estado: EstadoTorneo.BORRADOR },

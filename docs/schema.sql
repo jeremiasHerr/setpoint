@@ -339,13 +339,22 @@ CREATE TABLE pagos (
 );
 
 -- Hoy siempre tipo PLATAFORMA. Los tokens quedan listos para Marketplace.
+-- La cuenta de MercadoPago con la que cobra la organización, conectada por OAuth (decisión 137).
 CREATE TABLE cuentas_cobro (
     id              SERIAL PRIMARY KEY,
     organizacion_id INTEGER           NOT NULL UNIQUE REFERENCES organizaciones(id) ON DELETE CASCADE,
     tipo            tipo_cuenta_cobro NOT NULL DEFAULT 'PLATAFORMA',
+    -- Cifrados con CLAVE_TOKENS_MERCADOPAGO: con la base sola no se cobra en nombre de nadie.
     access_token    TEXT,
     refresh_token   TEXT,
-    token_vence     TIMESTAMPTZ
+    token_vence     TIMESTAMPTZ,
+    mp_user_id      TEXT,
+    mp_nombre       TEXT,
+    conectada_en    TIMESTAMPTZ,
+    -- El intento de conexión en curso: el state y el verificador de PKCE, hasta la vuelta.
+    conexion_estado      TEXT UNIQUE,
+    conexion_verificador TEXT,
+    conexion_vence       TIMESTAMPTZ
 );
 
 CREATE TABLE liquidaciones (
