@@ -10,52 +10,39 @@ El importe lo fija cada torneo. En el caso de validación (POLENTA): **$45.000 A
 
 ---
 
-## 2. Modelo elegido: cuenta única con liquidación
+## 2. Modelo elegido: cada organización cobra con su cuenta
 
-Toda la recaudación entra a una sola cuenta de MercadoPago (la de la plataforma, en sandbox). El sistema registra por torneo una `Liquidacion` con monto recaudado, comisión, monto correspondiente a la organización y estado.
+**La plata de cada inscripción entra directo a la cuenta de MercadoPago de la organización**, sin pasar por Setpoint ([decisión 137](decisiones/137-cada-organizacion-cobra-con-su-mercadopago.md)). La organización conecta su cuenta desde *Tu circuito*, por OAuth: toca "Conectar MercadoPago", inicia sesión en MercadoPago, autoriza a Setpoint y vuelve.
 
-La transferencia efectiva a la organización queda **fuera del alcance del sistema**.
+- **Sin cuenta conectada, solo se publican torneos gratis.** Publicar uno con importe, o pasar a cobrar uno publicado, responde `SIN_MERCADOPAGO`.
+- **Cada cobro se crea con el token de la organización del torneo**, y el webhook consulta el pago con esa misma cuenta.
+- **Los tokens se guardan cifrados** en `CuentaCobro`, con una clave que vive en una variable de entorno (`CLAVE_TOKENS_MERCADOPAGO`), y se renuevan solos antes de vencer.
+- **La organización puede desconectar su cuenta**, salvo mientras haya pagos en curso, y puede sacarle el permiso a Setpoint desde MercadoPago.
 
-**Setpoint no se queda con una comisión de lo cobrado:** cobra un cargo fijo por jugador inscripto, que la organización paga al cerrar la inscripción, y el primer torneo es gratis ([decisión 103](decisiones/103-cargo-por-jugador-inscripto.md), que reemplaza el 5% de la [078](decisiones/078-comision-de-la-plataforma.md)). El cargo todavía no se cobra en el sistema. La conciliación se calcula al consultar, con los pagos del torneo: lo cobrado por MercadoPago le corresponde entero a la organización, y lo cobrado en efectivo o por transferencia ya lo tiene.
+**Setpoint no se queda con una comisión de lo cobrado:** cobra un cargo fijo por jugador inscripto, que la organización paga al cerrar la inscripción, y el primer torneo es gratis ([decisión 103](decisiones/103-cargo-por-jugador-inscripto.md), que reemplaza el 5% de la [078](decisiones/078-comision-de-la-plataforma.md)). El cargo todavía no se cobra en el sistema. La conciliación se calcula al consultar, con los pagos del torneo: lo cobrado por MercadoPago ya está en la cuenta de la organización, y lo cobrado en efectivo o por transferencia ya lo tiene. La tabla `Liquidacion` del schema no se usa.
 
-> **Este modelo no queda así fuera de la demo.** Que la plata de las inscripciones pase por la cuenta de Setpoint no es aceptable para el grupo: tiene que llegar a la de cada organización. Es la decisión abierta 19 del [README](README.md).
+> **Antes, la plata entraba a una sola cuenta, la de Setpoint,** que le transfería a cada organización lo suyo por fuera. Se había elegido por alcance: conectar la cuenta de cada organización parecía de 3 a 5 días, en un área con documentación floja. Fuera de la demo no era aceptable para el grupo (era la decisión abierta 19), y la decisión 137 lo reemplazó.
 
-### Por qué no Marketplace
+### El pago simulado
 
-Marketplace (que la plata vaya directo a la cuenta de cada organización) requiere OAuth con MercadoPago, almacenamiento y refresh de tokens de terceros, manejo de revocación y testeo con dos cuentas de prueba. Son 3 a 5 días de trabajo en un área con documentación floja.
-
-Y en la demo **es indistinguible**: el jugador toca "inscribirme", paga, vuelve inscripto. Lo que sí se ve y sí se valora — reserva con vencimiento, idempotencia del webhook, conciliación por torneo — está en ambos modelos.
-
-Ese tiempo compite contra el motor de zonas, los dos cuadros, la app móvil y la IA.
-
-### Cómo queda abierta la migración
-
-Tres decisiones de diseño desde el inicio:
-
-1. Tabla `CuentaCobro` con `organizacion_id`, `access_token` (nullable), `refresh_token` (nullable) y `tipo` (`plataforma` | `propia`). Hoy todos los torneos apuntan a la única cuenta `plataforma`
-2. La creación de preferencias aislada en `crearPreferencia(inscripcion, cuentaCobro)`
-3. La `Liquidacion` se modela igual en ambos escenarios
-
-En la defensa: *"la arquitectura soporta ambos modelos; entregamos el de cuenta única por decisión de alcance, y la migración está aislada en una sola función"*.
-
-**Punto de control:** 2 de noviembre. Si el motor de competencia, el tablero y la app están cerrados, se puede evaluar agregar Marketplace.
+Con `PAGO_SIMULADO=1` ningún pago pasa por MercadoPago: la pantalla de pago ofrece aprobarlo o rechazarlo, y se pueden publicar torneos con importe sin cuenta conectada ([decisión 138](decisiones/138-el-pago-simulado-se-activa-a-proposito.md), que reemplaza en parte a la [053](decisiones/053-pago-sin-credenciales.md)). Lo pone el `docker-compose.yml` de la entrega, que no puede depender de cuentas externas. Sin la variable no se simula nunca, falte la credencial que falte.
 
 ---
 
 ## 3. Flujo de inscripción
 
-> **Estado:** implementado en la API. `POST /api/inscripcion/:slug/inscripciones/:id/pago` crea la preferencia (con vencimiento igual al de la reserva) y `POST /api/webhooks/mercadopago` confirma o rechaza consultando el pago. Una tarea vence las reservas cada minuto. Sin `MERCADOPAGO_ACCESS_TOKEN`, el pago es simulado ([decisión 053](decisiones/053-pago-sin-credenciales.md)). Si un pago aprobado llega después de vencida la reserva, se confirma igual: el jugador ya pagó.
+> **Estado:** implementado en la API. `POST /api/inscripcion/:slug/inscripciones/:id/pago` crea la preferencia con la cuenta de la organización (con vencimiento igual al de la reserva) y `POST /api/webhooks/mercadopago?organizacion=<id>` confirma o rechaza consultando el pago con esa cuenta. Una tarea vence las reservas cada minuto. Con `PAGO_SIMULADO=1`, el pago es simulado ([decisión 138](decisiones/138-el-pago-simulado-se-activa-a-proposito.md)). Si un pago aprobado llega después de vencida la reserva, se confirma igual: el jugador ya pagó.
 
 Quien llega por el link del torneo se inscribe desde el navegador del celular; quien tiene la sesión iniciada, también desde la app ([04-flujo-jugador.md](04-flujo-jugador.md) §5). En los dos casos, antes de pagar ya verificó su email con un código: **el código va antes del pago**, para que nadie quede con un pago hecho y una inscripción sin confirmar porque el código no le llegó ([decisión 049](decisiones/049-identidad-e-ingreso-con-codigo.md)).
 
 1. El jugador verifica su email, encuentra su perfil (04 §5.5 y §5.6) y toca "Pagar"
 2. **Se crea la `Inscripcion` en `pendiente_pago` ANTES de ir a MercadoPago**, con reserva de cupo por 15 minutos. El perfil elegido queda reservado y la vinculación con la persona, pendiente hasta el pago ([decisión 051](decisiones/051-vinculacion-con-el-padron.md))
-3. El backend crea la preferencia con `external_reference = inscripcion.id`
+3. El backend crea la preferencia con el token de la organización y `external_reference = inscripcion.id`
 4. La web redirige al `init_point`; la app lo abre con el sistema (`Linking.openURL`), para que Android pueda abrir la app de MercadoPago si está instalada ([decisión 054](decisiones/054-perfil-pendiente.md))
 5. El jugador paga
 6. MercadoPago redirige a la página de la inscripción en la web. Desde la app no hace falta volver por un link: al volver al frente, la app pide de nuevo la cuenta y ve si se confirmó
 7. La pantalla muestra "Confirmando el pago" y consulta el estado cada unos segundos, con la sesión que dejó el código
-8. **El webhook** llega a `POST /webhooks/mercadopago`, el backend consulta el pago contra la API de MP y, si está `approved`, pasa la inscripción a `pagada`, guarda la vinculación del perfil con la persona y manda el comprobante por email (§4)
+8. **El webhook** llega a `POST /webhooks/mercadopago`, el backend consulta el pago contra la API de MP con la cuenta de la organización y, si está `approved`, pasa la inscripción a `pagada`, guarda la vinculación del perfil con la persona y manda el comprobante por email (§4)
 9. La consulta devuelve `pagada` y la pantalla cambia a "Listo, estás inscripto", con el número de inscripción y el email al que se mandó el comprobante
 
 ---
@@ -77,16 +64,17 @@ Quien llega por el link del torneo se inscribe desde el navegador del celular; q
 - **El número de inscripción** es el id de la `Inscripcion`. Se muestra también en la pantalla final, como respaldo si el email se demora o cae en spam, y con él la organización la encuentra.
 - **Va al email verificado de la persona.** No hay cuenta que crear ni contraseña: la cuenta es ese email ([decisión 049](decisiones/049-identidad-e-ingreso-con-codigo.md)).
 - **Es idempotente, como el webhook.** Si MercadoPago reenvía la notificación y la inscripción ya está `pagada`, no sale otro comprobante.
-- **Se envía con `apps/api/src/lib/correo.ts`**, el mismo de los códigos y de la recuperación de la contraseña de los administradores. Para la entrega, Mailpit lo atrapa y lo muestra en `http://localhost:8025` ([decisión 006](decisiones/006-recuperar-la-contrasena.md)); el proveedor real es la decisión abierta 17 del [README](README.md).
+- **Se envía con `apps/api/src/lib/correo.ts`**, el mismo de los códigos y de la recuperación de la contraseña de los administradores. Para la entrega, Mailpit lo atrapa y lo muestra en `http://localhost:8025` ([decisión 006](decisiones/006-recuperar-la-contrasena.md)); la versión publicada lo manda con Resend ([decisión 086](decisiones/086-version-publicada.md)).
 
 ---
 
 ## 5. Reglas no negociables
 
 - **La confirmación viene del webhook, nunca del redirect.** El redirect puede llegar antes de que el pago esté acreditado
-- **El webhook consulta el pago contra la API de MercadoPago.** No se confía en el payload recibido
+- **El webhook consulta el pago contra la API de MercadoPago,** con la cuenta de la organización que dice la URL del aviso, y verifica que la inscripción sea de esa organización. No se confía en el payload recibido
 - **El webhook es idempotente.** MP reenvía notificaciones; si la inscripción ya está `pagada`, se responde 200 y no se hace nada
 - **El cupo se reserva antes de pagar,** con vencimiento a 15 minutos, para evitar sobreventa
+- **El pago se resuelve en el momento,** sin Rapipago, Pago Fácil ni cajeros (`binary_mode`, [decisión 139](decisiones/139-el-pago-se-resuelve-en-el-momento.md)). Un pago en efectivo se acreditaría días después, con la reserva vencida y el lugar dado a otro. Quien quiere pagar en efectivo le paga a la organización, que lo inscribe a mano (§8)
 - **El comprobante sale con el webhook, nunca con el redirect** (§4)
 
 > El "confirmando pago…" con polling no es un parche: es la forma correcta de manejar una confirmación asincrónica.

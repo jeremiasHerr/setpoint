@@ -96,6 +96,16 @@ Después del alta, y en cualquier momento, se configura:
 
 Todo menos los clubes se edita en la pantalla *Tu circuito*, que se guarda sola: cada cambio se envía un momento después de dejar de escribir (`PUT /api/organizaciones/:slug/circuito`, solo para administradores de esa organización). El PUT recibe la configuración completa y la deja tal cual llega.
 
+**La cuenta de MercadoPago** también está en *Tu circuito*, en "Cobrar con MercadoPago", pero no se guarda con el resto: conectar y desconectar son acciones ([decisión 137](decisiones/137-cada-organizacion-cobra-con-su-mercadopago.md)).
+
+| Ruta | Qué hace |
+|---|---|
+| `POST /api/organizaciones/:slug/mercadopago` | Devuelve el link de autorización de MercadoPago, con un `state` y PKCE. La web lleva ahí a la organización |
+| `GET /api/mercadopago/vuelta` | Adonde vuelve la organización. Canjea el código, guarda los tokens cifrados y redirige a `/circuito?mercadopago=` con el resultado: `conectada`, `cancelada`, `vencida`, `otra-cuenta-con-pagos` o `error` |
+| `DELETE /api/organizaciones/:slug/mercadopago` | Desconecta la cuenta. Con pagos en curso responde `PAGOS_EN_CURSO` |
+
+Sin cuenta conectada, la sección lo dice y solo se publican torneos gratis. Con `PAGO_SIMULADO=1` dice que el pago es simulado y no ofrece conectar ([decisión 138](decisiones/138-el-pago-simulado-se-activa-a-proposito.md)).
+
 **Las categorías y los torneos del calendario que se quitan se desactivan, no se borran** (`activa = false`). Una categoría puede tener torneos y jugadores apuntándole, y una etapa, torneos y movimientos de ranking; borrarlas rompería el historial o directamente fallaría por las claves foráneas. Si el nombre vuelve a agregarse, se reactiva la misma fila, con su historial. El orden de la lista define `orden`: para las etapas, es el orden del calendario.
 
 ---
@@ -202,7 +212,7 @@ El formulario replica la convocatoria que hoy publican en WhatsApp ([02](02-domi
 
 > Todos los valores por defecto salen de la configuración de la organización. El listado completo de parámetros está en [07-configurabilidad.md](07-configurabilidad.md).
 
-**Publicar.** El borrador se puede guardar incompleto, pero para publicarlo tienen que estar la fecha de cierre de inscripción, que no puede ser pasada, y la fecha de inicio. Publicar pasa a `publicado` todos los torneos de la convocatoria a la vez. Al publicar, la pantalla muestra el link de inscripción de cada categoría, listo para copiar y pasar por el grupo.
+**Publicar.** El borrador se puede guardar incompleto, pero para publicarlo tienen que estar la fecha de cierre de inscripción, que no puede ser pasada, y la fecha de inicio. Un torneo con importe necesita, además, la cuenta de MercadoPago conectada: si no, la API responde `SIN_MERCADOPAGO` con el campo `precio`, y pasa lo mismo al ponerle importe a uno publicado gratis ([decisión 137](decisiones/137-cada-organizacion-cobra-con-su-mercadopago.md)). Publicar pasa a `publicado` todos los torneos de la convocatoria a la vez. Al publicar, la pantalla muestra el link de inscripción de cada categoría, listo para copiar y pasar por el grupo.
 
 **Editar con la inscripción abierta.** Mientras el torneo está publicado se puede seguir ajustando todo menos las categorías: cada una ya puede tener inscripciones, y en borrador cambiarlas implica borrar y recrear torneos ([decisión 003](decisiones/003-torneo-con-varias-categorias.md)). El cupo de una categoría no puede bajar de la cantidad de inscriptos que ocupan lugar (pendientes de pago y pagados; la lista de espera no cuenta). Cuando se cierra la inscripción, el formato ya no cambia: el sorteo lo usa. Como el formato es uno solo para toda la convocatoria, alcanza con que una categoría cierre para que la convocatoria entera deje de editarse, aunque otra siga abierta.
 

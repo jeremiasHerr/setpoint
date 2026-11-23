@@ -21,6 +21,7 @@ Se definen una vez, al dar de alta el circuito.
 | Puntos de ingreso de jugador nuevo | Número | 0 |
 | **`quien_carga_resultados`** | `organizacion` \| `organizacion_y_jugadores` | `organizacion` |
 | **Nombre del cuadro consuelo** | Texto, hasta 40 caracteres | "Complementaria" (por defecto: "Cuadro consuelo") |
+| **Cuenta de MercadoPago** | Conectada por OAuth desde *Tu circuito*, o ninguna. Sin cuenta, solo torneos gratis ([decisión 137](decisiones/137-cada-organizacion-cobra-con-su-mercadopago.md)) | La de POLENTA, cuando la conecte |
 
 **`usa_ranking`** — si la organización administra un circuito con ranking acumulado o solo corre torneos sueltos.
 

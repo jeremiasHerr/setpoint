@@ -10,6 +10,7 @@ import { DEL_PADRON_ACTIVOS } from '../../lib/padron';
 import { organizacionAdministrada } from '../../lib/permisos';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
+import { cuentaMercadoPago } from '../mercadopago/cuenta.service';
 
 const aEnumContacto = (tipo: Contacto['tipo']) => tipo.toUpperCase() as TipoContacto;
 
@@ -67,6 +68,7 @@ export async function obtenerCircuito(slug: string, usuarioId: number): Promise<
       })),
     })),
     jugadores: organizacion._count.jugadores,
+    mercadopago: await cuentaMercadoPago(id),
   };
 }
 

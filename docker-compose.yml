@@ -2,8 +2,8 @@
 #   web      http://localhost:8080
 #   api      http://localhost:3000  (la que usa la app del celular)
 #   mailpit  http://localhost:8025  (los mails que manda la API)
-# Opcional: un .env en la raíz con MERCADOPAGO_ACCESS_TOKEN, API_URL_PUBLICA y ANTHROPIC_API_KEY.
-# Sin ellos el pago es simulado y la importación del padrón termina en error.
+# Opcional: un .env en la raíz con ANTHROPIC_API_KEY y, para cobrar con MercadoPago, sus variables
+# (ver .env.example). Sin ellos el pago es simulado y la importación del padrón termina en error.
 #
 # En desarrollo se levantan solo db y mailpit (npm run dev lo hace solo).
 services:
@@ -46,7 +46,14 @@ services:
       WEB_URL: http://localhost:8080
       # Carga el seed la primera vez, con la base vacía.
       SEMBRAR: si-vacia
-      MERCADOPAGO_ACCESS_TOKEN: ${MERCADOPAGO_ACCESS_TOKEN:-}
+      # La entrega no depende de cuentas externas: el pago es simulado salvo que el .env diga
+      # PAGO_SIMULADO=0 (decisión 138). Con las credenciales de la aplicación de MercadoPago, cada
+      # organización conecta su cuenta (decisión 137).
+      PAGO_SIMULADO: ${PAGO_SIMULADO:-1}
+      MERCADOPAGO_CLIENT_ID: ${MERCADOPAGO_CLIENT_ID:-}
+      MERCADOPAGO_CLIENT_SECRET: ${MERCADOPAGO_CLIENT_SECRET:-}
+      MERCADOPAGO_PRUEBA: ${MERCADOPAGO_PRUEBA:-}
+      CLAVE_TOKENS_MERCADOPAGO: ${CLAVE_TOKENS_MERCADOPAGO:-}
       API_URL_PUBLICA: ${API_URL_PUBLICA:-}
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
       IA_PEDIDOS_POR_HORA: ${IA_PEDIDOS_POR_HORA:-}

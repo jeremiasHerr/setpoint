@@ -16,6 +16,9 @@ function mensajeDeError(error: Error | null): string | null {
       return 'Venció la reserva. Si quedan lugares, inscribite de nuevo desde el link del torneo.';
     case 'INSCRIPCION_NO_ABIERTA':
       return 'La inscripción de este torneo ya cerró.';
+    // La organización no tiene MercadoPago conectado (decisión 137).
+    case 'SIN_MERCADOPAGO':
+      return 'La organización todavía no puede cobrar con MercadoPago. Escribile para pagar de otra forma.';
     case 'SIN_CONEXION':
       return 'No pudimos conectarnos. Revisá tu conexión y probá de nuevo.';
     default:

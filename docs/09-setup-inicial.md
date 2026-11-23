@@ -79,7 +79,7 @@ Y el `.env.example`:
 ```
 DATABASE_URL="postgresql://setpoint:setpoint@localhost:5432/setpoint"
 JWT_SECRET="cambiar-en-produccion"
-MERCADOPAGO_ACCESS_TOKEN="TEST-..."
+PAGO_SIMULADO=1
 ANTHROPIC_API_KEY="sk-ant-..."
 ```
 

@@ -1,7 +1,7 @@
 import { EstadoInscripcion, EstadoPago, EstadoTorneo, MedioPago, MotivoRevision, Prisma, Vinculacion } from '@prisma/client';
 import type { DatosPagoSimulado, EstadoDeLaInscripcion, InicioDePago, InscripcionParaPagar } from '@setpoint/shared';
 import { enviarCorreo } from '../../lib/correo';
-import { consultarPago, crearPreferencia, hayMercadoPago } from '../../lib/mercadopago';
+import { consultarPago, crearPreferencia, pagoSimulado } from '../../lib/mercadopago';
 import { DEL_PADRON_ACTIVOS } from '../../lib/padron';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
@@ -11,15 +11,23 @@ import { ocupanCupo } from '../inscripcion/inscripcion.service';
 import { descartarPerfil, entrarAlPadron } from '../inscripcion/perfil-pendiente';
 import { puestoEnLaLista } from '../inscripciones/lista-de-espera';
 import { avisarLugaresLiberados, promoverListaDeEspera } from '../inscripciones/lista-de-espera.service';
+import { tokenDeLaOrganizacion } from '../mercadopago/cuenta.service';
 import { comprobante } from './comprobante';
 
 // El pago de la inscripción (F12, 05-pagos.md): iniciar el checkout, confirmar con el webhook y
 // mandar el comprobante. La confirmación viene siempre del webhook, nunca de la vuelta del checkout.
+// Se cobra con la cuenta de MercadoPago de la organización del torneo (decisión 137).
 
 const WEB_URL = process.env.WEB_URL ?? 'http://localhost:5173';
 // La dirección pública de la API, para que MercadoPago avise. Sin ella no hay webhook (en
 // desarrollo, ngrok).
 const API_URL_PUBLICA = process.env.API_URL_PUBLICA;
+
+// El aviso lleva de qué organización es el pago, para consultarlo con su cuenta. source_news pide
+// solo los avisos nuevos (webhooks), sin los viejos (IPN) del mismo pago.
+function webhookDe(organizacionId: number) {
+  return API_URL_PUBLICA ? `${API_URL_PUBLICA}/api/webhooks/mercadopago?organizacion=${organizacionId}&source_news=webhooks` : null;
+}
 
 const CON_TORNEO = {
   torneo: { include: { categoria: true, organizacion: true } },
@@ -60,7 +68,7 @@ export async function inscripcionParaPagar(slug: string, inscripcionId: number, 
     jugador: { nombre: inscripcion.jugador.nombre, apellido: inscripcion.jugador.apellido },
     precio: torneo.precio.toNumber(),
     email: usuario.email,
-    pagoSimulado: !hayMercadoPago(),
+    pagoSimulado: pagoSimulado(),
     listaDeEspera: await listaDeEsperaDe(inscripcion),
   };
 }
@@ -117,7 +125,7 @@ export async function reservarAprobada(slug: string, inscripcionId: number, usua
   return inscripcionParaPagar(slug, inscripcionId, usuarioId);
 }
 
-// Abre el checkout de una reserva vigente. Sin credenciales, el pago es simulado (decisión 053).
+// Abre el checkout de una reserva vigente. Con PAGO_SIMULADO, el pago es simulado (decisión 138).
 export async function iniciarPago(slug: string, inscripcionId: number, usuarioId: number): Promise<InicioDePago> {
   const inscripcion = await inscripcionDe(slug, inscripcionId, usuarioId);
   if (estadoDe(inscripcion) !== 'reservando') throw new ErrorHttp(409, 'RESERVA_NO_VIGENTE');
@@ -130,15 +138,20 @@ export async function iniciarPago(slug: string, inscripcionId: number, usuarioId
     await confirmarPago(inscripcion.id, { medio: MedioPago.OTRO, monto: 0 });
     return { url: null };
   }
-  if (!hayMercadoPago()) return { url: null };
+  if (pagoSimulado()) return { url: null };
+
+  // Sin cuenta conectada no hay con qué cobrar: la organización la desconectó, o publicó el torneo
+  // antes de que hiciera falta conectarla (decisión 137).
+  const token = await tokenDeLaOrganizacion(torneo.organizacionId);
+  if (!token) throw new ErrorHttp(409, 'SIN_MERCADOPAGO');
 
   const vuelta = `${WEB_URL}/c/${slug}/inscripciones/${inscripcion.id}`;
-  const preferencia = await crearPreferencia({
+  const preferencia = await crearPreferencia(token, {
     inscripcionId: inscripcion.id,
     titulo: `${torneo.edicion ?? torneo.nombre} · ${torneo.categoria.nombre}`,
     precio,
     vuelta,
-    webhook: API_URL_PUBLICA ? `${API_URL_PUBLICA}/api/webhooks/mercadopago` : null,
+    webhook: webhookDe(torneo.organizacionId),
     vence: inscripcion.reservaVence ?? new Date(Date.now() + torneo.minutosReservaCupo * 60_000),
   });
 
@@ -278,20 +291,28 @@ export async function rechazarPago(inscripcionId: number, pago: Omit<PagoRecibid
   await avisarLugaresLiberados(liberados);
 }
 
-// Lo que avisa MercadoPago: se consulta el pago y se confirma o se rechaza la inscripción.
-export async function procesarNotificacion(pagoId: string) {
-  const pago = await consultarPago(pagoId);
+// Lo que avisa MercadoPago: se consulta el pago con la cuenta de la organización y se confirma o se
+// rechaza la inscripción.
+export async function procesarNotificacion(pagoId: string, organizacionId: number) {
+  // Sin cuenta conectada no hay con qué consultar el pago.
+  const token = await tokenDeLaOrganizacion(organizacionId);
+  if (!token) return;
+
+  const pago = await consultarPago(token, pagoId);
   const inscripcionId = Number(pago.external_reference);
   if (!Number.isInteger(inscripcionId)) return;
+  // El aviso dice de qué organización es el pago: la inscripción tiene que ser de esa misma.
+  const deLaOrganizacion = await prisma.inscripcion.count({ where: { id: inscripcionId, torneo: { organizacionId } } });
+  if (deLaOrganizacion === 0) return;
 
   const datos = { monto: pago.transaction_amount, mpPaymentId: pago.id, payload: pago as Prisma.InputJsonValue };
   if (pago.status === 'approved') await confirmarPago(inscripcionId, { medio: MedioPago.MERCADOPAGO, ...datos });
   if (pago.status === 'rejected' || pago.status === 'cancelled') await rechazarPago(inscripcionId, datos);
 }
 
-// Solo sin credenciales de MercadoPago (decisión 053). Con el token cargado, no existe.
+// Solo con PAGO_SIMULADO=1 (decisión 138). Sin la variable, no existe.
 export async function simularPago(slug: string, inscripcionId: number, usuarioId: number, datos: DatosPagoSimulado) {
-  if (hayMercadoPago()) throw new ErrorHttp(404, 'NO_ENCONTRADO');
+  if (!pagoSimulado()) throw new ErrorHttp(404, 'NO_ENCONTRADO');
   const inscripcion = await inscripcionDe(slug, inscripcionId, usuarioId);
   if (estadoDe(inscripcion) !== 'reservando') throw new ErrorHttp(409, 'RESERVA_NO_VIGENTE');
 

@@ -62,7 +62,7 @@ La primera vez tarda unos minutos: arma las imágenes, crea las tablas y carga l
 
 Los mails que manda la API (los códigos de ingreso, los comprobantes, la recuperación de la contraseña) no salen a internet: los atrapa Mailpit y se leen en http://localhost:8025.
 
-Funciona sin configurar nada. Con un `.env` en la raíz (ver `.env.example`) se suman MercadoPago y la IA: sin `MERCADOPAGO_ACCESS_TOKEN` el pago es simulado ([decisión 053](docs/decisiones/053-pago-sin-credenciales.md)), y sin `ANTHROPIC_API_KEY` la importación del padrón termina en error con el motivo.
+Funciona sin configurar nada: el pago es simulado ([decisión 138](docs/decisiones/138-el-pago-simulado-se-activa-a-proposito.md)), y sin `ANTHROPIC_API_KEY` la importación del padrón termina en error con el motivo. Con un `.env` en la raíz (ver `.env.example`) se suman la IA y, con `PAGO_SIMULADO=0`, el cobro con el MercadoPago de cada organización ([decisión 137](docs/decisiones/137-cada-organizacion-cobra-con-su-mercadopago.md)).
 
 ### Para desarrollar
 
@@ -120,8 +120,11 @@ Copiar `.env.example` a `.env` y completar:
 |---|---|
 | `DATABASE_URL` | Conexión a Postgres |
 | `JWT_SECRET` | Firma de tokens de sesión |
-| `MERCADOPAGO_ACCESS_TOKEN` | Credencial de **prueba** de MercadoPago. Vacía, el pago es simulado ([decisión 053](docs/decisiones/053-pago-sin-credenciales.md)) |
-| `API_URL_PUBLICA` | Dirección pública de la API, para que llegue el webhook de MercadoPago (en desarrollo, ngrok) |
+| `PAGO_SIMULADO` | Con `1`, la pantalla de pago ofrece aprobarlo o rechazarlo y no se cobra nada ([decisión 138](docs/decisiones/138-el-pago-simulado-se-activa-a-proposito.md)). Sin la variable, cada organización cobra con su MercadoPago |
+| `MERCADOPAGO_CLIENT_ID`, `MERCADOPAGO_CLIENT_SECRET` | Credenciales de producción de la aplicación de Setpoint en MercadoPago, para que cada organización conecte su cuenta ([decisión 137](docs/decisiones/137-cada-organizacion-cobra-con-su-mercadopago.md)) |
+| `MERCADOPAGO_PRUEBA` | Con `1`, las cuentas que se conectan reciben credenciales de prueba: el checkout es el del sandbox. Solo para desarrollo: la versión publicada cobra de verdad |
+| `CLAVE_TOKENS_MERCADOPAGO` | Clave de 32 bytes en hex para guardar cifrados los tokens de cada organización. Si se pierde, todas tienen que volver a conectarse |
+| `API_URL_PUBLICA` | Dirección pública de la API, para el webhook y la vuelta de MercadoPago (en desarrollo, ngrok) |
 | `ANTHROPIC_API_KEY` | Funcionalidades de IA |
 | `WEB_URL` | Dirección de la web: los links de los mails, la vuelta de MercadoPago y el único origen que acepta CORS |
 | `SMTP_HOST`, `SMTP_PORT` | Servidor de mail. Mailpit en desarrollo; vacío, los mails se imprimen en la consola |
@@ -133,9 +136,10 @@ Copiar `.env.example` a `.env` y completar:
 
 ### Probar con MercadoPago
 
-1. En el [panel de desarrolladores](https://www.mercadopago.com.ar/developers/panel/app), crear una aplicación de Checkout Pro con la API de **Preferences**, que es la que usa la API. Copiar el Access Token de las credenciales de prueba en `MERCADOPAGO_ACCESS_TOKEN`.
-2. Levantar un túnel a la API (`ngrok http 3000`) y poner su dirección en `API_URL_PUBLICA`. Sin webhook, el checkout abre pero la inscripción queda en "Confirmando el pago" hasta que vence la reserva: la confirmación nunca sale de la vuelta del checkout.
-3. Pagar con un usuario comprador de prueba, creado en el mismo panel, no con una cuenta real. Si el token empieza con `TEST-` se abre el checkout del sandbox; si empieza con `APP_USR-`, el checkout normal con los usuarios de prueba.
+1. En el [panel de desarrolladores](https://www.mercadopago.com.ar/developers/panel/app), crear una aplicación de Checkout Pro con la API de **Preferences**, que es la que usa la API. En *Credenciales > Producción*, activar el ambiente y copiar el Client ID y el Client Secret en `MERCADOPAGO_CLIENT_ID` y `MERCADOPAGO_CLIENT_SECRET`.
+2. Levantar un túnel a la API (`ngrok http 3000`) y poner su dirección en `API_URL_PUBLICA`. En *Detalles de aplicación > Editar*, cargar como URL de redireccionamiento esa dirección más `/api/mercadopago/vuelta`, y activar PKCE. Sin el túnel no llegan ni la vuelta de la conexión ni el webhook: la confirmación del pago nunca sale de la vuelta del checkout.
+3. Generar `CLAVE_TOKENS_MERCADOPAGO` (`node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`), poner `MERCADOPAGO_PRUEBA=1` y sacar `PAGO_SIMULADO`.
+4. En *Cuentas de prueba*, crear una que cobra y una que paga. En *Tu circuito*, tocar "Conectar MercadoPago" y autorizar con la que cobra, en una ventana de incógnito. Pagar la inscripción con la que paga, no con una cuenta real.
 
 Con `WEB_URL` en `http://localhost`, MercadoPago no acepta la vuelta automática después de pagar: el jugador vuelve con el botón "Volver al sitio" del checkout. Con una dirección `https`, vuelve solo.
 
@@ -170,10 +174,11 @@ Se configura una sola vez, en este orden:
    | `API_URL_PUBLICA` | `https://api.setpoint.com.ar` |
    | `RESEND_API_KEY` | La API key de Resend, del paso 3 |
    | `CORREO_REMITENTE` | `Setpoint <no-responder@setpoint.com.ar>` |
-   | `MERCADOPAGO_ACCESS_TOKEN` | La de prueba. Vacía, el pago es simulado |
+   | `MERCADOPAGO_CLIENT_ID`, `MERCADOPAGO_CLIENT_SECRET` | Las de producción de la aplicación de MercadoPago, con `https://api.setpoint.com.ar/api/mercadopago/vuelta` como URL de redireccionamiento |
+   | `CLAVE_TOKENS_MERCADOPAGO` | Una clave al azar, como la de `JWT_SECRET`. Guardarla también fuera de Railway: si se pierde, todas las organizaciones vuelven a conectar su cuenta |
    | `ANTHROPIC_API_KEY` | Para la importación del padrón |
 
-   Sin variables `SMTP_*`: Railway bloquea el SMTP saliente en su plan Hobby, y los mails salen por la API HTTP de Resend.
+   Sin variables `SMTP_*`: Railway bloquea el SMTP saliente en su plan Hobby, y los mails salen por la API HTTP de Resend. Sin `PAGO_SIMULADO` ni `MERCADOPAGO_PRUEBA`: la versión publicada cobra de verdad ([decisiones 137](docs/decisiones/137-cada-organizacion-cobra-con-su-mercadopago.md) y [138](docs/decisiones/138-el-pago-simulado-se-activa-a-proposito.md)).
 
    En *Networking → Custom domain*, agregar `api.setpoint.com.ar`, y en Cloudflare cargar el registro CNAME que indica Railway, con el proxy apagado (nube gris).
 5. **Web en Cloudflare Pages.** *Workers & Pages → Create → Pages → Connect to Git*, y elegir `setpoint`:

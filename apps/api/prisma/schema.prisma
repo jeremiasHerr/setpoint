@@ -636,13 +636,25 @@ model Pago {
 }
 
 /// Hoy siempre tipo PLATAFORMA. Los tokens quedan preparados para Marketplace.
+/// La cuenta de MercadoPago con la que cobra la organización, conectada por OAuth (decisión 137).
 model CuentaCobro {
   id             Int             @id @default(autoincrement())
   organizacionId Int             @unique
   tipo           TipoCuentaCobro @default(PLATAFORMA)
+  // Cifrados con CLAVE_TOKENS_MERCADOPAGO: con la base sola no se cobra en nombre de nadie.
   accessToken    String?
   refreshToken   String?
   tokenVence     DateTime?
+  // La cuenta que conectó: su id en MercadoPago y cómo se llama, para mostrarla en Tu circuito.
+  mpUserId       String?
+  mpNombre       String?
+  conectadaEn    DateTime?
+
+  // El intento de conexión en curso, hasta que MercadoPago devuelve a la organización: el state
+  // que la identifica y el verificador de PKCE. Se borran al volver: sirven una sola vez.
+  conexionEstado      String?   @unique
+  conexionVerificador String?
+  conexionVence       DateTime?
 
   organizacion Organizacion @relation(fields: [organizacionId], references: [id], onDelete: Cascade)
 
