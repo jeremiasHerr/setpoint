@@ -71,6 +71,27 @@ describe('auditar', () => {
     expect(porFila).toEqual([{ fila: 4, detalle: 'Fila 4: el 0 de Verano 2026 no está en la planilla' }]);
   });
 
+  // Decisión 137: en un texto pegado la celda vacía no deja rastro.
+  it('manda a revisión una línea con menos números que casilleros y acumulado, sin culpar al 0', () => {
+    const texto: FilaPlanilla[] = [...FILAS.slice(0, 2), { fila: 4, celdas: ['SANHUEZA, Martín', 10, 10] }, ...FILAS.slice(3)];
+    const { porFila } = auditar(respuesta([jugador(4, [10, 0], 10, 1), ...CORRECTOS.slice(1)]), texto, PADRON);
+    expect(porFila).toEqual([
+      { fila: 4, detalle: 'Fila 4: la línea tiene 2 números para 3 lugares: revisá en qué torneo va cada uno' },
+    ]);
+  });
+
+  it('acepta una línea de texto con todos sus números', () => {
+    const texto: FilaPlanilla[] = [...FILAS.slice(0, 2), { fila: 4, celdas: ['SANHUEZA, Martín', 10, 15, 25] }, ...FILAS.slice(3)];
+    const { porFila } = auditar(respuesta(CORRECTOS), texto, PADRON);
+    expect(porFila).toEqual([]);
+  });
+
+  it('con menos números, sigue rechazando un número que no está en la línea', () => {
+    const texto: FilaPlanilla[] = [...FILAS.slice(0, 2), { fila: 4, celdas: ['SANHUEZA, Martín', 10, 10] }, ...FILAS.slice(3)];
+    const { porFila } = auditar(respuesta([jugador(4, [10, 5], 15, 1), ...CORRECTOS.slice(1)]), texto, PADRON);
+    expect(porFila.map((p) => p.detalle)).toContain('Fila 4: el 5 de Verano 2026 no está en la planilla');
+  });
+
   it('marca un número inventado', () => {
     const { porFila } = auditar(respuesta([jugador(4, [10, 45], null, 1), ...CORRECTOS.slice(1)]), FILAS, PADRON);
     expect(porFila).toEqual([{ fila: 4, detalle: 'Fila 4: el 45 de Verano 2026 no está en la planilla' }]);

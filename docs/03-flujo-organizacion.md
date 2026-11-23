@@ -159,7 +159,7 @@ Mismas reglas de acceso que el padrón. El diseño de la extracción está en [0
 
 | Endpoint | Qué hace |
 |---|---|
-| `POST /api/organizaciones/:slug/importaciones` | Multipart con `archivo` (`.xlsx`, `.xls` o `.csv`, hasta 2 MB) y `categoria` (por nombre). Procesa la planilla con IA y devuelve la propuesta en estado `PROCESADO`, o `ERROR` con el motivo. Tarda unos 20 segundos |
+| `POST /api/organizaciones/:slug/importaciones` | Multipart con `archivos` (`.xlsx`, `.xls`, `.csv` o `.pdf` con texto, hasta 10 de 2 MB), `texto` (el ranking pegado, hasta 50.000 caracteres; va como un archivo más del lote) y `categoria` (por nombre). Tiene que venir al menos un archivo o el texto ([decisión 137](decisiones/137-pdf-y-texto-pegado-en-la-importacion.md)). Procesa la planilla con IA y devuelve la propuesta en estado `PROCESADO`, o `ERROR` con el motivo. Tarda unos 20 segundos |
 | `GET /api/organizaciones/:slug/importaciones/:id` | Propuesta, problemas de la auditoría y conteos (existentes, nuevos, dudosos, con problemas). Cada fila dice si se importa sola o por qué va a revisión, y si ya se aplicó; el lote, cuántas son seguras y cuántas van a revisión |
 | `POST /api/organizaciones/:slug/importaciones/:id/aplicar` | Confirma lo que se crea en el circuito (categorías, torneos del calendario, encender el ranking) y la categoría de las hojas que no la decían, y aplica las filas seguras. Si no hay nada de eso que preguntar, la subida lo hace sola ([decisión 118](decisiones/118-importacion-por-excepcion.md)) |
 | `POST /api/organizaciones/:slug/importaciones/:id/confirmar` | Una decisión por cada fila a revisar: `vincular` con un jugador del padrón, `crear` uno nuevo o `excluir`. Las seguras no llevan decisión: si todavía no se aplicaron, se aplican en la misma transacción. Deja la importación `CONFIRMADO` |
@@ -182,7 +182,7 @@ Mismas reglas de acceso que el padrón. El diseño de la extracción está en [0
 | ~~Sin forma de deshacer una importación confirmada~~ | **Implementado.** `deshacer`, con cada movimiento y cada jugador creado vinculado a su importación |
 | ~~`archivo` y `categoria` por nombre, un archivo por subida~~ | **Implementado.** Hasta 10 archivos de 2 MB, cada uno con una o varias hojas, revisados en una sola página y confirmados juntos ([decisión 012](decisiones/012-importacion-de-varios-archivos-y-hojas.md)) |
 | ~~Sin etapas configuradas termina en `ERROR` (`SIN_ETAPAS`)~~ | **Implementado.** Detecta los torneos del calendario en los encabezados y la categoría en la hoja o el nombre del archivo; se crean al confirmar, en la misma transacción, y si hay puntos se enciende el ranking ([decisión 098](decisiones/098-importar-puntos-enciende-el-ranking.md)) |
-| Solo `.xlsx`, `.xls` y `.csv` | Propuesto: PDF con texto, texto pegado e imágenes, en ese orden de prioridad |
+| ~~Solo `.xlsx`, `.xls` y `.csv`~~ | **Implementado** para PDF con texto y texto pegado ([decisión 137](decisiones/137-pdf-y-texto-pegado-en-la-importacion.md)). Imágenes y PDF escaneados: propuesto |
 
 ---
 

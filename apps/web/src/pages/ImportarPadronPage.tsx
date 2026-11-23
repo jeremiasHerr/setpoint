@@ -33,7 +33,7 @@ import {
 import { DeshacerImportacion } from '../features/importacion/DeshacerImportacion';
 import { EstadoProcesando } from '../features/importacion/EstadoProcesando';
 import { COLUMNAS, FilaImportacion, SOLO_COMPU } from '../features/importacion/FilaImportacion';
-import { FormularioSubida } from '../features/importacion/FormularioSubida';
+import { FormularioSubida, type Subida } from '../features/importacion/FormularioSubida';
 import { LoQueSeCrea } from '../features/importacion/LoQueSeCrea';
 import { PieConfirmar } from '../features/importacion/PieConfirmar';
 import { ResumenImportacion } from '../features/importacion/ResumenImportacion';
@@ -52,7 +52,7 @@ function errorDeSubida(error: Error | null) {
   if (!error) return undefined;
   switch (error instanceof ErrorApi ? error.codigo : null) {
     case 'ARCHIVO_INVALIDO':
-      return 'Ese archivo no es una planilla. Subí un .xlsx, .xls o .csv.';
+      return 'Ese archivo no es una planilla. Subí un .xlsx, .xls, .csv o un PDF, o pegá el ranking como texto.';
     case 'ARCHIVO_MUY_GRANDE':
       return 'Una de las planillas pesa más de 2 MB. ¿Seguro que es el ranking?';
     case 'DEMASIADOS_ARCHIVOS':
@@ -108,9 +108,9 @@ function ImportarPadron({ sesion }: { sesion: Sesion }) {
 
   const sesionInvalida = useSesionInvalida(circuito.error ?? padron.error ?? importacion.error ?? subir.error);
 
-  function subirPlanilla(archivos: File[], categoria: string | null) {
-    setArchivoSubiendo(archivos.length === 1 ? archivos[0].name : `${archivos.length} archivos`);
-    subir.mutate({ archivos, categoria }, { onSuccess: (nueva) => setParametros({ id: String(nueva.id) }) });
+  function subirPlanilla({ archivos, texto }: Subida, categoria: string | null) {
+    setArchivoSubiendo(texto ? 'el texto pegado' : archivos.length === 1 ? archivos[0].name : `${archivos.length} archivos`);
+    subir.mutate({ archivos, texto, categoria }, { onSuccess: (nueva) => setParametros({ id: String(nueva.id) }) });
   }
 
   function empezarDeNuevo() {

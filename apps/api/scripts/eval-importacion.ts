@@ -5,10 +5,14 @@
 // Si el .esperado.json trae categoria y etapas, también se compara lo detectado (decisión 011).
 // Un libro de varias hojas trae { hojas: [...] }, un esperado por hoja en el orden del libro: cada
 // hoja se procesa por separado, como en la API (decisión 012).
+// Un .pdf o un .txt se lee con el mismo lector que la API: el texto, como si se hubiera pegado, con
+// el nombre "Texto pegado" (decisión 137).
 // Uso: npm run eval:importacion -w apps/api
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { extname, join } from 'node:path';
+import { leerPdf } from '../src/modules/padron/importacion/leer-pdf';
 import { leerHojas } from '../src/modules/padron/importacion/leer-planilla';
+import { leerTexto } from '../src/modules/padron/importacion/leer-texto';
 import { procesarHoja } from '../src/modules/padron/importacion/procesar-planilla';
 
 // Precio de Haiku 4.5, en dólares por millón de tokens.
@@ -21,6 +25,7 @@ type Esperado = { esPlanillaDeJugadores: boolean; categoria?: string | null; eta
 type Contexto = { jugadores: { id: number; nombre: string; apellido: string }[]; etapas: string[]; categorias: string[] };
 
 const CATEGORIAS = ['Segunda', 'Tercera'];
+const FORMATOS = /\.(xlsx|pdf|txt)$/;
 
 type Comparacion = { aciertos: number; total: number; diferencias: string[] };
 
@@ -81,25 +86,32 @@ function comparar(esperado: Esperado, obtenido: Esperado, etapas: string[]): Com
 async function main() {
   const carpeta = join(__dirname, '../tests/fixtures');
   const padron = JSON.parse(readFileSync(join(carpeta, 'padron.json'), 'utf-8'));
-  const planillas = readdirSync(carpeta).filter((f) => f.endsWith('.xlsx')).sort();
+  const planillas = readdirSync(carpeta).filter((f) => FORMATOS.test(f)).sort();
 
   const total = { aciertos: 0, total: 0, entrada: 0, salida: 0, segundos: 0 };
 
   for (const planilla of planillas) {
-    const nombre = planilla.replace(/\.xlsx$/, '');
+    const nombre = planilla.replace(FORMATOS, '');
     const leido: Esperado | { hojas: Esperado[] } = JSON.parse(readFileSync(join(carpeta, `${nombre}.esperado.json`), 'utf-8'));
     const esperados = 'hojas' in leido ? leido.hojas : [leido];
     const propio = join(carpeta, `${nombre}.contexto.json`);
     const contexto: Contexto = existsSync(propio)
       ? JSON.parse(readFileSync(propio, 'utf-8'))
       : { jugadores: padron.jugadores, etapas: padron.etapas, categorias: CATEGORIAS };
-    const hojas = leerHojas(readFileSync(join(carpeta, planilla)));
+    const contenido = readFileSync(join(carpeta, planilla));
+    const formato = extname(planilla);
+    const hojas = formato === '.pdf'
+      ? [{ nombre: '', filas: await leerPdf(contenido) }]
+      : formato === '.txt'
+        ? [{ nombre: '', filas: leerTexto(contenido.toString('utf8')) }]
+        : leerHojas(contenido);
+    const archivo = formato === '.txt' ? 'Texto pegado' : planilla;
 
     for (const [i, esperado] of esperados.entries()) {
     const hoja = hojas[i] ?? { nombre: '(falta la hoja)', filas: [] };
     const inicio = Date.now();
     const resultado = await procesarHoja(hoja, {
-      archivo: planilla,
+      archivo,
       padron: contexto.jugadores,
       etapas: contexto.etapas,
       categorias: contexto.categorias,
