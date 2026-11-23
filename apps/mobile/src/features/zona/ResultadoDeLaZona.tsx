@@ -1,9 +1,10 @@
 import type { MiZona } from '@setpoint/shared';
-import { Linking, Pressable, StyleSheet, Text, View } from 'react-native';
+import { router } from 'expo-router';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { colores, fuentes, medidas, radios, tabular } from '../../lib/tokens';
 
 // Con las zonas cerradas, lo primero de Mi zona: a qué cuadro pasó el jugador y cómo verlo. Los
-// cuadros se ven en la página en vivo de la web; la app no los dibuja todavía.
+// cuadros se abren en la app, en el suyo y en la ronda donde juega (decisión 136).
 export function ResultadoDeLaZona({ zona, jugadorId }: { zona: MiZona; jugadorId: number }) {
   const fila = zona.filas.find((f) => f.jugadorId === jugadorId);
   if (!fila) return null;
@@ -25,7 +26,12 @@ export function ResultadoDeLaZona({ zona, jugadorId }: { zona: MiZona; jugadorId
       </Text>
       <Pressable
         accessibilityRole="link"
-        onPress={() => Linking.openURL(zona.enlaceCuadros)}
+        onPress={() =>
+          router.push({
+            pathname: '/cuadros/[id]',
+            params: { id: String(zona.torneoId), ...(fila.destino ? { cuadro: fila.destino } : {}) },
+          })
+        }
         style={({ pressed }) => [estilos.boton, pressed && estilos.apretado]}
       >
         <Text style={estilos.textoBoton}>{fila.destino ? 'Ver el cuadro' : 'Ver los cuadros'}</Text>

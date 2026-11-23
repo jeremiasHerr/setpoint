@@ -85,6 +85,8 @@ function Navegacion({ fuentesListas }: { fuentesListas: boolean }) {
           <Stack.Screen name="ficha/[id]" />
           {/* Cómo te fue con el rival de un partido (F18). */}
           <Stack.Screen name="rival/[id]/index" />
+          {/* Los cuadros del torneo, una ronda a la vez (F11, decisión 136), desde Mi zona. */}
+          <Stack.Screen name="cuadros/[id]" />
         </Stack.Protected>
         <Stack.Protected guard={sesion !== null && !sinCircuitos} redirectTo="/">
           <Stack.Screen name="circuitos" />
