@@ -1,6 +1,8 @@
-# 123 — La app muestra la lista de espera, sin anotar
+# 132 — La app muestra la lista de espera, sin anotar
 
 **Estado:** aceptada — 21 de noviembre de 2026.
+
+> Se numeró primero como la 123, que ya era la del inicio en noche: dos PR tomaron el mismo número a la vez.
 
 ## Contexto
 

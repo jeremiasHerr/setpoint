@@ -177,7 +177,7 @@ describe.skipIf(!process.env.DATABASE_URL)('la lista de espera desde el link, co
     expect((await inscripcionParaPagar(slug, dario.inscripcionId, ids.dario)).listaDeEspera?.espera?.posicion).toBe(1);
   });
 
-  it('la app muestra a quien espera con su puesto, y a quien le tocó el lugar, reservando (decisión 123)', async () => {
+  it('la app muestra a quien espera con su puesto, y a quien le tocó el lugar, reservando (decisión 132)', async () => {
     const delQueEspera = (await cuentaDe(ids.dario)).enCurso.filter((i) => i.estado === 'en_lista_espera');
     expect(delQueEspera).toEqual([expect.objectContaining({ torneo: 'Copa llena', listaDeEspera: { puesto: 1, horas: 24 } })]);
 

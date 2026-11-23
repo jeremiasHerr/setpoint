@@ -8,7 +8,7 @@ import { perfilesDe } from './auth.service';
 // Lo que la app pide al abrirse y al volver al frente (decisión 054). La cuenta existe desde que se
 // verificó el código, aunque todavía no juegue en ningún circuito: un perfil pendiente no es un
 // circuito, pero sus inscripciones en curso se muestran. También las que esperan en una lista de
-// espera, con su puesto: anotarse sigue siendo desde el link (decisión 123).
+// espera, con su puesto: anotarse sigue siendo desde el link (decisión 132).
 
 // Los avisos de una solicitud no aprobada o una reserva vencida se muestran una vez; la app recuerda
 // cuáles vio. Más viejos que esto ya no se mandan.
