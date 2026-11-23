@@ -24,6 +24,8 @@ export type TorneoEnJuego = {
 // Una categoría con la inscripción abierta. `id` es el del torneo, no el de la convocatoria.
 export type TorneoConInscripcionAbierta = {
   id: number;
+  // Para el link que se copia, con el nombre del torneo (decisión 140).
+  slugPublico: string | null;
   // La que abre el engranaje, mientras se pueda editar (decisión 101).
   convocatoriaId: number;
   sePuedeEditar: boolean;
@@ -61,6 +63,7 @@ export type Aviso = { tipo: 'partidos-vencidos'; torneoId: number; categoria: st
 // sortear las zonas (decisión 125). No venció nada: va aparte de «Necesita tu atención», sin rojo.
 export type PocosInscriptos = {
   torneoId: number;
+  slugPublico: string | null;
   nombre: string;
   pagaron: number;
   minimo: number;

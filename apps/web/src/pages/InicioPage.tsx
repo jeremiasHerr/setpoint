@@ -22,7 +22,7 @@ function primerosPasos(jugadores: number, convocatorias: ResumenConvocatoria[]):
     hayJugadores: jugadores > 0,
     hayTorneo: convocatorias.length > 0,
     hayInscripcion: torneos.some((t) => t.inscriptos > 0),
-    torneoAbiertoId: torneos.find((t) => t.estado === 'publicado')?.id ?? null,
+    torneoAbierto: torneos.find((t) => t.estado === 'publicado') ?? null,
   };
 }
 

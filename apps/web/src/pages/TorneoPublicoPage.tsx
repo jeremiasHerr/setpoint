@@ -1,5 +1,5 @@
-import type { TorneoPublico } from '@setpoint/shared';
-import { Link, useParams } from 'react-router-dom';
+import { rutaDelTorneo, type TorneoPublico } from '@setpoint/shared';
+import { Link, Navigate, useParams } from 'react-router-dom';
 import { EncabezadoPublico } from '../components/EncabezadoPublico';
 import { Numero } from '../components/Numero';
 import { diaLargo, formato, importe, lugaresLibres } from '../features/torneo-publico/convocatoria';
@@ -17,8 +17,12 @@ function mensajeDeError(error: Error) {
 // sin cuenta y sin instalar nada (F12, docs/pantallas/jugador/el-torneo.html). Con el cupo lleno,
 // lleva a la lista de espera (F13, estado 4).
 export function TorneoPublicoPage() {
-  const { slug = '', id = '' } = useParams();
-  const torneo = useTorneoPublico(slug, id);
+  // El link con nombre, /inscripcion/:slug/:torneo (decisión 140), o el de antes, con el número.
+  const { slug = '', id, torneo: delLink } = useParams();
+  const torneo = useTorneoPublico(slug, delLink ?? id ?? '');
+
+  // Por el link viejo, al nuevo: si alguien lo copia de la barra del navegador, copia el del nombre.
+  if (id && torneo.data?.slugPublico) return <Navigate to={rutaDelTorneo(slug, torneo.data)} replace />;
 
   return (
     <main className="mx-auto flex min-h-screen max-w-[480px] flex-col gap-5 px-4 pt-5 pb-7">

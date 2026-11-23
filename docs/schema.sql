@@ -241,6 +241,9 @@ CREATE TABLE torneos (
     nombre                 VARCHAR(150) NOT NULL,
     edicion                VARCHAR(80),
     descripcion            TEXT,
+    -- Lo que va en el link público, /inscripcion/<organización>/<slug_publico>: se arma al publicar
+    -- y queda fijo (decisión 140).
+    slug_publico           TEXT,
     estado                 estado_torneo NOT NULL DEFAULT 'BORRADOR',
 
     -- inscripción
@@ -288,6 +291,7 @@ CREATE TABLE torneos (
 
     -- una sola vez cada categoría por edición del evento
     CONSTRAINT uq_torneo_edicion_categoria UNIQUE (organizacion_id, edicion, categoria_id),
+    CONSTRAINT uq_torneo_slug_publico UNIQUE (organizacion_id, slug_publico),
     CONSTRAINT ck_torneo_cupo       CHECK (cupo > 0),
     CONSTRAINT ck_torneo_precio     CHECK (precio >= 0),
     CONSTRAINT ck_torneo_grupos     CHECK (cantidad_grupos > 0),

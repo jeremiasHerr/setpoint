@@ -22,6 +22,7 @@ type TorneoConConvocatoria = Prisma.TorneoGetPayload<{ include: typeof CONVOCATO
 export function aTorneoPublico(torneo: TorneoConConvocatoria): TorneoPublico {
   return {
     id: torneo.id,
+    slugPublico: torneo.slugPublico,
     organizacion: {
       ...torneo.organizacion,
       contactos: torneo.organizacion.contactos.map((c) => ({ tipo: c.tipo.toLowerCase() as Contacto['tipo'], valor: c.valor })),
@@ -46,12 +47,13 @@ export function aTorneoPublico(torneo: TorneoConConvocatoria): TorneoPublico {
   };
 }
 
-export async function torneoPublico(slug: string, torneoId: number): Promise<TorneoPublico> {
-  if (!Number.isInteger(torneoId)) throw new ErrorHttp(404, 'TORNEO_NO_ENCONTRADO');
-
+// El torneo se busca por su slug, el del link con nombre (decisión 140), o por su número, el de los
+// links de antes, que siguen andando. Un slug nunca es solo números, así que no se confunden.
+export async function torneoPublico(slug: string, torneoONumero: string): Promise<TorneoPublico> {
+  const porNumero = /^\d+$/.test(torneoONumero);
   const torneo = await prisma.torneo.findFirst({
-    // El slug va en el filtro: el id solo no alcanza para saber de qué organización es.
-    where: { id: torneoId, organizacion: { slug } },
+    // El slug de la organización va en el filtro: el del torneo solo no alcanza para saber de cuál es.
+    where: { ...(porNumero ? { id: Number(torneoONumero) } : { slugPublico: torneoONumero }), organizacion: { slug } },
     include: CONVOCATORIA,
   });
   if (!torneo || NO_PUBLICOS.includes(torneo.estado)) throw new ErrorHttp(404, 'TORNEO_NO_ENCONTRADO');

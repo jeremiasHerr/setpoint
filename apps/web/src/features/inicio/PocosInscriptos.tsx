@@ -30,7 +30,7 @@ export function PocosInscriptos({ avisos }: { avisos: Aviso[] }) {
                 {cuandoCierra(aviso.diasParaElCierre)}.
               </p>
             </div>
-            <BotonCopiarLink ruta={`/torneos/${aviso.torneoId}`} />
+            <BotonCopiarLink torneo={{ id: aviso.torneoId, slugPublico: aviso.slugPublico }} />
           </li>
         ))}
       </ul>

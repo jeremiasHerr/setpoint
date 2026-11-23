@@ -505,6 +505,9 @@ model Torneo {
   nombre         String
   edicion        String? // "Primavera 2026" — agrupa las categorías del evento
   descripcion    String?
+  // Lo que va en el link público: /inscripcion/<organización>/<slugPublico> (decisión 140). Se
+  // arma al publicar y queda fijo, aunque después cambie el nombre: hay links compartidos.
+  slugPublico    String?
 
   estado EstadoTorneo @default(BORRADOR)
 
@@ -571,6 +574,7 @@ model Torneo {
   lecturas      ExtraccionResultado[]
 
   @@unique([organizacionId, edicion, categoriaId])
+  @@unique([organizacionId, slugPublico])
   @@index([organizacionId, estado]) // listar torneos publicados
   @@index([etapaId]) // FK usada al calcular el ranking
   @@index([categoriaId]) // FK
