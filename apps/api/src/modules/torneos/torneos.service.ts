@@ -24,6 +24,7 @@ import { MINIMO_POR_ZONA } from '../competencia/sorteo';
 import { avanceDelTorneo } from '../competencia/tablero';
 import { avisarLugaresLiberados, promoverListaDeEspera } from '../inscripciones/lista-de-espera.service';
 import { exigirCobroDisponible } from '../mercadopago/cuenta.service';
+import { asignarSlugs } from './link-del-torneo';
 import { convocatoriaEditable } from './navegacion';
 
 // Las claves del contrato son los valores de los enums de Prisma en minúscula.
@@ -66,7 +67,7 @@ function aConvocatoria(torneos: TorneoConRelaciones[]): Convocatoria {
   return {
     id: t.id,
     estado: aClave<ClaveEstado>(t.estado),
-    torneos: torneos.map((x) => ({ id: x.id, categoria: x.categoria.nombre })),
+    torneos: torneos.map((x) => ({ id: x.id, categoria: x.categoria.nombre, slugPublico: x.slugPublico })),
 
     nombre: t.nombre,
     descripcion: t.descripcion ?? '',
@@ -340,9 +341,13 @@ export async function publicarConvocatoria(slug: string, usuarioId: number, torn
   // Sin MercadoPago conectado, solo se publican torneos gratis (decisión 137).
   await exigirCobroDisponible(organizacionId, torneos[0].precio.toNumber());
 
-  await prisma.torneo.updateMany({
-    where: { id: { in: torneos.map((t) => t.id) }, estado: EstadoTorneo.BORRADOR },
-    data: { estado: EstadoTorneo.PUBLICADO },
+  await prisma.$transaction(async (tx) => {
+    await tx.torneo.updateMany({
+      where: { id: { in: torneos.map((t) => t.id) }, estado: EstadoTorneo.BORRADOR },
+      data: { estado: EstadoTorneo.PUBLICADO },
+    });
+    // Desde que se publica, el link lleva el nombre del torneo (decisión 140).
+    await asignarSlugs(tx, torneos, torneos.length > 1);
   });
 
   return obtenerConvocatoria(slug, usuarioId, torneos[0].id);
@@ -434,6 +439,7 @@ export async function listarConvocatorias(slug: string, usuarioId: number): Prom
         torneos: grupo.map((t) => ({
           id: t.id,
           categoria: t.categoria.nombre,
+          slugPublico: t.slugPublico,
           estado: aClave<ClaveEstado>(t.estado),
           cupo: t.cupo,
           inscriptos: t._count.inscripciones,

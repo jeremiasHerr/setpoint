@@ -35,6 +35,7 @@ import { importacionesRouter } from './modules/padron/importacion/importaciones.
 import { proyeccionPublicaRouter } from './modules/proyeccion/proyeccion-publica.routes';
 import { rankingPublicoRouter } from './modules/ranking/ranking-publico.routes';
 import { revisionesRouter } from './modules/revisiones/revisiones.routes';
+import { asignarSlugsFaltantes } from './modules/torneos/link-del-torneo';
 import { navegacionRouter } from './modules/torneos/navegacion.routes';
 import { torneoPublicoRouter } from './modules/torneos/torneo-publico.routes';
 import { torneosRouter } from './modules/torneos/torneos.routes';
@@ -100,6 +101,8 @@ app.listen(PORT, () => {
 programarInicioDeGrupos();
 programarVencimientoDeReservas();
 programarRenovacionDeTokens();
+// Los torneos publicados antes de que el link llevara el nombre (decisión 140).
+void asignarSlugsFaltantes().catch((error) => console.error('No se pudieron asignar los links de los torneos', error));
 
 if (pagoSimulado()) {
   console.log('PAGO_SIMULADO=1: el pago de las inscripciones es simulado (decisión 138).');

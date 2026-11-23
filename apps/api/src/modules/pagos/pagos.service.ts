@@ -1,5 +1,5 @@
 import { EstadoInscripcion, EstadoPago, EstadoTorneo, MedioPago, MotivoRevision, Prisma, Vinculacion } from '@prisma/client';
-import type { DatosPagoSimulado, EstadoDeLaInscripcion, InicioDePago, InscripcionParaPagar } from '@setpoint/shared';
+import { rutaDelTorneo, type DatosPagoSimulado, type EstadoDeLaInscripcion, type InicioDePago, type InscripcionParaPagar } from '@setpoint/shared';
 import { enviarCorreo } from '../../lib/correo';
 import { consultarPago, crearPreferencia, pagoSimulado } from '../../lib/mercadopago';
 import { DEL_PADRON_ACTIVOS } from '../../lib/padron';
@@ -223,7 +223,7 @@ export async function confirmarPago(inscripcionId: number, pago: PagoRecibido) {
       organizacion: torneo.organizacion.nombre,
       monto: pago.monto,
       pagadoEn,
-      linkDelTorneo: `${WEB_URL}/c/${torneo.organizacion.slug}/torneos/${torneo.id}`,
+      linkDelTorneo: `${WEB_URL}${rutaDelTorneo(torneo.organizacion.slug, torneo)}`,
     });
     void enviarCorreo({ para: usuario.email, ...correo }).catch((error) => console.error('No se pudo mandar el comprobante', error));
   }

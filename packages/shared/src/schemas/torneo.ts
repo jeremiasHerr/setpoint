@@ -134,7 +134,8 @@ export function convocatoriaInicial(categorias: string[]): DatosConvocatoria {
 export type Convocatoria = DatosConvocatoria & {
   id: number;
   estado: EstadoTorneo;
-  torneos: { id: number; categoria: string }[];
+  // slugPublico: lo que va en el link público, desde que se publica (decisión 140).
+  torneos: { id: number; categoria: string; slugPublico: string | null }[];
 };
 
 // Una categoría de la convocatoria en el listado. `id` es el del torneo: el que va en la URL de
@@ -143,6 +144,8 @@ export type Convocatoria = DatosConvocatoria & {
 export type ResumenTorneo = {
   id: number;
   categoria: string;
+  // Lo que va en el link público que se copia para el grupo. null en borrador (decisión 140).
+  slugPublico: string | null;
   estado: EstadoTorneo;
   cupo: number;
   // Los que ya pagaron.

@@ -8,7 +8,7 @@ export type EstadoDePrimerosPasos = {
   hayTorneo: boolean;
   hayInscripcion: boolean;
   // Un torneo con la inscripción abierta, para copiar su link. null si no hay ninguno.
-  torneoAbiertoId: number | null;
+  torneoAbierto: { id: number; slugPublico: string | null } | null;
 };
 
 type Props = EstadoDePrimerosPasos & {
@@ -24,7 +24,7 @@ const enlace = 'text-sm font-medium underline underline-offset-2 hover:text-piza
 // padrón con jugadores, un torneo creado y la primera inscripción, que es la prueba de que el link
 // llegó al grupo. Borde de 1 px, no tarjeta noche: no es el dato principal. Con los tres hechos, no
 // se muestra.
-export function PrimerosPasos({ hayJugadores, hayTorneo, hayInscripcion, torneoAbiertoId, apilada = false }: Props) {
+export function PrimerosPasos({ hayJugadores, hayTorneo, hayInscripcion, torneoAbierto, apilada = false }: Props) {
   if (hayJugadores && hayTorneo && hayInscripcion) return null;
 
   const pasos: Paso[] = [
@@ -50,10 +50,10 @@ export function PrimerosPasos({ hayJugadores, hayTorneo, hayInscripcion, torneoA
       titulo: 'Compartí el link de inscripción',
       hecho: hayInscripcion,
       accion:
-        torneoAbiertoId === null ? (
+        torneoAbierto === null ? (
           <span className="text-sm text-pizarra-500">Cuando publiques un torneo</span>
         ) : (
-          <BotonCopiarLink ruta={`/torneos/${torneoAbiertoId}`} />
+          <BotonCopiarLink torneo={torneoAbierto} />
         ),
     },
   ];
