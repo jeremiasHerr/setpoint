@@ -50,8 +50,8 @@ Respondemos a la primera con la importación por excepción (cambio C) y la dete
 | **G1** | PDF con texto (exportado de Excel): se extrae línea por línea y se audita igual que un Excel | IA poco convincente | Propuesto | [06](06-ia.md) §1, [10](10-features.md) F03 | Sí |
 | **G2** | Texto pegado (un ranking copiado de WhatsApp): se numeran las líneas y se audita igual | IA poco convincente | Propuesto | Ídem G1 | Sí |
 | **G3** | Imágenes y PDF escaneados: el modelo lee la imagen. Sin texto contra el cual auditar, todas las filas pasan por revisión | IA poco convincente | Propuesto | Ídem G1 | Sí |
-| **H1** | Ayuda en contexto: el texto que explica algo aparece donde hace falta, en lugar de un tutorial | Confuso | Propuesto | [03](03-flujo-organizacion.md) §3, [design.md](design.md) §9 | Sí |
-| **H2** | Tarjeta **"Primeros pasos"** en el inicio del organizador, con pasos que se tildan solos | Confuso | Propuesto | Ídem H1 | Sí |
+| **H1** | Ayuda en contexto: el texto que explica algo aparece donde hace falta, en lugar de un tutorial | Confuso | Hecho ([decisión 134](decisiones/134-primeros-pasos-y-ayuda-en-contexto.md)) | [03](03-flujo-organizacion.md) §3, [design.md](design.md) §9 | Sí |
+| **H2** | Tarjeta **"Primeros pasos"** en el inicio del organizador, con pasos que se tildan solos | Confuso | Hecho ([decisión 134](decisiones/134-primeros-pasos-y-ayuda-en-contexto.md)) | Ídem H1 | Sí |
 | **I** | **IA en el uso diario: F19** (resultados desde los mensajes de WhatsApp), con la misma arquitectura de la importación. Condicionada a terminar la importación y la app móvil | IA poco convincente | A confirmar con el profesor | [06](06-ia.md) §2, [10](10-features.md) F19 | Sí |
 
 ### 3.1 Términos de la interfaz
