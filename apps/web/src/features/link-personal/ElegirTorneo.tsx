@@ -86,7 +86,7 @@ export function ElegirTorneo({ link, codigo, token, propio, onReservado }: Props
                   : 'Anotarme en la lista de espera'
                 : enCurso
                   ? 'Reservando…'
-                  : 'Ir a pagar con MercadoPago'}
+                  : 'Ir a pagar con Mercado Pago'}
             </BotonPrincipal>
             {lista ? <AvisoLista horas={lista.horas} /> : <AvisoReserva minutos={elegido.minutosReserva} />}
           </>

@@ -105,6 +105,6 @@ if (pagoSimulado()) {
   console.log('PAGO_SIMULADO=1: el pago de las inscripciones es simulado (decisión 138).');
 } else if (!sePuedeConectarMercadoPago() || !hayClaveDeCifrado()) {
   console.log(
-    'Sin MERCADOPAGO_CLIENT_ID, MERCADOPAGO_CLIENT_SECRET, API_URL_PUBLICA o CLAVE_TOKENS_MERCADOPAGO: las organizaciones no pueden conectar MercadoPago y solo se publican torneos gratis (decisión 137).',
+    'Sin MERCADOPAGO_CLIENT_ID, MERCADOPAGO_CLIENT_SECRET, API_URL_PUBLICA o CLAVE_TOKENS_MERCADOPAGO: las organizaciones no pueden conectar Mercado Pago y solo se publican torneos gratis (decisión 137).',
   );
 }

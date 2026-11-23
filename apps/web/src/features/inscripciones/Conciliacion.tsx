@@ -25,7 +25,7 @@ export function Conciliacion({ conciliacion }: { conciliacion: ConciliacionDelTo
       <h2 className="text-[15px] font-semibold">Conciliación del torneo</h2>
       <div className="flex flex-col gap-[11px]">
         <div className="flex items-center justify-between gap-3">
-          <span className="text-[15px] font-semibold">Por MercadoPago</span>
+          <span className="text-[15px] font-semibold">Por Mercado Pago</span>
           <Numero className="text-xl font-medium text-white">{plata(c.mercadoPago)}</Numero>
         </div>
         <div className="h-px bg-borde-noche" />
@@ -33,8 +33,8 @@ export function Conciliacion({ conciliacion }: { conciliacion: ConciliacionDelTo
         {c.devolucionesPendientes > 0 && <Linea rotulo="A devolver por fuera" valor={plata(c.aDevolver)} />}
       </div>
       <p className="text-[13px] leading-[1.4] text-pizarra-500">
-        <Numero>{c.pagosMercadoPago}</Numero> {pagos(c.pagosMercadoPago)} por MercadoPago y <Numero>{c.pagosPorFuera}</Numero>{' '}
-        por fuera. Lo de MercadoPago te lo transferimos por fuera del sistema; las devoluciones las hacés vos.
+        <Numero>{c.pagosMercadoPago}</Numero> {pagos(c.pagosMercadoPago)} por Mercado Pago y <Numero>{c.pagosPorFuera}</Numero>{' '}
+        por fuera. Lo de Mercado Pago ya está en tu cuenta, menos su comisión; las devoluciones las hacés vos.
       </p>
     </section>
   );

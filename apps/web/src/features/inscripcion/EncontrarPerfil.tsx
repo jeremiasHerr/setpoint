@@ -101,7 +101,7 @@ export function EncontrarPerfil({ torneo, token, email, nombre, situacion, onRes
             <span className="text-[15px] text-pizarra-500">{perfil.categoria}</span>
           </div>
         </div>
-        {pie('Ir a pagar con MercadoPago', perfil.jugadorId, undefined, false)}
+        {pie('Ir a pagar con Mercado Pago', perfil.jugadorId, undefined, false)}
       </>
     );
   }
@@ -239,7 +239,7 @@ export function EncontrarPerfil({ torneo, token, email, nombre, situacion, onRes
         if (perfilElegido?.vinculado) setModo('vinculado');
       }}
       onNoEsta={() => setModo('no-esta')}
-      pie={elegido && !elegido.vinculado ? pie('Ir a pagar con MercadoPago', elegido.jugadorId, 'busqueda') : null}
+      pie={elegido && !elegido.vinculado ? pie('Ir a pagar con Mercado Pago', elegido.jugadorId, 'busqueda') : null}
     />
   );
 }

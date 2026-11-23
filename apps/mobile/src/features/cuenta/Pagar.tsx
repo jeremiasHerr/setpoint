@@ -18,7 +18,7 @@ function mensajeDeError(error: Error | null): string | null {
       return 'La inscripción de este torneo ya cerró.';
     // La organización no tiene MercadoPago conectado (decisión 137).
     case 'SIN_MERCADOPAGO':
-      return 'La organización todavía no puede cobrar con MercadoPago. Escribile para pagar de otra forma.';
+      return 'La organización todavía no puede cobrar con Mercado Pago. Escribile para pagar de otra forma.';
     case 'SIN_CONEXION':
       return 'No pudimos conectarnos. Revisá tu conexión y probá de nuevo.';
     default:
@@ -66,7 +66,7 @@ export function Pagar({ inscripcion }: { inscripcion: InscripcionEnCurso }) {
       <View style={estilos.bloque}>
         <View style={estilos.caja}>
           <Text style={estilos.tituloCaja}>Pago simulado</Text>
-          <Text style={estilos.textoCaja}>Esta instalación no tiene credenciales de MercadoPago. Elegí cómo termina el pago.</Text>
+          <Text style={estilos.textoCaja}>En esta instalación el pago es de prueba: no se cobra nada. Elegí cómo termina el pago.</Text>
         </View>
         {error && <Text style={estilos.error}>{error}</Text>}
         <Boton

@@ -29,7 +29,7 @@ export function Hero() {
           Tu circuito de tenis, sin planillas ni comprobantes.
         </h1>
         <p className="mx-auto mt-5 max-w-[560px] text-center text-[clamp(16px,1.32vw,19px)] leading-[1.53] text-cal max-[859px]:mt-4 max-[859px]:text-[16px] max-[859px]:leading-6">
-          Inscripciones con MercadoPago, zonas, cuadros y ranking que se calculan solos. Vos cargás el resultado; lo demás ya está hecho.
+          Inscripciones con Mercado Pago, zonas, cuadros y ranking que se calculan solos. Vos cargás el resultado; lo demás ya está hecho.
         </p>
         {/* El texto sube y el botón no: entre los dos se ve la cancha de atrás. */}
         <div className="mt-[68px] flex justify-center max-[859px]:mt-6 max-[859px]:flex-col max-[859px]:items-stretch">

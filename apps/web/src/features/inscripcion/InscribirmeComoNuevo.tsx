@@ -80,7 +80,7 @@ export function InscribirmeComoNuevo({ torneo, token, email, nombre: nombreDeLaC
               : 'Mandar mi solicitud'
             : inscribir.isPending
               ? 'Reservando…'
-              : 'Ir a pagar con MercadoPago'}
+              : 'Ir a pagar con Mercado Pago'}
         </BotonPrincipal>
         {!conAprobacion && <AvisoReserva minutos={torneo.minutosReserva} />}
       </div>

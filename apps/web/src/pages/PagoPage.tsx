@@ -128,7 +128,7 @@ function mensajeDelPago(error: Error | null, organizacion: string) {
   // La organización no tiene MercadoPago conectado: lo desconectó, o publicó antes de que hiciera
   // falta (decisión 137). El lugar sigue reservado hasta que vence.
   if (error instanceof ErrorApi && error.codigo === 'SIN_MERCADOPAGO') {
-    return `${organizacion} todavía no puede cobrar con MercadoPago. Escribile para pagar de otra forma.`;
+    return `${organizacion} todavía no puede cobrar con Mercado Pago. Escribile para pagar de otra forma.`;
   }
   return 'No pudimos seguir con el pago. Probá de nuevo en unos minutos.';
 }
@@ -139,7 +139,7 @@ function PagoSimulado({ datos, simular }: { datos: InscripcionParaPagar; simular
     <>
       <Caja>
         <strong className="mb-1 block font-semibold text-noche">Pago simulado</strong>
-        Esta instalación no tiene credenciales de MercadoPago. Elegí cómo termina el pago para seguir el flujo.
+        En esta instalación el pago es de prueba: no se cobra nada. Elegí cómo termina el pago para seguir el flujo.
       </Caja>
       <Monto precio={datos.precio} />
       <BotonPrincipal onClick={() => simular.mutate({ resultado: 'aprobado' })} disabled={simular.isPending}>
@@ -175,7 +175,7 @@ function Pagar({ datos, token }: { datos: InscripcionParaPagar; token: string })
           <>
             <Monto precio={datos.precio} />
             <BotonPrincipal onClick={pagar} disabled={iniciar.isPending}>
-              {iniciar.isPending ? 'Abriendo MercadoPago…' : 'Ir a pagar con MercadoPago'}
+              {iniciar.isPending ? 'Abriendo Mercado Pago…' : 'Ir a pagar con Mercado Pago'}
             </BotonPrincipal>
           </>
         )}
@@ -271,10 +271,10 @@ function LugarLiberado({ datos, reservaVence, token }: { datos: InscripcionParaP
         ) : (
           <>
             <BotonPrincipal onClick={pagar} disabled={iniciar.isPending}>
-              {iniciar.isPending ? 'Abriendo MercadoPago…' : `Pagar ${importe(datos.precio)}`}
+              {iniciar.isPending ? 'Abriendo Mercado Pago…' : `Pagar ${importe(datos.precio)}`}
             </BotonPrincipal>
             <p className="text-center text-[15px] leading-[1.42] text-pizarra-500">
-              Pagás con MercadoPago. Tu lugar sigue guardado mientras pagás.
+              Pagás con Mercado Pago. Tu lugar sigue guardado mientras pagás.
             </p>
           </>
         )}
@@ -374,7 +374,7 @@ function Confirmando({ datos }: { datos: InscripcionParaPagar }) {
         </svg>
         <div className="flex flex-col gap-2.5">
           <h1 className="text-2xl font-display font-semibold tracking-[-0.02em]">Confirmando el pago</h1>
-          <p className="max-w-[290px] text-base leading-[1.45] text-pizarra-500">MercadoPago nos tiene que avisar que salió bien. Suele tardar unos segundos.</p>
+          <p className="max-w-[290px] text-base leading-[1.45] text-pizarra-500">Mercado Pago nos tiene que avisar que salió bien. Suele tardar unos segundos.</p>
         </div>
         <Numero className="rounded-full border border-linea px-3.5 py-2 text-[15px] text-pizarra-500">tu lugar sigue reservado · {resta ?? '—'}</Numero>
       </div>
@@ -446,9 +446,9 @@ function Rechazado({ datos }: { datos: InscripcionParaPagar }) {
             <path d="M3 10h18" />
           </svg>
         </span>
-        <h1 className="text-[28px] leading-[1.12] font-display font-semibold tracking-[-0.02em]">MercadoPago no aprobó el pago</h1>
+        <h1 className="text-[28px] leading-[1.12] font-display font-semibold tracking-[-0.02em]">Mercado Pago no aprobó el pago</h1>
         <p className="text-base leading-[1.45] text-pizarra-500">
-          No se te cobró nada y el lugar que te guardamos se liberó. Podés probar de nuevo, con otra tarjeta o con dinero en tu cuenta de MercadoPago.
+          No se te cobró nada y el lugar que te guardamos se liberó. Podés probar de nuevo, con otra tarjeta o con dinero en tu cuenta de Mercado Pago.
         </p>
       </div>
       <Resumen datos={datos} />
