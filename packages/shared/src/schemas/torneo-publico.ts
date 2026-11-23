@@ -4,6 +4,8 @@ import type { Contacto } from './circuito';
 // (F12, docs/pantallas/jugador/el-torneo.html). Sin datos de los inscriptos.
 export type TorneoPublico = {
   id: number;
+  // Lo que va en su link: /inscripcion/<organización>/<slugPublico> (decisión 140).
+  slugPublico: string | null;
   // Los contactos los carga la organización en Tu circuito; puede no haber ninguno (decisión 091).
   organizacion: { nombre: string; slug: string; contactos: Contacto[] };
   // La edición, o el nombre si es un torneo suelto: "Primavera 2026".
@@ -32,3 +34,9 @@ export type TorneoPublico = {
   // Lo que escribió la organización al crear el torneo, por ejemplo qué incluye la inscripción.
   descripcion: string | null;
 };
+
+// El link público de un torneo (decisión 140): con su nombre desde que se publica. Sin slug, el de
+// antes, con el número, que sigue andando y lleva al nuevo.
+export function rutaDelTorneo(organizacion: string, torneo: { id: number; slugPublico: string | null }) {
+  return torneo.slugPublico ? `/inscripcion/${organizacion}/${torneo.slugPublico}` : `/c/${organizacion}/torneos/${torneo.id}`;
+}

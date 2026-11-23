@@ -90,6 +90,8 @@ export default function App() {
         <Route path="/c/:slug/jugadores/:id/cara-a-cara/:rivalId?" element={<CaraACaraPage />} />
         {/* Pública, sin login: los cuadros de un torneo (una categoría), para compartir (F08, F10). */}
         <Route path="/c/:slug/torneos/:id" element={<TorneoPublicoPage />} />
+        {/* El link del torneo que se comparte, con su nombre (decisión 140). El de arriba lleva a este. */}
+        <Route path="/inscripcion/:slug/:torneo" element={<TorneoPublicoPage />} />
         <Route path="/c/:slug/torneos/:id/inscripcion" element={<InscripcionPage />} />
         <Route path="/c/:slug/inscripciones/:id" element={<PagoPage />} />
         <Route path="/i/:codigo" element={<LinkPersonalPage />} />

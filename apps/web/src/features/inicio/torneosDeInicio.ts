@@ -84,6 +84,7 @@ export function aTorneosDeInicio(convocatorias: ResumenConvocatoria[], circuito:
     })),
     conInscripcionAbierta: abiertas.map(({ convocatoria, torneo, nombre, calendario }) => ({
       id: torneo.id,
+      slugPublico: torneo.slugPublico,
       convocatoriaId: convocatoria.id,
       sePuedeEditar: convocatoria.sePuedeEditar,
       calendario,
@@ -134,7 +135,16 @@ export function aTorneosDeInicio(convocatorias: ResumenConvocatoria[], circuito:
     pocosInscriptos: abiertas.flatMap(({ convocatoria, torneo, nombre }) => {
       const dias = convocatoria.diasParaElCierre;
       return dias !== null && dias >= 0 && dias <= DIAS_PARA_AVISAR && torneo.inscriptos < torneo.minimoParaSortear
-        ? [{ torneoId: torneo.id, nombre, pagaron: torneo.inscriptos, minimo: torneo.minimoParaSortear, diasParaElCierre: dias }]
+        ? [
+            {
+              torneoId: torneo.id,
+              slugPublico: torneo.slugPublico,
+              nombre,
+              pagaron: torneo.inscriptos,
+              minimo: torneo.minimoParaSortear,
+              diasParaElCierre: dias,
+            },
+          ]
         : [];
     }),
     organizacion: circuito.nombre,

@@ -1,4 +1,4 @@
-import type { Convocatoria } from '@setpoint/shared';
+import { rutaDelTorneo, type Convocatoria } from '@setpoint/shared';
 import { useNavigate } from 'react-router-dom';
 import { Boton } from '../../components/Boton';
 import { Numero } from '../../components/Numero';
@@ -30,10 +30,11 @@ export function TorneoPublicado({ slug, convocatoria }: { slug: string; convocat
             <div className="flex min-w-0 flex-col gap-1">
               {varias && <span className="text-[15px] font-semibold">{torneo.categoria}</span>}
               <Numero className="text-[13px] break-all text-pizarra-500">
-                {window.location.host}/c/{slug}/torneos/{torneo.id}
+                {window.location.host}
+                {rutaDelTorneo(slug, torneo)}
               </Numero>
             </div>
-            <BotonCopiarLink ruta={`/torneos/${torneo.id}`} variante="organizador" className="shrink-0 font-semibold" />
+            <BotonCopiarLink torneo={torneo} variante="organizador" className="shrink-0 font-semibold" />
           </div>
         ))}
       </Tarjeta>
