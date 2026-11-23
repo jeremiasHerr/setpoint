@@ -14,6 +14,8 @@ export const estadosPartido = [
   'vencida',
   'walkover',
   'abandono',
+  // Ninguno se presentó: sin ganador (decisión 135).
+  'doble_walkover',
   'cancelada',
 ] as const;
 export type EstadoPartido = (typeof estadosPartido)[number];

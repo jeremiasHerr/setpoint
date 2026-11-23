@@ -9,7 +9,7 @@ export type PartidoParaElCalendario = {
   fechaAcordada: Date | null;
 };
 
-const CON_RESULTADO: EstadoPartido[] = ['JUGADA', 'WALKOVER', 'ABANDONO'];
+const CON_RESULTADO: EstadoPartido[] = ['JUGADA', 'WALKOVER', 'ABANDONO', 'DOBLE_WALKOVER']; // el doble W.O. también está resuelto (decisión 135)
 
 // El calendario lista los partidos con fecha, del más próximo al más lejano: así se sabe qué se
 // juega cada día. Los jugados quedan, con su resultado; un cancelado no se juega y no va. Con

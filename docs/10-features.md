@@ -337,7 +337,7 @@ La organización dispondrá de una pantalla única donde ver el avance completo 
 - La pantalla *Tablero del torneo* (`/torneos/:id/tablero`) muestra las barras zona por zona, los días que quedan, "Lo que falta" ordenado por urgencia y la tabla de cada zona con su matriz de resultados.
 - Un partido vencido se calcula al consultar: pasó su fecha límite sin resultado ([decisión 060](decisiones/060-partidos-vencidos-calculados.md)).
 - En los cuadros muestra lo mismo por ronda, y ofrece cerrar las zonas y cerrar el torneo cuando corresponde ([decisión 061](decisiones/061-tablero-en-los-cuadros.md)).
-- Resolver carga el W.O. y Escribirles abre el WhatsApp de cada jugador; extender el plazo, el doble W.O. y recordarles no están ([decisión 062](decisiones/062-acciones-del-tablero.md)). Anotar fecha, en los sin coordinar, llegó con F14.
+- Resolver carga el W.O. y Escribirles abre el WhatsApp de cada jugador ([decisión 062](decisiones/062-acciones-del-tablero.md)). "Más" suma extender el plazo de un partido, recordarles el partido por aviso y email, y el doble W.O. en las zonas ([decisión 135](decisiones/135-mas-acciones-del-tablero.md)). Anotar fecha, en los sin coordinar, llegó con F14.
 - Se llega desde la tarjeta del torneo en "En juego" del inicio, con los partidos jugados y los vencidos ([decisión 080](decisiones/080-torneos-en-juego-y-terminados-en-el-inicio.md)), y desde el Sorteo confirmado ([decisión 063](decisiones/063-entrada-al-tablero.md)).
 
 ---

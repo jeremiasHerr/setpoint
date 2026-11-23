@@ -7,6 +7,7 @@ import { Tarjeta } from '../../components/Tarjeta';
 import { urlDeWhatsApp } from '../padron/linkPersonal';
 import { TextoConNumeros } from '../resultados/AlGuardar';
 import { AnotarFecha } from './AnotarFecha';
+import { MasAcciones } from './MasAcciones';
 import {
   dondeSeJuega,
   elDiaYHora,
@@ -50,7 +51,7 @@ function Escribirles({ partido, tablero }: { partido: PartidoDelTablero; tablero
   );
 }
 
-type Abierto = 'escribirles' | 'anotar' | null;
+type Abierto = 'escribirles' | 'anotar' | 'mas' | null;
 
 // En qué lista está la fila: los vencidos se resuelven; los sin coordinar y los con fecha se anotan.
 type Lista = 'vencidos' | 'sin_coordinar' | 'con_fecha';
@@ -61,7 +62,7 @@ const textoDeAnotar = (lista: Lista, partido: PartidoDelTablero) =>
 
 function Fila({ slug, partido, tablero, lista }: { slug: string; partido: PartidoDelTablero; tablero: Tablero; lista: Lista }) {
   const resolver = lista === 'vencidos';
-  // Escribirles y Anotar fecha se abren debajo de la fila, de a uno.
+  // Escribirles, Anotar fecha y Más se abren debajo de la fila, de a uno.
   const [abierto, setAbierto] = useState<Abierto>(null);
   const alternar = (que: Abierto) => setAbierto(abierto === que ? null : que);
   const sangria = tablero.fase === 'grupos' ? 'md:pl-[108px]' : 'md:pl-[182px]';
@@ -100,7 +101,7 @@ function Fila({ slug, partido, tablero, lista }: { slug: string; partido: Partid
           )}
         </span>
         {/* Dos columnas fijas: los botones quedan alineados en todas las filas. */}
-        <div className="grid grid-cols-[100px_152px] gap-2 md:justify-end">
+        <div className="grid grid-cols-[96px_148px_60px] gap-2 md:justify-end">
           <button
             type="button"
             aria-expanded={abierto === 'escribirles'}
@@ -126,9 +127,19 @@ function Fila({ slug, partido, tablero, lista }: { slug: string; partido: Partid
               Resolver
             </Link>
           )}
+          {/* Extender el plazo, recordarles y el doble W.O. (decisión 135). */}
+          <button
+            type="button"
+            aria-expanded={abierto === 'mas'}
+            onClick={() => alternar('mas')}
+            className={`${accion} w-full border border-linea hover:bg-niebla`}
+          >
+            Más
+          </button>
         </div>
       </div>
       {abierto === 'escribirles' && <Escribirles partido={partido} tablero={tablero} />}
+      {abierto === 'mas' && <MasAcciones slug={slug} tablero={tablero} partido={partido} sangria={sangria} />}
       {abierto === 'anotar' && (
         <AnotarFecha slug={slug} torneoId={tablero.torneoId} partidoId={partido.id} sangria={sangria} onCerrar={() => setAbierto(null)} />
       )}
@@ -159,7 +170,7 @@ function FilaDelResultado({ slug, partido, tablero }: { slug: string; partido: P
           </span>
           <span className="text-[13px] text-pizarra-500">{falta}</span>
         </span>
-        <div className="grid grid-cols-[100px_152px] gap-2 md:justify-end">
+        <div className="grid grid-cols-[96px_148px_60px] gap-2 md:justify-end">
           <span />
           {pendiente ? (
             <button

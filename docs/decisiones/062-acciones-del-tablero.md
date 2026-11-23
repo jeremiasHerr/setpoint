@@ -1,6 +1,6 @@
 # 062 — En el tablero se resuelve con el W.O. y se les escribe por WhatsApp
 
-**Estado:** aceptada — 30 de octubre de 2026
+**Estado:** aceptada — 30 de octubre de 2026. Reemplazada en parte por la [135](135-mas-acciones-del-tablero.md), que suma extender el plazo, el doble W.O. y "Recordarles"
 
 ## Contexto
 

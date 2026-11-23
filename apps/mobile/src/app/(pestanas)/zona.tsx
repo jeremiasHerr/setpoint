@@ -15,7 +15,8 @@ import { useMiZona } from '../../features/zona/useMiZona';
 import { diasHasta } from '../../lib/fechas';
 import { colores, fuentes, medidas, tabular } from '../../lib/tokens';
 
-const CON_RESULTADO = new Set(['JUGADA', 'WALKOVER', 'ABANDONO']);
+// El doble W.O. también está resuelto: no se presentó ninguno (decisión 135).
+const CON_RESULTADO = new Set(['JUGADA', 'WALKOVER', 'ABANDONO', 'DOBLE_WALKOVER']);
 
 export default function Zona() {
   const { perfil } = useSesion();
