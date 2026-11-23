@@ -48,7 +48,7 @@ Antes del listado, la secuencia operativa completa. Cada paso está cubierto por
 - Una organización puede correr torneos sueltos sin ranking, y activar el ranking después.
 - Las categorías son propias de cada circuito; POLENTA usa Segunda y Tercera.
 - Los torneos del calendario definen los casilleros del ranking anual y solo hacen falta si se usa ranking.
-- El inicio del organizador muestra una tarjeta de **primeros pasos** que se tildan solos: importar los jugadores, crear el primer torneo, compartir el link de inscripción. *Propuesto.*
+- El inicio del organizador muestra una tarjeta de **primeros pasos** que se tildan solos: importar los jugadores, crear el primer torneo, compartir el link de inscripción ([decisión 134](decisiones/134-primeros-pasos-y-ayuda-en-contexto.md)).
 - La tabla de puntos es editable: campeón, finalista, semifinalista, cuartos, octavos y participación.
 - Opcionalmente puede registrar los clubes donde suele jugar, con sus canchas y superficies, para habilitar estadísticas por superficie.
 
@@ -246,7 +246,7 @@ El jugador dispondrá de una aplicación instalable en su teléfono donde ver su
 
 **Entrega: 50%**
 
-**Estado:** en curso. La app (`apps/mobile`, Expo) tiene el ingreso del jugador, la elección del circuito si juega en varios ([decisiones 039 a 042](decisiones/039-ingreso-del-jugador.md)), *Inscripciones en curso* para quien todavía no juega en ninguno, con el aviso arriba de Cuándo juego para quien ya juega en otro ([decisión 054](decisiones/054-perfil-pendiente.md)), el ranking, la ficha de cada jugador (F17), *Mi zona* (`GET /api/jugador/:slug/zona`, [decisión 044](decisiones/044-rutas-del-jugador.md)) y *Cuándo juego* (`GET /api/jugador/:slug/partidos`), con una barra de pestañas para pasar de una a otra ([decisión 045](decisiones/045-pestanas-de-la-app.md)). La app abre en Cuándo juego. "Escribirle" abre WhatsApp con el rival de un partido por jugar ([decisión 046](decisiones/046-telefono-del-rival.md)), con un aviso previo que deja ocultar el propio teléfono ([decisión 128](decisiones/128-aviso-del-telefono.md)); anotar la fecha llega con F14. "Cómo te fue con él" (F18) abre el historial con ese rival desde el próximo partido. Avisos ([decisión 047](decisiones/047-avisos-push.md)): el fixture llega por push al confirmarse el sorteo, y la app programa un recordatorio antes de cada partido con fecha; el de la confirmación del rival llega con F14. Los cuadros todavía se abren en la web: dibujarlos en la app (una ronda a la vez, [decisión 038](decisiones/038-cuadros-en-el-celular.md)) necesita las piezas del cuadro de la web, que no están en la app. Falta generar el APK con la cuenta de Expo y el proyecto de Firebase (pasos en el README de la raíz).
+**Estado:** en curso. La app (`apps/mobile`, Expo) tiene el ingreso del jugador, la elección del circuito si juega en varios ([decisiones 039 a 042](decisiones/039-ingreso-del-jugador.md)), *Inscripciones en curso* para quien todavía no juega en ninguno, con el aviso arriba de Cuándo juego para quien ya juega en otro ([decisión 054](decisiones/054-perfil-pendiente.md)), el ranking, la ficha de cada jugador (F17), *Mi zona* (`GET /api/jugador/:slug/zona`, [decisión 044](decisiones/044-rutas-del-jugador.md)) y *Cuándo juego* (`GET /api/jugador/:slug/partidos`), con una barra de pestañas para pasar de una a otra ([decisión 045](decisiones/045-pestanas-de-la-app.md)). La app abre en Cuándo juego. "Escribirle" abre WhatsApp con el rival de un partido por jugar ([decisión 046](decisiones/046-telefono-del-rival.md)), con un aviso previo que deja ocultar el propio teléfono ([decisión 128](decisiones/128-aviso-del-telefono.md)); anotar la fecha llega con F14. "Cómo te fue con él" (F18) abre el historial con ese rival desde el próximo partido. Avisos ([decisión 047](decisiones/047-avisos-push.md)): el fixture llega por push al confirmarse el sorteo, y la app programa un recordatorio antes de cada partido con fecha; el de la confirmación del rival llega con F14. Los cuadros se ven en la app desde Mi zona, una ronda a la vez, como en el celular de la web ([decisiones 038](decisiones/038-cuadros-en-el-celular.md) y [136](decisiones/136-cuadros-en-la-app.md)). Falta generar el APK con la cuenta de Expo y el proyecto de Firebase (pasos en el README de la raíz).
 
 ---
 
@@ -292,7 +292,7 @@ La organización podrá seguir el estado de las inscripciones de cada torneo en 
 - Al cerrar, las reservas sin pagar no se tocan y no entran al sorteo ([decisión 024](decisiones/024-reservas-sin-pagar-al-cerrar.md)), y no se puede cerrar si los que pagaron no alcanzan para las zonas ([decisión 025](decisiones/025-no-se-cierra-sin-inscriptos-para-las-zonas.md)).
 - Con el cupo lleno, el link del torneo y el link personal llevan a "Anotarme en la lista de espera", por el mismo camino que inscribirse y sin pagar. Se anota quien tiene perfil en el padrón ([decisión 081](decisiones/081-anotarse-en-la-lista-de-espera.md)). La pantalla de pago muestra su puesto en la lista, el lugar que le tocó con hasta cuándo es suyo, y que la lista terminó si se sorteó sin que le tocara ([decisión 082](decisiones/082-la-lista-termina-con-el-sorteo.md)). En el seed, la Copa Confluencia tiene a Sanhueza primero en la lista.
 - Las inscripciones cuya vinculación quedó para revisar llevan la marca "para revisar", la misma del padrón, que lleva a *Revisar vinculación*.
-- En la app, quien espera en la lista ve su puesto en *Tus inscripciones* y arriba de *Cuándo juego*; anotarse sigue siendo desde la web ([decisión 123](decisiones/123-la-lista-de-espera-en-la-app.md)).
+- En la app, quien espera en la lista ve su puesto en *Tus inscripciones* y arriba de *Cuándo juego*; anotarse sigue siendo desde la web ([decisión 132](decisiones/132-la-lista-de-espera-en-la-app.md)).
 
 **Entrega: 75%**
 
@@ -337,7 +337,7 @@ La organización dispondrá de una pantalla única donde ver el avance completo 
 - La pantalla *Tablero del torneo* (`/torneos/:id/tablero`) muestra las barras zona por zona, los días que quedan, "Lo que falta" ordenado por urgencia y la tabla de cada zona con su matriz de resultados.
 - Un partido vencido se calcula al consultar: pasó su fecha límite sin resultado ([decisión 060](decisiones/060-partidos-vencidos-calculados.md)).
 - En los cuadros muestra lo mismo por ronda, y ofrece cerrar las zonas y cerrar el torneo cuando corresponde ([decisión 061](decisiones/061-tablero-en-los-cuadros.md)).
-- Resolver carga el W.O. y Escribirles abre el WhatsApp de cada jugador; extender el plazo, el doble W.O. y recordarles no están ([decisión 062](decisiones/062-acciones-del-tablero.md)). Anotar fecha, en los sin coordinar, llegó con F14.
+- Resolver carga el W.O. y Escribirles abre el WhatsApp de cada jugador ([decisión 062](decisiones/062-acciones-del-tablero.md)). "Más" suma extender el plazo de un partido, recordarles el partido por aviso y email, y el doble W.O. en las zonas ([decisión 135](decisiones/135-mas-acciones-del-tablero.md)). Anotar fecha, en los sin coordinar, llegó con F14.
 - Se llega desde la tarjeta del torneo en "En juego" del inicio, con los partidos jugados y los vencidos ([decisión 080](decisiones/080-torneos-en-juego-y-terminados-en-el-inicio.md)), y desde el Sorteo confirmado ([decisión 063](decisiones/063-entrada-al-tablero.md)).
 
 ---
@@ -436,7 +436,7 @@ Antes y durante el torneo, cada jugador podrá ver cuántos puntos sumaría y qu
 
 **Entrega: 100%**
 
-**Estado: implementada en la web pública**, en `/c/:slug/torneos/:id/en-juego/:jugadorId`, sobre `GET /api/publico/:slug/torneos/:id/proyeccion/:jugadorId`. Se llega desde la ficha del jugador, y desde la vista del torneo por los nombres de las zonas, que abren la ficha; la app no la muestra ([decisión 120](decisiones/120-las-proyecciones-en-la-web-publica.md)). Es una cuenta exacta, sin IA: aplica la tabla de puntos, reemplaza el casillero y vuelve a ordenar el ranking ([decisión 117](decisiones/117-las-proyecciones-no-son-ia.md)).
+**Estado: implementada en la web pública**, en `/c/:slug/torneos/:id/en-juego/:jugadorId`, sobre `GET /api/publico/:slug/torneos/:id/proyeccion/:jugadorId`. Se llega desde la ficha del jugador, y desde la vista del torneo por los nombres de las zonas, que abren la ficha; la app no la muestra ([decisión 131](decisiones/131-las-proyecciones-en-la-web-publica.md)). Es una cuenta exacta, sin IA: aplica la tabla de puntos, reemplaza el casillero y vuelve a ordenar el ranking ([decisión 117](decisiones/117-las-proyecciones-no-son-ia.md)).
 
 ---
 

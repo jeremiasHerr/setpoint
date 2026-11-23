@@ -4,6 +4,7 @@ import { Boton } from '../../components/Boton';
 import { Etiqueta } from '../../components/Etiqueta';
 import { IconoMas } from '../../components/IconoMas';
 import { Numero } from '../../components/Numero';
+import { PrimerosPasos, type EstadoDePrimerosPasos } from './PrimerosPasos';
 import { ResumenOrganizacion } from './ResumenOrganizacion';
 
 // Tres barras de distinta altura: el ranking.
@@ -84,11 +85,12 @@ type Props = {
   nombre: string;
   jugadores: number;
   usaRanking: boolean;
+  primerosPasos: EstadoDePrimerosPasos;
 };
 
 // Primera vez: dos caminos con el mismo peso. Un torneo suelto no pide configurar nada antes; el
 // circuito con ranking se configura primero. Cualquiera de los dos deja hacer el otro después.
-export function InicioSinTorneos({ nombre, jugadores, usaRanking }: Props) {
+export function InicioSinTorneos({ nombre, jugadores, usaRanking, primerosPasos }: Props) {
   const navegar = useNavigate();
 
   return (
@@ -135,6 +137,7 @@ export function InicioSinTorneos({ nombre, jugadores, usaRanking }: Props) {
         </div>
 
         <aside className="flex flex-col gap-4">
+          <PrimerosPasos {...primerosPasos} apilada />
           <ResumenOrganizacion
             titulo="Tu organización"
             filas={[

@@ -1,6 +1,6 @@
-import type { DatosFechaAcordadaEntrada } from '@setpoint/shared';
+import type { DatosExtenderPlazo, DatosFechaAcordadaEntrada, Tablero } from '@setpoint/shared';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { anotarFecha, cerrarZonas, confirmarResultadoPropuesto, obtenerCoordinacion, obtenerTablero } from './api';
+import { anotarFecha, cerrarZonas, confirmarResultadoPropuesto, extenderPlazo, obtenerCoordinacion, obtenerTablero, recordarPartido } from './api';
 import { claveNavegacion } from '../torneos/useNavegacionDelTorneo';
 
 const claveTablero = (slug: string, id: number) => ['tablero', slug, id];
@@ -53,4 +53,17 @@ export function useConfirmarResultadoPropuesto(slug: string, id: number) {
       void queryClient.invalidateQueries({ queryKey: claveNavegacion(slug, id) });
     },
   });
+}
+
+// El tablero vuelve como quedó: con el plazo nuevo, el partido puede dejar de estar vencido.
+export function useExtenderPlazo(slug: string, id: number, partidoId: number) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (datos: DatosExtenderPlazo) => extenderPlazo(slug, id, partidoId, datos),
+    onSuccess: (tablero: Tablero) => queryClient.setQueryData(claveTablero(slug, id), tablero),
+  });
+}
+
+export function useRecordarPartido(slug: string, id: number, partidoId: number) {
+  return useMutation({ mutationFn: () => recordarPartido(slug, id, partidoId) });
 }

@@ -3,7 +3,7 @@
 import { ganadorDeLosSets, resultadoDelJugadorSchema, type DatosResultadoDelJugador } from '@setpoint/shared';
 import type { EstadoPartido } from '../competencia/clasificacion';
 
-const CON_RESULTADO: EstadoPartido[] = ['JUGADA', 'WALKOVER', 'ABANDONO'];
+const CON_RESULTADO: EstadoPartido[] = ['JUGADA', 'WALKOVER', 'ABANDONO', 'DOBLE_WALKOVER']; // el doble W.O. también está resuelto (decisión 135)
 
 export type PropuestaLeida = {
   id: number;

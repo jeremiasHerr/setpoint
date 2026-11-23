@@ -1,7 +1,7 @@
 import type { PartidoEnVivo, TorneoEnVivo } from '@setpoint/shared';
 import { nombreDelCuadro, rotuloDeRonda } from '../cuadros/cuadro';
 
-const CON_RESULTADO: PartidoEnVivo['estado'][] = ['jugada', 'walkover', 'abandono'];
+const CON_RESULTADO: PartidoEnVivo['estado'][] = ['jugada', 'walkover', 'abandono', 'doble_walkover'];
 
 export const tieneResultado = (partido: PartidoEnVivo) => CON_RESULTADO.includes(partido.estado);
 
@@ -15,6 +15,7 @@ export function dondeSeJuega(partido: PartidoEnVivo, torneo: TorneoEnVivo) {
 // El marcador desde el jugador A, como se lee en el calendario: "6-3 6-4", "W.O." o "abandono".
 export function marcador(partido: PartidoEnVivo) {
   if (partido.estado === 'walkover') return 'W.O.';
+  if (partido.estado === 'doble_walkover') return 'W.O. doble';
   const sets = partido.sets.map((s) => `${s.gamesA}-${s.gamesB}`).join(' ');
   if (partido.estado === 'abandono') return sets ? `${sets} ab.` : 'abandono';
   return sets;

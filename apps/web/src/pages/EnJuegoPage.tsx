@@ -25,7 +25,7 @@ function mensajeDeError(error: Error) {
 
 // Qué tiene en juego un jugador en un torneo que no cerró (F20): cuántos puntos suma y en qué
 // puesto queda según hasta dónde llegue. Web pública, sin cuenta, como la ficha desde la que se
-// llega (decisión 120). Es una cuenta exacta de la API, no IA (decisión 117).
+// llega (decisión 131). Es una cuenta exacta de la API, no IA (decisión 117).
 export function EnJuegoPage() {
   const { slug = '', torneoId = '', jugadorId = '' } = useParams();
   const proyeccion = useProyeccion(slug, torneoId, jugadorId);

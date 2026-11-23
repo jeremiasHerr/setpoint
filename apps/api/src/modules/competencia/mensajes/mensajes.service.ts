@@ -67,6 +67,8 @@ const CON_RESULTADO: Partial<Record<EstadoPartido, PartidoAuditable['estado']>> 
   [EstadoPartido.JUGADA]: 'jugada',
   [EstadoPartido.WALKOVER]: 'walkover',
   [EstadoPartido.ABANDONO]: 'abandono',
+  // Ya resuelto: la IA no le puede cargar un resultado encima (decisión 135).
+  [EstadoPartido.DOBLE_WALKOVER]: 'otro',
 };
 
 // Dónde se juega, para que la IA ubique el partido: "Zona B", "Campeonato, ronda 2".

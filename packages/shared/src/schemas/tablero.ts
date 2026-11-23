@@ -1,5 +1,6 @@
 // Tablero del torneo (F15): docs/pantallas/organizador/tablero.html. La API calcula en qué
 // situación está cada partido y qué falta; la web solo lo muestra.
+import { z } from 'zod';
 import type { ClaveCuadro, EstadoPartido } from './cuadros';
 import type { FilaDePosiciones } from './posiciones';
 
@@ -87,4 +88,18 @@ export type Tablero = {
   // los cuadros, el torneo (F16).
   sePuedenCerrarLasZonas: boolean;
   sePuedeCerrarElTorneo: boolean;
+};
+
+// Extender el plazo de un partido desde el tablero (decisión 135): el último día nuevo para jugarlo.
+export const extenderPlazoSchema = z.object({
+  fechaLimite: z.string().regex(/^d{4}-d{2}-d{2}$/, 'Elegí una fecha'),
+});
+export type DatosExtenderPlazo = z.infer<typeof extenderPlazoSchema>;
+
+// A quién le llegó "Recordarles" (decisión 135): por aviso al celular, por email, o a nadie. Son
+// apellidos, para decirlo en la fila del partido.
+export type RecordatorioEnviado = {
+  conAviso: string[];
+  conEmail: string[];
+  sinCanal: string[];
 };

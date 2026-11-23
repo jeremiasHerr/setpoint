@@ -377,11 +377,11 @@ La interfaz usa términos genéricos, no los del código ni los de un circuito e
 
 ### Ayuda en contexto
 
-*Propuesto* ([devolucion-25.md](devolucion-25.md), cambio H). **No hay tutorial** que resalte pasos en pantalla: es caro de hacer y la gente lo saltea. La explicación aparece donde hace falta:
+([devolucion-25.md](devolucion-25.md), cambio H; [decisión 134](decisiones/134-primeros-pasos-y-ayuda-en-contexto.md)). **No hay tutorial** que resalte pasos en pantalla: es caro de hacer y la gente lo saltea. La explicación aparece donde hace falta:
 
 - Debajo del campo o la sección que explica, en `pizarra-500`, cuerpo 13–14 en escritorio. Una o dos oraciones que digan la consecuencia, como el resto de la voz: *"Cada torneo del calendario es un casillero del ranking. Cuando se juega Primavera 26, sus puntos reemplazan los de Primavera 25."*
 - Para explicaciones largas, una caja `niebla` con radio de tarjeta, sin ícono de ayuda ni signo de pregunta.
-- **Tarjeta "Primeros pasos"** en el inicio del organizador: tres pasos con check (*Importá tus jugadores · Creá tu primer torneo · Compartí el link de inscripción*) que **se tildan solos** cuando se cumplen. Borde `linea`, no tarjeta noche: no es el dato principal de la pantalla. Desaparece cuando están los tres.
+- **Tarjeta "Primeros pasos"** en el inicio del organizador: tres pasos con check (*Importá tus jugadores · Creá tu primer torneo · Compartí el link de inscripción*) que **se tildan solos** cuando se cumplen. Borde `linea`, no tarjeta noche: no es el dato principal de la pantalla. Desaparece cuando están los tres. "Compartí el link" se tilda con la primera inscripción pagada.
 
 ---
 
@@ -410,7 +410,7 @@ El canvas *Verde pelota* tiene **21 pantallas**, en el orden en que se usan, con
 | Código · *nueva* | Email | F12 |
 | Comprobante · *nueva* | Email | F12 |
 | Cuenta e ingreso | App del jugador: ingresar con email y código | F02, F12 |
-| Qué está en juego | Web pública ([decisión 120](decisiones/120-las-proyecciones-en-la-web-publica.md)) | F20 |
+| Qué está en juego | Web pública ([decisión 131](decisiones/131-las-proyecciones-en-la-web-publica.md)) | F20 |
 | Registrar la organización | Web del organizador | F01 |
 | Tu circuito | Web del organizador | F01 |
 | Padrón | Web del organizador | F02 |

@@ -165,11 +165,14 @@ const ESTADO_DEL_RESULTADO = {
   jugado: EstadoPrisma.JUGADA,
   walkover: EstadoPrisma.WALKOVER,
   abandono: EstadoPrisma.ABANDONO,
+  doble_walkover: EstadoPrisma.DOBLE_WALKOVER,
 } as const;
 
 // El ganador de un partido jugado sale de los sets. El del W.O. y el del abandono lo indica la
 // organización: es quien estuvo para jugar o quien siguió.
 function ganadorDelResultado(resultado: DatosResultado, jugadorAId: number, jugadorBId: number) {
+  // En el doble W.O. no ganó nadie (decisión 135).
+  if (resultado.tipo === 'doble_walkover') return null;
   if (resultado.tipo === 'jugado') return ganadorDeLosSets(resultado.sets) === 'A' ? jugadorAId : jugadorBId;
   if (resultado.ganadorId !== jugadorAId && resultado.ganadorId !== jugadorBId) {
     throw new ErrorHttp(400, 'DATOS_INVALIDOS', { ganadorId: 'Tiene que ser uno de los dos jugadores del partido' });
@@ -192,6 +195,9 @@ function resultadoAGuardar(torneo: Torneo, partido: Partido, datos: DatosResulta
   const { jugadorAId, jugadorBId } = partido;
   // En un cuadro, el partido espera a que llegue el ganador del anterior.
   if (jugadorAId === null || jugadorBId === null) throw new ErrorHttp(409, 'PARTIDO_SIN_JUGADORES');
+
+  // En un cuadro alguien tiene que avanzar: el doble W.O. es solo de las zonas (decisión 135).
+  if (datos.tipo === 'doble_walkover' && partido.fase !== FasePartido.GRUPOS) throw new ErrorHttp(409, 'DOBLE_WALKOVER_EN_CUADRO');
 
   const validado = resultadoDelTorneoSchema(sistemaDeJuego(torneo)).safeParse(datos);
   if (!validado.success) throw new ErrorHttp(400, 'DATOS_INVALIDOS', camposConError(validado.error));

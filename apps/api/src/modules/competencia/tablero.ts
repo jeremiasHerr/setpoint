@@ -12,7 +12,7 @@ export type PartidoParaElTablero = {
   fechaAcordada: Date | null;
 };
 
-const CON_RESULTADO: EstadoPartido[] = ['JUGADA', 'WALKOVER', 'ABANDONO'];
+const CON_RESULTADO: EstadoPartido[] = ['JUGADA', 'WALKOVER', 'ABANDONO', 'DOBLE_WALKOVER']; // el doble W.O. también está resuelto (decisión 135)
 const CON_FECHA: EstadoPartido[] = ['ANOTADA', 'CONFIRMADA'];
 const UN_DIA = 24 * 60 * 60 * 1000;
 

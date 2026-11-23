@@ -1,3 +1,4 @@
+import type { ResumenConvocatoria } from '@setpoint/shared';
 import { Navigate } from 'react-router-dom';
 import { Boton } from '../components/Boton';
 import { EncabezadoOrganizador } from '../components/EncabezadoOrganizador';
@@ -8,9 +9,22 @@ import { useSesionInvalida } from '../features/auth/useSesionInvalida';
 import { useCircuito } from '../features/circuito/useCircuito';
 import { InicioConTorneos } from '../features/inicio/InicioConTorneos';
 import { InicioSinTorneos } from '../features/inicio/InicioSinTorneos';
+import type { EstadoDePrimerosPasos } from '../features/inicio/PrimerosPasos';
 import { aTorneosDeInicio } from '../features/inicio/torneosDeInicio';
 import { useTorneos } from '../features/inicio/useTorneos';
 import { iniciales, navegacionOrganizador } from '../features/organizador/encabezado';
+
+// Lo que tilda cada uno de los primeros pasos (decisión 134). Compartir el link se tilda con la
+// primera inscripción pagada: es lo que prueba que el link llegó.
+function primerosPasos(jugadores: number, convocatorias: ResumenConvocatoria[]): EstadoDePrimerosPasos {
+  const torneos = convocatorias.flatMap((c) => c.torneos);
+  return {
+    hayJugadores: jugadores > 0,
+    hayTorneo: convocatorias.length > 0,
+    hayInscripcion: torneos.some((t) => t.inscriptos > 0),
+    torneoAbiertoId: torneos.find((t) => t.estado === 'publicado')?.id ?? null,
+  };
+}
 
 function primerNombre(nombre: string) {
   return nombre.trim().split(/\s+/)[0];
@@ -62,12 +76,17 @@ function Inicio({ sesion }: { sesion: Sesion }) {
           </div>
         )
       ) : torneos.data.length > 0 ? (
-        <InicioConTorneos torneos={aTorneosDeInicio(torneos.data, circuito.data)} slug={slug} />
+        <InicioConTorneos
+          torneos={aTorneosDeInicio(torneos.data, circuito.data)}
+          slug={slug}
+          primerosPasos={primerosPasos(circuito.data.jugadores, torneos.data)}
+        />
       ) : (
         <InicioSinTorneos
           nombre={primerNombre(sesion.usuario.nombre)}
           jugadores={circuito.data.jugadores}
           usaRanking={circuito.data.usaRanking}
+          primerosPasos={primerosPasos(circuito.data.jugadores, torneos.data)}
         />
       )}
     </div>

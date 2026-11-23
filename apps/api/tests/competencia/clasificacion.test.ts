@@ -71,6 +71,26 @@ describe('estadisticasDeZona', () => {
     expect(deJugador(1, partidos)).toMatchObject({ partidosJugados: 1, partidosGanados: 0, setsGanados: 0, setsPerdidos: 2, gamesGanados: 0, gamesPerdidos: 12 });
   });
 
+  it('computa el doble W.O. como 0-6 0-6 para los dos, sin partido ganado (decisión 135)', () => {
+    const partidos: PartidoDeLaTabla[] = [{ jugadorAId: 1, jugadorBId: 2, ganadorId: null, estado: 'DOBLE_WALKOVER', sets: [] }];
+    const perdioLosDosSets = { partidosJugados: 1, partidosGanados: 0, setsGanados: 0, setsPerdidos: 2, gamesGanados: 0, gamesPerdidos: 12 };
+
+    expect(deJugador(1, partidos)).toMatchObject(perdioLosDosSets);
+    expect(deJugador(2, partidos)).toMatchObject(perdioLosDosSets);
+  });
+
+  it('el doble W.O. entre dos empatados no los desempata: define el ranking', () => {
+    // 3 y 4 no ganan nada y pierden igual; el partido entre ellos no tiene ganador.
+    const tabla = tablaDeZona(integrantes(1, 2, 3, 4), [
+      jugado(1, 3, '6-0 6-0'),
+      jugado(2, 4, '6-0 6-0'),
+      { jugadorAId: 4, jugadorBId: 3, ganadorId: null, estado: 'DOBLE_WALKOVER', sets: [] },
+    ]);
+    const [tercero, cuarto] = tabla.slice(2);
+    expect([tercero.jugadorId, cuarto.jugadorId]).toEqual([3, 4]);
+    expect(tercero.desempateConElSiguiente).toBe('RANKING');
+  });
+
   it('ignora los sets guardados en un W.O.', () => {
     const conSets = { ...walkover(2, 1), sets: [{ gamesA: 3, gamesB: 2, esSuperTieBreak: false }] };
 

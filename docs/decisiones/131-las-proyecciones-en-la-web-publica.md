@@ -1,6 +1,8 @@
-# 120 — Las proyecciones van en la web pública
+# 131 — Las proyecciones van en la web pública
 
 **Estado:** aceptada — 21 de noviembre de 2026.
+
+> Se numeró primero como la 120, que ya era la del nombre del cuadro consuelo: dos PR tomaron el mismo número a la vez.
 
 ## Contexto
 
