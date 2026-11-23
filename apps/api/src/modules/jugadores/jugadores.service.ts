@@ -9,7 +9,7 @@ import { nuevoCodigoDeLink } from '../link-personal/codigo';
 import { asignarPuestos, puntosVigentes } from '../ranking/ranking';
 
 // Un W.O. cuenta como partido jugado: se registra 6-0 6-0 y entra en la tabla.
-const PARTIDO_JUGADO = { estado: { in: [EstadoPartido.JUGADA, EstadoPartido.WALKOVER] } };
+const PARTIDO_JUGADO = { estado: { in: [EstadoPartido.JUGADA, EstadoPartido.WALKOVER, EstadoPartido.DOBLE_WALKOVER] } };
 
 // También lo usa la revisión de vinculaciones: los puntos y el puesto salen de la misma cuenta.
 export async function padronDe(organizacionId: number): Promise<JugadorPadron[]> {

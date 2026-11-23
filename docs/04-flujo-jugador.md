@@ -381,7 +381,7 @@ Notificación push al generarse el fixture, al acordarse una fecha y como record
 
 Tabla de posiciones del grupo en vivo, con la línea de corte marcada — arriba clasifican al cuadro principal, abajo al cuadro consuelo si el torneo lo tiene. Los cuadros son navegables.
 
-**Cuando cierran las zonas**, *Mi zona* en la app abre con una tarjeta que dice a qué cuadro pasó el jugador y en qué puesto salió, y "Ver el cuadro" abre la pestaña Cuadros de la página en vivo ([decisión 069](decisiones/069-torneo-en-vivo-en-una-pagina.md)). La app todavía no dibuja los cuadros. El link lo arma la API con `WEB_URL`, como los de los emails: para probarlo desde un celular, tiene que ser una dirección que el celular alcance, no `localhost`.
+**Cuando cierran las zonas**, *Mi zona* en la app abre con una tarjeta que dice a qué cuadro pasó el jugador y en qué puesto salió, y "Ver el cuadro" abre los cuadros en la app, una ronda a la vez, en el cuadro al que pasó y en la ronda donde juega ([decisión 136](decisiones/136-cuadros-en-la-app.md)). Usa la misma ruta pública que la página en vivo.
 
 ---
 

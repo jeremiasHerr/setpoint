@@ -44,10 +44,10 @@ export type PartidoLeido = {
   resultadosPropuestos?: PropuestaLeida[];
 };
 
-const CON_RESULTADO = new Set(['JUGADA', 'WALKOVER', 'ABANDONO']);
+const CON_RESULTADO = new Set(['JUGADA', 'WALKOVER', 'ABANDONO', 'DOBLE_WALKOVER']); // el doble W.O. también está resuelto (decisión 135)
 
 // "semifinales", contando desde la final. Igual que en la web (features/resultados).
-function nombreDeRonda(ronda: number, rondas: number) {
+export function nombreDeRonda(ronda: number, rondas: number) {
   return ['final', 'semifinales', 'cuartos de final', 'octavos de final'][rondas - ronda] ?? `ronda ${ronda}`;
 }
 
@@ -66,6 +66,7 @@ export function instancia(
 // 059); un abandono de antes de la 059 puede traer lo que se jugó. También lo usa la ficha (F17).
 export function marcador(p: Pick<PartidoLeido, 'estado' | 'sets'>, esA: boolean) {
   if (p.estado === 'WALKOVER') return 'W.O.';
+  if (p.estado === 'DOBLE_WALKOVER') return 'W.O. doble';
   const sets = p.sets.map((s) => (esA ? `${s.gamesA}-${s.gamesB}` : `${s.gamesB}-${s.gamesA}`)).join(' ');
   if (p.estado === 'ABANDONO') return sets ? `${sets} ab.` : 'ab.';
   return sets;

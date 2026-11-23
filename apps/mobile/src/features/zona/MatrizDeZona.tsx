@@ -8,7 +8,8 @@ type Props = {
   partidos: PartidoDeMiZona[];
 };
 
-const CON_RESULTADO = new Set(['JUGADA', 'WALKOVER', 'ABANDONO']);
+// El doble W.O. también está resuelto: no se presentó ninguno (decisión 135).
+const CON_RESULTADO = new Set(['JUGADA', 'WALKOVER', 'ABANDONO', 'DOBLE_WALKOVER']);
 
 // "san": tres letras del apellido, como los encabezados de la referencia.
 const abreviar = (apellido: string) => apellido.slice(0, 3).toLowerCase();
@@ -68,7 +69,9 @@ function Celda({ jugadorId, rivalId, partidos }: { jugadorId: number; rivalId: n
   const renglones =
     partido.estado === 'WALKOVER'
       ? ['W.O.']
-      : [
+      : partido.estado === 'DOBLE_WALKOVER'
+        ? ['W.O.', 'doble']
+        : [
           ...partido.sets.map((s) => (esA ? `${s.gamesA}-${s.gamesB}` : `${s.gamesB}-${s.gamesA}`)),
           ...(partido.estado === 'ABANDONO' ? ['ab.'] : []),
         ];

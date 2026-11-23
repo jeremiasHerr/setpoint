@@ -91,7 +91,7 @@ function comoResultado(r: ResultadoDeLaIA, partido: PartidoAuditable): DatosResu
   return ganador ? { tipo: r.tipo, ganadorId: ganador.id } : null;
 }
 
-const ESTADO_DEL_TIPO = { jugado: 'jugada', walkover: 'walkover', abandono: 'abandono' } as const;
+const ESTADO_DEL_TIPO = { jugado: 'jugada', walkover: 'walkover', abandono: 'abandono', doble_walkover: 'otro' } as const;
 
 // Si el partido ya tiene exactamente este resultado.
 function mismoResultado(partido: PartidoAuditable, resultado: DatosResultado, ganadorId: number) {
@@ -124,6 +124,8 @@ export function auditarResultado(r: ResultadoDeLaIA, { mensajes, partidos, siste
   const validado = resultadoDelTorneoSchema(sistema).safeParse(resultado);
   if (!validado.success) return { estado: 'a_revisar', resultado, motivo: validado.error.issues[0].message };
 
+  // La IA no lee dobles W.O.: los da la organización desde el tablero (decisión 135).
+  if (resultado.tipo === 'doble_walkover') return { estado: 'a_revisar', resultado, motivo: 'El doble W.O. se da desde el tablero' };
   const ganadorId = resultado.tipo === 'jugado' ? (ganadorDeLosSets(resultado.sets) === 'A' ? a.id : b.id) : resultado.ganadorId;
   if (resultado.tipo === 'jugado' && r.ganador !== null && ganadorDeLosSets(resultado.sets) !== r.ganador) {
     return { estado: 'a_revisar', resultado, motivo: 'El ganador no coincide con los sets' };

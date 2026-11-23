@@ -55,7 +55,7 @@ export function llevaTieBreak(set: SetEscrito, columna: Columna, sistema: Sistem
 const SIN_ESCRIBIR: SetEscrito = { gamesA: '', gamesB: '', tieBreakA: '', tieBreakB: '' };
 const escrito = (n: number | null) => (n === null ? '' : String(n));
 
-const ESTADOS_CON_RESULTADO: EstadoPartido[] = ['jugada', 'walkover', 'abandono'];
+const ESTADOS_CON_RESULTADO: EstadoPartido[] = ['jugada', 'walkover', 'abandono', 'doble_walkover'];
 export const tieneResultado = (partido: { estado: EstadoPartido }) => ESTADOS_CON_RESULTADO.includes(partido.estado);
 
 // Se puede cargar si tiene a sus dos jugadores y no se canceló.
@@ -76,7 +76,8 @@ export function cargaDelPartido(partido: PartidoConResultado): Carga {
       tieBreakB: escrito(set.tieBreakB),
     };
   });
-  const tipo: TipoDeResultado = partido.estado === 'walkover' || partido.estado === 'abandono' ? partido.estado : 'jugado';
+  const tipo: TipoDeResultado =
+    partido.estado === 'walkover' || partido.estado === 'abandono' || partido.estado === 'doble_walkover' ? partido.estado : 'jugado';
   return { tipo, sets, ganadorId: tipo === 'jugado' ? null : partido.ganadorId };
 }
 
@@ -108,6 +109,9 @@ export function leerCarga(carga: Carga, partido: PartidoConResultado): Lectura {
   const problemas: Problemas = { sets: columnas.map(() => null), tieBreaks: columnas.map(() => null), partido: null };
   const ladoDe = (jugadorId: number | null) =>
     jugadorId === null ? null : jugadorId === partido.jugadorA?.jugadorId ? 'A' : 'B';
+
+  // El doble W.O. no lleva sets ni ganador: está listo apenas se elige (decisión 135).
+  if (carga.tipo === 'doble_walkover') return { datos: { tipo: 'doble_walkover' }, problemas, ganador: null };
 
   // El W.O. y el abandono no llevan sets: alcanza con quién ganó (decisiones 016 y 059).
   if (carga.tipo !== 'jugado') {
@@ -174,12 +178,16 @@ function ganadorYPerdedor(datos: DatosResultado, partido: PartidoConResultado) {
   const nombres = nombresDelPartido(partido);
   const a = { jugadorId: partido.jugadorA!.jugadorId, nombre: nombres[0] };
   const b = { jugadorId: partido.jugadorB!.jugadorId, nombre: nombres[1] };
-  const ganaA = datos.tipo === 'jugado' ? ganadorDeLosSets(datos.sets) === 'A' : datos.ganadorId === a.jugadorId;
+  const ganaA =
+    datos.tipo === 'jugado' ? ganadorDeLosSets(datos.sets) === 'A' : datos.tipo !== 'doble_walkover' && datos.ganadorId === a.jugadorId;
   return ganaA ? [a, b] : [b, a];
 }
 
 // La caja verde: "Gana Roa, 2 sets a 1", con un detalle en mono si hace falta.
 export function resumenDelResultado(datos: DatosResultado, partido: PartidoConResultado): { titulo: Frase; detalle: string | null } {
+  if (datos.tipo === 'doble_walkover') {
+    return { titulo: ['No se presentó ninguno de los dos'], detalle: 'para la tabla pierden los dos 0-6 0-6' };
+  }
   const [ganador, perdedor] = ganadorYPerdedor(datos, partido);
   if (datos.tipo === 'jugado') {
     const sets = setsGanados(datos.sets);

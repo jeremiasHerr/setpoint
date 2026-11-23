@@ -167,6 +167,8 @@ enum EstadoPartido {
   WALKOVER
   // Uno abandonó: no guarda sets y cuenta como un W.O., 6-0 6-0 para quien siguió (decisión 059)
   ABANDONO
+  // No se presentó ninguno de los dos: sin ganador, 0-6 0-6 para cada uno. Solo en las zonas (decisión 135)
+  DOBLE_WALKOVER
   CANCELADA
 }
 
@@ -176,6 +178,8 @@ enum TipoEventoCoordinacion {
   CAMBIADA
   REPROGRAMADA
   CONFIRMADA
+  // La organización corrió la fecha límite del partido desde el tablero (decisión 135)
+  PLAZO_EXTENDIDO
 }
 
 enum Instancia {
@@ -750,6 +754,8 @@ model EventoCoordinacion {
   fechaAcordada   DateTime?
   clubId          Int?
   sedeTexto       String?
+  // En PLAZO_EXTENDIDO, la fecha límite nueva
+  fechaLimite     DateTime?
   creadoEn        DateTime               @default(now())
 
   partido Partido  @relation(fields: [partidoId], references: [id], onDelete: Cascade)

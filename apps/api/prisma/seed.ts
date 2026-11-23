@@ -477,8 +477,19 @@ async function crearTorneoConZonas(organizacionId: number, categoriaId: number, 
             vuelta ? { ...set, gamesA: set.gamesB, gamesB: set.gamesA, tieBreakA: set.tieBreakB, tieBreakB: set.tieBreakA } : set,
           );
     const ganadorId =
-      resultado.tipo === 'jugado' ? (ganadorDeLosSets(sets) === 'A' ? jugadorAId : jugadorBId) : resultado.ganadorId;
-    const estado = { jugado: EstadoPartido.JUGADA, walkover: EstadoPartido.WALKOVER, abandono: EstadoPartido.ABANDONO }[
+      resultado.tipo === 'jugado'
+        ? ganadorDeLosSets(sets) === 'A'
+          ? jugadorAId
+          : jugadorBId
+        : resultado.tipo === 'doble_walkover'
+          ? null
+          : resultado.ganadorId;
+    const estado = {
+      jugado: EstadoPartido.JUGADA,
+      walkover: EstadoPartido.WALKOVER,
+      abandono: EstadoPartido.ABANDONO,
+      doble_walkover: EstadoPartido.DOBLE_WALKOVER,
+    }[
       resultado.tipo
     ];
 

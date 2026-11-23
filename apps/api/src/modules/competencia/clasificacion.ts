@@ -10,6 +10,7 @@ export type EstadoPartido =
   | 'VENCIDA'
   | 'WALKOVER'
   | 'ABANDONO'
+  | 'DOBLE_WALKOVER'
   | 'CANCELADA';
 
 // Un set como lo guarda SetPartido. En un super tie-break, gamesA y gamesB son los puntos.
@@ -35,8 +36,10 @@ export type Estadisticas = {
 
 const ESTADOS_CON_RESULTADO: EstadoPartido[] = ['JUGADA', 'WALKOVER', 'ABANDONO'];
 
-// Solo suman los partidos con resultado. Un W.O. tiene ganador aunque no tenga sets.
+// Solo suman los partidos con resultado. Un W.O. tiene ganador aunque no tenga sets; el doble
+// W.O. es el único resultado sin ganador (decisión 135).
 export function tieneResultado(partido: PartidoDeLaTabla) {
+  if (partido.estado === 'DOBLE_WALKOVER') return true;
   return ESTADOS_CON_RESULTADO.includes(partido.estado) && partido.ganadorId !== null;
 }
 
@@ -50,6 +53,8 @@ export function conElResultado<P extends PartidoDeLaTabla>(partidos: P[], nuevo:
 // se arman acá a partir del estado y del ganador (decisión 016). El abandono cuenta igual
 // (decisión 059); si es de antes de esa decisión y guardó lo que se jugó, eso no cuenta.
 function setsDelResultado(partido: PartidoDeLaTabla): SetDelPartido[] {
+  // Doble W.O.: los dos pierden 0-6 0-6. Se suma aparte, porque un set siempre tiene un ganador.
+  if (partido.estado === 'DOBLE_WALKOVER') return [];
   if (partido.estado !== 'WALKOVER' && partido.estado !== 'ABANDONO') return partido.sets;
   const ganaA = partido.ganadorId === partido.jugadorAId;
   const set = { gamesA: ganaA ? 6 : 0, gamesB: ganaA ? 0 : 6, esSuperTieBreak: false };
@@ -79,6 +84,14 @@ export function estadisticasDeZona(integrantes: { jugadorId: number }[], partido
 
     a.partidosJugados++;
     b.partidosJugados++;
+    if (partido.estado === 'DOBLE_WALKOVER') {
+      // Ninguno se presentó: cada uno pierde 0-6 0-6, como si el otro le hubiera ganado por W.O.
+      for (const jugador of [a, b]) {
+        jugador.setsPerdidos += 2;
+        jugador.gamesPerdidos += 12;
+      }
+      continue;
+    }
     (partido.ganadorId === partido.jugadorAId ? a : b).partidosGanados++;
 
     for (const set of setsDelResultado(partido)) {
@@ -130,7 +143,8 @@ function enfrentamientoDirecto(a: FilaAOrdenar, b: FilaAOrdenar, { empatados, pa
       ((p.jugadorAId === a.jugadorId && p.jugadorBId === b.jugadorId) ||
         (p.jugadorAId === b.jugadorId && p.jugadorBId === a.jugadorId)),
   );
-  if (!entreEllos) return 0;
+  // Sin ganador (doble W.O.), el partido entre ellos no separa a nadie.
+  if (!entreEllos || entreEllos.ganadorId === null) return 0;
   return entreEllos.ganadorId === a.jugadorId ? -1 : 1;
 }
 

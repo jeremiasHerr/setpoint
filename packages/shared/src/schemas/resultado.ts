@@ -32,6 +32,8 @@ export const resultadoSchema = z.discriminatedUnion('tipo', [
   z.object({ tipo: z.literal('walkover'), ganadorId }),
   // El abandono tampoco: se elige quién siguió y cuenta 6-0 6-0 a su favor, como el W.O. (decisión 059).
   z.object({ tipo: z.literal('abandono'), ganadorId }),
+  // No se presentó ninguno: sin ganador, 0-6 0-6 para los dos. Solo en las zonas (decisión 135).
+  z.object({ tipo: z.literal('doble_walkover') }),
 ]);
 
 // Lo que puede cargar un jugador desde la app (decisión 127): un partido jugado o un abandono. El

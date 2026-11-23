@@ -107,6 +107,8 @@ type PartidoConMarcador = Pick<PartidoDelTablero, 'estado' | 'sets'> & {
 // El marcador de un partido de zona desde quien está en la fila: "6-3 6-4", "W.O." o "ab.".
 export function marcadorDesde(partido: PartidoConMarcador, jugadorId: number) {
   if (partido.estado === 'walkover') return 'W.O.';
+  // Ninguno se presentó: pierden los dos (decisión 135).
+  if (partido.estado === 'doble_walkover') return 'W.O. doble';
   const esA = partido.jugadorA?.jugadorId === jugadorId;
   const sets = partido.sets.map((s) => (esA ? `${s.gamesA}-${s.gamesB}` : `${s.gamesB}-${s.gamesA}`)).join(' ');
   if (partido.estado === 'abandono') return sets ? `${sets} ab.` : 'ab.';

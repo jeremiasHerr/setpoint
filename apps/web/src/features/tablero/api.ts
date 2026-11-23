@@ -1,4 +1,4 @@
-import type { CoordinacionDelPartido, Cuadros, DatosFechaAcordadaEntrada, Tablero } from '@setpoint/shared';
+import type { CoordinacionDelPartido, Cuadros, DatosExtenderPlazo, DatosFechaAcordadaEntrada, RecordatorioEnviado, Tablero } from '@setpoint/shared';
 import { pedir } from '../../lib/api';
 
 // El id es el de un torneo (una categoría): cada categoría tiene su tablero.
@@ -28,4 +28,14 @@ export function anotarFecha(slug: string, id: number, partidoId: number, datos: 
 // cargado la organización (decisión 127).
 export function confirmarResultadoPropuesto(slug: string, id: number, partidoId: number) {
   return pedir('POST', `${ruta(slug, id)}/partidos/${partidoId}/resultado-propuesto/confirmacion`);
+}
+
+// Corre la fecha límite de un partido pendiente (decisión 135). Devuelve el tablero como quedó.
+export function extenderPlazo(slug: string, id: number, partidoId: number, datos: DatosExtenderPlazo) {
+  return pedir<Tablero>('PATCH', `${ruta(slug, id)}/tablero/partidos/${partidoId}/plazo`, datos);
+}
+
+// Les recuerda el partido a los dos: aviso a quien tiene la app, email a quien tiene cuenta (decisión 135).
+export function recordarPartido(slug: string, id: number, partidoId: number) {
+  return pedir<RecordatorioEnviado>('POST', `${ruta(slug, id)}/tablero/partidos/${partidoId}/recordatorio`);
 }
