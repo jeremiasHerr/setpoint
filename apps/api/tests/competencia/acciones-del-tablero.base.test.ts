@@ -1,3 +1,4 @@
+import type { Prisma } from '@prisma/client';
 import { afterAll, beforeAll, describe, expect, it as base, vi } from 'vitest';
 
 // Contra Postgres: las acciones del tablero (decisión 135). Extender el plazo de un partido,
@@ -73,7 +74,8 @@ describe.skipIf(!process.env.DATABASE_URL)('las acciones del tablero, contra la 
         },
       })
     ).id;
-    const partido = async (datos: object) => (await prisma.partido.create({ data: { torneoId: ids.torneo, ...datos } })).id;
+    const partido = async (datos: Omit<Prisma.PartidoUncheckedCreateInput, 'torneoId'>) =>
+      (await prisma.partido.create({ data: { torneoId: ids.torneo, ...datos } })).id;
     const deZona = { fase: 'GRUPOS' as const, grupo: 'A', fechaLimite: enDias(2) };
     ids.pendiente = await partido({ ...deZona, jugadorAId: bravo, jugadorBId: vera });
     ids.otro = await partido({ ...deZona, jugadorAId: ojeda, jugadorBId: rivas });
