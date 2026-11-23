@@ -30,6 +30,7 @@ const donde = (p: PartidoDeLaLista, consuelo: string) =>
 // Lo que se carga, con los nombres en el orden del partido: "Antileo 4-6 3-6 Sanhueza".
 function Marcador({ partido, resultado }: { partido: PartidoDeLaLista; resultado: DatosResultado }) {
   const [a, b] = nombresDelPartido(partido);
+  if (resultado.tipo === 'doble_walkover') return <span>W.O. doble</span>;
   if (resultado.tipo !== 'jugado') {
     const ganador = resultado.ganadorId === partido.jugadorA?.jugadorId ? a : b;
     return <span>{resultado.tipo === 'walkover' ? `W.O. para ${ganador}` : `Abandono: sigue ${ganador}`}</span>;

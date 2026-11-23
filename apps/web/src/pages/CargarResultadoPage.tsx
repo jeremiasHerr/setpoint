@@ -187,12 +187,16 @@ function TarjetaDelPartido({ sesion, partido }: { sesion: Sesion; partido: Parti
   const partidos = usePartidos(slug, torneoId);
   useSesionInvalida(guardar.error);
 
-  // "Resolver" en el tablero abre un partido vencido con el W.O. elegido (decisión 062). Si ya
-  // tiene resultado, se muestra el que tiene.
+  // "Resolver" en el tablero abre un partido vencido con el W.O. elegido (decisión 062), y "Doble
+  // W.O.", con el doble W.O. (decisión 135). Si ya tiene resultado, se muestra el que tiene.
   const [parametros] = useSearchParams();
   const [carga, setCarga] = useState<Carga>(() => {
     const cargada = cargaDelPartido(partido);
-    return parametros.get('tipo') === 'walkover' && !tieneResultado(partido) ? { ...cargada, tipo: 'walkover' } : cargada;
+    const pedido = parametros.get('tipo');
+    if (tieneResultado(partido)) return cargada;
+    if (pedido === 'walkover') return { ...cargada, tipo: 'walkover' };
+    if (pedido === 'doble_walkover' && partido.fase === 'grupos') return { ...cargada, tipo: 'doble_walkover' };
+    return cargada;
   });
 
   // Un partido de cuadro sin sus dos jugadores, o cancelado, no lleva resultado todavía.
@@ -286,7 +290,7 @@ function TarjetaDelPartido({ sesion, partido }: { sesion: Sesion; partido: Parti
                   bloqueada={carga.tipo !== 'jugado'}
                 />
 
-                {carga.tipo !== 'jugado' && (
+                {(carga.tipo === 'walkover' || carga.tipo === 'abandono') && (
                   <ElegirGanador
                     pregunta={carga.tipo === 'walkover' ? '¿Quién ganó?' : '¿Quién siguió jugando?'}
                     partido={partido}
@@ -312,6 +316,12 @@ function TarjetaDelPartido({ sesion, partido }: { sesion: Sesion; partido: Parti
                   <Chip activo={carga.tipo === 'abandono'} onClick={() => alternarTipo('abandono')}>
                     Hubo abandono
                   </Chip>
+                  {/* En un cuadro alguien tiene que avanzar: el doble W.O. es solo de las zonas (decisión 135). */}
+                  {partido.fase === 'grupos' && (
+                    <Chip activo={carga.tipo === 'doble_walkover'} onClick={() => alternarTipo('doble_walkover')}>
+                      No se presentó ninguno
+                    </Chip>
+                  )}
                 </div>
               </div>
 
