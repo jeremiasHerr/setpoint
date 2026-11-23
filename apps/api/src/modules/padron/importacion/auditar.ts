@@ -76,7 +76,7 @@ export function auditar(
     const tieneVacias = fila.celdas.some((c) => c === null);
     // En un texto pegado sin columnas la celda vacía no deja rastro: la línea tiene menos números que
     // casilleros y acumulado, y no hay cómo verificar en qué torneo va cada uno. La suma no lo detecta
-    // ("50 75 125" puede ser 50, 0, 75 o 50, 75, 0): va a revisión (decisión 137).
+    // ("50 75 125" puede ser 50, 0, 75 o 50, 75, 0): va a revisión (decisión 140).
     const esperados = etapas.size + (jugador.acumulado !== null ? 1 : 0);
     const ambigua = !tieneVacias && numeros.length < esperados;
     if (ambigua) problema(`la línea tiene ${numeros.length} números para ${esperados} lugares: revisá en qué torneo va cada uno`);
