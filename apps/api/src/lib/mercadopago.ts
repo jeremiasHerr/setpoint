@@ -60,7 +60,7 @@ async function fallo(respuesta: Response, que: string) {
     (d: { message?: string; error?: string }) => d.message ?? d.error,
     () => undefined,
   );
-  return new ErrorMercadoPago(respuesta.status, `MercadoPago respondió ${respuesta.status} al ${que}${motivo ? `: ${motivo}` : ''}`);
+  return new ErrorMercadoPago(respuesta.status, `Mercado Pago respondió ${respuesta.status} al ${que}${motivo ? `: ${motivo}` : ''}`);
 }
 
 // ---------------------------------------------------------------------------------------------

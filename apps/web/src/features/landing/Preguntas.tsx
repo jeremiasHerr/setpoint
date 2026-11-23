@@ -26,7 +26,7 @@ const preguntas: { pregunta: string; respuesta: ReactNode }[] = [
     pregunta: '¿Cuánto cuesta?',
     // El cargo por jugador inscripto (decisión 103). El monto todavía no está definido.
     respuesta:
-      'El primer torneo es gratis. Desde el segundo, pagás un monto fijo por cada jugador inscripto, al cerrar la inscripción. Da lo mismo si te pagó por MercadoPago o en mano.',
+      'El primer torneo es gratis. Desde el segundo, pagás un monto fijo por cada jugador inscripto, al cerrar la inscripción. Da lo mismo si te pagó por Mercado Pago o en mano.',
   },
   {
     pregunta: '¿Puede anotarse cualquiera?',

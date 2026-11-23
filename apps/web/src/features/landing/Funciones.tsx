@@ -51,7 +51,7 @@ export function Funciones() {
             </div>
           </div>
         </Funcion>
-        <Funcion titulo="Inscripciones que se cobran solas" texto="Pagan con MercadoPago desde el link. Si se llena, hay lista de espera.">
+        <Funcion titulo="Inscripciones que se cobran solas" texto="Pagan con Mercado Pago desde el link. Si se llena, hay lista de espera.">
           <div className="flex flex-col gap-2.5">
             <Numero className="text-[15px] font-medium">
               Pagaron 28 <span className="text-pizarra-500">/ 32</span>

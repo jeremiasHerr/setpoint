@@ -264,7 +264,7 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
       } else if (error instanceof ErrorApi && error.codigo === 'SIN_MERCADOPAGO') {
         // Sin MercadoPago conectado, solo se publican torneos gratis (decisión 137).
         setErroresPublicar(error.campos);
-        setErrorGeneral('Para cobrar la inscripción, conectá tu MercadoPago en Tu circuito. Si no, publicalo gratis.');
+        setErrorGeneral('Para cobrar la inscripción, conectá tu Mercado Pago en Tu circuito. Si no, publicalo gratis.');
       } else {
         setErrorGeneral('No pudimos publicar el torneo. Probá de nuevo.');
       }

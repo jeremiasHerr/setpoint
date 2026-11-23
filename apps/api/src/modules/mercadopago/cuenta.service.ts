@@ -87,7 +87,7 @@ async function resolverVuelta({ state, code }: { state?: unknown; code?: unknown
   try {
     tokens = await canjearCodigo(code, cuenta.conexionVerificador);
   } catch (error) {
-    console.error('No se pudo conectar la cuenta de MercadoPago', error);
+    console.error('No se pudo conectar la cuenta de Mercado Pago', error);
     return 'error';
   }
 
@@ -98,7 +98,7 @@ async function resolverVuelta({ state, code }: { state?: unknown; code?: unknown
 
   // El nombre es para mostrarla: si MercadoPago no lo da, la cuenta queda conectada igual.
   const nombre = await nombreDeLaCuenta(tokens.access_token).catch((error) => {
-    console.error('No se pudo leer el nombre de la cuenta de MercadoPago', error);
+    console.error('No se pudo leer el nombre de la cuenta de Mercado Pago', error);
     return null;
   });
   await prisma.cuentaCobro.update({
@@ -145,7 +145,7 @@ export async function exigirCobroDisponible(organizacionId: number, precio: numb
   if (precio === 0 || pagoSimulado()) return;
   const conectada = await prisma.cuentaCobro.count({ where: { organizacionId, accessToken: { not: null } } });
   if (conectada > 0) return;
-  throw new ErrorHttp(400, 'SIN_MERCADOPAGO', { precio: 'Para cobrar la inscripción, conectá tu MercadoPago en Tu circuito' });
+  throw new ErrorHttp(400, 'SIN_MERCADOPAGO', { precio: 'Para cobrar la inscripción, conectá tu Mercado Pago en Tu circuito' });
 }
 
 // Los tokens duran 180 días y se renuevan con un mes de margen. Corre una tarea por vez, así que dos
@@ -166,7 +166,7 @@ export async function renovarTokensPorVencer(ahora = new Date()) {
       if (error instanceof ErrorMercadoPago && (error.estado === 400 || error.estado === 401)) {
         await prisma.cuentaCobro.update({ where: { id: cuenta.id }, data: SIN_CUENTA });
       }
-      console.error(`No se pudo renovar el token de MercadoPago de la organización ${cuenta.organizacionId}`, error);
+      console.error(`No se pudo renovar el token de Mercado Pago de la organización ${cuenta.organizacionId}`, error);
     }
   }
   return cuentas.length;
@@ -175,7 +175,7 @@ export async function renovarTokensPorVencer(ahora = new Date()) {
 const CADA_12_HORAS = 12 * 60 * 60 * 1000;
 
 export function programarRenovacionDeTokens() {
-  const revisar = () => renovarTokensPorVencer().catch((error) => console.error('No se pudieron renovar los tokens de MercadoPago', error));
+  const revisar = () => renovarTokensPorVencer().catch((error) => console.error('No se pudieron renovar los tokens de Mercado Pago', error));
   void revisar();
   setInterval(revisar, CADA_12_HORAS).unref();
 }

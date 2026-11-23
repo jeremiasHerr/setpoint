@@ -8,7 +8,7 @@ const pesos = new Intl.NumberFormat('es-AR');
 export const plata = (monto: number) => `$${pesos.format(monto)}`;
 
 export const nombreDelMedio: Record<MedioPago, string> = {
-  mercadopago: 'MercadoPago',
+  mercadopago: 'Mercado Pago',
   efectivo: 'Efectivo',
   transferencia: 'Transferencia',
   otro: 'Otro',
