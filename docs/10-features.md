@@ -48,7 +48,7 @@ Antes del listado, la secuencia operativa completa. Cada paso está cubierto por
 - Una organización puede correr torneos sueltos sin ranking, y activar el ranking después.
 - Las categorías son propias de cada circuito; POLENTA usa Segunda y Tercera.
 - Los torneos del calendario definen los casilleros del ranking anual y solo hacen falta si se usa ranking.
-- El inicio del organizador muestra una tarjeta de **primeros pasos** que se tildan solos: importar los jugadores, crear el primer torneo, compartir el link de inscripción. *Propuesto.*
+- El inicio del organizador muestra una tarjeta de **primeros pasos** que se tildan solos: importar los jugadores, crear el primer torneo, compartir el link de inscripción ([decisión 134](decisiones/134-primeros-pasos-y-ayuda-en-contexto.md)).
 - La tabla de puntos es editable: campeón, finalista, semifinalista, cuartos, octavos y participación.
 - Opcionalmente puede registrar los clubes donde suele jugar, con sus canchas y superficies, para habilitar estadísticas por superficie.
 

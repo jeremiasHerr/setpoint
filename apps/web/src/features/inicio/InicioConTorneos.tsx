@@ -6,6 +6,7 @@ import { AvisosAtencion } from './AvisosAtencion';
 import { Columna } from './Columna';
 import { EncabezadoDelCircuito } from './EncabezadoDelCircuito';
 import { PocosInscriptos } from './PocosInscriptos';
+import { PrimerosPasos, type EstadoDePrimerosPasos } from './PrimerosPasos';
 import { VinculacionesParaRevisar } from './VinculacionesParaRevisar';
 import { TarjetaBorrador } from './TarjetaBorrador';
 import { TarjetaInscripcionAbierta } from './TarjetaInscripcionAbierta';
@@ -19,7 +20,9 @@ const TERMINADOS_VISIBLES = 4;
 
 // Con torneos: arriba el circuito, y abajo sus torneos en cuatro columnas, por el momento en que
 // está cada uno (decisión 094).
-export function InicioConTorneos({ torneos, slug }: { torneos: TorneosDeInicio; slug: string }) {
+type Props = { torneos: TorneosDeInicio; slug: string; primerosPasos: EstadoDePrimerosPasos };
+
+export function InicioConTorneos({ torneos, slug, primerosPasos }: Props) {
   const { borradores, enJuego, conInscripcionAbierta, paraSortear, terminados, avisos, pocosInscriptos } = torneos;
   const [todosLosTerminados, setTodosLosTerminados] = useState(false);
   const terminadosVisibles = todosLosTerminados ? terminados : terminados.slice(0, TERMINADOS_VISIBLES);
@@ -41,6 +44,10 @@ export function InicioConTorneos({ torneos, slug }: { torneos: TorneosDeInicio; 
           <PocosInscriptos avisos={pocosInscriptos} />
         </div>
       )}
+
+      <div className="px-4 pt-6 empty:hidden md:px-7">
+        <PrimerosPasos {...primerosPasos} />
+      </div>
 
       <div className="px-4 pt-6 empty:hidden md:px-7">
         <VinculacionesParaRevisar slug={slug} />
