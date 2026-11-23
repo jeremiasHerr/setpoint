@@ -6,7 +6,7 @@
 // Un libro de varias hojas trae { hojas: [...] }, un esperado por hoja en el orden del libro: cada
 // hoja se procesa por separado, como en la API (decisión 012).
 // Un .pdf o un .txt se lee con el mismo lector que la API: el texto, como si se hubiera pegado, con
-// el nombre "Texto pegado" (decisión 137).
+// el nombre "Texto pegado" (decisión 140).
 // Uso: npm run eval:importacion -w apps/api
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { extname, join } from 'node:path';

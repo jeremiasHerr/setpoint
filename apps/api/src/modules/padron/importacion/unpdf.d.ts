@@ -1,5 +1,5 @@
 // unpdf solo publica ESM y la API compila como CommonJS: tsc no encuentra sus tipos, aunque al correr
-// tsx y Node 22 lo cargan igual. Se declara solo lo que usa leer-pdf.ts (decisión 137).
+// tsx y Node 22 lo cargan igual. Se declara solo lo que usa leer-pdf.ts (decisión 140).
 declare module 'unpdf' {
   type ItemDeTexto = { str: string; transform: number[]; width: number };
 

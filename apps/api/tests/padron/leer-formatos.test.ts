@@ -1,4 +1,4 @@
-// Los lectores de PDF y de texto pegado (decisión 137): convierten la fuente en las mismas filas que
+// Los lectores de PDF y de texto pegado (decisión 140): convierten la fuente en las mismas filas que
 // una planilla, para que la auditoría las trate igual.
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
