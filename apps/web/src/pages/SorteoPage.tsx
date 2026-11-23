@@ -16,11 +16,12 @@ import { BotonCopiarLink } from '../features/inicio/BotonCopiarLink';
 import { leerSesion, type Sesion } from '../features/auth/sesion';
 import { useSesionInvalida } from '../features/auth/useSesionInvalida';
 import { CargaManual } from '../features/competencia/CargaManual';
+import { OrdenDeSiembra } from '../features/competencia/OrdenDeSiembra';
 import { SorteoEnPantalla } from '../features/competencia/SorteoEnPantalla';
 import { TarjetaOpciones } from '../features/competencia/TarjetaOpciones';
 import { HojaDeZonas, HojaDeZonasVacia } from '../features/competencia/HojaDeZonas';
 import { TarjetaZona, TarjetaZonaVacia } from '../features/competencia/TarjetaZona';
-import { useCargarZonas, useConfirmarSorteo, useSorteo, useSortear } from '../features/competencia/useSorteo';
+import { useCargarZonas, useConfirmarSorteo, useOrdenarSiembra, useSorteo, useSortear } from '../features/competencia/useSorteo';
 import {
   asignacionDeLasZonas,
   partidosDeZona,
@@ -208,6 +209,10 @@ function textoDeError(error: Error, sorteo: Sorteo): ReactNode {
       );
     case 'ZONAS_INVALIDAS':
       return 'Las zonas no tienen la cantidad de jugadores que corresponde. Revisalas antes de confirmar.';
+    case 'SIEMBRA_DESACTUALIZADA':
+      return 'Cambiaron los inscriptos desde que ordenaste la siembra. Revisá el orden y guardalo de nuevo.';
+    case 'SIEMBRA_CON_RANKING':
+      return 'Con ranking, la siembra sale del ranking: no se ordena a mano.';
     case 'SORTEO_DESACTUALIZADO':
       return 'Cambiaron los inscriptos desde el último sorteo. Volvé a sortear antes de confirmar.';
     case 'TORNEO_NO_SORTEABLE':
@@ -224,14 +229,17 @@ function SorteoDeZonas({ sesion, sorteo }: { sesion: Sesion; sorteo: Sorteo }) {
   const sortear = useSortear(slug, sorteo.torneoId);
   const cargar = useCargarZonas(slug, sorteo.torneoId);
   const confirmar = useConfirmarSorteo(slug, sorteo.torneoId);
+  const ordenar = useOrdenarSiembra(slug, sorteo.torneoId);
+  // Hay un orden de siembra armado a mano que todavía no se guardó: no se sortea con él (decisión 133).
+  const [siembraPendiente, setSiembraPendiente] = useState(false);
   // Si ya hay borrador, se sigue con el modo con que se armó.
   const borradorManual = sorteo.modoSorteo === 'manual' && sorteo.zonas !== null;
   const [ejecutor, setEjecutor] = useState<ModoSorteo>(sorteo.zonas !== null ? sorteo.modoSorteo : 'automatico');
   const [asignacion, setAsignacion] = useState<Asignacion>(() => (borradorManual ? asignacionDeLasZonas(sorteo.zonas) : {}));
 
   const sorteable = sorteo.estado === 'inscripciones_cerradas' && !sorteo.confirmado;
-  const ocupado = sortear.isPending || cargar.isPending || confirmar.isPending;
-  const error = sortear.error ?? cargar.error ?? confirmar.error;
+  const ocupado = sortear.isPending || cargar.isPending || confirmar.isPending || ordenar.isPending;
+  const error = sortear.error ?? cargar.error ?? confirmar.error ?? ordenar.error;
   useSesionInvalida(error);
 
   const { zonas } = sorteo;
@@ -268,6 +276,7 @@ function SorteoDeZonas({ sesion, sorteo }: { sesion: Sesion; sorteo: Sorteo }) {
   // de nuevo también el orden entre los empatados.
   function repartir(nuevaSiembra: boolean) {
     confirmar.reset();
+    ordenar.reset();
     pedirSorteo({ modoDistribucion: distribucionElegida, nuevaSiembra });
   }
 
@@ -366,7 +375,13 @@ function SorteoDeZonas({ sesion, sorteo }: { sesion: Sesion; sorteo: Sorteo }) {
             {ejecutor !== 'manual' && (
               <TarjetaOpciones
                 titulo="Cómo se reparten"
-                aclaracion={sorteo.usaRanking ? 'usa el ranking vigente' : 'sin ranking, la siembra es al azar'}
+                aclaracion={
+                  sorteo.siembraManual
+                    ? 'con el orden que armaste'
+                    : sorteo.usaRanking && !sorteo.siembraAMano
+                      ? 'usa el ranking vigente'
+                      : 'sin ranking, la siembra es al azar'
+                }
                 opciones={distribuciones.map((d) => ({ ...d, deshabilitada: !sorteable || ocupado }))}
                 elegida={distribucionElegida}
                 alElegir={setDistribucionElegida}
@@ -374,6 +389,20 @@ function SorteoDeZonas({ sesion, sorteo }: { sesion: Sesion; sorteo: Sorteo }) {
               />
             )}
           </div>
+        )}
+
+        {sorteo.siembraAMano && sorteable && ejecutor !== 'manual' && (
+          <OrdenDeSiembra
+            jugadores={sorteo.jugadores}
+            manual={sorteo.siembraManual}
+            deshabilitada={ocupado}
+            guardando={ordenar.isPending}
+            alGuardar={(jugadorIds) => {
+              sortear.reset();
+              ordenar.mutate({ jugadorIds });
+            }}
+            alCambiarPendiente={setSiembraPendiente}
+          />
         )}
 
         <section className="flex flex-col gap-3.5">
@@ -433,7 +462,11 @@ function SorteoDeZonas({ sesion, sorteo }: { sesion: Sesion; sorteo: Sorteo }) {
           {error && <MensajeError>{textoDeError(error, sorteo)}</MensajeError>}
 
           {(zonasVisibles || (cargandoAMano && sorteo.jugadores.some((j) => j.posicionSiembra !== null))) && (
-            <p className="text-sm text-pizarra-500">El número es la posición de siembra, según el ranking al momento del sorteo.</p>
+            <p className="text-sm text-pizarra-500">
+              {sorteo.siembraManual
+                ? 'El número es la posición de siembra, en el orden que armaste.'
+                : 'El número es la posición de siembra, según el ranking al momento del sorteo.'}
+            </p>
           )}
         </section>
       </main>
@@ -468,7 +501,7 @@ function SorteoDeZonas({ sesion, sorteo }: { sesion: Sesion; sorteo: Sorteo }) {
           </div>
           <div className="flex w-full flex-wrap gap-2.5 sm:w-auto">
             {enPantalla ? (
-              <Boton grande className="flex-auto whitespace-nowrap sm:flex-none" disabled={!sorteable || ocupado} onClick={sortearEnPantalla}>
+              <Boton grande className="flex-auto whitespace-nowrap sm:flex-none" disabled={!sorteable || ocupado || siembraPendiente} onClick={sortearEnPantalla}>
                 {sorteadoEnPantalla ? 'Volver a sortear en pantalla' : 'Sortear en pantalla'}
               </Boton>
             ) : (
@@ -478,13 +511,13 @@ function SorteoDeZonas({ sesion, sorteo }: { sesion: Sesion; sorteo: Sorteo }) {
                   variante="organizador"
                   grande
                   className="flex-auto font-semibold whitespace-nowrap sm:flex-none"
-                  disabled={!sorteable || ocupado}
+                  disabled={!sorteable || ocupado || siembraPendiente}
                   onClick={() => repartir(false)}
                 >
                   {sortear.isPending ? 'Sorteando…' : 'Sortear'}
                 </Boton>
               ) : (
-                <Boton grande className="flex-auto whitespace-nowrap sm:flex-none" disabled={!sorteable || ocupado} onClick={() => repartir(true)}>
+                <Boton grande className="flex-auto whitespace-nowrap sm:flex-none" disabled={!sorteable || ocupado || siembraPendiente} onClick={() => repartir(true)}>
                   Volver a sortear
                 </Boton>
               ))

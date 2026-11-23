@@ -268,6 +268,7 @@ CREATE TABLE torneos (
     modo_distribucion      modo_distribucion NOT NULL DEFAULT 'SERPENTINA',
     modo_sorteo            modo_sorteo       NOT NULL DEFAULT 'MANUAL',
     sorteo_confirmado      BOOLEAN           NOT NULL DEFAULT FALSE,
+    siembra_manual         BOOLEAN           NOT NULL DEFAULT FALSE, -- decisión 133
     grupos_cerrados        BOOLEAN           NOT NULL DEFAULT FALSE,
 
     -- sistema de juego

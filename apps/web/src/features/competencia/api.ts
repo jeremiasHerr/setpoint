@@ -1,4 +1,4 @@
-import type { DatosCargarZonas, DatosSortearEntrada, Sorteo } from '@setpoint/shared';
+import type { DatosCargarZonas, DatosOrdenarSiembra, DatosSortearEntrada, Sorteo } from '@setpoint/shared';
 import { pedir } from '../../lib/api';
 
 // El id es el de un torneo (una categoría), no el de la convocatoria: cada categoría se sortea aparte.
@@ -14,6 +14,10 @@ export function sortear(slug: string, id: number, datos: DatosSortearEntrada) {
 
 export function cargarZonas(slug: string, id: number, datos: DatosCargarZonas) {
   return pedir<Sorteo>('POST', `${ruta(slug, id)}/manual`, datos);
+}
+
+export function ordenarSiembra(slug: string, id: number, datos: DatosOrdenarSiembra) {
+  return pedir<Sorteo>('PUT', `${ruta(slug, id)}/siembra`, datos);
 }
 
 export function confirmarSorteo(slug: string, id: number) {

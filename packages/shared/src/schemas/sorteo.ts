@@ -39,6 +39,14 @@ export const cargarZonasSchema = z.object({
 
 export type DatosCargarZonas = z.infer<typeof cargarZonasSchema>;
 
+// La siembra que ordena a mano la organización en un torneo sin ranking (decisión 133): todos los
+// inscriptos, del mejor sembrado al último. null vuelve a la siembra al azar.
+export const ordenarSiembraSchema = z.object({
+  jugadorIds: z.array(z.number().int().positive()).min(1).nullable(),
+});
+
+export type DatosOrdenarSiembra = z.infer<typeof ordenarSiembraSchema>;
+
 // Las letras de las zonas: "A", "B"... tantas como grupos tiene el formato.
 export function letrasDeZonas(cantidadGrupos: number) {
   return Array.from({ length: cantidadGrupos }, (_, i) => String.fromCharCode('A'.charCodeAt(0) + i));
@@ -79,6 +87,11 @@ export type Sorteo = {
   estado: EstadoTorneo;
   // Sin ranking, la siembra sale entera al azar.
   usaRanking: boolean;
+  // Si la organización puede ordenar la siembra a mano: sin ranking, o en un torneo suelto, donde
+  // todos empatan en 0 (decisión 133).
+  siembraAMano: boolean;
+  // true si la ordenó: el sorteo usa ese orden y "Volver a sortear" no lo mezcla.
+  siembraManual: boolean;
   modoDistribucion: ModoDistribucion;
   // Cómo se armó el borrador o, si ya se confirmó, las zonas.
   modoSorteo: ModoSorteo;
