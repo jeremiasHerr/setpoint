@@ -113,7 +113,29 @@ describe('auditarResultado', () => {
   it('manda a revisión si quien dice "le gané" es el que perdió según los sets', () => {
     const ctx = contexto([['Martín Sanhueza', 'Le gané a Antileo 6-4 6-3']]);
     // La IA lo orientó al revés: A (Antileo) ganó.
-    expect(auditarResultado(jugado(1, 10, [[6, 4], [6, 3]]), ctx).motivo).toBe('Quien lo manda dice lo contrario de lo que leímos');
+    const auditado = auditarResultado(jugado(1, 10, [[6, 4], [6, 3]]), ctx);
+    expect(auditado.motivo).toBe('Quien lo manda dice lo contrario de lo que leímos');
+    // Lo que se propone cargar es lo que dice el mensaje: ganó Sanhueza (B).
+    expect(auditado.resultado).toMatchObject({ tipo: 'jugado', sets: [{ gamesA: 4, gamesB: 6 }, { gamesA: 3, gamesB: 6 }] });
+  });
+
+  it('un abandono va a revisión si el mensaje dice que abandonó el que leímos como ganador', () => {
+    // Le pasó a la organización al probar: "Villalobos abandonó" se cargó solo con Villalobos ganador.
+    const abandono = { mensaje: 1, partidoId: 10, tipo: 'abandono' as const, ganador: 'B' as const, sets: [], confianza: 'alta' as const };
+    const ctx = contexto([['Diego Antileo', 'Sanhueza abandonó en el segundo set, íbamos 6-4 2-1 para mí']]);
+    const auditado = auditarResultado(abandono, ctx);
+    expect(auditado).toMatchObject({ estado: 'a_revisar', motivo: 'El mensaje dice que abandonó Sanhueza', resultado: { tipo: 'abandono', ganadorId: antileo.id } });
+    expect(auditarResultado({ ...abandono, ganador: 'A' }, ctx).estado).toBe('seguro');
+  });
+
+  it('en un W.O. o un abandono, el texto tiene que decir quién no siguió', () => {
+    const wo = { mensaje: 1, partidoId: 11, tipo: 'walkover' as const, ganador: 'B' as const, sets: [], confianza: 'alta' as const };
+    expect(auditarResultado(wo, contexto([[null, 'Paz no se presentó, W.O. para Ruiz']])).estado).toBe('seguro');
+    expect(auditarResultado(wo, contexto([[null, 'Hubo W.O. entre Paz y Ruiz']])).motivo).toBe('El mensaje no dice quién no se presentó');
+    // "Me retiré": no siguió quien lo manda.
+    const abandono = { ...wo, tipo: 'abandono' as const };
+    expect(auditarResultado(abandono, contexto([['Juan Paz', 'Con Ruiz me retiré en el primero, me lesioné']])).estado).toBe('seguro');
+    expect(auditarResultado(abandono, contexto([['Martín Ruiz', 'Con Paz me retiré en el primero']])).motivo).toBe('El mensaje dice que abandonó Ruiz');
   });
 
   it('un W.O. se carga solo si el mensaje lo dice', () => {

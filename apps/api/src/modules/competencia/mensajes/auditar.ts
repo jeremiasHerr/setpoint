@@ -78,6 +78,47 @@ const DICE_ABANDONO = /\b(abandon\w*|se retiro|retiro|me retire|lesion\w*|no pud
 const DICE_GANE = /\b(gane|le gane|ganamos)\b/;
 const DICE_PERDI = /\b(perdi|me gano|perdimos)\b/;
 
+// El mismo resultado con el otro ganador: los sets dados vuelta, o el W.O. o el abandono para el otro.
+function alReves(resultado: DatosResultado, a: JugadorDelTorneo, b: JugadorDelTorneo): DatosResultado {
+  if (resultado.tipo === 'jugado') {
+    return {
+      ...resultado,
+      sets: resultado.sets.map((s) => ({ ...s, gamesA: s.gamesB, gamesB: s.gamesA, tieBreakA: s.tieBreakB, tieBreakB: s.tieBreakA })),
+    };
+  }
+  if (resultado.tipo === 'doble_walkover') return resultado;
+  return { ...resultado, ganadorId: resultado.ganadorId === a.id ? b.id : a.id };
+}
+
+const escapar = (texto: string) => texto.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+// Cómo puede aparecer el jugador en el texto ya normalizado: su apellido, o su nombre si no se repite.
+const formasDe = (j: JugadorDelTorneo, repetidos: Set<string>) =>
+  [normalizar(j.apellido), repetidos.has(primerNombre(j)) ? '' : primerNombre(j)].filter((f) => f !== '').map(escapar).join('|');
+
+// "W.O. de Gil", "se retiró Ruiz", "abandono de Ruiz" / "Villalobos abandonó", "Gil no se presentó".
+const NO_SIGUIO_ANTES = '(?:w ?o de|walk ?over de|abandono de|se retiro|retiro)';
+const NO_SIGUIO_DESPUES = '(?:abandono|abandona|se retiro|no se presento|no vino|no aparecio|no pudo seguir|se lesiono)';
+const YO_NO_SEGUI = /\b(me retire|abandone|no pude seguir|me lesione|no me presente|no pude ir|no fui)\b/;
+
+// Quién no siguió en un W.O. o un abandono, según el texto normalizado. null si el texto no lo dice
+// de un solo jugador: entonces lo decide la organización.
+function quienNoSiguio(t: string, a: JugadorDelTorneo, b: JugadorDelTorneo, remitente: JugadorDelTorneo | null, repetidos: Set<string>) {
+  const dice = (patron: string) => new RegExp(`\\b${patron}\\b`).test(t);
+  const nombrados = [a, b].filter((j) => {
+    const formas = formasDe(j, repetidos);
+    return dice(`${NO_SIGUIO_ANTES} (?:${formas})`) || dice(`(?:${formas}) ${NO_SIGUIO_DESPUES}`);
+  });
+  if (nombrados.length === 1) return nombrados[0];
+  if (nombrados.length > 1) return null;
+  // "Gana Ruiz": no siguió el otro.
+  const ganadores = [a, b].filter((j) => dice(`(?:gana|gano) (?:${formasDe(j, repetidos)})`));
+  if (ganadores.length === 1) return ganadores[0] === a ? b : a;
+  // "Me retiré": quien lo manda.
+  if (remitente && YO_NO_SEGUI.test(t)) return remitente;
+  return null;
+}
+
 // Lo que se cargaría: el mismo formato que la carga a mano.
 function comoResultado(r: ResultadoDeLaIA, partido: PartidoAuditable): DatosResultado | null {
   if (r.tipo === 'jugado') {
@@ -153,7 +194,9 @@ export function auditarResultado(r: ResultadoDeLaIA, { mensajes, partidos, siste
     const remitenteId = remitenteEsA && !remitenteEsB ? a.id : remitenteEsB && !remitenteEsA ? b.id : null;
     if (remitenteId === null) return { estado: 'a_revisar', resultado, motivo: 'Está en primera persona y no sabemos quién lo manda' };
     if ((remitenteId === ganadorId) !== (primeraPersona === 'gano')) {
-      return { estado: 'a_revisar', resultado, motivo: 'Quien lo manda dice lo contrario de lo que leímos' };
+      // Va a revisión con el resultado dado vuelta, que es el que dice el mensaje: así "Cargar así"
+      // carga lo que dijo quien lo manda, no lo que leyó mal el modelo.
+      return { estado: 'a_revisar', resultado: alReves(resultado, a, b), motivo: 'Quien lo manda dice lo contrario de lo que leímos' };
     }
   }
 
@@ -166,6 +209,18 @@ export function auditarResultado(r: ResultadoDeLaIA, { mensajes, partidos, siste
   }
   if (resultado.tipo === 'abandono' && !DICE_ABANDONO.test(t)) {
     return { estado: 'a_revisar', resultado, motivo: 'El mensaje no dice que hubo un abandono' };
+  }
+
+  // En un W.O. o un abandono no hay sets que digan quién ganó: quién no siguió lo dice el texto, y
+  // lo controla el código. "Le gané" o "perdí" ya se controló arriba.
+  if ((resultado.tipo === 'walkover' || resultado.tipo === 'abandono') && !primeraPersona) {
+    const verbo = resultado.tipo === 'walkover' ? 'no se presentó' : 'abandonó';
+    const remitenteJugador = remitenteEsA && !remitenteEsB ? a : remitenteEsB && !remitenteEsA ? b : null;
+    const noSiguio = quienNoSiguio(t, a, b, remitenteJugador, repetidos);
+    if (!noSiguio) return { estado: 'a_revisar', resultado, motivo: `El mensaje no dice quién ${verbo}` };
+    if (noSiguio.id === ganadorId) {
+      return { estado: 'a_revisar', resultado: alReves(resultado, a, b), motivo: `El mensaje dice que ${verbo} ${noSiguio.apellido}` };
+    }
   }
 
   if (r.confianza !== 'alta') return { estado: 'a_revisar', resultado, motivo: 'No es seguro cómo se leyó el mensaje' };
