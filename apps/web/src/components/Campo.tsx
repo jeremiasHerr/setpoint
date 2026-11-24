@@ -1,4 +1,5 @@
-import type { InputHTMLAttributes } from 'react';
+import { useState, type InputHTMLAttributes, type ReactNode } from 'react';
+import { IconoInfo } from './IconoInfo';
 
 type Props = InputHTMLAttributes<HTMLInputElement> & {
   id: string;
@@ -8,6 +9,8 @@ type Props = InputHTMLAttributes<HTMLInputElement> & {
   sufijo?: string;
   // Dentro de una tarjeta noche, como el formulario de Ingresar (decisión 148).
   sobreNoche?: boolean;
+  // Qué es el dato, cuando el rótulo no alcanza: una (i) al lado del rótulo lo abre debajo (decisión 150).
+  ayuda?: ReactNode;
 };
 
 // Inválido, el borde se marca grueso como con el foco: en noche y no en rojo (decisión 099). Sobre
@@ -18,7 +21,8 @@ const CAMPO = {
     'border-borde-campo bg-noche-900 text-white focus:border-white aria-invalid:border-white autofill:shadow-[inset_0_0_0_1000px_var(--color-noche-900)] autofill:[-webkit-text-fill-color:var(--color-papel)]',
 };
 
-export function Campo({ id, rotulo, numerico = false, sufijo, sobreNoche = false, className = '', ...props }: Props) {
+export function Campo({ id, rotulo, numerico = false, sufijo, sobreNoche = false, ayuda, className = '', ...props }: Props) {
+  const [conAyuda, setConAyuda] = useState(false);
   const input = (
     <input
       id={id}
@@ -31,9 +35,34 @@ export function Campo({ id, rotulo, numerico = false, sufijo, sobreNoche = false
 
   return (
     <div className={`flex flex-col gap-2 ${className}`}>
-      <label htmlFor={id} className={`text-[13px] font-semibold ${sobreNoche ? 'text-pizarra-400' : 'text-pizarra-500'}`}>
-        {rotulo}
-      </label>
+      <div className="flex items-center gap-1.5">
+        <label htmlFor={id} className={`text-[13px] font-semibold ${sobreNoche ? 'text-pizarra-400' : 'text-pizarra-500'}`}>
+          {rotulo}
+        </label>
+        {/* El dibujo es de 15 y se toca en 44: el margen negativo no corre el rótulo ni el campo. */}
+        {ayuda && (
+          <button
+            type="button"
+            aria-expanded={conAyuda}
+            aria-controls={`${id}-ayuda`}
+            aria-label={`Qué es «${rotulo}»`}
+            title={`Qué es «${rotulo}»`}
+            onClick={() => setConAyuda(!conAyuda)}
+            className={`-m-3.5 flex size-11 shrink-0 items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-[-11px] ${
+              sobreNoche
+                ? 'text-pizarra-400 hover:text-white focus-visible:outline-white aria-expanded:text-white'
+                : 'text-pizarra-500 hover:text-noche focus-visible:outline-noche aria-expanded:text-noche'
+            }`}
+          >
+            <IconoInfo className="size-[15px]" />
+          </button>
+        )}
+      </div>
+      {ayuda && conAyuda && (
+        <p id={`${id}-ayuda`} className={`text-[13px] leading-[1.45] ${sobreNoche ? 'text-pizarra-400' : 'text-pizarra-500'}`}>
+          {ayuda}
+        </p>
+      )}
       {sufijo ? (
         <div className="relative flex flex-col">
           {input}

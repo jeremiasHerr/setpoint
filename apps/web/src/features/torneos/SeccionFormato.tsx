@@ -52,6 +52,7 @@ export function SeccionFormato({
             onChange={(e) => alCambiarGrupos(aEntero(e.target.value, MAXIMO_GRUPOS))}
             aria-invalid={errores.cantidadGrupos ? true : undefined}
             aria-describedby={errores.cantidadGrupos ? 'torneo-grupos-error' : undefined}
+            ayuda={`Cuántas zonas se arman. En cada una juegan ${JUGADORES_POR_GRUPO}, todos contra todos, y de ahí salen los que pasan a los cuadros.`}
           />
           <MensajeError id="torneo-grupos-error">{errores.cantidadGrupos}</MensajeError>
         </div>
@@ -74,6 +75,11 @@ export function SeccionFormato({
             onChange={(e) => alCambiarClasificados(aEntero(e.target.value, MAXIMO_CLASIFICADOS))}
             aria-invalid={errores.clasificanPorGrupo ? true : undefined}
             aria-describedby={errores.clasificanPorGrupo ? 'torneo-clasificados-error' : undefined}
+            ayuda={
+              tieneComplementaria
+                ? `Cuántos de cada zona pasan a Campeonato, desde arriba de la tabla. Los demás siguen en ${nombreConsuelo}.`
+                : 'Cuántos de cada zona pasan a Campeonato, desde arriba de la tabla. Los demás terminan el torneo en la zona.'
+            }
           />
           <MensajeError id="torneo-clasificados-error">{errores.clasificanPorGrupo}</MensajeError>
         </div>
