@@ -13,6 +13,7 @@ type Props = {
   error?: string;
 };
 
+// En una tarjeta noche, que es lo único de la pantalla (decisión 148).
 export function FormularioIngreso({ alEnviar, enviando = false, error }: Props) {
   const [email, setEmail] = useState('');
   const [contrasena, setContrasena] = useState('');
@@ -23,11 +24,11 @@ export function FormularioIngreso({ alEnviar, enviando = false, error }: Props) 
   }
 
   return (
-    <Tarjeta className="p-6">
+    <Tarjeta variante="noche">
       <form onSubmit={manejarEnvio} className="flex flex-col gap-5">
         <div className="flex flex-col gap-1.5">
           <h1 className="text-2xl font-display font-semibold tracking-[-0.02em]">Ingresar</h1>
-          <p className="text-[15px] text-pizarra-500">Con el email y la contraseña que usaste al registrar tu organización.</p>
+          <p className="text-[15px] text-pizarra-400">Con el email y la contraseña que usaste al registrar tu organización.</p>
         </div>
 
         <div className="flex flex-col gap-3.5">
@@ -37,6 +38,7 @@ export function FormularioIngreso({ alEnviar, enviando = false, error }: Props) 
             type="email"
             autoComplete="email"
             required
+            sobreNoche
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -45,10 +47,14 @@ export function FormularioIngreso({ alEnviar, enviando = false, error }: Props) 
             rotulo="Contraseña"
             autoComplete="current-password"
             required
+            sobreNoche
             value={contrasena}
             onChange={(e) => setContrasena(e.target.value)}
             accesorio={
-              <Link to="/recuperar-contrasena" className="text-[13px] font-medium text-noche hover:text-pizarra-500">
+              <Link
+                to="/recuperar-contrasena"
+                className="rounded-[4px] text-[13px] font-medium text-white underline-offset-[3px] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              >
                 Olvidé mi contraseña
               </Link>
             }
@@ -56,12 +62,8 @@ export function FormularioIngreso({ alEnviar, enviando = false, error }: Props) 
         </div>
 
         <div className="flex flex-col gap-[11px]">
-          {error && (
-            <Aviso>
-              {error}
-            </Aviso>
-          )}
-          <Boton type="submit" variante="organizador" grande className="w-full" disabled={enviando}>
+          {error && <Aviso sobreNoche>{error}</Aviso>}
+          <Boton type="submit" variante="claro" grande className="w-full" disabled={enviando}>
             {enviando ? 'Ingresando…' : 'Ingresar'}
           </Boton>
         </div>

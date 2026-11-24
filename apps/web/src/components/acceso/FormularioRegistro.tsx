@@ -64,35 +64,35 @@ function PasoCodigo({ email, alConfirmar, alReenviar, alCambiarEmail, enviando, 
     <form onSubmit={manejarEnvio} className="flex flex-col gap-5">
       <div className="flex flex-col gap-1.5">
         <h1 className="text-2xl font-display font-semibold tracking-[-0.02em]">Revisá tu email</h1>
-        <p className="text-[15px] text-pizarra-500">
-          Te mandamos un código de <Numero>6</Numero> dígitos a <span className="font-medium text-noche">{email}</span>.
+        <p className="text-[15px] text-pizarra-400">
+          Te mandamos un código de <Numero>6</Numero> dígitos a <span className="font-medium text-white">{email}</span>.
           Escribilo para crear la organización.
         </p>
       </div>
 
       <div className="flex flex-col gap-2">
-        <CampoCodigo valor={codigo} onChange={setCodigo} onCompleto={(valor) => alConfirmar?.(valor)} apagado={enviando} />
+        <CampoCodigo sobreNoche valor={codigo} onChange={setCodigo} onCompleto={(valor) => alConfirmar?.(valor)} apagado={enviando} />
         {errores.codigo ? (
-          <MensajeError>
+          <MensajeError sobreNoche>
             {errores.codigo}
           </MensajeError>
         ) : (
-          <p className="text-xs text-pizarra-500">
+          <p className="text-xs text-pizarra-400">
             Vence en <Numero>10</Numero> minutos. ¿No te llegó? Fijate en spam o en correo no deseado.
           </p>
         )}
       </div>
 
       <div className="flex flex-col gap-[11px]">
-        <Aviso>{errores.general}</Aviso>
-        <Boton type="submit" variante="organizador" grande className="w-full" disabled={enviando || codigo.length < 6}>
+        <Aviso sobreNoche>{errores.general}</Aviso>
+        <Boton type="submit" variante="claro" grande className="w-full" disabled={enviando || codigo.length < 6}>
           {enviando ? 'Creando la organización…' : 'Crear la organización'}
         </Boton>
         <div className="flex items-center justify-between gap-3 text-sm">
           <button type="button" onClick={reenviar} disabled={reenviando} className="font-medium underline underline-offset-[3px]">
             {reenviando ? 'Mandando…' : 'Reenviar el código'}
           </button>
-          <button type="button" onClick={alCambiarEmail} className="font-medium text-pizarra-500 underline underline-offset-[3px]">
+          <button type="button" onClick={alCambiarEmail} className="font-medium text-pizarra-400 underline underline-offset-[3px]">
             Cambiar el email
           </button>
         </div>
@@ -136,7 +136,7 @@ export function FormularioRegistro({
 
   if (paso === 'codigo') {
     return (
-      <Tarjeta className="p-6">
+      <Tarjeta variante="noche">
         <PasoCodigo
           email={datos.email.trim().toLowerCase()}
           alConfirmar={alConfirmar}
@@ -151,12 +151,12 @@ export function FormularioRegistro({
   }
 
   return (
-    <Tarjeta className="p-6">
+    <Tarjeta variante="noche">
       <form onSubmit={manejarEnvio} className="flex flex-col gap-5">
         <div className="flex flex-col gap-1.5">
           <h1 className="text-2xl font-display font-semibold tracking-[-0.02em]">Registrar tu organización</h1>
           {/* El cargo por jugador inscripto, antes de registrarse (decisión 103). */}
-          <p className="text-[15px] text-pizarra-500">
+          <p className="text-[15px] text-pizarra-400">
             Elegís si armás un circuito con ranking o un torneo suelto. No hace falta tarjeta: el primer torneo es gratis, y desde
             el segundo pagás un monto fijo por cada jugador inscripto.
           </p>
@@ -166,6 +166,7 @@ export function FormularioRegistro({
           <div className="flex flex-col gap-2">
             <Campo
               id="registro-organizacion"
+              sobreNoche
               rotulo="Nombre del circuito o grupo"
               autoComplete="organization"
               required
@@ -174,8 +175,8 @@ export function FormularioRegistro({
               aria-invalid={campos.organizacion ? true : undefined}
               aria-describedby={campos.organizacion ? 'registro-organizacion-error' : undefined}
             />
-            <MensajeError id="registro-organizacion-error">{campos.organizacion}</MensajeError>
-            <p className="font-mono text-xs text-pizarra-500 tabular-nums">
+            <MensajeError sobreNoche id="registro-organizacion-error">{campos.organizacion}</MensajeError>
+            <p className="font-mono text-xs text-pizarra-400 tabular-nums">
               setpoint.com.ar/{aSlug(datos.organizacion) || 'tu-circuito'} · así lo van a ver los jugadores
             </p>
           </div>
@@ -184,6 +185,7 @@ export function FormularioRegistro({
             <div className="flex flex-col gap-2">
               <Campo
                 id="registro-nombre"
+                sobreNoche
                 rotulo="Tu nombre"
                 autoComplete="name"
                 required
@@ -192,11 +194,12 @@ export function FormularioRegistro({
                 aria-invalid={campos.nombre ? true : undefined}
                 aria-describedby={campos.nombre ? 'registro-nombre-error' : undefined}
               />
-              <MensajeError id="registro-nombre-error">{campos.nombre}</MensajeError>
+              <MensajeError sobreNoche id="registro-nombre-error">{campos.nombre}</MensajeError>
             </div>
             <div className="flex flex-col gap-2">
               <Campo
                 id="registro-email"
+                sobreNoche
                 rotulo="Tu email"
                 type="email"
                 autoComplete="email"
@@ -206,13 +209,14 @@ export function FormularioRegistro({
                 aria-invalid={campos.email ? true : undefined}
                 aria-describedby={campos.email ? 'registro-email-error' : undefined}
               />
-              <MensajeError id="registro-email-error">{campos.email}</MensajeError>
+              <MensajeError sobreNoche id="registro-email-error">{campos.email}</MensajeError>
             </div>
           </div>
 
           <div className="flex flex-col gap-2">
             <CampoContrasena
               id="registro-contrasena"
+              sobreNoche
               rotulo="Contraseña"
               autoComplete="new-password"
               required
@@ -222,8 +226,8 @@ export function FormularioRegistro({
               aria-invalid={campos.contrasena ? true : undefined}
               aria-describedby={campos.contrasena ? 'registro-contrasena-error' : undefined}
             />
-            <MensajeError id="registro-contrasena-error">{campos.contrasena}</MensajeError>
-            <p className="text-xs text-pizarra-500">
+            <MensajeError sobreNoche id="registro-contrasena-error">{campos.contrasena}</MensajeError>
+            <p className="text-xs text-pizarra-400">
               Al menos <span className="font-mono tabular-nums">{LARGO_MINIMO_CONTRASENA}</span> caracteres.
             </p>
           </div>
@@ -231,6 +235,7 @@ export function FormularioRegistro({
           <div className="flex flex-col gap-2">
             <CampoContrasena
               id="registro-repetir"
+              sobreNoche
               rotulo="Confirmá la contraseña"
               autoComplete="new-password"
               required
@@ -242,16 +247,16 @@ export function FormularioRegistro({
               aria-invalid={noCoinciden ? true : undefined}
               aria-describedby={noCoinciden ? 'registro-repetir-error' : undefined}
             />
-            <MensajeError id="registro-repetir-error">{noCoinciden && 'Las contraseñas no coinciden.'}</MensajeError>
+            <MensajeError sobreNoche id="registro-repetir-error">{noCoinciden && 'Las contraseñas no coinciden.'}</MensajeError>
           </div>
         </div>
 
         <div className="flex flex-col gap-[11px]">
-          <Aviso>{errores.general}</Aviso>
-          <Boton type="submit" variante="organizador" grande className="w-full" disabled={enviando}>
+          <Aviso sobreNoche>{errores.general}</Aviso>
+          <Boton type="submit" variante="claro" grande className="w-full" disabled={enviando}>
             {enviando ? 'Mandando el código…' : 'Continuar'}
           </Boton>
-          <p className="text-center text-[13px] leading-[1.45] text-pizarra-500">Al continuar aceptás los términos del servicio.</p>
+          <p className="text-center text-[13px] leading-[1.45] text-pizarra-400">Al continuar aceptás los términos del servicio.</p>
         </div>
       </form>
     </Tarjeta>

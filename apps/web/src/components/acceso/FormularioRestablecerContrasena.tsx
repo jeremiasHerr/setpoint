@@ -28,16 +28,17 @@ export function FormularioRestablecerContrasena({ alEnviar, enviando = false, er
   }
 
   return (
-    <Tarjeta className="p-6">
+    <Tarjeta variante="noche">
       <form onSubmit={manejarEnvio} className="flex flex-col gap-5">
         <div className="flex flex-col gap-1.5">
           <h1 className="text-2xl font-display font-semibold tracking-[-0.02em]">Elegí una contraseña nueva</h1>
-          <p className="text-[15px] text-pizarra-500">Es la que vas a usar para ingresar de ahora en más.</p>
+          <p className="text-[15px] text-pizarra-400">Es la que vas a usar para ingresar de ahora en más.</p>
         </div>
 
         <div className="flex flex-col gap-2">
           <CampoContrasena
             id="restablecer-contrasena"
+            sobreNoche
             rotulo="Contraseña nueva"
             autoComplete="new-password"
             required
@@ -48,7 +49,7 @@ export function FormularioRestablecerContrasena({ alEnviar, enviando = false, er
               setNoCoinciden(false);
             }}
           />
-          <p className="text-xs text-pizarra-500">
+          <p className="text-xs text-pizarra-400">
             Al menos <span className="font-mono tabular-nums">{LARGO_MINIMO_CONTRASENA}</span> caracteres.
           </p>
         </div>
@@ -56,6 +57,7 @@ export function FormularioRestablecerContrasena({ alEnviar, enviando = false, er
         <div className="flex flex-col gap-2">
           <CampoContrasena
             id="restablecer-repetir"
+            sobreNoche
             rotulo="Confirmá la contraseña nueva"
             autoComplete="new-password"
             required
@@ -68,7 +70,7 @@ export function FormularioRestablecerContrasena({ alEnviar, enviando = false, er
             aria-describedby={noCoinciden ? 'restablecer-repetir-error' : undefined}
           />
           {noCoinciden && (
-            <MensajeError id="restablecer-repetir-error">
+            <MensajeError sobreNoche id="restablecer-repetir-error">
               Las contraseñas no coinciden.
             </MensajeError>
           )}
@@ -76,11 +78,11 @@ export function FormularioRestablecerContrasena({ alEnviar, enviando = false, er
 
         <div className="flex flex-col gap-[11px]">
           {error && (
-            <Aviso>
+            <Aviso sobreNoche>
               {error}
             </Aviso>
           )}
-          <Boton type="submit" variante="organizador" grande className="w-full" disabled={enviando}>
+          <Boton type="submit" variante="claro" grande className="w-full" disabled={enviando}>
             {enviando ? 'Guardando…' : 'Guardar la contraseña'}
           </Boton>
         </div>

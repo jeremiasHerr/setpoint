@@ -23,18 +23,18 @@ export function FormularioRecuperarContrasena({ alEnviar, enviando = false, envi
 
   if (enviado) {
     return (
-      <Tarjeta className="flex flex-col gap-5 p-6">
+      <Tarjeta variante="noche" className="flex flex-col gap-5">
         <div className="flex flex-col gap-1.5">
           <h1 className="text-2xl font-display font-semibold tracking-[-0.02em]">Revisá tu email</h1>
           {/* No confirmamos si la cuenta existe, para no revelar qué emails están registrados. */}
-          <p className="text-[15px] text-pizarra-500">
-            Si hay una cuenta con <span className="font-medium text-noche">{email}</span>, te mandamos un link para elegir una
+          <p className="text-[15px] text-pizarra-400">
+            Si hay una cuenta con <span className="font-medium text-white">{email}</span>, te mandamos un link para elegir una
             contraseña nueva. Vale por una hora.
           </p>
         </div>
         <Link
           to="/ingresar"
-          className="inline-flex h-12 items-center justify-center rounded-control border border-linea text-[15px] font-medium text-noche hover:bg-niebla"
+          className="inline-flex h-12 items-center justify-center rounded-control border border-borde-noche text-[15px] font-medium text-white hover:bg-noche-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
         >
           Volver a ingresar
         </Link>
@@ -43,15 +43,16 @@ export function FormularioRecuperarContrasena({ alEnviar, enviando = false, envi
   }
 
   return (
-    <Tarjeta className="p-6">
+    <Tarjeta variante="noche">
       <form onSubmit={manejarEnvio} className="flex flex-col gap-5">
         <div className="flex flex-col gap-1.5">
           <h1 className="text-2xl font-display font-semibold tracking-[-0.02em]">Recuperar la contraseña</h1>
-          <p className="text-[15px] text-pizarra-500">Escribí el email de tu cuenta y te mandamos un link para elegir una nueva.</p>
+          <p className="text-[15px] text-pizarra-400">Escribí el email de tu cuenta y te mandamos un link para elegir una nueva.</p>
         </div>
 
         <Campo
           id="recuperar-email"
+          sobreNoche
           rotulo="Email"
           type="email"
           autoComplete="email"
@@ -62,11 +63,11 @@ export function FormularioRecuperarContrasena({ alEnviar, enviando = false, envi
 
         <div className="flex flex-col gap-[11px]">
           {error && (
-            <Aviso>
+            <Aviso sobreNoche>
               {error}
             </Aviso>
           )}
-          <Boton type="submit" variante="organizador" grande className="w-full" disabled={enviando}>
+          <Boton type="submit" variante="claro" grande className="w-full" disabled={enviando}>
             {enviando ? 'Mandando…' : 'Mandarme el link'}
           </Boton>
         </div>

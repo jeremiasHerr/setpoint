@@ -51,14 +51,14 @@ export function RestablecerContrasenaPage() {
     <PantallaAcceso pregunta="¿Te acordaste?" enlace={{ texto: 'Ingresar', a: '/ingresar' }}>
       <div className="mx-auto w-full max-w-[420px]">
         {cambio.isSuccess ? (
-          <Tarjeta className="flex flex-col gap-5 p-6">
+          <Tarjeta variante="noche" className="flex flex-col gap-5">
             <div className="flex flex-col gap-1.5">
               <h1 className="text-2xl font-display font-semibold tracking-[-0.02em]">Listo, ya la cambiaste</h1>
-              <p className="text-[15px] text-pizarra-500">Ingresá con tu email y la contraseña nueva.</p>
+              <p className="text-[15px] text-pizarra-400">Ingresá con tu email y la contraseña nueva.</p>
             </div>
             <Link
               to="/ingresar"
-              className="inline-flex h-12 items-center justify-center rounded-control bg-noche text-[15px] font-medium text-white"
+              className="inline-flex h-12 items-center justify-center rounded-control bg-papel text-[15px] font-medium text-noche-900 hover:bg-linea-suave focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
               Ingresar
             </Link>
