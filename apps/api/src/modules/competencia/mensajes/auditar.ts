@@ -178,13 +178,15 @@ export function auditarResultado(r: ResultadoDeLaIA, { mensajes, partidos, siste
   const esRemitente = (j: JugadorDelTorneo) => remitente !== '' && nombra(remitente, j, repetidos);
   const remitenteEsA = esRemitente(a);
   const remitenteEsB = esRemitente(b);
+  // Si falta uno, probablemente el modelo eligió otro partido: no se propone cargar nada, para que
+  // "Cargar así" no ponga el resultado en el partido equivocado. Se carga a mano.
   const faltan = [a, b].filter((j) => !nombra(mensaje.texto, j, repetidos) && !esRemitente(j));
-  if (faltan.length === 2) return { estado: 'a_revisar', resultado, motivo: 'El mensaje no dice quiénes jugaron' };
+  if (faltan.length === 2) return { estado: 'a_revisar', resultado: null, motivo: 'El mensaje no dice quiénes jugaron' };
   if (faltan.length === 1) {
     const motivo = remitente !== '' && !remitenteEsA && !remitenteEsB
       ? `No nombra a ${faltan[0].apellido}, y lo manda alguien que no jugó`
       : `El mensaje no nombra a ${faltan[0].apellido}`;
-    return { estado: 'a_revisar', resultado, motivo };
+    return { estado: 'a_revisar', resultado: null, motivo };
   }
 
   // "Le gané" o "perdí": quien lo manda tiene que ser el ganador o el perdedor.

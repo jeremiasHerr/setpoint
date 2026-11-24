@@ -4,14 +4,12 @@
 // - cargados mal: lo que la auditoría dejaría cargar solo y no es lo esperado. Tiene que ser 0: un
 //   resultado mal cargado sin revisión es peor que uno de más en revisión.
 // Uso: npm run eval:mensajes -w apps/api
-import { MODELO, intentarJson } from '../src/lib/ia';
+import { costoUsd, intentarJson, MODELO_MENSAJES as MODELO } from '../src/lib/ia';
 import { auditarLectura, problemasGlobales } from '../src/modules/competencia/mensajes/auditar';
 import { armarMensaje, INSTRUCCIONES, VERSION_PROMPT } from '../src/modules/competencia/mensajes/prompt';
 import { respuestaMensajesSchema, type ResultadoDeLaIA } from '../src/modules/competencia/mensajes/schema-respuesta';
 import { chatsDePrueba, contextoDe, type Esperado } from '../tests/fixtures/mensajes/fixture';
 
-// Precio de Haiku 4.5, en dólares por millón de tokens.
-const PRECIO = { entrada: 1, salida: 5 };
 
 const sets = (r: ResultadoDeLaIA) => r.sets.map((s) => `${s.gamesA}-${s.gamesB}`).join(' ');
 const setsEsperados = (e: Esperado) => (e.sets ?? []).map(([a, b]) => `${a}-${b}`).join(' ');
@@ -31,7 +29,7 @@ async function main() {
   for (const prueba of chatsDePrueba()) {
     const { contexto, mensajes, paraLaIA } = contextoDe(prueba);
     const pedido = armarMensaje({ torneo: prueba.nombre, sistema: prueba.sistema, partidos: paraLaIA, mensajes });
-    const r = await intentarJson(respuestaMensajesSchema, INSTRUCCIONES, pedido);
+    const r = await intentarJson(respuestaMensajesSchema, INSTRUCCIONES, pedido, MODELO);
     if (r.tokens) {
       tokens.entrada += r.tokens.entrada;
       tokens.salida += r.tokens.salida;
@@ -65,7 +63,7 @@ async function main() {
     }
   }
 
-  const costo = (tokens.entrada * PRECIO.entrada + tokens.salida * PRECIO.salida) / 1_000_000;
+  const costo = costoUsd(tokens, MODELO);
   console.log(`\n${MODELO} · ${VERSION_PROMPT}`);
   console.log(`Aciertos: ${aciertos} / ${total} · Se cargan solos: ${seCargan} · Cargados mal: ${cargadosMal}`);
   console.log(`Tokens: ${tokens.entrada} · ${tokens.salida} · US$ ${costo.toFixed(3)} · ${Math.round((Date.now() - inicio) / 1000)} s`);

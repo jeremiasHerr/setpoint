@@ -6,7 +6,7 @@ import {
   type LecturaDeMensajes,
   type ResultadoLeido,
 } from '@setpoint/shared';
-import { intentarJson, MODELO, type Tokens } from '../../../lib/ia';
+import { intentarJson, MODELO_MENSAJES as MODELO, type Tokens } from '../../../lib/ia';
 import { reservarUsoIA, registrarTokensIA } from '../../../lib/limite-ia';
 import { organizacionAdministrada } from '../../../lib/permisos';
 import { prisma } from '../../../lib/prisma';
@@ -196,7 +196,7 @@ export async function leerMensajes(slug: string, usuarioId: number, torneoId: nu
   let feedback: string[] = [];
   while (resumen.intentos < MAXIMO_INTENTOS && respuesta === null) {
     const conFeedback = feedback.length === 0 ? pedido : `${pedido}\n\nTu respuesta anterior tuvo estos problemas:\n${feedback.map((p) => `- ${p}`).join('\n')}`;
-    const r = await intentarJson(respuestaMensajesSchema, INSTRUCCIONES, conFeedback);
+    const r = await intentarJson(respuestaMensajesSchema, INSTRUCCIONES, conFeedback, MODELO);
     resumen.intentos++;
     if (r.crudo !== undefined) crudos.push(r.crudo);
     if (r.tokens) {

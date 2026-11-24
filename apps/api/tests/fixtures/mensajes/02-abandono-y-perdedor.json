@@ -1,0 +1,27 @@
+{
+  "descripcion": "El chat con el que la organización probó F19 en la demo: super tie-break, \"me ganó\" de quien perdió, un abandono contado por el rival y conversación. Con Haiku, el abandono se cargaba solo al revés y \"me ganó\" iba al partido de otro.",
+  "sistema": { "setsPorPartido": 3, "terceroSet": "super_tiebreak", "gamesPorSet": 6, "puntosTieBreak": 7, "puntosSuperTieBreak": 10 },
+  "partidos": [
+    { "id": 21, "donde": "Zona B", "a": "Ricardo Barrera", "b": "Pablo Medel" },
+    { "id": 22, "donde": "Zona B", "a": "Ricardo Barrera", "b": "Hugo Catalán" },
+    { "id": 23, "donde": "Zona B", "a": "Pablo Medel", "b": "Hugo Catalán" },
+    { "id": 31, "donde": "Zona C", "a": "Adrián Montecino", "b": "Alejo Figueroa" },
+    { "id": 32, "donde": "Zona C", "a": "Germán Quilodrán", "b": "Adrián Montecino" },
+    { "id": 33, "donde": "Zona C", "a": "Germán Quilodrán", "b": "Alejo Figueroa" },
+    { "id": 41, "donde": "Zona D", "a": "Oscar Villalobos", "b": "Gustavo Fuentealba" },
+    { "id": 42, "donde": "Zona D", "a": "Oscar Villalobos", "b": "Rubén Tapia" },
+    { "id": 43, "donde": "Zona D", "a": "Gustavo Fuentealba", "b": "Rubén Tapia" }
+  ],
+  "chat": [
+    "[23/11/26, 19:02] Ricardo Barrera: Le gané a Medel 6-3 4-6 10-7 🎾",
+    "[23/11/26, 19:05] Pablo Medel: Bien jugado Ricky, el super tie-break se me escapó",
+    "[23/11/26, 19:30] Alejo Figueroa: Montecino me ganó 6-2 6-4",
+    "[23/11/26, 19:41] Lucas Ferraro: alguien tiene cancha para el jueves a la tarde?",
+    "[23/11/26, 20:10] Gustavo Fuentealba: Villalobos abandonó en el segundo set, íbamos 6-4 2-1 para mí. Se torció el tobillo"
+  ],
+  "esperado": [
+    { "mensaje": 1, "partidoId": 21, "tipo": "jugado", "ganador": "A", "sets": [[6, 3], [4, 6], [10, 7]], "seCargaSolo": true },
+    { "mensaje": 3, "partidoId": 31, "tipo": "jugado", "ganador": "A", "sets": [[6, 2], [6, 4]], "seCargaSolo": true },
+    { "mensaje": 5, "partidoId": 41, "tipo": "abandono", "ganador": "B", "sets": [], "seCargaSolo": true }
+  ]
+}

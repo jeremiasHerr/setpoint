@@ -1,5 +1,5 @@
 // Un PDF con texto, como el ranking exportado de Excel, convertido en las mismas filas que una
-// planilla (decisión 140). Con el texto y su posición se rearma la tabla: cada renglón es una fila, y
+// planilla (decisión 141). Con el texto y su posición se rearma la tabla: cada renglón es una fila, y
 // cada número va a su columna, así una celda vacía queda vacía y no corre los números de al lado.
 // Un PDF escaneado no tiene texto: se rechaza, porque no hay contra qué auditar.
 import { getDocumentProxy } from 'unpdf';

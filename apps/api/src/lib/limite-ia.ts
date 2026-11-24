@@ -1,7 +1,7 @@
 import type { FuncionIA } from '@prisma/client';
 import { ErrorHttp } from '../middleware/errores';
 import { prisma } from './prisma';
-import type { Tokens } from './ia';
+import { costoUsd, MODELO_IMPORTACION, MODELO_MENSAJES, type Modelo } from './ia';
 
 // Límites de las llamadas a un modelo (decisión 121), para la importación de la planilla y los
 // resultados desde los mensajes. Cada pedido deja una fila en UsoIA, con los tokens que devolvió la
@@ -11,9 +11,10 @@ import type { Tokens } from './ia';
 export type ConfigLimitesIA = {
   pedidosPorHora: number;
   topeDiarioUsd: number;
-  precioEntradaUsd: number;
-  precioSalidaUsd: number;
 };
+
+// El modelo de cada funcionalidad (decisión 141): el gasto de cada pedido se cuenta con su precio.
+const MODELO_DE: Record<FuncionIA, Modelo> = { IMPORTACION: MODELO_IMPORTACION, RESULTADOS: MODELO_MENSAJES };
 
 // Cuántos pedidos y cuánta plata ya se usaron en la ventana de cada límite.
 export type UsoReciente = { pedidosDelUsuario: number; gastoDeLaOrganizacionUsd: number };
@@ -26,19 +27,18 @@ function numero(valor: string | undefined, porDefecto: number) {
   return valor !== undefined && valor.trim() !== '' && Number.isFinite(n) && n > 0 ? n : porDefecto;
 }
 
-// Los valores por defecto son los de Claude Haiku 4.5 (US$ por millón de tokens) y alcanzan para la
-// demo: una planilla de 77 jugadores cuesta unos US$ 0,06. Ver .env.example.
+// Alcanzan para la demo: una planilla de 77 jugadores cuesta unos US$ 0,06, y una lectura de mensajes,
+// unos US$ 0,02. Ver .env.example.
 export function leerConfigLimitesIA(env: Record<string, string | undefined> = process.env): ConfigLimitesIA {
   return {
     pedidosPorHora: Math.floor(numero(env.IA_PEDIDOS_POR_HORA, 10)),
     topeDiarioUsd: numero(env.IA_TOPE_DIARIO_USD, 2),
-    precioEntradaUsd: numero(env.IA_PRECIO_ENTRADA_USD_MTOK, 1),
-    precioSalidaUsd: numero(env.IA_PRECIO_SALIDA_USD_MTOK, 5),
   };
 }
 
-export function costoUsd(tokens: Tokens, config: ConfigLimitesIA) {
-  return (tokens.entrada * config.precioEntradaUsd + tokens.salida * config.precioSalidaUsd) / 1_000_000;
+// Lo que gastó la organización: la suma de cada funcionalidad, con el precio de su modelo.
+export function gastoUsd(porFuncion: { funcion: FuncionIA; entrada: number; salida: number }[]) {
+  return porFuncion.reduce((suma, f) => suma + costoUsd({ entrada: f.entrada, salida: f.salida }, MODELO_DE[f.funcion]), 0);
 }
 
 // Qué límite se pasó, si alguno. El del usuario va primero: es el que se arregla esperando un rato.
@@ -59,19 +59,22 @@ export async function reservarUsoIA(organizacionId: number, usuarioId: number, f
   const config = leerConfigLimitesIA();
   const [pedidosDelUsuario, gasto] = await Promise.all([
     prisma.usoIA.count({ where: { usuarioId, creadoEn: { gte: new Date(ahora.getTime() - HORA_MS) } } }),
-    prisma.usoIA.aggregate({
+    prisma.usoIA.groupBy({
+      by: ['funcion'],
       where: { organizacionId, creadoEn: { gte: new Date(ahora.getTime() - DIA_MS) } },
       _sum: { tokensEntrada: true, tokensSalida: true },
     }),
   ]);
-  const gastoDeLaOrganizacionUsd = costoUsd({ entrada: gasto._sum.tokensEntrada ?? 0, salida: gasto._sum.tokensSalida ?? 0 }, config);
+  const gastoDeLaOrganizacionUsd = gastoUsd(
+    gasto.map((g) => ({ funcion: g.funcion, entrada: g._sum.tokensEntrada ?? 0, salida: g._sum.tokensSalida ?? 0 })),
+  );
   const pasado = limitePasado({ pedidosDelUsuario, gastoDeLaOrganizacionUsd }, config);
   if (pasado) throw new ErrorHttp(429, pasado);
   return (await prisma.usoIA.create({ data: { organizacionId, usuarioId, funcion } })).id;
 }
 
 // Después de la respuesta: los tokens que devolvió el modelo.
-export async function registrarTokensIA(usoId: number | null, tokens: Tokens) {
+export async function registrarTokensIA(usoId: number | null, tokens: { entrada: number; salida: number }) {
   if (usoId === null) return;
   await prisma.usoIA.update({ where: { id: usoId }, data: { tokensEntrada: tokens.entrada, tokensSalida: tokens.salida } });
 }

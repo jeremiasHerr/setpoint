@@ -101,7 +101,10 @@ describe('auditarResultado', () => {
 
   it('manda a revisión cuando falta uno de los dos y quien lo manda no jugó', () => {
     const ctx = contexto([['Juan Paz', 'Antileo ganó 6-4 6-3']]);
-    expect(auditarResultado(jugado(1, 10, [[6, 4], [6, 3]]), ctx).motivo).toBe('No nombra a Sanhueza, y lo manda alguien que no jugó');
+    const auditado = auditarResultado(jugado(1, 10, [[6, 4], [6, 3]]), ctx);
+    expect(auditado.motivo).toBe('No nombra a Sanhueza, y lo manda alguien que no jugó');
+    // Probablemente es otro partido: no se propone cargar nada en este.
+    expect(auditado.resultado).toBeNull();
   });
 
   it('no toma un nombre de pila que se repite en el torneo', () => {

@@ -1,5 +1,5 @@
 // Un ranking pegado como texto (copiado de WhatsApp o de una planilla), convertido en las mismas
-// filas que una planilla (decisión 140). Cada línea es una fila, con su número de línea, y se audita
+// filas que una planilla (decisión 141). Cada línea es una fila, con su número de línea, y se audita
 // igual: cada número tiene que estar en su línea.
 import type { Celda, FilaPlanilla } from './leer-planilla';
 

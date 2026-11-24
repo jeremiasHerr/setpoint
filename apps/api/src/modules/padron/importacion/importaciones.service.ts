@@ -217,7 +217,7 @@ async function asegurarEnElCircuito(
   return ids;
 }
 
-// Un archivo subido, o el texto pegado (decisión 140), que se procesa como un archivo más.
+// Un archivo subido, o el texto pegado (decisión 141), que se procesa como un archivo más.
 export type ArchivoSubido = { nombre: string; contenido: Buffer; esTexto?: boolean };
 
 type HojaPorProcesar = { archivo: ArchivoSubido; hoja: { nombre: string; filas: FilaPlanilla[] } | null; error: string | null };
@@ -225,7 +225,7 @@ type HojaPorProcesar = { archivo: ArchivoSubido; hoja: { nombre: string; filas: 
 type HojaProcesada = { archivoNombre: string; hoja: string; resumen: Partial<ResumenHoja>; crudos: string[] | null };
 
 // Las hojas de un archivo: una por hoja de la planilla, y una sola en un PDF o un texto pegado, que
-// se leen como una planilla de una hoja (decisión 140).
+// se leen como una planilla de una hoja (decisión 141).
 async function leerArchivo(archivo: ArchivoSubido) {
   if (archivo.esTexto) return [{ nombre: '', filas: leerTexto(archivo.contenido.toString('utf8')) }];
   if (extname(archivo.nombre).toLowerCase() === '.pdf') return [{ nombre: '', filas: await leerPdf(archivo.contenido) }];
