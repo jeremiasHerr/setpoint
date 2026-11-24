@@ -383,8 +383,8 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
           />
         </div>
 
-        {/* Fijo al bajar: muestra el efecto de cada cambio de las seis secciones. */}
-        <aside className="flex flex-col gap-3.5 lg:sticky lg:top-4">
+        {/* Fijo al bajar, debajo de la franja (decisión 149): muestra el efecto de cada cambio de las seis secciones. */}
+        <aside className="flex flex-col gap-3.5 lg:sticky lg:top-[76px]">
           <PanelComoQueda
             formato={formato}
             tieneComplementaria={datos.tieneComplementaria}

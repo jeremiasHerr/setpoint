@@ -45,10 +45,13 @@ export function EncabezadoOrganizador({ organizacion, navegacion = [], activo, i
     return () => document.removeEventListener('keydown', alTeclear);
   }, [abierto]);
 
+  // Fija arriba en todas las pantallas del organizador, para no perder el menú en un formulario largo
+  // (decisión 149). Por encima de los menús de las filas (z-10) y por debajo del sorteo en pantalla
+  // (z-50); con el panel abierto, sobre el velo.
   return (
     <header
-      className={`relative flex h-[60px] items-center justify-between gap-2 bg-noche-900 px-4 md:gap-6 md:px-7 ${
-        abierto ? 'z-40' : ''
+      className={`sticky top-0 flex h-[60px] items-center justify-between gap-2 bg-noche-900 px-4 md:gap-6 md:px-7 ${
+        abierto ? 'z-40' : 'z-30'
       }`}
     >
       <div className="flex min-w-0 items-center gap-2.5 md:gap-3.5">
