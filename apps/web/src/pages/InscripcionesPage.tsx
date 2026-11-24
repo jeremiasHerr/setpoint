@@ -1,4 +1,4 @@
-import type { InscripcionesDelTorneo } from '@setpoint/shared';
+import { coincideConElNombre, type InscripcionesDelTorneo } from '@setpoint/shared';
 import { useState, type ReactNode } from 'react';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Boton } from '../components/Boton';
@@ -16,7 +16,6 @@ import { TablaBajas } from '../features/inscripciones/TablaBajas';
 import { TablaInscriptos } from '../features/inscripciones/TablaInscriptos';
 import { TablaListaDeEspera } from '../features/inscripciones/TablaListaDeEspera';
 import { TablaSolicitudes } from '../features/inscripciones/TablaSolicitudes';
-import { normalizar } from '../features/inscripciones/texto';
 import { useCerrarInscripcion, useInscripciones } from '../features/inscripciones/useInscripciones';
 import { diaConSemana } from '../features/torneos/texto';
 import { EncabezadoDelTorneo } from '../features/torneos/EncabezadoDelTorneo';
@@ -187,8 +186,8 @@ function textoDeError(error: Error): ReactNode {
 
 type Pestana = 'confirmados' | 'reservando' | 'espera' | 'bajas' | 'solicitudes';
 
-// Si tiene apellido parecido a lo que se busca. Sin búsqueda, todos.
-const coincide = (termino: string) => (fila: { apellido: string }) => !termino || normalizar(fila.apellido).includes(termino);
+// Si su nombre completo tiene lo que se busca (decisión 146). Sin búsqueda, todos.
+const coincide = (termino: string) => (fila: { nombre: string; apellido: string }) => coincideConElNombre(fila, termino);
 
 function Inscripciones({ sesion, datos }: { sesion: Sesion; datos: InscripcionesDelTorneo }) {
   const slug = sesion.organizacion.slug;
@@ -210,7 +209,7 @@ function Inscripciones({ sesion, datos }: { sesion: Sesion; datos: Inscripciones
   const pagados = confirmados.length;
   const reservando = reservas.length;
   const irAlSorteo = () => navegar(`/torneos/${datos.torneoId}/sorteo`);
-  const termino = normalizar(busqueda);
+  const termino = busqueda.trim();
   const primeroEnEspera = datos.listaDeEspera[0] ?? null;
   // Sin lugares no se inscribe a mano: la organización no se pasa del cupo (decisión 079).
   const sinLugares = datos.libres === 0;
@@ -305,8 +304,8 @@ function Inscripciones({ sesion, datos }: { sesion: Sesion; datos: Inscripciones
                 </svg>
                 <input
                   type="search"
-                  aria-label="Buscar por apellido"
-                  placeholder="Buscar por apellido"
+                  aria-label="Buscar por nombre o apellido"
+                  placeholder="Nombre o apellido"
                   autoComplete="off"
                   value={busqueda}
                   onChange={(e) => setBusqueda(e.target.value)}
@@ -323,7 +322,7 @@ function Inscripciones({ sesion, datos }: { sesion: Sesion; datos: Inscripciones
                 sePuedeDarDeBaja={datos.sePuedeModificar}
                 primeroEnEspera={primeroEnEspera}
                 horasReserva={datos.horasReservaListaEspera}
-                vacio={termino ? 'Nadie con ese apellido.' : 'Todavía no pagó nadie.'}
+                vacio={termino ? 'Nadie con ese nombre.' : 'Todavía no pagó nadie.'}
                 pie={
                   datos.sePuedeModificar
                     ? 'Se puede dar de baja hasta que se confirma el sorteo de zonas. Después, quien no juega pierde sus partidos por W.O. desde el tablero.'
@@ -339,7 +338,7 @@ function Inscripciones({ sesion, datos }: { sesion: Sesion; datos: Inscripciones
                 sePuedeDarDeBaja={false}
                 primeroEnEspera={primeroEnEspera}
                 horasReserva={datos.horasReservaListaEspera}
-                vacio={termino ? 'Nadie con ese apellido.' : 'Nadie está pagando ahora.'}
+                vacio={termino ? 'Nadie con ese nombre.' : 'Nadie está pagando ahora.'}
                 pie={'"Recordarle" le manda otra vez el link para pagar. Si la reserva vence, el lugar pasa al primero de la lista de espera.'}
               />
             )}

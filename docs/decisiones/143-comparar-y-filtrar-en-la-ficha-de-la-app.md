@@ -1,6 +1,6 @@
 # 143 — En la app, la ficha compara con quienes jugó y filtra sus partidos
 
-**Estado:** aceptada — 23 de noviembre de 2026.
+**Estado:** aceptada — 23 de noviembre de 2026. Reemplazada en parte por la [decisión 146](146-buscar-por-nombre-y-apellido.md): los dos buscadores son por nombre o apellido.
 
 ## Contexto
 

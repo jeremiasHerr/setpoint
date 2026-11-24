@@ -1,4 +1,4 @@
-import type { BajaDelTorneo, DatosInscripcionManual, InscripcionDelTorneo, JugadorPadron } from '@setpoint/shared';
+import { coincideConElNombre, type BajaDelTorneo, type DatosInscripcionManual, type InscripcionDelTorneo, type JugadorPadron } from '@setpoint/shared';
 import { MensajeError } from '../../components/Aviso';
 import { useState } from 'react';
 import { Boton } from '../../components/Boton';
@@ -7,7 +7,6 @@ import { Chip } from '../../components/Chip';
 import { Numero } from '../../components/Numero';
 import { usePadron } from '../padron/usePadron';
 import { textoDelError } from './errores';
-import { normalizar } from './texto';
 import { useInscribirAMano } from './useInscripciones';
 
 type Medio = DatosInscripcionManual['medio'];
@@ -18,7 +17,7 @@ const MEDIOS: { clave: Medio; nombre: string }[] = [
   { clave: 'otro', nombre: 'Otro' },
 ];
 
-// Cuántos resultados se muestran: se busca por apellido, no se recorre el padrón.
+// Cuántos resultados se muestran: se busca por nombre (decisión 146), no se recorre el padrón.
 const RESULTADOS = 6;
 
 type Props = {
@@ -51,12 +50,12 @@ export function InscribirAMano({ slug, torneoId, categoria, suelto, precio, libr
   // Por qué no se puede elegir a alguien que aparece en la búsqueda.
   const noSePuede = (j: JugadorPadron) => (pagados.has(j.id) ? 'ya inscripto' : dadosDeBaja.has(j.id) ? 'se dio de baja' : null);
 
-  const termino = normalizar(busqueda);
+  const termino = busqueda.trim();
   const candidatos =
     termino.length < 2
       ? []
       : (padron.data ?? [])
-          .filter((j) => j.activo && (suelto || j.categoria === categoria) && normalizar(j.apellido).includes(termino))
+          .filter((j) => j.activo && (suelto || j.categoria === categoria) && coincideConElNombre(j, termino))
           .slice(0, RESULTADOS);
 
   const montoElegido = Number(monto.replace(/\D/g, ''));
@@ -75,12 +74,12 @@ export function InscribirAMano({ slug, torneoId, categoria, suelto, precio, libr
 
       <div className="flex flex-col gap-2">
         <Campo
-          id="inscribir-a-mano-apellido"
+          id="inscribir-a-mano-jugador"
           autoFocus
           rotulo={`Jugador del padrón de ${categoria}`}
           type="search"
           autoComplete="off"
-          placeholder="Buscá por apellido"
+          placeholder="Nombre o apellido"
           value={elegido ? `${elegido.nombre} ${elegido.apellido}` : busqueda}
           onChange={(e) => {
             setElegido(null);
@@ -110,7 +109,7 @@ export function InscribirAMano({ slug, torneoId, categoria, suelto, precio, libr
           </ul>
         )}
         {!elegido && termino.length >= 2 && padron.data && candidatos.length === 0 && (
-          <p className="text-[13px] text-pizarra-500">Nadie en el padrón de {categoria} tiene ese apellido.</p>
+          <p className="text-[13px] text-pizarra-500">Nadie en el padrón de {categoria} se llama así.</p>
         )}
       </div>
 

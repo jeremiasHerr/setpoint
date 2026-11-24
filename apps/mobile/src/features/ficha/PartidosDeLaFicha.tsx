@@ -1,4 +1,4 @@
-import type { PartidoDeLaFicha } from '@setpoint/shared';
+import { coincideConElNombre, type PartidoDeLaFicha } from '@setpoint/shared';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
@@ -6,7 +6,7 @@ import { Boton } from '../../components/Boton';
 import { Campo } from '../../components/Campo';
 import { Chip } from '../../components/Chip';
 import { colores, fuentes, tabular } from '../../lib/tokens';
-import { NOMBRE_DEL_CUADRO, paraBuscar, rotuloDeRonda } from './textos';
+import { NOMBRE_DEL_CUADRO, rotuloDeRonda } from './textos';
 
 // Los últimos, y el resto se despliega en el lugar.
 const VISIBLES = 5;
@@ -27,18 +27,18 @@ function donde(partido: PartidoDeLaFicha) {
 
 // Sus partidos con resultado, del más reciente al más viejo. El punto verde es un partido ganado; el
 // W.O. figura aunque no cuente en jugados (decisión 073). Se filtran por ganados o perdidos y por el
-// apellido del rival, y cada uno abre el cara a cara con ese rival (decisión 143).
+// nombre del rival (decisión 146), y cada uno abre el cara a cara con ese rival (decisión 143).
 export function PartidosDeLaFicha({ jugadorId, partidos }: { jugadorId: number; partidos: PartidoDeLaFicha[] }) {
   const [todos, setTodos] = useState(false);
   const [resultado, setResultado] = useState<Resultado>('todos');
   const [busqueda, setBusqueda] = useState('');
 
-  const buscado = paraBuscar(busqueda);
+  const buscado = busqueda.trim();
   const filtrando = resultado !== 'todos' || buscado !== '';
   const filtrados = partidos.filter(
     (p) =>
       (resultado === 'todos' || p.gano === (resultado === 'ganados')) &&
-      (buscado === '' || paraBuscar(p.rival.apellido).includes(buscado)),
+      coincideConElNombre(p.rival, buscado),
   );
   // Con un filtro se ve todo lo que coincide: si no, un partido viejo quedaría escondido.
   const hayMas = !filtrando && filtrados.length > VISIBLES;
@@ -58,7 +58,7 @@ export function PartidosDeLaFicha({ jugadorId, partidos }: { jugadorId: number; 
           </View>
           <View style={estilos.buscador}>
             <Campo
-              rotulo="Buscar por apellido del rival"
+              rotulo="Buscar rival por nombre o apellido"
               value={busqueda}
               onChangeText={setBusqueda}
               autoCapitalize="words"
@@ -69,7 +69,7 @@ export function PartidosDeLaFicha({ jugadorId, partidos }: { jugadorId: number; 
           {visibles.length === 0 ? (
             <Text style={estilos.vacio}>
               {buscado !== ''
-                ? 'Ningún partido contra un rival con ese apellido.'
+                ? 'Ningún partido contra un rival que se llame así.'
                 : resultado === 'ganados'
                   ? 'Todavía no ganó ninguno.'
                   : 'Todavía no perdió ninguno.'}

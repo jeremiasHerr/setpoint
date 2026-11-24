@@ -1,6 +1,6 @@
 # 076 — Cuando se libera un lugar, el primero de la lista de espera lo tiene reservado 24 horas
 
-**Estado:** aceptada — 7 de noviembre de 2026. El 22 de noviembre se sumó el campo en *Nuevo torneo*, en Inscripción: "Para pagar un lugar liberado" (1 a 72 horas). La decisión no cambia: 24 por defecto
+**Estado:** aceptada — 7 de noviembre de 2026. El 22 de noviembre se sumó el campo en *Nuevo torneo*, en Inscripción: "Tiempo para pagar un lugar liberado" (1 a 72 horas). La decisión no cambia: 24 por defecto
 
 ## Contexto
 

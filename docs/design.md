@@ -179,7 +179,7 @@ En la app es el mismo dibujo, con cuatro `View` para no sumar `react-native-svg`
 
 Franja `noche-900` de 56 de alto, el mismo noche que rodea la landing: el logo, la organización en `pizarra-400` y, a la derecha, el menú. Debajo va el fondo blanco de la página, con el bloque del circuito del inicio y la franja del torneo sin bandas propias ([decisión 123](decisiones/123-inicio-en-noche-y-rotulos-sin-mono.md)); lo oscuro del inicio son las columnas. Ítem activo con fondo `noche-2` y texto blanco; los demás en `pizarra-400`, blancos con el mouse encima.
 
-**Debajo de 768 px** no entra en una fila: el menú, las iniciales y Salir van en un panel que abre el botón "Menú" ([decisión 109](decisiones/109-menu-del-organizador-en-el-celular.md)). El panel baja en `noche-900`, con las secciones en filas de 48 y, abajo, las iniciales con el nombre completo de la organización y Salir. Detrás va el velo del modal de confirmación, y se cierra con Escape, tocando el velo o al elegir una sección.
+**Debajo de 768 px** no entra en una fila: el menú, las iniciales y Salir van en un panel que abre el botón "Menú" ([decisión 109](decisiones/109-menu-del-organizador-en-el-celular.md)). El panel baja en `noche-900`, sin borde que lo separe de la franja, con las secciones en filas de 48 (el fondo `noche-2` del activo abraza la palabra, como en la compu, y la fila entera se toca) y, abajo, las iniciales con el nombre completo de la organización y Salir. Detrás va el velo del modal de confirmación, y se cierra con Escape, tocando el velo o al elegir una sección.
 
 ### Botones
 
@@ -205,7 +205,7 @@ Dos objetos distintos:
 
 Solo en la franja de las pantallas de un torneo, debajo del encabezado del organizador ([decisión 095](decisiones/095-navegacion-del-torneo.md)). La franja va sobre el fondo blanco de la página, con borde inferior `linea`. Texto de 15, alto 40–44. Activa: `noche`, peso 600 y subrayado de 2px `noche`. Disponible: `pizarra-700`, peso 500. Apagada: `pizarra-400`, y al tocarla, una línea debajo de la franja dice por qué. Son distintas de los chips a propósito: los chips filtran dentro de una pantalla (Confirmados, Reservando), las pestañas cambian de pantalla.
 
-**En el celular**, debajo de 640, las cinco no entran en una fila y van en una grilla de tres columnas: Inscripciones, Zonas y Tablero arriba; Resultados y Cierre abajo ([decisión 110](decisiones/110-pestanas-del-torneo-en-el-celular.md)). Cada pestaña ocupa su celda, sin margen, y la fila de arriba lleva una línea de base `linea-suave`.
+**En el celular**, debajo de 640, las cinco no entran en una fila y van en una grilla de tres columnas: Inscripciones, Zonas y Tablero arriba; Resultados y Cierre abajo ([decisión 110](decisiones/110-pestanas-del-torneo-en-el-celular.md)). Cada pestaña ocupa su celda, sin margen y con el texto centrado, para que el subrayado quede debajo de la palabra, y la fila de arriba lleva una línea de base `linea-suave`.
 
 ### Migas de pan
 

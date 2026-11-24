@@ -284,7 +284,7 @@ function Buscar({
     <>
       <div className="flex flex-col gap-1.5">
         <Titulo>Buscate en el padrón</Titulo>
-        <Ayuda>Escribí tu apellido. Buscamos entre los jugadores de {torneo.categoria}.</Ayuda>
+        <Ayuda>Escribí tu nombre y apellido. Buscamos entre los jugadores de {torneo.categoria}.</Ayuda>
       </div>
       <div className="flex flex-col gap-2.5">
         <div className="flex h-14 items-center gap-3 rounded-[12px] border-2 border-noche px-[15px]">
@@ -295,7 +295,7 @@ function Buscar({
           <input
             value={consulta}
             onChange={(e) => setConsulta(e.target.value)}
-            aria-label="Tu apellido"
+            aria-label="Tu nombre y apellido"
             autoFocus
             className="min-w-0 grow text-[17px] outline-none"
           />
