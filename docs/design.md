@@ -213,7 +213,7 @@ En las pantallas internas de la organización, las que no están en el menú: la
 
 ### Campos
 
-Alto 56 en móvil y 48 en escritorio, radio 8, fondo `papel`, borde 1px `borde-campo`. El campo activo lleva borde 2px `noche`. El valor va en mono si es un número. **Sobre una tarjeta noche** (las pantallas de acceso): relleno `noche-900`, borde `borde-campo`, texto blanco y rótulo `pizarra-400`; el activo y el inválido llevan borde 2px blanco, y el autocompletado del navegador no los pinta de celeste ([decisión 148](decisiones/148-pantallas-de-acceso-con-tarjeta-noche.md)). La grilla de sets de *Cargar resultado* usa el mismo campo, de 56 de alto, con el número en mono 22.
+Alto 56 en móvil y 48 en escritorio, radio 8, fondo `papel`, borde 1px `borde-campo`. El campo activo lleva borde 2px `noche`. El valor va en mono si es un número. Una fecha ocupa todo el ancho, con el valor a la izquierda, y vacía, en una pantalla táctil, dice *Elegí el día*: el celular no muestra el *dd/mm/aaaa* de la compu. **Sobre una tarjeta noche** (las pantallas de acceso): relleno `noche-900`, borde `borde-campo`, texto blanco y rótulo `pizarra-400`; el activo y el inválido llevan borde 2px blanco, y el autocompletado del navegador no los pinta de celeste ([decisión 148](decisiones/148-pantallas-de-acceso-con-tarjeta-noche.md)). La grilla de sets de *Cargar resultado* usa el mismo campo, de 56 de alto, con el número en mono 22.
 
 ### Interruptor
 

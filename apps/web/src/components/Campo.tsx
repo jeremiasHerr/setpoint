@@ -23,12 +23,19 @@ const CAMPO = {
 
 export function Campo({ id, rotulo, numerico = false, sufijo, sobreNoche = false, ayuda, className = '', ...props }: Props) {
   const [conAyuda, setConAyuda] = useState(false);
+  // Una fecha, en el celular: Android y iOS la dibujan angosta y, vacía, no muestran nada, ni el
+  // "dd/mm/aaaa" de la compu. Ocupa el ancho como los demás campos, con el valor a la izquierda, y vacía
+  // dice qué hay que hacer.
+  const esFecha = props.type === 'date';
+  const pista = esFecha && !props.value ? 'Elegí el día' : null;
   const input = (
     <input
       id={id}
       className={`h-12 rounded-control border px-3.5 text-[15px] outline-none placeholder:text-pizarra-400 focus:border-2 focus:px-[13px] aria-invalid:border-2 aria-invalid:px-[13px] ${
         CAMPO[sobreNoche ? 'noche' : 'claro']
-      } ${numerico ? 'font-mono tabular-nums' : ''}`}
+      } ${numerico ? 'font-mono tabular-nums' : ''} ${
+        esFecha ? 'w-full min-w-0 pointer-coarse:appearance-none [&::-webkit-date-and-time-value]:text-left' : ''
+      } ${pista ? 'peer pointer-coarse:not-focus:text-transparent' : ''}`}
       {...props}
     />
   );
@@ -63,16 +70,29 @@ export function Campo({ id, rotulo, numerico = false, sufijo, sobreNoche = false
           {ayuda}
         </p>
       )}
-      {sufijo ? (
+      {sufijo || pista ? (
         <div className="relative flex flex-col">
           {input}
-          <span
-            className={`pointer-events-none absolute top-1/2 right-3.5 -translate-y-1/2 text-[13px] ${
-              sobreNoche ? 'text-pizarra-400' : 'text-pizarra-500'
-            }`}
-          >
-            {sufijo}
-          </span>
+          {/* Solo en pantallas táctiles: en la compu, la fecha vacía ya muestra "dd/mm/aaaa". Una
+              pantalla táctil con el Chrome de la compu también lo dibuja: hasta tocar el campo, ese
+              texto queda transparente, y al tocarlo se ve y la pista se esconde. */}
+          {pista && (
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute top-1/2 left-3.5 hidden -translate-y-1/2 text-[15px] text-pizarra-400 pointer-coarse:block peer-focus:invisible"
+            >
+              {pista}
+            </span>
+          )}
+          {sufijo && (
+            <span
+              className={`pointer-events-none absolute top-1/2 right-3.5 -translate-y-1/2 text-[13px] ${
+                sobreNoche ? 'text-pizarra-400' : 'text-pizarra-500'
+              }`}
+            >
+              {sufijo}
+            </span>
+          )}
         </div>
       ) : (
         input
