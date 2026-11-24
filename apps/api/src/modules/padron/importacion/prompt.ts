@@ -3,7 +3,7 @@ import type { FilaPlanilla } from './leer-planilla';
 // v2: detecta la categoría y los torneos del calendario de la planilla (decisión 011).
 // v2.1: el nombre de la hoja es la categoría, aunque no diga "Ranking" (libros de varias hojas, decisión 012).
 // v2.2: la planilla puede venir de un PDF o de un texto pegado, donde una celda vacía puede no dejar
-// rastro (decisión 140).
+// rastro (decisión 141).
 export const VERSION_PROMPT = 'importacion-v2.2';
 
 export const INSTRUCCIONES = `Extraés rankings de tenis amateur desde planillas.

@@ -1,17 +1,17 @@
 import { describe, expect, it, vi } from 'vitest';
 
-const { count, aggregate, create, update } = vi.hoisted(() => ({ count: vi.fn(), aggregate: vi.fn(), create: vi.fn(), update: vi.fn() }));
-vi.mock('../../src/lib/prisma', () => ({ prisma: { usoIA: { count, aggregate, create, update } } }));
+const { count, groupBy, create, update } = vi.hoisted(() => ({ count: vi.fn(), groupBy: vi.fn(), create: vi.fn(), update: vi.fn() }));
+vi.mock('../../src/lib/prisma', () => ({ prisma: { usoIA: { count, groupBy, create, update } } }));
 
 import { ErrorHttp } from '../../src/middleware/errores';
-import { costoUsd, leerConfigLimitesIA, limitePasado, registrarTokensIA, reservarUsoIA } from '../../src/lib/limite-ia';
+import { gastoUsd, leerConfigLimitesIA, limitePasado, registrarTokensIA, reservarUsoIA } from '../../src/lib/limite-ia';
 
 const config = leerConfigLimitesIA({});
 
 describe('la configuración de los límites', () => {
   it('toma los valores por defecto sin variables, o con valores que no sirven', () => {
-    expect(config).toEqual({ pedidosPorHora: 10, topeDiarioUsd: 2, precioEntradaUsd: 1, precioSalidaUsd: 5 });
-    expect(leerConfigLimitesIA({ IA_PEDIDOS_POR_HORA: 'mucho', IA_TOPE_DIARIO_USD: '-1', IA_PRECIO_ENTRADA_USD_MTOK: '' })).toEqual(config);
+    expect(config).toEqual({ pedidosPorHora: 10, topeDiarioUsd: 2 });
+    expect(leerConfigLimitesIA({ IA_PEDIDOS_POR_HORA: 'mucho', IA_TOPE_DIARIO_USD: '-1' })).toEqual(config);
   });
 
   it('toma las variables de entorno', () => {
@@ -22,9 +22,17 @@ describe('la configuración de los límites', () => {
 });
 
 describe('el costo y los límites', () => {
-  it('calcula el costo con los tokens de la respuesta', () => {
-    // Una planilla de 77 jugadores: ~12.000 tokens de salida y ~5.000 de entrada, unos 6 centavos.
-    expect(costoUsd({ entrada: 5_000, salida: 11_000 }, config)).toBeCloseTo(0.06, 5);
+  it('calcula el gasto con los tokens de la respuesta y el precio del modelo de cada funcionalidad', () => {
+    // Una planilla de 77 jugadores con Haiku: ~5.000 tokens de entrada y ~11.000 de salida, 6 centavos.
+    expect(gastoUsd([{ funcion: 'IMPORTACION', entrada: 5_000, salida: 11_000 }])).toBeCloseTo(0.06, 5);
+    // La misma cantidad de tokens leyendo mensajes, con Sonnet, cuesta el doble (decisión 141).
+    expect(gastoUsd([{ funcion: 'RESULTADOS', entrada: 5_000, salida: 11_000 }])).toBeCloseTo(0.12, 5);
+    expect(
+      gastoUsd([
+        { funcion: 'IMPORTACION', entrada: 5_000, salida: 11_000 },
+        { funcion: 'RESULTADOS', entrada: 5_000, salida: 11_000 },
+      ]),
+    ).toBeCloseTo(0.18, 5);
   });
 
   it('deja pasar mientras no se llegue a ninguno', () => {
@@ -42,9 +50,9 @@ describe('el costo y los límites', () => {
 
 describe('reservar un pedido', () => {
   const conClave = () => vi.stubEnv('ANTHROPIC_API_KEY', 'clave-de-prueba');
-  const uso = (pedidos: number, entrada: number, salida: number) => {
+  const uso = (pedidos: number, entrada: number, salida: number, funcion = 'IMPORTACION') => {
     count.mockResolvedValue(pedidos);
-    aggregate.mockResolvedValue({ _sum: { tokensEntrada: entrada, tokensSalida: salida } });
+    groupBy.mockResolvedValue([{ funcion, _sum: { tokensEntrada: entrada, tokensSalida: salida } }]);
   };
 
   it('sin clave no cuenta ni limita nada', async () => {
@@ -81,5 +89,13 @@ describe('reservar un pedido', () => {
     const error = await reservarUsoIA(1, 2, 'IMPORTACION').catch((e) => e);
     expect(error).toBeInstanceOf(ErrorHttp);
     expect(error).toMatchObject({ estado: 429, codigo: 'TOPE_DE_GASTO_IA' });
+  });
+
+  it('con los mensajes, el tope llega con la mitad de los tokens: Sonnet cuesta US$ 10 por millón de salida', async () => {
+    conClave();
+    uso(1, 0, 199_000, 'RESULTADOS');
+    expect(await reservarUsoIA(1, 2, 'RESULTADOS').catch((e) => e)).not.toBeInstanceOf(ErrorHttp);
+    uso(1, 0, 200_000, 'RESULTADOS');
+    await expect(reservarUsoIA(1, 2, 'RESULTADOS')).rejects.toMatchObject({ estado: 429, codigo: 'TOPE_DE_GASTO_IA' });
   });
 });

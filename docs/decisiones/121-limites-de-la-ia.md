@@ -23,7 +23,7 @@ Opción 1.
 
 - **`UsoIA`**: una fila por pedido (una subida de planilla, aunque sean varios archivos, o una lectura de mensajes, aunque reintente), con la organización, el usuario, la funcionalidad y los tokens de entrada y salida que devolvió la respuesta del modelo. La fila se crea antes de llamar al modelo, con 0 tokens, y se completa después.
 - **Por usuario, en la base:** 10 pedidos por hora (`IA_PEDIDOS_POR_HORA`). Pasado, `429 LIMITE_DE_PEDIDOS_IA`.
-- **Por organización, en la base:** US$ 2 en las últimas 24 horas (`IA_TOPE_DIARIO_USD`), con el precio por millón de tokens también en variables (`IA_PRECIO_ENTRADA_USD_MTOK`, `IA_PRECIO_SALIDA_USD_MTOK`; los de Haiku 4.5). Pasado, `429 TOPE_DE_GASTO_IA`.
+- **Por organización, en la base:** US$ 2 en las últimas 24 horas (`IA_TOPE_DIARIO_USD`), con el precio por millón de tokens también en variables (`IA_PRECIO_ENTRADA_USD_MTOK`, `IA_PRECIO_SALIDA_USD_MTOK`; los de Haiku 4.5). Pasado, `429 TOPE_DE_GASTO_IA`. *Reemplazado en parte por la [decisión 142](142-los-mensajes-con-sonnet.md): los precios están en el código, uno por modelo, y el gasto se suma por funcionalidad con el precio de la suya.*
 - **Por usuario, en memoria:** 6 pedidos cada 15 minutos (`middleware/limite.ts`), segunda capa contra ráfagas.
 - Las dos funcionalidades comparten el contador y el tope: son el mismo gasto.
 - **Sin `ANTHROPIC_API_KEY` no se cuenta ni se limita nada**: no se llama a ningún modelo y todo sigue como antes.

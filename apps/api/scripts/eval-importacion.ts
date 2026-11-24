@@ -6,17 +6,16 @@
 // Un libro de varias hojas trae { hojas: [...] }, un esperado por hoja en el orden del libro: cada
 // hoja se procesa por separado, como en la API (decisión 012).
 // Un .pdf o un .txt se lee con el mismo lector que la API: el texto, como si se hubiera pegado, con
-// el nombre "Texto pegado" (decisión 140).
+// el nombre "Texto pegado" (decisión 141).
 // Uso: npm run eval:importacion -w apps/api
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { extname, join } from 'node:path';
 import { leerPdf } from '../src/modules/padron/importacion/leer-pdf';
 import { leerHojas } from '../src/modules/padron/importacion/leer-planilla';
 import { leerTexto } from '../src/modules/padron/importacion/leer-texto';
+import { costoUsd, MODELO_IMPORTACION } from '../src/lib/ia';
 import { procesarHoja } from '../src/modules/padron/importacion/procesar-planilla';
 
-// Precio de Haiku 4.5, en dólares por millón de tokens.
-const PRECIO = { entrada: 1, salida: 5 };
 const HOY = new Date('2026-10-05');
 
 type Casillero = { etapa: string; anio: number; puntos: number };
@@ -141,7 +140,7 @@ async function main() {
     }
   }
 
-  const costo = (total.entrada * PRECIO.entrada + total.salida * PRECIO.salida) / 1_000_000;
+  const costo = costoUsd(total, MODELO_IMPORTACION);
   console.log('\n══ Total');
   console.table({
     aciertos: `${total.aciertos} / ${total.total} (${((100 * total.aciertos) / total.total).toFixed(1)} %)`,

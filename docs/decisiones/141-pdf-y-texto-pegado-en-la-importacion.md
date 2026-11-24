@@ -1,4 +1,4 @@
-# 140 — La importación lee PDF con texto y texto pegado; las imágenes quedan para después
+# 141 — La importación lee PDF con texto y texto pegado; las imágenes quedan para después
 
 **Estado:** aceptada — 23 de noviembre de 2026.
 

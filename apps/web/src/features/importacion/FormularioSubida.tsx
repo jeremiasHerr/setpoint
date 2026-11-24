@@ -5,7 +5,7 @@ import { Selector } from '../../components/Selector';
 import { Tarjeta } from '../../components/Tarjeta';
 import { MensajeError } from '../../components/Aviso';
 
-// Lo que se sube: archivos, o el ranking pegado como texto (decisión 140).
+// Lo que se sube: archivos, o el ranking pegado como texto (decisión 141).
 export type Subida = { archivos: File[]; texto: string | null };
 
 type Props = {

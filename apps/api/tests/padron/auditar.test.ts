@@ -71,7 +71,7 @@ describe('auditar', () => {
     expect(porFila).toEqual([{ fila: 4, detalle: 'Fila 4: el 0 de Verano 2026 no está en la planilla' }]);
   });
 
-  // Decisión 140: en un texto pegado la celda vacía no deja rastro.
+  // Decisión 141: en un texto pegado la celda vacía no deja rastro.
   it('manda a revisión una línea con menos números que casilleros y acumulado, sin culpar al 0', () => {
     const texto: FilaPlanilla[] = [...FILAS.slice(0, 2), { fila: 4, celdas: ['SANHUEZA, Martín', 10, 10] }, ...FILAS.slice(3)];
     const { porFila } = auditar(respuesta([jugador(4, [10, 0], 10, 1), ...CORRECTOS.slice(1)]), texto, PADRON);

@@ -20,7 +20,7 @@ import {
 const TAMANIO_MAXIMO = 2 * 1024 * 1024;
 // Un lote: uno o varios archivos por categoría (decisión 012).
 const ARCHIVOS_MAXIMOS = 10;
-// El PDF con texto se lee como una planilla de una hoja (decisión 140).
+// El PDF con texto se lee como una planilla de una hoja (decisión 141).
 const EXTENSIONES = ['.xlsx', '.xls', '.csv', '.pdf'];
 // Un ranking pegado: 77 jugadores con sus casilleros entran de sobra.
 const TEXTO_MAXIMO = 50_000;
@@ -90,7 +90,7 @@ importacionesRouter.post(
       nombre: Buffer.from(archivo.originalname, 'latin1').toString('utf8'),
       contenido: archivo.buffer,
     }));
-    // El texto pegado se procesa como un archivo más del lote (decisión 140).
+    // El texto pegado se procesa como un archivo más del lote (decisión 141).
     const texto: string | undefined = req.body.texto?.trim();
     if (texto) archivos.push({ nombre: 'Texto pegado', contenido: Buffer.from(texto, 'utf8'), esTexto: true });
     const importacion = await crearImportacion(slug, res.locals.usuarioId, archivos, req.body.categoria || null);
