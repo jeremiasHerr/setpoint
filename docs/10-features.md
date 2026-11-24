@@ -383,7 +383,7 @@ Cada jugador tendrá una ficha con su historial completo: todos los partidos que
 - Los torneos van con la instancia que alcanzó y los puntos que le dio el cierre; es la sección que la referencia no dibuja ([decisión 071](decisiones/071-la-ficha-suma-los-torneos.md)). La instancia se calcula con sus partidos de cuadro, así que sirve también para torneos sin ranking y en juego ([decisión 072](decisiones/072-la-instancia-se-calcula-con-los-partidos.md)).
 - El W.O. figura en la lista pero no cuenta como jugado; el abandono sí ([decisión 073](decisiones/073-el-wo-no-cuenta-en-la-ficha.md)).
 - Se llega desde la fila abierta del ranking ("Ver la ficha") y desde los nombres de las zonas del torneo en vivo ([decisión 074](decisiones/074-entrada-a-la-ficha.md)).
-- En la app, la fila abierta del ranking suma "Ver la ficha" y abre la misma ficha (`/ficha/[id]`, sobre la ruta pública), sin pestaña nueva ([decisión 045](decisiones/045-pestanas-de-la-app.md)).
+- En la app, la fila abierta del ranking suma "Ver la ficha" y abre la misma ficha (`/ficha/[id]`, sobre la ruta pública), sin pestaña nueva ([decisión 045](decisiones/045-pestanas-de-la-app.md)). Sus partidos se filtran por ganados o perdidos y por el apellido del rival, y cada uno abre el cara a cara con ese rival ([decisión 143](decisiones/143-comparar-y-filtrar-en-la-ficha-de-la-app.md)).
 - "Comparar con otro jugador" abre el cara a cara (F18).
 
 ---
@@ -404,7 +404,8 @@ Cualquier persona podrá comparar a dos jugadores del circuito y ver el historia
 - *Cara a cara* (`/c/:slug/jugadores/:id/cara-a-cara/:rivalId`) muestra el cruce acumulado, cada partido con su torneo e instancia, y vuelve a la ficha. Sin rival, lista con quiénes jugó el jugador para elegir.
 - La API: `GET /api/publico/:slug/jugadores/:id/rivales` y `.../cara-a-cara/:rivalId`. El W.O. no cuenta como jugado y el abandono sí ([decisión 073](decisiones/073-el-wo-no-cuenta-en-la-ficha.md)). Sin teléfono ni email.
 - El filtro por superficie usa la del club de cada partido, si todas sus canchas son de la misma; los partidos sin ese dato solo cuentan en "Todas". Abajo, una frase dice cómo están en cada superficie ([decisión 126](decisiones/126-superficie-del-partido-por-el-club.md)).
-- En la app, *Cómo te fue con…* (`/rival/[id]`) muestra el historial entre quien tiene la sesión y un rival, con el mismo filtro y la misma frase, que viven en `packages/shared`. Se abre desde el próximo partido en *Cuándo juego* y desde la ficha de otro jugador. No tiene el buscador de rivales de la web.
+- En la app, *Cómo te fue con…* (`/rival/[id]`) muestra el historial entre quien tiene la sesión y un rival, con el mismo filtro y la misma frase, que viven en `packages/shared`. Se abre desde el próximo partido en *Cuándo juego* y desde la ficha de otro jugador.
+- En la app, "Comparar con otro jugador", en cualquier ficha, abre la lista de con quiénes jugó, con un buscador por apellido, y de ahí el cara a cara de los dos (`/rival/[id]?de=`). Solo con quienes ya se enfrentaron, como en la web ([decisión 143](decisiones/143-comparar-y-filtrar-en-la-ficha-de-la-app.md)).
 
 ---
 

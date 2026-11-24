@@ -27,3 +27,12 @@ export function hastaDonde(instancia: InstanciaDeLaFicha) {
 }
 
 export const cantidadDePuntos = (puntos: number) => `${puntos} ${puntos === 1 ? 'punto' : 'puntos'}`;
+
+// Para buscar por apellido sin que importen las tildes ni las mayúsculas: "quilodran" encuentra a
+// "Quilodrán" (decisión 143).
+export const paraBuscar = (texto: string) =>
+  texto
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .trim();

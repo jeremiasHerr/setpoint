@@ -76,11 +76,17 @@ export default function Ficha() {
                 onPress={() => router.push({ pathname: '/rival/[id]', params: { id: String(ficha.jugadorId) } })}
               />
             )}
+            {/* En cualquier ficha, también la propia: con quién jugó, para comparar (decisión 143). */}
+            <Boton
+              texto="Comparar con otro jugador"
+              variante="secundario"
+              onPress={() => router.push({ pathname: '/comparar/[id]', params: { id: String(ficha.jugadorId) } })}
+            />
             <RecordDeLaFicha record={ficha.record} />
             {ficha.ranking && <PuntosPorTorneo ranking={ficha.ranking} />}
             <TorneosDeLaFicha torneos={ficha.torneos} />
             {/* Sin torneos no hay partidos: con el aviso de Torneos alcanza. */}
-            {ficha.torneos.length > 0 && <PartidosDeLaFicha partidos={ficha.partidos} />}
+            {ficha.torneos.length > 0 && <PartidosDeLaFicha jugadorId={ficha.jugadorId} partidos={ficha.partidos} />}
           </>
         )}
       </ScrollView>

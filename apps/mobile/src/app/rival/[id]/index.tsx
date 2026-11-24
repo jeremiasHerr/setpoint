@@ -1,5 +1,6 @@
 // Cómo te fue con él (F18): el historial del jugador con el rival de un partido, para mirarlo antes
-// de jugar. Usa las mismas rutas públicas que el cara a cara de la web (decisión 122).
+// de jugar. Con ?de=, el de dos jugadores cualesquiera, elegidos desde una ficha (decisión 143).
+// Usa las mismas rutas públicas que el cara a cara de la web (decisión 122).
 import { cortaDe, cruceEnPalabras, type Superficie } from '@setpoint/shared';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
@@ -7,6 +8,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Chip } from '../../../components/Chip';
 import { Esqueleto } from '../../../components/Esqueleto';
+import { useSesion } from '../../../features/auth/SesionProvider';
 import { ErrorDeCarga } from '../../../features/auth/ErrorDeCarga';
 import { PartidosDelCruce } from '../../../features/caraACara/PartidosDelCruce';
 import { useCaraACara } from '../../../features/caraACara/useCaraACara';
@@ -15,8 +17,11 @@ import { colores, fuentes, medidas, radios, tabular } from '../../../lib/tokens'
 const conMayuscula = (texto: string) => texto.charAt(0).toUpperCase() + texto.slice(1);
 
 export default function ComoTeFueConEl() {
-  const { id } = useLocalSearchParams<{ id: string }>();
-  const consulta = useCaraACara(Number(id));
+  const { id, de } = useLocalSearchParams<{ id: string; de?: string }>();
+  const { perfil } = useSesion();
+  // Sin ?de=, o si de es quien tiene la sesión, es su propio historial: "vos".
+  const conVos = de === undefined || Number(de) === perfil?.jugador.id;
+  const consulta = useCaraACara(Number(id), de === undefined ? undefined : Number(de));
   const cara = consulta.data;
   // El filtro solo achica la lista: el panel sigue con el cruce de todas las canchas (decisión 126).
   const [superficie, setSuperficie] = useState<Superficie | null>(null);
@@ -36,7 +41,7 @@ export default function ComoTeFueConEl() {
             <View style={estilos.flecha} />
           </Pressable>
           <Text style={estilos.titulo} accessibilityRole="header">
-            {cara ? `Cómo te fue con ${cara.b.nombre}` : 'Cómo te fue con él'}
+            {!cara ? 'Cara a cara' : conVos ? `Cómo te fue con ${cara.b.nombre}` : `${cara.a.apellido} y ${cara.b.apellido}`}
           </Text>
         </View>
 
@@ -58,7 +63,7 @@ export default function ComoTeFueConEl() {
                 <Text style={estilos.numero}>{cara.resumen.ganadosB}</Text>
               </View>
               <Text style={estilos.leyenda}>
-                Vos · {cara.b.nombre} {cara.b.apellido}
+                {conVos ? 'Vos' : `${cara.a.nombre} ${cara.a.apellido}`} · {cara.b.nombre} {cara.b.apellido}
               </Text>
             </View>
 
@@ -72,7 +77,9 @@ export default function ComoTeFueConEl() {
 
             {cara.partidos.length === 0 ? (
               <Text style={estilos.nota}>
-                Nunca jugaron entre ustedes: este va a ser el primero. Cuando haya un resultado, el historial aparece acá.
+                {conVos
+                  ? 'Nunca jugaron entre ustedes: este va a ser el primero. Cuando haya un resultado, el historial aparece acá.'
+                  : 'Todavía no jugaron entre ellos.'}
               </Text>
             ) : (
               <>
@@ -91,7 +98,12 @@ export default function ComoTeFueConEl() {
                     ))}
                   </View>
                 )}
-                <PartidosDelCruce partidos={partidos} apellidoRival={cara.b.apellido} consuelo={cara.nombreCuadroConsuelo} />
+                <PartidosDelCruce
+                  partidos={partidos}
+                  apellidoJugador={conVos ? null : cara.a.apellido}
+                  apellidoRival={cara.b.apellido}
+                  consuelo={cara.nombreCuadroConsuelo}
+                />
                 {cara.porSuperficie.length > 0 && (
                   <Text style={estilos.nota}>{cruceEnPalabras(cara.porSuperficie, cara.a.apellido, cara.b.apellido)}</Text>
                 )}
