@@ -213,7 +213,7 @@ En las pantallas internas de la organización, las que no están en el menú: la
 
 ### Campos
 
-Alto 56 en móvil y 48 en escritorio, radio 8, fondo `papel`, borde 1px `borde-campo`. El campo activo lleva borde 2px `noche`. El valor va en mono si es un número. La grilla de sets de *Cargar resultado* usa el mismo campo, de 56 de alto, con el número en mono 22.
+Alto 56 en móvil y 48 en escritorio, radio 8, fondo `papel`, borde 1px `borde-campo`. El campo activo lleva borde 2px `noche`. El valor va en mono si es un número. **Sobre una tarjeta noche** (las pantallas de acceso): relleno `noche-900`, borde `borde-campo`, texto blanco y rótulo `pizarra-400`; el activo y el inválido llevan borde 2px blanco, y el autocompletado del navegador no los pinta de celeste ([decisión 148](decisiones/148-pantallas-de-acceso-con-tarjeta-noche.md)). La grilla de sets de *Cargar resultado* usa el mismo campo, de 56 de alto, con el número en mono 22.
 
 ### Interruptor
 
@@ -222,6 +222,10 @@ Alto 56 en móvil y 48 en escritorio, radio 8, fondo `papel`, borde 1px `borde-c
 ### Tarjeta noche
 
 Fondo `noche`, radio 20, padding 20–22, texto blanco y rótulos en `pizarra-400`. Es el recurso de jerarquía más fuerte del sistema y se usa para **una sola cosa por pantalla**: el próximo partido, el ranking propio, la conciliación, el resumen del torneo. En la tarjeta del próximo partido, el rival va en Display 34, la fecha en mono 26 blanco y el botón principal.
+
+### Pantallas de acceso
+
+*Ingresar*, *Registrar la organización* y *Recuperar la contraseña* llevan la franja del encabezado del organizador, con el logo que lleva a la landing y, a la derecha, la pregunta y el enlace a la otra pantalla; en el celular, solo el enlace. Debajo, el fondo `niebla` y el formulario en una tarjeta noche, al medio de la pantalla, con el botón principal dado vuelta. En el registro, "Lo que sigue" va en papel: la tarjeta noche es la del formulario ([decisión 148](decisiones/148-pantallas-de-acceso-con-tarjeta-noche.md)).
 
 ### Barra de marcas
 
@@ -262,7 +266,7 @@ Columnas por ronda con rótulo en minúscula. Tarjeta de 190×62 con dos filas d
 
 El rojo es solo vencimiento: un error no es rojo ([decisión 099](decisiones/099-los-errores-no-son-rojos.md)). Un solo componente para toda la web y el flujo del jugador:
 
-- **Aviso**: bloque con borde 1px `noche`, radio 8–12, texto 15 `noche`. Para el error de un formulario entero o de una acción ("No pudimos ingresar"). La primera frase puede ir en negrita: "**Ese código no es.** Revisá que sea el último que te mandamos".
+- **Aviso**: bloque con borde 1px `noche`, radio 8–12, texto 15 `noche`. Para el error de un formulario entero o de una acción ("No pudimos ingresar"). Sobre una tarjeta noche, relleno `noche-2`, borde `borde-noche` y texto blanco: más claro que los campos, para que no se confunda con uno enfocado. La primera frase puede ir en negrita: "**Ese código no es.** Revisá que sea el último que te mandamos".
 - **Mensaje de error**: una línea en `noche`, peso 500, debajo del campo o de la acción que falló. El campo lo nombra en su `aria-describedby`.
 
 Lo que hay que revisar, como una fila de la importación, se marca con borde `noche`, como la marca "para revisar" de *Revisar vinculación*.

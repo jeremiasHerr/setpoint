@@ -8,14 +8,20 @@ type PropsAviso = {
   titulo?: ReactNode;
   children?: ReactNode;
   className?: string;
+  // Dentro de una tarjeta noche, en blanco sobre noche-2: más claro que los campos, para que no se
+  // confunda con uno enfocado (decisión 148).
+  sobreNoche?: boolean;
 };
 
 // Bloque con borde noche, para el error de un formulario entero o de una acción. En 15 px, el piso del
 // celular: lo usa también el flujo del jugador.
-export function Aviso({ titulo, children, className = '' }: PropsAviso) {
+export function Aviso({ titulo, children, className = '', sobreNoche = false }: PropsAviso) {
   if (!titulo && !children) return null;
   return (
-    <p role="alert" className={`rounded-control border border-noche px-3.5 py-3 text-[15px] leading-[1.42] text-noche ${className}`}>
+    <p
+      role="alert"
+      className={`rounded-control border px-3.5 py-3 text-[15px] leading-[1.42] ${sobreNoche ? 'border-borde-noche bg-noche-2 text-white' : 'border-noche text-noche'} ${className}`}
+    >
       {titulo && <strong className="font-semibold">{titulo} </strong>}
       {children}
     </p>
@@ -27,13 +33,14 @@ type PropsMensaje = {
   id?: string;
   children?: ReactNode;
   className?: string;
+  sobreNoche?: boolean;
 };
 
 // Una línea, debajo del campo o de la acción que falló.
-export function MensajeError({ id, children, className = '' }: PropsMensaje) {
+export function MensajeError({ id, children, className = '', sobreNoche = false }: PropsMensaje) {
   if (!children) return null;
   return (
-    <p id={id} role={id ? undefined : 'alert'} className={`text-sm font-medium text-noche ${className}`}>
+    <p id={id} role={id ? undefined : 'alert'} className={`text-sm font-medium ${sobreNoche ? 'text-white' : 'text-noche'} ${className}`}>
       {children}
     </p>
   );
