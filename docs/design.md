@@ -179,8 +179,6 @@ En la app es el mismo dibujo, con cuatro `View` para no sumar `react-native-svg`
 
 Franja `noche-900` de 56 de alto, el mismo noche que rodea la landing: el logo, la organización en `pizarra-400` y, a la derecha, el menú. Debajo va el fondo blanco de la página, con el bloque del circuito del inicio y la franja del torneo sin bandas propias ([decisión 123](decisiones/123-inicio-en-noche-y-rotulos-sin-mono.md)); lo oscuro del inicio son las columnas. Ítem activo con fondo `noche-2` y texto blanco; los demás en `pizarra-400`, blancos con el mouse encima.
 
-**Las pantallas de acceso** (*Ingresar*, *Registrar la organización* y *Recuperar la contraseña*) llevan la misma franja, con el logo que lleva a la landing y, a la derecha, la pregunta y el enlace a la otra pantalla; en el celular, solo el enlace. Debajo, el fondo `niebla` y el formulario en una tarjeta noche, al medio de la pantalla, con el botón principal dado vuelta. En el registro, "Lo que sigue" va en papel: la tarjeta noche es la del formulario ([decisión 148](decisiones/148-pantallas-de-acceso-con-tarjeta-noche.md)).
-
 **Debajo de 768 px** no entra en una fila: el menú, las iniciales y Salir van en un panel que abre el botón "Menú" ([decisión 109](decisiones/109-menu-del-organizador-en-el-celular.md)). El panel baja en `noche-900`, con las secciones en filas de 48 y, abajo, las iniciales con el nombre completo de la organización y Salir. Detrás va el velo del modal de confirmación, y se cierra con Escape, tocando el velo o al elegir una sección.
 
 ### Botones
@@ -224,6 +222,10 @@ Alto 56 en móvil y 48 en escritorio, radio 8, fondo `papel`, borde 1px `borde-c
 ### Tarjeta noche
 
 Fondo `noche`, radio 20, padding 20–22, texto blanco y rótulos en `pizarra-400`. Es el recurso de jerarquía más fuerte del sistema y se usa para **una sola cosa por pantalla**: el próximo partido, el ranking propio, la conciliación, el resumen del torneo. En la tarjeta del próximo partido, el rival va en Display 34, la fecha en mono 26 blanco y el botón principal.
+
+### Pantallas de acceso
+
+*Ingresar*, *Registrar la organización* y *Recuperar la contraseña* llevan la franja del encabezado del organizador, con el logo que lleva a la landing y, a la derecha, la pregunta y el enlace a la otra pantalla; en el celular, solo el enlace. Debajo, el fondo `niebla` y el formulario en una tarjeta noche, al medio de la pantalla, con el botón principal dado vuelta. En el registro, "Lo que sigue" va en papel: la tarjeta noche es la del formulario ([decisión 148](decisiones/148-pantallas-de-acceso-con-tarjeta-noche.md)).
 
 ### Barra de marcas
 
