@@ -13,10 +13,11 @@ function donde(p: PartidoDelCaraACara, consuelo: string) {
   return p.cuadro === 'complementaria' ? `${ronda} · ${consuelo}` : ronda;
 }
 
-type Props = { partidos: PartidoDelCaraACara[]; apellidoRival: string; consuelo: string };
+// apellidoJugador: null cuando el primero es quien tiene la sesión ("Ganaste").
+type Props = { partidos: PartidoDelCaraACara[]; apellidoJugador: string | null; apellidoRival: string; consuelo: string };
 
-// Cada enfrentamiento, del más reciente al más viejo. El punto verde marca los que ganó el jugador.
-export function PartidosDelCruce({ partidos, apellidoRival, consuelo }: Props) {
+// Cada enfrentamiento, del más reciente al más viejo. El punto verde marca los que ganó el primero.
+export function PartidosDelCruce({ partidos, apellidoJugador, apellidoRival, consuelo }: Props) {
   return (
     <View style={estilos.lista}>
       {partidos.map((p, i) => {
@@ -26,7 +27,7 @@ export function PartidosDelCruce({ partidos, apellidoRival, consuelo }: Props) {
             <View style={[estilos.punto, gane && estilos.puntoGanado]} />
             <View style={estilos.texto}>
               <Text style={[estilos.titulo, gane && estilos.ganado]}>
-                {gane ? 'Ganaste' : `Ganó ${apellidoRival}`}
+                {gane ? (apellidoJugador === null ? 'Ganaste' : `Ganó ${apellidoJugador}`) : `Ganó ${apellidoRival}`}
                 {TEXTO_DEL_ESTADO[p.estado]}
               </Text>
               <Text style={estilos.detalle}>

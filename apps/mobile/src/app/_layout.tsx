@@ -85,6 +85,8 @@ function Navegacion({ fuentesListas }: { fuentesListas: boolean }) {
           <Stack.Screen name="ficha/[id]" />
           {/* Cómo te fue con el rival de un partido (F18). */}
           <Stack.Screen name="rival/[id]/index" />
+          {/* Con quién comparar a un jugador, desde su ficha (decisión 143). */}
+          <Stack.Screen name="comparar/[id]" />
           {/* Los cuadros del torneo, una ronda a la vez (F11, decisión 136), desde Mi zona. */}
           <Stack.Screen name="cuadros/[id]" />
         </Stack.Protected>
