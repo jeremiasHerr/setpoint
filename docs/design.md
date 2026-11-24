@@ -213,7 +213,7 @@ En las pantallas internas de la organización, las que no están en el menú: la
 
 ### Campos
 
-Alto 56 en móvil y 48 en escritorio, radio 8, fondo `papel`, borde 1px `borde-campo`. El campo activo lleva borde 2px `noche`. El valor va en mono si es un número. **Sobre una tarjeta noche** (las pantallas de acceso): relleno `noche-900`, borde `borde-campo`, texto blanco y rótulo `pizarra-400`; el activo y el inválido llevan borde 2px blanco, y el autocompletado del navegador no los pinta de celeste ([decisión 148](decisiones/148-pantallas-de-acceso-con-tarjeta-noche.md)). La grilla de sets de *Cargar resultado* usa el mismo campo, de 56 de alto, con el número en mono 22.
+Alto 56 en móvil y 48 en escritorio, radio 8, fondo `papel`, borde 1px `borde-campo`. El campo activo lleva borde 2px `noche`. El valor va en mono si es un número. Una fecha ocupa todo el ancho, con el valor a la izquierda, y vacía, en una pantalla táctil, dice *Elegí el día*: el celular no muestra el *dd/mm/aaaa* de la compu. **Sobre una tarjeta noche** (las pantallas de acceso): relleno `noche-900`, borde `borde-campo`, texto blanco y rótulo `pizarra-400`; el activo y el inválido llevan borde 2px blanco, y el autocompletado del navegador no los pinta de celeste ([decisión 148](decisiones/148-pantallas-de-acceso-con-tarjeta-noche.md)). La grilla de sets de *Cargar resultado* usa el mismo campo, de 56 de alto, con el número en mono 22.
 
 ### Interruptor
 
@@ -385,13 +385,14 @@ La interfaz usa términos genéricos, no los del código ni los de un circuito e
 
 - Debajo del campo o la sección que explica, en `pizarra-500`, cuerpo 13–14 en escritorio. Una o dos oraciones que digan la consecuencia, como el resto de la voz: *"Cada torneo del calendario es un casillero del ranking. Cuando se juega Primavera 26, sus puntos reemplazan los de Primavera 25."*
 - Para explicaciones largas, una caja `niebla` con radio de tarjeta, sin ícono de ayuda ni signo de pregunta.
+- **Qué es un dato, cuando el rótulo no alcanza:** una "i" en un círculo al lado del rótulo, en su color, que se toca en 44. Al tocarla, la explicación se abre entre el rótulo y el campo, en `pizarra-500` de 13, y otro toque la cierra. Nunca un "!", que se lee como error ([decisión 150](decisiones/150-ayuda-con-la-i-en-los-campos.md)).
 - **Tarjeta "Primeros pasos"** en el inicio del organizador: tres pasos con check (*Importá tus jugadores · Creá tu primer torneo · Compartí el link de inscripción*) que **se tildan solos** cuando se cumplen. Borde `linea`, no tarjeta noche: no es el dato principal de la pantalla. Desaparece cuando están los tres. "Compartí el link" se tilda con la primera inscripción pagada.
 
 ---
 
 ## 10. Iconos
 
-SVG en línea, trazo de 1.7–1.9, grilla de 16/18/20/24, `stroke-linecap: round`, con el color de un token (`stroke-pizarra-500`, `currentColor`), nunca un hex. Nunca emoji ni glifos unicode como ícono. El set actual: búsqueda, chevron, reloj, cámara, compartir, mensaje, check, cuadro, calendario, tarjeta, archivo, barras, engranaje.
+SVG en línea, trazo de 1.7–1.9, grilla de 16/18/20/24, `stroke-linecap: round`, con el color de un token (`stroke-pizarra-500`, `currentColor`), nunca un hex. Nunca emoji ni glifos unicode como ícono. El set actual: búsqueda, chevron, reloj, cámara, compartir, mensaje, check, cuadro, calendario, tarjeta, archivo, barras, engranaje, información.
 
 Un ícono sin texto dice qué hace en `aria-label` y en `title`, y tiene un área de toque de 44 aunque el dibujo sea de 20. El engranaje abre la configuración de algo: hoy, *Editar el torneo* desde su tarjeta en el inicio ([decisión 101](decisiones/101-engranaje-para-editar.md)).
 
