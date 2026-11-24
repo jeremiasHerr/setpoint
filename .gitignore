@@ -5,3 +5,7 @@ build/
 .expo/
 *.log
 .DS_Store
+# Estado local de wrangler, al probar la función de Cloudflare (decisión 144).
+.wrangler/
+# Las pinturas que se exportan de docs/pintura: el resultado va a apps/web/public (decisión 145).
+docs/pintura/*.jpg

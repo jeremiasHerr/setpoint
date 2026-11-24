@@ -24,7 +24,8 @@ tp-torneos/
 │   ├── 06-ia.md
 │   ├── 07-configurabilidad.md
 │   ├── 08-repositorio.md        # este archivo
-│   └── diagramas/               # SVG y fuentes
+│   ├── diagramas/               # SVG y fuentes
+│   └── pintura/                 # la pintura del hero, en código, y cómo se exporta (decisión 145)
 │
 ├── apps/
 │   ├── api/
@@ -71,6 +72,9 @@ tp-torneos/
 │           ├── features/        # espejo de los módulos de la API
 │           ├── components/
 │           └── lib/
+│
+├── functions/                   # función de Cloudflare Pages: la vista previa del link del torneo
+│   └── inscripcion/[org]/[torneo].ts   (decisión 144; va en la raíz porque ahí la busca Cloudflare)
 │
 └── packages/
     └── shared/

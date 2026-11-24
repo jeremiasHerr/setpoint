@@ -187,6 +187,8 @@ Se configura una sola vez, en este orden:
    - *Variables:* `VITE_API_URL` = `https://api.setpoint.com.ar`, `NODE_VERSION` = `22` y `SKIP_DEPENDENCY_INSTALL` = `1` (el comando instala solo lo de la web, como el Dockerfile).
 
    En *Custom domains*, agregar `setpoint.com.ar`.
+
+   La carpeta `functions/` de la raíz se publica sola con la web, sin configurar nada: es la función que arma la vista previa del link del torneo en WhatsApp, y lee la API del mismo `VITE_API_URL` ([decisión 144](docs/decisiones/144-vista-previa-del-link-del-torneo.md)). Para probarla en local, con la API levantada: `npm run build -w apps/web && npx wrangler pages dev apps/web/dist --binding VITE_API_URL=http://localhost:3000`, y abrir `http://localhost:8788/inscripcion/<organización>/<torneo>`.
 6. **APK.** Desde `apps/mobile`: `npx eas-cli env:set --name EXPO_PUBLIC_API_URL --value https://api.setpoint.com.ar --environment production --visibility plaintext`, y para los avisos, el mismo `GOOGLE_SERVICES_JSON` del perfil de prueba con `--environment production`. Después, `npx eas-cli build -p android --profile production`. Este APK no acepta http ([decisión 048](docs/decisiones/048-http-en-el-apk-de-prueba.md)).
 
 **Para comprobar:** abrir https://setpoint.com.ar, registrar una organización y, desde la app, pedir un código con un email real.
@@ -202,6 +204,7 @@ setpoint/
 │   ├── api/           Express + Prisma
 │   ├── web/           React
 │   └── mobile/        React Native (Expo)
+├── functions/         función de Cloudflare: la vista previa del link del torneo
 └── packages/
     └── shared/        schemas de Zod y tipos compartidos
 ```
