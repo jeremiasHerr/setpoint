@@ -47,7 +47,7 @@ La distinción clave: coordinar la fecha **no es carga nueva**. El reglamento ya
 | Cuadros y zonas | Cuadro principal y, si hay, cuadro consuelo, en vivo |
 | Calendario | Partidos acordados por fecha |
 
-Se accede por link directo, sin sesión. **No exponen datos de contacto.** La búsqueda de jugador es **por apellido**, no un listado completo del padrón.
+Se accede por link directo, sin sesión. **No exponen datos de contacto.** La búsqueda de jugador es **por nombre o apellido** ([decisión 146](decisiones/146-buscar-por-nombre-y-apellido.md)), no un listado completo del padrón.
 
 ---
 
@@ -55,7 +55,7 @@ Se accede por link directo, sin sesión. **No exponen datos de contacto.** La b�
 
 **La cuenta es el email verificado** ([decisión 049](decisiones/049-identidad-e-ingreso-con-codigo.md)). La persona (`Usuario`) tiene nombre, apellido y email, y se crea la primera vez que verifica un código. Toda persona que se inscribe ya tiene cuenta. No hay registro de jugadores ni contraseña.
 
-En modo `cerrada` —el de POLENTA— **el jugador ya existe en el padrón antes de tener cuenta**. La vinculación con su perfil ocurre **al inscribirse**: buscándose por su apellido, con la propuesta "¿Sos…?" si ya juega en otro circuito, o desde el link personal que le manda la organización (§5). En modo `abierta`, el perfil se crea al inscribirse, con 0 puntos.
+En modo `cerrada` —el de POLENTA— **el jugador ya existe en el padrón antes de tener cuenta**. La vinculación con su perfil ocurre **al inscribirse**: buscándose por su nombre y apellido, con la propuesta "¿Sos…?" si ya juega en otro circuito, o desde el link personal que le manda la organización (§5). En modo `abierta`, el perfil se crea al inscribirse, con 0 puntos.
 
 La organización **ve cada vinculación nueva** en el padrón y revisa solo las dudosas: los posibles homónimos y los perfiles que reclama otra cuenta. También puede desvincular cualquier perfil (§5.9). **La organización no toca la identidad de nadie:** el email y el nombre de la persona son de ella.
 
@@ -178,7 +178,7 @@ Después del código, o con la sesión iniciada:
 
 1. **Ya tiene perfil en este circuito.** Ve *"Lucas Bravo · Tercera"* y sigue al pago.
 2. **Ya juega en otro circuito y es nuevo en este.** Se busca su apellido en la categoría del torneo y se le propone *"¿Sos Federico Ibáñez, de Intermedia?"*, que confirma con un toque. Si hay varios, elige entre hasta 5. Si no es ninguno, sigue como en el punto 3.
-3. **Es su primera vez.** *"Buscate por tu apellido."* Es un buscador, no una lista:
+3. **Es su primera vez.** *"Escribí tu nombre y apellido."* Es un buscador, no una lista:
    - no muestra nada hasta escribir 3 letras, y como mucho 5 resultados;
    - busca solo en la categoría del torneo y muestra solo nombre y apellido;
    - compara sin tildes ni mayúsculas y palabra por palabra: "Lucas Matías Bravo" encuentra a "Lucas Bravo";
@@ -266,7 +266,7 @@ Si la reserva vence sin pago, la inscripción pasa a `expirada`, no se vincula n
 |---|---|---|
 | Ya tiene perfil en el circuito, sin sesión | Link del torneo → email → código → paga | Nada nuevo |
 | Ya tiene perfil en el circuito, con sesión | Link del torneo → paga | Nada nuevo |
-| Primera vez | Link del torneo → email → código → se busca por apellido → toca su nombre → consentimiento → paga | La vinculación nueva; si hay un homónimo, para revisar |
+| Primera vez | Link del torneo → email → código → se busca por nombre y apellido → toca su nombre → consentimiento → paga | La vinculación nueva; si hay un homónimo, para revisar |
 | Juega en otro circuito, nuevo en este | Link del torneo → (email y código, si no hay sesión) → "¿Sos…?" y consentimiento → paga | La vinculación nueva; si hay un homónimo, para revisar |
 | Link personal | Link personal → email → código → elige el torneo → paga | La vinculación nueva |
 | Su perfil está vinculado a otra cuenta | … → toca su nombre → "Avisarle a la organización" | El reclamo, para revisar |

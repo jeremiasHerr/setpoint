@@ -1,4 +1,4 @@
-import type { RankingPublico } from '@setpoint/shared';
+import { coincideConElNombre, type RankingPublico } from '@setpoint/shared';
 import { useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { Campo } from '../components/Campo';
@@ -9,11 +9,6 @@ import { TablaRanking } from '../features/ranking/TablaRanking';
 import { useRankingPublico } from '../features/ranking/useRankingPublico';
 import { ErrorApi } from '../lib/api';
 import { Esqueleto } from '../components/Esqueleto';
-
-// Para buscar "fernandez" y encontrar a Fernández.
-function normalizar(texto: string) {
-  return texto.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().trim();
-}
 
 function mensajeDeError(error: Error) {
   if (error instanceof ErrorApi && error.codigo === 'ORGANIZACION_NO_ENCONTRADA') return 'No encontramos ese circuito. Revisá el enlace.';
@@ -54,8 +49,8 @@ function Ranking({ ranking, slug }: { ranking: RankingPublico; slug: string }) {
   if (!categoria) return <p className="text-[15px] text-pizarra-700">Este circuito todavía no cargó sus categorías.</p>;
 
   // Cada fila conserva su puesto: se busca para ver dónde está alguien, no para reordenar.
-  const termino = normalizar(busqueda);
-  const filas = termino ? categoria.filas.filter((f) => normalizar(f.apellido).includes(termino)) : categoria.filas;
+  // Por nombre, apellido o los dos (decisión 146).
+  const filas = categoria.filas.filter((f) => coincideConElNombre(f, busqueda));
 
   return (
     <>
@@ -72,7 +67,7 @@ function Ranking({ ranking, slug }: { ranking: RankingPublico; slug: string }) {
 
       <Campo
         id="buscar-jugador"
-        rotulo="Buscar por apellido"
+        rotulo="Buscar por nombre o apellido"
         type="search"
         autoComplete="off"
         value={busqueda}
@@ -92,7 +87,7 @@ function Ranking({ ranking, slug }: { ranking: RankingPublico; slug: string }) {
       {categoria.filas.length === 0 ? (
         <p className="text-[15px] text-pizarra-500">Todavía no hay jugadores en esta categoría.</p>
       ) : filas.length === 0 ? (
-        <p className="text-[15px] text-pizarra-500">Nadie en {categoria.nombre} tiene ese apellido.</p>
+        <p className="text-[15px] text-pizarra-500">Nadie en {categoria.nombre} se llama así.</p>
       ) : (
         <TablaRanking
           slug={slug}

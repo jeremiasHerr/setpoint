@@ -165,7 +165,7 @@ Las horas de la lista de espera están en el torneo, con 24 por defecto, y se el
 | `con_aprobacion` | Cualquiera solicita; la organización aprueba o rechaza | Al pagar, después de aprobada la solicitud |
 | `abierta` | Cualquiera se inscribe pagando | Automáticamente al confirmarse el pago, con 0 puntos |
 
-**Cuando el jugador no está en el padrón.** En los tres modos, el jugador verifica su email con un código y quien ya está se encuentra igual: por su perfil ya vinculado, buscándose por su apellido la primera vez, o desde su link personal ([04-flujo-jugador.md](04-flujo-jugador.md) §5). El modo solo decide qué pasa cuando no aparece en la búsqueda:
+**Cuando el jugador no está en el padrón.** En los tres modos, el jugador verifica su email con un código y quien ya está se encuentra igual: por su perfil ya vinculado, buscándose por su nombre y apellido la primera vez, o desde su link personal ([04-flujo-jugador.md](04-flujo-jugador.md) §5). El modo solo decide qué pasa cuando no aparece en la búsqueda:
 
 | Modo | Qué ve el jugador | Qué pasa |
 |---|---|---|

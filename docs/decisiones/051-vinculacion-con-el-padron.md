@@ -1,6 +1,6 @@
 # 051 — Vinculación con el padrón: búsqueda acotada y revisión por excepción
 
-**Estado:** aceptada — 25 de octubre de 2026. Ajustada por la [decisión 054](054-perfil-pendiente.md): en los modos con aprobación y abierto, el perfil existe desde la solicitud o la reserva, como pendiente, y si se abandona queda descartado.
+**Estado:** aceptada — 25 de octubre de 2026. Ajustada por la [decisión 054](054-perfil-pendiente.md): en los modos con aprobación y abierto, el perfil existe desde la solicitud o la reserva, como pendiente, y si se abandona queda descartado. Reemplazada en parte por la [decisión 146](146-buscar-por-nombre-y-apellido.md): la primera vez, el jugador se busca por su nombre y apellido.
 
 ## Contexto
 

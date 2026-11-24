@@ -144,7 +144,7 @@ export function SeccionInscripcion({
           <div className="flex flex-col gap-2">
             <Campo
               id="torneo-horas-lista"
-              rotulo="Para pagar un lugar liberado"
+              rotulo="Tiempo para pagar un lugar liberado"
               numerico
               inputMode="numeric"
               sufijo={horasReservaListaEspera === 1 ? 'hora' : 'horas'}

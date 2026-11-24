@@ -113,12 +113,17 @@ export function EncabezadoOrganizador({ organizacion, navegacion = [], activo, i
           {/* Dentro del header, que con z-40 arma su propio apilamiento: con -z-10 el velo tapa la
               página pero queda debajo del logo y del botón. */}
           <div aria-hidden="true" onClick={cerrar} className="fixed inset-0 -z-10 bg-noche/40 backdrop-blur-[4px] md:hidden" />
+          {/* El fondo de la franja, encima del velo: si no, el desenfoque mezcla la página blanca con el
+              borde de abajo de la franja y queda una línea clara contra el panel. */}
+          <div aria-hidden="true" className="absolute inset-0 -z-[5] bg-noche-900 md:hidden" />
           <nav
             ref={panel}
             id={idPanel}
             aria-label="Menú"
-            className="absolute inset-x-0 top-full z-40 flex flex-col border-t border-borde-noche bg-noche-900 px-4 pt-1.5 pb-3.5 md:hidden"
+            className="absolute inset-x-0 top-full z-40 flex flex-col bg-noche-900 px-4 pt-1.5 pb-3.5 md:hidden"
           >
+            {/* Sin borde arriba: el panel sigue a la franja, del mismo noche. Toda la fila se toca, pero el
+                fondo del activo abraza la palabra, como en la compu. */}
             {navegacion.map(({ etiqueta, href }) => {
               const esActivo = etiqueta === activo;
               return (
@@ -127,11 +132,11 @@ export function EncabezadoOrganizador({ organizacion, navegacion = [], activo, i
                   to={href}
                   aria-current={esActivo ? 'page' : undefined}
                   onClick={cerrar}
-                  className={`flex h-12 items-center rounded-control px-3 text-base focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-white ${
-                    esActivo ? 'bg-noche-2 font-semibold text-white' : 'font-medium text-pizarra-400 hover:text-white'
+                  className={`flex h-12 items-center rounded-control text-base focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-white ${
+                    esActivo ? 'font-semibold text-white' : 'font-medium text-pizarra-400 hover:text-white'
                   }`}
                 >
-                  {etiqueta}
+                  <span className={`flex h-[38px] items-center rounded-lg px-3 ${esActivo ? 'bg-noche-2' : ''}`}>{etiqueta}</span>
                 </Link>
               );
             })}

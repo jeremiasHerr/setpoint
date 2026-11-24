@@ -34,8 +34,9 @@ const ESTADO: Record<EstadoTorneo, string> = {
   cancelado: 'cancelado',
 };
 
-// En el celular cada pestaña ocupa su celda de la grilla, sin margen; desde sm, el de siempre.
-const pestana = 'flex h-11 items-center border-b-2 text-[15px] -mb-px sm:px-3';
+// En el celular cada pestaña ocupa su celda de la grilla, sin margen y centrada, para que el subrayado
+// quede debajo de la palabra; desde sm, el de siempre.
+const pestana = 'flex h-11 items-center justify-center border-b-2 text-[15px] -mb-px sm:justify-start sm:px-3';
 
 type Props = {
   sesion: Sesion;

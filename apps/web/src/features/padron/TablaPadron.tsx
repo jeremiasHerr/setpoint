@@ -1,4 +1,4 @@
-import type { JugadorPadron } from '@setpoint/shared';
+import { coincideConElNombre, type JugadorPadron } from '@setpoint/shared';
 import { useState } from 'react';
 import { Chip } from '../../components/Chip';
 import { Numero } from '../../components/Numero';
@@ -27,16 +27,9 @@ const COLUMNAS_SIN_RANKING =
 // En Nuevas: categoría, cómo se vinculó y cuándo. En el celular queda solo cuándo.
 const COLUMNAS_NUEVAS = 'grid-cols-[34px_minmax(0,1fr)_auto_32px] md:grid-cols-[34px_minmax(0,1fr)_118px_130px_70px_40px]';
 
-// Además de las categorías, el padrón filtra las vinculaciones nuevas y las que quedaron para revisar.
-type Filtro = { categoria: string } | 'nuevas' | 'revisar' | null;
-
-// Sin tildes ni mayúsculas: "perez" encuentra a "Pérez".
-function normalizar(texto: string) {
-  return texto
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase();
-}
+// Además de las categorías, el padrón filtra a quienes no tienen ninguna, como los que entraron por un
+// torneo suelto (decisión 147), las vinculaciones nuevas y las que quedaron para revisar.
+type Filtro = { categoria: string } | 'sin-categoria' | 'nuevas' | 'revisar' | null;
 
 // Activos primero, de más a menos puntos; los de baja al final.
 function ordenar(jugadores: JugadorPadron[]) {
@@ -55,6 +48,7 @@ export function TablaPadron({ jugadores, categorias, conRanking, seleccionadoId,
 
   const nuevas = anterior === undefined ? [] : jugadores.filter((j) => esVinculacionNueva(j, anterior));
   const paraRevisar = jugadores.filter((j) => j.revision !== null);
+  const sinCategoria = jugadores.filter((j) => j.categoria === null);
   const enNuevas = filtro === 'nuevas';
 
   const delFiltro =
@@ -62,11 +56,13 @@ export function TablaPadron({ jugadores, categorias, conRanking, seleccionadoId,
       ? nuevas
       : filtro === 'revisar'
         ? paraRevisar
-        : filtro === null
-          ? jugadores
-          : jugadores.filter((j) => j.categoria === filtro.categoria);
-  const texto = normalizar(busqueda.trim());
-  const encontrados = delFiltro.filter((j) => texto === '' || normalizar(`${j.apellido} ${j.nombre}`).includes(texto));
+        : filtro === 'sin-categoria'
+          ? sinCategoria
+          : filtro === null
+            ? jugadores
+            : jugadores.filter((j) => j.categoria === filtro.categoria);
+  // Por nombre, apellido o los dos (decisión 146).
+  const encontrados = delFiltro.filter((j) => coincideConElNombre(j, busqueda));
   // Las nuevas, de la última a la primera.
   const visibles = enNuevas ? [...encontrados].sort((a, b) => b.vinculadoEn!.localeCompare(a.vinculadoEn!)) : ordenar(encontrados);
   const columnas = enNuevas ? COLUMNAS_NUEVAS : conRanking ? COLUMNAS_CON_RANKING : COLUMNAS_SIN_RANKING;
@@ -88,6 +84,12 @@ export function TablaPadron({ jugadores, categorias, conRanking, seleccionadoId,
               {nombre}
             </Chip>
           ))}
+          {/* Sin categorías en el circuito, nadie tiene una y "Todas" ya los muestra a todos. */}
+          {categorias.length > 0 && (sinCategoria.length > 0 || filtro === 'sin-categoria') && (
+            <Chip activo={filtro === 'sin-categoria'} onClick={() => setFiltro('sin-categoria')}>
+              Sin categoría
+            </Chip>
+          )}
           {/* Solo si hay alguna; el elegido queda aunque se vacíe, para no dejar la tabla sin filtro a la vista. */}
           {(nuevas.length > 0 || enNuevas) && (
             <Chip activo={enNuevas} onClick={() => setFiltro('nuevas')}>
@@ -115,8 +117,8 @@ export function TablaPadron({ jugadores, categorias, conRanking, seleccionadoId,
             type="search"
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
-            placeholder="Buscar por apellido"
-            aria-label="Buscar por apellido"
+            placeholder="Nombre o apellido"
+            aria-label="Buscar por nombre o apellido"
             className="min-w-0 flex-1 text-sm outline-none placeholder:text-pizarra-400"
           />
         </label>

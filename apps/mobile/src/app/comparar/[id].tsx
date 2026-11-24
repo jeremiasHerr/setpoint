@@ -1,6 +1,7 @@
 // Comparar a un jugador con otro (F18, decisión 143): desde su ficha, la lista de con quiénes jugó,
-// con un buscador por apellido. Al tocar uno se abre el cara a cara de los dos. Solo los que ya se
+// con un buscador por nombre o apellido (decisión 146). Al tocar uno se abre el cara a cara de los dos. Solo los que ya se
 // enfrentaron, como en la web (decisión 122): con otro no habría nada que mostrar.
+import { coincideConElNombre } from '@setpoint/shared';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -10,7 +11,6 @@ import { Esqueleto } from '../../components/Esqueleto';
 import { useSesion } from '../../features/auth/SesionProvider';
 import { ErrorDeCarga } from '../../features/auth/ErrorDeCarga';
 import { useRivales } from '../../features/caraACara/useCaraACara';
-import { paraBuscar } from '../../features/ficha/textos';
 import { colores, fuentes, medidas, tabular } from '../../lib/tokens';
 
 const vecesJugadas = (n: number) => (n === 1 ? '1 partido' : `${n} partidos`);
@@ -24,8 +24,7 @@ export default function Comparar() {
   const [busqueda, setBusqueda] = useState('');
 
   const esVos = perfil?.jugador.id === jugadorId;
-  const buscado = paraBuscar(busqueda);
-  const rivales = (datos?.rivales ?? []).filter((r) => buscado === '' || paraBuscar(r.apellido).includes(buscado));
+  const rivales = (datos?.rivales ?? []).filter((r) => coincideConElNombre(r, busqueda));
 
   return (
     <SafeAreaView style={estilos.pantalla}>
@@ -60,7 +59,7 @@ export default function Comparar() {
                 veces a la que menos.
               </Text>
               <Campo
-                rotulo="Buscar por apellido"
+                rotulo="Buscar por nombre o apellido"
                 value={busqueda}
                 onChangeText={setBusqueda}
                 autoCapitalize="words"
@@ -68,7 +67,7 @@ export default function Comparar() {
                 returnKeyType="search"
               />
               {rivales.length === 0 ? (
-                <Text style={estilos.nota}>Ningún rival tiene un apellido así.</Text>
+                <Text style={estilos.nota}>Ningún rival se llama así.</Text>
               ) : (
                 <View>
                   {rivales.map((rival) => (

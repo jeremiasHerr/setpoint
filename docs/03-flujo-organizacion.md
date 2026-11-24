@@ -151,7 +151,7 @@ Todos exigen sesión y solo responden a administradores de esa organización.
 | `PATCH /api/organizaciones/:slug/jugadores/:id` | Edita solo los campos que llegan. Sirve también para reasignar la categoría y para la baja |
 | `POST /api/organizaciones/:slug/jugadores/visita` | Guarda que el administrador abrió el padrón y devuelve su visita anterior, para "Nuevas" ([decisión 083](decisiones/083-ultima-visita-al-padron.md)) |
 
-**El padrón viaja entero.** Filtrar por categoría y buscar por apellido se resuelve en la pantalla: con padrones de decenas de jugadores no se justifica paginar.
+**El padrón viaja entero.** Filtrar por categoría (o a los que no tienen ninguna, [decisión 147](decisiones/147-jugadores-sin-categoria-en-el-padron.md)) y buscar por nombre o apellido se resuelve en la pantalla: con padrones de decenas de jugadores no se justifica paginar.
 
 **Un jugador nuevo entra con 0 puntos porque no se le crea ningún movimiento de ranking**, no porque se le cargue un cero. Figura en el ranking de su categoría desde el alta.
 

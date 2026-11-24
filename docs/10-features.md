@@ -67,7 +67,7 @@ Antes del listado, la secuencia operativa completa. Cada paso está cubierto por
 - La organización puede reasignar la categoría de un jugador cuando corresponda.
 - Un mismo jugador puede pertenecer a varios circuitos, con ranking independiente en cada uno: tiene una sola cuenta y un perfil en cada circuito, y ningún circuito ve los datos del otro.
 - El padrón puede ser cerrado, con aprobación previa o abierto, según lo defina la organización. En modo abierto, quien se inscribe sin estar en el padrón se incorpora automáticamente con cero puntos al confirmarse su pago.
-- El jugador se vincula con su perfil del padrón **al inscribirse por primera vez**, después de verificar su email con un código: buscándose por su apellido o desde el link personal que le manda la organización. Así recupera su historial y sus puntos.
+- El jugador se vincula con su perfil del padrón **al inscribirse por primera vez**, después de verificar su email con un código: buscándose por su nombre y apellido o desde el link personal que le manda la organización. Así recupera su historial y sus puntos.
 - Desde el padrón, la organización comparte el **link personal** de cada jugador por WhatsApp o lo copia, y puede generar uno nuevo si se le mandó a quien no era.
 - La organización **ve cada vinculación nueva** en el padrón, **revisa solo las dudosas** (un posible homónimo en la categoría, o un perfil que reclama otra cuenta) y puede desvincular cualquier perfil. Decide sobre su padrón, nunca sobre el email o los datos de la persona.
 
@@ -204,13 +204,13 @@ Cualquier persona podrá consultar el ranking del circuito desde un enlace, sin 
 
 **Precisiones de alcance:**
 - El ranking se muestra por categoría, con el desglose de puntos que aportó cada torneo del calendario.
-- Se puede buscar a un jugador por apellido para ver su posición.
+- Se puede buscar a un jugador por nombre o apellido para ver su posición.
 - Ninguna pantalla pública muestra datos de contacto de los jugadores.
 - La información se actualiza sola a medida que se cierran torneos, sin que nadie edite una planilla.
 
 **Entrega: 50%**
 
-**Estado:** implementada. En la web, para cualquiera con el enlace (`/c/:slug/ranking`, [decisión 033](decisiones/033-ranking-publico.md)), con buscador por apellido. En la app, la pantalla *Ranking* usa la misma ruta y suma tu tarjeta ("Vas 1º de 26", tus puntos y tus casilleros) y tu fila destacada. La tarjeta no muestra cuánto cambió el último torneo ([decisión 043](decisiones/043-ranking-sin-el-cambio-del-ultimo-torneo.md)). La organización copia el enlace desde el inicio ("Copiar el link del ranking") para pasarlo al grupo. En la web, la fila abierta lleva a la ficha del jugador (F17).
+**Estado:** implementada. En la web, para cualquiera con el enlace (`/c/:slug/ranking`, [decisión 033](decisiones/033-ranking-publico.md)), con buscador por nombre o apellido ([decisión 146](decisiones/146-buscar-por-nombre-y-apellido.md)). En la app, la pantalla *Ranking* usa la misma ruta y suma tu tarjeta ("Vas 1º de 26", tus puntos y tus casilleros) y tu fila destacada. La tarjeta no muestra cuánto cambió el último torneo ([decisión 043](decisiones/043-ranking-sin-el-cambio-del-ultimo-torneo.md)). La organización copia el enlace desde el inicio ("Copiar el link del ranking") para pasarlo al grupo. En la web, la fila abierta lleva a la ficha del jugador (F17).
 
 ---
 
@@ -258,7 +258,7 @@ El jugador dispondrá de una aplicación instalable en su teléfono donde ver su
 **Precisiones de alcance:**
 - Solo pueden inscribirse los jugadores que la organización cargó previamente en el circuito, salvo que haya habilitado la inscripción con aprobación o abierta.
 - **El jugador no necesita registrarse ni crear una contraseña.** Entra desde el link del torneo que la organización comparte en el grupo, en el navegador del celular, o desde su link personal.
-- **Se identifica con su email, verificado con un código de 6 dígitos** que le llega en el momento. Ese email es su cuenta. No se le pide el DNI. La primera vez se busca por su apellido entre los jugadores de la categoría.
+- **Se identifica con su email, verificado con un código de 6 dígitos** que le llega en el momento. Ese email es su cuenta. No se le pide el DNI. La primera vez se busca por su nombre y apellido entre los jugadores de la categoría.
 - Si no está en el padrón: en un torneo cerrado se le pide que hable con la organización; con aprobación, deja una solicitud; en uno abierto, se le crea el perfil.
 - El lugar se reserva por quince minutos mientras se completa el pago. Si el pago no se concreta en ese plazo, el lugar se libera para otro jugador.
 - La inscripción se confirma sola: nadie tiene que verificar comprobantes a mano. Al confirmarse el pago le llega un **comprobante por email**, con su número de inscripción.
@@ -285,7 +285,7 @@ La organización podrá seguir el estado de las inscripciones de cada torneo en 
 - Marca las inscripciones cuya vinculación quedó para revisar (un posible homónimo, o un perfil que reclama otra cuenta) y lleva a revisarla (F02).
 
 **Estado:** implementada (`/torneos/:id/inscripciones`, [03-flujo-organizacion.md](03-flujo-organizacion.md) §7), y del lado del jugador, anotarse en la lista de espera desde el link del torneo y desde el link personal.
-- Pestañas Confirmados, Reservando, Lista de espera, Bajas y, con aprobación, Solicitudes, con un buscador por apellido. Al costado, la lista de espera, las devoluciones pendientes y la conciliación.
+- Pestañas Confirmados, Reservando, Lista de espera, Bajas y, con aprobación, Solicitudes, con un buscador por nombre o apellido. Al costado, la lista de espera, las devoluciones pendientes y la conciliación.
 - Dar de baja a quien pagó, diciendo si le corresponde la devolución; el sistema la anota y la organización la hace por fuera ([decisión 075](decisiones/075-la-devolucion-se-anota.md)). Se puede hasta que se confirma el sorteo ([decisión 077](decisiones/077-baja-hasta-el-sorteo.md)).
 - Un lugar que se libera (baja, reserva vencida, pago rechazado o cupo más grande) pasa al primero de la lista de espera, con 24 horas para pagar y un email; si no paga, pasa al siguiente ([decisión 076](decisiones/076-lista-de-espera-24-horas.md)).
 - Inscribir a mano a quien pagó por fuera, sin pasarse del cupo ([decisión 079](decisiones/079-inscribir-a-mano-sin-pasarse-del-cupo.md)), y "Recordarle" el pago a una reserva.
@@ -383,7 +383,7 @@ Cada jugador tendrá una ficha con su historial completo: todos los partidos que
 - Los torneos van con la instancia que alcanzó y los puntos que le dio el cierre; es la sección que la referencia no dibuja ([decisión 071](decisiones/071-la-ficha-suma-los-torneos.md)). La instancia se calcula con sus partidos de cuadro, así que sirve también para torneos sin ranking y en juego ([decisión 072](decisiones/072-la-instancia-se-calcula-con-los-partidos.md)).
 - El W.O. figura en la lista pero no cuenta como jugado; el abandono sí ([decisión 073](decisiones/073-el-wo-no-cuenta-en-la-ficha.md)).
 - Se llega desde la fila abierta del ranking ("Ver la ficha") y desde los nombres de las zonas del torneo en vivo ([decisión 074](decisiones/074-entrada-a-la-ficha.md)).
-- En la app, la fila abierta del ranking suma "Ver la ficha" y abre la misma ficha (`/ficha/[id]`, sobre la ruta pública), sin pestaña nueva ([decisión 045](decisiones/045-pestanas-de-la-app.md)). Sus partidos se filtran por ganados o perdidos y por el apellido del rival, y cada uno abre el cara a cara con ese rival ([decisión 143](decisiones/143-comparar-y-filtrar-en-la-ficha-de-la-app.md)).
+- En la app, la fila abierta del ranking suma "Ver la ficha" y abre la misma ficha (`/ficha/[id]`, sobre la ruta pública), sin pestaña nueva ([decisión 045](decisiones/045-pestanas-de-la-app.md)). Sus partidos se filtran por ganados o perdidos y por el nombre del rival ([decisión 146](decisiones/146-buscar-por-nombre-y-apellido.md)), y cada uno abre el cara a cara con ese rival ([decisión 143](decisiones/143-comparar-y-filtrar-en-la-ficha-de-la-app.md)).
 - "Comparar con otro jugador" abre el cara a cara (F18).
 
 ---
@@ -396,7 +396,7 @@ Cualquier persona podrá comparar a dos jugadores del circuito y ver el historia
 - Muestra el resultado acumulado del cruce, por ejemplo tres a dos.
 - Detalla cada enfrentamiento con su resultado, torneo e instancia.
 - Permite filtrar el rendimiento según la superficie de la cancha.
-- Se accede desde la ficha de cualquier jugador o desde un buscador por apellido.
+- Se accede desde la ficha de cualquier jugador o desde un buscador por nombre o apellido.
 
 **Entrega: 100%**
 
@@ -405,7 +405,7 @@ Cualquier persona podrá comparar a dos jugadores del circuito y ver el historia
 - La API: `GET /api/publico/:slug/jugadores/:id/rivales` y `.../cara-a-cara/:rivalId`. El W.O. no cuenta como jugado y el abandono sí ([decisión 073](decisiones/073-el-wo-no-cuenta-en-la-ficha.md)). Sin teléfono ni email.
 - El filtro por superficie usa la del club de cada partido, si todas sus canchas son de la misma; los partidos sin ese dato solo cuentan en "Todas". Abajo, una frase dice cómo están en cada superficie ([decisión 126](decisiones/126-superficie-del-partido-por-el-club.md)).
 - En la app, *Cómo te fue con…* (`/rival/[id]`) muestra el historial entre quien tiene la sesión y un rival, con el mismo filtro y la misma frase, que viven en `packages/shared`. Se abre desde el próximo partido en *Cuándo juego* y desde la ficha de otro jugador.
-- En la app, "Comparar con otro jugador", en cualquier ficha, abre la lista de con quiénes jugó, con un buscador por apellido, y de ahí el cara a cara de los dos (`/rival/[id]?de=`). Solo con quienes ya se enfrentaron, como en la web ([decisión 143](decisiones/143-comparar-y-filtrar-en-la-ficha-de-la-app.md)).
+- En la app, "Comparar con otro jugador", en cualquier ficha, abre la lista de con quiénes jugó, con un buscador por nombre o apellido, y de ahí el cara a cara de los dos (`/rival/[id]?de=`). Solo con quienes ya se enfrentaron, como en la web ([decisión 143](decisiones/143-comparar-y-filtrar-en-la-ficha-de-la-app.md)).
 
 ---
 

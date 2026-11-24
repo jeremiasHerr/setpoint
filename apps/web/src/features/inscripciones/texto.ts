@@ -14,11 +14,6 @@ export const nombreDelMedio: Record<MedioPago, string> = {
   otro: 'Otro',
 };
 
-// Para buscar "perez" y encontrar a Pérez.
-export function normalizar(texto: string) {
-  return texto.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().trim();
-}
-
 const zona = 'America/Argentina/Buenos_Aires';
 const hora = new Intl.DateTimeFormat('es-AR', { hour: '2-digit', minute: '2-digit', hourCycle: 'h23', timeZone: zona });
 const dia = new Intl.DateTimeFormat('en-CA', { timeZone: zona });
