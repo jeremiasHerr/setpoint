@@ -265,7 +265,7 @@ function TarjetaDelPartido({ sesion, partido }: { sesion: Sesion; partido: Parti
       </Tarjeta>
 
       <Tarjeta className="w-full max-w-[720px] self-center overflow-hidden">
-        <form ref={formulario} onSubmit={enviar} className="scroll-mt-4">
+        <form ref={formulario} onSubmit={enviar} className="scroll-mt-[76px]">
           <div className="flex flex-col gap-[5px] border-b border-linea px-4 py-5 sm:px-6">
             <h1 className="text-[22px] font-display font-semibold tracking-[-0.02em]">
               {nombres[0]} · {nombres[1]}

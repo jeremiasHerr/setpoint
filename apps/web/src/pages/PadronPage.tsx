@@ -178,7 +178,7 @@ function Padron({ sesion }: { sesion: Sesion }) {
 
           {/* Fijo al bajar, como en Nuevo torneo: el jugador que se edita puede estar al final de la
               tabla. Si el panel no entra en la pantalla, baja por su cuenta. */}
-          <aside className="flex flex-col gap-4 lg:sticky lg:top-4 lg:max-h-[calc(100dvh-32px)] lg:overflow-y-auto">
+          <aside className="flex flex-col gap-4 lg:sticky lg:top-[76px] lg:max-h-[calc(100dvh-92px)] lg:overflow-y-auto">
             <PanelJugador
               key={editando ? `jugador-${editando.id}` : `alta-${altas}`}
               categorias={circuito.data.categorias}
