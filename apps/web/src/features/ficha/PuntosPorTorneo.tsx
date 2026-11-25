@@ -1,6 +1,7 @@
 import type { Instancia, RankingDeLaFicha } from '@setpoint/shared';
 import { Numero } from '../../components/Numero';
 import { NOMBRE_DEL_PRINCIPAL } from '../cuadros/cuadro';
+import { abreviarTorneo } from '../ranking/casilleros';
 
 // La barra más alta mide 100 px; una sin puntos queda como una línea.
 const ALTO_MAXIMO = 100;
@@ -18,8 +19,8 @@ const QUE_HIZO: Record<Instancia, string> = {
   participacion: 'jugado el torneo',
 };
 
-// "pri", "ver": las tres primeras letras, como en la tabla del ranking.
-const rotulo = (nombre: string) => nombre.slice(0, 3).toLowerCase();
+// "prim", "ver": la misma abreviatura que en la tabla del ranking.
+const rotulo = abreviarTorneo;
 const anioCorto = (anio: number) => String(anio).slice(-2);
 
 // Una barra por torneo del calendario, con los puntos vigentes de cada casillero: se ve de un vistazo

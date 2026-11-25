@@ -6,6 +6,7 @@ import {
   type JugadorDelCuadro,
   type PartidoDelCuadro,
 } from '@setpoint/shared';
+import { elDiaYHora } from '../tablero/tablero';
 
 // El cuadro consuelo se llama como lo configuró la organización (07 §1.2): cada pantalla recibe el
 // nombre en la respuesta de la API. "Campeonato" sigue fijo hasta cerrar la decisión abierta 16.
@@ -98,13 +99,10 @@ export function marcadorDelLado(partido: PartidoDelCuadro, lado: Lado, abierta: 
   return String(partido.sets.filter((set) => propios(set) > ajenos(set)).length);
 }
 
-const diaYHora = new Intl.DateTimeFormat('es-AR', { weekday: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false });
-
-// "domingo 22 · 11:00" (design.md §8). Sin fecha anotada, "a coordinar".
+// "dom 22 · 11:00" (design.md §8). Sin fecha anotada, "a coordinar".
 export function cuandoSeJuega(partido: PartidoDelCuadro) {
   if (!partido.fechaAcordada) return 'a coordinar';
-  const partes = Object.fromEntries(diaYHora.formatToParts(new Date(partido.fechaAcordada)).map((p) => [p.type, p.value]));
-  return `${partes.weekday} ${partes.day} · ${partes.hour}:${partes.minute}`;
+  return elDiaYHora(partido.fechaAcordada);
 }
 
 const PRIMEROS = ['', 'el primero', 'los dos primeros', 'los tres primeros', 'los cuatro primeros'];
