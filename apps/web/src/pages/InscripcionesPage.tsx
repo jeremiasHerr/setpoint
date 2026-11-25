@@ -17,7 +17,7 @@ import { TablaInscriptos } from '../features/inscripciones/TablaInscriptos';
 import { TablaListaDeEspera } from '../features/inscripciones/TablaListaDeEspera';
 import { TablaSolicitudes } from '../features/inscripciones/TablaSolicitudes';
 import { useCerrarInscripcion, useInscripciones } from '../features/inscripciones/useInscripciones';
-import { diaConSemana } from '../features/torneos/texto';
+import { diaConSemana, hoy } from '../features/torneos/texto';
 import { EncabezadoDelTorneo } from '../features/torneos/EncabezadoDelTorneo';
 import { ErrorApi } from '../lib/api';
 import { Esqueleto } from '../components/Esqueleto';
@@ -65,9 +65,6 @@ function CargarInscripciones({ sesion, id }: { sesion: Sesion; id: number }) {
     </div>
   );
 }
-
-// 'AAAA-MM-DD' de hoy, en la hora de quien mira.
-const hoy = () => new Intl.DateTimeFormat('en-CA').format(new Date());
 
 // "cierra el viernes 26"
 function textoDelCierre({ estado, cierreInscripcion }: InscripcionesDelTorneo) {

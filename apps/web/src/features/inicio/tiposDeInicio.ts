@@ -57,7 +57,10 @@ export type TorneoTerminado = {
 };
 
 // `torneoId` es el de la categoría: «Resolver» lleva a su tablero.
-export type Aviso = { tipo: 'partidos-vencidos'; torneoId: number; categoria: string; partidos: number };
+export type Aviso =
+  | { tipo: 'partidos-vencidos'; torneoId: number; categoria: string; partidos: number }
+  // «Cerrar la inscripción» lleva a Inscripciones, que tiene el botón. `cierre` es 'AAAA-MM-DD'.
+  | { tipo: 'inscripcion-sin-cerrar'; torneoId: number; categoria: string; cierre: string };
 
 // Una categoría con la inscripción abierta que cierra pronto y todavía no tiene los pagos para
 // sortear las zonas (decisión 125). No venció nada: va aparte de «Necesita tu atención», sin rojo.
