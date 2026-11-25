@@ -322,7 +322,7 @@ Cómo está conectado un perfil del padrón con la persona ([04-flujo-jugador.md
 | Estado | Cómo se ve |
 |---|---|
 | Sin vincular | Rótulo en `pizarra-500` debajo del nombre: `sin vincular`. Es el estado de todo el padrón importado, no un problema |
-| Vinculado | El email de la cuenta en `pizarra-500` debajo del nombre. Para el jugador que busca su perfil, el rótulo `vinculado` al lado del nombre, sin el email |
+| Vinculado | El email de la cuenta en `pizarra-500` debajo del nombre. Para el jugador que busca su perfil, el rótulo `vinculado` al lado del nombre, sin el email. Si es largo se corta con elipsis; el chip «con cuenta» y el «desde…» no van en la fila ([decisión 154](decisiones/154-la-vinculacion-en-el-padron.md)) |
 | `nueva` | Chip `lona-fondo` con texto `lona-texto` en minúscula, el mismo de "nuevo" en el padrón: la vinculación se hizo desde la última visita de la organización |
 | `para revisar` | Chip en minúscula con borde 1px `noche`, sin relleno. **No es rojo**: no venció nada, es un caso dudoso que espera una decisión |
 

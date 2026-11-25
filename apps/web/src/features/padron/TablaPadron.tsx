@@ -169,6 +169,7 @@ export function TablaPadron({ jugadores, categorias, conRanking, seleccionadoId,
           seleccionado={jugador.id === seleccionadoId}
           slug={slug}
           organizacion={organizacion}
+          vinculacionNueva={anterior !== undefined && esVinculacionNueva(jugador, anterior)}
           alEditar={() => alEditar(jugador)}
         />
       ))}
