@@ -46,7 +46,7 @@ export function SeccionRanking({ usaRanking, etapas, alCambiarUsaRanking, alCamb
           <div className="h-px bg-linea-suave" />
           <div className="flex flex-col gap-[11px]">
             <h3 className="text-[13px] font-semibold text-pizarra-500">Torneos del calendario</h3>
-            <ListaEditable items={etapas} alCambiar={alCambiarEtapas} rotuloNuevo="Nombre del torneo" numerada />
+            <ListaEditable items={etapas} alCambiar={alCambiarEtapas} rotuloNuevo="Nombre del torneo" rotuloAgregar="Agregar torneo del calendario" numerada />
             <p className="text-[13px] text-pizarra-500">
               Cada torneo del calendario es un casillero del ranking. Cuando se juega Primavera <span className="font-mono tabular-nums">26</span>, sus
               puntos reemplazan los de Primavera <span className="font-mono tabular-nums">25</span>.

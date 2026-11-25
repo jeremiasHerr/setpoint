@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { Boton } from '../../components/Boton';
 import { Campo } from '../../components/Campo';
 import { Chip } from '../../components/Chip';
-import { IconoMas } from '../../components/IconoMas';
 import { Tarjeta } from '../../components/Tarjeta';
 
 type Props = {
@@ -74,7 +73,7 @@ export function SeccionQuienesSon({
   );
 }
 
-// De a uno: se agrega, queda en la lista, y "+ Agregar contacto" abre el siguiente (decisión 091).
+// De a uno: se agrega, queda en la lista, y "Agregar contacto" abre el siguiente (decisión 091).
 function Contactos({ contactos, alCambiar }: { contactos: Contacto[]; alCambiar: (contactos: Contacto[]) => void }) {
   const [agregando, setAgregando] = useState(false);
   const [tipo, setTipo] = useState<Contacto['tipo']>('whatsapp');
@@ -177,7 +176,6 @@ function Contactos({ contactos, alCambiar }: { contactos: Contacto[]; alCambiar:
       ) : (
         contactos.length < MAXIMO_CONTACTOS && (
           <Boton className="self-start" onClick={() => setAgregando(true)}>
-            <IconoMas className="size-3.5 stroke-[2.4]" />
             Agregar contacto
           </Boton>
         )
