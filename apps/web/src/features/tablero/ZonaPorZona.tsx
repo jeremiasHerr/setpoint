@@ -55,7 +55,7 @@ function Tabla({ zona, consuelo }: { zona: ZonaDelTablero; consuelo: string }) {
         <span className="px-4 py-2.5 text-xs text-pizarra-500">jugador</span>
         {zona.filas.map((rival) => (
           <span key={rival.jugadorId} className={`hidden truncate px-1 py-2.5 text-center md:block ${rotulo}`}>
-            {rival.apellido.toLowerCase()}
+            {rival.apellido}
           </span>
         ))}
         <span className={`py-2.5 text-center ${rotulo}`}>pg</span>

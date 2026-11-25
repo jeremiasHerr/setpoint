@@ -63,7 +63,7 @@ export function ResultadoLeido({ torneoId, consuelo, leido, decidiendo = false, 
         ) : (
           <p className="text-[15px] font-semibold text-pizarra-500">Sin resultado para cargar</p>
         )}
-        {leido.partido && <p className="text-[13px] text-pizarra-500">{donde(leido.partido, consuelo).toLowerCase()}</p>}
+        {leido.partido && <p className="text-[13px] text-pizarra-500">{donde(leido.partido, consuelo)}</p>}
 
         {aRevisar ? (
           <>
