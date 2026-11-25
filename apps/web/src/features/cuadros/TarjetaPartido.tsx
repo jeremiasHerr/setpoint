@@ -75,7 +75,7 @@ export function TarjetaPaseDirecto({ jugador, rotulo, className = '' }: { jugado
       <span className="truncate text-[13px] text-pizarra-500" title={`${jugador.nombre} ${jugador.apellido}`}>
         {jugador.apellido}
       </span>
-      <span className="truncate text-[12.5px] font-medium text-pizarra-400">{rotulo}</span>
+      <span className="truncate text-[12.5px] font-medium text-pizarra-450">{rotulo}</span>
     </div>
   );
 }
@@ -90,7 +90,7 @@ function Fila({ partido, lado, abierta, destacado }: PropsFila) {
 
   const fondo = gano ? 'bg-lona-fondo' : '';
   const separador = lado === 'B' ? 'border-t border-linea-suave' : '';
-  const nombre = !jugador ? 'text-pizarra-400' : gano || destacado ? 'font-semibold' : perdio ? 'text-pizarra-400' : '';
+  const nombre = !jugador ? 'text-pizarra-450' : gano || destacado ? 'font-semibold' : perdio ? 'text-pizarra-450' : '';
 
   return (
     <span className={`flex ${destacado ? 'h-[34px]' : 'h-[31px]'} items-center justify-between gap-2 px-2.5 ${fondo} ${separador}`}>
@@ -100,7 +100,7 @@ function Fila({ partido, lado, abierta, destacado }: PropsFila) {
       >
         {jugador?.apellido ?? 'a definir'}
       </span>
-      <Numero className={`shrink-0 text-xs ${gano ? 'font-semibold' : 'text-pizarra-400'}`}>{marcadorDelLado(partido, lado, abierta)}</Numero>
+      <Numero className={`shrink-0 text-xs ${gano ? 'font-semibold' : 'text-pizarra-450'}`}>{marcadorDelLado(partido, lado, abierta)}</Numero>
     </span>
   );
 }

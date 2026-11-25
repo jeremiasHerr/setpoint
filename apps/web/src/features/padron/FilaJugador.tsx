@@ -105,7 +105,7 @@ export function FilaJugador({ jugador, columnas, conRanking, seleccionado, slug,
         </div>
       )}
 
-      <Numero className={`hidden text-right text-[15px] xl:block ${jugador.partidos > 0 ? '' : 'text-pizarra-400'}`}>
+      <Numero className={`hidden text-right text-[15px] xl:block ${jugador.partidos > 0 ? '' : 'text-pizarra-450'}`}>
         {jugador.partidos}
       </Numero>
 

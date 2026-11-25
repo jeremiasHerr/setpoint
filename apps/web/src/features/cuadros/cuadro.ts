@@ -1,4 +1,5 @@
 import {
+  alConsuelo,
   lugarSiguiente,
   type ClaveCuadro,
   type CuadroEliminatorio,
@@ -119,5 +120,5 @@ export function bajada(cuadros: CuadroEliminatorio[], clasificadosPorGrupo: numb
   const primeros = PRIMEROS[clasificadosPorGrupo] ?? `los ${clasificadosPorGrupo} primeros`;
   const van = clasificadosPorGrupo === 1 ? 'va' : 'van';
   if (cuadros.length < 2) return `Al cuadro ${van} ${primeros} de cada zona.`;
-  return `Corren en paralelo. Nadie queda afuera de la fase de grupos: ${primeros} de cada zona ${van} a ${NOMBRE_DEL_PRINCIPAL} y el resto al ${consuelo.toLowerCase()}.`;
+  return `Corren en paralelo. Nadie queda afuera de la fase de grupos: ${primeros} de cada zona ${van} a ${NOMBRE_DEL_PRINCIPAL} y el resto ${alConsuelo(consuelo)}.`;
 }

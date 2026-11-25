@@ -6,7 +6,8 @@ import type { FilaDePosiciones } from './posiciones';
 
 // Vencido: pasó su fecha límite sin resultado. Se calcula en cada consulta, no se guarda
 // (decisión 060). Esperando: un partido de cuadro que todavía no tiene a sus dos jugadores.
-export const situacionesDelPartido = ['jugado', 'con_fecha', 'sin_coordinar', 'vencido', 'esperando'] as const;
+// Falta cargar: la fecha acordada ya pasó y no tiene resultado; gana sobre vencido (decisión 151).
+export const situacionesDelPartido = ['jugado', 'con_fecha', 'falta_cargar', 'sin_coordinar', 'vencido', 'esperando'] as const;
 export type SituacionDelPartido = (typeof situacionesDelPartido)[number];
 
 // El teléfono es para "Escribirles": el tablero es solo para quien administra.
@@ -66,6 +67,8 @@ export type Tablero = {
   nombre: string;
   // Cómo llama la organización a su cuadro consuelo (07 §1.2).
   nombreCuadroConsuelo: string;
+  // Sin ranking, la posición de siembra salió al azar del sorteo: lo usa la explicación del desempate.
+  usaRanking: boolean;
   // grupos: zonas en juego. cuadros: zonas cerradas, cuadros en juego. terminado: torneo cerrado.
   fase: 'grupos' | 'cuadros' | 'terminado';
   clasificanPorGrupo: number;
@@ -76,11 +79,13 @@ export type Tablero = {
   // null si no hay nada pendiente o el torneo no tiene plazo cargado.
   plazo: { fechaLimite: string; dias: number } | null;
   // De la fase que se muestra: los de zona en grupos, los de cuadro en cuadros. Sin cancelados.
-  totales: { partidos: number; jugados: number; conFecha: number; sinCoordinar: number; vencidos: number };
+  totales: { partidos: number; jugados: number; conFecha: number; faltaCargar: number; sinCoordinar: number; vencidos: number };
   bloques: BloqueDelTablero[];
   // Lo que falta, ordenado por urgencia: los vencidos y los sin coordinar, del plazo más viejo al
   // más nuevo. Los que tienen fecha se cuentan en totales.conFecha.
   vencidos: PartidoDelTablero[];
+  // Con la fecha acordada ya pasada y sin resultado, del más viejo al más reciente (decisión 151).
+  faltaCargar: PartidoDelTablero[];
   sinCoordinar: PartidoDelTablero[];
   // Las zonas con su tabla y sus partidos. Vacío fuera de la fase de grupos.
   zonas: ZonaDelTablero[];

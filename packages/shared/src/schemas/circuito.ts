@@ -81,6 +81,13 @@ export const NOMBRE_CUADRO_CONSUELO = 'Cuadro consuelo';
 // El nombre que se muestra: el de la organización o el de por defecto.
 export const nombreCuadroConsuelo = (guardado: string | null | undefined) => guardado?.trim() || NOMBRE_CUADRO_CONSUELO;
 
+// El nombre del cuadro consuelo dentro de una frase. El de por defecto es un nombre común y va en
+// minúscula; el que eligió la organización es un nombre propio y va tal cual, sin pasarlo a minúscula.
+// Como el artículo no puede depender del nombre, con uno propio se usa la preposición sola.
+export const consueloEnFrase = (nombre: string) => (nombre === NOMBRE_CUADRO_CONSUELO ? nombre.toLowerCase() : nombre);
+export const alConsuelo = (nombre: string) => (nombre === NOMBRE_CUADRO_CONSUELO ? 'al cuadro consuelo' : `a ${nombre}`);
+export const delConsuelo = (nombre: string) => (nombre === NOMBRE_CUADRO_CONSUELO ? 'del cuadro consuelo' : `de ${nombre}`);
+
 export const configuracionCircuitoSchema = z.object({
   nombre: z.string({ error: 'Escribí el nombre del circuito' }).trim().min(2, 'Escribí el nombre del circuito').max(80),
   contactos: z.array(contactoSchema).max(10, 'Como máximo 10 contactos').default([]),

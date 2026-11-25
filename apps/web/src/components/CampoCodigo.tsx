@@ -12,7 +12,7 @@ type Props = {
 };
 
 const CASILLA = {
-  claro: { apagada: 'border border-linea bg-niebla text-pizarra-400', activa: 'border-2 border-noche', comun: 'border border-borde-campo' },
+  claro: { apagada: 'border border-linea bg-niebla text-pizarra-450', activa: 'border-2 border-noche', comun: 'border border-borde-campo' },
   noche: {
     apagada: 'border border-borde-noche bg-noche-2 text-pizarra-400',
     activa: 'border-2 border-white bg-noche-900',

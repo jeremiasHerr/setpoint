@@ -423,7 +423,7 @@ function Listo({ datos }: { datos: InscripcionParaPagar }) {
         <p className="text-base leading-[1.45] text-pizarra-500">Zonas, cuadros y resultados, sin instalar nada.</p>
         <Link
           to={`${linkTorneo(datos)}/en-vivo`}
-          className="flex h-14 items-center justify-center rounded-[12px] border border-lona-borde bg-lona text-noche-900 text-[17px] font-semibold"
+          className="flex h-14 items-center justify-center gap-2.5 rounded-[12px] bg-noche-900 text-white text-[17px] font-semibold hover:bg-pizarra-700"
         >
           Ver el torneo en vivo
         </Link>
@@ -453,7 +453,7 @@ function Rechazado({ datos }: { datos: InscripcionParaPagar }) {
       </div>
       <Resumen datos={datos} />
       <div className="mt-auto flex flex-col gap-3">
-        <Link to={linkInscripcion(datos)} className="flex h-14 items-center justify-center rounded-[12px] border border-lona-borde bg-lona text-noche-900 text-[17px] font-semibold">
+        <Link to={linkInscripcion(datos)} className="flex h-14 items-center justify-center gap-2.5 rounded-[12px] bg-noche-900 text-white text-[17px] font-semibold hover:bg-pizarra-700">
           Probar de nuevo
         </Link>
         <p className="text-center text-[15px] text-pizarra-500">Al probar de nuevo te guardamos otros 15 minutos.</p>
@@ -486,7 +486,7 @@ function Vencida({ datos }: { datos: InscripcionParaPagar }) {
         <VolverAlTorneo datos={datos} />
       ) : (
         <div className="mt-auto flex flex-col gap-3">
-          <Link to={linkInscripcion(datos)} className="flex h-14 items-center justify-center rounded-[12px] border border-lona-borde bg-lona text-noche-900 text-[17px] font-semibold">
+          <Link to={linkInscripcion(datos)} className="flex h-14 items-center justify-center gap-2.5 rounded-[12px] bg-noche-900 text-white text-[17px] font-semibold hover:bg-pizarra-700">
             Reservar otra vez y pagar
           </Link>
         </div>

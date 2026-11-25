@@ -104,7 +104,7 @@ export function GrillaDeSets({ sistema, nombres, sets: escritos, problemas, gana
               <div className="flex items-center justify-between" style={campo(4)}>
                 {(['tieBreakA', 'tieBreakB'] as const).map((puntos, j) => (
                   <Fragment key={puntos}>
-                    {j === 1 && <span className="text-xs text-pizarra-400 sm:text-base">-</span>}
+                    {j === 1 && <span className="text-xs text-pizarra-450 sm:text-base">-</span>}
                     <CampoNumerico
                       aria-label={`Tie-break del ${columna.rotulo}, ${nombres[j]}`}
                       aria-invalid={problemas.tieBreaks[i] !== null}
