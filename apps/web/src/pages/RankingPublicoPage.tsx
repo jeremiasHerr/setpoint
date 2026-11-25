@@ -76,9 +76,9 @@ function Ranking({ ranking, slug }: { ranking: RankingPublico; slug: string }) {
 
       <div className="flex items-baseline justify-between gap-3 pt-0.5">
         <h2 className="text-xl font-semibold tracking-[-0.02em]">Toda la tabla</h2>
-        <Numero className="text-[13px] text-pizarra-500">
-          {categoria.filas.length} {categoria.filas.length === 1 ? 'jugador' : 'jugadores'}
-        </Numero>
+        <span className="text-[13px] text-pizarra-500">
+          <Numero>{categoria.filas.length}</Numero> {categoria.filas.length === 1 ? 'jugador' : 'jugadores'}
+        </span>
       </div>
 
       {/* Arriba de la tabla: al pie quedaba después de todas las filas, y nadie lo veía. */}

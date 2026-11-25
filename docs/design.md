@@ -45,7 +45,8 @@ Todo el sistema sale de que hay dos personas usando esto en situaciones opuestas
 | `borde-noche` | `#2E3D5A` | Bordes y separadores sobre noche |
 | `pizarra-700` | `#3B4659` | Texto secundario sobre papel |
 | `pizarra-500` | `#4A5468` | Rótulos, texto de apoyo, marca punteada |
-| `pizarra-400` | `#9AA5B8` | Texto sobre noche, datos apagados, perdedor en una tabla |
+| `pizarra-450` | `#586275` | Texto atenuado sobre fondos claros: perdedor en una tabla, ceros, totales, rótulos y placeholders. 6,14:1 sobre papel, 5,63:1 sobre niebla ([decisión 153](decisiones/153-texto-atenuado-con-contraste.md)) |
+| `pizarra-400` | `#9AA5B8` | Texto sobre noche y lo que no es texto (bordes, puntos, íconos). **Nunca como texto sobre un fondo claro: da 2,49:1** |
 | `borde-campo` | `#878FA1` | Borde de campo de formulario y de las celdas de la grilla de sets |
 | `linea` | `#D8DCE5` | Borde de tarjeta y separador |
 | `linea-suave` | `#ECEEF3` | Separador entre filas de tabla, hover del secundario |
@@ -82,9 +83,9 @@ Todo el sistema sale de que hay dos personas usando esto en situaciones opuestas
 - **El botón principal es `noche-900` con texto blanco** (18,72:1), el mismo noche de la barra: el color queda para los estados. Sobre una superficie noche va dado vuelta, `papel` con texto `noche-900` ([decisión 115](decisiones/115-boton-principal-noche.md)).
 - **Las columnas del inicio son recuadros `noche`** de radio 20, con las tarjetas de los torneos en `papel` adentro, sobre el fondo blanco de la página. El estado lo dice la marca de 9 px del título: En preparación en `amarillo-claro` (punteada), Inscripción en `lona`, En juego en `azul-claro` y Terminados en `pizarra-400`. Sobre noche van en blanco el título, la columna vacía y "Armar el próximo torneo"; la ayuda va en `pizarra-400` y el contador es una píldora `noche-2` con borde `borde-noche` ([decisión 123](decisiones/123-inicio-en-noche-y-rotulos-sin-mono.md)).
 - **El rojo solo significa vencimiento.** No se usa para "error de formulario" ni para eliminar. Un partido que venció sin jugarse es lo único urgente del sistema.
-- **La derrota se dibuja en pizarra, no en rojo.** En tablas y matrices, el ganador va en `noche` con peso 600 y el perdedor en `pizarra-400`.
+- **La derrota se dibuja en pizarra, no en rojo.** En tablas y matrices, el ganador va en `noche` con peso 600 y el perdedor en `pizarra-450`.
 - **Sobre noche, los números van en blanco.** El lima de antes sobre las tarjetas oscuras pasa a blanco: la fecha del próximo partido, los puntos propios, la conciliación.
-- **Contrastes verificados:** `noche` sobre `niebla` 15,97:1 y sobre papel 17,41:1. `pizarra-500` sobre papel 7,61:1. `amarillo-claro`, `lona`, `azul-claro` y `pizarra-400` sobre noche, 6,9:1, 7,2:1, 5,3:1 y 7,00:1. `pizarra-400` sobre noche 7,00:1. Blanco sobre `noche-2` 14,91:1. `cal` sobre `noche-900` 14,55:1. `azul-texto` sobre `azul-fondo` 5,72:1. `rojo-texto` sobre `rojo-fondo` 5,23:1. `ambar` y `petroleo` sobre sus fondos, 5,66:1 y 6,28:1. `borde-campo` sobre papel 3,2:1, el mínimo para el borde de un control.
+- **Contrastes verificados:** `noche` sobre `niebla` 15,97:1 y sobre papel 17,41:1. `pizarra-500` sobre papel 7,61:1. `pizarra-450` sobre papel 6,14:1, sobre niebla 5,63:1 y sobre `cal` 4,77:1. `amarillo-claro`, `lona`, `azul-claro` y `pizarra-400` sobre noche, 6,9:1, 7,2:1, 5,3:1 y 7,00:1. `pizarra-400` sobre noche 7,00:1. Blanco sobre `noche-2` 14,91:1. `cal` sobre `noche-900` 14,55:1. `azul-texto` sobre `azul-fondo` 5,72:1. `rojo-texto` sobre `rojo-fondo` 5,23:1. `ambar` y `petroleo` sobre sus fondos, 5,66:1 y 6,28:1. `borde-campo` sobre papel 3,2:1, el mínimo para el borde de un control.
 
 ---
 
@@ -99,7 +100,7 @@ Cuatro familias, de Google Fonts, cada una con un solo rol:
 - **Funnel Display 600** (`font-display`) — títulos de página del producto y de la landing, el nombre del rival en la tarjeta del próximo partido, el partido que se está cargando. Tracking −0.02em.
 - **Newsreader 500** (`font-serif`) — **solo el titular del hero de la landing**, con `opsz` 72 y tracking −0.028em. Es la única frase que vende una emoción; en el producto parecía el título de un documento.
 - **Instrument Sans** (`font-sans`) — interfaz, nombres, títulos de sección, copy. Pesos 400 / 500 / 600.
-- **Geist Mono** (`font-mono`) — **solo cifras**: marcadores, puntos, plazos, horarios, importes, fechas cortas, contadores y códigos. Los rótulos, metadatos, migas, chips y encabezados de tabla son texto y van en Instrument Sans 12,5 px, peso 500, `noche`; un metadato secundario de una fila va en `pizarra-500`, 13 px, peso 400 ([decisión 123](decisiones/123-inicio-en-noche-y-rotulos-sin-mono.md)). Siempre con `font-variant-numeric: tabular-nums`.
+- **Geist Mono** (`font-mono`) — **solo cifras**: marcadores, puntos, plazos, horarios, importes, fechas cortas, contadores y códigos. Los rótulos, metadatos, migas, chips y encabezados de tabla son texto y van en Instrument Sans 12,5 px, peso 500, `noche`; un metadato secundario de una fila va en `pizarra-500`, 13 px, peso 400 ([decisión 123](decisiones/123-inicio-en-noche-y-rotulos-sin-mono.md)). Un texto que mezcla palabras y cifras ("sáb 21 · 10:00", "quedan 8 días") lleva en mono solo las cifras: `ConCifras` las separa. Siempre con `font-variant-numeric: tabular-nums`.
 
 ```css
 .mono {
@@ -121,7 +122,7 @@ El mono es lo que da el acabado de producto y lo que hace que las tablas queden 
 | Cuerpo | 16–17 | Sans 400 | — |
 | Rótulo | 15 | Sans 500 | — |
 | Mono grande (puntos, marcador, fecha) | 24–52 | Mono 500 | −0.02 a −0.04em |
-| Mono chico (fecha, zona, rótulo de casillero) | 15 | Mono 400/500 | — |
+| Mono chico (fecha, cifras de un rótulo) | 15 | Mono 400/500 | — |
 
 **Piso duro: 15px.** Ningún texto baja de ahí en móvil, y los datos van de 17 para arriba. Las pantallas de referencia del jugador tienen rótulos de 10 a 14: al implementarlas suben a 15. Si algo no entra, se reorganiza, como los casilleros del ranking, que van sin el año.
 
@@ -190,6 +191,8 @@ Franja `noche-900` de 56 de alto, el mismo noche que rodea la landing: el logo, 
 | Secundario | `papel` + borde 1px `linea` | `noche` | Todo lo demás |
 | Sobre noche | transparente + borde `borde-noche` | blanco | Acción alternativa dentro de una tarjeta noche |
 
+Agregar un elemento a una lista (contacto, categoría, torneo del calendario, club, cancha) usa siempre el botón secundario, sin "+" y con el texto "Agregar" más lo que se agrega: "Agregar cancha". Una lista crece hacia abajo y el secundario es el botón de "todo lo demás"; un chip punteado no es una variante de botón.
+
 Un link que tiene que verse como botón usa `BotonLink`, que toma las clases de `Boton`: navegar es un link, así se abre en otra pestaña.
 
 Nunca hay flechas pegadas al texto del botón. El texto dice la acción completa: "Anotar y avisarle a Pablo", no "Continuar".
@@ -215,7 +218,7 @@ En las pantallas internas de la organización, las que no están en el menú: la
 
 ### Campos
 
-Alto 56 en móvil y 48 en escritorio, radio 8, fondo `papel`, borde 1px `borde-campo`. El campo activo lleva borde 2px `noche`. El valor va en mono si es un número. **Sobre una tarjeta noche** (las pantallas de acceso): relleno `noche-900`, borde `borde-campo`, texto blanco y rótulo `pizarra-400`; el activo y el inválido llevan borde 2px blanco, y el autocompletado del navegador no los pinta de celeste ([decisión 148](decisiones/148-pantallas-de-acceso-con-tarjeta-noche.md)). La grilla de sets de *Cargar resultado* usa el mismo campo, de 56 de alto, con el número en mono 22.
+Alto 56 en móvil y 48 en escritorio, radio 8, fondo `papel`, borde 1px `borde-campo`. El campo activo lleva borde 2px `noche`. El valor va en mono si es un número. Una fecha ocupa todo el ancho, con el valor a la izquierda, y vacía, en una pantalla táctil, dice *Elegí el día*: el celular no muestra el *dd/mm/aaaa* de la compu. **Sobre una tarjeta noche** (las pantallas de acceso): relleno `noche-900`, borde `borde-campo`, texto blanco y rótulo `pizarra-400`; el activo y el inválido llevan borde 2px blanco, y el autocompletado del navegador no los pinta de celeste ([decisión 148](decisiones/148-pantallas-de-acceso-con-tarjeta-noche.md)). La grilla de sets de *Cargar resultado* usa el mismo campo, de 56 de alto, con el número en mono 22.
 
 ### Interruptor
 
@@ -249,7 +252,7 @@ Aparece en el tablero (48 partidos en 8 bloques de 6, con la letra de zona debaj
 La fase de grupos como todos contra todos. Fila = el jugador, columna = el rival.
 
 - Ganó: fondo `lona-fondo`, marcador en peso 600
-- Perdió: marcador en `pizarra-400`
+- Perdió: marcador en `pizarra-450`
 - Con fecha: la fecha corta en mono `pizarra-500`
 - Sin coordinar: recuadro punteado 1,5px `pizarra-500`, vacío
 - Diagonal: `linea-suave`, sin contenido
@@ -323,7 +326,7 @@ Cómo está conectado un perfil del padrón con la persona ([04-flujo-jugador.md
 | Estado | Cómo se ve |
 |---|---|
 | Sin vincular | Rótulo en `pizarra-500` debajo del nombre: `sin vincular`. Es el estado de todo el padrón importado, no un problema |
-| Vinculado | El email de la cuenta en `pizarra-500` debajo del nombre. Para el jugador que busca su perfil, el rótulo `vinculado` al lado del nombre, sin el email |
+| Vinculado | El email de la cuenta en `pizarra-500` debajo del nombre. Para el jugador que busca su perfil, el rótulo `vinculado` al lado del nombre, sin el email. Si es largo se corta con elipsis; el chip «con cuenta» y el «desde…» no van en la fila ([decisión 154](decisiones/154-la-vinculacion-en-el-padron.md)) |
 | `nueva` | Chip `lona-fondo` con texto `lona-texto` en minúscula, el mismo de "nuevo" en el padrón: la vinculación se hizo desde la última visita de la organización |
 | `para revisar` | Chip en minúscula con borde 1px `noche`, sin relleno. **No es rojo**: no venció nada, es un caso dudoso que espera una decisión |
 
@@ -331,7 +334,7 @@ Cómo está conectado un perfil del padrón con la persona ([04-flujo-jugador.md
 
 ### Torneo
 
-`borrador` · `publicado` · `inscripciones cerradas` · `zonas generadas` · `grupos en curso` · `cuadros` · `finalizado`. Se muestran como chip en minúscula.
+`borrador` · `publicado` · `inscripciones cerradas` · `zonas generadas` · `grupos en curso` · `cuadros` · `finalizado`. Se muestran como chip en minúscula, con un solo componente (`EstadoDelTorneo`) en la franja del torneo y en las tarjetas del inicio.
 
 ---
 
@@ -348,7 +351,7 @@ Cómo está conectado un perfil del padrón con la persona ([04-flujo-jugador.md
 | Puntos | número solo, la palabra al lado | `95 puntos` |
 | Dinero | punto como separador de miles | `$45.000` |
 | Plazo | en días, no en fechas | `quedan 6 días` |
-| Torneo del calendario abreviado | tres letras minúscula | `prim` `ver` `pre` `oto` `inv` |
+| Torneo del calendario abreviado | tres letras minúscula | `pri` `ver` `pre` `oto` `inv` |
 | Código de verificación | mono, seis dígitos en dos grupos de tres | `482 913` |
 | Número de inscripción | mono, sin puntos ni numeral | `100482` |
 
@@ -387,13 +390,14 @@ La interfaz usa términos genéricos, no los del código ni los de un circuito e
 
 - Debajo del campo o la sección que explica, en `pizarra-500`, cuerpo 13–14 en escritorio. Una o dos oraciones que digan la consecuencia, como el resto de la voz: *"Cada torneo del calendario es un casillero del ranking. Cuando se juega Primavera 26, sus puntos reemplazan los de Primavera 25."*
 - Para explicaciones largas, una caja `niebla` con radio de tarjeta, sin ícono de ayuda ni signo de pregunta.
+- **Qué es un dato, cuando el rótulo no alcanza:** una "i" en un círculo al lado del rótulo, en su color, que se toca en 44. Al tocarla, la explicación se abre entre el rótulo y el campo, en `pizarra-500` de 13, y otro toque la cierra. Nunca un "!", que se lee como error ([decisión 150](decisiones/150-ayuda-con-la-i-en-los-campos.md)).
 - **Tarjeta "Primeros pasos"** en el inicio del organizador: tres pasos con check (*Importá tus jugadores · Creá tu primer torneo · Compartí el link de inscripción*) que **se tildan solos** cuando se cumplen. Borde `linea`, no tarjeta noche: no es el dato principal de la pantalla. Desaparece cuando están los tres. "Compartí el link" se tilda con la primera inscripción pagada.
 
 ---
 
 ## 10. Iconos
 
-SVG en línea, trazo de 1.7–1.9, grilla de 16/18/20/24, `stroke-linecap: round`, con el color de un token (`stroke-pizarra-500`, `currentColor`), nunca un hex. Nunca emoji ni glifos unicode como ícono. El set actual: búsqueda, chevron, reloj, cámara, compartir, mensaje, check, cuadro, calendario, tarjeta, archivo, barras, engranaje.
+SVG en línea, trazo de 1.7–1.9, grilla de 16/18/20/24, `stroke-linecap: round`, con el color de un token (`stroke-pizarra-500`, `currentColor`), nunca un hex. Nunca emoji ni glifos unicode como ícono. El set actual: búsqueda, chevron, reloj, cámara, compartir, mensaje, check, cuadro, calendario, tarjeta, archivo, barras, engranaje, información.
 
 Un ícono sin texto dice qué hace en `aria-label` y en `title`, y tiene un área de toque de 44 aunque el dibujo sea de 20. El engranaje abre la configuración de algo: hoy, *Editar el torneo* desde su tarjeta en el inicio ([decisión 101](decisiones/101-engranaje-para-editar.md)).
 
@@ -450,6 +454,7 @@ La web usa Tailwind 4: los tokens están en el bloque `@theme` de `apps/web/src/
   --color-borde-noche: #2E3D5A;
   --color-pizarra-700: #3B4659;
   --color-pizarra-500: #4A5468;
+  --color-pizarra-450: #586275;
   --color-pizarra-400: #9AA5B8;
   --color-borde-campo: #878FA1;
   --color-linea: #D8DCE5;

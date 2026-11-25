@@ -130,7 +130,7 @@ function PegarMensajes({ enviando, error, alLeer }: { enviando: boolean; error?:
             rows={12}
             placeholder={'[20/11/26, 18:03] Diego Antileo: Perdí con Sanhueza 46 36\n[20/11/26, 18:40] Lucas Bravo: Le gané a Paz 6-4 3-6 10-8'}
             aria-invalid={largo > MAXIMO_TEXTO_MENSAJES || undefined}
-            className="min-h-[220px] resize-y rounded-control border border-borde-campo px-3.5 py-3 font-mono text-sm leading-relaxed text-noche outline-none placeholder:text-pizarra-400 focus:border-2 focus:border-noche focus:px-[13px] focus:py-[11px] aria-invalid:border-2 aria-invalid:border-noche"
+            className="min-h-[220px] resize-y rounded-control border border-borde-campo px-3.5 py-3 text-sm leading-relaxed text-noche outline-none placeholder:text-pizarra-450 focus:border-2 focus:border-noche focus:px-[13px] focus:py-[11px] aria-invalid:border-2 aria-invalid:border-noche"
           />
           <p className="text-[13px] text-pizarra-500">
             {largo > MAXIMO_TEXTO_MENSAJES

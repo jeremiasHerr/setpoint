@@ -82,7 +82,7 @@ export function VerificarEmail({ onVerificado, desdeLink = false }: Props) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="tu@email.com"
-            className="h-[60px] rounded-[12px] border border-borde-campo px-4 text-lg outline-none placeholder:text-pizarra-400 focus:border-2 focus:border-noche focus:px-[15px]"
+            className="h-[60px] rounded-[12px] border border-borde-campo px-4 text-lg outline-none placeholder:text-pizarra-450 focus:border-2 focus:border-noche focus:px-[15px]"
           />
           <Ayuda>
             {desdeLink
@@ -116,7 +116,7 @@ export function VerificarEmail({ onVerificado, desdeLink = false }: Props) {
       <div className="flex grow flex-col gap-5">
         <div className="flex flex-col gap-2">
           {error === 'CODIGO_VENCIDO' && (
-            <span className="self-start rounded-full border border-rojo-linea bg-rojo-fondo px-3 py-1 font-mono text-[15px] font-medium text-rojo-texto">
+            <span className="self-start rounded-full border border-rojo-linea bg-rojo-fondo px-3 py-1 text-[15px] font-medium text-rojo-texto">
               venció
             </span>
           )}

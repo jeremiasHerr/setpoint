@@ -1,7 +1,7 @@
 import type { TorneoPublico } from '@setpoint/shared';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Numero } from '../../components/Numero';
+import { ConCifras, Numero } from '../../components/Numero';
 import { diaLargo } from '../torneo-publico/convocatoria';
 import { Aviso, AvisoReserva, Ayuda, BotonPrincipal, Caja, Consentimiento, Monto, Titulo } from './piezas';
 import { mensajeReserva } from './mensajeReserva';
@@ -143,7 +143,7 @@ function SolicitudEnviada({ torneo, email }: { torneo: TorneoPublico; email: str
           <div className="flex justify-between gap-3">
             <dt className="text-[15px] text-pizarra-500">Cierra</dt>
             <dd>
-              <Numero className="text-base">{diaLargo(torneo.cierreInscripcion)}</Numero>
+              <ConCifras className="text-base">{diaLargo(torneo.cierreInscripcion)}</ConCifras>
             </dd>
           </div>
         )}

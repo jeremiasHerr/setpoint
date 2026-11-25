@@ -1,6 +1,7 @@
 import type { Instancia, RankingDeLaFicha } from '@setpoint/shared';
 import { Numero } from '../../components/Numero';
 import { NOMBRE_DEL_PRINCIPAL } from '../cuadros/cuadro';
+import { abreviarTorneo } from '../ranking/casilleros';
 
 // La barra más alta mide 100 px; una sin puntos queda como una línea.
 const ALTO_MAXIMO = 100;
@@ -18,8 +19,8 @@ const QUE_HIZO: Record<Instancia, string> = {
   participacion: 'jugado el torneo',
 };
 
-// "pri", "ver": las tres primeras letras, como en la tabla del ranking.
-const rotulo = (nombre: string) => nombre.slice(0, 3).toLowerCase();
+// "pri", "ver": la misma abreviatura que en la tabla del ranking.
+const rotulo = abreviarTorneo;
 const anioCorto = (anio: number) => String(anio).slice(-2);
 
 // Una barra por torneo del calendario, con los puntos vigentes de cada casillero: se ve de un vistazo
@@ -42,7 +43,7 @@ export function PuntosPorTorneo({ ranking }: { ranking: RankingDeLaFicha }) {
     <section className="flex flex-col gap-3">
       <div className="flex items-baseline justify-between gap-3">
         <h2 className="text-[17px] font-semibold tracking-[-0.015em]">Puntos por torneo del calendario</h2>
-        {anios.length > 0 && <Numero className="shrink-0 text-xs text-pizarra-400">{anios.join(' · ')}</Numero>}
+        {anios.length > 0 && <Numero className="shrink-0 text-xs text-pizarra-450">{anios.join(' · ')}</Numero>}
       </div>
 
       <ul
@@ -58,11 +59,11 @@ export function PuntosPorTorneo({ ranking }: { ranking: RankingDeLaFicha }) {
               title={casillero ? `${torneo.nombre} ${anioCorto(casillero.anio)}` : torneo.nombre}
               className="flex flex-col items-center gap-[7px]"
             >
-              <Numero className={`text-[13px] ${esLaMejor ? 'font-semibold' : 'font-medium'} ${puntos > 0 ? '' : 'text-pizarra-400'}`}>
+              <Numero className={`text-[13px] ${esLaMejor ? 'font-semibold' : 'font-medium'} ${puntos > 0 ? '' : 'text-pizarra-450'}`}>
                 {puntos}
               </Numero>
               <div className={`w-full rounded-t-[5px] ${esLaMejor ? 'bg-lona' : 'bg-linea'}`} style={{ height: alto(puntos) }} />
-              <Numero className={`text-[11px] ${esLaMejor ? 'text-noche' : 'text-pizarra-500'}`}>{rotulo(torneo.nombre)}</Numero>
+              <span className={`text-[15px] leading-none ${esLaMejor ? 'text-noche' : 'text-pizarra-500'}`}>{rotulo(torneo.nombre)}</span>
             </li>
           );
         })}

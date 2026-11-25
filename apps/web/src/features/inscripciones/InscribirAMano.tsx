@@ -98,10 +98,10 @@ export function InscribirAMano({ slug, torneoId, categoria, suelto, precio, libr
                     onClick={() => setElegido(jugador)}
                     className="flex h-11 w-full items-center justify-between gap-2.5 px-3 text-left text-sm hover:bg-lona-fondo disabled:hover:bg-transparent"
                   >
-                    <span className={motivo ? 'text-pizarra-400' : 'font-medium'}>
+                    <span className={motivo ? 'text-pizarra-450' : 'font-medium'}>
                       {jugador.nombre} {jugador.apellido}
                     </span>
-                    {motivo && <span className="text-[13px] text-pizarra-400">{motivo}</span>}
+                    {motivo && <span className="text-[13px] text-pizarra-450">{motivo}</span>}
                   </button>
                 </li>
               );

@@ -64,7 +64,7 @@ function Ficha({ ficha, slug }: { ficha: FichaDelJugador; slug: string }) {
               {ficha.categoria && <Pildora>{ficha.categoria}</Pildora>}
               {ranking && (
                 <Pildora>
-                  {ranking.puesto}º · {ranking.puntos} {ranking.puntos === 1 ? 'punto' : 'puntos'}
+                  <Numero>{ranking.puesto}º</Numero> · <Numero>{ranking.puntos}</Numero> {ranking.puntos === 1 ? 'punto' : 'puntos'}
                 </Pildora>
               )}
             </div>
@@ -82,7 +82,7 @@ function Ficha({ ficha, slug }: { ficha: FichaDelJugador; slug: string }) {
       {ficha.partidos.length > 0 && (
         <Link
           to={`/c/${slug}/jugadores/${ficha.jugadorId}/cara-a-cara`}
-          className="inline-flex h-[52px] items-center justify-center rounded-control border border-noche text-base font-semibold hover:bg-linea-suave focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-noche"
+          className="inline-flex h-10 items-center justify-center gap-2 rounded-control border border-linea bg-papel px-4 text-[15px] font-medium text-noche hover:bg-linea-suave focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-noche motion-safe:transition-[transform,background-color] motion-safe:duration-100 active:scale-[.97]"
         >
           Comparar con otro jugador
         </Link>
@@ -94,7 +94,7 @@ function Ficha({ ficha, slug }: { ficha: FichaDelJugador; slug: string }) {
 }
 
 function Pildora({ children }: { children: ReactNode }) {
-  return <Numero className="rounded-full border border-linea px-2.5 py-[5px] text-[13px] text-pizarra-500">{children}</Numero>;
+  return <span className="rounded-full border border-linea px-2.5 py-[5px] text-[13px] text-pizarra-500">{children}</span>;
 }
 
 // Jugados, ganados y perdidos. El W.O. no cuenta, porque no se jugó (decisión 073): se aclara para

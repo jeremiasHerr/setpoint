@@ -1,5 +1,6 @@
 import { Cuadro, EstadoPartido as EstadoPrisma, EstadoTorneo, FasePartido, ModoSede, type Prisma } from '@prisma/client';
 import { lugarSiguiente, nombreCuadroConsuelo, type ClaveCuadro, type Cuadros, type EstadoPartido } from '@setpoint/shared';
+import { hoy } from '../../lib/fechas';
 import { organizacionAdministrada } from '../../lib/permisos';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
@@ -11,6 +12,7 @@ import {
   siembrasDeLosCuadros,
   type PartidoDeCuadro,
 } from './cuadros';
+import { plazoCumplido } from './en-vivo';
 import { INCLUIR_ZONAS, inscriptosYPartidos } from './posiciones.service';
 
 // Cuadros eliminatorios (F08). Se arman cuando la organización cierra las zonas (decisión 026),
@@ -173,6 +175,7 @@ async function cuadrosDelTorneo(organizacionId: number, torneoId: number): Promi
   const aJugador = (j: { id: number; nombre: string; apellido: string } | null) =>
     j && { jugadorId: j.id, nombre: j.nombre, apellido: j.apellido };
 
+  const dia = hoy();
   const cuadros = [Cuadro.CAMPEONATO, Cuadro.COMPLEMENTARIA]
     .map((cuadro) => torneo.partidos.filter((p) => p.cuadro === cuadro))
     .filter((partidos) => partidos.length > 0)
@@ -189,6 +192,7 @@ async function cuadrosDelTorneo(organizacionId: number, torneoId: number): Promi
         estado: p.estado.toLowerCase() as EstadoPartido,
         fechaLimite: p.fechaLimite?.toISOString().slice(0, 10) ?? null,
         fechaAcordada: p.fechaAcordada?.toISOString() ?? null,
+        plazoCumplido: plazoCumplido({ ...p, jugadorAId: p.jugadorA?.id ?? null, jugadorBId: p.jugadorB?.id ?? null }, dia),
         sede: p.club?.nombre ?? p.sedeTexto,
         sets: p.sets,
       })),

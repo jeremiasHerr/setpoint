@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { partidosDelCalendario, partidosSinFecha, type PartidoParaElCalendario } from '../../src/modules/competencia/en-vivo';
+import { partidosDelCalendario, partidosSinFecha, plazoCumplido, type PartidoParaElCalendario } from '../../src/modules/competencia/en-vivo';
 
 const partido = (id: number, cambios: Partial<PartidoParaElCalendario> = {}) => ({
   id,
@@ -48,5 +48,20 @@ describe('partidosSinFecha', () => {
       partido(6),
     ];
     expect(partidosSinFecha(partidos)).toBe(2);
+  });
+});
+
+describe('plazoCumplido', () => {
+  const limite = new Date('2026-11-20T00:00:00.000Z');
+  const sinResultado = { estado: 'PENDIENTE_COORDINACION' as const, jugadorAId: 1, jugadorBId: 2, fechaLimite: limite, fechaAcordada: null };
+
+  it('es cierto sin fecha acordada ni resultado y con la fecha límite pasada', () => {
+    expect(plazoCumplido(sinResultado, '2026-11-23')).toBe(true);
+  });
+
+  it('no lo es el último día, ni con resultado, ni con fecha acordada', () => {
+    expect(plazoCumplido(sinResultado, '2026-11-20')).toBe(false);
+    expect(plazoCumplido({ ...sinResultado, estado: 'JUGADA' }, '2026-11-23')).toBe(false);
+    expect(plazoCumplido({ ...sinResultado, estado: 'CONFIRMADA', fechaAcordada: new Date('2026-11-19T18:00:00Z') }, '2026-11-23')).toBe(false);
   });
 });

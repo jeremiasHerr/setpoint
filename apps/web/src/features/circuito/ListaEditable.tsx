@@ -1,9 +1,12 @@
 import { useRef, useState, type KeyboardEvent } from 'react';
+import { Boton } from '../../components/Boton';
 
 type Props = {
   items: string[];
   alCambiar: (items: string[]) => void;
   rotuloNuevo: string;
+  // Lo que dice el botón que abre el campo: "Agregar categoría".
+  rotuloAgregar: string;
   // Las etapas se muestran numeradas porque el orden define el calendario.
   numerada?: boolean;
 };
@@ -16,15 +19,7 @@ function IconoCerrar() {
   );
 }
 
-function IconoMas() {
-  return (
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" aria-hidden="true">
-      <path d="M12 5v14M5 12h14" />
-    </svg>
-  );
-}
-
-export function ListaEditable({ items, alCambiar, rotuloNuevo, numerada = false }: Props) {
+export function ListaEditable({ items, alCambiar, rotuloNuevo, rotuloAgregar, numerada = false }: Props) {
   const [agregando, setAgregando] = useState(false);
   const [nuevo, setNuevo] = useState('');
   // Evita que el blur que dispara el cierre del campo vuelva a confirmar, o agregue algo cancelado con Escape.
@@ -93,14 +88,7 @@ export function ListaEditable({ items, alCambiar, rotuloNuevo, numerada = false 
             className="h-9 w-40 rounded-full border-2 border-noche px-[13px] text-sm font-medium outline-none"
           />
         ) : (
-          <button
-            type="button"
-            onClick={abrir}
-            className="flex h-9 items-center gap-[9px] rounded-full border border-dashed border-borde-campo px-3.5 text-sm font-medium text-pizarra-500 hover:bg-niebla"
-          >
-            <IconoMas />
-            <span>Agregar</span>
-          </button>
+          <Boton onClick={abrir}>{rotuloAgregar}</Boton>
         )}
       </li>
     </ul>

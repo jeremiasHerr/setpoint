@@ -1,7 +1,7 @@
 import { rutaDelTorneo, type TorneoPublico } from '@setpoint/shared';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { EncabezadoPublico } from '../components/EncabezadoPublico';
-import { Numero } from '../components/Numero';
+import { ConCifras, Numero } from '../components/Numero';
 import { diaLargo, formato, importe, lugaresLibres } from '../features/torneo-publico/convocatoria';
 import { useTorneoPublico } from '../features/torneo-publico/useTorneoPublico';
 import { ErrorApi } from '../lib/api';
@@ -44,9 +44,7 @@ function Convocatoria({ torneo }: { torneo: TorneoPublico }) {
       <title>{`${torneo.nombre} · ${torneo.categoria} · ${torneo.organizacion.nombre}`}</title>
       <div className="flex items-center justify-between gap-3">
         <EncabezadoPublico organizacion={torneo.organizacion.nombre} />
-        <Numero className="rounded-full border border-linea px-2.5 py-1.5 text-[14px] font-medium text-pizarra-500">
-          {torneo.categoria}
-        </Numero>
+        <span className="rounded-full border border-linea px-2.5 py-1.5 text-[14px] font-medium text-pizarra-500">{torneo.categoria}</span>
       </div>
 
       <section className="flex flex-col gap-[18px] rounded-superficie bg-noche px-5 py-[22px]">
@@ -125,7 +123,7 @@ function Convocatoria({ torneo }: { torneo: TorneoPublico }) {
             // La lista de espera sigue el mismo camino que inscribirse: el email y el código.
             <Link
               to={`/c/${torneo.organizacion.slug}/torneos/${torneo.id}/inscripcion`}
-              className="flex h-[60px] items-center justify-center rounded-[12px] border border-lona-borde bg-lona text-noche-900 text-lg font-semibold"
+              className="flex h-[60px] items-center justify-center gap-2.5 rounded-[12px] bg-noche-900 text-white text-lg font-semibold hover:bg-pizarra-700"
             >
               {lista ? 'Anotarme en la lista de espera' : 'Inscribirme y pagar'}
             </Link>
@@ -163,7 +161,7 @@ function Dato({ rotulo, valor }: { rotulo: string; valor: string }) {
     <div className="flex items-center justify-between gap-3">
       <dt className="text-[15px] text-pizarra-400">{rotulo}</dt>
       <dd>
-        <Numero className="text-[15px] text-white">{valor}</Numero>
+        <ConCifras className="text-[15px] text-white">{valor}</ConCifras>
       </dd>
     </div>
   );

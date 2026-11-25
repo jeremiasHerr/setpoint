@@ -35,6 +35,8 @@ export type PartidoDelCuadro = {
   fechaLimite: string | null;
   // Fecha y hora que anotaron los jugadores (F14), en ISO. null mientras no la coordinaron.
   fechaAcordada: string | null;
+  // Pasó la fecha límite sin fecha acordada ni resultado: lo resuelve la organización (decisión 152).
+  plazoCumplido: boolean;
   // El club registrado o la sede escrita a mano. null si todavía no se sabe.
   sede: string | null;
   // En un super tie-break, gamesA y gamesB son los puntos. Un W.O. no tiene sets (decisión 016),

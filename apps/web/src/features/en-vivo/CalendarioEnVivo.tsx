@@ -1,5 +1,5 @@
 import type { PartidoEnVivo, TorneoEnVivo } from '@setpoint/shared';
-import { Numero } from '../../components/Numero';
+import { ConCifras, Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
 import { dondeSeJuega, hoy, laHora, marcador, porDia, tieneResultado, type DiaDelCalendario } from './enVivo';
 
@@ -14,17 +14,17 @@ function Fila({ partido, torneo }: { partido: PartidoEnVivo; torneo: TorneoEnViv
 
   return (
     <li className="grid grid-cols-[52px_minmax(0,1fr)_auto] items-center gap-3 border-b border-linea-suave px-4 py-3 last:border-b-0">
-      <Numero className={`text-[15px] ${jugado ? 'text-pizarra-400' : 'font-semibold'}`}>{laHora(partido.fechaAcordada!)}</Numero>
+      <Numero className={`text-[15px] ${jugado ? 'text-pizarra-450' : 'font-semibold'}`}>{laHora(partido.fechaAcordada!)}</Numero>
       <div className="flex min-w-0 flex-col gap-0.5">
         <span className="truncate text-[15px]">
           <span className={estilo(partido.jugadorA)}>{nombre(partido.jugadorA)}</span>
-          <span className="text-pizarra-400"> · </span>
+          <span className="text-pizarra-450"> · </span>
           <span className={estilo(partido.jugadorB)}>{nombre(partido.jugadorB)}</span>
         </span>
         <span className="truncate text-[13px] text-pizarra-500">{detalle}</span>
       </div>
       {jugado ? (
-        <Numero className="text-[13px] font-semibold">{marcador(partido)}</Numero>
+        <ConCifras className="text-[13px] font-semibold">{marcador(partido)}</ConCifras>
       ) : partido.estado === 'anotada' ? (
         <span className="text-xs text-pizarra-500">a confirmar</span>
       ) : (

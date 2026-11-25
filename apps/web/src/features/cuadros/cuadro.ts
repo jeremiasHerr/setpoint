@@ -1,4 +1,5 @@
 import {
+  alConsuelo,
   lugarSiguiente,
   type ClaveCuadro,
   type CuadroEliminatorio,
@@ -6,6 +7,7 @@ import {
   type JugadorDelCuadro,
   type PartidoDelCuadro,
 } from '@setpoint/shared';
+import { elDiaYHora } from '../torneos/texto';
 
 // El cuadro consuelo se llama como lo configuró la organización (07 §1.2): cada pantalla recibe el
 // nombre en la respuesta de la API. "Campeonato" sigue fijo hasta cerrar la decisión abierta 16.
@@ -98,13 +100,15 @@ export function marcadorDelLado(partido: PartidoDelCuadro, lado: Lado, abierta: 
   return String(partido.sets.filter((set) => propios(set) > ajenos(set)).length);
 }
 
-const diaYHora = new Intl.DateTimeFormat('es-AR', { weekday: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false });
+// En la página pública, lo que dice un partido sin fecha acordada cuando pasó su plazo: no se
+// marca como vencido ni en rojo, porque lo resuelve la organización (decisión 152).
+export const PLAZO_CUMPLIDO = 'Plazo cumplido · lo resuelve la organización';
 
-// "domingo 22 · 11:00" (design.md §8). Sin fecha anotada, "a coordinar".
+// "dom 22 · 11:00" (design.md §8). Sin fecha anotada, "a coordinar".
 export function cuandoSeJuega(partido: PartidoDelCuadro) {
+  if (partido.plazoCumplido) return PLAZO_CUMPLIDO;
   if (!partido.fechaAcordada) return 'a coordinar';
-  const partes = Object.fromEntries(diaYHora.formatToParts(new Date(partido.fechaAcordada)).map((p) => [p.type, p.value]));
-  return `${partes.weekday} ${partes.day} · ${partes.hour}:${partes.minute}`;
+  return elDiaYHora(partido.fechaAcordada);
 }
 
 const PRIMEROS = ['', 'el primero', 'los dos primeros', 'los tres primeros', 'los cuatro primeros'];
@@ -114,5 +118,5 @@ export function bajada(cuadros: CuadroEliminatorio[], clasificadosPorGrupo: numb
   const primeros = PRIMEROS[clasificadosPorGrupo] ?? `los ${clasificadosPorGrupo} primeros`;
   const van = clasificadosPorGrupo === 1 ? 'va' : 'van';
   if (cuadros.length < 2) return `Al cuadro ${van} ${primeros} de cada zona.`;
-  return `Corren en paralelo. Nadie queda afuera de la fase de grupos: ${primeros} de cada zona ${van} a ${NOMBRE_DEL_PRINCIPAL} y el resto al ${consuelo.toLowerCase()}.`;
+  return `Corren en paralelo. Nadie queda afuera de la fase de grupos: ${primeros} de cada zona ${van} a ${NOMBRE_DEL_PRINCIPAL} y el resto ${alConsuelo(consuelo)}.`;
 }
