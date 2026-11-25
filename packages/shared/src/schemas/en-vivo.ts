@@ -17,6 +17,8 @@ export type PartidoEnVivo = {
   estado: EstadoPartido;
   // Fecha y hora anotadas por los jugadores o la organización (F14), en ISO.
   fechaAcordada: string | null;
+  // Pasó la fecha límite sin fecha acordada ni resultado: lo resuelve la organización (decisión 152).
+  plazoCumplido: boolean;
   // El club registrado o la sede escrita a mano.
   sede: string | null;
   sets: { gamesA: number; gamesB: number; esSuperTieBreak: boolean }[];

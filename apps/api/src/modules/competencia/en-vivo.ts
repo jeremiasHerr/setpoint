@@ -1,6 +1,7 @@
 // El torneo en vivo (F10): qué partidos van al calendario público.
 // Lógica pura: recibe los partidos ya leídos. No toca la base.
 import type { EstadoPartido } from './clasificacion';
+import { situacionDelPartido, type PartidoParaElTablero } from './tablero';
 
 export type PartidoParaElCalendario = {
   estado: EstadoPartido;
@@ -30,4 +31,10 @@ export function partidosSinFecha(partidos: PartidoParaElCalendario[]) {
       p.estado !== 'CANCELADA' &&
       !CON_RESULTADO.includes(p.estado),
   ).length;
+}
+
+// El plazo se cumplió sin fecha acordada ni resultado: la página pública no lo marca como vencido
+// sino como algo que resuelve la organización (decisión 152). Usa la misma cuenta que el tablero.
+export function plazoCumplido(partido: PartidoParaElTablero, hoy: string) {
+  return partido.fechaAcordada === null && situacionDelPartido(partido, hoy) === 'vencido';
 }

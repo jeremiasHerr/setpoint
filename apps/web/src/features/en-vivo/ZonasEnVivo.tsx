@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
 import { estadoParaLaFicha, type VueltaDeLaFicha } from '../ficha/vuelta';
-import { NOMBRE_DEL_PRINCIPAL } from '../cuadros/cuadro';
+import { NOMBRE_DEL_PRINCIPAL, PLAZO_CUMPLIDO } from '../cuadros/cuadro';
 import { DesempateDeLaZona } from '../tablero/DesempateDeLaZona';
 import { comoVieneLaZona, marcadorDesde } from '../tablero/tablero';
 import { laHora, elDia, tieneResultado } from './enVivo';
@@ -76,7 +76,7 @@ function TablaDeZona({ zona, slug, vuelta, consuelo, usaRanking }: { zona: ZonaE
   );
 }
 
-// "Pérez · Gómez   6-3 6-4", con el ganador en negrita. Sin resultado, la fecha o "a coordinar".
+// "Pérez · Gómez   6-3 6-4", con el ganador en negrita. Sin resultado, la fecha, "a coordinar" o, con el plazo cumplido, el texto neutro (decisión 152).
 function PartidoDeZona({ partido }: { partido: PartidoEnVivo }) {
   const { jugadorA, jugadorB } = partido;
   if (!jugadorA || !jugadorB) return null;
@@ -100,9 +100,13 @@ function PartidoDeZona({ partido }: { partido: PartidoEnVivo }) {
           <span className="min-w-0 truncate text-pizarra-700">
             {jugadorA.apellido} · {jugadorB.apellido}
           </span>
-          <Numero className="shrink-0 text-[13px] text-pizarra-500">
-            {partido.fechaAcordada ? `${elDia(partido.fechaAcordada)} · ${laHora(partido.fechaAcordada)}` : 'a coordinar'}
-          </Numero>
+          {partido.plazoCumplido ? (
+            <span className="shrink-0 text-[13px] text-pizarra-500">{PLAZO_CUMPLIDO}</span>
+          ) : (
+            <Numero className="shrink-0 text-[13px] text-pizarra-500">
+              {partido.fechaAcordada ? `${elDia(partido.fechaAcordada)} · ${laHora(partido.fechaAcordada)}` : 'a coordinar'}
+            </Numero>
+          )}
         </>
       )}
     </li>

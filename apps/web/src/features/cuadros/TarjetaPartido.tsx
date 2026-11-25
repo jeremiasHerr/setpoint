@@ -41,15 +41,20 @@ export function TarjetaPartido({ partido, destacado, eleccion, className = '' }:
       onClick={() => (eleccion ? eleccion.alElegir(partido) : setAbierta(!abierta))}
       className={`flex flex-col overflow-hidden bg-papel text-left disabled:cursor-default ${elegible ? 'hover:border-pizarra-500' : ''} ${borde} ${className}`}
     >
-      {destacado && (
-        <Numero
-          className={`flex h-[26px] items-center justify-center text-[11px] ${
-            destacado === 'principal' ? 'bg-lona-fondo font-semibold text-lona-texto' : 'bg-linea-suave font-medium text-pizarra-700'
-          }`}
-        >
-          {cuandoSeJuega(partido)}
-        </Numero>
-      )}
+      {destacado &&
+        (partido.plazoCumplido ? (
+          <span className="flex h-[26px] items-center justify-center bg-linea-suave text-[11px] font-medium text-pizarra-500">
+            {cuandoSeJuega(partido)}
+          </span>
+        ) : (
+          <Numero
+            className={`flex h-[26px] items-center justify-center text-[11px] ${
+              destacado === 'principal' ? 'bg-lona-fondo font-semibold text-lona-texto' : 'bg-linea-suave font-medium text-pizarra-700'
+            }`}
+          >
+            {cuandoSeJuega(partido)}
+          </Numero>
+        ))}
       <Fila partido={partido} lado="A" abierta={abierta} destacado={!!destacado} />
       <Fila partido={partido} lado="B" abierta={abierta} destacado={!!destacado} />
       {destacado && partido.sede && (
