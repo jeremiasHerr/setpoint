@@ -149,6 +149,11 @@ body {
     cursor: pointer;
   }
 
+  /* Reserva el lugar de la barra de scroll: la página no salta de ancho entre pantallas. */
+  html {
+    scrollbar-gutter: stable;
+  }
+
   /* Con una confirmación abierta, la pantalla de atrás no se mueve con la rueda (decisión 096). */
   html:has(dialog[open]) {
     overflow: hidden;
