@@ -2,7 +2,7 @@ import type { SolicitudDelTorneo } from '@setpoint/shared';
 import { MensajeError } from '../../components/Aviso';
 import { useState } from 'react';
 import { Confirmacion } from '../../components/Confirmacion';
-import { Numero } from '../../components/Numero';
+import { ConCifras, Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
 import { ErrorApi } from '../../lib/api';
 import { diaCorto } from '../torneos/texto';
@@ -80,7 +80,7 @@ export function TablaSolicitudes({ slug, torneoId, solicitudes, abierta }: Props
                     </div>
                   </div>
                   <span className="hidden truncate text-sm text-pizarra-700 md:block">{solicitud.email}</span>
-                  <Numero className="hidden text-[13px] whitespace-nowrap text-pizarra-500 md:block">{diaCorto(solicitud.fecha)}</Numero>
+                  <ConCifras className="hidden text-[13px] whitespace-nowrap text-pizarra-500 md:block">{diaCorto(solicitud.fecha)}</ConCifras>
                   <div className="flex justify-end gap-2 pt-2.5 max-md:empty:hidden md:pt-0">
                     {!aprobada && abierta && (
                       <>

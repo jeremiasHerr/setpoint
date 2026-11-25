@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { BarraDeMarcas } from '../../components/BarraDeMarcas';
 import { Boton } from '../../components/Boton';
-import { Etiqueta } from '../../components/Etiqueta';
+import { EstadoDelTorneo } from '../../components/EstadoDelTorneo';
 import { Numero } from '../../components/Numero';
 import { TarjetaDeColumna } from './TarjetaDeColumna';
 import type { TorneoEnJuego } from './tiposDeInicio';
@@ -16,7 +16,7 @@ export function TarjetaTorneoEnJuego({ torneo }: { torneo: TorneoEnJuego }) {
       calendario={torneo.calendario}
       nombre={torneo.nombre}
       detalle={torneo.detalle}
-      etiqueta={<Etiqueta variante="noche">{torneo.fase}</Etiqueta>}
+      etiqueta={<EstadoDelTorneo estado={torneo.estado} />}
       acciones={
         <Boton variante="organizador" className="grow font-semibold" onClick={() => navegar(`/torneos/${torneo.id}/tablero`)}>
           Ver el tablero
@@ -27,7 +27,7 @@ export function TarjetaTorneoEnJuego({ torneo }: { torneo: TorneoEnJuego }) {
         <div className="flex items-baseline justify-between gap-2 text-[13px]">
           <span className="text-pizarra-700">Partidos jugados</span>
           <Numero className="text-sm font-medium">
-            {jugados} <span className="text-pizarra-400">/ {total}</span>
+            {jugados} <span className="text-pizarra-450">/ {total}</span>
           </Numero>
         </div>
         <BarraDeMarcas

@@ -47,7 +47,7 @@ export function SorteoEnPantalla({ nombre, zonas, cantidadGrupos, ronda, error, 
       <div className="flex items-center justify-between gap-6 px-10 pt-8">
         <div className="flex flex-col gap-1">
           <p className="text-[12.5px] font-medium text-pizarra-400">sorteo de zonas</p>
-          <Numero className="text-xl font-semibold">{nombre}</Numero>
+          <span className="text-xl font-semibold">{nombre}</span>
         </div>
         <BotonOscuro onClick={alCerrar}>Cerrar</BotonOscuro>
       </div>

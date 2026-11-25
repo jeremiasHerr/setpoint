@@ -107,7 +107,7 @@ export function HojaDeZonasVacia({
         {grupos.map((grupo, i) => (
           <section key={grupo} className={celdaDeZona(i, columnas)}>
             <div className="flex items-baseline justify-between gap-3 px-6 pt-[22px] pb-2.5">
-              <h3 className="font-display text-[22px] font-semibold tracking-[-0.02em] text-pizarra-400">Zona {grupo}</h3>
+              <h3 className="font-display text-[22px] font-semibold tracking-[-0.02em] text-pizarra-450">Zona {grupo}</h3>
             </div>
 
             <ul className={`px-6 pb-4 ${sorteando ? 'motion-safe:animate-pulse' : ''}`}>

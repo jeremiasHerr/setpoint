@@ -1,4 +1,5 @@
 import {
+  alConsuelo,
   lugarSiguiente,
   type ClaveCuadro,
   type CuadroEliminatorio,
@@ -99,8 +100,13 @@ export function marcadorDelLado(partido: PartidoDelCuadro, lado: Lado, abierta: 
   return String(partido.sets.filter((set) => propios(set) > ajenos(set)).length);
 }
 
+// En la página pública, lo que dice un partido sin fecha acordada cuando pasó su plazo: no se
+// marca como vencido ni en rojo, porque lo resuelve la organización (decisión 152).
+export const PLAZO_CUMPLIDO = 'Plazo cumplido · lo resuelve la organización';
+
 // "dom 22 · 11:00" (design.md §8). Sin fecha anotada, "a coordinar".
 export function cuandoSeJuega(partido: PartidoDelCuadro) {
+  if (partido.plazoCumplido) return PLAZO_CUMPLIDO;
   if (!partido.fechaAcordada) return 'a coordinar';
   return elDiaYHora(partido.fechaAcordada);
 }
@@ -112,5 +118,5 @@ export function bajada(cuadros: CuadroEliminatorio[], clasificadosPorGrupo: numb
   const primeros = PRIMEROS[clasificadosPorGrupo] ?? `los ${clasificadosPorGrupo} primeros`;
   const van = clasificadosPorGrupo === 1 ? 'va' : 'van';
   if (cuadros.length < 2) return `Al cuadro ${van} ${primeros} de cada zona.`;
-  return `Corren en paralelo. Nadie queda afuera de la fase de grupos: ${primeros} de cada zona ${van} a ${NOMBRE_DEL_PRINCIPAL} y el resto al ${consuelo.toLowerCase()}.`;
+  return `Corren en paralelo. Nadie queda afuera de la fase de grupos: ${primeros} de cada zona ${van} a ${NOMBRE_DEL_PRINCIPAL} y el resto ${alConsuelo(consuelo)}.`;
 }

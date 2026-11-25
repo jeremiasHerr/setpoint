@@ -13,10 +13,6 @@ type Props = {
   vuelta: VueltaDeLaFicha;
 };
 
-// "pri 25": la abreviatura del torneo del calendario y el año de los puntos.
-function rotuloDeCasillero(nombre: string, anio: number) {
-  return `${abreviarTorneo(nombre)} ${String(anio).slice(-2)}`;
-}
 
 // Puesto, nombre y total, sin scroll horizontal. Al tocar una fila se abre el desglose
 // por torneo del calendario, como en la planilla, y el enlace a la ficha (decisión 074).
@@ -84,13 +80,11 @@ function Casilleros({ fila, torneosDelCalendario }: { fila: FilaDeRanking; torne
         return (
           <div
             key={torneo.id}
-            title={torneo.nombre}
+            title={casillero ? `${torneo.nombre} ${String(casillero.anio).slice(-2)}` : torneo.nombre}
             className="flex flex-col items-center gap-1 rounded-lg bg-niebla px-1 py-[9px]"
           >
-            <Numero className="text-[10px] text-pizarra-500">
-              {casillero ? rotuloDeCasillero(torneo.nombre, casillero.anio) : abreviarTorneo(torneo.nombre)}
-            </Numero>
-            <Numero className={`text-[17px] font-medium ${casillero ? 'text-noche' : 'text-pizarra-400'}`}>
+            <span className="text-[15px] leading-none text-pizarra-500">{abreviarTorneo(torneo.nombre)}</span>
+            <Numero className={`text-[17px] font-medium ${casillero ? 'text-noche' : 'text-pizarra-450'}`}>
               {casillero?.puntos ?? 0}
             </Numero>
           </div>

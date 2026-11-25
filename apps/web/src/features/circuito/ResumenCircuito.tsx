@@ -35,7 +35,7 @@ export function ResumenCircuito({ usaRanking, categorias, etapas, jugadores }: P
 
       <p className="text-[13px] leading-[1.45] text-pizarra-400">
         {usaRanking
-          ? 'El ranking empieza a moverse cuando cierres tu primer torneo.'
+          ? 'Cada torneo del circuito que cerrás actualiza el ranking de su categoría.'
           : 'El ranking anual está apagado: cada torneo termina con su propia tabla de posiciones, sin acumular puntos.'}
       </p>
     </Tarjeta>

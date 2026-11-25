@@ -150,9 +150,9 @@ export function CargaManual({ jugadores, zonas, capacidad, alMover }: Props) {
             <Destino key={zona.grupo} id={zona.grupo} llena={zona.integrantes.length >= capacidad} className="flex flex-col gap-1.5 px-[15px] py-[13px]">
               <div className="flex items-baseline justify-between gap-2.5 border-b border-linea-suave pb-[7px]">
                 <h3 className="text-[15px] font-semibold">Zona {zona.grupo}</h3>
-                <Numero className="text-xs text-pizarra-500">
-                  {zona.integrantes.length} de {capacidad}
-                </Numero>
+                <span className="text-xs text-pizarra-500">
+                  <Numero>{zona.integrantes.length}</Numero> de <Numero>{capacidad}</Numero>
+                </span>
               </div>
               <ul className="flex flex-col">
                 {zona.integrantes.map((jugador) => (
@@ -161,7 +161,7 @@ export function CargaManual({ jugadores, zonas, capacidad, alMover }: Props) {
                   </li>
                 ))}
                 {Array.from({ length: Math.max(capacidad - zona.integrantes.length, 0) }, (_, i) => (
-                  <li key={`libre-${i}`} className="flex h-[34px] items-center text-sm text-pizarra-400">
+                  <li key={`libre-${i}`} className="flex h-[34px] items-center text-sm text-pizarra-450">
                     libre
                   </li>
                 ))}
@@ -217,7 +217,7 @@ function Contenido({ jugador, levantado = false }: { jugador: JugadorDelSorteo; 
         levantado ? 'cursor-grabbing rounded-control border-2 border-noche bg-papel px-3' : ''
       }`}
     >
-      <Numero className="w-5 shrink-0 text-xs text-pizarra-400">
+      <Numero className="w-5 shrink-0 text-xs text-pizarra-450">
         {jugador.posicionSiembra === null ? '—' : String(jugador.posicionSiembra).padStart(2, '0')}
       </Numero>
       <span className="min-w-0 truncate text-sm">{jugador.apellido}</span>

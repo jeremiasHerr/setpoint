@@ -17,6 +17,8 @@ export type PartidoEnVivo = {
   estado: EstadoPartido;
   // Fecha y hora anotadas por los jugadores o la organización (F14), en ISO.
   fechaAcordada: string | null;
+  // Pasó la fecha límite sin fecha acordada ni resultado: lo resuelve la organización (decisión 152).
+  plazoCumplido: boolean;
   // El club registrado o la sede escrita a mano.
   sede: string | null;
   sets: { gamesA: number; gamesB: number; esSuperTieBreak: boolean }[];
@@ -34,6 +36,8 @@ export type TorneoEnVivo = {
   organizacion: string;
   // Cómo llama la organización a su cuadro consuelo (07 §1.2).
   nombreCuadroConsuelo: string;
+  // Sin ranking, la posición de siembra salió al azar del sorteo: lo usa la explicación del desempate.
+  usaRanking: boolean;
   // "Primavera 2026 · Tercera"
   nombre: string;
   // La línea de corte: los primeros clasificanPorGrupo van al cuadro principal.

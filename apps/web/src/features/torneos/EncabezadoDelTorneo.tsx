@@ -1,8 +1,9 @@
-import { pestanasDelTorneo, type EstadoTorneo, type PestanaDelTorneo } from '@setpoint/shared';
+import { pestanasDelTorneo, type PestanaDelTorneo } from '@setpoint/shared';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Boton } from '../../components/Boton';
 import { EncabezadoOrganizador } from '../../components/EncabezadoOrganizador';
+import { EstadoDelTorneo } from '../../components/EstadoDelTorneo';
 import { Migas } from '../../components/Migas';
 import type { Sesion } from '../auth/sesion';
 import { useCerrarSesion } from '../auth/useCerrarSesion';
@@ -20,18 +21,6 @@ const PESTANAS: Record<PestanaDelTorneo, { etiqueta: string; ruta: string; motiv
     motivo: 'Los resultados se cargan cuando se confirma el sorteo de zonas.',
   },
   cierre: { etiqueta: 'Cierre', ruta: 'cierre', motivo: 'El torneo se cierra cuando se definen los campeones.' },
-};
-
-// Como los nombra design.md: en los cuadros, el estado de la base es "eliminatorias".
-const ESTADO: Record<EstadoTorneo, string> = {
-  borrador: 'borrador',
-  publicado: 'publicado',
-  inscripciones_cerradas: 'inscripciones cerradas',
-  zonas_generadas: 'zonas generadas',
-  grupos_en_curso: 'grupos en curso',
-  eliminatorias: 'cuadros',
-  finalizado: 'finalizado',
-  cancelado: 'cancelado',
 };
 
 // En el celular cada pestaña ocupa su celda de la grilla, sin margen y centrada, para que el subrayado
@@ -78,9 +67,7 @@ export function EncabezadoDelTorneo({ sesion, torneoId, actual }: Props) {
                   <Migas anteriores={[{ etiqueta: 'Inicio', ruta: '/inicio' }]}>
                     <span className="font-medium text-noche">{datos.nombre}</span>
                   </Migas>
-                  <span className="flex h-7 items-center rounded-full border border-linea px-[11px] text-[12.5px] font-medium text-noche">
-                    {ESTADO[datos.estado]}
-                  </span>
+                  <EstadoDelTorneo estado={datos.estado} />
                 </div>
                 {/* La edición vuelve, por sus migas, a esta categoría y no a la primera de la convocatoria. */}
                 {datos.sePuedeEditar && (

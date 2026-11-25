@@ -1,6 +1,6 @@
 import type { JugadorDelCuadro, PartidoDelCuadro } from '@setpoint/shared';
 import { useState } from 'react';
-import { Numero } from '../../components/Numero';
+import { ConCifras } from '../../components/Numero';
 import { cuandoSeJuega, marcadorDelLado, tieneResultado, type Destacado } from './cuadro';
 
 // Para elegir un partido desde el cuadro (Cargar resultado): tocarlo lo elige en vez de abrirlo.
@@ -41,15 +41,20 @@ export function TarjetaPartido({ partido, destacado, eleccion, className = '' }:
       onClick={() => (eleccion ? eleccion.alElegir(partido) : setAbierta(!abierta))}
       className={`flex flex-col overflow-hidden bg-papel text-left disabled:cursor-default ${elegible ? 'hover:border-pizarra-500' : ''} ${borde} ${className}`}
     >
-      {destacado && (
-        <Numero
-          className={`flex h-[26px] items-center justify-center text-[11px] ${
-            destacado === 'principal' ? 'bg-lona-fondo font-semibold text-lona-texto' : 'bg-linea-suave font-medium text-pizarra-700'
-          }`}
-        >
-          {cuandoSeJuega(partido)}
-        </Numero>
-      )}
+      {destacado &&
+        (partido.plazoCumplido ? (
+          <span className="flex h-[26px] items-center justify-center bg-linea-suave text-[11px] font-medium text-pizarra-500">
+            {cuandoSeJuega(partido)}
+          </span>
+        ) : (
+          <span
+            className={`flex h-[26px] items-center justify-center text-[11px] ${
+              destacado === 'principal' ? 'bg-lona-fondo font-semibold text-lona-texto' : 'bg-linea-suave font-medium text-pizarra-700'
+            }`}
+          >
+            <ConCifras>{cuandoSeJuega(partido)}</ConCifras>
+          </span>
+        ))}
       <Fila partido={partido} lado="A" abierta={abierta} destacado={!!destacado} />
       <Fila partido={partido} lado="B" abierta={abierta} destacado={!!destacado} />
       {destacado && partido.sede && (
@@ -70,7 +75,7 @@ export function TarjetaPaseDirecto({ jugador, rotulo, className = '' }: { jugado
       <span className="truncate text-[13px] text-pizarra-500" title={`${jugador.nombre} ${jugador.apellido}`}>
         {jugador.apellido}
       </span>
-      <span className="truncate text-[12.5px] font-medium text-pizarra-400">{rotulo}</span>
+      <span className="truncate text-[12.5px] font-medium text-pizarra-450">{rotulo}</span>
     </div>
   );
 }
@@ -85,7 +90,7 @@ function Fila({ partido, lado, abierta, destacado }: PropsFila) {
 
   const fondo = gano ? 'bg-lona-fondo' : '';
   const separador = lado === 'B' ? 'border-t border-linea-suave' : '';
-  const nombre = !jugador ? 'text-pizarra-400' : gano || destacado ? 'font-semibold' : perdio ? 'text-pizarra-400' : '';
+  const nombre = !jugador ? 'text-pizarra-450' : gano || destacado ? 'font-semibold' : perdio ? 'text-pizarra-450' : '';
 
   return (
     <span className={`flex ${destacado ? 'h-[34px]' : 'h-[31px]'} items-center justify-between gap-2 px-2.5 ${fondo} ${separador}`}>
@@ -95,7 +100,7 @@ function Fila({ partido, lado, abierta, destacado }: PropsFila) {
       >
         {jugador?.apellido ?? 'a definir'}
       </span>
-      <Numero className={`shrink-0 text-xs ${gano ? 'font-semibold' : 'text-pizarra-400'}`}>{marcadorDelLado(partido, lado, abierta)}</Numero>
+      <ConCifras className={`shrink-0 text-xs ${gano ? 'font-semibold' : 'text-pizarra-450'}`}>{marcadorDelLado(partido, lado, abierta)}</ConCifras>
     </span>
   );
 }

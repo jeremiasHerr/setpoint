@@ -128,7 +128,7 @@ export function PanelJugador({
             value={telefono}
             onChange={(e) => setTelefono(e.target.value)}
             placeholder="Para avisarle cambios de horario"
-            className="h-12 rounded-control border border-borde-campo px-3.5 font-mono text-[15px] text-noche tabular-nums outline-none placeholder:font-sans placeholder:text-pizarra-400 focus:border-2 focus:border-noche focus:px-[13px]"
+            className="h-12 rounded-control border border-borde-campo px-3.5 font-mono text-[15px] text-noche tabular-nums outline-none placeholder:font-sans placeholder:text-pizarra-450 focus:border-2 focus:border-noche focus:px-[13px]"
             {...propsDeError('telefono')}
           />
           <MensajeError id="jugador-telefono-error">{campos.telefono}</MensajeError>

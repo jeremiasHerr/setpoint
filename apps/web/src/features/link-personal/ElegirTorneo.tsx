@@ -110,9 +110,9 @@ function Tarjeta({ torneo }: { torneo: TorneoPublico }) {
       <div className="flex flex-col gap-[9px]">
         <div className="flex justify-between gap-3">
           <span className="text-[15px] text-pizarra-400">Lugares</span>
-          <Numero className="text-[15px] text-white">
-            {torneo.ocupados} de {torneo.cupo}
-          </Numero>
+          <span className="text-[15px] text-white">
+            <Numero>{torneo.ocupados}</Numero> de <Numero>{torneo.cupo}</Numero>
+          </span>
         </div>
         {/* La barra de marcas del cupo, en una sola franja (design.md §6). */}
         <div className="flex gap-[3px]">

@@ -1,7 +1,7 @@
 import type { InscripcionParaPagar } from '@setpoint/shared';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { EncabezadoPublico } from '../components/EncabezadoPublico';
-import { Numero } from '../components/Numero';
+import { ConCifras, Numero } from '../components/Numero';
 import { Aviso, BotonPrincipal, BotonSecundario, Caja, Monto } from '../features/inscripcion/piezas';
 import { leerSesionJugador } from '../features/inscripcion/sesionJugador';
 import { useCuentaRegresiva } from '../features/inscripcion/useCuentaRegresiva';
@@ -198,9 +198,9 @@ function EnLaLista({
   return (
     <>
       <div className="flex flex-col gap-4 pt-10">
-        <Numero className="self-start rounded-full border border-linea px-3 py-1.5 text-[15px] font-medium">
-          {espera.posicion}º en la lista de espera
-        </Numero>
+        <span className="self-start rounded-full border border-linea px-3 py-1.5 text-[15px] font-medium">
+          <Numero>{espera.posicion}º</Numero> en la lista de espera
+        </span>
         <h1 className="text-[28px] leading-[1.12] font-display font-semibold tracking-[-0.02em]">Estás en la lista de espera</h1>
         <p className="text-base leading-[1.45] text-pizarra-500">
           Si se libera un lugar y te toca, te llega un email a {datos.email} y tenés <Numero className="text-noche">{horas}</Numero> horas
@@ -223,7 +223,7 @@ function Dato({ rotulo, valor }: { rotulo: string; valor: string }) {
     <div className="flex items-center justify-between gap-3">
       <dt className="text-[15px] text-pizarra-500">{rotulo}</dt>
       <dd>
-        <Numero className="text-[15px]">{valor}</Numero>
+        <ConCifras className="text-[15px]">{valor}</ConCifras>
       </dd>
     </div>
   );
@@ -237,9 +237,9 @@ function LugarLiberado({ datos, reservaVence, token }: { datos: InscripcionParaP
   return (
     <div className="-mx-4 flex grow flex-col">
       <div className="flex flex-col gap-4 bg-noche px-5 pt-[30px] pb-[26px]">
-        <Numero className="self-start rounded-full bg-lona px-3 py-1.5 text-[15px] font-medium text-noche-900">
-          es tuyo hasta {cuandoVence(reservaVence).texto}
-        </Numero>
+        <ConCifras className="self-start rounded-full bg-lona px-3 py-1.5 text-[15px] font-medium text-noche-900">
+          {`es tuyo hasta ${cuandoVence(reservaVence).texto}`}
+        </ConCifras>
         <div className="flex flex-col gap-2">
           <h1 className="text-[28px] leading-[1.1] font-display font-semibold tracking-[-0.02em] text-white">Se liberó un lugar para vos</h1>
           <p className="text-base text-pizarra-400">
@@ -257,7 +257,7 @@ function LugarLiberado({ datos, reservaVence, token }: { datos: InscripcionParaP
         <div className="flex justify-between gap-3">
           <dt className="text-[15px] text-pizarra-500">Tenés para pagar hasta</dt>
           <dd>
-            <Numero className="text-base">{hastaCuando(reservaVence)}</Numero>
+            <ConCifras className="text-base">{hastaCuando(reservaVence)}</ConCifras>
           </dd>
         </div>
         <p className="pt-1 text-[15px] leading-[1.42] text-pizarra-500">
@@ -376,7 +376,7 @@ function Confirmando({ datos }: { datos: InscripcionParaPagar }) {
           <h1 className="text-2xl font-display font-semibold tracking-[-0.02em]">Confirmando el pago</h1>
           <p className="max-w-[290px] text-base leading-[1.45] text-pizarra-500">Mercado Pago nos tiene que avisar que salió bien. Suele tardar unos segundos.</p>
         </div>
-        <Numero className="rounded-full border border-linea px-3.5 py-2 text-[15px] text-pizarra-500">tu lugar sigue reservado · {resta ?? '—'}</Numero>
+        <ConCifras className="rounded-full border border-linea px-3.5 py-2 text-[15px] text-pizarra-500">{`tu lugar sigue reservado · ${resta ?? '—'}`}</ConCifras>
       </div>
       <Caja>
         Podés cerrar esta página: cuando se confirme, te mandamos el comprobante a {datos.email}. Si el pago no sale, el lugar se libera y no se te cobra.
@@ -423,7 +423,7 @@ function Listo({ datos }: { datos: InscripcionParaPagar }) {
         <p className="text-base leading-[1.45] text-pizarra-500">Zonas, cuadros y resultados, sin instalar nada.</p>
         <Link
           to={`${linkTorneo(datos)}/en-vivo`}
-          className="flex h-14 items-center justify-center rounded-[12px] border border-lona-borde bg-lona text-noche-900 text-[17px] font-semibold"
+          className="flex h-14 items-center justify-center gap-2.5 rounded-[12px] bg-noche-900 text-white text-[17px] font-semibold hover:bg-pizarra-700"
         >
           Ver el torneo en vivo
         </Link>
@@ -453,7 +453,7 @@ function Rechazado({ datos }: { datos: InscripcionParaPagar }) {
       </div>
       <Resumen datos={datos} />
       <div className="mt-auto flex flex-col gap-3">
-        <Link to={linkInscripcion(datos)} className="flex h-14 items-center justify-center rounded-[12px] border border-lona-borde bg-lona text-noche-900 text-[17px] font-semibold">
+        <Link to={linkInscripcion(datos)} className="flex h-14 items-center justify-center gap-2.5 rounded-[12px] bg-noche-900 text-white text-[17px] font-semibold hover:bg-pizarra-700">
           Probar de nuevo
         </Link>
         <p className="text-center text-[15px] text-pizarra-500">Al probar de nuevo te guardamos otros 15 minutos.</p>
@@ -469,7 +469,7 @@ function Vencida({ datos }: { datos: InscripcionParaPagar }) {
   return (
     <>
       <div className="flex flex-col gap-4 pt-10">
-        <span className="self-start rounded-full border border-rojo-linea bg-rojo-fondo px-3 py-1.5 font-mono text-[15px] font-medium text-rojo-texto">
+        <span className="self-start rounded-full border border-rojo-linea bg-rojo-fondo px-3 py-1.5 text-[15px] font-medium text-rojo-texto">
           venció la reserva
         </span>
         <h1 className="text-[28px] leading-[1.12] font-display font-semibold tracking-[-0.02em]">
@@ -486,7 +486,7 @@ function Vencida({ datos }: { datos: InscripcionParaPagar }) {
         <VolverAlTorneo datos={datos} />
       ) : (
         <div className="mt-auto flex flex-col gap-3">
-          <Link to={linkInscripcion(datos)} className="flex h-14 items-center justify-center rounded-[12px] border border-lona-borde bg-lona text-noche-900 text-[17px] font-semibold">
+          <Link to={linkInscripcion(datos)} className="flex h-14 items-center justify-center gap-2.5 rounded-[12px] bg-noche-900 text-white text-[17px] font-semibold hover:bg-pizarra-700">
             Reservar otra vez y pagar
           </Link>
         </div>

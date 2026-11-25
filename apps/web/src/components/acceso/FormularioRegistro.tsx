@@ -176,7 +176,7 @@ export function FormularioRegistro({
               aria-describedby={campos.organizacion ? 'registro-organizacion-error' : undefined}
             />
             <MensajeError sobreNoche id="registro-organizacion-error">{campos.organizacion}</MensajeError>
-            <p className="font-mono text-xs text-pizarra-400 tabular-nums">
+            <p className="text-xs text-pizarra-400">
               setpoint.com.ar/{aSlug(datos.organizacion) || 'tu-circuito'} · así lo van a ver los jugadores
             </p>
           </div>

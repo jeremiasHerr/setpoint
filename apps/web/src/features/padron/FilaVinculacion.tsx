@@ -1,5 +1,5 @@
 import type { JugadorPadron } from '@setpoint/shared';
-import { Numero } from '../../components/Numero';
+import { ConCifras } from '../../components/Numero';
 import { EnlaceParaRevisar } from '../revisiones/piezas';
 import { motivoCorto } from '../revisiones/textos';
 import { MenuJugador } from './MenuJugador';
@@ -64,7 +64,7 @@ export function FilaVinculacion({ jugador, columnas, seleccionado, slug, organiz
 
       <span className="hidden text-sm md:block">{jugador.vinculadoPor ? COMO_EN_LA_LISTA[jugador.vinculadoPor] : '—'}</span>
 
-      <Numero className="text-right text-[13px] text-pizarra-500">{jugador.vinculadoEn ? cuandoSeVinculo(jugador.vinculadoEn) : '—'}</Numero>
+      <ConCifras className="text-right text-[13px] text-pizarra-500">{jugador.vinculadoEn ? cuandoSeVinculo(jugador.vinculadoEn) : '—'}</ConCifras>
 
       <MenuJugador jugador={jugador} slug={slug} organizacion={organizacion} alEditar={alEditar} />
     </div>
