@@ -26,9 +26,15 @@ export function diasHasta(fechaLimite: Date, hoy: string) {
 // Vencido se calcula, no se guarda: pasó la fecha límite y no tiene resultado (decisión 060).
 // Uno con fecha acordada también vence si no se jugó a tiempo. El estado VENCIDA del schema no
 // se escribe; si apareciera, cuenta como un partido sin resultado.
-export function situacionDelPartido(partido: PartidoParaElTablero, hoy: string): SituacionDelPartido {
+//
+// Falta cargar (decisión 151): tiene fecha acordada, el día y la hora ya pasaron y no hay resultado.
+// Gana sobre vencido: lo que corresponde es pedir el resultado, no dar un W.O. por un partido que
+// se acordó jugar. Solo se distingue si se pasa `ahora`; sin él, es vencido o con fecha.
+export function situacionDelPartido(partido: PartidoParaElTablero, hoy: string, ahora?: Date): SituacionDelPartido {
   if (CON_RESULTADO.includes(partido.estado)) return 'jugado';
   if (partido.jugadorAId === null || partido.jugadorBId === null) return 'esperando';
+  const conFecha = CON_FECHA.includes(partido.estado) || partido.fechaAcordada !== null;
+  if (ahora && conFecha && partido.fechaAcordada && partido.fechaAcordada.getTime() < ahora.getTime()) return 'falta_cargar';
   if (partido.fechaLimite && diasHasta(partido.fechaLimite, hoy) < 0) return 'vencido';
   if (CON_FECHA.includes(partido.estado) || partido.fechaAcordada) return 'con_fecha';
   return 'sin_coordinar';
@@ -37,9 +43,9 @@ export function situacionDelPartido(partido: PartidoParaElTablero, hoy: string):
 // El plazo que corre: la fecha límite más cercana de los partidos que todavía se pueden jugar.
 // En la fase de grupos es una sola; en los cuadros, la de la ronda más atrasada. null si no
 // queda nada pendiente o ningún partido tiene fecha límite.
-export function plazoQueCorre(partidos: PartidoParaElTablero[], hoy: string) {
+export function plazoQueCorre(partidos: PartidoParaElTablero[], hoy: string, ahora?: Date) {
   const pendientes = partidos.filter((p) => {
-    const situacion = situacionDelPartido(p, hoy);
+    const situacion = situacionDelPartido(p, hoy, ahora);
     return situacion !== 'jugado' && situacion !== 'esperando' && p.fechaLimite !== null;
   });
   if (pendientes.length === 0) return null;
@@ -53,10 +59,10 @@ export type PartidoDelAvance = PartidoParaElTablero & { cuadro: 'CAMPEONATO' | '
 
 // Cómo viene el torneo, para su tarjeta en el inicio (decisión 080). Con las mismas cuentas que el
 // tablero: un vencido o el plazo que corre son lo mismo en las dos pantallas.
-export function avanceDelTorneo(partidos: PartidoDelAvance[], hoy: string) {
-  const situaciones = partidos.map((p) => situacionDelPartido(p, hoy));
+export function avanceDelTorneo(partidos: PartidoDelAvance[], hoy: string, ahora?: Date) {
+  const situaciones = partidos.map((p) => situacionDelPartido(p, hoy, ahora));
   const cuantos = (situacion: SituacionDelPartido) => situaciones.filter((s) => s === situacion).length;
-  const plazo = plazoQueCorre(partidos, hoy);
+  const plazo = plazoQueCorre(partidos, hoy, ahora);
 
   // La ronda que marca el plazo: la del partido de cuadro pendiente que vence primero.
   const marca = plazo
@@ -81,4 +87,9 @@ export function avanceDelTorneo(partidos: PartidoDelAvance[], hoy: string) {
 export function porUrgencia<P extends { dias: number | null }>(partidos: P[]): P[] {
   const dias = (p: P) => p.dias ?? Infinity;
   return [...partidos].sort((a, b) => dias(a) - dias(b));
+}
+
+// Los que ya tendrían que haberse jugado, del que hace más que pasó al más reciente.
+export function porFechaAcordada<P extends { fechaAcordada: string | null }>(partidos: P[]): P[] {
+  return [...partidos].sort((a, b) => (a.fechaAcordada ?? '').localeCompare(b.fechaAcordada ?? ''));
 }
