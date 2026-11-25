@@ -1,3 +1,4 @@
+import { alConsuelo } from '@setpoint/shared';
 import type { PartidoEnVivo, TorneoEnVivo, ZonaEnVivo } from '@setpoint/shared';
 import { Link } from 'react-router-dom';
 import { Numero } from '../../components/Numero';
@@ -106,7 +107,7 @@ function PartidoDeZona({ partido }: { partido: PartidoEnVivo }) {
 
 // Todas las zonas, una debajo de la otra en el celular y en columnas en escritorio.
 export function ZonasEnVivo({ torneo, slug }: { torneo: TorneoEnVivo; slug: string }) {
-  const consuelo = torneo.tieneComplementaria ? ` y el resto al ${torneo.nombreCuadroConsuelo.toLowerCase()}` : '';
+  const consuelo = torneo.tieneComplementaria ? ` y el resto ${alConsuelo(torneo.nombreCuadroConsuelo)}` : '';
   const vuelta = { ruta: `/c/${slug}/torneos/${torneo.torneoId}/en-vivo?ver=zonas`, etiqueta: `${torneo.nombre} en vivo` };
   const primeros = torneo.clasificanPorGrupo === 1 ? 'El primero de cada zona va' : `Los ${torneo.clasificanPorGrupo} primeros de cada zona van`;
   return (
