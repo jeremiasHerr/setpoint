@@ -5,6 +5,9 @@ export function aEntero(texto: string, maximo: number) {
   return Math.min(maximo, Number(texto.replace(/\D/g, '')) || 0);
 }
 
+// 'AAAA-MM-DD' de hoy, en la hora de quien mira.
+export const hoy = () => new Intl.DateTimeFormat('en-CA').format(new Date());
+
 // '2026-10-06' -> '6 oct'. Se arma desde el texto para que no se corra por zona horaria.
 export function diaCorto(dia: string) {
   const [, mes, numero] = dia.split('-').map(Number);
@@ -17,6 +20,11 @@ const DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', '
 export function diaConSemana(dia: string) {
   const [anio, mes, numero] = dia.split('-').map(Number);
   return `${DIAS[new Date(Date.UTC(anio, mes - 1, numero)).getUTCDay()]} ${numero}`;
+}
+
+// '2026-11-13' -> 'vie 13': la fecha corta de design.md §8.
+export function diaConSemanaCorto(dia: string) {
+  return diaConSemana(dia).replace(/^\S+/, (nombre) => nombre.slice(0, 3));
 }
 
 export function rangoDeDias(desde: string, hasta: string) {
