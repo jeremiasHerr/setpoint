@@ -14,7 +14,7 @@ export function TablaPuntos({ puntos, alCambiar }: Props) {
       {/* Se llena por columnas: de campeón a semifinalista a la izquierda, el resto a la derecha. */}
       <div className="grid gap-x-[22px] gap-y-3.5 sm:grid-flow-col sm:grid-cols-2 sm:grid-rows-3">
         {instancias.map(({ clave, etiqueta }) => (
-          <div key={clave} className="grid grid-cols-[minmax(0,1fr)_92px] items-center gap-3">
+          <div key={clave} className="grid max-w-xs grid-cols-[minmax(0,1fr)_92px] items-center gap-3">
             <label htmlFor={`puntos-${clave}`} className="text-[15px]">
               {etiqueta}
             </label>
