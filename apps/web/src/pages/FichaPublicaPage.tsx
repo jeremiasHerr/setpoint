@@ -31,7 +31,7 @@ export function FichaPublicaPage() {
   const ficha = useFichaPublica(slug, id);
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-[480px] flex-col gap-[22px] px-4 pt-5 pb-7">
+    <main className="mx-auto flex min-h-screen max-w-[480px] flex-col gap-[22px] px-4 pt-5 pb-7 lg:max-w-[1040px] lg:px-8">
       {ficha.isPending && <Esqueleto forma="lista" />}
       {ficha.error && <p className="text-[15px] text-pizarra-700">{mensajeDeError(ficha.error)}</p>}
       {ficha.data && <Ficha ficha={ficha.data} slug={slug} />}
@@ -55,6 +55,9 @@ function Ficha({ ficha, slug }: { ficha: FichaDelJugador; slug: string }) {
         <BotonCompartir titulo={`${nombre} · ${ficha.organizacion}`} />
       </header>
 
+      {/* Desde 1024 px, dos columnas (decisión 155); debajo, 'contents' deja las secciones como siempre. */}
+      <div className="contents lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-12">
+      <div className="contents lg:flex lg:flex-col lg:gap-[22px]">
       <section className="flex flex-col gap-4">
         <div className="flex flex-col gap-1.5">
           {vuelta && <LinkDeVuelta ruta={vuelta.ruta}>{vuelta.etiqueta}</LinkDeVuelta>}
@@ -75,6 +78,8 @@ function Ficha({ ficha, slug }: { ficha: FichaDelJugador; slug: string }) {
 
       {ranking && <PuntosPorTorneo ranking={ranking} />}
       <TorneosDeLaFicha torneos={ficha.torneos} consuelo={ficha.nombreCuadroConsuelo} slug={slug} jugadorId={ficha.jugadorId} />
+      </div>
+      <div className="contents lg:flex lg:flex-col lg:gap-[22px]">
       {/* Sin torneos no hay partidos: con el aviso de Torneos alcanza. */}
       {ficha.torneos.length > 0 && <PartidosDeLaFicha partidos={ficha.partidos} consuelo={ficha.nombreCuadroConsuelo} />}
 
@@ -87,6 +92,9 @@ function Ficha({ ficha, slug }: { ficha: FichaDelJugador; slug: string }) {
           Comparar con otro jugador
         </Link>
       )}
+
+      </div>
+      </div>
 
       <p className="text-sm leading-[1.42] text-pizarra-500">Ninguna pantalla pública muestra datos de contacto.</p>
     </>

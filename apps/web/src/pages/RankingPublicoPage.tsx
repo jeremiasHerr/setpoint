@@ -5,6 +5,7 @@ import { Campo } from '../components/Campo';
 import { Chip } from '../components/Chip';
 import { EncabezadoPublico } from '../components/EncabezadoPublico';
 import { Numero } from '../components/Numero';
+import { PlanillaRanking } from '../features/ranking/PlanillaRanking';
 import { TablaRanking } from '../features/ranking/TablaRanking';
 import { useRankingPublico } from '../features/ranking/useRankingPublico';
 import { ErrorApi } from '../lib/api';
@@ -22,7 +23,7 @@ export function RankingPublicoPage() {
   const ranking = useRankingPublico(slug);
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-[480px] flex-col gap-[18px] px-4 pt-5 pb-7">
+    <main className="mx-auto flex min-h-screen max-w-[480px] flex-col gap-[18px] px-4 pt-5 pb-7 lg:max-w-[1040px] lg:px-8">
       {/* Las páginas que se comparten por link dicen en la pestaña qué son. React lo sube al <head>. */}
       {ranking.data && <title>{`Ranking · ${ranking.data.organizacion}`}</title>}
       {ranking.data && <EncabezadoPublico organizacion={ranking.data.organizacion} />}
@@ -51,6 +52,7 @@ function Ranking({ ranking, slug }: { ranking: RankingPublico; slug: string }) {
   // Cada fila conserva su puesto: se busca para ver dónde está alguien, no para reordenar.
   // Por nombre, apellido o los dos (decisión 146).
   const filas = categoria.filas.filter((f) => coincideConElNombre(f, busqueda));
+  const vuelta = { ruta: `/c/${slug}/ranking?categoria=${categoria.id}`, etiqueta: 'Ranking' };
 
   return (
     <>
@@ -82,19 +84,22 @@ function Ranking({ ranking, slug }: { ranking: RankingPublico; slug: string }) {
       </div>
 
       {/* Arriba de la tabla: al pie quedaba después de todas las filas, y nadie lo veía. */}
-      {filas.length > 0 && <p className="text-[15px] text-pizarra-500">Tocá un jugador para ver sus puntos por torneo y su ficha.</p>}
+      {filas.length > 0 && <p className="text-[15px] text-pizarra-500 lg:hidden">Tocá un jugador para ver sus puntos por torneo y su ficha.</p>}
 
       {categoria.filas.length === 0 ? (
         <p className="text-[15px] text-pizarra-500">Todavía no hay jugadores en esta categoría.</p>
       ) : filas.length === 0 ? (
         <p className="text-[15px] text-pizarra-500">Nadie en {categoria.nombre} se llama así.</p>
       ) : (
-        <TablaRanking
-          slug={slug}
-          filas={filas}
-          torneosDelCalendario={ranking.torneosDelCalendario}
-          vuelta={{ ruta: `/c/${slug}/ranking?categoria=${categoria.id}`, etiqueta: 'Ranking' }}
-        />
+        // En la compu, la planilla con una columna por torneo del calendario (decisión 155).
+        <>
+          <div className="lg:hidden">
+            <TablaRanking slug={slug} filas={filas} torneosDelCalendario={ranking.torneosDelCalendario} vuelta={vuelta} />
+          </div>
+          <div className="hidden lg:block">
+            <PlanillaRanking slug={slug} filas={filas} torneosDelCalendario={ranking.torneosDelCalendario} vuelta={vuelta} />
+          </div>
+        </>
       )}
     </>
   );
