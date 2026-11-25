@@ -35,7 +35,7 @@ function TablaDeZona({ zona, slug, vuelta, consuelo }: { zona: ZonaEnVivo; slug:
         return (
           <div key={fila.jugadorId} className={`${grilla} min-h-[46px] border-b border-linea-suave py-1`}>
             <div className="flex min-w-0 items-center gap-2.5 px-4">
-              <Numero className={`text-xs ${clasifica ? 'text-pizarra-500' : 'text-pizarra-400'}`}>{fila.posicion}</Numero>
+              <Numero className={`text-xs ${clasifica ? 'text-pizarra-500' : 'text-pizarra-450'}`}>{fila.posicion}</Numero>
               <span className={`size-1.5 shrink-0 rounded-full ${clasifica ? 'bg-lona-texto' : 'bg-linea'}`} />
               <Link
                 to={`/c/${slug}/jugadores/${fila.jugadorId}`}
@@ -85,7 +85,7 @@ function PartidoDeZona({ partido }: { partido: PartidoEnVivo }) {
         <>
           <span className="min-w-0 truncate">
             <span className="font-semibold">{ganador.apellido}</span>
-            <span className="text-pizarra-400"> le ganó a </span>
+            <span className="text-pizarra-450"> le ganó a </span>
             {perdedor.apellido}
           </span>
           <Numero className="shrink-0 text-[13px] font-semibold">{marcadorDesde(partido, ganador.jugadorId)}</Numero>

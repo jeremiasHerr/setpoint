@@ -15,7 +15,7 @@ export function TarjetaZona({ zona }: { zona: ZonaSorteada }) {
         {/* Cada jugador entra con una animación: al sortear de nuevo, se nota quién cambió de zona. */}
         {zona.integrantes.map(({ jugadorId, posicionSiembra, apellido }) => (
           <li key={jugadorId} className="flex h-[34px] min-w-0 items-center gap-2.5 motion-safe:animate-aparecer">
-            <Numero className="w-5 shrink-0 text-xs text-pizarra-400">{String(posicionSiembra).padStart(2, '0')}</Numero>
+            <Numero className="w-5 shrink-0 text-xs text-pizarra-450">{String(posicionSiembra).padStart(2, '0')}</Numero>
             {/* min-w-0: sin él, un apellido largo no se recorta y se sale de la tarjeta a 375. */}
             <span className="min-w-0 truncate text-sm" title={apellido}>
               {apellido}
@@ -32,7 +32,7 @@ export function TarjetaZonaVacia({ grupo, lugares, sorteando }: { grupo: string;
   return (
     <Tarjeta className="flex flex-col gap-1.5 px-[15px] py-[13px]" aria-hidden="true">
       <div className="flex items-baseline justify-between gap-2.5 border-b border-linea-suave pb-[7px]">
-        <h3 className="text-[15px] font-semibold text-pizarra-400">Zona {grupo}</h3>
+        <h3 className="text-[15px] font-semibold text-pizarra-450">Zona {grupo}</h3>
       </div>
 
       <ul className={sorteando ? 'motion-safe:animate-pulse' : ''}>

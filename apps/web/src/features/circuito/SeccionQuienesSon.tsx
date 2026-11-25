@@ -163,7 +163,7 @@ function Contactos({ contactos, alCambiar }: { contactos: Contacto[]; alCambiar:
                 }
                 if (e.key === 'Escape') cerrar();
               }}
-              className={`h-10 min-w-0 flex-1 rounded-control border border-borde-campo bg-papel px-3.5 text-[15px] outline-none placeholder:text-pizarra-400 focus:border-2 focus:border-noche focus:px-[13px] ${
+              className={`h-10 min-w-0 flex-1 rounded-control border border-borde-campo bg-papel px-3.5 text-[15px] outline-none placeholder:text-pizarra-450 focus:border-2 focus:border-noche focus:px-[13px] ${
                 tipo === 'whatsapp' ? 'font-mono tabular-nums' : ''
               }`}
             />
