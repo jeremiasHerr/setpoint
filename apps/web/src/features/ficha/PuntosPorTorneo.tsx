@@ -62,7 +62,7 @@ export function PuntosPorTorneo({ ranking }: { ranking: RankingDeLaFicha }) {
                 {puntos}
               </Numero>
               <div className={`w-full rounded-t-[5px] ${esLaMejor ? 'bg-lona' : 'bg-linea'}`} style={{ height: alto(puntos) }} />
-              <Numero className={`text-[11px] ${esLaMejor ? 'text-noche' : 'text-pizarra-500'}`}>{rotulo(torneo.nombre)}</Numero>
+              <span className={`text-[15px] leading-none ${esLaMejor ? 'text-noche' : 'text-pizarra-500'}`}>{rotulo(torneo.nombre)}</span>
             </li>
           );
         })}
