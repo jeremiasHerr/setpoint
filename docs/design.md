@@ -514,7 +514,7 @@ La app tiene su copia de los tokens en `apps/mobile/src/lib/tokens.ts`, con los 
 - Las tarjetas y las tablas llevan fondo `papel` explícito: el fondo de la página es `papel` o `niebla`, y las tarjetas se separan con su borde `linea`. Sin el borde se funden con el papel.
 - Toda tabla y toda matriz usan `tabular-nums`. Sin eso, las columnas bailan.
 - El cuadro eliminatorio se arma con columnas de altura fija y `justify-content: space-around` anidado: cada par de partidos queda centrado respecto del siguiente, y los codos son bordes de 1px con `border-left: none`.
-- Nada de scroll horizontal en móvil. Si una tabla no entra, se reorganiza (así se resolvieron los cinco casilleros del ranking).
+- Nada de scroll horizontal en móvil. Si una tabla no entra, se reorganiza (así se resolvieron los cinco casilleros del ranking). Desde 1024 px el ranking público se ve como planilla, con una columna por casillero, y la ficha en dos columnas ([decisión 155](decisiones/155-ranking-y-ficha-en-la-compu.md)).
 
 ---
 
