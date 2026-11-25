@@ -145,7 +145,7 @@ function EditorCircuito({ sesion, inicial }: { sesion: Sesion; inicial: Circuito
           />
         </div>
 
-        <aside className="flex flex-col gap-4">
+        <aside className="flex flex-col gap-4 lg:sticky lg:top-[76px] lg:max-h-[calc(100dvh-92px)] lg:overflow-y-auto">
           <ResumenCircuito
             usaRanking={usaRanking}
             categorias={circuito.categorias.length}
