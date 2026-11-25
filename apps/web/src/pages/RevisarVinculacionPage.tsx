@@ -96,6 +96,7 @@ function Revisar({ sesion }: { sesion: Sesion }) {
     <div className="min-h-screen bg-papel text-noche">
       <EncabezadoOrganizador
         organizacion={organizacion}
+        titulo={['Revisar vinculación', 'Jugadores']}
         navegacion={navegacionOrganizador}
         activo="Jugadores"
         iniciales={iniciales(sesion.usuario.nombre)}

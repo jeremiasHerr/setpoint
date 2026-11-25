@@ -9,6 +9,8 @@ type ItemNavegacion = {
 
 type Props = {
   organizacion: string;
+  // Título de la pestaña del navegador, de lo más específico a lo más general; la organización va al final.
+  titulo?: string[];
   navegacion?: ItemNavegacion[];
   activo?: string;
   // Iniciales de quien inició sesión, para el círculo de la derecha.
@@ -19,7 +21,7 @@ type Props = {
 
 // En el celular el menú, las iniciales y Salir no entran en una fila: debajo de
 // 768 px van en un panel que se abre con "Menú" (decisión 109).
-export function EncabezadoOrganizador({ organizacion, navegacion = [], activo, iniciales, alSalir }: Props) {
+export function EncabezadoOrganizador({ organizacion, titulo, navegacion = [], activo, iniciales, alSalir }: Props) {
   const idPanel = useId();
   const boton = useRef<HTMLButtonElement>(null);
   const panel = useRef<HTMLElement>(null);
@@ -54,6 +56,7 @@ export function EncabezadoOrganizador({ organizacion, navegacion = [], activo, i
         abierto ? 'z-40' : 'z-30'
       }`}
     >
+      {titulo && <title>{[...titulo, organizacion].join(' · ')}</title>}
       <div className="flex min-w-0 items-center gap-2.5 md:gap-3.5">
         <Link to="/inicio" aria-label="Ir al inicio" className="rounded-[7px]">
           <Logo sobreNoche />

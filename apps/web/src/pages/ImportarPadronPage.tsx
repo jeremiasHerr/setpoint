@@ -175,6 +175,7 @@ function ImportarPadron({ sesion }: { sesion: Sesion }) {
     <div className="flex min-h-screen flex-col bg-papel text-noche">
       <EncabezadoOrganizador
         organizacion={circuito.data?.nombre ?? sesion.organizacion.nombre}
+        titulo={['Importar planilla', 'Jugadores']}
         navegacion={navegacionOrganizador}
         activo="Jugadores"
         iniciales={iniciales(sesion.usuario.nombre)}

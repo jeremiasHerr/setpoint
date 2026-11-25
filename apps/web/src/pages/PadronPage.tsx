@@ -114,6 +114,7 @@ function Padron({ sesion }: { sesion: Sesion }) {
     <div className="min-h-screen bg-papel text-noche">
       <EncabezadoOrganizador
         organizacion={circuito.data?.nombre ?? sesion.organizacion.nombre}
+        titulo={['Jugadores']}
         navegacion={navegacionOrganizador}
         activo="Jugadores"
         iniciales={iniciales(sesion.usuario.nombre)}

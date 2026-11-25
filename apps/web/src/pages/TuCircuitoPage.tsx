@@ -33,11 +33,12 @@ export function TuCircuitoPage() {
   return <CargarCircuito sesion={sesion} />;
 }
 
-function Encabezado({ sesion, organizacion }: { sesion: Sesion; organizacion: string }) {
+function Encabezado({ sesion, organizacion, titulo }: { sesion: Sesion; organizacion: string; titulo: string[] }) {
   const cerrarSesion = useCerrarSesion();
   return (
     <EncabezadoOrganizador
       organizacion={organizacion}
+      titulo={titulo}
       navegacion={navegacionOrganizador}
       activo="Circuito"
       iniciales={iniciales(sesion.usuario.nombre)}
@@ -59,7 +60,7 @@ function CargarCircuito({ sesion }: { sesion: Sesion }) {
 
   return (
     <div className="min-h-screen bg-papel text-noche">
-      <Encabezado sesion={sesion} organizacion={sesion.organizacion.nombre} />
+      <Encabezado sesion={sesion} organizacion={sesion.organizacion.nombre} titulo={['Tu circuito']} />
       <div className="flex flex-col items-start gap-3 px-4 md:px-7 pt-[26px]">
         {error && !sesionInvalida ? (
           <>
@@ -93,7 +94,7 @@ function EditorCircuito({ sesion, inicial }: { sesion: Sesion; inicial: Circuito
 
   return (
     <div className="min-h-screen bg-papel text-noche">
-      <Encabezado sesion={sesion} organizacion={circuito.nombre || sesion.organizacion.nombre} />
+      <Encabezado sesion={sesion} organizacion={circuito.nombre || sesion.organizacion.nombre} titulo={['Tu circuito']} />
 
       <div className="flex flex-wrap items-end justify-between gap-6 px-4 md:px-7 pt-[26px] pb-5">
         <div className="flex flex-col gap-[7px]">

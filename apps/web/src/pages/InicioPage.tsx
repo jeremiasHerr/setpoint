@@ -48,6 +48,7 @@ function Inicio({ sesion }: { sesion: Sesion }) {
     <div className="min-h-screen bg-papel text-noche">
       <EncabezadoOrganizador
         organizacion={circuito.data?.nombre ?? sesion.organizacion.nombre}
+        titulo={['Inicio']}
         navegacion={navegacionOrganizador}
         activo="Inicio"
         iniciales={iniciales(sesion.usuario.nombre)}
