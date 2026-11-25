@@ -55,7 +55,7 @@ export function BarrasDelTorneo({ tablero }: { tablero: Tablero }) {
 
         <div
           className={`grid ${
-            deZonas ? 'gap-5 grid-cols-[repeat(auto-fit,minmax(84px,1fr))]' : 'gap-[18px] grid-cols-[repeat(auto-fill,minmax(150px,1fr))]'
+            deZonas ? 'gap-5 grid-cols-[repeat(auto-fit,minmax(84px,1fr))]' : 'gap-[18px] grid-cols-[repeat(auto-fit,minmax(190px,1fr))]'
           }`}
         >
           {tablero.bloques.map((bloque) => {
@@ -80,7 +80,7 @@ export function BarrasDelTorneo({ tablero }: { tablero: Tablero }) {
                   })}
                 </ul>
                 <div className={`flex items-baseline justify-between gap-2 ${conVencidos ? 'text-rojo-texto' : ''}`}>
-                  <span className="min-w-0 text-sm font-semibold">{nombreDelBloque(bloque, tablero)}</span>
+                  <span className="min-w-0 truncate text-sm font-semibold">{nombreDelBloque(bloque, tablero)}</span>
                   <Numero className={`text-xs ${conVencidos ? '' : 'text-pizarra-500'}`}>
                     {jugados}/{bloque.partidos.length}
                   </Numero>
