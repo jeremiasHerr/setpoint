@@ -13,7 +13,7 @@ type Props = {
   vuelta: VueltaDeLaFicha;
 };
 
-// "prim 25": la abreviatura del torneo del calendario y el año de los puntos.
+// "pri 25": la abreviatura del torneo del calendario y el año de los puntos.
 function rotuloDeCasillero(nombre: string, anio: number) {
   return `${abreviarTorneo(nombre)} ${String(anio).slice(-2)}`;
 }

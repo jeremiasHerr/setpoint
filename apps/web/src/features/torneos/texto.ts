@@ -22,3 +22,17 @@ export function diaConSemana(dia: string) {
 export function rangoDeDias(desde: string, hasta: string) {
   return `${diaCorto(desde)} al ${diaCorto(hasta)}`;
 }
+
+const formatoDiaCorto = new Intl.DateTimeFormat('es-AR', { weekday: 'short', day: 'numeric', timeZone: 'America/Argentina/Buenos_Aires' });
+
+// "sáb 14", para la fecha que anotaron los jugadores, que tiene hora.
+export function elDiaCorto(fechaHora: string) {
+  return formatoDiaCorto.format(new Date(fechaHora)).replace('.', '').replace(',', '');
+}
+
+const hora = new Intl.DateTimeFormat('es-AR', { hour: '2-digit', minute: '2-digit', hourCycle: 'h23', timeZone: 'America/Argentina/Buenos_Aires' });
+
+// "sáb 14 · 10:00", como en la app.
+export function elDiaYHora(fechaHora: string) {
+  return `${elDiaCorto(fechaHora)} · ${hora.format(new Date(fechaHora))}`;
+}

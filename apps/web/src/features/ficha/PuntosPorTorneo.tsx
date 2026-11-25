@@ -19,7 +19,7 @@ const QUE_HIZO: Record<Instancia, string> = {
   participacion: 'jugado el torneo',
 };
 
-// "prim", "ver": la misma abreviatura que en la tabla del ranking.
+// "pri", "ver": la misma abreviatura que en la tabla del ranking.
 const rotulo = abreviarTorneo;
 const anioCorto = (anio: number) => String(anio).slice(-2);
 

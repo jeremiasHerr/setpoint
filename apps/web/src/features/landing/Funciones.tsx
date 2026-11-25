@@ -7,7 +7,7 @@ import { TituloDeHoja } from './HojaClara';
 const CUPO: EstadoDeMarca[] = Array.from({ length: 32 }, (_, i) => (i < 28 ? 'hecho' : i === 28 ? 'en-curso' : 'pendiente'));
 
 const CASILLEROS = [
-  { etapa: 'prim', puntos: 10 },
+  { etapa: 'pri', puntos: 10 },
   { etapa: 'ver', puntos: 15 },
   { etapa: 'pre', puntos: 50 },
   { etapa: 'oto', puntos: 15 },

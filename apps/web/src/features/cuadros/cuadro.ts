@@ -6,7 +6,7 @@ import {
   type JugadorDelCuadro,
   type PartidoDelCuadro,
 } from '@setpoint/shared';
-import { elDiaYHora } from '../tablero/tablero';
+import { elDiaYHora } from '../torneos/texto';
 
 // El cuadro consuelo se llama como lo configuró la organización (07 §1.2): cada pantalla recibe el
 // nombre en la respuesta de la API. "Campeonato" sigue fijo hasta cerrar la decisión abierta 16.
