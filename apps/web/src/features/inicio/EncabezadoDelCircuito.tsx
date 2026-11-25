@@ -1,5 +1,4 @@
-import { useNavigate } from 'react-router-dom';
-import { Boton } from '../../components/Boton';
+import { BotonLink } from '../../components/Boton';
 import { IconoMas } from '../../components/IconoMas';
 import { Numero } from '../../components/Numero';
 import { BotonCopiarLink } from './BotonCopiarLink';
@@ -9,7 +8,6 @@ import type { TorneosDeInicio } from './tiposDeInicio';
 // Va sobre el fondo blanco de la página, sin una franja propia, y sin los torneos del calendario:
 // repetían lo que ya dicen las columnas (decisión 116). Sin rótulo arriba del nombre (decisión 123).
 export function EncabezadoDelCircuito({ torneos }: { torneos: TorneosDeInicio }) {
-  const navegar = useNavigate();
   const cifras = [
     { rotulo: 'Jugadores', valor: String(torneos.jugadores) },
     { rotulo: 'Categorías', valor: String(torneos.categorias) },
@@ -41,10 +39,10 @@ export function EncabezadoDelCircuito({ torneos }: { torneos: TorneosDeInicio })
               // El enlace del ranking para el grupo, que hoy recibe la planilla por mensaje (F09).
               <BotonCopiarLink ruta="/ranking" texto="Copiar el link del ranking" className="text-sm" />
             )}
-            <Boton variante="principal" className="text-sm font-semibold" onClick={() => navegar('/torneos/nuevo')}>
+            <BotonLink variante="principal" className="text-sm font-semibold" to="/torneos/nuevo">
               <IconoMas className="size-[13px] stroke-[2.6]" />
               Nuevo torneo
-            </Boton>
+            </BotonLink>
           </div>
         </div>
       </div>

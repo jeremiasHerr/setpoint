@@ -1,12 +1,10 @@
-import { useNavigate } from 'react-router-dom';
-import { Boton } from '../../components/Boton';
+import { BotonLink } from '../../components/Boton';
 import { Numero } from '../../components/Numero';
 import { TarjetaDeColumna } from './TarjetaDeColumna';
 import type { TorneoTerminado } from './tiposDeInicio';
 
 // Un torneo cerrado: lleva a su cierre, con los campeones y los puntos (decisión 080).
 export function TarjetaTerminado({ torneo }: { torneo: TorneoTerminado }) {
-  const navegar = useNavigate();
   return (
     <TarjetaDeColumna
       calendario={torneo.calendario}
@@ -17,7 +15,7 @@ export function TarjetaTerminado({ torneo }: { torneo: TorneoTerminado }) {
           <Numero className="flex grow items-center text-[13px] text-pizarra-500">
             {torneo.termino ?? '—'} · {torneo.jugadores} jugadores
           </Numero>
-          <Boton onClick={() => navegar(`/torneos/${torneo.id}/cierre`)}>Ver</Boton>
+          <BotonLink to={`/torneos/${torneo.id}/cierre`}>Ver</BotonLink>
         </>
       }
     />
