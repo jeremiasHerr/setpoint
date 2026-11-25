@@ -2,7 +2,8 @@ import { Cuadro, type Prisma } from '@prisma/client';
 import { nombreCuadroConsuelo, type ClaveCuadro, type EstadoPartido, type PartidoEnVivo, type TorneoEnVivo } from '@setpoint/shared';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
-import { partidosDelCalendario, partidosSinFecha } from './en-vivo';
+import { hoy } from '../../lib/fechas';
+import { partidosDelCalendario, partidosSinFecha, plazoCumplido } from './en-vivo';
 import { zonasConPosiciones } from './posiciones';
 import { INCLUIR_ZONAS, inscriptosYPartidos } from './posiciones.service';
 
@@ -22,6 +23,7 @@ const DEL_PARTIDO = {
   ganadorId: true,
   estado: true,
   fechaAcordada: true,
+  fechaLimite: true,
   sedeTexto: true,
   club: { select: { nombre: true } },
   jugadorA: jugador,
@@ -33,7 +35,7 @@ type PartidoLeido = Prisma.PartidoGetPayload<{ select: typeof DEL_PARTIDO }>;
 
 const aJugador = (j: PartidoLeido['jugadorA']) => j && { jugadorId: j.id, nombre: j.nombre, apellido: j.apellido };
 
-function aPartido(p: PartidoLeido): PartidoEnVivo {
+function aPartido(p: PartidoLeido, dia: string): PartidoEnVivo {
   return {
     id: p.id,
     grupo: p.grupo,
@@ -44,6 +46,7 @@ function aPartido(p: PartidoLeido): PartidoEnVivo {
     ganadorId: p.ganadorId,
     estado: p.estado.toLowerCase() as EstadoPartido,
     fechaAcordada: p.fechaAcordada?.toISOString() ?? null,
+    plazoCumplido: plazoCumplido(p, dia),
     sede: p.club?.nombre ?? p.sedeTexto,
     sets: p.sets,
   };
@@ -69,7 +72,8 @@ export async function torneoEnVivo(slug: string, torneoId: number): Promise<Torn
     orderBy: [{ fase: 'asc' }, { grupo: 'asc' }, { cuadro: 'asc' }, { ronda: 'asc' }, { ordenEnRonda: 'asc' }, { id: 'asc' }],
     select: DEL_PARTIDO,
   });
-  const partidos = leidos.map((p) => ({ leido: p, enVivo: aPartido(p) }));
+  const dia = hoy();
+  const partidos = leidos.map((p) => ({ leido: p, enVivo: aPartido(p, dia) }));
 
   // Las zonas se siguen mostrando con los cuadros armados: dicen cómo llegó cada uno.
   const { inscriptos, partidos: partidosDeZona } = inscriptosYPartidos(torneo);
@@ -94,7 +98,7 @@ export async function torneoEnVivo(slug: string, torneoId: number): Promise<Torn
     hayCuadros: torneo.gruposCerrados,
     rondas,
     zonas,
-    calendario: partidosDelCalendario(leidos).map(aPartido),
+    calendario: partidosDelCalendario(leidos).map((p) => aPartido(p, dia)),
     sinFecha: partidosSinFecha(leidos),
   };
 }
