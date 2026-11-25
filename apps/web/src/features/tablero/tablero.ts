@@ -1,4 +1,4 @@
-import { alConsuelo, consueloEnFrase } from '@setpoint/shared';
+import { alConsuelo } from '@setpoint/shared';
 import type { BloqueDelTablero, FilaDePosiciones, PartidoDelTablero, SituacionDelPartido, Tablero } from '@setpoint/shared';
 import { MARCA } from '../../components/marcas';
 import { NOMBRE_DEL_PRINCIPAL, nombreDelCuadro, rotuloDeRonda } from '../cuadros/cuadro';
@@ -49,17 +49,21 @@ export function partidosConFecha(tablero: Tablero) {
     .sort((a, b) => (a.fechaAcordada ?? '').localeCompare(b.fechaAcordada ?? ''));
 }
 
+// El cuadro y la ronda, siempre en este orden y con el nombre del cuadro tal cual: "Campeonato · semis".
+function cuadroYRonda(cuadro: NonNullable<PartidoDelTablero['cuadro']>, ronda: number, tablero: Tablero) {
+  return `${nombreDelCuadro(cuadro, tablero.nombreCuadroConsuelo)} · ${rotuloDeRonda(ronda, tablero.rondas[cuadro]!)}`;
+}
+
 // Cómo se nombra cada barra: la zona, o el cuadro y la ronda ("Campeonato · semis").
 export function nombreDelBloque(bloque: BloqueDelTablero, tablero: Tablero) {
   if (bloque.grupo) return bloque.grupo;
-  return `${nombreDelCuadro(bloque.cuadro!, tablero.nombreCuadroConsuelo)} · ${rotuloDeRonda(bloque.ronda!, tablero.rondas[bloque.cuadro!]!)}`;
+  return cuadroYRonda(bloque.cuadro!, bloque.ronda!, tablero);
 }
 
-// Dónde se juega, para la columna de la izquierda de "Lo que falta": "zona D", o "semis" con el cuadro.
+// Dónde se juega, para la columna de la izquierda de "Lo que falta": "zona D", o el cuadro y la ronda.
 export function dondeSeJuega(partido: PartidoDelTablero, tablero: Tablero) {
   if (partido.grupo) return `zona ${partido.grupo}`;
-  const ronda = rotuloDeRonda(partido.ronda!, tablero.rondas[partido.cuadro!]!);
-  return partido.cuadro === 'campeonato' ? ronda : `${ronda} · ${consueloEnFrase(tablero.nombreCuadroConsuelo)}`;
+  return cuadroYRonda(partido.cuadro!, partido.ronda!, tablero);
 }
 
 // "venció ayer", "venció hace 3 días", "vence hoy", "quedan 6 días".
