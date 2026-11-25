@@ -330,7 +330,7 @@ Cómo está conectado un perfil del padrón con la persona ([04-flujo-jugador.md
 
 ### Torneo
 
-`borrador` · `publicado` · `inscripciones cerradas` · `zonas generadas` · `grupos en curso` · `cuadros` · `finalizado`. Se muestran como chip en minúscula.
+`borrador` · `publicado` · `inscripciones cerradas` · `zonas generadas` · `grupos en curso` · `cuadros` · `finalizado`. Se muestran como chip en minúscula, con un solo componente (`EstadoDelTorneo`) en la franja del torneo y en las tarjetas del inicio.
 
 ---
 

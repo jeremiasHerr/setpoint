@@ -6,7 +6,7 @@ import type { TorneosDeInicio } from './tiposDeInicio';
 // La etiqueta de arriba de cada tarjeta: a qué pertenece el torneo (decisión 094).
 function calendarioDe({ etapa, suelto }: ResumenConvocatoria) {
   if (suelto) return 'torneo suelto';
-  return etapa ? etapa.toLocaleLowerCase('es') : 'del circuito';
+  return etapa ?? 'del circuito';
 }
 
 const EN_JUEGO: EstadoTorneo[] = ['zonas_generadas', 'grupos_en_curso', 'eliminatorias'];
@@ -116,7 +116,7 @@ export function aTorneosDeInicio(convocatorias: ResumenConvocatoria[], circuito:
               id: torneo.id,
               calendario,
               nombre,
-              fase: torneo.avance.fase === 'zonas' ? 'Zonas' : 'Cuadros',
+              estado: torneo.estado,
               detalle: detalleEnJuego(convocatoria, torneo, torneo.avance),
               partidosJugados: torneo.avance.jugados,
               partidosTotales: torneo.avance.partidos,
