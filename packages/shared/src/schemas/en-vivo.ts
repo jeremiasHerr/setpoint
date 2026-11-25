@@ -34,6 +34,8 @@ export type TorneoEnVivo = {
   organizacion: string;
   // Cómo llama la organización a su cuadro consuelo (07 §1.2).
   nombreCuadroConsuelo: string;
+  // Sin ranking, la posición de siembra salió al azar del sorteo: lo usa la explicación del desempate.
+  usaRanking: boolean;
   // "Primavera 2026 · Tercera"
   nombre: string;
   // La línea de corte: los primeros clasificanPorGrupo van al cuadro principal.
