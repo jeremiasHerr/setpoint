@@ -45,7 +45,7 @@ Todo el sistema sale de que hay dos personas usando esto en situaciones opuestas
 | `borde-noche` | `#2E3D5A` | Bordes y separadores sobre noche |
 | `pizarra-700` | `#3B4659` | Texto secundario sobre papel |
 | `pizarra-500` | `#4A5468` | Rótulos, texto de apoyo, marca punteada |
-| `pizarra-450` | `#586275` | Texto atenuado sobre fondos claros: perdedor en una tabla, ceros, totales, rótulos y placeholders. 6,14:1 sobre papel, 5,63:1 sobre niebla ([decisión 150](decisiones/150-texto-atenuado-con-contraste.md)) |
+| `pizarra-450` | `#586275` | Texto atenuado sobre fondos claros: perdedor en una tabla, ceros, totales, rótulos y placeholders. 6,14:1 sobre papel, 5,63:1 sobre niebla ([decisión 153](decisiones/153-texto-atenuado-con-contraste.md)) |
 | `pizarra-400` | `#9AA5B8` | Texto sobre noche y lo que no es texto (bordes, puntos, íconos). **Nunca como texto sobre un fondo claro: da 2,49:1** |
 | `borde-campo` | `#878FA1` | Borde de campo de formulario y de las celdas de la grilla de sets |
 | `linea` | `#D8DCE5` | Borde de tarjeta y separador |

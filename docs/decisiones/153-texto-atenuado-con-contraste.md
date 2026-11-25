@@ -1,4 +1,4 @@
-# 150 — El texto atenuado sobre fondos claros tiene su propio gris
+# 153 — El texto atenuado sobre fondos claros tiene su propio gris
 
 **Estado:** aceptada — 25 de noviembre de 2026.
 
