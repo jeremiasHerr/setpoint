@@ -4,6 +4,7 @@ import { Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
 import { estadoParaLaFicha, type VueltaDeLaFicha } from '../ficha/vuelta';
 import { NOMBRE_DEL_PRINCIPAL } from '../cuadros/cuadro';
+import { DesempateDeLaZona } from '../tablero/DesempateDeLaZona';
 import { comoVieneLaZona, marcadorDesde } from '../tablero/tablero';
 import { laHora, elDia, tieneResultado } from './enVivo';
 
@@ -12,7 +13,7 @@ const rotulo = 'text-[12.5px] font-medium text-noche';
 // La tabla de una zona: quién clasifica a cada cuadro se ve con el punto verde y la negrita,
 // como en el tablero y en Mi zona. Cada nombre lleva a la ficha del jugador (decisión 074), que
 // vuelve a las zonas (decisión 102). Debajo, los partidos de la zona con su resultado o su fecha.
-function TablaDeZona({ zona, slug, vuelta, consuelo }: { zona: ZonaEnVivo; slug: string; vuelta: VueltaDeLaFicha; consuelo: string }) {
+function TablaDeZona({ zona, slug, vuelta, consuelo, usaRanking }: { zona: ZonaEnVivo; slug: string; vuelta: VueltaDeLaFicha; consuelo: string; usaRanking: boolean }) {
   // En el celular las columnas de números se angostan para dejarle el lugar al nombre.
   const grilla = 'grid grid-cols-[minmax(0,1fr)_28px_40px_56px] items-center sm:grid-cols-[minmax(0,1fr)_36px_52px_64px]';
   return (
@@ -59,7 +60,10 @@ function TablaDeZona({ zona, slug, vuelta, consuelo }: { zona: ZonaEnVivo; slug:
 
       <div className="flex items-start gap-2.5 bg-niebla px-4 py-3">
         <span className="mt-[7px] size-1.5 shrink-0 rounded-full bg-lona-texto" />
-        <p className="text-[13px] text-pizarra-500">{comoVieneLaZona(zona.filas, consuelo)}</p>
+        <div className="flex flex-col gap-1">
+          <p className="text-[13px] text-pizarra-500">{comoVieneLaZona(zona.filas, consuelo)}</p>
+          <DesempateDeLaZona filas={zona.filas} usaRanking={usaRanking} />
+        </div>
       </div>
 
       <ul className="flex flex-col px-4 py-2">
@@ -117,7 +121,7 @@ export function ZonasEnVivo({ torneo, slug }: { torneo: TorneoEnVivo; slug: stri
       </p>
       <div className="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
         {torneo.zonas.map((zona) => (
-          <TablaDeZona key={zona.grupo} zona={zona} slug={slug} vuelta={vuelta} consuelo={torneo.nombreCuadroConsuelo} />
+          <TablaDeZona key={zona.grupo} zona={zona} slug={slug} vuelta={vuelta} consuelo={torneo.nombreCuadroConsuelo} usaRanking={torneo.usaRanking} />
         ))}
       </div>
     </section>

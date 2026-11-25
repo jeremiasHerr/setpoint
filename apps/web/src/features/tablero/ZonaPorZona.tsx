@@ -3,6 +3,7 @@ import { useState, type CSSProperties } from 'react';
 import { Chip } from '../../components/Chip';
 import { Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
+import { DesempateDeLaZona } from './DesempateDeLaZona';
 import { comoVieneLaZona, elDiaCorto, marcadorDesde, partidoEntre } from './tablero';
 
 const rotulo = 'text-[12.5px] font-medium text-noche';
@@ -44,7 +45,7 @@ function Cruce({ zona, fila, rival }: { zona: ZonaDelTablero; fila: FilaDePosici
   );
 }
 
-function Tabla({ zona, consuelo }: { zona: ZonaDelTablero; consuelo: string }) {
+function Tabla({ zona, consuelo, usaRanking }: { zona: ZonaDelTablero; consuelo: string; usaRanking: boolean }) {
   // Una columna por rival: el ancho depende de cuántos son, así que va en una variable.
   const columnas = { '--columnas': `200px repeat(${zona.filas.length}, minmax(0, 1fr)) 48px 58px 74px` } as CSSProperties;
   const grilla = 'grid grid-cols-[minmax(0,1fr)_40px_52px_64px] md:grid-cols-[var(--columnas)]';
@@ -88,7 +89,10 @@ function Tabla({ zona, consuelo }: { zona: ZonaDelTablero; consuelo: string }) {
 
       <div className="flex items-start gap-2.5 bg-niebla px-5 py-[13px]">
         <span className="mt-[7px] size-1.5 shrink-0 rounded-full bg-lona-texto" />
-        <p className="text-[13px] text-pizarra-500">{comoVieneLaZona(zona.filas, consuelo)}</p>
+        <div className="flex flex-col gap-1">
+          <p className="text-[13px] text-pizarra-500">{comoVieneLaZona(zona.filas, consuelo)}</p>
+          <DesempateDeLaZona filas={zona.filas} usaRanking={usaRanking} />
+        </div>
       </div>
     </Tarjeta>
   );
@@ -123,7 +127,7 @@ export function ZonaPorZona({ tablero }: { tablero: Tablero }) {
           })}
         </div>
       </div>
-      <Tabla zona={zona} consuelo={tablero.nombreCuadroConsuelo} />
+      <Tabla zona={zona} consuelo={tablero.nombreCuadroConsuelo} usaRanking={tablero.usaRanking} />
     </section>
   );
 }

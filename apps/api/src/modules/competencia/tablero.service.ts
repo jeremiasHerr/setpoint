@@ -100,7 +100,7 @@ export async function obtenerTablero(slug: string, usuarioId: number, torneoId: 
   // El filtro por organización es el aislamiento: el id solo no alcanza.
   const torneo = await prisma.torneo.findFirst({
     where: { id: torneoId, organizacionId },
-    include: { categoria: { select: { nombre: true } }, organizacion: { select: { nombreCuadroConsuelo: true } }, ...INCLUIR_ZONAS },
+    include: { categoria: { select: { nombre: true } }, organizacion: { select: { nombreCuadroConsuelo: true, usaRanking: true } }, ...INCLUIR_ZONAS },
   });
   if (!torneo) throw new ErrorHttp(404, 'TORNEO_NO_ENCONTRADO');
   if (!CON_TABLERO.some((e) => e === torneo.estado)) throw new ErrorHttp(409, 'TABLERO_NO_DISPONIBLE');
@@ -142,6 +142,7 @@ export async function obtenerTablero(slug: string, usuarioId: number, torneoId: 
     torneoId: torneo.id,
     nombre: `${torneo.edicion ?? torneo.nombre} · ${torneo.categoria.nombre}`,
     nombreCuadroConsuelo: nombreCuadroConsuelo(torneo.organizacion.nombreCuadroConsuelo),
+    usaRanking: torneo.organizacion.usaRanking,
     fase,
     clasificanPorGrupo: torneo.clasificanPorGrupo,
     tieneComplementaria: torneo.tieneComplementaria,

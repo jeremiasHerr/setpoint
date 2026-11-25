@@ -50,7 +50,7 @@ function aPartido(p: PartidoLeido): PartidoEnVivo {
 }
 
 export async function torneoEnVivo(slug: string, torneoId: number): Promise<TorneoEnVivo> {
-  const organizacion = await prisma.organizacion.findUnique({ where: { slug }, select: { id: true, nombre: true, nombreCuadroConsuelo: true } });
+  const organizacion = await prisma.organizacion.findUnique({ where: { slug }, select: { id: true, nombre: true, nombreCuadroConsuelo: true, usaRanking: true } });
   if (!organizacion) throw new ErrorHttp(404, 'ORGANIZACION_NO_ENCONTRADA');
   if (!Number.isInteger(torneoId)) throw new ErrorHttp(404, 'TORNEO_NO_ENCONTRADO');
 
@@ -88,6 +88,7 @@ export async function torneoEnVivo(slug: string, torneoId: number): Promise<Torn
     torneoId: torneo.id,
     organizacion: organizacion.nombre,
     nombreCuadroConsuelo: nombreCuadroConsuelo(organizacion.nombreCuadroConsuelo),
+    usaRanking: organizacion.usaRanking,
     nombre: `${torneo.edicion ?? torneo.nombre} · ${torneo.categoria.nombre}`,
     clasificanPorGrupo: torneo.clasificanPorGrupo,
     tieneComplementaria: torneo.tieneComplementaria,
