@@ -32,7 +32,7 @@ export function Conciliacion({ conciliacion }: { conciliacion: ConciliacionDelTo
         <Linea rotulo="Cobraste por fuera" valor={plata(c.porFuera)} />
         {c.devolucionesPendientes > 0 && <Linea rotulo="A devolver por fuera" valor={plata(c.aDevolver)} />}
       </div>
-      <p className="text-[13px] leading-[1.4] text-pizarra-500">
+      <p className="text-[13px] leading-[1.4] text-pizarra-400">
         <Numero>{c.pagosMercadoPago}</Numero> {pagos(c.pagosMercadoPago)} por Mercado Pago y <Numero>{c.pagosPorFuera}</Numero>{' '}
         por fuera. Lo de Mercado Pago ya está en tu cuenta, menos su comisión; las devoluciones las hacés vos.
       </p>
