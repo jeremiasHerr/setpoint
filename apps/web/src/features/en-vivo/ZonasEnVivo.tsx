@@ -107,22 +107,22 @@ function PartidoDeZona({ partido }: { partido: PartidoEnVivo }) {
 // Cuántas columnas lleva la grilla para que las filas queden parejas y ninguna zona quede sola.
 // La tabla de una zona necesita unos 300 px, así que cuatro columnas solo entran desde 2xl (1536 px);
 // en xl (1280 px) cuatro zonas van de a dos. Con cantidad impar no hay dos columnas que cierren
-// la fila, y esas zonas siguen en una columna hasta que las tres o cuatro columnas la completan.
+// la fila, y la última queda sola en media fila; solo en el ancho mayor se completa con tres o cuatro columnas.
 // Las clases van escritas enteras para que Tailwind las genere.
 function columnasParaZonas(n: number): string {
   switch (n) {
     case 2:
       return 'md:grid-cols-2';
     case 3:
-      return 'xl:grid-cols-3';
+      return 'md:grid-cols-2 xl:grid-cols-3';
     case 4:
       return 'md:grid-cols-2 2xl:grid-cols-4';
     case 5:
-      return 'xl:grid-cols-3';
+      return 'md:grid-cols-2 xl:grid-cols-3';
     case 6:
       return 'md:grid-cols-2 xl:grid-cols-3';
     case 7:
-      return '2xl:grid-cols-4';
+      return 'md:grid-cols-2 2xl:grid-cols-4';
     case 8:
       return 'md:grid-cols-2 2xl:grid-cols-4';
     default:
