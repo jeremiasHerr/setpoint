@@ -33,7 +33,7 @@ function Cambio({ antes, despues, sufijo = '' }: { antes: number | null; despues
   const valor = (n: number | null) => (n === null ? '—' : `${n}${sufijo}`);
   return (
     <Numero>
-      <span className="text-pizarra-400">{valor(antes)}</span> <span className="text-pizarra-500">→</span>{' '}
+      <span className="text-pizarra-450">{valor(antes)}</span> <span className="text-pizarra-500">→</span>{' '}
       <span className="font-semibold">{valor(despues)}</span>
     </Numero>
   );

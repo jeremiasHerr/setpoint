@@ -1,12 +1,12 @@
 import type { AvanceDelTorneo, Circuito, EstadoTorneo, ResumenConvocatoria, ResumenTorneo } from '@setpoint/shared';
 import { nombreDeRonda } from '../resultados/resultado';
-import { diaConSemana, diaCorto } from '../torneos/texto';
+import { diaConSemana, diaCorto, hoy } from '../torneos/texto';
 import type { TorneosDeInicio } from './tiposDeInicio';
 
 // La etiqueta de arriba de cada tarjeta: a qué pertenece el torneo (decisión 094).
 function calendarioDe({ etapa, suelto }: ResumenConvocatoria) {
   if (suelto) return 'torneo suelto';
-  return etapa ? etapa.toLocaleLowerCase('es') : 'del circuito';
+  return etapa ?? 'del circuito';
 }
 
 const EN_JUEGO: EstadoTorneo[] = ['zonas_generadas', 'grupos_en_curso', 'eliminatorias'];
@@ -16,10 +16,16 @@ function nombreDelBorrador({ nombre, torneos }: ResumenConvocatoria) {
   return `${nombre} · ${torneos.map((t) => t.categoria).join(' y ')}`;
 }
 
+// Una fecha que ya pasó no se escribe en presente: el torneo no arrancó, así que lo que anunciaba
+// todavía no ocurrió. Es el tono de Inscripciones: "la fecha de cierre era el viernes 13".
+function fechaDeInicio(fechaInicio: string) {
+  return `${fechaInicio < hoy() ? 'tenía que empezar' : 'empieza'} el ${diaCorto(fechaInicio)}`;
+}
+
 function detalleDeFechas({ cierreInscripcion, fechaInicio }: ResumenConvocatoria) {
   const partes = [
-    cierreInscripcion && `Cierra el ${diaCorto(cierreInscripcion)}`,
-    fechaInicio && `empieza el ${diaCorto(fechaInicio)}`,
+    cierreInscripcion && `${cierreInscripcion < hoy() ? 'Tenía que cerrar' : 'Cierra'} el ${diaCorto(cierreInscripcion)}`,
+    fechaInicio && fechaDeInicio(fechaInicio),
   ].filter(Boolean);
   return partes.join(' · ') || 'Sin fechas todavía';
 }
@@ -43,7 +49,7 @@ function categoriasEn(convocatorias: ResumenConvocatoria[], estados: EstadoTorne
 function detalleEnJuego({ fechaInicio }: ResumenConvocatoria, { estado, inscriptos }: ResumenTorneo, avance: AvanceDelTorneo) {
   const jugadores = `${inscriptos} jugadores`;
   // Con el sorteo confirmado, sigue en zonas_generadas hasta la fecha de inicio (decisión 029).
-  if (estado === 'zonas_generadas' && fechaInicio) return `${jugadores} · empieza el ${diaCorto(fechaInicio)}`;
+  if (estado === 'zonas_generadas' && fechaInicio) return `${jugadores} · ${fechaDeInicio(fechaInicio)}`;
   if (avance.partidos > 0 && avance.jugados === avance.partidos) {
     return avance.fase === 'zonas' ? `${jugadores} · zonas completas: falta cerrarlas` : `${jugadores} · cuadros completos: falta cerrar el torneo`;
   }
@@ -98,7 +104,7 @@ export function aTorneosDeInicio(convocatorias: ResumenConvocatoria[], circuito:
       calendario,
       nombre,
       detalle: convocatoria.fechaInicio
-        ? `Inscripción cerrada · empieza el ${diaCorto(convocatoria.fechaInicio)}`
+        ? `Inscripción cerrada · ${fechaDeInicio(convocatoria.fechaInicio)}`
         : 'Inscripción cerrada',
       pagaron: torneo.inscriptos,
       cupo: torneo.cupo,
@@ -110,7 +116,7 @@ export function aTorneosDeInicio(convocatorias: ResumenConvocatoria[], circuito:
               id: torneo.id,
               calendario,
               nombre,
-              fase: torneo.avance.fase === 'zonas' ? 'Zonas' : 'Cuadros',
+              estado: torneo.estado,
               detalle: detalleEnJuego(convocatoria, torneo, torneo.avance),
               partidosJugados: torneo.avance.jugados,
               partidosTotales: torneo.avance.partidos,
@@ -127,11 +133,19 @@ export function aTorneosDeInicio(convocatorias: ResumenConvocatoria[], circuito:
       campeon: torneo.terminado?.campeon ? `${torneo.terminado.campeon.nombre} ${torneo.terminado.campeon.apellido}` : null,
       jugadores: torneo.inscriptos,
     })),
-    avisos: enJuego.flatMap(({ torneo, nombre }) =>
-      torneo.avance && torneo.avance.vencidos > 0
-        ? [{ tipo: 'partidos-vencidos' as const, torneoId: torneo.id, categoria: nombre, partidos: torneo.avance.vencidos }]
-        : [],
-    ),
+    avisos: [
+      ...enJuego.flatMap(({ torneo, nombre }) =>
+        torneo.avance && torneo.avance.vencidos > 0
+          ? [{ tipo: 'partidos-vencidos' as const, torneoId: torneo.id, categoria: nombre, partidos: torneo.avance.vencidos }]
+          : [],
+      ),
+      // La inscripción sigue abierta con su fecha de cierre ya pasada: nadie la cerró.
+      ...abiertas.flatMap(({ convocatoria, torneo, nombre }) =>
+        convocatoria.cierreInscripcion && convocatoria.diasParaElCierre !== null && convocatoria.diasParaElCierre < 0
+          ? [{ tipo: 'inscripcion-sin-cerrar' as const, torneoId: torneo.id, categoria: nombre, cierre: convocatoria.cierreInscripcion }]
+          : [],
+      ),
+    ],
     pocosInscriptos: abiertas.flatMap(({ convocatoria, torneo, nombre }) => {
       const dias = convocatoria.diasParaElCierre;
       return dias !== null && dias >= 0 && dias <= DIAS_PARA_AVISAR && torneo.inscriptos < torneo.minimoParaSortear

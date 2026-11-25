@@ -1,5 +1,5 @@
 import type { CuadroEliminatorio } from '@setpoint/shared';
-import { Numero } from '../../components/Numero';
+import { ConCifras, Numero } from '../../components/Numero';
 import {
   nombreDelCuadro,
   destacadoDe,
@@ -25,9 +25,9 @@ export function EncabezadoDelCuadro({ cuadro, consuelo }: { cuadro: CuadroElimin
         <span className={`size-[9px] rounded-full ${principal ? 'bg-lona-texto' : 'bg-linea'}`} />
         <h2 className="text-xl font-semibold tracking-[-0.025em]">{nombreDelCuadro(cuadro.cuadro, consuelo)}</h2>
       </div>
-      <Numero className="text-[13px] text-pizarra-500">
-        {partidosJugados(cuadro)} de {cuadro.partidos.length} jugados
-      </Numero>
+      <span className="text-[13px] text-pizarra-500">
+        <Numero>{partidosJugados(cuadro)}</Numero> de <Numero>{cuadro.partidos.length}</Numero> jugados
+      </span>
     </div>
   );
 }
@@ -47,9 +47,9 @@ export function CuadroCompleto({ cuadro, consuelo, eleccion }: { cuadro: CuadroE
 
       <div className="grid" style={columnas}>
         {rondas.map((ronda) => (
-          <Numero key={ronda} className="text-xs text-pizarra-500">
+          <ConCifras key={ronda} className="text-xs text-pizarra-500">
             {rotuloDeRonda(ronda, cuadro.rondas)}
-          </Numero>
+          </ConCifras>
         ))}
       </div>
 

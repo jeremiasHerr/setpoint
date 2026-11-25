@@ -156,15 +156,15 @@ function EditorCircuito({ sesion, inicial }: { sesion: Sesion; inicial: Circuito
             <div className="flex flex-col gap-[9px] rounded-tarjeta border border-linea bg-papel p-[18px]">
               <h2 className="text-sm font-semibold">¿Solo querés probar?</h2>
               <p className="text-sm leading-normal text-pizarra-500">
-                Apagá el ranking anual y creá un torneo suelto. Al terminar vas a tener la tabla de posiciones de ese torneo, sin
-                acumular puntos.
+                En <em>Nuevo torneo</em> elegí «suelto»: no suma al ranking ni usa tus categorías, y al terminar te deja su
+                tabla de posiciones. No hace falta apagar nada.
               </p>
             </div>
           )}
 
           <div className="flex flex-col gap-2.5">
             <Boton variante="organizador" className="w-full" disabled={guardando} onClick={() => navegar('/padron')}>
-              Guardar y cargar el padrón
+              Cargar el padrón
             </Boton>
             <Boton className="w-full" disabled={guardando} onClick={() => navegar('/torneos/nuevo')}>
               Crear un torneo ahora

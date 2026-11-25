@@ -1,4 +1,4 @@
-import type { MiZona } from '@setpoint/shared';
+import { alConsuelo, consueloEnFrase, type MiZona } from '@setpoint/shared';
 import { router } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { colores, fuentes, medidas, radios, tabular } from '../../lib/tokens';
@@ -13,7 +13,7 @@ export function ResultadoDeLaZona({ zona, jugadorId }: { zona: MiZona; jugadorId
     fila.destino === 'campeonato'
       ? 'Clasificaste a Campeonato'
       : fila.destino === 'complementaria'
-        ? `Pasaste al ${zona.nombreCuadroConsuelo.toLowerCase()}`
+        ? `Pasaste ${alConsuelo(zona.nombreCuadroConsuelo)}`
         : 'Terminaste la zona';
 
   return (
@@ -22,7 +22,7 @@ export function ResultadoDeLaZona({ zona, jugadorId }: { zona: MiZona; jugadorId
       <Text style={estilos.titulo}>{titulo}</Text>
       <Text style={estilos.detalle}>
         Saliste <Text style={estilos.puesto}>{fila.posicion}º</Text> en la zona.
-        {fila.destino === null && ` Sin ${zona.nombreCuadroConsuelo.toLowerCase()}, tu torneo terminó acá.`}
+        {fila.destino === null && ` Sin ${consueloEnFrase(zona.nombreCuadroConsuelo)}, tu torneo terminó acá.`}
       </Text>
       <Pressable
         accessibilityRole="link"

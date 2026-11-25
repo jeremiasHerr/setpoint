@@ -79,9 +79,9 @@ function ElegirRival({ datos, slug }: { datos: RivalesDelJugador; slug: string }
                   </span>
                   {rival.categoria && <span className="text-xs text-pizarra-500">{rival.categoria}</span>}
                 </span>
-                <Numero className="text-sm text-pizarra-500">
-                  {rival.partidos} {rival.partidos === 1 ? 'partido' : 'partidos'}
-                </Numero>
+                <span className="text-sm text-pizarra-500">
+                  <Numero>{rival.partidos}</Numero> {rival.partidos === 1 ? 'partido' : 'partidos'}
+                </span>
               </Link>
             </li>
           ))}
@@ -100,9 +100,9 @@ function Lado({ jugador, derecha }: { jugador: JugadorDelCaraACara; derecha?: bo
         {jugador.apellido}
       </span>
       {jugador.puesto !== null && (
-        <Numero className="text-xs text-pizarra-400">
-          {jugador.puesto}º · {jugador.puntos} pts
-        </Numero>
+        <span className="text-xs text-pizarra-400">
+          <Numero>{jugador.puesto}º</Numero> · <Numero>{jugador.puntos}</Numero> puntos
+        </span>
       )}
     </div>
   );

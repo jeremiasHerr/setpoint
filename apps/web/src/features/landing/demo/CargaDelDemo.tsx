@@ -128,7 +128,7 @@ function Valor({ visible, celu, children }: { visible: boolean; celu: boolean; c
 export function TarjetasDeCarga({ banderas: f, foco, apretado, desplazo, reg, celu = false }: Props) {
   const nombre = (cambia: boolean, a: string, b: string) => <Alternativa cambia={cambia} a={a} b={b} />;
   const gana = f.has('gana');
-  const rotulo = `text-center font-mono text-pizarra-500 ${celu ? 'text-[11px] leading-[13px]' : 'text-[12px] leading-4'}`;
+  const rotulo = `text-center text-pizarra-500 ${celu ? 'text-[11px] leading-[13px]' : 'text-[12px] leading-4'}`;
   const nom = (clase: string) =>
     `flex min-w-0 items-center font-sans leading-6 transition-colors duration-200 ${
       celu ? 'gap-2 text-[16px]' : 'gap-2.5 text-[18px]'
@@ -188,7 +188,7 @@ export function TarjetasDeCarga({ banderas: f, foco, apretado, desplazo, reg, ce
           <p className={`font-display font-semibold tracking-[-0.02em] ${celu ? 'text-[19px] leading-6' : 'text-[22px] leading-7'}`}>
             {nombre(f.has('bm'), 'Roa · Peralta', 'Bustos · Millán')}
           </p>
-          <p className={`font-mono text-pizarra-500 ${celu ? 'text-[12px] leading-4' : 'text-[13px] leading-[18px]'}`}>
+          <p className={`text-pizarra-500 ${celu ? 'text-[12px] leading-4' : 'text-[13px] leading-[18px]'}`}>
             {nombre(f.has('bm'), 'zona A · fase de grupos', 'zona G · fase de grupos')}
           </p>
         </div>
@@ -251,7 +251,7 @@ export function TarjetasDeCarga({ banderas: f, foco, apretado, desplazo, reg, ce
                 <b className={`font-semibold ${celu ? 'text-[14px] leading-5' : 'text-[15px] leading-[22px]'}`}>
                   Gana Bustos, <Numero>2</Numero> sets a <Numero>1</Numero>
                 </b>
-                <span className={`font-mono text-pizarra-500 ${celu ? 'text-[12px] leading-4' : 'text-[13px] leading-[18px]'}`}>
+                <span className={`text-pizarra-500 ${celu ? 'text-[12px] leading-4' : 'text-[13px] leading-[18px]'}`}>
                   el tercer set se definió por super tie-break
                 </span>
               </div>

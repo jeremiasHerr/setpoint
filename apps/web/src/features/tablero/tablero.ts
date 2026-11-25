@@ -1,26 +1,14 @@
+import { alConsuelo } from '@setpoint/shared';
 import type { BloqueDelTablero, FilaDePosiciones, PartidoDelTablero, SituacionDelPartido, Tablero } from '@setpoint/shared';
 import { MARCA } from '../../components/marcas';
 import { NOMBRE_DEL_PRINCIPAL, nombreDelCuadro, rotuloDeRonda } from '../cuadros/cuadro';
 
 // Las fechas límite son días ('AAAA-MM-DD'): se leen y se muestran en UTC para que no se corran.
 const diaLargo = new Intl.DateTimeFormat('es-AR', { weekday: 'long', day: 'numeric', timeZone: 'UTC' });
-const diaCorto = new Intl.DateTimeFormat('es-AR', { weekday: 'short', day: 'numeric', timeZone: 'America/Argentina/Buenos_Aires' });
 
 // "sábado 20"
 export function elDia(fecha: string) {
   return diaLargo.format(new Date(`${fecha}T00:00:00Z`)).replace(',', '');
-}
-
-// "sáb 14", para la fecha que anotaron los jugadores, que tiene hora.
-export function elDiaCorto(fechaHora: string) {
-  return diaCorto.format(new Date(fechaHora)).replace('.', '').replace(',', '');
-}
-
-const hora = new Intl.DateTimeFormat('es-AR', { hour: '2-digit', minute: '2-digit', hourCycle: 'h23', timeZone: 'America/Argentina/Buenos_Aires' });
-
-// "sáb 14 · 10:00", como en la app.
-export function elDiaYHora(fechaHora: string) {
-  return `${elDiaCorto(fechaHora)} · ${hora.format(new Date(fechaHora))}`;
 }
 
 // Los partidos con un resultado que cargó un jugador desde la app y todavía no cuenta (decisión 127):
@@ -140,7 +128,7 @@ export function comoVieneLaZona(filas: FilaDePosiciones[], nombreConsuelo: strin
   return [
     principal.length > 0 &&
       `${enumerar(principal)} ${verbo(principal, 'está', 'están')} clasificando a ${NOMBRE_DEL_PRINCIPAL}.`,
-    consuelo.length > 0 && `${enumerar(consuelo)} ${verbo(consuelo, 'va', 'van')} al ${nombreConsuelo.toLowerCase()}.`,
+    consuelo.length > 0 && `${enumerar(consuelo)} ${verbo(consuelo, 'va', 'van')} ${alConsuelo(nombreConsuelo)}.`,
     afuera.length > 0 && `${enumerar(afuera)} ${verbo(afuera, 'queda', 'quedan')} afuera.`,
   ]
     .filter(Boolean)
@@ -152,6 +140,7 @@ export function comoVieneLaZona(filas: FilaDePosiciones[], nombreConsuelo: strin
 export const COLOR_DE_LA_SITUACION: Record<SituacionDelPartido, string> = {
   jugado: MARCA.hecho,
   con_fecha: MARCA['en-curso'],
+  falta_cargar: MARCA['en-curso'],
   sin_coordinar: MARCA.pendiente,
   vencido: MARCA.vencido,
   esperando: 'bg-linea',

@@ -1,7 +1,7 @@
 import type { EnListaDeEspera, InscripcionDelTorneo } from '@setpoint/shared';
 import { MensajeError } from '../../components/Aviso';
 import { useState } from 'react';
-import { Numero } from '../../components/Numero';
+import { ConCifras } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
 import { EnlaceParaRevisar } from '../revisiones/piezas';
 import { diaCorto } from '../torneos/texto';
@@ -78,22 +78,21 @@ export function TablaInscriptos({ slug, torneoId, inscripciones, sePuedeDarDeBaj
                         </span>
                         {inscripcion.revision && <EnlaceParaRevisar jugadorId={inscripcion.jugadorId} />}
                       </div>
-                      <Numero className={`text-[13px] md:hidden ${fecha.urgente ? 'text-rojo-texto' : 'text-pizarra-500'}`}>
-                        {fecha.texto}
-                        {pagada && inscripcion.medio && ` · ${nombreDelMedio[inscripcion.medio]}`}
-                      </Numero>
+                      <ConCifras className={`text-[13px] md:hidden ${fecha.urgente ? 'text-rojo-texto' : 'text-pizarra-500'}`}>
+                        {fecha.texto + (pagada && inscripcion.medio ? ` · ${nombreDelMedio[inscripcion.medio]}` : '')}
+                      </ConCifras>
                       {inscripcion.deLaListaDeEspera && (
                         <span className="truncate text-[13px] text-pizarra-500">de la lista de espera</span>
                       )}
                     </div>
                   </div>
                   <span className={`hidden text-sm md:block ${pagada ? '' : 'text-pizarra-700'}`}>{pagada ? 'Pagada' : 'Reservando'}</span>
-                  <Numero className="hidden text-[13px] text-pizarra-500 md:block">
+                  <span className="hidden text-[13px] text-pizarra-500 md:block">
                     {inscripcion.medio ? nombreDelMedio[inscripcion.medio] : '—'}
-                  </Numero>
-                  <Numero className={`hidden text-[13px] whitespace-nowrap md:block ${fecha.urgente ? 'text-rojo-texto' : 'text-pizarra-500'}`}>
+                  </span>
+                  <ConCifras className={`hidden text-[13px] whitespace-nowrap md:block ${fecha.urgente ? 'text-rojo-texto' : 'text-pizarra-500'}`}>
                     {fecha.texto}
-                  </Numero>
+                  </ConCifras>
                   <div className="flex justify-end">
                     {pagada && sePuedeDarDeBaja && (
                       <BotonAccion onClick={() => setEnBaja(inscripcion)} aria-haspopup="dialog">

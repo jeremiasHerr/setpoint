@@ -83,13 +83,13 @@ function Grupo({ rojo, titulo, cantidad, detalle }: { rojo?: boolean; titulo: st
 function Fila({ fila, vencida }: { fila: FilaDeFalta; vencida?: boolean }) {
   return (
     <div className="grid h-[52px] grid-cols-[76px_minmax(0,1fr)_320px_auto] items-center gap-3 overflow-hidden border-b border-linea-suave px-4 py-2">
-      <span className={`font-mono text-[12px] leading-4 ${vencida ? 'text-rojo-texto' : 'text-pizarra-500'}`}>
+      <span className={`text-[12px] leading-4 ${vencida ? 'text-rojo-texto' : 'text-pizarra-500'}`}>
         {vencida && <span className="mr-1.5 inline-block size-1.5 rounded-full bg-rojo align-[1px]" />}
         zona {fila.zona}
       </span>
       <span className={vencida ? 'font-semibold' : 'font-medium'}>{fila.partido}</span>
       <span
-        className={`flex min-w-0 items-center gap-2.5 font-mono text-[13px] leading-[18px] ${
+        className={`flex min-w-0 items-center gap-2.5 text-[13px] leading-[18px] ${
           vencida ? 'text-rojo-texto' : 'text-pizarra-500'
         }`}
       >
@@ -98,7 +98,9 @@ function Fila({ fila, vencida }: { fila: FilaDeFalta; vencida?: boolean }) {
         ) : (
           <>
             <ChipSinFecha />
-            quedan 8 días
+            <span>
+              quedan <Numero>8</Numero> días
+            </span>
           </>
         )}
       </span>

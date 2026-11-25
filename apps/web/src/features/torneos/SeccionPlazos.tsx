@@ -1,6 +1,6 @@
 import type { DatosConvocatoria, InstanciaCronograma } from '@setpoint/shared';
 import { Campo } from '../../components/Campo';
-import { Numero } from '../../components/Numero';
+import { ConCifras } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
 import { MensajeError } from '../../components/Aviso';
 import { aEntero, rangoDeDias } from './texto';
@@ -58,6 +58,7 @@ export function SeccionPlazos({
             onChange={(e) => alCambiar('plazoGruposDias', aEntero(e.target.value, MAXIMO_SEMANAS_GRUPOS) * DIAS_POR_SEMANA)}
             aria-invalid={errores.plazoGruposDias ? true : undefined}
             aria-describedby={errores.plazoGruposDias ? 'torneo-plazo-grupos-error' : undefined}
+            ayuda="Cuánto tienen para jugar los partidos de su zona. Al terminar, el que quedó sin resultado figura vencido en el tablero, y lo resolvés ahí."
           />
           <MensajeError id="torneo-plazo-grupos-error">{errores.plazoGruposDias}</MensajeError>
         </div>
@@ -72,6 +73,7 @@ export function SeccionPlazos({
             onChange={(e) => alCambiar('plazoPorRondaDias', aEntero(e.target.value, MAXIMO_SEMANAS_RONDA) * DIAS_POR_SEMANA)}
             aria-invalid={errores.plazoPorRondaDias ? true : undefined}
             aria-describedby={errores.plazoPorRondaDias ? 'torneo-plazo-ronda-error' : undefined}
+            ayuda="Cuánto tiene cada ronda de los cuadros para jugarse, de la primera hasta la final."
           />
           <MensajeError id="torneo-plazo-ronda-error">{errores.plazoPorRondaDias}</MensajeError>
         </div>
@@ -85,6 +87,7 @@ export function SeccionPlazos({
             onChange={(e) => alCambiar('fechaInicio', e.target.value || null)}
             aria-invalid={errores.fechaInicio ? true : undefined}
             aria-describedby={errores.fechaInicio ? 'torneo-fecha-inicio-error' : undefined}
+            ayuda="El día que arranca la fase de grupos. Con esa fecha se calculan las de cada instancia, que ves más abajo."
           />
           <MensajeError id="torneo-fecha-inicio-error">{errores.fechaInicio}</MensajeError>
         </div>
@@ -136,9 +139,9 @@ export function SeccionPlazos({
             ({ nombre, desde, hasta }) =>
               desde &&
               hasta && (
-                <Numero key={nombre} className="text-[13px] text-pizarra-700">
-                  {nombre} · {rangoDeDias(desde, hasta)}
-                </Numero>
+                <ConCifras key={nombre} className="text-[13px] text-pizarra-700">
+                  {`${nombre} · ${rangoDeDias(desde, hasta)}`}
+                </ConCifras>
               ),
           )
         )}

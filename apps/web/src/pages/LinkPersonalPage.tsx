@@ -64,9 +64,7 @@ function LinkEncontrado({ link, codigo }: { link: LinkPersonal; codigo: string }
       <div className="flex items-center justify-between gap-3">
         <EncabezadoPublico organizacion={link.organizacion.nombre} />
         {link.jugador.categoria && (
-          <Numero className="rounded-full border border-linea px-2.5 py-1.5 text-[14px] font-medium text-pizarra-500">
-            {link.jugador.categoria}
-          </Numero>
+          <span className="rounded-full border border-linea px-2.5 py-1.5 text-[14px] font-medium text-pizarra-500">{link.jugador.categoria}</span>
         )}
       </div>
 
