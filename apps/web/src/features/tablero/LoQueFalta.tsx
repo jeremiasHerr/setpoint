@@ -84,7 +84,7 @@ function Fila({ slug, partido, tablero, lista }: { slug: string; partido: Partid
         ) : (
           <span className="text-[12.5px] font-medium text-noche">{dondeSeJuega(partido, tablero)}</span>
         )}
-        <span className={`text-base ${vencido ? 'font-semibold' : ''}`}>{nombresDelPartido(partido)}</span>
+        <span className="text-base font-semibold">{nombresDelPartido(partido)}</span>
         <span className="flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1">
           {lista === 'con_fecha' && partido.fechaAcordada ? (
             <>
@@ -162,7 +162,7 @@ function FilaDelResultado({ slug, partido, tablero }: { slug: string; partido: P
         }`}
       >
         <span className="text-[12.5px] font-medium text-noche">{dondeSeJuega(partido, tablero)}</span>
-        <span className="text-base">{nombresDelPartido(partido)}</span>
+        <span className="text-base font-semibold">{nombresDelPartido(partido)}</span>
         <span className="flex min-w-0 flex-col gap-0.5">
           <span className="text-[13px] text-noche">
             {cargado}
