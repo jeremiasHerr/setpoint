@@ -15,6 +15,8 @@ type Props = {
   // Para el link personal: el mensaje nombra a la organización.
   slug: string;
   organizacion: string;
+  // Vinculada desde la última visita de la organización (decisión 083).
+  vinculacionNueva: boolean;
   alEditar: () => void;
 };
 
@@ -22,30 +24,11 @@ function iniciales({ nombre, apellido }: JugadorPadron) {
   return `${nombre[0] ?? ''}${apellido[0] ?? ''}`.toUpperCase();
 }
 
-// Tres letras en minúscula, como las etapas abreviadas (design.md §8). toLocaleDateString da "sept".
-const MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
-
-// "oct 26": mes y año corto.
-function mesYAnio(fecha: string) {
-  const d = new Date(fecha);
-  return `${MESES[d.getMonth()]} ${String(d.getFullYear()).slice(-2)}`;
-}
-
-function textoAlta(dias: number) {
-  if (dias <= 0) return 'dado de alta hoy';
-  if (dias === 1) return 'dado de alta ayer';
-  return `dado de alta hace ${dias} días`;
-}
-
-export function FilaJugador({ jugador, columnas, conRanking, seleccionado, slug, organizacion, alEditar }: Props) {
+export function FilaJugador({ jugador, columnas, conRanking, seleccionado, slug, organizacion, vinculacionNueva, alEditar }: Props) {
   const dias = diasDesde(jugador.creadoEn);
   const esNuevo = jugador.activo && dias < DIAS_COMO_NUEVO;
   // Un jugador con 0 puntos comparte el último puesto con los demás: mostrarlo no aporta.
   const muestraPuesto = jugador.puesto !== null && jugador.puntos > 0;
-
-  let detalle = `desde ${mesYAnio(jugador.creadoEn)}`;
-  if (!jugador.activo) detalle = 'no aparece en el ranking';
-  else if (esNuevo) detalle = textoAlta(dias);
 
   return (
     <div
@@ -68,10 +51,8 @@ export function FilaJugador({ jugador, columnas, conRanking, seleccionado, slug,
             {jugador.nombre} {jugador.apellido}
           </span>
           {esNuevo && <span className="shrink-0 rounded-full bg-lona-fondo text-lona-texto px-[7px] py-0.5 text-[12.5px] font-medium whitespace-nowrap">nuevo</span>}
-          {jugador.cuenta && (
-            <span className="shrink-0 rounded-full bg-linea-suave px-[7px] py-0.5 text-[12.5px] font-medium whitespace-nowrap text-noche">
-              con cuenta
-            </span>
+          {vinculacionNueva && (
+            <span className="shrink-0 rounded-full bg-lona-fondo text-lona-texto px-[7px] py-0.5 text-[12.5px] font-medium whitespace-nowrap">nueva</span>
           )}
           {jugador.revision && (
             <EnlaceParaRevisar jugadorId={jugador.id} />
@@ -82,7 +63,7 @@ export function FilaJugador({ jugador, columnas, conRanking, seleccionado, slug,
             </span>
           )}
         </div>
-        <span className="truncate text-[13px] text-pizarra-500">{detalle}</span>
+        <span className="truncate text-[13px] text-pizarra-500">{jugador.cuenta ? jugador.cuenta.email : 'sin vincular'}</span>
       </div>
 
       <div className="hidden md:block">
