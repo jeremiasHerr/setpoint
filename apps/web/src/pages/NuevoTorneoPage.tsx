@@ -101,11 +101,12 @@ export function NuevoTorneoPage() {
   return <CargarTorneo sesion={sesion} id={id === 'nuevo' ? null : Number(id)} />;
 }
 
-function Encabezado({ sesion, organizacion }: { sesion: Sesion; organizacion: string }) {
+function Encabezado({ sesion, organizacion, titulo }: { sesion: Sesion; organizacion: string; titulo: string[] }) {
   const cerrarSesion = useCerrarSesion();
   return (
     <EncabezadoOrganizador
       organizacion={organizacion}
+      titulo={titulo}
       navegacion={navegacionOrganizador}
       iniciales={iniciales(sesion.usuario.nombre)}
       alSalir={cerrarSesion}
@@ -131,7 +132,7 @@ function CargarTorneo({ sesion, id }: { sesion: Sesion; id: number | null }) {
 
   return (
     <div className="min-h-screen bg-papel text-noche">
-      <Encabezado sesion={sesion} organizacion={sesion.organizacion.nombre} />
+      <Encabezado sesion={sesion} organizacion={sesion.organizacion.nombre} titulo={['Torneo']} />
       <div className="flex flex-col items-start gap-3 px-4 md:px-7 pt-[26px]">
         {noExiste ? (
           <>
@@ -282,14 +283,16 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
   // Publicado, el torneo ya tiene sus pantallas: se vuelve a la categoría, con el nombre que lleva en ellas.
   const categoria = inicial?.torneos.find((t) => t.id === desde) ?? inicial?.torneos[0];
   const migas: Miga[] = [{ etiqueta: 'Inicio', ruta: '/inicio' }];
+  let nombreEnMigas = datos.nombre.trim() || 'Torneo';
   if (!enBorrador && inicial && categoria) {
-    migas.push({ etiqueta: `${datos.nombre.trim() || inicial.nombre} · ${categoria.categoria}`, ruta: `/torneos/${categoria.id}/inscripciones` });
+    nombreEnMigas = `${datos.nombre.trim() || inicial.nombre} · ${categoria.categoria}`;
+    migas.push({ etiqueta: nombreEnMigas, ruta: `/torneos/${categoria.id}/inscripciones` });
   }
 
   if (publicada) {
     return (
       <div className="min-h-screen bg-papel text-noche">
-        <Encabezado sesion={sesion} organizacion={circuito.nombre} />
+        <Encabezado sesion={sesion} organizacion={circuito.nombre} titulo={['Torneo publicado']} />
         <TorneoPublicado slug={slug} convocatoria={publicada} />
       </div>
     );
@@ -297,7 +300,7 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
 
   return (
     <div className="min-h-screen bg-papel text-noche">
-      <Encabezado sesion={sesion} organizacion={circuito.nombre} />
+      <Encabezado sesion={sesion} organizacion={circuito.nombre} titulo={enBorrador ? ['Nuevo torneo'] : ['Editar', nombreEnMigas]} />
 
       <div className="flex flex-wrap items-end justify-between gap-6 px-4 md:px-7 pt-[26px] pb-5">
         <div className="flex flex-col gap-[7px]">

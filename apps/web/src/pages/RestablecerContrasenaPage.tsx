@@ -48,7 +48,7 @@ export function RestablecerContrasenaPage() {
   const cambio = useMutation({ mutationFn: restablecerContrasena });
 
   return (
-    <PantallaAcceso pregunta="¿Te acordaste?" enlace={{ texto: 'Ingresar', a: '/ingresar' }}>
+    <PantallaAcceso titulo="Elegí una contraseña nueva" pregunta="¿Te acordaste?" enlace={{ texto: 'Ingresar', a: '/ingresar' }}>
       <div className="mx-auto w-full max-w-[420px]">
         {cambio.isSuccess ? (
           <Tarjeta variante="noche" className="flex flex-col gap-5">

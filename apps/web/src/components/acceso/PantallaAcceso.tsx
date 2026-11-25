@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { Logo } from '../Logo';
 
 type Props = {
+  // Título de la pestaña: la pantalla y Setpoint.
+  titulo: string;
   pregunta: string;
   enlace: { texto: string; a: string };
   children: ReactNode;
@@ -11,9 +13,10 @@ type Props = {
 // Ingresar, Registrar la organización y Recuperar la contraseña (decisión 148): la franja noche de la
 // landing y del organizador, con el mismo logo, y el formulario en una tarjeta noche, al medio de la
 // página clara. Se llega desde la landing y se sigue al panel: las tres pantallas van con la misma franja.
-export function PantallaAcceso({ pregunta, enlace, children }: Props) {
+export function PantallaAcceso({ titulo, pregunta, enlace, children }: Props) {
   return (
     <div className="flex min-h-dvh flex-col bg-niebla text-noche">
+      <title>{`${titulo} · Setpoint`}</title>
       <header className="flex h-[60px] shrink-0 items-center justify-between gap-4 bg-noche-900 px-4 sm:px-7">
         <Link
           to="/"

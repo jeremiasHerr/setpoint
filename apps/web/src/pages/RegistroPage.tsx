@@ -102,7 +102,7 @@ export function RegistroPage() {
   };
 
   return (
-    <PantallaAcceso pregunta="¿Ya tenés cuenta?" enlace={{ texto: 'Ingresar', a: '/ingresar' }}>
+    <PantallaAcceso titulo="Registrar tu organización" pregunta="¿Ya tenés cuenta?" enlace={{ texto: 'Ingresar', a: '/ingresar' }}>
       <div className="mx-auto grid max-w-[814px] items-start gap-5 md:grid-cols-[minmax(0,1fr)_300px]">
         <FormularioRegistro
           paso={datos ? 'codigo' : 'datos'}

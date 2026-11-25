@@ -30,7 +30,7 @@ export function IngresoPage() {
   if (leerSesion()) return <Navigate to="/inicio" replace />;
 
   return (
-    <PantallaAcceso pregunta="¿Todavía no tenés cuenta?" enlace={{ texto: 'Registrá tu organización', a: '/registro' }}>
+    <PantallaAcceso titulo="Ingresar" pregunta="¿Todavía no tenés cuenta?" enlace={{ texto: 'Registrá tu organización', a: '/registro' }}>
       <div className="mx-auto w-full max-w-[420px]">
         <FormularioIngreso
           alEnviar={(datos) => ingreso.mutate(datos)}

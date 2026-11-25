@@ -54,9 +54,12 @@ export function EncabezadoDelTorneo({ sesion, torneoId, actual }: Props) {
   const navegar = useNavigate();
   const [apagadaTocada, setApagadaTocada] = useState<PestanaDelTorneo | null>(null);
   const datos = navegacion.data;
+  // Sin los datos del torneo, el título lleva solo la pantalla.
+  const titulo = [PESTANAS[actual].etiqueta, ...(datos ? [datos.nombre] : []), sesion.organizacion.nombre].join(' · ');
 
   return (
     <>
+      <title>{titulo}</title>
       {/* Las pantallas del torneo se abren desde el inicio. */}
       <EncabezadoOrganizador
         organizacion={sesion.organizacion.nombre}

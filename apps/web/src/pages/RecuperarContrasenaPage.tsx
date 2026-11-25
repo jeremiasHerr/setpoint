@@ -17,7 +17,7 @@ export function RecuperarContrasenaPage() {
   const pedido = useMutation({ mutationFn: pedirRecuperacion });
 
   return (
-    <PantallaAcceso pregunta="¿Te acordaste?" enlace={{ texto: 'Ingresar', a: '/ingresar' }}>
+    <PantallaAcceso titulo="Recuperar la contraseña" pregunta="¿Te acordaste?" enlace={{ texto: 'Ingresar', a: '/ingresar' }}>
       <div className="mx-auto w-full max-w-[420px]">
         <FormularioRecuperarContrasena
           alEnviar={(email) => pedido.mutate(email)}
