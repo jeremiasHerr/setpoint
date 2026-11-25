@@ -112,12 +112,12 @@ function Fila({ slug, partido, tablero, lista }: { slug: string; partido: Partid
           )}
         </span>
         {/* Dos columnas fijas: los botones quedan alineados en todas las filas. */}
-        <div className="grid grid-cols-[96px_148px_60px] gap-2 md:justify-end">
+        <div className="flex flex-wrap gap-2 md:grid md:grid-cols-[96px_148px_60px] md:justify-end">
           <button
             type="button"
             aria-expanded={abierto === 'escribirles'}
             onClick={() => alternar('escribirles')}
-            className={`${accion} w-full border border-linea hover:bg-niebla`}
+            className={`${accion} md:w-full border border-linea hover:bg-niebla`}
           >
             Escribirles
           </button>
@@ -127,7 +127,7 @@ function Fila({ slug, partido, tablero, lista }: { slug: string; partido: Partid
               type="button"
               aria-expanded={abierto === 'anotar'}
               onClick={() => alternar('anotar')}
-              className={`${accion} w-full border border-linea hover:bg-niebla`}
+              className={`${accion} md:w-full border border-linea hover:bg-niebla`}
             >
               {textoDeAnotar(lista, partido)}
             </button>
@@ -139,7 +139,7 @@ function Fila({ slug, partido, tablero, lista }: { slug: string; partido: Partid
           )}
           {resolver && (
             // Resolver es cargarlo como W.O.: la pantalla de carga abre con el W.O. elegido (decisión 062).
-            <Link to={`/torneos/${tablero.torneoId}/resultados/${partido.id}?tipo=walkover`} className={`${accion} w-full bg-noche font-semibold text-white`}>
+            <Link to={`/torneos/${tablero.torneoId}/resultados/${partido.id}?tipo=walkover`} className={`${accion} md:w-full bg-noche font-semibold text-white`}>
               Resolver
             </Link>
           )}
@@ -148,7 +148,7 @@ function Fila({ slug, partido, tablero, lista }: { slug: string; partido: Partid
             type="button"
             aria-expanded={abierto === 'mas'}
             onClick={() => alternar('mas')}
-            className={`${accion} w-full border border-linea hover:bg-niebla`}
+            className={`${accion} md:w-full border border-linea hover:bg-niebla`}
           >
             Más
           </button>
@@ -186,19 +186,19 @@ function FilaDelResultado({ slug, partido, tablero }: { slug: string; partido: P
           </span>
           <span className="text-[13px] text-pizarra-500">{falta}</span>
         </span>
-        <div className="grid grid-cols-[96px_148px_60px] gap-2 md:justify-end">
-          <span />
+        <div className="flex flex-wrap gap-2 md:grid md:grid-cols-[96px_148px_60px] md:justify-end">
+          <span className="hidden md:block" />
           {pendiente ? (
             <button
               type="button"
               disabled={confirmar.isPending}
               onClick={() => confirmar.mutate(partido.id)}
-              className={`${accion} w-full bg-noche font-semibold text-white disabled:opacity-60`}
+              className={`${accion} md:w-full bg-noche font-semibold text-white disabled:opacity-60`}
             >
               {confirmar.isPending ? 'Confirmando…' : 'Confirmar el resultado'}
             </button>
           ) : (
-            <Link to={`/torneos/${tablero.torneoId}/resultados/${partido.id}`} className={`${accion} w-full border border-linea hover:bg-niebla`}>
+            <Link to={`/torneos/${tablero.torneoId}/resultados/${partido.id}`} className={`${accion} md:w-full border border-linea hover:bg-niebla`}>
               Cargar el resultado
             </Link>
           )}
