@@ -6,12 +6,11 @@ import { Pildora } from '../../components/Pildora';
 import { Tarjeta } from '../../components/Tarjeta';
 import { urlDeWhatsApp } from '../padron/linkPersonal';
 import { TextoConNumeros } from '../resultados/AlGuardar';
+import { elDiaCorto, elDiaYHora } from '../torneos/texto';
 import { AnotarFecha } from './AnotarFecha';
 import { MasAcciones } from './MasAcciones';
 import {
   dondeSeJuega,
-  elDiaCorto,
-  elDiaYHora,
   mensajeParaCoordinar,
   nombresDelPartido,
   partidosConFecha,

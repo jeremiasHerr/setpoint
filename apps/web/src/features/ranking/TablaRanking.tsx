@@ -2,6 +2,7 @@ import type { FilaDeRanking, TorneoDelCalendario } from '@setpoint/shared';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Numero } from '../../components/Numero';
+import { abreviarTorneo } from './casilleros';
 import { estadoParaLaFicha, type VueltaDeLaFicha } from '../ficha/vuelta';
 
 type Props = {
@@ -12,8 +13,6 @@ type Props = {
   vuelta: VueltaDeLaFicha;
 };
 
-// "pri": las tres primeras letras del torneo del calendario, sin el año (design.md §4).
-const rotuloDeCasillero = (nombre: string) => nombre.slice(0, 3).toLowerCase();
 
 // Puesto, nombre y total, sin scroll horizontal. Al tocar una fila se abre el desglose
 // por torneo del calendario, como en la planilla, y el enlace a la ficha (decisión 074).
@@ -84,7 +83,7 @@ function Casilleros({ fila, torneosDelCalendario }: { fila: FilaDeRanking; torne
             title={casillero ? `${torneo.nombre} ${String(casillero.anio).slice(-2)}` : torneo.nombre}
             className="flex flex-col items-center gap-1 rounded-lg bg-niebla px-1 py-[9px]"
           >
-            <span className="text-[15px] leading-none text-pizarra-500">{rotuloDeCasillero(torneo.nombre)}</span>
+            <span className="text-[15px] leading-none text-pizarra-500">{abreviarTorneo(torneo.nombre)}</span>
             <Numero className={`text-[17px] font-medium ${casillero ? 'text-noche' : 'text-pizarra-450'}`}>
               {casillero?.puntos ?? 0}
             </Numero>

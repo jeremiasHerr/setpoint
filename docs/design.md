@@ -347,7 +347,7 @@ Cómo está conectado un perfil del padrón con la persona ([04-flujo-jugador.md
 | Puntos | número solo, la palabra al lado | `95 puntos` |
 | Dinero | punto como separador de miles | `$45.000` |
 | Plazo | en días, no en fechas | `quedan 6 días` |
-| Torneo del calendario abreviado | tres letras minúscula | `prim` `ver` `pre` `oto` `inv` |
+| Torneo del calendario abreviado | tres letras minúscula | `pri` `ver` `pre` `oto` `inv` |
 | Código de verificación | mono, seis dígitos en dos grupos de tres | `482 913` |
 | Número de inscripción | mono, sin puntos ni numeral | `100482` |
 

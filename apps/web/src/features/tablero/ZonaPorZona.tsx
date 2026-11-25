@@ -3,8 +3,9 @@ import { useState, type CSSProperties } from 'react';
 import { Chip } from '../../components/Chip';
 import { ConCifras, Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
+import { elDiaCorto } from '../torneos/texto';
 import { DesempateDeLaZona } from './DesempateDeLaZona';
-import { comoVieneLaZona, elDiaCorto, marcadorDesde, partidoEntre } from './tablero';
+import { comoVieneLaZona, marcadorDesde, partidoEntre } from './tablero';
 
 const rotulo = 'text-[12.5px] font-medium text-noche';
 

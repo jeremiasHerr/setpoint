@@ -101,7 +101,7 @@ function Lado({ jugador, derecha }: { jugador: JugadorDelCaraACara; derecha?: bo
       </span>
       {jugador.puesto !== null && (
         <span className="text-xs text-pizarra-400">
-          <Numero>{jugador.puesto}º</Numero> · <Numero>{jugador.puntos}</Numero> pts
+          <Numero>{jugador.puesto}º</Numero> · <Numero>{jugador.puntos}</Numero> puntos
         </span>
       )}
     </div>
