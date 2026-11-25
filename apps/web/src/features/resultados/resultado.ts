@@ -1,4 +1,6 @@
 import {
+  alConsuelo,
+  delConsuelo,
   ganadorDeLosSets,
   resultadoDelTorneoSchema,
   setsGanados,
@@ -226,7 +228,7 @@ export function rotuloDelPartido(partido: PartidoConResultado) {
 export const CAMBIA_LOS_CUADROS =
   'Las zonas ya se cerraron y este resultado cambia quién clasifica o en qué orden. Los cuadros ya están armados, así que no se puede corregir.';
 
-const destinos = (consuelo: string) => ({ campeonato: 'clasifica a Campeonato', complementaria: `va al ${consuelo.toLowerCase()}` });
+const destinos = (consuelo: string) => ({ campeonato: 'clasifica a Campeonato', complementaria: `va ${alConsuelo(consuelo)}` });
 
 // A qué cuadro iría si la zona terminara así. Mientras falten partidos, es "por ahora".
 function destino(fila: FilaDePosiciones, zonaCompleta: boolean, consuelo: string) {
@@ -298,7 +300,7 @@ export function vistaPreviaDelCuadro(datos: DatosResultado, partido: PartidoConR
   const lineas: Frase[] =
     ronda === rondas
       ? [
-          [`${ganador.nombre} es campeón ${partido.cuadro === 'campeonato' ? 'de Campeonato' : `del ${partido.nombreCuadroConsuelo.toLowerCase()}`}.`],
+          [`${ganador.nombre} es campeón ${partido.cuadro === 'campeonato' ? 'de Campeonato' : delConsuelo(partido.nombreCuadroConsuelo)}.`],
           [`${perdedor.nombre} pierde la final.`],
         ]
       : [[`${ganador.nombre} pasa a ${siguiente}.`], [`${perdedor.nombre} queda afuera en ${conArticulo(nombreDeRonda(ronda, rondas))}.`]];

@@ -176,7 +176,7 @@ function JugadorDestino({
   vinculado?: JugadorPadron;
   marcada: boolean;
 }) {
-  if (decision.accion === 'excluir') return <span className="text-[15px] text-pizarra-400">—</span>;
+  if (decision.accion === 'excluir') return <span className="text-[15px] text-pizarra-450">—</span>;
   if (decision.accion === 'crear') {
     return (
       <div className="flex min-w-0 items-center gap-[9px]">

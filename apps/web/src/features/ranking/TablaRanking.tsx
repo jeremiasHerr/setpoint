@@ -1,7 +1,7 @@
 import type { FilaDeRanking, TorneoDelCalendario } from '@setpoint/shared';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ConCifras, Numero } from '../../components/Numero';
+import { Numero } from '../../components/Numero';
 import { estadoParaLaFicha, type VueltaDeLaFicha } from '../ficha/vuelta';
 
 type Props = {
@@ -12,10 +12,8 @@ type Props = {
   vuelta: VueltaDeLaFicha;
 };
 
-// "pri 25": las tres primeras letras del torneo del calendario y el año de los puntos.
-function rotuloDeCasillero(nombre: string, anio: number) {
-  return `${nombre.slice(0, 3).toLowerCase()} ${String(anio).slice(-2)}`;
-}
+// "pri": las tres primeras letras del torneo del calendario, sin el año (design.md §4).
+const rotuloDeCasillero = (nombre: string) => nombre.slice(0, 3).toLowerCase();
 
 // Puesto, nombre y total, sin scroll horizontal. Al tocar una fila se abre el desglose
 // por torneo del calendario, como en la planilla, y el enlace a la ficha (decisión 074).
@@ -83,13 +81,11 @@ function Casilleros({ fila, torneosDelCalendario }: { fila: FilaDeRanking; torne
         return (
           <div
             key={torneo.id}
-            title={torneo.nombre}
+            title={casillero ? `${torneo.nombre} ${String(casillero.anio).slice(-2)}` : torneo.nombre}
             className="flex flex-col items-center gap-1 rounded-lg bg-niebla px-1 py-[9px]"
           >
-            <ConCifras className="text-[10px] text-pizarra-500">
-              {casillero ? rotuloDeCasillero(torneo.nombre, casillero.anio) : torneo.nombre.slice(0, 3).toLowerCase()}
-            </ConCifras>
-            <Numero className={`text-[17px] font-medium ${casillero ? 'text-noche' : 'text-pizarra-400'}`}>
+            <span className="text-[15px] leading-none text-pizarra-500">{rotuloDeCasillero(torneo.nombre)}</span>
+            <Numero className={`text-[17px] font-medium ${casillero ? 'text-noche' : 'text-pizarra-450'}`}>
               {casillero?.puntos ?? 0}
             </Numero>
           </div>

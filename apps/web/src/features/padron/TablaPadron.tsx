@@ -119,7 +119,7 @@ export function TablaPadron({ jugadores, categorias, conRanking, seleccionadoId,
             onChange={(e) => setBusqueda(e.target.value)}
             placeholder="Nombre o apellido"
             aria-label="Buscar por nombre o apellido"
-            className="min-w-0 flex-1 text-sm outline-none placeholder:text-pizarra-400"
+            className="min-w-0 flex-1 text-sm outline-none placeholder:text-pizarra-450"
           />
         </label>
       </div>

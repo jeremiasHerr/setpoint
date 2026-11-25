@@ -82,7 +82,7 @@ export function VerificarEmail({ onVerificado, desdeLink = false }: Props) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="tu@email.com"
-            className="h-[60px] rounded-[12px] border border-borde-campo px-4 text-lg outline-none placeholder:text-pizarra-400 focus:border-2 focus:border-noche focus:px-[15px]"
+            className="h-[60px] rounded-[12px] border border-borde-campo px-4 text-lg outline-none placeholder:text-pizarra-450 focus:border-2 focus:border-noche focus:px-[15px]"
           />
           <Ayuda>
             {desdeLink

@@ -3,6 +3,7 @@ import { useState, type CSSProperties } from 'react';
 import { Chip } from '../../components/Chip';
 import { ConCifras, Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
+import { DesempateDeLaZona } from './DesempateDeLaZona';
 import { comoVieneLaZona, elDiaCorto, marcadorDesde, partidoEntre } from './tablero';
 
 const rotulo = 'text-[12.5px] font-medium text-noche';
@@ -18,7 +19,7 @@ function Cruce({ zona, fila, rival }: { zona: ZonaDelTablero; fila: FilaDePosici
   if (partido.situacion === 'jugado') {
     const gano = partido.ganadorId === fila.jugadorId;
     return (
-      <div className={`${celda} ${gano ? 'bg-lona-fondo font-semibold' : 'text-pizarra-400'}`}>
+      <div className={`${celda} ${gano ? 'bg-lona-fondo font-semibold' : 'text-pizarra-450'}`}>
         <ConCifras className="text-[13px]">{marcadorDesde(partido, fila.jugadorId)}</ConCifras>
       </div>
     );
@@ -44,7 +45,7 @@ function Cruce({ zona, fila, rival }: { zona: ZonaDelTablero; fila: FilaDePosici
   );
 }
 
-function Tabla({ zona, consuelo }: { zona: ZonaDelTablero; consuelo: string }) {
+function Tabla({ zona, consuelo, usaRanking }: { zona: ZonaDelTablero; consuelo: string; usaRanking: boolean }) {
   // Una columna por rival: el ancho depende de cuántos son, así que va en una variable.
   const columnas = { '--columnas': `200px repeat(${zona.filas.length}, minmax(0, 1fr)) 48px 58px 74px` } as CSSProperties;
   const grilla = 'grid grid-cols-[minmax(0,1fr)_40px_52px_64px] md:grid-cols-[var(--columnas)]';
@@ -68,7 +69,7 @@ function Tabla({ zona, consuelo }: { zona: ZonaDelTablero; consuelo: string }) {
         return (
           <div key={fila.jugadorId} className={`${grilla} items-center border-b border-linea-suave`} style={columnas}>
             <div className="flex h-[60px] min-w-0 items-center gap-2.5 px-4">
-              <Numero className={`text-xs ${clasifica ? 'text-pizarra-500' : 'text-pizarra-400'}`}>{fila.posicion}</Numero>
+              <Numero className={`text-xs ${clasifica ? 'text-pizarra-500' : 'text-pizarra-450'}`}>{fila.posicion}</Numero>
               <span className={`size-1.5 shrink-0 rounded-full ${clasifica ? 'bg-lona-texto' : 'bg-linea'}`} />
               <span className={`truncate text-[15px] ${clasifica ? 'font-semibold' : 'font-medium text-pizarra-700'}`}>{fila.apellido}</span>
             </div>
@@ -76,10 +77,10 @@ function Tabla({ zona, consuelo }: { zona: ZonaDelTablero; consuelo: string }) {
               <Cruce key={rival.jugadorId} zona={zona} fila={fila} rival={rival} />
             ))}
             <Numero className={`text-center text-[15px] font-semibold ${clasifica ? '' : 'text-pizarra-700'}`}>{fila.partidosGanados}</Numero>
-            <Numero className={`text-center text-[13px] ${clasifica ? 'text-pizarra-500' : 'text-pizarra-400'}`}>
+            <Numero className={`text-center text-[13px] ${clasifica ? 'text-pizarra-500' : 'text-pizarra-450'}`}>
               {fila.setsGanados}-{fila.setsPerdidos}
             </Numero>
-            <Numero className={`pr-2.5 text-right text-[13px] ${clasifica ? 'text-pizarra-500' : 'text-pizarra-400'}`}>
+            <Numero className={`pr-2.5 text-right text-[13px] ${clasifica ? 'text-pizarra-500' : 'text-pizarra-450'}`}>
               {fila.gamesGanados}-{fila.gamesPerdidos}
             </Numero>
           </div>
@@ -88,7 +89,10 @@ function Tabla({ zona, consuelo }: { zona: ZonaDelTablero; consuelo: string }) {
 
       <div className="flex items-start gap-2.5 bg-niebla px-5 py-[13px]">
         <span className="mt-[7px] size-1.5 shrink-0 rounded-full bg-lona-texto" />
-        <p className="text-[13px] text-pizarra-500">{comoVieneLaZona(zona.filas, consuelo)}</p>
+        <div className="flex flex-col gap-1">
+          <p className="text-[13px] text-pizarra-500">{comoVieneLaZona(zona.filas, consuelo)}</p>
+          <DesempateDeLaZona filas={zona.filas} usaRanking={usaRanking} />
+        </div>
       </div>
     </Tarjeta>
   );
@@ -123,7 +127,7 @@ export function ZonaPorZona({ tablero }: { tablero: Tablero }) {
           })}
         </div>
       </div>
-      <Tabla zona={zona} consuelo={tablero.nombreCuadroConsuelo} />
+      <Tabla zona={zona} consuelo={tablero.nombreCuadroConsuelo} usaRanking={tablero.usaRanking} />
     </section>
   );
 }

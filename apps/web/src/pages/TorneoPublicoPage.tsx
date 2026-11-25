@@ -123,7 +123,7 @@ function Convocatoria({ torneo }: { torneo: TorneoPublico }) {
             // La lista de espera sigue el mismo camino que inscribirse: el email y el código.
             <Link
               to={`/c/${torneo.organizacion.slug}/torneos/${torneo.id}/inscripcion`}
-              className="flex h-[60px] items-center justify-center rounded-[12px] border border-lona-borde bg-lona text-noche-900 text-lg font-semibold"
+              className="flex h-[60px] items-center justify-center gap-2.5 rounded-[12px] bg-noche-900 text-white text-lg font-semibold hover:bg-pizarra-700"
             >
               {lista ? 'Anotarme en la lista de espera' : 'Inscribirme y pagar'}
             </Link>

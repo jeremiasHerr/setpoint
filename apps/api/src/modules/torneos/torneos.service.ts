@@ -416,7 +416,7 @@ export async function listarConvocatorias(slug: string, usuarioId: number): Prom
 
   const avance = (t: (typeof torneos)[number]): AvanceDelTorneo | null =>
     EN_JUEGO.includes(t.estado)
-      ? { fase: t.estado === EstadoTorneo.ELIMINATORIAS ? 'cuadros' : 'zonas', ...avanceDelTorneo(partidos.get(t.id) ?? [], dia) }
+      ? { fase: t.estado === EstadoTorneo.ELIMINATORIAS ? 'cuadros' : 'zonas', ...avanceDelTorneo(partidos.get(t.id) ?? [], dia, new Date()) }
       : null;
   const terminado = (t: (typeof torneos)[number]) =>
     t.estado === EstadoTorneo.FINALIZADO

@@ -1,3 +1,4 @@
+import { alConsuelo, consueloEnFrase } from '@setpoint/shared';
 import type { BloqueDelTablero, FilaDePosiciones, PartidoDelTablero, SituacionDelPartido, Tablero } from '@setpoint/shared';
 import { MARCA } from '../../components/marcas';
 import { NOMBRE_DEL_PRINCIPAL, nombreDelCuadro, rotuloDeRonda } from '../cuadros/cuadro';
@@ -71,7 +72,7 @@ export function nombreDelBloque(bloque: BloqueDelTablero, tablero: Tablero) {
 export function dondeSeJuega(partido: PartidoDelTablero, tablero: Tablero) {
   if (partido.grupo) return `zona ${partido.grupo}`;
   const ronda = rotuloDeRonda(partido.ronda!, tablero.rondas[partido.cuadro!]!);
-  return partido.cuadro === 'campeonato' ? ronda : `${ronda} · ${tablero.nombreCuadroConsuelo.toLowerCase()}`;
+  return partido.cuadro === 'campeonato' ? ronda : `${ronda} · ${consueloEnFrase(tablero.nombreCuadroConsuelo)}`;
 }
 
 // "venció ayer", "venció hace 3 días", "vence hoy", "quedan 6 días".
@@ -136,7 +137,7 @@ export function comoVieneLaZona(filas: FilaDePosiciones[], nombreConsuelo: strin
   return [
     principal.length > 0 &&
       `${enumerar(principal)} ${verbo(principal, 'está', 'están')} clasificando a ${NOMBRE_DEL_PRINCIPAL}.`,
-    consuelo.length > 0 && `${enumerar(consuelo)} ${verbo(consuelo, 'va', 'van')} al ${nombreConsuelo.toLowerCase()}.`,
+    consuelo.length > 0 && `${enumerar(consuelo)} ${verbo(consuelo, 'va', 'van')} ${alConsuelo(nombreConsuelo)}.`,
     afuera.length > 0 && `${enumerar(afuera)} ${verbo(afuera, 'queda', 'quedan')} afuera.`,
   ]
     .filter(Boolean)
@@ -148,6 +149,7 @@ export function comoVieneLaZona(filas: FilaDePosiciones[], nombreConsuelo: strin
 export const COLOR_DE_LA_SITUACION: Record<SituacionDelPartido, string> = {
   jugado: MARCA.hecho,
   con_fecha: MARCA['en-curso'],
+  falta_cargar: MARCA['en-curso'],
   sin_coordinar: MARCA.pendiente,
   vencido: MARCA.vencido,
   esperando: 'bg-linea',

@@ -14,6 +14,7 @@ const LEYENDA: [SituacionDelPartido, string][] = [
 const SITUACION: Record<SituacionDelPartido, string> = {
   jugado: 'jugado',
   con_fecha: 'con fecha',
+  falta_cargar: 'falta cargar el resultado',
   sin_coordinar: 'sin coordinar',
   vencido: 'vencido',
   esperando: 'esperando a los ganadores de la ronda anterior',

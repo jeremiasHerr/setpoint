@@ -1,9 +1,10 @@
-import type { PartidoEnVivo, TorneoEnVivo, ZonaEnVivo } from '@setpoint/shared';
+import { alConsuelo, type PartidoEnVivo, type TorneoEnVivo, type ZonaEnVivo } from '@setpoint/shared';
 import { Link } from 'react-router-dom';
 import { ConCifras, Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
 import { estadoParaLaFicha, type VueltaDeLaFicha } from '../ficha/vuelta';
-import { NOMBRE_DEL_PRINCIPAL } from '../cuadros/cuadro';
+import { NOMBRE_DEL_PRINCIPAL, PLAZO_CUMPLIDO } from '../cuadros/cuadro';
+import { DesempateDeLaZona } from '../tablero/DesempateDeLaZona';
 import { comoVieneLaZona, marcadorDesde } from '../tablero/tablero';
 import { laHora, elDia, tieneResultado } from './enVivo';
 
@@ -12,7 +13,7 @@ const rotulo = 'text-[12.5px] font-medium text-noche';
 // La tabla de una zona: quién clasifica a cada cuadro se ve con el punto verde y la negrita,
 // como en el tablero y en Mi zona. Cada nombre lleva a la ficha del jugador (decisión 074), que
 // vuelve a las zonas (decisión 102). Debajo, los partidos de la zona con su resultado o su fecha.
-function TablaDeZona({ zona, slug, vuelta, consuelo }: { zona: ZonaEnVivo; slug: string; vuelta: VueltaDeLaFicha; consuelo: string }) {
+function TablaDeZona({ zona, slug, vuelta, consuelo, usaRanking }: { zona: ZonaEnVivo; slug: string; vuelta: VueltaDeLaFicha; consuelo: string; usaRanking: boolean }) {
   // En el celular las columnas de números se angostan para dejarle el lugar al nombre.
   const grilla = 'grid grid-cols-[minmax(0,1fr)_28px_40px_56px] items-center sm:grid-cols-[minmax(0,1fr)_36px_52px_64px]';
   return (
@@ -35,7 +36,7 @@ function TablaDeZona({ zona, slug, vuelta, consuelo }: { zona: ZonaEnVivo; slug:
         return (
           <div key={fila.jugadorId} className={`${grilla} min-h-[46px] border-b border-linea-suave py-1`}>
             <div className="flex min-w-0 items-center gap-2.5 px-4">
-              <Numero className={`text-xs ${clasifica ? 'text-pizarra-500' : 'text-pizarra-400'}`}>{fila.posicion}</Numero>
+              <Numero className={`text-xs ${clasifica ? 'text-pizarra-500' : 'text-pizarra-450'}`}>{fila.posicion}</Numero>
               <span className={`size-1.5 shrink-0 rounded-full ${clasifica ? 'bg-lona-texto' : 'bg-linea'}`} />
               <Link
                 to={`/c/${slug}/jugadores/${fila.jugadorId}`}
@@ -59,7 +60,10 @@ function TablaDeZona({ zona, slug, vuelta, consuelo }: { zona: ZonaEnVivo; slug:
 
       <div className="flex items-start gap-2.5 bg-niebla px-4 py-3">
         <span className="mt-[7px] size-1.5 shrink-0 rounded-full bg-lona-texto" />
-        <p className="text-[13px] text-pizarra-500">{comoVieneLaZona(zona.filas, consuelo)}</p>
+        <div className="flex flex-col gap-1">
+          <p className="text-[13px] text-pizarra-500">{comoVieneLaZona(zona.filas, consuelo)}</p>
+          <DesempateDeLaZona filas={zona.filas} usaRanking={usaRanking} />
+        </div>
       </div>
 
       <ul className="flex flex-col px-4 py-2">
@@ -71,7 +75,7 @@ function TablaDeZona({ zona, slug, vuelta, consuelo }: { zona: ZonaEnVivo; slug:
   );
 }
 
-// "Pérez · Gómez   6-3 6-4", con el ganador en negrita. Sin resultado, la fecha o "a coordinar".
+// "Pérez · Gómez   6-3 6-4", con el ganador en negrita. Sin resultado, la fecha, "a coordinar" o, con el plazo cumplido, el texto neutro (decisión 152).
 function PartidoDeZona({ partido }: { partido: PartidoEnVivo }) {
   const { jugadorA, jugadorB } = partido;
   if (!jugadorA || !jugadorB) return null;
@@ -85,7 +89,7 @@ function PartidoDeZona({ partido }: { partido: PartidoEnVivo }) {
         <>
           <span className="min-w-0 truncate">
             <span className="font-semibold">{ganador.apellido}</span>
-            <span className="text-pizarra-400"> le ganó a </span>
+            <span className="text-pizarra-450"> le ganó a </span>
             {perdedor.apellido}
           </span>
           <ConCifras className="shrink-0 text-[13px] font-semibold">{marcadorDesde(partido, ganador.jugadorId)}</ConCifras>
@@ -95,9 +99,13 @@ function PartidoDeZona({ partido }: { partido: PartidoEnVivo }) {
           <span className="min-w-0 truncate text-pizarra-700">
             {jugadorA.apellido} · {jugadorB.apellido}
           </span>
-          <ConCifras className="shrink-0 text-[13px] text-pizarra-500">
-            {partido.fechaAcordada ? `${elDia(partido.fechaAcordada)} · ${laHora(partido.fechaAcordada)}` : 'a coordinar'}
-          </ConCifras>
+          {partido.plazoCumplido ? (
+            <span className="shrink-0 text-[13px] text-pizarra-500">{PLAZO_CUMPLIDO}</span>
+          ) : (
+            <ConCifras className="shrink-0 text-[13px] text-pizarra-500">
+              {partido.fechaAcordada ? `${elDia(partido.fechaAcordada)} · ${laHora(partido.fechaAcordada)}` : 'a coordinar'}
+            </ConCifras>
+          )}
         </>
       )}
     </li>
@@ -106,7 +114,7 @@ function PartidoDeZona({ partido }: { partido: PartidoEnVivo }) {
 
 // Todas las zonas, una debajo de la otra en el celular y en columnas en escritorio.
 export function ZonasEnVivo({ torneo, slug }: { torneo: TorneoEnVivo; slug: string }) {
-  const consuelo = torneo.tieneComplementaria ? ` y el resto al ${torneo.nombreCuadroConsuelo.toLowerCase()}` : '';
+  const consuelo = torneo.tieneComplementaria ? ` y el resto ${alConsuelo(torneo.nombreCuadroConsuelo)}` : '';
   const vuelta = { ruta: `/c/${slug}/torneos/${torneo.torneoId}/en-vivo?ver=zonas`, etiqueta: `${torneo.nombre} en vivo` };
   const primeros = torneo.clasificanPorGrupo === 1 ? 'El primero de cada zona va' : `Los ${torneo.clasificanPorGrupo} primeros de cada zona van`;
   return (
@@ -117,7 +125,7 @@ export function ZonasEnVivo({ torneo, slug }: { torneo: TorneoEnVivo; slug: stri
       </p>
       <div className="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
         {torneo.zonas.map((zona) => (
-          <TablaDeZona key={zona.grupo} zona={zona} slug={slug} vuelta={vuelta} consuelo={torneo.nombreCuadroConsuelo} />
+          <TablaDeZona key={zona.grupo} zona={zona} slug={slug} vuelta={vuelta} consuelo={torneo.nombreCuadroConsuelo} usaRanking={torneo.usaRanking} />
         ))}
       </div>
     </section>

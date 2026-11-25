@@ -36,7 +36,7 @@ export function SeccionRanking({ usaRanking, etapas, alCambiarUsaRanking, alCamb
         <span>
           Primavera <Numero>26</Numero>: <Numero className="text-noche">100</Numero>
         </span>
-        <span className="text-pizarra-400">·</span>
+        <span className="text-pizarra-450">·</span>
         <span>
           el total sube <Numero className="text-noche">50</Numero>
         </span>

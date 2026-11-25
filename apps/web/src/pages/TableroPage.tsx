@@ -1,4 +1,4 @@
-import type { Tablero } from '@setpoint/shared';
+import { alConsuelo as haciaElConsuelo, consueloEnFrase, type Tablero } from '@setpoint/shared';
 import { useState, type ReactNode } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Boton } from '../components/Boton';
@@ -80,7 +80,7 @@ function bajada(tablero: Tablero): string {
   if (tablero.fase === 'terminado') return 'El torneo está cerrado y los puntos ya están en el ranking.';
   if (tablero.fase === 'cuadros') {
     const cuadros = tablero.tieneComplementaria
-      ? `${NOMBRE_DEL_PRINCIPAL} y ${tablero.nombreCuadroConsuelo.toLowerCase()}`
+      ? `${NOMBRE_DEL_PRINCIPAL} y ${consueloEnFrase(tablero.nombreCuadroConsuelo)}`
       : NOMBRE_DEL_PRINCIPAL;
     return `${cuadros}${elPlazo('la ronda en curso termina')}`;
   }
@@ -101,7 +101,7 @@ function alCerrarLasZonas(tablero: Tablero): ReactNode[] {
     alConsuelo > 0 ? (
       <>
         Se arman los cuadros: <Numero>{alPrincipal}</Numero> jugadores van a {NOMBRE_DEL_PRINCIPAL} y{' '}
-        <Numero>{alConsuelo}</Numero> al {tablero.nombreCuadroConsuelo.toLowerCase()}.
+        <Numero>{alConsuelo}</Numero> {haciaElConsuelo(tablero.nombreCuadroConsuelo)}.
       </>
     ) : (
       <>
