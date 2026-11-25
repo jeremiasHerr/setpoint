@@ -99,7 +99,7 @@ Cuatro familias, de Google Fonts, cada una con un solo rol:
 - **Funnel Display 600** (`font-display`) — títulos de página del producto y de la landing, el nombre del rival en la tarjeta del próximo partido, el partido que se está cargando. Tracking −0.02em.
 - **Newsreader 500** (`font-serif`) — **solo el titular del hero de la landing**, con `opsz` 72 y tracking −0.028em. Es la única frase que vende una emoción; en el producto parecía el título de un documento.
 - **Instrument Sans** (`font-sans`) — interfaz, nombres, títulos de sección, copy. Pesos 400 / 500 / 600.
-- **Geist Mono** (`font-mono`) — **solo cifras**: marcadores, puntos, plazos, horarios, importes, fechas cortas, contadores y códigos. Los rótulos, metadatos, migas, chips y encabezados de tabla son texto y van en Instrument Sans 12,5 px, peso 500, `noche`; un metadato secundario de una fila va en `pizarra-500`, 13 px, peso 400 ([decisión 123](decisiones/123-inicio-en-noche-y-rotulos-sin-mono.md)). Siempre con `font-variant-numeric: tabular-nums`.
+- **Geist Mono** (`font-mono`) — **solo cifras**: marcadores, puntos, plazos, horarios, importes, fechas cortas, contadores y códigos. Los rótulos, metadatos, migas, chips y encabezados de tabla son texto y van en Instrument Sans 12,5 px, peso 500, `noche`; un metadato secundario de una fila va en `pizarra-500`, 13 px, peso 400 ([decisión 123](decisiones/123-inicio-en-noche-y-rotulos-sin-mono.md)). Un texto que mezcla palabras y cifras ("sáb 21 · 10:00", "quedan 8 días") lleva en mono solo las cifras: `ConCifras` las separa. Siempre con `font-variant-numeric: tabular-nums`.
 
 ```css
 .mono {
@@ -121,7 +121,7 @@ El mono es lo que da el acabado de producto y lo que hace que las tablas queden 
 | Cuerpo | 16–17 | Sans 400 | — |
 | Rótulo | 15 | Sans 500 | — |
 | Mono grande (puntos, marcador, fecha) | 24–52 | Mono 500 | −0.02 a −0.04em |
-| Mono chico (fecha, zona, rótulo de casillero) | 15 | Mono 400/500 | — |
+| Mono chico (fecha, cifras de un rótulo) | 15 | Mono 400/500 | — |
 
 **Piso duro: 15px.** Ningún texto baja de ahí en móvil, y los datos van de 17 para arriba. Las pantallas de referencia del jugador tienen rótulos de 10 a 14: al implementarlas suben a 15. Si algo no entra, se reorganiza, como los casilleros del ranking, que van sin el año.
 

@@ -1,6 +1,6 @@
 import type { CasoHomonimo as Caso, PerfilEnRevision, ResolverRevision } from '@setpoint/shared';
 import { Boton } from '../../components/Boton';
-import { Numero } from '../../components/Numero';
+import { ConCifras, Numero } from '../../components/Numero';
 import { importe } from '../torneo-publico/convocatoria';
 import { Cifra, Dato, OtraSalida, Planteo, Rotulo } from './piezas';
 import { COMO_SE_VINCULO, desde, diaYHoraCorta } from './textos';
@@ -50,7 +50,7 @@ export function CasoHomonimo({ caso, enviando, alResolver }: Props) {
               </div>
               <div className="flex flex-col gap-[5px]">
                 <Rotulo>pagó</Rotulo>
-                <Numero className="text-[15px]">{inscripcion.pagadoEn ? diaYHoraCorta(inscripcion.pagadoEn) : '—'}</Numero>
+                <ConCifras className="text-[15px]">{inscripcion.pagadoEn ? diaYHoraCorta(inscripcion.pagadoEn) : '—'}</ConCifras>
               </div>
             </>
           )}

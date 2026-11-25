@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { EncabezadoPublico } from '../components/EncabezadoPublico';
 import { LinkDeVuelta } from '../components/LinkDeVuelta';
-import { Numero } from '../components/Numero';
 import { EncontrarPerfil } from '../features/inscripcion/EncontrarPerfil';
 import { EstadoInscripcion } from '../features/inscripcion/EstadoInscripcion';
 import { CuentaVerificada } from '../features/inscripcion/piezas';
@@ -62,7 +61,7 @@ function Inscripcion({ torneo }: { torneo: TorneoPublico }) {
     <>
       <div className="flex items-center justify-between gap-3">
         <EncabezadoPublico organizacion={torneo.organizacion.nombre} />
-        <Numero className="rounded-full border border-linea px-2.5 py-1.5 text-[14px] font-medium text-pizarra-500">{torneo.categoria}</Numero>
+        <span className="rounded-full border border-linea px-2.5 py-1.5 text-[14px] font-medium text-pizarra-500">{torneo.categoria}</span>
       </div>
       {/* Las páginas públicas no tienen menú: esta vuelve a la del torneo, como la página en vivo (decisión 084). */}
       <div className="flex flex-col gap-1.5">

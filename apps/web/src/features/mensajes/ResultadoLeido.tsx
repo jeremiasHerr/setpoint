@@ -52,7 +52,7 @@ export function ResultadoLeido({ torneoId, consuelo, leido, decidiendo = false, 
         <figcaption className="text-[13px] text-pizarra-500">
           {[leido.hora, leido.remitente ?? 'sin remitente'].filter(Boolean).join(' · ')}
         </figcaption>
-        <blockquote className="font-mono text-sm break-words whitespace-pre-line text-pizarra-700">{leido.texto}</blockquote>
+        <blockquote className="text-sm break-words whitespace-pre-line text-pizarra-700">{leido.texto}</blockquote>
       </figure>
 
       <div className="flex min-w-0 flex-col gap-2">

@@ -122,7 +122,7 @@ export function FormularioSubida({ categorias, enviando, error, alSubir }: Props
               placeholder={'Ranking Tercera 2026\nPrim 25 · Ver 26 · Pretemp 26 · Total\n1. Martín Sanhueza 10 15 50 75\n2. Diego Antileo 15 10 10 35'}
               aria-describedby="importacion-ayuda-texto importacion-error"
               aria-invalid={textoLargo || undefined}
-              className="min-h-[200px] resize-y rounded-control border border-borde-campo px-3.5 py-3 font-mono text-sm leading-relaxed text-noche outline-none placeholder:text-pizarra-400 focus:border-2 focus:border-noche focus:px-[13px] focus:py-[11px] aria-invalid:border-2 aria-invalid:border-noche"
+              className="min-h-[200px] resize-y rounded-control border border-borde-campo px-3.5 py-3 text-sm leading-relaxed text-noche outline-none placeholder:text-pizarra-400 focus:border-2 focus:border-noche focus:px-[13px] focus:py-[11px] aria-invalid:border-2 aria-invalid:border-noche"
             />
             <p id="importacion-ayuda-texto" className="text-[13px] text-pizarra-500">
               {textoLargo

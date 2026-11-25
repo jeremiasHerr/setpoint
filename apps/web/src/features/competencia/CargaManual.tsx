@@ -150,9 +150,9 @@ export function CargaManual({ jugadores, zonas, capacidad, alMover }: Props) {
             <Destino key={zona.grupo} id={zona.grupo} llena={zona.integrantes.length >= capacidad} className="flex flex-col gap-1.5 px-[15px] py-[13px]">
               <div className="flex items-baseline justify-between gap-2.5 border-b border-linea-suave pb-[7px]">
                 <h3 className="text-[15px] font-semibold">Zona {zona.grupo}</h3>
-                <Numero className="text-xs text-pizarra-500">
-                  {zona.integrantes.length} de {capacidad}
-                </Numero>
+                <span className="text-xs text-pizarra-500">
+                  <Numero>{zona.integrantes.length}</Numero> de <Numero>{capacidad}</Numero>
+                </span>
               </div>
               <ul className="flex flex-col">
                 {zona.integrantes.map((jugador) => (

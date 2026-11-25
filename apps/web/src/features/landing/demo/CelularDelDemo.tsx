@@ -1,4 +1,4 @@
-import { Numero } from '../../../components/Numero';
+import { ConCifras, Numero } from '../../../components/Numero';
 import { TarjetasDeCarga } from './CargaDelDemo';
 import type { Bandera, CeldaDeSet, Objetivo } from './lineaDeTiempo';
 import { MarcasDeZonas } from './MarcasDeZonas';
@@ -22,7 +22,7 @@ function Franja() {
         <MarcaDelLogo className="h-3 w-3.5" />
         Setpoint
       </span>
-      <span className="font-mono text-[12px] text-pizarra-400">Primavera 26 · Tercera</span>
+      <ConCifras className="text-[12px] text-pizarra-400">Primavera 26 · Tercera</ConCifras>
     </div>
   );
 }
@@ -47,17 +47,19 @@ function Fila({ partido, zona, vencida }: { partido: string; zona: string; venci
     <div className="box-border flex h-[60px] flex-col justify-center gap-1 overflow-hidden border-b border-linea-suave px-3.5 py-2">
       <div className="flex items-baseline justify-between gap-2">
         <span className={`text-[14px] leading-5 ${vencida ? 'font-semibold' : 'font-medium'}`}>{partido}</span>
-        <span className="font-mono text-[12px] leading-4 whitespace-nowrap text-pizarra-500">zona {zona}</span>
+        <span className="text-[12px] leading-4 whitespace-nowrap text-pizarra-500">zona {zona}</span>
       </div>
       <div
-        className={`flex items-center gap-2 font-mono text-[12px] leading-4 ${vencida ? 'text-rojo-texto' : 'text-pizarra-500'}`}
+        className={`flex items-center gap-2 text-[12px] leading-4 ${vencida ? 'text-rojo-texto' : 'text-pizarra-500'}`}
       >
         {vencida ? (
           'venció ayer'
         ) : (
           <>
             <ChipSinFecha />
-            quedan 8 días
+            <span>
+              quedan <Numero>8</Numero> días
+            </span>
           </>
         )}
       </div>

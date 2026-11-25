@@ -40,7 +40,7 @@ export function Funciones() {
           texto="Jugadores, puntos, categorías y torneos del calendario entran solos. Revisás solo lo dudoso."
         >
           <div className="flex flex-col gap-2 rounded-tarjeta border border-linea bg-papel p-3.5 text-sm">
-            <Numero className="text-xs text-pizarra-500">ranking-tercera-2026.xlsx</Numero>
+            <span className="text-xs text-pizarra-500">ranking-tercera-2026.xlsx</span>
             <div className="flex justify-between gap-2.5">
               <span>Importados</span>
               <Numero className="font-medium">74</Numero>
@@ -53,9 +53,9 @@ export function Funciones() {
         </Funcion>
         <Funcion titulo="Inscripciones que se cobran solas" texto="Pagan con Mercado Pago desde el link. Si se llena, hay lista de espera.">
           <div className="flex flex-col gap-2.5">
-            <Numero className="text-[15px] font-medium">
-              Pagaron 28 <span className="text-pizarra-500">/ 32</span>
-            </Numero>
+            <span className="text-[15px] font-medium">
+              Pagaron <Numero>28</Numero> <span className="text-pizarra-500">/ <Numero>32</Numero></span>
+            </span>
             <div className="flex gap-0.5">
               {CUPO.map((estado, i) => (
                 <i key={i} className={`block h-6 flex-1 rounded-[2px] ${MARCA[estado]}`} />
@@ -89,7 +89,7 @@ export function Funciones() {
                   nuevo ? 'border-lona-borde bg-lona-fondo' : 'border-linea bg-papel'
                 }`}
               >
-                <Numero className={`text-[11px] ${nuevo ? '' : 'text-pizarra-500'}`}>{etapa}</Numero>
+                <span className={`text-[11px] ${nuevo ? '' : 'text-pizarra-500'}`}>{etapa}</span>
                 <Numero className="text-[15px] font-medium">{puntos}</Numero>
               </div>
             ))}

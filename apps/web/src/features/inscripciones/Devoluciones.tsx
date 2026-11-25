@@ -1,6 +1,6 @@
 import type { BajaDelTorneo } from '@setpoint/shared';
 import { MensajeError } from '../../components/Aviso';
-import { Numero } from '../../components/Numero';
+import { ConCifras, Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
 import { diaCorto } from '../torneos/texto';
 import { BotonAccion } from './BotonAccion';
@@ -21,9 +21,9 @@ export function Devoluciones({ slug, torneoId, bajas }: Props) {
     <Tarjeta className="flex flex-col overflow-hidden">
       <div className="flex items-center justify-between gap-2.5 border-b border-linea px-4 py-3.5">
         <h2 className="text-[15px] font-semibold">Devoluciones</h2>
-        <Numero className="text-[13px] text-pizarra-500">
-          {pendientes.length} {pendientes.length === 1 ? 'pendiente' : 'pendientes'}
-        </Numero>
+        <span className="text-[13px] text-pizarra-500">
+          <Numero>{pendientes.length}</Numero> {pendientes.length === 1 ? 'pendiente' : 'pendientes'}
+        </span>
       </div>
       <ul>
         {pendientes.map((baja) => (
@@ -32,9 +32,7 @@ export function Devoluciones({ slug, torneoId, bajas }: Props) {
               <span className="truncate text-sm font-medium">
                 {baja.nombre} {baja.apellido}
               </span>
-              <Numero className="text-xs text-pizarra-500">
-                {plata(baja.monto)} · {diaCorto(baja.fecha)}
-              </Numero>
+              <ConCifras className="text-xs text-pizarra-500">{`${plata(baja.monto)} · ${diaCorto(baja.fecha)}`}</ConCifras>
             </div>
             <BotonAccion onClick={() => marcar.mutate(baja.id)} disabled={marcar.isPending}>
               {marcar.isPending && marcar.variables === baja.id ? 'Guardando…' : 'Ya se lo devolví'}

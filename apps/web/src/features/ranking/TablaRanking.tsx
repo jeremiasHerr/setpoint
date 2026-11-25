@@ -1,7 +1,7 @@
 import type { FilaDeRanking, TorneoDelCalendario } from '@setpoint/shared';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Numero } from '../../components/Numero';
+import { ConCifras, Numero } from '../../components/Numero';
 import { estadoParaLaFicha, type VueltaDeLaFicha } from '../ficha/vuelta';
 
 type Props = {
@@ -86,9 +86,9 @@ function Casilleros({ fila, torneosDelCalendario }: { fila: FilaDeRanking; torne
             title={torneo.nombre}
             className="flex flex-col items-center gap-1 rounded-lg bg-niebla px-1 py-[9px]"
           >
-            <Numero className="text-[10px] text-pizarra-500">
+            <ConCifras className="text-[10px] text-pizarra-500">
               {casillero ? rotuloDeCasillero(torneo.nombre, casillero.anio) : torneo.nombre.slice(0, 3).toLowerCase()}
-            </Numero>
+            </ConCifras>
             <Numero className={`text-[17px] font-medium ${casillero ? 'text-noche' : 'text-pizarra-400'}`}>
               {casillero?.puntos ?? 0}
             </Numero>

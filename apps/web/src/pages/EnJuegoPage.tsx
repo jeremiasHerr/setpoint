@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { EncabezadoPublico } from '../components/EncabezadoPublico';
 import { Esqueleto } from '../components/Esqueleto';
 import { LinkDeVuelta } from '../components/LinkDeVuelta';
-import { Numero } from '../components/Numero';
+import { ConCifras, Numero } from '../components/Numero';
 import { Tarjeta } from '../components/Tarjeta';
 import { hastaDonde } from '../features/ficha/hastaDonde';
 import { nombreDelEscenario } from '../features/proyeccion/escenario';
@@ -73,8 +73,8 @@ function EnJuego({ p, slug, ficha }: { p: ProyeccionDelJugador; slug: string; fi
 
       <Tarjeta variante="noche" className="flex flex-col gap-[17px]">
         <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
-          <Numero className="text-[13px] text-pizarra-400">{p.torneo}</Numero>
-          <Numero className="text-[13px] text-white">{p.situacion ? hastaDonde(p.situacion) : 'Antes del sorteo'}</Numero>
+          <ConCifras className="text-[13px] text-pizarra-400">{p.torneo}</ConCifras>
+          <ConCifras className="text-[13px] text-white">{p.situacion ? hastaDonde(p.situacion) : 'Antes del sorteo'}</ConCifras>
         </div>
         <div className="flex items-end justify-between gap-4">
           <div className="flex flex-col gap-[3px]">

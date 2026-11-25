@@ -1,6 +1,6 @@
 import type { DatosConvocatoria, InstanciaCronograma } from '@setpoint/shared';
 import { Campo } from '../../components/Campo';
-import { Numero } from '../../components/Numero';
+import { ConCifras } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
 import { MensajeError } from '../../components/Aviso';
 import { aEntero, rangoDeDias } from './texto';
@@ -136,9 +136,9 @@ export function SeccionPlazos({
             ({ nombre, desde, hasta }) =>
               desde &&
               hasta && (
-                <Numero key={nombre} className="text-[13px] text-pizarra-700">
-                  {nombre} · {rangoDeDias(desde, hasta)}
-                </Numero>
+                <ConCifras key={nombre} className="text-[13px] text-pizarra-700">
+                  {`${nombre} · ${rangoDeDias(desde, hasta)}`}
+                </ConCifras>
               ),
           )
         )}
