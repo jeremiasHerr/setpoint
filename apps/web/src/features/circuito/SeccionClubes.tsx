@@ -1,4 +1,5 @@
 import type { Club } from '@setpoint/shared';
+import { Boton } from '../../components/Boton';
 import { Interruptor } from '../../components/Interruptor';
 import { Tarjeta } from '../../components/Tarjeta';
 import { TarjetaClub } from './TarjetaClub';
@@ -50,9 +51,9 @@ export function SeccionClubes({ usaClubes, clubes, alCambiarUsaClubes, alCambiar
               />
             ))}
           </ul>
-          <button type="button" onClick={agregarClub} className="self-start text-sm font-medium hover:text-pizarra-500">
-            Agregar otro club
-          </button>
+          <Boton className="self-start" onClick={agregarClub}>
+            Agregar club
+          </Boton>
         </>
       ) : (
         <div className="flex flex-col items-center gap-1.5 rounded-xl border border-dashed border-borde-campo p-[18px] text-center">
@@ -62,9 +63,7 @@ export function SeccionClubes({ usaClubes, clubes, alCambiarUsaClubes, alCambiar
               : 'Sin clubes cargados, la sede de cada partido se escribe a mano.'}
           </p>
           {usaClubes && (
-            <button type="button" onClick={agregarClub} className="text-sm font-medium hover:text-pizarra-500">
-              Agregar el primer club
-            </button>
+            <Boton onClick={agregarClub}>Agregar club</Boton>
           )}
         </div>
       )}

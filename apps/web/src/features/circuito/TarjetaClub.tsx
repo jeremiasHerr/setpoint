@@ -1,4 +1,5 @@
 import { superficies, type Cancha, type Club, type Superficie } from '@setpoint/shared';
+import { Boton } from '../../components/Boton';
 import { Campo } from '../../components/Campo';
 
 type Props = {
@@ -89,9 +90,9 @@ export function TarjetaClub({ indice, club, alCambiar, alQuitar }: Props) {
             ))}
           </ul>
         )}
-        <button type="button" onClick={agregarCancha} className="self-start text-sm font-medium hover:text-pizarra-500">
-          Agregar una cancha
-        </button>
+        <Boton className="self-start" onClick={agregarCancha}>
+          Agregar cancha
+        </Boton>
       </div>
     </li>
   );
