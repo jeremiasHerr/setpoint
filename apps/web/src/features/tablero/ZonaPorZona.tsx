@@ -1,7 +1,7 @@
 import type { FilaDePosiciones, Tablero, ZonaDelTablero } from '@setpoint/shared';
 import { useState, type CSSProperties } from 'react';
 import { Chip } from '../../components/Chip';
-import { Numero } from '../../components/Numero';
+import { ConCifras, Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
 import { DesempateDeLaZona } from './DesempateDeLaZona';
 import { comoVieneLaZona, elDiaCorto, marcadorDesde, partidoEntre } from './tablero';
@@ -20,21 +20,21 @@ function Cruce({ zona, fila, rival }: { zona: ZonaDelTablero; fila: FilaDePosici
     const gano = partido.ganadorId === fila.jugadorId;
     return (
       <div className={`${celda} ${gano ? 'bg-lona-fondo font-semibold' : 'text-pizarra-450'}`}>
-        <Numero className="text-[13px]">{marcadorDesde(partido, fila.jugadorId)}</Numero>
+        <ConCifras className="text-[13px]">{marcadorDesde(partido, fila.jugadorId)}</ConCifras>
       </div>
     );
   }
   if (partido.situacion === 'vencido') {
     return (
       <div className={celda}>
-        <Numero className="text-xs text-rojo-texto">vencido</Numero>
+        <span className="text-xs text-rojo-texto">vencido</span>
       </div>
     );
   }
   if (partido.fechaAcordada) {
     return (
       <div className={celda}>
-        <Numero className="text-xs text-pizarra-500">{elDiaCorto(partido.fechaAcordada)}</Numero>
+        <ConCifras className="text-xs text-pizarra-500">{elDiaCorto(partido.fechaAcordada)}</ConCifras>
       </div>
     );
   }

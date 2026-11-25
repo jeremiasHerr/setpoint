@@ -1,3 +1,4 @@
+import { Numero } from '../../components/Numero';
 import { FILA_VENCIDA, FILAS_SIN_COORDINAR } from './demo/datos';
 import { MarcasDeZonas } from './demo/MarcasDeZonas';
 import { ChipSinFecha } from './demo/piezas';
@@ -26,32 +27,38 @@ function CelularDelJugador() {
             <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-hidden px-4 pt-1 pb-6">
               <div className="flex min-h-12 items-center justify-between gap-2.5 text-[16px] font-semibold">
                 <span>Liga Amateur del Valle</span>
-                <span className="inline-flex h-[34px] items-center rounded-full border border-linea px-3 font-mono text-[15px] font-normal text-pizarra-500">
-                  Primavera 26
+                <span className="inline-flex h-[34px] items-center rounded-full border border-linea px-3 text-[15px] font-normal text-pizarra-500">
+                  Primavera <Numero>26</Numero>
                 </span>
               </div>
               <p className="font-display text-[26px] leading-[30px] font-semibold tracking-[-0.02em]">Cuándo juego</p>
               <div className="flex flex-col gap-2.5 rounded-superficie bg-noche p-[22px] text-white">
                 <div className="flex items-center justify-between text-[15px] text-pizarra-400">
                   <span>Tu próximo partido</span>
-                  <span className="inline-flex h-7 items-center rounded-full border border-borde-noche px-2.5 font-mono text-[14px]">
+                  <span className="inline-flex h-7 items-center rounded-full border border-borde-noche px-2.5 text-[14px]">
                     zona C
                   </span>
                 </div>
                 <p className="font-display text-[34px] leading-9 font-semibold tracking-[-0.025em]">Marcelo Sanhueza</p>
                 <hr className="my-1.5 border-0 border-t border-borde-noche" />
-                <p className="font-mono text-[26px] leading-[30px] font-medium tabular-nums">sáb 21 · 10:00</p>
+                <p className="text-[26px] leading-[30px] font-medium">
+                  sáb <Numero>21</Numero> · <Numero>10:00</Numero>
+                </p>
                 <p className="text-[16px] text-pizarra-400">Club Alta Barda, cancha 3</p>
                 <span className={`${boton} mt-1 bg-papel text-noche-900`}>Escribirle a Marcelo</span>
               </div>
               <div className="flex items-baseline justify-between text-[20px] font-semibold tracking-[-0.01em]">
                 <span>Te falta coordinar</span>
-                <span className="font-mono text-[15px] font-normal text-pizarra-500">1 de 3</span>
+                <span className="text-[15px] font-normal text-pizarra-500">
+                  <Numero>1</Numero> de <Numero>3</Numero>
+                </span>
               </div>
               <div className="flex flex-col gap-3 rounded-tarjeta border border-linea bg-papel p-[18px]">
                 <div className="flex items-baseline justify-between gap-2">
                   <b className="text-[20px] font-semibold">Pablo Ojeda</b>
-                  <span className="font-mono text-[15px] text-pizarra-700">quedan 8 días</span>
+                  <span className="text-[15px] text-pizarra-700">
+                    quedan <Numero>8</Numero> días
+                  </span>
                 </div>
                 <p className="text-[16px] leading-normal text-pizarra-500">
                   Todavía nadie anotó la fecha. La puede cargar cualquiera de los dos.
@@ -90,10 +97,10 @@ export function CadaUnoVeLoQueNecesita() {
                     vencida ? '-mx-[22px] border-l-2 border-l-rojo bg-rojo-fondo pr-[22px] pl-5' : ''
                   }`}
                 >
-                  <span className="self-center font-mono text-[12px] leading-[18px] text-pizarra-500">zona {zona}</span>
+                  <span className="self-center text-[12px] leading-[18px] text-pizarra-500">zona {zona}</span>
                   <span className="self-center text-[14px] leading-5 font-medium">{partido}</span>
                   <span
-                    className={`col-start-2 flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-[12px] leading-[18px] tabular-nums ${
+                    className={`col-start-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px] leading-[18px] ${
                       vencida ? 'text-rojo-texto' : 'text-pizarra-500'
                     }`}
                   >
@@ -103,7 +110,9 @@ export function CadaUnoVeLoQueNecesita() {
                     ) : (
                       <>
                         <ChipSinFecha />
-                        <span className="whitespace-nowrap">quedan 8 días</span>
+                        <span className="whitespace-nowrap">
+                          quedan <Numero>8</Numero> días
+                        </span>
                       </>
                     )}
                   </span>

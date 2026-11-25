@@ -17,9 +17,9 @@ export function Escenarios({ escenarios, definido, numeroUnoDesde }: Props) {
   return (
     <div className="overflow-hidden rounded-tarjeta border border-linea bg-papel">
       <div className="grid h-[34px] grid-cols-[minmax(0,1fr)_76px_58px] items-center gap-x-3 border-b border-linea bg-niebla px-[18px]">
-        <Numero className="text-[13px] text-pizarra-500">instancia</Numero>
-        <Numero className="text-right text-[13px] text-pizarra-500">queda con</Numero>
-        <Numero className="text-right text-[13px] text-pizarra-500">puesto</Numero>
+        <span className="text-[13px] text-pizarra-500">instancia</span>
+        <span className="text-right text-[13px] text-pizarra-500">queda con</span>
+        <span className="text-right text-[13px] text-pizarra-500">puesto</span>
       </div>
       <ul>
         {escenarios.map((e, i) => {
@@ -33,9 +33,9 @@ export function Escenarios({ escenarios, definido, numeroUnoDesde }: Props) {
                 <span className={`text-[17px] ${marcada ? 'font-semibold' : 'font-medium'}`}>
                   {nombreDelEscenario(e.instancia, i === 0 && !definido)}
                 </span>
-                <Numero className="text-[13px] text-pizarra-500">
-                  {e.puntos} {e.puntos === 1 ? 'punto' : 'puntos'}
-                </Numero>
+                <span className="text-[13px] text-pizarra-500">
+                  <Numero>{e.puntos}</Numero> {e.puntos === 1 ? 'punto' : 'puntos'}
+                </span>
               </div>
               <Numero className={`text-right text-[19px] ${marcada ? 'font-semibold' : 'font-medium'}`}>{e.acumulado}</Numero>
               <Numero className={`text-right text-[17px] ${marcada ? 'font-semibold text-noche' : 'font-medium text-pizarra-500'}`}>

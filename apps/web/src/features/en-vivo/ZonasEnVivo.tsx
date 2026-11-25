@@ -1,7 +1,6 @@
-import { alConsuelo } from '@setpoint/shared';
-import type { PartidoEnVivo, TorneoEnVivo, ZonaEnVivo } from '@setpoint/shared';
+import { alConsuelo, type PartidoEnVivo, type TorneoEnVivo, type ZonaEnVivo } from '@setpoint/shared';
 import { Link } from 'react-router-dom';
-import { Numero } from '../../components/Numero';
+import { ConCifras, Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
 import { estadoParaLaFicha, type VueltaDeLaFicha } from '../ficha/vuelta';
 import { NOMBRE_DEL_PRINCIPAL, PLAZO_CUMPLIDO } from '../cuadros/cuadro';
@@ -21,9 +20,9 @@ function TablaDeZona({ zona, slug, vuelta, consuelo, usaRanking }: { zona: ZonaE
     <Tarjeta className="overflow-hidden">
       <div className="flex items-center justify-between border-b border-linea px-4 py-3">
         <h3 className="text-[17px] font-semibold tracking-[-0.02em]">Zona {zona.grupo}</h3>
-        <Numero className="text-xs text-pizarra-500">
-          {zona.partidos.filter(tieneResultado).length} de {zona.partidos.length} jugados
-        </Numero>
+        <span className="text-xs text-pizarra-500">
+          <Numero>{zona.partidos.filter(tieneResultado).length}</Numero> de <Numero>{zona.partidos.length}</Numero> jugados
+        </span>
       </div>
 
       <div className={`${grilla} border-b border-linea bg-niebla`}>
@@ -93,7 +92,7 @@ function PartidoDeZona({ partido }: { partido: PartidoEnVivo }) {
             <span className="text-pizarra-450"> le ganó a </span>
             {perdedor.apellido}
           </span>
-          <Numero className="shrink-0 text-[13px] font-semibold">{marcadorDesde(partido, ganador.jugadorId)}</Numero>
+          <ConCifras className="shrink-0 text-[13px] font-semibold">{marcadorDesde(partido, ganador.jugadorId)}</ConCifras>
         </>
       ) : (
         <>
@@ -103,9 +102,9 @@ function PartidoDeZona({ partido }: { partido: PartidoEnVivo }) {
           {partido.plazoCumplido ? (
             <span className="shrink-0 text-[13px] text-pizarra-500">{PLAZO_CUMPLIDO}</span>
           ) : (
-            <Numero className="shrink-0 text-[13px] text-pizarra-500">
+            <ConCifras className="shrink-0 text-[13px] text-pizarra-500">
               {partido.fechaAcordada ? `${elDia(partido.fechaAcordada)} · ${laHora(partido.fechaAcordada)}` : 'a coordinar'}
-            </Numero>
+            </ConCifras>
           )}
         </>
       )}

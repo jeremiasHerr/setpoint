@@ -1,4 +1,5 @@
 import { Interruptor } from '../../components/Interruptor';
+import { Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
 import { ListaEditable } from './ListaEditable';
 
@@ -27,17 +28,17 @@ export function SeccionRanking({ usaRanking, etapas, alCambiarUsaRanking, alCamb
       </div>
 
       {/* El reemplazo es lo que menos se entiende: un ejemplo lo dice mejor que la regla. */}
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-control bg-niebla px-3.5 py-2.5 font-mono text-[13px] text-pizarra-500 tabular-nums">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-control bg-niebla px-3.5 py-2.5 text-[13px] text-pizarra-500">
         <span>
-          Primavera 25: <span className="text-noche">50</span>
+          Primavera <Numero>25</Numero>: <Numero className="text-noche">50</Numero>
         </span>
         <span aria-hidden="true">→</span>
         <span>
-          Primavera 26: <span className="text-noche">100</span>
+          Primavera <Numero>26</Numero>: <Numero className="text-noche">100</Numero>
         </span>
         <span className="text-pizarra-450">·</span>
         <span>
-          el total sube <span className="text-noche">50</span>
+          el total sube <Numero className="text-noche">50</Numero>
         </span>
       </div>
 

@@ -1,4 +1,4 @@
-import { Numero } from './Numero';
+import { ConCifras } from './Numero';
 
 type Props = {
   organizacion: string;
@@ -19,7 +19,7 @@ export function EncabezadoPublico({ organizacion, detalle }: Props) {
       {detalle && (
         <>
           <div className="hidden h-[18px] w-px bg-linea sm:block" />
-          <Numero className="text-[13px] text-pizarra-500">{detalle}</Numero>
+          <ConCifras className="text-[13px] text-pizarra-500">{detalle}</ConCifras>
         </>
       )}
     </div>

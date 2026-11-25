@@ -1,5 +1,5 @@
 import type { EnListaDeEspera } from '@setpoint/shared';
-import { Numero } from '../../components/Numero';
+import { ConCifras, Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
 import { diaCorto } from '../torneos/texto';
 
@@ -30,7 +30,7 @@ export function ResumenListaDeEspera({ listaDeEspera, horasReserva }: Props) {
                 {enEspera.nombre} {enEspera.apellido}
               </span>
               {enEspera.posicion === 1 && <span className="size-[7px] shrink-0 rounded-full bg-lona-texto" />}
-              <Numero className="text-xs text-pizarra-500">{diaCorto(enEspera.fecha)}</Numero>
+              <ConCifras className="text-xs text-pizarra-500">{diaCorto(enEspera.fecha)}</ConCifras>
             </li>
           ))}
         </ul>

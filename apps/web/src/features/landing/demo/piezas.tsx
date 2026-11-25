@@ -33,7 +33,7 @@ export function BotonDelDemo({ principal, chico, apretado, tenue, className = ''
 export function ChipSinFecha() {
   return (
     <span
-      className={`inline-flex h-6 items-center whitespace-nowrap rounded-full px-[9px] font-mono text-[12px] leading-none text-pizarra-500 ${MARCA.pendiente}`}
+      className={`inline-flex h-6 items-center whitespace-nowrap rounded-full px-[9px] text-[12px] leading-none text-pizarra-500 ${MARCA.pendiente}`}
     >
       sin fecha
     </span>

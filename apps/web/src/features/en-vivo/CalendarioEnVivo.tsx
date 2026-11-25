@@ -1,5 +1,5 @@
 import type { PartidoEnVivo, TorneoEnVivo } from '@setpoint/shared';
-import { Numero } from '../../components/Numero';
+import { ConCifras, Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
 import { dondeSeJuega, hoy, laHora, marcador, porDia, tieneResultado, type DiaDelCalendario } from './enVivo';
 
@@ -24,7 +24,7 @@ function Fila({ partido, torneo }: { partido: PartidoEnVivo; torneo: TorneoEnViv
         <span className="truncate text-[13px] text-pizarra-500">{detalle}</span>
       </div>
       {jugado ? (
-        <Numero className="text-[13px] font-semibold">{marcador(partido)}</Numero>
+        <ConCifras className="text-[13px] font-semibold">{marcador(partido)}</ConCifras>
       ) : partido.estado === 'anotada' ? (
         <span className="text-xs text-pizarra-500">a confirmar</span>
       ) : (

@@ -1,6 +1,6 @@
 import type { BajaDelTorneo, DevolucionDeLaBaja } from '@setpoint/shared';
 import { MensajeError } from '../../components/Aviso';
-import { Numero } from '../../components/Numero';
+import { ConCifras, Numero } from '../../components/Numero';
 import { Tarjeta } from '../../components/Tarjeta';
 import { diaCorto } from '../torneos/texto';
 import { BotonAccion } from './BotonAccion';
@@ -46,23 +46,31 @@ export function TablaBajas({ slug, torneoId, bajas }: Props) {
                   <span className="truncate text-[15px] text-pizarra-700">
                     {baja.nombre} {baja.apellido}
                   </span>
-                  <Numero className="text-[13px] text-pizarra-500 md:hidden">
-                    {diaCorto(baja.fecha)} ·{' '}
+                  <span className="text-[13px] text-pizarra-500 md:hidden">
+                    <ConCifras>{diaCorto(baja.fecha)}</ConCifras> ·{' '}
                     {/* Si no entra en una línea, corta acá: el monto queda con "a devolver". */}
                     <span className={`whitespace-nowrap ${baja.devolucion === 'pendiente' ? 'text-noche' : ''}`}>
                       {textoDeLaDevolucion[baja.devolucion]}
-                      {baja.devolucion !== 'no_corresponde' && ` ${plata(baja.monto)}`}
+                      {baja.devolucion !== 'no_corresponde' && (
+                        <>
+                          {' '}
+                          <Numero>{plata(baja.monto)}</Numero>
+                        </>
+                      )}
                     </span>
-                  </Numero>
+                  </span>
                 </div>
-                <Numero className="hidden text-[13px] text-pizarra-500 md:block">
-                  {baja.medio ? nombreDelMedio[baja.medio] : '—'}
-                </Numero>
-                <Numero className="hidden text-[13px] text-pizarra-500 md:block">{diaCorto(baja.fecha)}</Numero>
-                <Numero className={`hidden text-[13px] md:block ${baja.devolucion === 'pendiente' ? 'text-noche' : 'text-pizarra-500'}`}>
+                <span className="hidden text-[13px] text-pizarra-500 md:block">{baja.medio ? nombreDelMedio[baja.medio] : '—'}</span>
+                <ConCifras className="hidden text-[13px] text-pizarra-500 md:block">{diaCorto(baja.fecha)}</ConCifras>
+                <span className={`hidden text-[13px] md:block ${baja.devolucion === 'pendiente' ? 'text-noche' : 'text-pizarra-500'}`}>
                   {textoDeLaDevolucion[baja.devolucion]}
-                  {baja.devolucion !== 'no_corresponde' && ` ${plata(baja.monto)}`}
-                </Numero>
+                  {baja.devolucion !== 'no_corresponde' && (
+                    <>
+                      {' '}
+                      <Numero>{plata(baja.monto)}</Numero>
+                    </>
+                  )}
+                </span>
                 <div className="flex justify-end">
                   {baja.devolucion === 'pendiente' && (
                     <BotonAccion onClick={() => marcar.mutate(baja.id)} disabled={marcar.isPending}>

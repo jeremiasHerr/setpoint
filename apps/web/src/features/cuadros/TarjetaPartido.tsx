@@ -1,6 +1,6 @@
 import type { JugadorDelCuadro, PartidoDelCuadro } from '@setpoint/shared';
 import { useState } from 'react';
-import { Numero } from '../../components/Numero';
+import { ConCifras } from '../../components/Numero';
 import { cuandoSeJuega, marcadorDelLado, tieneResultado, type Destacado } from './cuadro';
 
 // Para elegir un partido desde el cuadro (Cargar resultado): tocarlo lo elige en vez de abrirlo.
@@ -47,13 +47,13 @@ export function TarjetaPartido({ partido, destacado, eleccion, className = '' }:
             {cuandoSeJuega(partido)}
           </span>
         ) : (
-          <Numero
+          <span
             className={`flex h-[26px] items-center justify-center text-[11px] ${
               destacado === 'principal' ? 'bg-lona-fondo font-semibold text-lona-texto' : 'bg-linea-suave font-medium text-pizarra-700'
             }`}
           >
-            {cuandoSeJuega(partido)}
-          </Numero>
+            <ConCifras>{cuandoSeJuega(partido)}</ConCifras>
+          </span>
         ))}
       <Fila partido={partido} lado="A" abierta={abierta} destacado={!!destacado} />
       <Fila partido={partido} lado="B" abierta={abierta} destacado={!!destacado} />
@@ -100,7 +100,7 @@ function Fila({ partido, lado, abierta, destacado }: PropsFila) {
       >
         {jugador?.apellido ?? 'a definir'}
       </span>
-      <Numero className={`shrink-0 text-xs ${gano ? 'font-semibold' : 'text-pizarra-450'}`}>{marcadorDelLado(partido, lado, abierta)}</Numero>
+      <ConCifras className={`shrink-0 text-xs ${gano ? 'font-semibold' : 'text-pizarra-450'}`}>{marcadorDelLado(partido, lado, abierta)}</ConCifras>
     </span>
   );
 }

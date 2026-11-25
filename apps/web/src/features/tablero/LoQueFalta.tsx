@@ -1,7 +1,7 @@
 import type { PartidoDelTablero, Tablero } from '@setpoint/shared';
 import { useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { Numero } from '../../components/Numero';
+import { ConCifras, Numero } from '../../components/Numero';
 import { Pildora } from '../../components/Pildora';
 import { Tarjeta } from '../../components/Tarjeta';
 import { urlDeWhatsApp } from '../padron/linkPersonal';
@@ -80,10 +80,10 @@ function Fila({ slug, partido, tablero, lista }: { slug: string; partido: Partid
         }`}
       >
         {vencido ? (
-          <Numero className="flex items-center gap-1.5 text-xs text-rojo-texto">
+          <span className="flex items-center gap-1.5 text-xs text-rojo-texto">
             <span className="size-1.5 shrink-0 rounded-full bg-rojo" />
-            {dondeSeJuega(partido, tablero)}
-          </Numero>
+            <ConCifras>{dondeSeJuega(partido, tablero)}</ConCifras>
+          </span>
         ) : (
           <span className="text-[12.5px] font-medium text-noche">{dondeSeJuega(partido, tablero)}</span>
         )}
@@ -104,11 +104,11 @@ function Fila({ slug, partido, tablero, lista }: { slug: string; partido: Partid
               <span className="text-[13px] text-pizarra-500">{partido.estado === 'anotada' ? 'falta que confirme el rival' : 'confirmada'}</span>
             </>
           ) : vencido ? (
-            <Numero className="text-[13px] text-rojo-texto">{textoDeLosDias(partido.dias)}</Numero>
+            <ConCifras className="text-[13px] text-rojo-texto">{textoDeLosDias(partido.dias)}</ConCifras>
           ) : (
             <>
               <Pildora tono="sin-fecha" />
-              <Numero className="text-[13px] text-pizarra-500">{textoDeLosDias(partido.dias)}</Numero>
+              <ConCifras className="text-[13px] text-pizarra-500">{textoDeLosDias(partido.dias)}</ConCifras>
             </>
           )}
         </span>
