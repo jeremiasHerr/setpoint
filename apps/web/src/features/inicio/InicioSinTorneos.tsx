@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Boton } from '../../components/Boton';
+import { Link } from 'react-router-dom';
+import { BotonLink } from '../../components/Boton';
 import { Etiqueta } from '../../components/Etiqueta';
 import { IconoMas } from '../../components/IconoMas';
 import { Numero } from '../../components/Numero';
@@ -25,13 +25,13 @@ type PropsCamino = {
   descripcion: string;
   pasos: Paso[];
   boton: string;
-  alElegir: () => void;
+  ruta: string;
   nota: ReactNode;
 };
 
 // Las dos formas de arrancar se muestran iguales, una al lado de la otra (decisión 088): solo cambia
 // lo que dice cada una.
-function Camino({ icono, titulo, etiqueta, descripcion, pasos, boton, alElegir, nota }: PropsCamino) {
+function Camino({ icono, titulo, etiqueta, descripcion, pasos, boton, ruta, nota }: PropsCamino) {
   return (
     <section className="flex flex-col gap-[22px] rounded-superficie border border-linea bg-papel p-5 sm:p-7">
       <div className="flex flex-col gap-4">
@@ -58,9 +58,9 @@ function Camino({ icono, titulo, etiqueta, descripcion, pasos, boton, alElegir, 
       </ol>
 
       <div className="mt-auto flex flex-col gap-2.5">
-        <Boton variante="organizador" grande className="w-full" onClick={alElegir}>
+        <BotonLink variante="organizador" grande className="w-full" to={ruta}>
           {boton}
-        </Boton>
+        </BotonLink>
         <span className="text-center text-sm text-pizarra-500">{nota}</span>
       </div>
     </section>
@@ -91,8 +91,6 @@ type Props = {
 // Primera vez: dos caminos con el mismo peso. Un torneo suelto no pide configurar nada antes; el
 // circuito con ranking se configura primero. Cualquiera de los dos deja hacer el otro después.
 export function InicioSinTorneos({ nombre, jugadores, usaRanking, primerosPasos }: Props) {
-  const navegar = useNavigate();
-
   return (
     <>
       <div className="flex flex-col gap-[7px] px-4 pt-[26px] pb-[22px] md:px-7">
@@ -113,7 +111,7 @@ export function InicioSinTorneos({ nombre, jugadores, usaRanking, primerosPasos 
             descripcion="Elegís el formato, la fecha y el precio, y compartís el link de inscripción. Al terminar tenés la tabla de posiciones."
             pasos={pasosTorneo}
             boton="Crear mi primer torneo"
-            alElegir={() => navegar('/torneos/nuevo')}
+            ruta="/torneos/nuevo"
             nota={
               <>
                 Te lleva <Numero>2</Numero> minutos
@@ -131,7 +129,7 @@ export function InicioSinTorneos({ nombre, jugadores, usaRanking, primerosPasos 
             descripcion="Cargás tus categorías, los torneos del calendario y la tabla de puntos. Cada torneo va sumando y el ranking se arma solo."
             pasos={pasosCircuito}
             boton="Configurar mi circuito"
-            alElegir={() => navegar('/circuito')}
+            ruta="/circuito"
             nota="Ahora o después de tu primer torneo"
           />
         </div>

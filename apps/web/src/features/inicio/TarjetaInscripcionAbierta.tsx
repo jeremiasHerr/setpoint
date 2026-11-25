@@ -1,12 +1,11 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { Boton } from '../../components/Boton';
+import { Link } from 'react-router-dom';
+import { BotonLink } from '../../components/Boton';
 import { IconoEngranaje } from '../../components/IconoEngranaje';
 import { BotonCopiarLink } from './BotonCopiarLink';
 import { CuentaDelCupo, TarjetaDeColumna } from './TarjetaDeColumna';
 import type { TorneoConInscripcionAbierta } from './tiposDeInicio';
 
 export function TarjetaInscripcionAbierta({ torneo }: { torneo: TorneoConInscripcionAbierta }) {
-  const navegar = useNavigate();
 
   return (
     <TarjetaDeColumna
@@ -30,9 +29,9 @@ export function TarjetaInscripcionAbierta({ torneo }: { torneo: TorneoConInscrip
       }
       acciones={
         <>
-          <Boton className="grow" onClick={() => navegar(`/torneos/${torneo.id}/inscripciones`)}>
+          <BotonLink className="grow" to={`/torneos/${torneo.id}/inscripciones`}>
             Inscripciones
-          </Boton>
+          </BotonLink>
           <BotonCopiarLink torneo={torneo} />
         </>
       }

@@ -193,6 +193,8 @@ Franja `noche-900` de 56 de alto, el mismo noche que rodea la landing: el logo, 
 
 Agregar un elemento a una lista (contacto, categoría, torneo del calendario, club, cancha) usa siempre el botón secundario, sin "+" y con el texto "Agregar" más lo que se agrega: "Agregar cancha". Una lista crece hacia abajo y el secundario es el botón de "todo lo demás"; un chip punteado no es una variante de botón.
 
+Un link que tiene que verse como botón usa `BotonLink`, que toma las clases de `Boton`: navegar es un link, así se abre en otra pestaña.
+
 Nunca hay flechas pegadas al texto del botón. El texto dice la acción completa: "Anotar y avisarle a Pablo", no "Continuar".
 
 **Estados en la web.** Con el mouse, el principal pasa a `pizarra-700` (9,52:1), el principal sobre noche y el secundario toman `linea-suave`. Al apretar, el botón se achica apenas. Con el teclado, un anillo `noche` de 2px separado 2px del borde: es un outline, no una sombra. Deshabilitado, opacidad 40% y sin reacción.
