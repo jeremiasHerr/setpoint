@@ -65,6 +65,7 @@ export function SeccionInscripcion({
             onChange={(e) => alCambiar('precio', aEntero(e.target.value, MAXIMO_PRECIO))}
             aria-invalid={errores.precio ? true : undefined}
             aria-describedby={errores.precio ? 'torneo-importe-error' : undefined}
+            ayuda="Lo que paga cada jugador al inscribirse, con Mercado Pago. Con $0, el torneo es gratis."
           />
           <MensajeError id="torneo-importe-error">{errores.precio}</MensajeError>
         </div>
@@ -85,6 +86,7 @@ export function SeccionInscripcion({
                 onChange={(e) => cambiarCupo(i, aEntero(e.target.value, MAXIMO_CUPO))}
                 aria-invalid={error ? true : undefined}
                 aria-describedby={error ? `${id}-error` : undefined}
+                ayuda={`Cuántos se pueden inscribir. Por defecto, los que entran en las zonas: ${cantidadGrupos} de ${JUGADORES_POR_GRUPO}. Con el cupo lleno, quien llega después va a la lista de espera, si está prendida.`}
               />
               <MensajeError id={`${id}-error`}>{error}</MensajeError>
             </div>
@@ -101,6 +103,7 @@ export function SeccionInscripcion({
             onChange={(e) => alCambiar('cierreInscripcion', e.target.value || null)}
             aria-invalid={errores.cierreInscripcion ? true : undefined}
             aria-describedby={errores.cierreInscripcion ? 'torneo-cierre-error' : undefined}
+            ayuda="La fecha límite que ven los jugadores en el link. La inscripción la cerrás vos, desde Inscripciones."
           />
           <MensajeError id="torneo-cierre-error">{errores.cierreInscripcion}</MensajeError>
         </div>
