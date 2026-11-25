@@ -27,7 +27,7 @@ export function TarjetaTorneoEnJuego({ torneo }: { torneo: TorneoEnJuego }) {
         <div className="flex items-baseline justify-between gap-2 text-[13px]">
           <span className="text-pizarra-700">Partidos jugados</span>
           <Numero className="text-sm font-medium">
-            {jugados} <span className="text-pizarra-400">/ {total}</span>
+            {jugados} <span className="text-pizarra-450">/ {total}</span>
           </Numero>
         </div>
         <BarraDeMarcas

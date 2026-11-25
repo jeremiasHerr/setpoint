@@ -42,7 +42,7 @@ export function PuntosPorTorneo({ ranking }: { ranking: RankingDeLaFicha }) {
     <section className="flex flex-col gap-3">
       <div className="flex items-baseline justify-between gap-3">
         <h2 className="text-[17px] font-semibold tracking-[-0.015em]">Puntos por torneo del calendario</h2>
-        {anios.length > 0 && <Numero className="shrink-0 text-xs text-pizarra-400">{anios.join(' · ')}</Numero>}
+        {anios.length > 0 && <Numero className="shrink-0 text-xs text-pizarra-450">{anios.join(' · ')}</Numero>}
       </div>
 
       <ul
@@ -58,7 +58,7 @@ export function PuntosPorTorneo({ ranking }: { ranking: RankingDeLaFicha }) {
               title={casillero ? `${torneo.nombre} ${anioCorto(casillero.anio)}` : torneo.nombre}
               className="flex flex-col items-center gap-[7px]"
             >
-              <Numero className={`text-[13px] ${esLaMejor ? 'font-semibold' : 'font-medium'} ${puntos > 0 ? '' : 'text-pizarra-400'}`}>
+              <Numero className={`text-[13px] ${esLaMejor ? 'font-semibold' : 'font-medium'} ${puntos > 0 ? '' : 'text-pizarra-450'}`}>
                 {puntos}
               </Numero>
               <div className={`w-full rounded-t-[5px] ${esLaMejor ? 'bg-lona' : 'bg-linea'}`} style={{ height: alto(puntos) }} />

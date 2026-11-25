@@ -22,7 +22,7 @@ export function Campo({ id, rotulo, numerico = false, sufijo, sobreNoche = false
   const input = (
     <input
       id={id}
-      className={`h-12 rounded-control border px-3.5 text-[15px] outline-none placeholder:text-pizarra-400 focus:border-2 focus:px-[13px] aria-invalid:border-2 aria-invalid:px-[13px] ${
+      className={`h-12 rounded-control border px-3.5 text-[15px] outline-none ${sobreNoche ? 'placeholder:text-pizarra-400' : 'placeholder:text-pizarra-450'} focus:border-2 focus:px-[13px] aria-invalid:border-2 aria-invalid:px-[13px] ${
         CAMPO[sobreNoche ? 'noche' : 'claro']
       } ${numerico ? 'font-mono tabular-nums' : ''}`}
       {...props}

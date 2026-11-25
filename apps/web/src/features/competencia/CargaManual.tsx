@@ -161,7 +161,7 @@ export function CargaManual({ jugadores, zonas, capacidad, alMover }: Props) {
                   </li>
                 ))}
                 {Array.from({ length: Math.max(capacidad - zona.integrantes.length, 0) }, (_, i) => (
-                  <li key={`libre-${i}`} className="flex h-[34px] items-center text-sm text-pizarra-400">
+                  <li key={`libre-${i}`} className="flex h-[34px] items-center text-sm text-pizarra-450">
                     libre
                   </li>
                 ))}
@@ -217,7 +217,7 @@ function Contenido({ jugador, levantado = false }: { jugador: JugadorDelSorteo; 
         levantado ? 'cursor-grabbing rounded-control border-2 border-noche bg-papel px-3' : ''
       }`}
     >
-      <Numero className="w-5 shrink-0 text-xs text-pizarra-400">
+      <Numero className="w-5 shrink-0 text-xs text-pizarra-450">
         {jugador.posicionSiembra === null ? '—' : String(jugador.posicionSiembra).padStart(2, '0')}
       </Numero>
       <span className="min-w-0 truncate text-sm">{jugador.apellido}</span>

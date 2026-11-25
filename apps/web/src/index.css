@@ -12,6 +12,9 @@
   /* La pizarra: texto secundario, rótulos y texto sobre noche. */
   --color-pizarra-700: #3B4659;
   --color-pizarra-500: #4A5468;
+  /* Texto atenuado sobre fondos claros: da 4,5:1 o más sobre papel, niebla y los fondos de estado (decisión 153). */
+  --color-pizarra-450: #586275;
+  /* Texto atenuado sobre noche y lo que no es texto. Sobre fondos claros da 2,5:1: no se usa para texto. */
   --color-pizarra-400: #9AA5B8;
   --color-borde-campo: #878FA1;
 

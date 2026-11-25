@@ -66,6 +66,8 @@ export type Tablero = {
   nombre: string;
   // Cómo llama la organización a su cuadro consuelo (07 §1.2).
   nombreCuadroConsuelo: string;
+  // Sin ranking, la posición de siembra salió al azar del sorteo: lo usa la explicación del desempate.
+  usaRanking: boolean;
   // grupos: zonas en juego. cuadros: zonas cerradas, cuadros en juego. terminado: torneo cerrado.
   fase: 'grupos' | 'cuadros' | 'terminado';
   clasificanPorGrupo: number;

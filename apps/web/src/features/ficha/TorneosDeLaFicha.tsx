@@ -28,7 +28,7 @@ export function TorneosDeLaFicha({ torneos, consuelo, slug, jugadorId }: Props) 
     <section className="flex flex-col gap-2.5">
       <div className="flex items-baseline justify-between gap-3">
         <h2 className="text-[17px] font-semibold tracking-[-0.015em]">Torneos</h2>
-        {torneos.length > 0 && <Numero className="text-xs text-pizarra-400">{torneos.length}</Numero>}
+        {torneos.length > 0 && <Numero className="text-xs text-pizarra-450">{torneos.length}</Numero>}
       </div>
 
       {torneos.length === 0 ? (

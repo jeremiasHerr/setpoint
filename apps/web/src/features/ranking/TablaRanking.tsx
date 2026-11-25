@@ -85,7 +85,7 @@ function Casilleros({ fila, torneosDelCalendario }: { fila: FilaDeRanking; torne
             className="flex flex-col items-center gap-1 rounded-lg bg-niebla px-1 py-[9px]"
           >
             <span className="text-[15px] leading-none text-pizarra-500">{rotuloDeCasillero(torneo.nombre)}</span>
-            <Numero className={`text-[17px] font-medium ${casillero ? 'text-noche' : 'text-pizarra-400'}`}>
+            <Numero className={`text-[17px] font-medium ${casillero ? 'text-noche' : 'text-pizarra-450'}`}>
               {casillero?.puntos ?? 0}
             </Numero>
           </div>
