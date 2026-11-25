@@ -25,7 +25,7 @@ export function TorneoPublicoPage() {
   if (id && torneo.data?.slugPublico) return <Navigate to={rutaDelTorneo(slug, torneo.data)} replace />;
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-[480px] flex-col gap-5 px-4 pt-5 pb-7">
+    <main className="mx-auto flex min-h-screen max-w-[480px] md:min-h-0 flex-col gap-5 px-4 pt-5 pb-7">
       {torneo.isPending && <Esqueleto forma="lista" />}
       {torneo.error && <p className="text-[15px] text-pizarra-700">{mensajeDeError(torneo.error)}</p>}
       {torneo.data && <Convocatoria torneo={torneo.data} />}
@@ -114,7 +114,7 @@ function Convocatoria({ torneo }: { torneo: TorneoPublico }) {
       )}
 
       {abierta ? (
-        <div className="mt-auto flex flex-col gap-3">
+        <div className="mt-auto flex flex-col gap-3 md:mt-0">
           <div className="flex items-center justify-between gap-3 px-1">
             <p className="text-base text-pizarra-500">Inscripción</p>
             <Numero className="text-[26px] font-medium tracking-[-0.02em]">{importe(torneo.precio)}</Numero>
