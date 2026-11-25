@@ -54,6 +54,34 @@ describe('situacionDelPartido', () => {
     expect(situacionDelPartido(acordado, HOY)).toBe('vencido');
   });
 
+  describe('falta cargar (decisión 151)', () => {
+    const AHORA = new Date('2026-10-30T15:00:00Z');
+
+    it('con la fecha acordada ya pasada y sin resultado, falta cargar', () => {
+      const p = partido({ estado: 'CONFIRMADA', fechaAcordada: new Date('2026-10-28T18:00:00Z'), fechaLimite: limite('2026-11-05') });
+      expect(situacionDelPartido(p, HOY, AHORA)).toBe('falta_cargar');
+    });
+
+    it('con la fecha acordada en el futuro, sigue con fecha', () => {
+      const p = partido({ estado: 'CONFIRMADA', fechaAcordada: new Date('2026-10-30T18:00:00Z') });
+      expect(situacionDelPartido(p, HOY, AHORA)).toBe('con_fecha');
+    });
+
+    it('gana sobre vencido: la fecha pasó y también la fecha límite', () => {
+      const p = partido({ estado: 'CONFIRMADA', fechaAcordada: new Date('2026-10-20T18:00:00Z'), fechaLimite: limite('2026-10-25') });
+      expect(situacionDelPartido(p, HOY, AHORA)).toBe('falta_cargar');
+    });
+
+    it('sin fecha acordada y con el plazo vencido, sigue vencido', () => {
+      expect(situacionDelPartido(partido({ fechaLimite: limite('2026-10-25') }), HOY, AHORA)).toBe('vencido');
+    });
+
+    it('con resultado está jugado, aunque la fecha haya pasado', () => {
+      const p = partido({ estado: 'JUGADA', fechaAcordada: new Date('2026-10-20T18:00:00Z') });
+      expect(situacionDelPartido(p, HOY, AHORA)).toBe('jugado');
+    });
+  });
+
   it('con fecha anotada o confirmada, y dentro del plazo, tiene fecha', () => {
     expect(situacionDelPartido(partido({ estado: 'ANOTADA' }), HOY)).toBe('con_fecha');
     expect(situacionDelPartido(partido({ fechaAcordada: new Date('2026-11-02T18:00:00Z') }), HOY)).toBe('con_fecha');

@@ -10,7 +10,7 @@ import { zonasConPosiciones } from './posiciones';
 import { INCLUIR_ZONAS, inscriptosYPartidos } from './posiciones.service';
 import { marcador } from '../jugador/mis-partidos';
 import { datosDeLaPropuesta, ganadorDeLaPropuesta, propuestaVigente } from '../resultado-del-jugador/resultado-del-jugador';
-import { diasHasta, plazoQueCorre, porUrgencia, situacionDelPartido } from './tablero';
+import { diasHasta, plazoQueCorre, porFechaAcordada, porUrgencia, situacionDelPartido } from './tablero';
 
 // Tablero del torneo (F15): la pantalla de la organización mientras se juega. Todo se calcula
 // en cada consulta, como las posiciones: no se guarda ninguna situación (decisión 060).
@@ -62,7 +62,7 @@ function propuestaDelPartido(p: PartidoLeido): PartidoDelTablero['resultadoPropu
   };
 }
 
-function aPartido(p: PartidoLeido, dia: string): PartidoDelTablero {
+function aPartido(p: PartidoLeido, dia: string, ahora: Date): PartidoDelTablero {
   return {
     id: p.id,
     grupo: p.grupo,
@@ -71,7 +71,7 @@ function aPartido(p: PartidoLeido, dia: string): PartidoDelTablero {
     jugadorA: aJugador(p.jugadorA),
     jugadorB: aJugador(p.jugadorB),
     estado: p.estado.toLowerCase() as EstadoPartido,
-    situacion: situacionDelPartido(p, dia),
+    situacion: situacionDelPartido(p, dia, ahora),
     ganadorId: p.ganadorId,
     fechaLimite: p.fechaLimite?.toISOString().slice(0, 10) ?? null,
     dias: p.fechaLimite ? diasHasta(p.fechaLimite, dia) : null,
@@ -118,7 +118,8 @@ export async function obtenerTablero(slug: string, usuarioId: number, torneoId: 
   });
 
   const dia = hoy();
-  const partidos = leidos.map((p) => aPartido(p, dia));
+  const ahora = new Date();
+  const partidos = leidos.map((p) => aPartido(p, dia, ahora));
   const cuenta = (situacion: PartidoDelTablero['situacion']) => partidos.filter((p) => p.situacion === situacion).length;
 
   // La tabla de cada zona sale de la misma cuenta que las posiciones y el cierre de las zonas.
@@ -146,16 +147,18 @@ export async function obtenerTablero(slug: string, usuarioId: number, torneoId: 
     clasificanPorGrupo: torneo.clasificanPorGrupo,
     tieneComplementaria: torneo.tieneComplementaria,
     rondas,
-    plazo: plazoQueCorre(leidos, dia),
+    plazo: plazoQueCorre(leidos, dia, ahora),
     totales: {
       partidos: partidos.length,
       jugados: cuenta('jugado'),
       conFecha: cuenta('con_fecha'),
+      faltaCargar: cuenta('falta_cargar'),
       sinCoordinar: cuenta('sin_coordinar'),
       vencidos: cuenta('vencido'),
     },
     bloques: bloques(partidos),
     vencidos: porUrgencia(partidos.filter((p) => p.situacion === 'vencido')),
+    faltaCargar: porFechaAcordada(partidos.filter((p) => p.situacion === 'falta_cargar')),
     sinCoordinar: porUrgencia(partidos.filter((p) => p.situacion === 'sin_coordinar')),
     zonas,
     sePuedenCerrarLasZonas: zonasAbiertas && !torneo.gruposCerrados && partidosSinResultado(partidosDeZona) === 0,

@@ -148,6 +148,7 @@ export function comoVieneLaZona(filas: FilaDePosiciones[], nombreConsuelo: strin
 export const COLOR_DE_LA_SITUACION: Record<SituacionDelPartido, string> = {
   jugado: MARCA.hecho,
   con_fecha: MARCA['en-curso'],
+  falta_cargar: MARCA['en-curso'],
   sin_coordinar: MARCA.pendiente,
   vencido: MARCA.vencido,
   esperando: 'bg-linea',
