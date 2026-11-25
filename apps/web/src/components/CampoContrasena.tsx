@@ -27,7 +27,7 @@ export function CampoContrasena({ id, rotulo, accesorio, sobreNoche = false, cla
         <input
           id={id}
           type={visible ? 'text' : 'password'}
-          className={`min-w-0 flex-1 bg-transparent text-[15px] outline-none placeholder:text-pizarra-400 ${
+          className={`min-w-0 flex-1 bg-transparent text-[15px] outline-none ${sobreNoche ? 'placeholder:text-pizarra-400' : 'placeholder:text-pizarra-450'} ${
             sobreNoche
               ? 'text-white autofill:shadow-[inset_0_0_0_1000px_var(--color-noche-900)] autofill:[-webkit-text-fill-color:var(--color-papel)]'
               : 'text-noche'

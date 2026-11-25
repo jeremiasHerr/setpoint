@@ -8,6 +8,7 @@ export const colores = {
   bordeNoche: '#2E3D5A',
   pizarra700: '#3B4659',
   pizarra500: '#4A5468',
+  pizarra450: '#586275',
   pizarra400: '#9AA5B8',
   bordeCampo: '#878FA1',
   linea: '#D8DCE5',

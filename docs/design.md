@@ -45,7 +45,8 @@ Todo el sistema sale de que hay dos personas usando esto en situaciones opuestas
 | `borde-noche` | `#2E3D5A` | Bordes y separadores sobre noche |
 | `pizarra-700` | `#3B4659` | Texto secundario sobre papel |
 | `pizarra-500` | `#4A5468` | Rótulos, texto de apoyo, marca punteada |
-| `pizarra-400` | `#9AA5B8` | Texto sobre noche, datos apagados, perdedor en una tabla |
+| `pizarra-450` | `#586275` | Texto atenuado sobre fondos claros: perdedor en una tabla, ceros, totales, rótulos y placeholders. 6,14:1 sobre papel, 5,63:1 sobre niebla ([decisión 153](decisiones/153-texto-atenuado-con-contraste.md)) |
+| `pizarra-400` | `#9AA5B8` | Texto sobre noche y lo que no es texto (bordes, puntos, íconos). **Nunca como texto sobre un fondo claro: da 2,49:1** |
 | `borde-campo` | `#878FA1` | Borde de campo de formulario y de las celdas de la grilla de sets |
 | `linea` | `#D8DCE5` | Borde de tarjeta y separador |
 | `linea-suave` | `#ECEEF3` | Separador entre filas de tabla, hover del secundario |
@@ -82,9 +83,9 @@ Todo el sistema sale de que hay dos personas usando esto en situaciones opuestas
 - **El botón principal es `noche-900` con texto blanco** (18,72:1), el mismo noche de la barra: el color queda para los estados. Sobre una superficie noche va dado vuelta, `papel` con texto `noche-900` ([decisión 115](decisiones/115-boton-principal-noche.md)).
 - **Las columnas del inicio son recuadros `noche`** de radio 20, con las tarjetas de los torneos en `papel` adentro, sobre el fondo blanco de la página. El estado lo dice la marca de 9 px del título: En preparación en `amarillo-claro` (punteada), Inscripción en `lona`, En juego en `azul-claro` y Terminados en `pizarra-400`. Sobre noche van en blanco el título, la columna vacía y "Armar el próximo torneo"; la ayuda va en `pizarra-400` y el contador es una píldora `noche-2` con borde `borde-noche` ([decisión 123](decisiones/123-inicio-en-noche-y-rotulos-sin-mono.md)).
 - **El rojo solo significa vencimiento.** No se usa para "error de formulario" ni para eliminar. Un partido que venció sin jugarse es lo único urgente del sistema.
-- **La derrota se dibuja en pizarra, no en rojo.** En tablas y matrices, el ganador va en `noche` con peso 600 y el perdedor en `pizarra-400`.
+- **La derrota se dibuja en pizarra, no en rojo.** En tablas y matrices, el ganador va en `noche` con peso 600 y el perdedor en `pizarra-450`.
 - **Sobre noche, los números van en blanco.** El lima de antes sobre las tarjetas oscuras pasa a blanco: la fecha del próximo partido, los puntos propios, la conciliación.
-- **Contrastes verificados:** `noche` sobre `niebla` 15,97:1 y sobre papel 17,41:1. `pizarra-500` sobre papel 7,61:1. `amarillo-claro`, `lona`, `azul-claro` y `pizarra-400` sobre noche, 6,9:1, 7,2:1, 5,3:1 y 7,00:1. `pizarra-400` sobre noche 7,00:1. Blanco sobre `noche-2` 14,91:1. `cal` sobre `noche-900` 14,55:1. `azul-texto` sobre `azul-fondo` 5,72:1. `rojo-texto` sobre `rojo-fondo` 5,23:1. `ambar` y `petroleo` sobre sus fondos, 5,66:1 y 6,28:1. `borde-campo` sobre papel 3,2:1, el mínimo para el borde de un control.
+- **Contrastes verificados:** `noche` sobre `niebla` 15,97:1 y sobre papel 17,41:1. `pizarra-500` sobre papel 7,61:1. `pizarra-450` sobre papel 6,14:1, sobre niebla 5,63:1 y sobre `cal` 4,77:1. `amarillo-claro`, `lona`, `azul-claro` y `pizarra-400` sobre noche, 6,9:1, 7,2:1, 5,3:1 y 7,00:1. `pizarra-400` sobre noche 7,00:1. Blanco sobre `noche-2` 14,91:1. `cal` sobre `noche-900` 14,55:1. `azul-texto` sobre `azul-fondo` 5,72:1. `rojo-texto` sobre `rojo-fondo` 5,23:1. `ambar` y `petroleo` sobre sus fondos, 5,66:1 y 6,28:1. `borde-campo` sobre papel 3,2:1, el mínimo para el borde de un control.
 
 ---
 
@@ -247,7 +248,7 @@ Aparece en el tablero (48 partidos en 8 bloques de 6, con la letra de zona debaj
 La fase de grupos como todos contra todos. Fila = el jugador, columna = el rival.
 
 - Ganó: fondo `lona-fondo`, marcador en peso 600
-- Perdió: marcador en `pizarra-400`
+- Perdió: marcador en `pizarra-450`
 - Con fecha: la fecha corta en mono `pizarra-500`
 - Sin coordinar: recuadro punteado 1,5px `pizarra-500`, vacío
 - Diagonal: `linea-suave`, sin contenido
@@ -448,6 +449,7 @@ La web usa Tailwind 4: los tokens están en el bloque `@theme` de `apps/web/src/
   --color-borde-noche: #2E3D5A;
   --color-pizarra-700: #3B4659;
   --color-pizarra-500: #4A5468;
+  --color-pizarra-450: #586275;
   --color-pizarra-400: #9AA5B8;
   --color-borde-campo: #878FA1;
   --color-linea: #D8DCE5;

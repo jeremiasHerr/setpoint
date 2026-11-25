@@ -89,7 +89,7 @@ function Casilleros({ fila, torneosDelCalendario }: { fila: FilaDeRanking; torne
             <Numero className="text-[10px] text-pizarra-500">
               {casillero ? rotuloDeCasillero(torneo.nombre, casillero.anio) : torneo.nombre.slice(0, 3).toLowerCase()}
             </Numero>
-            <Numero className={`text-[17px] font-medium ${casillero ? 'text-noche' : 'text-pizarra-400'}`}>
+            <Numero className={`text-[17px] font-medium ${casillero ? 'text-noche' : 'text-pizarra-450'}`}>
               {casillero?.puntos ?? 0}
             </Numero>
           </div>

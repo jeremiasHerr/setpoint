@@ -43,7 +43,7 @@ export function CuentaDelCupo({ pagaron, cupo }: { pagaron: number; cupo: number
       <div className="flex items-baseline justify-between gap-2 text-[13px]">
         <span className="text-pizarra-700">Pagaron</span>
         <Numero className="text-sm font-medium">
-          {pagaron} <span className="text-pizarra-400">/ {cupo}</span>
+          {pagaron} <span className="text-pizarra-450">/ {cupo}</span>
         </Numero>
       </div>
       <BarraDeMarcas

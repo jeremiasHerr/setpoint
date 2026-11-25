@@ -19,7 +19,7 @@ function Cruce({ zona, fila, rival }: { zona: ZonaDelTablero; fila: FilaDePosici
   if (partido.situacion === 'jugado') {
     const gano = partido.ganadorId === fila.jugadorId;
     return (
-      <div className={`${celda} ${gano ? 'bg-lona-fondo font-semibold' : 'text-pizarra-400'}`}>
+      <div className={`${celda} ${gano ? 'bg-lona-fondo font-semibold' : 'text-pizarra-450'}`}>
         <Numero className="text-[13px]">{marcadorDesde(partido, fila.jugadorId)}</Numero>
       </div>
     );
@@ -69,7 +69,7 @@ function Tabla({ zona, consuelo, usaRanking }: { zona: ZonaDelTablero; consuelo:
         return (
           <div key={fila.jugadorId} className={`${grilla} items-center border-b border-linea-suave`} style={columnas}>
             <div className="flex h-[60px] min-w-0 items-center gap-2.5 px-4">
-              <Numero className={`text-xs ${clasifica ? 'text-pizarra-500' : 'text-pizarra-400'}`}>{fila.posicion}</Numero>
+              <Numero className={`text-xs ${clasifica ? 'text-pizarra-500' : 'text-pizarra-450'}`}>{fila.posicion}</Numero>
               <span className={`size-1.5 shrink-0 rounded-full ${clasifica ? 'bg-lona-texto' : 'bg-linea'}`} />
               <span className={`truncate text-[15px] ${clasifica ? 'font-semibold' : 'font-medium text-pizarra-700'}`}>{fila.apellido}</span>
             </div>
@@ -77,10 +77,10 @@ function Tabla({ zona, consuelo, usaRanking }: { zona: ZonaDelTablero; consuelo:
               <Cruce key={rival.jugadorId} zona={zona} fila={fila} rival={rival} />
             ))}
             <Numero className={`text-center text-[15px] font-semibold ${clasifica ? '' : 'text-pizarra-700'}`}>{fila.partidosGanados}</Numero>
-            <Numero className={`text-center text-[13px] ${clasifica ? 'text-pizarra-500' : 'text-pizarra-400'}`}>
+            <Numero className={`text-center text-[13px] ${clasifica ? 'text-pizarra-500' : 'text-pizarra-450'}`}>
               {fila.setsGanados}-{fila.setsPerdidos}
             </Numero>
-            <Numero className={`pr-2.5 text-right text-[13px] ${clasifica ? 'text-pizarra-500' : 'text-pizarra-400'}`}>
+            <Numero className={`pr-2.5 text-right text-[13px] ${clasifica ? 'text-pizarra-500' : 'text-pizarra-450'}`}>
               {fila.gamesGanados}-{fila.gamesPerdidos}
             </Numero>
           </div>

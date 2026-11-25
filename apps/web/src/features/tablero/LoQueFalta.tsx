@@ -42,7 +42,7 @@ function Escribirles({ partido, tablero }: { partido: PartidoDelTablero; tablero
                 WhatsApp a {jugador.apellido}
               </a>
             ) : (
-              <span className={`${accion} border border-linea text-pizarra-400`}>{jugador.apellido} no tiene teléfono en el padrón</span>
+              <span className={`${accion} border border-linea text-pizarra-450`}>{jugador.apellido} no tiene teléfono en el padrón</span>
             )}
           </li>
         );
