@@ -1,7 +1,8 @@
 // Los tipos de la pantalla de inicio. Los datos salen de torneosDeInicio.ts.
 
-// Cada tarjeta lleva arriba a qué pertenece: su torneo del calendario ("primavera"), "torneo suelto"
+// Cada tarjeta lleva arriba a qué pertenece: su torneo del calendario ("Primavera"), "torneo suelto"
 // o "del circuito" si no tiene casillero en el ranking (decisión 094).
+import type { EstadoTorneo } from '@setpoint/shared';
 
 export type TorneoEnBorrador = {
   id: number;
@@ -14,7 +15,7 @@ export type TorneoEnJuego = {
   id: number;
   calendario: string;
   nombre: string;
-  fase: string;
+  estado: EstadoTorneo;
   detalle: string;
   partidosJugados: number;
   partidosTotales: number;
