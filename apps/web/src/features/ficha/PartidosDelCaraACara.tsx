@@ -1,6 +1,6 @@
 import { cortaDe, type PartidoDelCaraACara } from '@setpoint/shared';
 import { Numero } from '../../components/Numero';
-import { donde } from './PartidosDeLaFicha';
+import { donde } from './hastaDonde';
 
 const TEXTO_DEL_ESTADO = { jugada: '', walkover: ' por W.O.', abandono: ' por abandono' } as const;
 

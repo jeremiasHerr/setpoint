@@ -346,6 +346,7 @@ function situacionEnLaLista(partido: PartidoDeLaLista): Situacion {
 
 function estadoEnLaLista(partido: PartidoDeLaLista, situacion: Situacion) {
   if (situacion !== 'con_resultado') return { sin_jugadores: 'espera la ronda anterior', falta: 'falta', vencido: 'venció' }[situacion];
+  if (partido.estado === 'doble_walkover' || partido.ganadorId === null) return 'W.O. doble';
   const [a, b] = nombresDelPartido(partido);
   return `ganó ${partido.ganadorId === partido.jugadorA?.jugadorId ? a : b}`;
 }

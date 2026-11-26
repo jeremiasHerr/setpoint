@@ -37,7 +37,7 @@ export function EnVivoPage({ pestanaInicial }: { pestanaInicial?: Pestana }) {
   const torneo = useTorneoEnVivo(slug, id);
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-[480px] flex-col gap-[18px] px-4 pt-5 pb-7 xl:max-w-none xl:px-[30px]">
+    <main className="mx-auto flex min-h-screen max-w-[480px] flex-col gap-[18px] px-4 pt-5 pb-7 md:max-w-[960px] md:px-6 xl:max-w-none xl:px-[30px]">
       {torneo.isPending && <Esqueleto forma="lista" />}
       {/* Si falla una actualización, queda lo último que se cargó. */}
       {torneo.error && !torneo.data && <p className="text-[15px] text-pizarra-700">{mensajeDeError(torneo.error)}</p>}

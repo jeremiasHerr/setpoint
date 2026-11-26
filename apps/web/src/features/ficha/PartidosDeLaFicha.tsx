@@ -2,17 +2,10 @@ import type { PartidoDeLaFicha } from '@setpoint/shared';
 import { useState } from 'react';
 import { Boton } from '../../components/Boton';
 import { Numero } from '../../components/Numero';
-import { rotuloDeRonda } from '../cuadros/cuadro';
+import { donde } from './hastaDonde';
 
 // Los últimos, y el resto se despliega en el lugar.
 const VISIBLES = 5;
-
-// "zona C", "final", o en el cuadro consuelo "semis · Cuadro consuelo".
-export function donde(partido: Pick<PartidoDeLaFicha, 'grupo' | 'ronda' | 'rondas' | 'cuadro'>, consuelo: string) {
-  if (partido.grupo) return `zona ${partido.grupo}`;
-  const ronda = rotuloDeRonda(partido.ronda!, partido.rondas!);
-  return partido.cuadro === 'complementaria' ? `${ronda} · ${consuelo}` : ronda;
-}
 
 // Sus partidos con resultado, del más reciente al más viejo: el rival, dónde fue y el marcador desde
 // su lado. El punto verde es un partido ganado. El W.O. figura aunque no cuente en jugados (decisión 073).
