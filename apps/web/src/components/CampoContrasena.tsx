@@ -20,8 +20,10 @@ export function CampoContrasena({ id, rotulo, accesorio, sobreNoche = false, cla
         {accesorio}
       </div>
       <div
-        className={`flex h-12 items-center gap-2.5 rounded-control border border-borde-campo pr-1.5 pl-3.5 focus-within:border-2 focus-within:pr-[5px] focus-within:pl-[13px] ${
-          sobreNoche ? 'bg-noche-900 focus-within:border-white' : 'focus-within:border-noche'
+        className={`flex h-12 items-center gap-2.5 rounded-control border border-borde-campo pr-1.5 pl-3.5 focus-within:border-2 focus-within:pr-[5px] focus-within:pl-[13px] has-[input[aria-invalid=true]]:border-2 has-[input[aria-invalid=true]]:pr-[5px] has-[input[aria-invalid=true]]:pl-[13px] ${
+          sobreNoche
+            ? 'bg-noche-900 focus-within:border-white has-[input[aria-invalid=true]]:border-white'
+            : 'bg-papel focus-within:border-noche has-[input[aria-invalid=true]]:border-noche'
         }`}
       >
         <input

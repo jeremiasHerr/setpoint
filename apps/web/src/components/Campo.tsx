@@ -16,7 +16,7 @@ type Props = InputHTMLAttributes<HTMLInputElement> & {
 // Inválido, el borde se marca grueso como con el foco: en noche y no en rojo (decisión 099). Sobre
 // noche, en blanco, y el autocompletado del navegador no pinta el campo de celeste.
 const CAMPO = {
-  claro: 'border-borde-campo text-noche focus:border-noche aria-invalid:border-noche',
+  claro: 'border-borde-campo bg-papel text-noche focus:border-noche aria-invalid:border-noche',
   noche:
     'border-borde-campo bg-noche-900 text-white focus:border-white aria-invalid:border-white autofill:shadow-[inset_0_0_0_1000px_var(--color-noche-900)] autofill:[-webkit-text-fill-color:var(--color-papel)]',
 };
@@ -79,7 +79,7 @@ export function Campo({ id, rotulo, numerico = false, sufijo, sobreNoche = false
           {pista && (
             <span
               aria-hidden="true"
-              className="pointer-events-none absolute top-1/2 left-3.5 hidden -translate-y-1/2 text-[15px] text-pizarra-400 pointer-coarse:block peer-focus:invisible"
+              className="pointer-events-none absolute top-1/2 left-3.5 hidden -translate-y-1/2 text-[15px] text-pizarra-450 pointer-coarse:block peer-focus:invisible"
             >
               {pista}
             </span>

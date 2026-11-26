@@ -78,11 +78,13 @@ export function VerificarEmail({ onVerificado, desdeLink = false }: Props) {
           <input
             id="email"
             type="email"
+            required
             autoComplete="email"
+            disabled={pedirCodigo.isPending}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="tu@email.com"
-            className="h-[60px] rounded-[12px] border border-borde-campo px-4 text-lg outline-none placeholder:text-pizarra-450 focus:border-2 focus:border-noche focus:px-[15px]"
+            className="h-[60px] rounded-[12px] border border-borde-campo bg-papel px-4 text-lg outline-none placeholder:text-pizarra-450 focus:border-2 focus:border-noche focus:px-[15px] disabled:opacity-60"
           />
           <Ayuda>
             {desdeLink
@@ -147,7 +149,7 @@ export function VerificarEmail({ onVerificado, desdeLink = false }: Props) {
         </Ayuda>
       </div>
       <div className="flex flex-col gap-3">
-        <CampoCodigo valor={codigo} onChange={setCodigo} onCompleto={confirmar} />
+        <CampoCodigo valor={codigo} onChange={setCodigo} onCompleto={confirmar} apagado={verificar.isPending} />
         {error === 'CODIGO_INCORRECTO' ? (
           <AvisoConTitulo titulo="Ese código no es.">
             {(verificar.error as ErrorApi).campos.codigo}. Revisá que sea el último que te mandamos.

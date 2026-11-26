@@ -14,7 +14,7 @@ export function Ayuda({ children }: { children: ReactNode }) {
 }
 
 export function Caja({ children }: { children: ReactNode }) {
-  return <div className="rounded-[12px] bg-niebla px-4 py-3.5 text-[15px] leading-[1.42] text-pizarra-700">{children}</div>;
+  return <div className="rounded-[12px] border border-linea bg-niebla px-4 py-3.5 text-[15px] leading-[1.42] text-pizarra-700">{children}</div>;
 }
 
 // El rojo es solo para vencimientos (design.md §3): los errores van con el aviso de toda la web
@@ -60,7 +60,7 @@ export function Tilde() {
 // El email verificado arriba de cada paso. "Cambiar" cierra la sesión en este dispositivo.
 export function CuentaVerificada({ email, onCambiar }: { email: string; onCambiar: () => void }) {
   return (
-    <div className="flex h-[52px] items-center justify-between gap-3 rounded-[12px] bg-niebla px-4">
+    <div className="flex h-[52px] items-center justify-between gap-3 rounded-[12px] border border-linea bg-niebla px-4">
       <div className="flex min-w-0 items-center gap-2.5">
         <Tilde />
         <span className="truncate text-base">{email}</span>
@@ -85,7 +85,11 @@ export function Monto({ precio }: { precio: number }) {
   return (
     <div className="flex items-center justify-between gap-3 px-1">
       <span className="text-base text-pizarra-500">Inscripción</span>
-      <Numero className="text-2xl font-medium tracking-[-0.02em]">{importe(precio)}</Numero>
+      {precio === 0 ? (
+        <span className="text-2xl font-medium tracking-[-0.02em]">Gratis</span>
+      ) : (
+        <Numero className="text-2xl font-medium tracking-[-0.02em]">{importe(precio)}</Numero>
+      )}
     </div>
   );
 }

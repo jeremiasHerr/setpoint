@@ -12,7 +12,11 @@ type Props = {
 };
 
 const CASILLA = {
-  claro: { apagada: 'border border-linea bg-niebla text-pizarra-450', activa: 'border-2 border-noche', comun: 'border border-borde-campo' },
+  claro: {
+    apagada: 'border border-linea bg-niebla text-pizarra-450',
+    activa: 'border-2 border-noche bg-papel',
+    comun: 'border border-borde-campo bg-papel',
+  },
   noche: {
     apagada: 'border border-borde-noche bg-noche-2 text-pizarra-400',
     activa: 'border-2 border-white bg-noche-900',
@@ -34,13 +38,13 @@ export function CampoCodigo({ valor, onChange, onCompleto, apagado = false, sobr
   }
 
   return (
-    <div className="relative flex gap-2" onClick={() => campo.current?.focus()}>
+    <div className="relative flex w-full max-w-[322px] gap-1.5 sm:gap-2" onClick={() => campo.current?.focus()}>
       {Array.from({ length: LARGO }, (_, i) => (
         <div
           key={i}
           aria-hidden
-          className={`flex h-[58px] w-[46px] items-center justify-center rounded-control font-mono text-[26px] font-medium tabular-nums ${
-            i === 3 ? 'ml-1.5' : ''
+          className={`flex h-[58px] min-w-0 flex-1 items-center justify-center rounded-control font-mono text-[26px] font-medium tabular-nums ${
+            i === 3 ? 'ml-1 sm:ml-1.5' : ''
           } ${
             apagado ? casilla.apagada : enfocado && i === Math.min(valor.length, LARGO - 1) ? casilla.activa : casilla.comun
           }`}
@@ -57,7 +61,6 @@ export function CampoCodigo({ valor, onChange, onCompleto, apagado = false, sobr
         inputMode="numeric"
         autoComplete="one-time-code"
         aria-label="Código de 6 dígitos"
-        maxLength={LARGO}
         disabled={apagado}
         autoFocus
         className="absolute inset-0 opacity-0"

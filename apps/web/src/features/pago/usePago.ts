@@ -26,8 +26,16 @@ export function useReservarAprobada(slug: string, id: string, token: string | un
 }
 
 export function useIniciarPago(slug: string, id: string, token: string | undefined) {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: () => pedir<InicioDePago>('POST', `/api/inscripcion/${slug}/inscripciones/${id}/pago`, undefined, token),
+    onSuccess: ({ url }) => {
+      // Torneo gratis: la API confirma la inscripción en el acto y devuelve url: null.
+      if (!url) void queryClient.invalidateQueries({ queryKey: ['inscripcion-para-pagar', slug, id] });
+    },
+    onError: () => {
+      void queryClient.invalidateQueries({ queryKey: ['inscripcion-para-pagar', slug, id] });
+    },
   });
 }
 

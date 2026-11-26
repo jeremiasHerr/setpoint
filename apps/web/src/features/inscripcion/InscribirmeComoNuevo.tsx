@@ -80,7 +80,9 @@ export function InscribirmeComoNuevo({ torneo, token, email, nombre: nombreDeLaC
               : 'Mandar mi solicitud'
             : inscribir.isPending
               ? 'Reservando…'
-              : 'Ir a pagar con Mercado Pago'}
+              : torneo.precio === 0
+                ? 'Inscribirme'
+                : 'Ir a pagar con Mercado Pago'}
         </BotonPrincipal>
         {!conAprobacion && <AvisoReserva minutos={torneo.minutosReserva} />}
       </div>
@@ -112,7 +114,7 @@ function Campo({
         onChange={(e) => onCambiar(e.target.value)}
         autoComplete={autoComplete}
         maxLength={60}
-        className="h-14 min-w-0 rounded-[12px] border border-borde-campo px-4 text-[17px] outline-none focus:border-2 focus:border-noche focus:px-[15px]"
+        className="h-14 min-w-0 rounded-[12px] border border-borde-campo bg-papel px-4 text-[17px] outline-none focus:border-2 focus:border-noche focus:px-[15px]"
       />
     </div>
   );

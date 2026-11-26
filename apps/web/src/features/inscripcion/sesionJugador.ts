@@ -7,7 +7,11 @@ const CLAVE = 'setpoint.jugador';
 
 export type SesionJugador = RespuestaCodigo;
 
+// Respaldo en memoria si el navegador bloquea localStorage (modo privado o webview restringido).
+let sesionEnMemoria: SesionJugador | null = null;
+
 export function guardarSesionJugador(sesion: SesionJugador) {
+  sesionEnMemoria = sesion;
   try {
     localStorage.setItem(CLAVE, JSON.stringify(sesion));
   } catch {
@@ -18,13 +22,18 @@ export function guardarSesionJugador(sesion: SesionJugador) {
 export function leerSesionJugador(): SesionJugador | null {
   try {
     const resultado = respuestaCodigoSchema.safeParse(JSON.parse(localStorage.getItem(CLAVE) ?? 'null'));
-    return resultado.success ? resultado.data : null;
+    if (resultado.success) {
+      sesionEnMemoria = resultado.data;
+      return resultado.data;
+    }
+    return sesionEnMemoria;
   } catch {
-    return null;
+    return sesionEnMemoria;
   }
 }
 
 export function borrarSesionJugador() {
+  sesionEnMemoria = null;
   try {
     localStorage.removeItem(CLAVE);
   } catch {

@@ -1,5 +1,5 @@
 import type { TorneoPublico } from '@setpoint/shared';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { EncabezadoPublico } from '../components/EncabezadoPublico';
 import { LinkDeVuelta } from '../components/LinkDeVuelta';
@@ -53,8 +53,11 @@ function Inscripcion({ torneo }: { torneo: TorneoPublico }) {
     setSesion(null);
   };
 
-  // Con la sesión vencida o inválida se vuelve a pedir el código. La guardada se pisa al verificar.
+  // Con la sesión vencida o inválida se limpia y se vuelve a pedir el código.
   const sesionVencida = situacion.error instanceof ErrorApi && situacion.error.codigo === 'NO_AUTENTICADO';
+  useEffect(() => {
+    if (sesionVencida) borrarSesionJugador();
+  }, [sesionVencida]);
   const activa = sesionVencida ? null : sesion;
 
   return (
