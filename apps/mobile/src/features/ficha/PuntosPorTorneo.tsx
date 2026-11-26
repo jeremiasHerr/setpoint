@@ -45,7 +45,7 @@ const estilos = StyleSheet.create({
   columna: { flex: 1, alignItems: 'center', gap: 7 },
   puntos: { fontFamily: fuentes.mono[500], fontSize: 13, color: colores.noche, ...tabular },
   puntosMejor: { fontFamily: fuentes.mono[600] },
-  puntosCero: { color: colores.pizarra400 },
+  puntosCero: { color: colores.pizarra450 },
   barra: { width: '100%', backgroundColor: colores.linea, borderTopLeftRadius: 5, borderTopRightRadius: 5 },
   barraMejor: { backgroundColor: colores.lona },
   rotulo: { fontFamily: fuentes.mono[400], fontSize: 11, color: colores.pizarra500, ...tabular },

@@ -4,7 +4,7 @@
 import type { CoordinacionDelPartido } from '@setpoint/shared';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
-import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Boton } from '../../../components/Boton';
 import { Campo } from '../../../components/Campo';
@@ -35,7 +35,7 @@ export default function AnotarFecha() {
 
   return (
     <SafeAreaView style={estilos.pantalla}>
-      <KeyboardAvoidingView style={estilos.pantalla} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <KeyboardAvoidingView style={estilos.pantalla} behavior="padding">
         <ScrollView contentContainerStyle={estilos.contenido} keyboardShouldPersistTaps="handled">
           <View style={estilos.encabezado}>
             <Pressable
@@ -51,7 +51,9 @@ export default function AnotarFecha() {
           </View>
 
           {consulta.isPending && <Esqueleto forma="tarjeta" />}
-          {consulta.error && !coordinacion && <ErrorDeCarga error={consulta.error} que="el partido" />}
+          {consulta.error && !coordinacion && (
+            <ErrorDeCarga error={consulta.error} que="el partido" onReintentar={() => void consulta.refetch()} />
+          )}
           {coordinacion && <Contenido coordinacion={coordinacion} recargar={() => void consulta.refetch()} />}
         </ScrollView>
       </KeyboardAvoidingView>
@@ -159,7 +161,11 @@ function Formulario({ coordinacion, rival, recargar }: { coordinacion: Coordinac
 
       <View style={estilos.seccion}>
         <Text style={estilos.pregunta}>¿A qué hora?</Text>
-        {dia ? (
+        {!dia ? (
+          <Text style={estilos.ayuda}>Primero elegí el día.</Text>
+        ) : horas.length === 0 ? (
+          <Text style={estilos.ayuda}>Hoy ya no quedan horarios. Elegí otro día.</Text>
+        ) : (
           <Desplegable
             rotulo="¿A qué hora?"
             opciones={horas.map((h) => ({ valor: h, texto: h }))}
@@ -168,10 +174,7 @@ function Formulario({ coordinacion, rival, recargar }: { coordinacion: Coordinac
             onElegir={setHora}
             numerico
           />
-        ) : (
-          <Text style={estilos.ayuda}>Primero elegí el día.</Text>
         )}
-        {dia && horas.length === 0 && <Text style={estilos.ayuda}>Hoy ya no quedan horarios. Elegí otro día.</Text>}
         {campos.hora && <Text style={estilos.error}>{campos.hora}</Text>}
       </View>
 
@@ -247,11 +250,12 @@ const estilos = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: colores.linea,
+    backgroundColor: colores.papel,
     alignItems: 'center',
     justifyContent: 'center',
   },
   apretado: {
-    backgroundColor: colores.niebla,
+    backgroundColor: colores.lineaSuave,
   },
   // Un ángulo hecho con dos bordes, apuntando a la izquierda.
   flecha: {
@@ -336,10 +340,10 @@ const estilos = StyleSheet.create({
     color: colores.pizarra500,
   },
   error: {
-    fontFamily: fuentes.sans[400],
-    fontSize: 14,
-    lineHeight: 20,
-    color: colores.rojoTexto,
+    fontFamily: fuentes.sans[500],
+    fontSize: 15,
+    lineHeight: 21,
+    color: colores.noche,
   },
   sedeFija: {
     height: medidas.toque,

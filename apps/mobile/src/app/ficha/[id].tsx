@@ -84,9 +84,11 @@ export default function Ficha() {
             />
             <RecordDeLaFicha record={ficha.record} />
             {ficha.ranking && <PuntosPorTorneo ranking={ficha.ranking} />}
-            <TorneosDeLaFicha torneos={ficha.torneos} />
+            <TorneosDeLaFicha torneos={ficha.torneos} consuelo={ficha.nombreCuadroConsuelo} />
             {/* Sin torneos no hay partidos: con el aviso de Torneos alcanza. */}
-            {ficha.torneos.length > 0 && <PartidosDeLaFicha jugadorId={ficha.jugadorId} partidos={ficha.partidos} />}
+            {ficha.torneos.length > 0 && (
+              <PartidosDeLaFicha jugadorId={ficha.jugadorId} partidos={ficha.partidos} consuelo={ficha.nombreCuadroConsuelo} />
+            )}
           </>
         )}
       </ScrollView>
@@ -104,6 +106,7 @@ const estilos = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: colores.linea,
+    backgroundColor: colores.papel,
     alignItems: 'center',
     justifyContent: 'center',
   },

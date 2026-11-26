@@ -73,5 +73,5 @@ const estilos = StyleSheet.create({
   // Desde su lado: sus games primero.
   marcador: { fontFamily: fuentes.mono[500], fontSize: 26, letterSpacing: -0.26, color: colores.noche, ...tabular },
   quien: { fontFamily: fuentes.sans[500], fontSize: 16, color: colores.pizarra700 },
-  error: { fontFamily: fuentes.sans[400], fontSize: 14, lineHeight: 20, color: colores.rojoTexto },
+  error: { fontFamily: fuentes.sans[500], fontSize: 15, lineHeight: 21, color: colores.noche },
 });

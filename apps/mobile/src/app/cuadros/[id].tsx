@@ -123,7 +123,7 @@ function Fila({ jugador, gano, marcador, jugadorId }: { jugador: JugadorDelCuadr
         {jugador ? `${jugador.nombre} ${jugador.apellido}` : 'a definir'}
         {vos && <Text style={estilos.vos}> · vos</Text>}
       </Text>
-      <Text style={[estilos.marcador, gano && estilos.ganador]}>{marcador}</Text>
+      <Text style={[estilos.marcador, gano && estilos.marcadorGanador]}>{marcador}</Text>
     </View>
   );
 }
@@ -170,10 +170,11 @@ const estilos = StyleSheet.create({
   separador: { height: 1, backgroundColor: colores.lineaSuave },
   fila: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12, minHeight: 44 },
   nombre: { flex: 1, fontFamily: fuentes.sans[400], fontSize: 16, color: colores.pizarra700 },
-  aDefinir: { color: colores.pizarra400 },
+  aDefinir: { color: colores.pizarra450 },
   ganador: { fontFamily: fuentes.sans[600], color: colores.noche },
   vos: { fontFamily: fuentes.sans[400], fontSize: 14, color: colores.pizarra500 },
   marcador: { fontFamily: fuentes.mono[500], fontSize: 15, color: colores.pizarra500, ...tabular },
+  marcadorGanador: { fontFamily: fuentes.mono[600], color: colores.noche },
   pie: { fontFamily: fuentes.sans[400], fontSize: 13, color: colores.pizarra500, paddingBottom: 8 },
   // Quien pasa directo por un bye: tenue, sin borde de tarjeta (decisión 083).
   pase: { backgroundColor: colores.lineaSuave, borderRadius: radios.tarjeta, paddingHorizontal: 14, paddingVertical: 12, gap: 2 },

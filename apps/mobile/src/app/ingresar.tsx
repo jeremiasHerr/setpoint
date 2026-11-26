@@ -152,7 +152,7 @@ export default function Ingresar() {
                 </View>
 
                 <View style={estilos.bloqueCodigo}>
-                  <CampoCodigo valor={codigo} onChange={setCodigo} onCompleto={confirmar} />
+                  <CampoCodigo valor={codigo} onChange={setCodigo} onCompleto={confirmar} apagado={verificar.isPending} />
                   {errorVerificar === 'CODIGO_INCORRECTO' ? (
                     <View accessibilityRole="alert" style={estilos.incorrecto}>
                       <Text style={estilos.textoIncorrecto}>

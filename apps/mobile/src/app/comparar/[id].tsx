@@ -45,7 +45,7 @@ export default function Comparar() {
         </View>
 
         {consulta.isPending && <Esqueleto forma="lista" />}
-        {consulta.error && <ErrorDeCarga error={consulta.error} que="los rivales" />}
+        {consulta.error && <ErrorDeCarga error={consulta.error} que="los rivales" onReintentar={() => void consulta.refetch()} />}
         {datos &&
           (datos.rivales.length === 0 ? (
             <Text style={estilos.nota}>
@@ -111,6 +111,7 @@ const estilos = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: colores.linea,
+    backgroundColor: colores.papel,
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -76,7 +76,7 @@ const estilos = StyleSheet.create({
   columnas: {
     fontFamily: fuentes.mono[400],
     fontSize: 12,
-    color: colores.pizarra400,
+    color: colores.pizarra450,
   },
   fila: {
     flexDirection: 'row',
@@ -148,7 +148,7 @@ const estilos = StyleSheet.create({
     textAlign: 'right',
   },
   apagado: {
-    color: colores.pizarra400,
+    color: colores.pizarra450,
   },
   corte: {
     flexDirection: 'row',

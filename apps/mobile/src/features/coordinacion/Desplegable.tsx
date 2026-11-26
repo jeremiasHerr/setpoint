@@ -21,14 +21,17 @@ type Props = {
 export function Desplegable({ rotulo, opciones, valor, vacio, onElegir, numerico = false }: Props) {
   const [abierto, setAbierto] = useState(false);
   const elegida = opciones.find((o) => o.valor === valor);
+  const sinOpciones = opciones.length === 0;
+  const indiceInicial = opciones.findIndex((o) => o.valor === valor);
 
   return (
     <>
       <Pressable
         accessibilityRole="button"
         accessibilityLabel={`${rotulo}: ${elegida?.texto ?? vacio}`}
+        disabled={sinOpciones}
         onPress={() => setAbierto(true)}
-        style={({ pressed }) => [estilos.campo, pressed && estilos.apretado]}
+        style={({ pressed }) => [estilos.campo, pressed && estilos.apretado, sinOpciones && estilos.deshabilitado]}
       >
         <Text style={[estilos.valor, numerico && estilos.numerico, !elegida && estilos.vacio]} numberOfLines={1}>
           {elegida?.texto ?? vacio}
@@ -36,14 +39,14 @@ export function Desplegable({ rotulo, opciones, valor, vacio, onElegir, numerico
         <View style={estilos.chevron} />
       </Pressable>
 
-      <Modal visible={abierto} transparent animationType="slide" onRequestClose={() => setAbierto(false)}>
+      <Modal visible={abierto && !sinOpciones} transparent animationType="slide" onRequestClose={() => setAbierto(false)}>
         <Pressable accessibilityLabel="Cerrar" style={estilos.fondo} onPress={() => setAbierto(false)} />
         <SafeAreaView edges={['bottom']} style={estilos.hoja}>
           <Text style={estilos.titulo}>{rotulo}</Text>
           <FlatList
             data={opciones}
             keyExtractor={(o) => o.valor}
-            initialScrollIndex={Math.max(0, opciones.findIndex((o) => o.valor === valor))}
+            initialScrollIndex={indiceInicial >= 0 ? indiceInicial : undefined}
             getItemLayout={(_, i) => ({ length: medidas.toque, offset: medidas.toque * i, index: i })}
             renderItem={({ item }) => {
               const activa = item.valor === valor;
@@ -57,7 +60,15 @@ export function Desplegable({ rotulo, opciones, valor, vacio, onElegir, numerico
                   }}
                   style={({ pressed }) => [estilos.opcion, pressed && estilos.apretado]}
                 >
-                  <Text style={[estilos.textoOpcion, numerico && estilos.numerico, activa && estilos.textoActivo]}>{item.texto}</Text>
+                  <Text
+                    style={[
+                      estilos.textoOpcion,
+                      numerico && estilos.numerico,
+                      activa && (numerico ? estilos.numericoActivo : estilos.textoActivo),
+                    ]}
+                  >
+                    {item.texto}
+                  </Text>
                   {activa && <View style={estilos.marca} />}
                 </Pressable>
               );
@@ -85,6 +96,9 @@ const estilos = StyleSheet.create({
   apretado: {
     backgroundColor: colores.niebla,
   },
+  deshabilitado: {
+    opacity: 0.5,
+  },
   valor: {
     flexShrink: 1,
     fontFamily: fuentes.sans[400],
@@ -96,8 +110,12 @@ const estilos = StyleSheet.create({
     fontSize: 18,
     ...tabular,
   },
+  numericoActivo: {
+    fontFamily: fuentes.mono[600],
+    color: colores.noche,
+  },
   vacio: {
-    color: colores.pizarra400,
+    color: colores.pizarra450,
   },
   // Un ángulo hecho con dos bordes, como en el encabezado del circuito: sin react-native-svg.
   chevron: {
@@ -111,7 +129,7 @@ const estilos = StyleSheet.create({
   },
   fondo: {
     flex: 1,
-    backgroundColor: 'rgba(10, 11, 13, 0.4)',
+    backgroundColor: 'rgba(16, 26, 44, 0.4)',
   },
   hoja: {
     maxHeight: '60%',

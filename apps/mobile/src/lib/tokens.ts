@@ -25,7 +25,7 @@ export const colores = {
   pelota: '#CDF546',
   azul: '#3567D6',
   azulTexto: '#2A55BC',
-  azulFondo: '#ECF1FD',
+  azulFondo: '#E5EDFE',
   rojo: '#E5484D',
   rojoTexto: '#C62A2F',
   rojoFondo: '#FEF6F6',

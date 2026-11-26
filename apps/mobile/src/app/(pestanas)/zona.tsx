@@ -38,7 +38,7 @@ export default function Zona() {
       >
         <EncabezadoCircuito />
         {consulta.isPending && <Esqueleto forma="lista" />}
-        {consulta.error && <ErrorDeCarga error={consulta.error} que="tu zona" />}
+        {consulta.error && <ErrorDeCarga error={consulta.error} que="tu zona" onReintentar={() => void consulta.refetch()} />}
         {consulta.data &&
           (consulta.data.zona ? (
             <Contenido zona={consulta.data.zona} jugadorId={perfil.jugador.id} />

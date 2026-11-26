@@ -6,7 +6,7 @@ import { useSesion } from './SesionProvider';
 
 // El error de una pantalla que pide login. Si el token venció o el jugador ya no está en el
 // circuito, la sesión guardada no sirve: se ofrece volver a ingresar.
-export function ErrorDeCarga({ error, que }: { error: Error; que: string }) {
+export function ErrorDeCarga({ error, que, onReintentar }: { error: Error; que: string; onReintentar?: () => void }) {
   const { cerrarSesion } = useSesion();
   const codigo = error instanceof ErrorApi ? error.codigo : null;
 
@@ -22,11 +22,14 @@ export function ErrorDeCarga({ error, que }: { error: Error; que: string }) {
   }
 
   return (
-    <Text style={estilos.texto}>
-      {codigo === 'SIN_CONEXION'
-        ? 'No pudimos conectarnos. Revisá tu conexión y probá de nuevo.'
-        : `No pudimos cargar ${que}. Probá de nuevo en unos minutos.`}
-    </Text>
+    <View style={estilos.bloque}>
+      <Text style={estilos.texto}>
+        {codigo === 'SIN_CONEXION'
+          ? 'No pudimos conectarnos. Revisá tu conexión y probá de nuevo.'
+          : `No pudimos cargar ${que}. Probá de nuevo en unos minutos.`}
+      </Text>
+      {onReintentar && <Boton texto="Probar de nuevo" onPress={onReintentar} />}
+    </View>
   );
 }
 

@@ -8,6 +8,7 @@ export function useRanking(slug: string) {
   return useQuery({
     queryKey: ['ranking-publico', slug],
     queryFn: () => pedir<RankingPublico>('GET', `/api/publico/${slug}/ranking`),
+    enabled: slug !== '',
     // Un reintento por si la señal se cortó; más, con el corte de 10 segundos de pedir(), tarda en avisar.
     retry: 1,
   });

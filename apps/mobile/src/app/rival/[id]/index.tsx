@@ -46,7 +46,7 @@ export default function ComoTeFueConEl() {
         </View>
 
         {consulta.isPending && <Esqueleto forma="tarjeta" />}
-        {consulta.error && <ErrorDeCarga error={consulta.error} que="el historial" />}
+        {consulta.error && <ErrorDeCarga error={consulta.error} que="el historial" onReintentar={() => void consulta.refetch()} />}
         {cara && (
           <>
             <View style={estilos.panel}>
@@ -126,10 +126,11 @@ const estilos = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: colores.linea,
+    backgroundColor: colores.papel,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  apretado: { backgroundColor: colores.niebla },
+  apretado: { backgroundColor: colores.lineaSuave },
   flecha: {
     width: 9,
     height: 9,

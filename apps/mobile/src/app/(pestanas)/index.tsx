@@ -61,7 +61,7 @@ export default function CuandoJuego() {
         {/* Las inscripciones en curso en otro circuito, sin tapar el partido que viene (decisión 054). */}
         <AvisoInscripcion />
         {consulta.isPending && <Esqueleto forma="tarjeta" />}
-        {consulta.error && <ErrorDeCarga error={consulta.error} que="tus partidos" />}
+        {consulta.error && <ErrorDeCarga error={consulta.error} que="tus partidos" onReintentar={() => void consulta.refetch()} />}
         {consulta.data &&
           (consulta.data.partidos ? (
             <>
