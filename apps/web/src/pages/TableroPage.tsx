@@ -77,7 +77,11 @@ function bajada(tablero: Tablero): string {
   const { plazo } = tablero;
   const elPlazo = (termina: string) =>
     plazo ? ` · ${plazo.dias >= 0 ? termina : 'el plazo venció'} el ${elDia(plazo.fechaLimite)}` : '';
-  if (tablero.fase === 'terminado') return 'El torneo está cerrado y los puntos ya están en el ranking.';
+  if (tablero.fase === 'terminado') {
+    return tablero.usaRanking
+      ? 'El torneo está cerrado y los puntos ya están en el ranking.'
+      : 'El torneo está cerrado con sus posiciones finales.';
+  }
   if (tablero.fase === 'cuadros') {
     const cuadros = tablero.tieneComplementaria
       ? `${NOMBRE_DEL_PRINCIPAL} y ${consueloEnFrase(tablero.nombreCuadroConsuelo)}`

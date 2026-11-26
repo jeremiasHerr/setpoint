@@ -20,6 +20,9 @@ export function useCerrarZonas(slug: string, id: number) {
     // Con las zonas cerradas, el tablero pasa a mostrar los cuadros y el torneo, a estar en ellos.
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: claveTablero(slug, id) });
+      void queryClient.invalidateQueries({ queryKey: ['partidos', slug, id] });
+      void queryClient.invalidateQueries({ queryKey: ['cierre', slug, id] });
+      void queryClient.invalidateQueries({ queryKey: ['torneos', slug] });
       void queryClient.invalidateQueries({ queryKey: claveNavegacion(slug, id) });
     },
   });

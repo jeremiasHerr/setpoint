@@ -101,13 +101,20 @@ function QuePasaAlCerrar({ datos, pagados, reservando }: { datos: InscripcionesD
   if (datos.estado === 'publicado' && !datos.alcanzanParaLasZonas) {
     return (
       <p className="text-sm text-pizarra-700">
-        Para armar <Numero>{datos.cantidadGrupos}</Numero> zonas hacen falta al menos{' '}
+        Para armar <Numero>{datos.cantidadGrupos}</Numero> {datos.cantidadGrupos === 1 ? 'zona' : 'zonas'} hacen falta al menos{' '}
         <Numero>{datos.cantidadGrupos * MINIMO_POR_ZONA}</Numero> inscriptos que hayan pagado, y hay <Numero>{pagados}</Numero>.
-        Para poder cerrar, esperá a que paguen más o{' '}
-        <Link to={`/torneos/${datos.convocatoriaId}`} state={{ desde: datos.torneoId }} className="underline">
-          bajá la cantidad de zonas del torneo
-        </Link>
-        .
+        {datos.cantidadGrupos > 1 ? (
+          <>
+            {' '}
+            Para poder cerrar, esperá a que paguen más o{' '}
+            <Link to={`/torneos/${datos.convocatoriaId}`} state={{ desde: datos.torneoId }} className="underline">
+              bajá la cantidad de zonas del torneo
+            </Link>
+            .
+          </>
+        ) : (
+          ' Para poder cerrar, esperá a que paguen más.'
+        )}
       </p>
     );
   }

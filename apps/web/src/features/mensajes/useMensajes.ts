@@ -20,6 +20,9 @@ function useRefrescarElTorneo(slug: string, id: number) {
   const queryClient = useQueryClient();
   return () => {
     void queryClient.invalidateQueries({ queryKey: ['partidos', slug, id] });
+    void queryClient.invalidateQueries({ queryKey: ['tablero', slug, id] });
+    void queryClient.invalidateQueries({ queryKey: ['cierre', slug, id] });
+    void queryClient.invalidateQueries({ queryKey: ['torneos', slug] });
     void queryClient.invalidateQueries({ queryKey: claveNavegacion(slug, id) });
   };
 }

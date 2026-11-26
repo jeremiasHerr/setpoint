@@ -5,7 +5,11 @@ const CLAVE_SESION = 'setpoint.sesion';
 
 export type Sesion = RespuestaRegistro;
 
+// Respaldo en memoria si el navegador bloquea localStorage (modo privado o webview restringido).
+let sesionEnMemoria: Sesion | null = null;
+
 export function guardarSesion(sesion: Sesion) {
+  sesionEnMemoria = sesion;
   try {
     localStorage.setItem(CLAVE_SESION, JSON.stringify(sesion));
   } catch {
@@ -16,13 +20,18 @@ export function guardarSesion(sesion: Sesion) {
 export function leerSesion(): Sesion | null {
   try {
     const sesion = JSON.parse(localStorage.getItem(CLAVE_SESION) ?? 'null');
-    return sesion?.token && sesion?.organizacion?.slug ? sesion : null;
+    if (sesion?.token && sesion?.organizacion?.slug) {
+      sesionEnMemoria = sesion;
+      return sesion;
+    }
+    return sesionEnMemoria;
   } catch {
-    return null;
+    return sesionEnMemoria;
   }
 }
 
 export function borrarSesion() {
+  sesionEnMemoria = null;
   try {
     localStorage.removeItem(CLAVE_SESION);
   } catch {

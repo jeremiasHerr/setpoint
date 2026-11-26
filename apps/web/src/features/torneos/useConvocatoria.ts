@@ -81,6 +81,12 @@ export function useAutoguardadoConvocatoria(
         } else if (error instanceof ErrorApi && error.codigo === 'CATEGORIA_DEL_CIRCUITO') {
           setErrores({ categorias: 'Esa ya es una categoría de tu circuito: usá otro nombre' });
           setEstado('incompleto');
+        } else if (error instanceof ErrorApi && error.codigo === 'CATEGORIAS_BLOQUEADAS') {
+          setErrores({ categorias: 'Con la inscripción abierta ya no se pueden cambiar las categorías' });
+          setEstado('incompleto');
+        } else if (error instanceof ErrorApi && error.codigo === 'CUPO_MENOR_A_INSCRIPTOS') {
+          setErrores({ categorias: 'El cupo no puede ser menor a la cantidad de inscriptos que ya tiene el torneo' });
+          setEstado('incompleto');
         } else if (error instanceof ErrorApi && (error.codigo === 'DATOS_INVALIDOS' || error.codigo === 'SIN_MERCADOPAGO')) {
           // SIN_MERCADOPAGO: con la inscripción abierta, pasar a cobrar pide MercadoPago (decisión 137).
           setErrores(error.campos);
