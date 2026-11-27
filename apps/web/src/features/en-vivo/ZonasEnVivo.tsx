@@ -80,12 +80,25 @@ function PartidoDeZona({ partido }: { partido: PartidoEnVivo }) {
   const { jugadorA, jugadorB } = partido;
   if (!jugadorA || !jugadorB) return null;
   const jugado = tieneResultado(partido);
-  const ganador = jugado ? (partido.ganadorId === jugadorA.jugadorId ? jugadorA : jugadorB) : null;
+  const dobleWo = partido.estado === 'doble_walkover';
+  const ganador =
+    jugado && !dobleWo && partido.ganadorId !== null
+      ? partido.ganadorId === jugadorA.jugadorId
+        ? jugadorA
+        : jugadorB
+      : null;
   const perdedor = ganador && (ganador === jugadorA ? jugadorB : jugadorA);
 
   return (
     <li className="flex h-[38px] items-center justify-between gap-3 border-b border-linea-suave text-sm last:border-b-0">
-      {ganador && perdedor ? (
+      {dobleWo ? (
+        <>
+          <span className="min-w-0 truncate text-pizarra-500">
+            {jugadorA.apellido} · {jugadorB.apellido}
+          </span>
+          <span className="shrink-0 text-[13px] font-medium text-pizarra-500">W.O. doble</span>
+        </>
+      ) : ganador && perdedor ? (
         <>
           <span className="min-w-0 truncate">
             <span className="font-semibold">{ganador.apellido}</span>
@@ -119,6 +132,8 @@ function PartidoDeZona({ partido }: { partido: PartidoEnVivo }) {
 // Las clases van escritas enteras para que Tailwind las genere.
 function columnasParaZonas(n: number): string {
   switch (n) {
+    case 1:
+      return 'max-w-[560px]';
     case 2:
       return 'md:grid-cols-2';
     case 3:

@@ -1,5 +1,12 @@
-import { instancias, type Instancia, type InstanciaDeLaFicha } from '@setpoint/shared';
+import { instancias, type Instancia, type InstanciaDeLaFicha, type PartidoDeLaFicha } from '@setpoint/shared';
 import { rotuloDeRonda } from '../cuadros/cuadro';
+
+// "zona C", "final", o en el cuadro consuelo "semis · Cuadro consuelo".
+export function donde(partido: Pick<PartidoDeLaFicha, 'grupo' | 'ronda' | 'rondas' | 'cuadro'>, consuelo: string) {
+  if (partido.grupo) return `zona ${partido.grupo}`;
+  const ronda = rotuloDeRonda(partido.ronda!, partido.rondas!);
+  return partido.cuadro === 'complementaria' ? `${ronda} · ${consuelo}` : ronda;
+}
 
 // Con los mismos nombres que la tabla de puntos de Tu circuito: "Finalista", "Cuartos de final".
 const etiqueta = (clave: Instancia) => instancias.find((i) => i.clave === clave)!.etiqueta;

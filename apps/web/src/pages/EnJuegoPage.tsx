@@ -1,4 +1,4 @@
-import type { ProyeccionDelJugador } from '@setpoint/shared';
+import { NOMBRE_CUADRO_CONSUELO, type ProyeccionDelJugador } from '@setpoint/shared';
 import { Link, useParams } from 'react-router-dom';
 import { EncabezadoPublico } from '../components/EncabezadoPublico';
 import { Esqueleto } from '../components/Esqueleto';
@@ -56,6 +56,12 @@ function EnJuego({ p, slug, ficha }: { p: ProyeccionDelJugador; slug: string; fi
         ? { ruta: `/c/${slug}/torneos/${p.torneoId}/cuadros`, texto: 'Ver el cuadro' }
         : { ruta: `/c/${slug}/torneos/${p.torneoId}/en-vivo`, texto: 'Ver las zonas' };
 
+  const situacionTexto = !p.situacion
+    ? 'Antes del sorteo'
+    : p.situacion.tipo === 'cuadro' && p.situacion.cuadro === 'complementaria'
+      ? `${hastaDonde(p.situacion)} · ${NOMBRE_CUADRO_CONSUELO.toLowerCase()}`
+      : hastaDonde(p.situacion);
+
   return (
     <>
       <title>{`Qué está en juego · ${nombre}`}</title>
@@ -74,7 +80,7 @@ function EnJuego({ p, slug, ficha }: { p: ProyeccionDelJugador; slug: string; fi
       <Tarjeta variante="noche" className="flex flex-col gap-[17px]">
         <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
           <ConCifras className="text-[13px] text-pizarra-400">{p.torneo}</ConCifras>
-          <ConCifras className="text-[13px] text-white">{p.situacion ? hastaDonde(p.situacion) : 'Antes del sorteo'}</ConCifras>
+          <ConCifras className="text-[13px] text-white">{situacionTexto}</ConCifras>
         </div>
         <div className="flex items-end justify-between gap-4">
           <div className="flex flex-col gap-[3px]">
@@ -138,8 +144,13 @@ function NumeroUno({ p }: { p: ProyeccionDelJugador }) {
 
   let falta: string;
   if (desde === null) falta = 'Con este torneo no le alcanza para quedar primero.';
-  else if (desde === asegurada) falta = 'Queda primero pase lo que pase en este torneo.';
-  else if (desde === 'campeon') falta = 'Tiene que ganar el torneo.';
+  else if (desde === asegurada) {
+    falta = rival?.sigueEnJuego
+      ? 'Con lo que ya tiene asegurado queda primero hoy, aunque depende de hasta dónde llegue su escolta.'
+      : 'Queda primero pase lo que pase en este torneo.';
+  } else if (desde === 'campeon') falta = 'Tiene que ganar el torneo.';
+  else if (desde === 'finalista') falta = 'Tiene que llegar a la final.';
+  else if (desde === 'semifinalista') falta = 'Tiene que llegar a semifinales.';
   else falta = `Tiene que llegar a ${nombreDelEscenario(desde, false).toLowerCase()}.`;
 
   return (

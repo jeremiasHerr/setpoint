@@ -21,7 +21,7 @@ function Cruce({ zona, fila, rival }: { zona: ZonaDelTablero; fila: FilaDePosici
     const gano = partido.ganadorId === fila.jugadorId;
     return (
       <div className={`${celda} ${gano ? 'bg-lona-fondo font-semibold' : 'text-pizarra-450'}`}>
-        <ConCifras className="text-[13px]">{marcadorDesde(partido, fila.jugadorId)}</ConCifras>
+        <ConCifras className="text-[13px] whitespace-nowrap">{marcadorDesde(partido, fila.jugadorId)}</ConCifras>
       </div>
     );
   }

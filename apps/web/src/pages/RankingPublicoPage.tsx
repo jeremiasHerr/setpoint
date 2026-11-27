@@ -52,6 +52,7 @@ function Ranking({ ranking, slug }: { ranking: RankingPublico; slug: string }) {
   // Cada fila conserva su puesto: se busca para ver dónde está alguien, no para reordenar.
   // Por nombre, apellido o los dos (decisión 146).
   const filas = categoria.filas.filter((f) => coincideConElNombre(f, busqueda));
+  const filtrando = busqueda.trim() !== '';
   const vuelta = { ruta: `/c/${slug}/ranking?categoria=${categoria.id}`, etiqueta: 'Ranking' };
 
   return (
@@ -79,7 +80,16 @@ function Ranking({ ranking, slug }: { ranking: RankingPublico; slug: string }) {
       <div className="flex items-baseline justify-between gap-3 pt-0.5">
         <h2 className="text-xl font-semibold tracking-[-0.02em]">Toda la tabla</h2>
         <span className="text-[13px] text-pizarra-500">
-          <Numero>{categoria.filas.length}</Numero> {categoria.filas.length === 1 ? 'jugador' : 'jugadores'}
+          {filtrando ? (
+            <>
+              <Numero>{filas.length}</Numero> de <Numero>{categoria.filas.length}</Numero>{' '}
+              {categoria.filas.length === 1 ? 'jugador' : 'jugadores'}
+            </>
+          ) : (
+            <>
+              <Numero>{categoria.filas.length}</Numero> {categoria.filas.length === 1 ? 'jugador' : 'jugadores'}
+            </>
+          )}
         </span>
       </div>
 
@@ -97,7 +107,13 @@ function Ranking({ ranking, slug }: { ranking: RankingPublico; slug: string }) {
             <TablaRanking slug={slug} filas={filas} torneosDelCalendario={ranking.torneosDelCalendario} vuelta={vuelta} />
           </div>
           <div className="hidden lg:block">
-            <PlanillaRanking slug={slug} filas={filas} torneosDelCalendario={ranking.torneosDelCalendario} vuelta={vuelta} />
+            <PlanillaRanking
+              slug={slug}
+              filas={filas}
+              todasLasFilas={categoria.filas}
+              torneosDelCalendario={ranking.torneosDelCalendario}
+              vuelta={vuelta}
+            />
           </div>
         </>
       )}

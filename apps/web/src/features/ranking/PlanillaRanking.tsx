@@ -6,6 +6,8 @@ import { estadoParaLaFicha, type VueltaDeLaFicha } from '../ficha/vuelta';
 type Props = {
   slug: string;
   filas: FilaDeRanking[];
+  // Las filas sin filtrar, para que los años de cada columna no cambien al buscar.
+  todasLasFilas?: FilaDeRanking[];
   torneosDelCalendario: TorneoDelCalendario[];
   // A dónde vuelve la ficha: este ranking, en esta categoría (decisión 102).
   vuelta: VueltaDeLaFicha;
@@ -13,9 +15,9 @@ type Props = {
 
 // El ranking en la compu, como la planilla con la que el circuito ya lo llevaba: una columna por
 // torneo del calendario y el total al lado (decisión 155). En el celular sigue TablaRanking.
-export function PlanillaRanking({ slug, filas, torneosDelCalendario, vuelta }: Props) {
+export function PlanillaRanking({ slug, filas, todasLasFilas = filas, torneosDelCalendario, vuelta }: Props) {
   return (
-    <table className="w-full max-w-[860px] border-collapse text-left">
+    <table className="w-full border-collapse text-left">
       <thead>
         <tr className="border-b border-linea text-sm text-pizarra-500">
           <th scope="col" className="w-12 py-2 pr-3 text-right font-medium">
@@ -25,7 +27,7 @@ export function PlanillaRanking({ slug, filas, torneosDelCalendario, vuelta }: P
             Jugador
           </th>
           {torneosDelCalendario.map((torneo) => {
-            const anios = [...new Set(filas.flatMap((f) => f.casilleros.filter((c) => c.etapaId === torneo.id).map((c) => c.anio)))].sort();
+            const anios = [...new Set(todasLasFilas.flatMap((f) => f.casilleros.filter((c) => c.etapaId === torneo.id).map((c) => c.anio)))].sort();
             return (
               <th
                 key={torneo.id}
