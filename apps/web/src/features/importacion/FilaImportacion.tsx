@@ -98,6 +98,10 @@ export function FilaImportacion({
     >
       {resumen}
 
+      <p className="text-[13px] text-pizarra-500 md:hidden">
+        Casilleros: <Numero>{casillerosComoTexto(fila)}</Numero>
+      </p>
+
       {problemas && (
         <ul className="flex flex-col gap-1">
           {problemas.map((p) => (
@@ -143,7 +147,7 @@ export function FilaImportacion({
 
       {otros.length > 0 && (
         <Selector
-          id={`importacion-otro-${fila.fila}`}
+          id={`importacion-otro-${hoja}-${fila.fila}`}
           rotulo="O vinculalo con otro jugador del padrón"
           className="max-w-[360px]"
           value={otroElegido ?? ''}

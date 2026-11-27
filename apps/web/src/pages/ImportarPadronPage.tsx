@@ -218,8 +218,11 @@ function filasDe(importacion: Importacion) {
 function tituloDeRevision(importacion: Importacion) {
   if (!importacion.aplicadaEn) return 'Revisá la importación';
   const { importadas, pendientes } = filasDe(importacion);
-  const revisa = pendientes.length === 1 ? 'Revisá este' : `Revisá estos ${pendientes.length}`;
-  return importadas.length > 0 ? `Importamos ${jugadores(importadas.length)}. ${revisa}` : `${revisa} jugadores`;
+  if (importadas.length > 0) {
+    const revisa = pendientes.length === 1 ? 'Revisá este' : `Revisá estos ${pendientes.length}`;
+    return `Importamos ${jugadores(importadas.length)}. ${revisa}`;
+  }
+  return pendientes.length === 1 ? 'Revisá este jugador' : `Revisá estos ${pendientes.length} jugadores`;
 }
 
 function Cargando({ error }: { error: boolean }) {

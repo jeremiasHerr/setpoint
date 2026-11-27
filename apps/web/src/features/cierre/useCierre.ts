@@ -19,6 +19,8 @@ export function useCerrarTorneo(slug: string, id: number) {
     // La respuesta es la vista ya cerrada, con los puntos que se guardaron.
     onSuccess: (cierre) => {
       queryClient.setQueryData(claveCierre(slug, id), cierre);
+      void queryClient.invalidateQueries({ queryKey: ['tablero', slug, id] });
+      void queryClient.invalidateQueries({ queryKey: ['torneos', slug] });
       void queryClient.invalidateQueries({ queryKey: claveNavegacion(slug, id) });
     },
   });

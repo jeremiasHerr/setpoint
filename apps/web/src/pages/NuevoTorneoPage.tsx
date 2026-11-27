@@ -257,6 +257,7 @@ function EditorTorneo({ sesion, circuito, inicial }: PropsEditor) {
     try {
       const publicada = await publicarConvocatoria(slug, id);
       queryClient.setQueryData(claveConvocatoria(slug, id), publicada);
+      void queryClient.invalidateQueries({ queryKey: ['torneos', slug] });
       setPublicada(publicada);
     } catch (error) {
       if (error instanceof ErrorApi && error.codigo === 'DATOS_INCOMPLETOS') {

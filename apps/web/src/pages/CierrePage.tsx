@@ -101,9 +101,19 @@ function AvisoParticipacion({ cierre }: { cierre: CierreDelTorneo }) {
         <path d="M12 8v5M12 16v.01" />
       </svg>
       <p className="text-sm leading-normal text-pizarra-500">
-        Los <Numero>{participacion.length}</Numero> jugadores de participación reciben{' '}
-        <Numero className="text-noche">{puntos}</Numero> puntos de participación. Cada uno reemplaza lo que tenía en el casillero
-        de {cierre.torneoDelCalendario}, no se suma encima.
+        {participacion.length === 1 ? (
+          <>
+            El jugador de participación recibe <Numero className="text-noche">{puntos}</Numero>{' '}
+            {puntos === 1 ? 'punto' : 'puntos'} de participación. Reemplaza lo que tenía en el casillero de{' '}
+            {cierre.torneoDelCalendario}, no se suma encima.
+          </>
+        ) : (
+          <>
+            Los <Numero>{participacion.length}</Numero> jugadores de participación reciben{' '}
+            <Numero className="text-noche">{puntos}</Numero> {puntos === 1 ? 'punto' : 'puntos'} de participación. Cada uno
+            reemplaza lo que tenía en el casillero de {cierre.torneoDelCalendario}, no se suma encima.
+          </>
+        )}
       </p>
     </div>
   );

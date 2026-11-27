@@ -1,14 +1,10 @@
 import type { Club } from '@setpoint/shared';
 import { Boton } from '../../components/Boton';
-import { Interruptor } from '../../components/Interruptor';
 import { Tarjeta } from '../../components/Tarjeta';
 import { TarjetaClub } from './TarjetaClub';
 
 type Props = {
-  // Apagarlo solo oculta la lista: los clubes cargados quedan guardados.
-  usaClubes: boolean;
   clubes: Club[];
-  alCambiarUsaClubes: (usaClubes: boolean) => void;
   alCambiar: (clubes: Club[]) => void;
 };
 
@@ -20,24 +16,25 @@ function nombreDeClubNuevo(clubes: Club[]) {
   return `Club ${numero}`;
 }
 
-export function SeccionClubes({ usaClubes, clubes, alCambiarUsaClubes, alCambiar }: Props) {
+export function SeccionClubes({ clubes, alCambiar }: Props) {
   function agregarClub() {
     alCambiar([...clubes, { nombre: nombreDeClubNuevo(clubes), direccion: '', canchas: [] }]);
   }
 
   return (
     <Tarjeta className="flex flex-col gap-4 p-5">
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex flex-col gap-[5px]">
-          <h2 id="clubes-titulo" className="text-[17px] font-semibold">
-            Clubes donde juegan
-          </h2>
-          <p className="text-sm text-pizarra-500">Es opcional. Cargalos solo si querés estadísticas por superficie.</p>
-        </div>
-        <Interruptor encendido={usaClubes} alCambiar={alCambiarUsaClubes} aria-labelledby="clubes-titulo" />
+      <div className="flex flex-col gap-[5px]">
+        <h2 id="clubes-titulo" className="text-[17px] font-semibold">
+          Clubes donde juegan
+        </h2>
+        <p className="text-sm text-pizarra-500">
+          {clubes.length > 0
+            ? 'Es opcional. Si quitás todos los clubes, la sede de cada partido se escribe a mano.'
+            : 'Es opcional. Cargalos solo si querés estadísticas por superficie.'}
+        </p>
       </div>
 
-      {usaClubes && clubes.length > 0 ? (
+      {clubes.length > 0 ? (
         <>
           <ul className="flex flex-col gap-3">
             {clubes.map((club, i) => (
@@ -56,15 +53,9 @@ export function SeccionClubes({ usaClubes, clubes, alCambiarUsaClubes, alCambiar
           </Boton>
         </>
       ) : (
-        <div className="flex flex-col items-center gap-1.5 rounded-xl border border-dashed border-borde-campo p-[18px] text-center">
-          <p className="text-sm text-pizarra-500">
-            {clubes.length > 0
-              ? 'Con esto apagado, la sede de cada partido se escribe a mano. Los clubes que cargaste quedan guardados.'
-              : 'Sin clubes cargados, la sede de cada partido se escribe a mano.'}
-          </p>
-          {usaClubes && (
-            <Boton onClick={agregarClub}>Agregar club</Boton>
-          )}
+        <div className="flex flex-col items-center gap-2.5 rounded-xl border border-dashed border-borde-campo p-[18px] text-center">
+          <p className="text-sm text-pizarra-500">Sin clubes cargados, la sede de cada partido se escribe a mano.</p>
+          <Boton onClick={agregarClub}>Agregar club</Boton>
         </div>
       )}
     </Tarjeta>

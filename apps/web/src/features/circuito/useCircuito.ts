@@ -21,6 +21,7 @@ export function useCircuito(slug: string) {
 export function useAutoguardadoCircuito(slug: string, circuito: Circuito) {
   const queryClient = useQueryClient();
   const [estado, setEstado] = useState<EstadoGuardado>('sin-cambios');
+  const [motivoIncompleto, setMotivoIncompleto] = useState<string | null>(null);
   const actual = useRef(circuito);
   const ultimoGuardado = useRef(JSON.stringify(circuito));
   const enCurso = useRef(false);
@@ -31,17 +32,20 @@ export function useAutoguardadoCircuito(slug: string, circuito: Circuito) {
     const valor = actual.current;
     const json = JSON.stringify(valor);
     if (json === ultimoGuardado.current) {
+      setMotivoIncompleto(null);
       setEstado('guardado');
       return;
     }
 
     const configuracion = configuracionCircuitoSchema.safeParse(valor);
     if (!configuracion.success) {
+      setMotivoIncompleto(configuracion.error.issues[0]?.message ?? null);
       setEstado('incompleto');
       return;
     }
 
     enCurso.current = true;
+    setMotivoIncompleto(null);
     setEstado('guardando');
     try {
       const guardado = await guardarCircuito(slug, configuracion.data);
@@ -63,6 +67,7 @@ export function useAutoguardadoCircuito(slug: string, circuito: Circuito) {
     if (JSON.stringify(circuito) === ultimoGuardado.current) {
       // Se deshizo un cambio antes de que llegara a guardarse: lo que está en la base ya es esto.
       if (!enCurso.current) {
+        setMotivoIncompleto(null);
         setEstado((anterior) => (anterior === 'pendiente' || anterior === 'incompleto' ? 'guardado' : anterior));
       }
       return;
@@ -75,5 +80,5 @@ export function useAutoguardadoCircuito(slug: string, circuito: Circuito) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [circuito]);
 
-  return estado;
+  return { estado, motivoIncompleto };
 }

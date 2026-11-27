@@ -238,7 +238,6 @@ export function LoQueFalta({ slug, tablero }: { slug: string; tablero: Tablero }
   const vencidos = tablero.vencidos.filter((p) => !yaJugados.has(p.id));
   const faltaCargar = tablero.faltaCargar.filter((p) => !yaJugados.has(p.id));
   const sinCoordinar = tablero.sinCoordinar.filter((p) => !yaJugados.has(p.id));
-  const { totales } = tablero;
   const nada = conResultado.length === 0 && vencidos.length === 0 && faltaCargar.length === 0 && sinCoordinar.length === 0;
   // Los con fecha no son urgentes: se despliegan desde el pie, para cambiarlos o confirmarlos (F14).
   const [verConFecha, setVerConFecha] = useState(false);
@@ -306,14 +305,14 @@ export function LoQueFalta({ slug, tablero }: { slug: string; tablero: Tablero }
 
         {nada && <p className="px-5 py-5 text-[15px] text-pizarra-500">No hay partidos vencidos ni sin coordinar.</p>}
 
-        {totales.conFecha > 0 && (
+        {conFecha.length > 0 && (
           <div className="flex flex-wrap items-center justify-between gap-3 border-t border-linea bg-niebla px-5 py-3.5">
             <p className="text-sm text-pizarra-500">
               <TextoConNumeros
                 frase={
-                  totales.conFecha === 1
+                  conFecha.length === 1
                     ? ['También hay ', 1, ' partido con fecha acordada que todavía no se jugó.']
-                    : ['También hay ', totales.conFecha, ' partidos con fecha acordada que todavía no se jugaron.']
+                    : ['También hay ', conFecha.length, ' partidos con fecha acordada que todavía no se jugaron.']
                 }
               />
             </p>
@@ -323,7 +322,7 @@ export function LoQueFalta({ slug, tablero }: { slug: string; tablero: Tablero }
               onClick={() => setVerConFecha(!verConFecha)}
               className={`${accion} border border-linea bg-papel hover:bg-niebla`}
             >
-              {verConFecha ? 'Ocultar' : totales.conFecha === 1 ? 'Verlo' : 'Verlos'}
+              {verConFecha ? 'Ocultar' : conFecha.length === 1 ? 'Verlo' : 'Verlos'}
             </button>
           </div>
         )}

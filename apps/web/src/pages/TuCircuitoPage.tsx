@@ -23,7 +23,7 @@ const textoEstado: Record<EstadoGuardado, string> = {
   pendiente: 'guardando…',
   guardando: 'guardando…',
   guardado: 'guardado',
-  incompleto: 'falta un nombre · sin guardar',
+  incompleto: 'revisá los datos · sin guardar',
   error: 'no se pudo guardar',
 };
 
@@ -78,12 +78,12 @@ function CargarCircuito({ sesion }: { sesion: Sesion }) {
 function EditorCircuito({ sesion, inicial }: { sesion: Sesion; inicial: Circuito }) {
   const slug = sesion.organizacion.slug;
   const [circuito, setCircuito] = useState<Circuito>(inicial);
-  // No hay columna para esto: arranca encendido si ya hay clubes, y apagarlo solo los oculta.
-  const [usaClubes, setUsaClubes] = useState(inicial.clubes.length > 0);
-  const estadoGuardado = useAutoguardadoCircuito(slug, circuito);
+  const { estado: estadoGuardado, motivoIncompleto } = useAutoguardadoCircuito(slug, circuito);
   const navegar = useNavigate();
   // Salir con un cambio sin guardar lo perdería: el autoguardado espera un momento antes de mandarlo.
   const guardando = estadoGuardado === 'pendiente' || estadoGuardado === 'guardando';
+  const etiquetaGuardado =
+    estadoGuardado === 'incompleto' && motivoIncompleto ? `${motivoIncompleto} · sin guardar` : textoEstado[estadoGuardado];
 
   function cambiar<K extends keyof Circuito>(campo: K, valor: Circuito[K]) {
     setCircuito((anterior) => ({ ...anterior, [campo]: valor }));
@@ -104,7 +104,7 @@ function EditorCircuito({ sesion, inicial }: { sesion: Sesion; inicial: Circuito
           </p>
         </div>
         <span aria-live="polite" className="shrink-0 text-[13px] text-pizarra-500">
-          {textoEstado[estadoGuardado]}
+          {etiquetaGuardado}
         </span>
       </div>
 
@@ -137,12 +137,7 @@ function EditorCircuito({ sesion, inicial }: { sesion: Sesion; inicial: Circuito
             jugadoresCarganResultados={circuito.jugadoresCarganResultados ?? false}
             alCambiar={(valor) => cambiar('jugadoresCarganResultados', valor)}
           />
-          <SeccionClubes
-            usaClubes={usaClubes}
-            clubes={circuito.clubes}
-            alCambiarUsaClubes={setUsaClubes}
-            alCambiar={(clubes) => cambiar('clubes', clubes)}
-          />
+          <SeccionClubes clubes={circuito.clubes} alCambiar={(clubes) => cambiar('clubes', clubes)} />
         </div>
 
         <aside className="flex flex-col gap-4 lg:sticky lg:top-[76px] lg:max-h-[calc(100dvh-92px)] lg:overflow-y-auto">

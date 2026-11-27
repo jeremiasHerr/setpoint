@@ -54,13 +54,14 @@ function subtitulo(caso: CasoDeRevision) {
 // Revisar vinculación (docs/pantallas/organizador/revisar-vinculacion.html, decisión 051).
 export function RevisarVinculacionPage() {
   const sesion = leerSesion();
+  const { jugadorId = '' } = useParams();
   if (!sesion) return <Navigate to="/ingresar" replace />;
-  return <Revisar sesion={sesion} />;
+  // key por jugadorId: al pasar a otro caso desde la columna lateral se limpian mutaciones previas.
+  return <Revisar key={jugadorId} sesion={sesion} jugadorId={jugadorId} />;
 }
 
-function Revisar({ sesion }: { sesion: Sesion }) {
+function Revisar({ sesion, jugadorId }: { sesion: Sesion; jugadorId: string }) {
   const { slug } = sesion.organizacion;
-  const { jugadorId = '' } = useParams();
   const navegar = useNavigate();
   const circuito = useCircuito(slug);
   const revisiones = useRevisiones(slug);

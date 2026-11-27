@@ -52,9 +52,13 @@ function Fila({ fila, columnas }: { fila: FilaDelCierre; columnas: string }) {
           {fila.nombre} {fila.apellido}
         </span>
         {ranking && (
-          <span className="md:hidden">
+          <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 md:hidden">
             <ChipInstancia instancia={fila.instancia} />
-          </span>
+            <span className="text-[13px] text-pizarra-500">
+              <Cambio antes={ranking.reemplaza} despues={ranking.puntos} /> · total{' '}
+              <Numero className="font-semibold text-noche">{ranking.acumulado}</Numero>
+            </span>
+          </div>
         )}
       </div>
       <span className={ranking ? 'hidden md:block' : ''}>

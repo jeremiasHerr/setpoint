@@ -59,6 +59,10 @@ export function Confirmacion({
         evento.preventDefault();
         cancelar();
       }}
+      // Si el navegador cierra el <dialog> directamente (por ejemplo, doble Escape), sincroniza el estado.
+      onClose={() => {
+        if (abierta) cancelar();
+      }}
       // El clic en el fondo desenfocado le llega al <dialog> mismo: también cancela.
       onClick={(evento) => evento.target === evento.currentTarget && cancelar()}
       className="m-auto w-[min(560px,calc(100%-32px))] overflow-hidden rounded-superficie border border-linea bg-papel p-0 text-noche backdrop:bg-noche/40 backdrop:backdrop-blur-[4px]"

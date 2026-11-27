@@ -1,5 +1,5 @@
 import { VUELTAS_DE_MERCADOPAGO, type CuentaMercadoPago, type VueltaDeMercadoPago } from '@setpoint/shared';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Aviso } from '../../components/Aviso';
@@ -52,6 +52,7 @@ type Props = {
 // La cuenta de MercadoPago con la que cobra la organización (decisión 137). No es parte del
 // autoguardado: conectar y desconectar son acciones, con sus propias rutas.
 export function SeccionMercadoPago({ slug, inicial }: Props) {
+  const queryClient = useQueryClient();
   const [cuenta, setCuenta] = useState(inicial);
   const [confirmando, setConfirmando] = useState(false);
   const vuelta = useVueltaDeMercadoPago();
@@ -66,6 +67,7 @@ export function SeccionMercadoPago({ slug, inicial }: Props) {
     onSuccess: (nueva) => {
       setCuenta(nueva);
       setConfirmando(false);
+      void queryClient.invalidateQueries({ queryKey: ['circuito', slug] });
     },
   });
 

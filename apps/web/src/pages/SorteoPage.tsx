@@ -149,7 +149,11 @@ function ResumenDeSumas({ zonas }: { zonas: ZonaSorteada[] }) {
       <span className={`mt-[7px] size-[7px] shrink-0 rounded-full ${parejas ? 'bg-lona-texto' : 'bg-borde-campo'}`} />
       <p className="text-sm text-pizarra-700">
         {conUnoMenos.length === 0 ? (
-          parejas ? (
+          !comparables ? (
+            <>
+              La zona suma <Numero>{menor}</Numero>.
+            </>
+          ) : parejas ? (
             <>
               Las <Numero>{zonas.length}</Numero> zonas suman <Numero>{menor}</Numero>. Están parejas.
             </>
@@ -204,7 +208,7 @@ function textoDeError(error: Error, sorteo: Sorteo): ReactNode {
       return (
         <>
           Hay <Numero>{sorteo.inscriptos}</Numero> inscriptos: no alcanzan para <Numero>{sorteo.cantidadGrupos}</Numero>{' '}
-          zonas de al menos <Numero>3</Numero>.
+          {sorteo.cantidadGrupos === 1 ? 'zona' : 'zonas'} de al menos <Numero>3</Numero>.
         </>
       );
     case 'ZONAS_INVALIDAS':
@@ -331,7 +335,8 @@ function SorteoDeZonas({ sesion, sorteo }: { sesion: Sesion; sorteo: Sorteo }) {
           <p className="text-[15px] text-pizarra-500">
             {sorteo.confirmado && zonas ? (
               <>
-                <Numero>{sorteo.inscriptos}</Numero> jugadores en <Numero>{sorteo.cantidadGrupos}</Numero> zonas de{' '}
+                <Numero>{sorteo.inscriptos}</Numero> jugadores en <Numero>{sorteo.cantidadGrupos}</Numero>{' '}
+                {sorteo.cantidadGrupos === 1 ? 'zona' : 'zonas'} de{' '}
                 <TamanoDeZonas inscriptos={sorteo.inscriptos} grupos={sorteo.cantidadGrupos} />, {comoSeSorteo(sorteo)} ·{' '}
                 <Numero>{partidosDeZona(zonas)}</Numero> partidos y <Numero>{sorteo.plazoGruposDias}</Numero> días para jugarlos
               </>
@@ -342,7 +347,8 @@ function SorteoDeZonas({ sesion, sorteo }: { sesion: Sesion; sorteo: Sorteo }) {
                 {(sorteable || zonas) && (
                   <>
                     {' '}
-                    · se arman <Numero>{sorteo.cantidadGrupos}</Numero> zonas de{' '}
+                    · {sorteo.cantidadGrupos === 1 ? 'se arma' : 'se arman'} <Numero>{sorteo.cantidadGrupos}</Numero>{' '}
+                    {sorteo.cantidadGrupos === 1 ? 'zona' : 'zonas'} de{' '}
                     <TamanoDeZonas inscriptos={sorteo.inscriptos} grupos={sorteo.cantidadGrupos} />
                   </>
                 )}

@@ -147,6 +147,7 @@ export function SeccionBasico({
             categorias={categorias}
             categoriasDelCircuito={categoriasDelCircuito}
             cupoPorDefecto={cupoPorDefecto}
+            fijas={categoriasFijas}
             error={errores.categorias}
             alCambiar={alCambiarCategorias}
           />
@@ -160,12 +161,14 @@ type PropsCategorias = {
   categorias: DatosConvocatoria['categorias'];
   categoriasDelCircuito: string[];
   cupoPorDefecto: number;
+  fijas: boolean;
   error?: string;
   alCambiar: (categorias: DatosConvocatoria['categorias']) => void;
 };
 
-function CategoriasDelCircuito({ categorias, categoriasDelCircuito, cupoPorDefecto, error, alCambiar }: PropsCategorias) {
+function CategoriasDelCircuito({ categorias, categoriasDelCircuito, cupoPorDefecto, fijas, error, alCambiar }: PropsCategorias) {
   function alternar(categoria: string) {
+    if (fijas) return;
     if (categorias.some((c) => c.categoria === categoria)) {
       alCambiar(categorias.filter((c) => c.categoria !== categoria));
       return;
@@ -185,7 +188,13 @@ function CategoriasDelCircuito({ categorias, categoriasDelCircuito, cupoPorDefec
       <h3 className="text-[13px] font-semibold text-pizarra-500">Categorías que se disputan</h3>
       <div className="flex flex-wrap gap-2">
         {categoriasDelCircuito.map((categoria) => (
-          <Chip key={categoria} activo={categorias.some((c) => c.categoria === categoria)} onClick={() => alternar(categoria)}>
+          <Chip
+            key={categoria}
+            activo={categorias.some((c) => c.categoria === categoria)}
+            disabled={fijas}
+            className="disabled:cursor-not-allowed disabled:opacity-60"
+            onClick={() => alternar(categoria)}
+          >
             {categoria}
           </Chip>
         ))}

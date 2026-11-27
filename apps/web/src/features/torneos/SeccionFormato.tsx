@@ -88,8 +88,8 @@ export function SeccionFormato({
       {/* Ayuda en contexto (decisión 134): lo que después frena el cierre, dicho donde se elige. */}
       <p className="text-[13px] text-pizarra-500">
         Si no se llena el cupo, algunas zonas quedan de <Numero>3</Numero>. Para sortear, cada zona necesita al menos{' '}
-        <Numero>3</Numero> inscriptos pagos: con <Numero>{cantidadGrupos || 0}</Numero> zonas, hacen falta{' '}
-        <Numero>{(cantidadGrupos || 0) * 3}</Numero>.
+        <Numero>3</Numero> inscriptos pagos: con <Numero>{cantidadGrupos || 0}</Numero>{' '}
+        {cantidadGrupos === 1 ? 'zona' : 'zonas'}, hacen falta <Numero>{(cantidadGrupos || 0) * 3}</Numero>.
       </p>
 
       <div className="flex items-center justify-between gap-4 pt-1">
