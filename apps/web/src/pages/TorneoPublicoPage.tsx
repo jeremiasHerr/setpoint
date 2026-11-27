@@ -27,13 +27,22 @@ export function TorneoPublicoPage() {
   // Por el link viejo, al nuevo: si alguien lo copia de la barra del navegador, copia el del nombre.
   if (id && torneo.data?.slugPublico) return <Navigate to={rutaDelTorneo(slug, torneo.data)} replace />;
 
+  const datos = torneo.data;
   return (
-    // En la compu, el mismo ancho que el ranking y la ficha (decisión 155).
+    <>
+    <EncabezadoPublico
+      organizacion={datos?.organizacion.nombre}
+      detalle={datos?.categoria}
+      rutaRanking={datos?.organizacion.usaRanking ? `/c/${datos.organizacion.slug}/ranking` : undefined}
+      ancho="ancho"
+    />
+    {/* En la compu, el mismo ancho que el ranking y la ficha (decisión 155). */}
     <main className="mx-auto flex min-h-screen max-w-[480px] flex-col gap-5 px-4 pt-5 pb-7 md:min-h-0 lg:max-w-[1040px] lg:px-8 lg:pt-8">
       {torneo.isPending && <Esqueleto forma="lista" />}
       {torneo.error && <p className="text-[15px] text-pizarra-700">{mensajeDeError(torneo.error)}</p>}
       {torneo.data && <Convocatoria torneo={torneo.data} />}
     </main>
+    </>
   );
 }
 
@@ -47,10 +56,6 @@ function Convocatoria({ torneo }: { torneo: TorneoPublico }) {
     <>
       <title>{`${torneo.nombre} · ${torneo.categoria} · ${torneo.organizacion.nombre}`}</title>
       <Vuelta organizacion={torneo.organizacion} />
-      <div className="flex items-center justify-between gap-3">
-        <EncabezadoPublico organizacion={torneo.organizacion.nombre} />
-        <span className="rounded-full border border-linea px-2.5 py-1.5 text-[14px] font-medium text-pizarra-500">{torneo.categoria}</span>
-      </div>
 
       {/* En la compu, dos columnas: lo que es el torneo a la izquierda y lo que se hace con él a la
           derecha, fija al bajar (decisión 156). En el celular, una sola columna, como antes. */}
@@ -178,10 +183,9 @@ function Convocatoria({ torneo }: { torneo: TorneoPublico }) {
 }
 
 // Sin menú, y desde un link de WhatsApp sin historial, la vuelta es una ruta fija (decisión 156):
-// quien administra ese circuito vuelve a su Inicio; los demás, al ranking, si el circuito lo lleva.
+// quien administra ese circuito vuelve a su Inicio. Al ranking se va desde la banda (decisión 158).
 function Vuelta({ organizacion }: { organizacion: TorneoPublico['organizacion'] }) {
   if (leerSesion()?.organizacion.slug === organizacion.slug) return <LinkDeVuelta ruta="/inicio">Inicio</LinkDeVuelta>;
-  if (organizacion.usaRanking) return <LinkDeVuelta ruta={`/c/${organizacion.slug}/ranking`}>Ranking del circuito</LinkDeVuelta>;
   return null;
 }
 

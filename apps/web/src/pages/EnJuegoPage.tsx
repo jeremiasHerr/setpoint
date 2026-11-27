@@ -32,6 +32,8 @@ export function EnJuegoPage() {
   const ficha = `/c/${slug}/jugadores/${jugadorId}`;
 
   return (
+    <>
+    <EncabezadoPublico organizacion={proyeccion.data?.organizacion} />
     <main className="mx-auto flex min-h-screen max-w-[480px] flex-col gap-[22px] px-4 pt-5 pb-7">
       {proyeccion.isPending && <Esqueleto forma="lista" />}
       {proyeccion.error && (
@@ -42,6 +44,7 @@ export function EnJuegoPage() {
       )}
       {proyeccion.data && <EnJuego p={proyeccion.data} slug={slug} ficha={ficha} />}
     </main>
+    </>
   );
 }
 
@@ -65,10 +68,6 @@ function EnJuego({ p, slug, ficha }: { p: ProyeccionDelJugador; slug: string; fi
   return (
     <>
       <title>{`Qué está en juego · ${nombre}`}</title>
-      <header>
-        <EncabezadoPublico organizacion={p.organizacion} />
-      </header>
-
       <section className="flex flex-col gap-1.5">
         <LinkDeVuelta ruta={ficha}>Ficha del jugador</LinkDeVuelta>
         <h1 className="text-[28px] leading-[1.1] font-display font-semibold tracking-[-0.02em]">Qué está en juego</h1>

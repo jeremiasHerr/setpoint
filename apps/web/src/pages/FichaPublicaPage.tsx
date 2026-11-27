@@ -32,11 +32,14 @@ export function FichaPublicaPage() {
   const ficha = useFichaPublica(slug, id);
 
   return (
+    <>
+    <EncabezadoPublico organizacion={ficha.data?.organizacion} ancho="ancho" />
     <main className="mx-auto flex min-h-screen max-w-[480px] flex-col gap-[22px] px-4 pt-5 pb-7 lg:max-w-[1040px] lg:px-8">
       {ficha.isPending && <Esqueleto forma="lista" />}
       {ficha.error && <p className="text-[15px] text-pizarra-700">{mensajeDeError(ficha.error)}</p>}
       {ficha.data && <Ficha ficha={ficha.data} slug={slug} />}
     </main>
+    </>
   );
 }
 
@@ -50,18 +53,18 @@ function Ficha({ ficha, slug }: { ficha: FichaDelJugador; slug: string }) {
   return (
     <>
       <title>{`${nombre} · ${ficha.organizacion}`}</title>
-      {/* Compartir arriba, en la línea de la organización, como en la referencia: el nombre ocupa todo el ancho. */}
-      <header className="flex flex-wrap items-center justify-between gap-3">
-        <EncabezadoPublico organizacion={ficha.organizacion} />
+      {/* La vuelta y Compartir arriba, en una línea: el nombre ocupa todo el ancho. La organización ya
+          está en la banda (decisión 158). */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        {vuelta ? <LinkDeVuelta ruta={vuelta.ruta}>{vuelta.etiqueta}</LinkDeVuelta> : <span />}
         <BotonCompartir titulo={`${nombre} · ${ficha.organizacion}`} />
-      </header>
+      </div>
 
       {/* Desde 1024 px, dos columnas (decisión 155); debajo, 'contents' deja las secciones como siempre. */}
       <div className="contents lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-12">
       <div className="contents lg:flex lg:flex-col lg:gap-[22px]">
       <section className="flex flex-col gap-4">
         <div className="flex flex-col gap-1.5">
-          {vuelta && <LinkDeVuelta ruta={vuelta.ruta}>{vuelta.etiqueta}</LinkDeVuelta>}
           <h1 className="text-[28px] leading-[1.1] font-display font-semibold tracking-[-0.02em]">{nombre}</h1>
           {(ficha.categoria || ranking) && (
             <div className="flex flex-wrap items-center gap-[9px]">

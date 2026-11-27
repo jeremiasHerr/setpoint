@@ -36,13 +36,22 @@ export function EnVivoPage({ pestanaInicial }: { pestanaInicial?: Pestana }) {
   const { slug = '', id = '' } = useParams();
   const torneo = useTorneoEnVivo(slug, id);
 
+  const datos = torneo.data;
   return (
+    <>
+    <EncabezadoPublico
+      organizacion={datos?.organizacion}
+      detalle={datos?.nombre}
+      rutaRanking={datos?.usaRanking ? `/c/${slug}/ranking` : undefined}
+      ancho="completo"
+    />
     <main className="mx-auto flex min-h-screen max-w-[480px] flex-col gap-[18px] px-4 pt-5 pb-7 md:max-w-[960px] md:px-6 xl:max-w-none xl:px-[30px]">
       {torneo.isPending && <Esqueleto forma="lista" />}
       {/* Si falla una actualización, queda lo último que se cargó. */}
       {torneo.error && !torneo.data && <p className="text-[15px] text-pizarra-700">{mensajeDeError(torneo.error)}</p>}
       {torneo.data && <Contenido torneo={torneo.data} slug={slug} id={id} pestanaInicial={pestanaInicial} />}
     </main>
+    </>
   );
 }
 
@@ -57,11 +66,7 @@ function Contenido({ torneo, slug, id, pestanaInicial }: { torneo: TorneoEnVivo;
   return (
     <>
       <title>{`${torneo.nombre} · en vivo · ${torneo.organizacion}`}</title>
-      <header className="xl:-mx-[30px] xl:flex xl:h-[58px] xl:items-center xl:border-b xl:border-linea xl:px-[30px]">
-        <EncabezadoPublico organizacion={torneo.organizacion} detalle={torneo.nombre} />
-      </header>
-
-      <div className="flex flex-col gap-1.5 xl:pt-2">
+      <div className="flex flex-col gap-1.5">
         {/* Las páginas públicas no tienen menú: esta vuelve a la del torneo, que enlaza acá (decisión 084). */}
         <LinkDeVuelta ruta={`/c/${slug}/torneos/${id}`}>El torneo</LinkDeVuelta>
         <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">

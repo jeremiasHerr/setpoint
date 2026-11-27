@@ -25,12 +25,13 @@ export function RankingPublicoPage() {
   const ranking = useRankingPublico(slug);
 
   return (
+    <>
+    <EncabezadoPublico organizacion={ranking.data?.organizacion} ancho="ancho" />
     <main className="mx-auto flex min-h-screen max-w-[480px] flex-col gap-[18px] px-4 pt-5 pb-7 lg:max-w-[1040px] lg:px-8">
       {/* Las páginas que se comparten por link dicen en la pestaña qué son. React lo sube al <head>. */}
       {ranking.data && <title>{`Ranking · ${ranking.data.organizacion}`}</title>}
       {/* Quien llega por el link no tiene historial: vuelve a su Inicio o a Setpoint (decisión 157). */}
       {leerSesion() ? <LinkDeVuelta ruta="/inicio">Inicio</LinkDeVuelta> : <LinkDeVuelta ruta="/">Setpoint</LinkDeVuelta>}
-      {ranking.data && <EncabezadoPublico organizacion={ranking.data.organizacion} />}
       {ranking.isPending && <Esqueleto forma="lista" />}
       {ranking.error && <p className="text-[15px] text-pizarra-700">{mensajeDeError(ranking.error)}</p>}
       {ranking.data &&
@@ -40,6 +41,7 @@ export function RankingPublicoPage() {
           <p className="text-[15px] text-pizarra-700">Este circuito no lleva ranking.</p>
         ))}
     </main>
+    </>
   );
 }
 
