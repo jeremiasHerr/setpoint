@@ -57,7 +57,7 @@ Todo el sistema sale de que hay dos personas usando esto en situaciones opuestas
 | `lona-borde` | `#93D2A3` | Anillo del partido elegido |
 | `lona-fondo` | `#E4F8E7` | Celda ganada, chip "nueva", fila tuya |
 | `lona-texto` | `#1B6236` | La lona como texto o punto sobre papel: clasifica, pagada, ganador; interruptor prendido |
-| `pelota` | `#CDF546` | **Solo** la barra levantada del logo sobre noche, el punto de la marca del circuito y una pelota dibujada |
+| `pelota` | `#CDF546` | **Solo** la barra levantada del logo sobre noche y una pelota dibujada |
 | `azul` | `#3567D6` | Marca "con fecha" o "en curso" |
 | `azul-texto` | `#2A55BC` | Chip de fecha |
 | `azul-fondo` | `#E5EDFE` | Fondo del chip de fecha, columna En juego |
@@ -174,7 +174,7 @@ Las marcas de una zona: tres barras de partido jugado y la cuarta, levantada, qu
 - **Splash de la app:** fondo `noche-900` y la marca sola, sin recuadro, en la versión sobre noche ([decisión 107](decisiones/107-splash-en-noche.md)).
 - **Al pasar el mouse**, el set point recorre la zona: el acento arranca en la primera barra, la levanta y pasa a la siguiente, hasta volver a la última, en un segundo. Corre completa aunque el mouse se vaya enseguida, y no vuelve a arrancar hasta terminar. Responde a una acción, como toda animación fuera del demo de la landing, y con "reducir movimiento" no se mueve.
 
-En la app es el mismo dibujo, con cuatro `View` para no sumar `react-native-svg` por un logo, y sin la palabra: va al lado del nombre del circuito. La marca de la organización en las páginas públicas de la web es otra cosa: un cuadrado `noche` con un punto `pelota`, al lado de su nombre.
+En la app es el mismo dibujo, con cuatro `View` para no sumar `react-native-svg` por un logo, y sin la palabra: va al lado del nombre del circuito. Las páginas públicas de la web llevan el logo sobre claro, con una raya y el nombre del circuito al lado; el logo es un link al Inicio de quien administra o, sin sesión, a la landing ([decisión 157](decisiones/157-el-logo-en-las-paginas-publicas.md)).
 
 ### Encabezado del organizador
 

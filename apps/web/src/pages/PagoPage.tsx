@@ -95,7 +95,7 @@ export function PagoPage() {
 function Marco({ organizacion, children }: { organizacion?: string; children: React.ReactNode }) {
   return (
     <main className="mx-auto flex min-h-screen max-w-[480px] flex-col gap-[22px] px-4 pt-5 pb-7">
-      <EncabezadoPublico organizacion={organizacion ?? 'Setpoint'} />
+      <EncabezadoPublico organizacion={organizacion} />
       {children}
     </main>
   );
