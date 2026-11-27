@@ -32,17 +32,30 @@ export function EncabezadoDelCuadro({ cuadro, consuelo }: { cuadro: CuadroElimin
   );
 }
 
+type PropsCuadro = {
+  cuadro: CuadroEliminatorio;
+  consuelo: string;
+  eleccion?: Eleccion;
+  // Las columnas se reparten el ancho disponible en lugar de medir 190, y cada tarjeta muestra el
+  // nombre completo y el marcador set por set (decisión 161). Para cuadros de pocas rondas.
+  repartido?: boolean;
+};
+
 // El cuadro completo, una columna por ronda. Las columnas tienen todas la misma altura y cada par
 // de lugares se reparte con space-around: así cada partido queda a la altura de los dos que lo
 // alimentan, y los codos son bordes de 1px (design.md §12).
 // Con eleccion, tocar un partido lo elige (Cargar resultado) en vez de abrir su marcador.
-export function CuadroCompleto({ cuadro, consuelo, eleccion }: { cuadro: CuadroEliminatorio; consuelo: string; eleccion?: Eleccion }) {
+export function CuadroCompleto({ cuadro, consuelo, eleccion, repartido = false }: PropsCuadro) {
   const rondas = Array.from({ length: cuadro.rondas }, (_, i) => i + 1);
-  const columnas = { gridTemplateColumns: `repeat(${cuadro.rondas}, ${ANCHO_TARJETA}px)`, columnGap: SEPARACION };
+  const columnas = {
+    gridTemplateColumns: repartido ? `repeat(${cuadro.rondas}, minmax(0, 1fr))` : `repeat(${cuadro.rondas}, ${ANCHO_TARJETA}px)`,
+    columnGap: SEPARACION,
+  };
   const alto = Math.max(2 ** (cuadro.rondas - 1) * ALTO_POR_LUGAR, 150);
+  const ancho = repartido ? undefined : { width: cuadro.rondas * ANCHO_TARJETA + (cuadro.rondas - 1) * SEPARACION };
 
   return (
-    <section className="flex flex-col gap-4" style={{ width: cuadro.rondas * ANCHO_TARJETA + (cuadro.rondas - 1) * SEPARACION }}>
+    <section className={`flex flex-col gap-4 ${repartido ? 'min-w-0' : ''}`} style={ancho}>
       <EncabezadoDelCuadro cuadro={cuadro} consuelo={consuelo} />
 
       <div className="grid" style={columnas}>
@@ -59,7 +72,7 @@ export function CuadroCompleto({ cuadro, consuelo, eleccion }: { cuadro: CuadroE
           if (lugares.length === 1) {
             return (
               <div key={ronda} className="flex flex-col justify-center" style={{ height: alto }}>
-                <Lugar lugar={lugares[0]} ronda={ronda} cuadro={cuadro} eleccion={eleccion} />
+                <Lugar lugar={lugares[0]} ronda={ronda} cuadro={cuadro} eleccion={eleccion} completo={repartido} />
               </div>
             );
           }
@@ -68,8 +81,8 @@ export function CuadroCompleto({ cuadro, consuelo, eleccion }: { cuadro: CuadroE
             <div key={ronda} className="flex flex-col" style={{ height: alto }}>
               {pares.map(([arriba, abajo], i) => (
                 <div key={i} className={`relative flex flex-1 flex-col justify-around ${codo(arriba !== null, abajo !== null)}`}>
-                  <Lugar lugar={arriba} ronda={ronda} cuadro={cuadro} eleccion={eleccion} />
-                  <Lugar lugar={abajo} ronda={ronda} cuadro={cuadro} eleccion={eleccion} />
+                  <Lugar lugar={arriba} ronda={ronda} cuadro={cuadro} eleccion={eleccion} completo={repartido} />
+                  <Lugar lugar={abajo} ronda={ronda} cuadro={cuadro} eleccion={eleccion} completo={repartido} />
                 </div>
               ))}
             </div>
@@ -91,18 +104,18 @@ function codo(hayArriba: boolean, hayAbajo: boolean) {
   return '';
 }
 
-type PropsLugar = { lugar: LugarDelCuadro; ronda: number; cuadro: CuadroEliminatorio; eleccion?: Eleccion };
+type PropsLugar = { lugar: LugarDelCuadro; ronda: number; cuadro: CuadroEliminatorio; eleccion?: Eleccion; completo: boolean };
 
 // Un lugar del cuadro: un partido o quien pasa directo. Desde la segunda ronda, cada partido lleva
 // el conector que llega del codo.
-function Lugar({ lugar, ronda, cuadro, eleccion }: PropsLugar) {
+function Lugar({ lugar, ronda, cuadro, eleccion, completo }: PropsLugar) {
   if (!lugar) return <div className="h-16" aria-hidden />;
   if (lugar.tipo === 'pase') return <TarjetaPaseDirecto jugador={lugar.jugador} rotulo={rotuloDelPaseDirecto(cuadro.rondas)} className="w-full" />;
   const conector =
     ronda > 1 ? "before:absolute before:top-1/2 before:-left-[17px] before:h-px before:w-[17px] before:bg-linea before:content-['']" : '';
   return (
     <div className={`relative ${conector}`}>
-      <TarjetaPartido partido={lugar.partido} destacado={destacadoDe(lugar.partido, cuadro)} eleccion={eleccion} className="w-full" />
+      <TarjetaPartido partido={lugar.partido} destacado={destacadoDe(lugar.partido, cuadro)} eleccion={eleccion} completo={completo} className="w-full" />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { EncabezadoPublico } from '../components/EncabezadoPublico';
 import { LinkDeVuelta } from '../components/LinkDeVuelta';
 import { BotonCompartir } from '../features/cuadros/BotonCompartir';
 import { LosCuadros } from '../features/cuadros/LosCuadros';
+import { LoProximo } from '../features/en-vivo/LoProximo';
 import { CalendarioEnVivo } from '../features/en-vivo/CalendarioEnVivo';
 import { useTorneoEnVivo } from '../features/en-vivo/useTorneoEnVivo';
 import { ZonasEnVivo } from '../features/en-vivo/ZonasEnVivo';
@@ -74,6 +75,8 @@ function Contenido({ torneo, slug, id, pestanaInicial }: { torneo: TorneoEnVivo;
           <BotonCompartir titulo={`${torneo.nombre} · ${torneo.organizacion}`} />
         </div>
       </div>
+
+      <LoProximo torneo={torneo} slug={slug} id={id} />
 
       <div role="group" aria-label="Qué ver" className="flex flex-wrap gap-1.5">
         {PESTANAS.map(({ clave, nombre }) => (
