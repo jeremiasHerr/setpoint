@@ -3,7 +3,9 @@ import {
   asignarPuestos,
   puntosVigentes,
   tablaDeCategoria,
+  temporadaDeCategoria,
   type MovimientoDeRanking,
+  type TorneoDeLaTemporada,
 } from '../../src/modules/ranking/ranking';
 
 let proximoId = 1;
@@ -128,5 +130,62 @@ describe('tablaDeCategoria', () => {
     const [fila] = tablaDeCategoria([jugadores[0]], [movimiento(1, 1, 0)]);
 
     expect(fila.casilleros).toEqual([]);
+  });
+});
+
+describe('temporadaDeCategoria', () => {
+  const torneo = (datos: Partial<TorneoDeLaTemporada> & { id: number; estado: string }): TorneoDeLaTemporada => ({
+    slugPublico: null,
+    nombre: `Torneo ${datos.id}`,
+    etapaId: 1,
+    fechaInicio: null,
+    cierreInscripcion: null,
+    ...datos,
+  });
+
+  it('sin torneos, no hay nada en juego ni abierto', () => {
+    expect(temporadaDeCategoria([])).toEqual({ enJuego: null, inscripcionAbierta: null });
+  });
+
+  it('en juego es la edición de un torneo del calendario que se está jugando', () => {
+    const { enJuego } = temporadaDeCategoria([torneo({ id: 1, nombre: 'Primavera 2026', estado: 'GRUPOS_EN_CURSO', etapaId: 3 })]);
+
+    expect(enJuego).toEqual({ nombre: 'Primavera 2026', etapaId: 3 });
+  });
+
+  it('un torneo suelto que se está jugando no está en juego: no cambia ningún casillero', () => {
+    expect(temporadaDeCategoria([torneo({ id: 1, estado: 'ELIMINATORIAS', etapaId: null })]).enJuego).toBeNull();
+  });
+
+  it('con dos jugándose, en juego es el que arrancó más tarde', () => {
+    const { enJuego } = temporadaDeCategoria([
+      torneo({ id: 1, nombre: 'Invierno', estado: 'ELIMINATORIAS', etapaId: 5, fechaInicio: new Date('2026-07-01') }),
+      torneo({ id: 2, nombre: 'Primavera', estado: 'GRUPOS_EN_CURSO', etapaId: 1, fechaInicio: new Date('2026-10-01') }),
+    ]);
+
+    expect(enJuego?.nombre).toBe('Primavera');
+  });
+
+  it('un publicado no está en juego: es el de la inscripción abierta', () => {
+    const temporada = temporadaDeCategoria([
+      torneo({ id: 7, slugPublico: 'verano-26-27', nombre: 'Verano 26/27', estado: 'PUBLICADO', cierreInscripcion: new Date('2026-12-07') }),
+    ]);
+
+    expect(temporada.enJuego).toBeNull();
+    expect(temporada.inscripcionAbierta).toEqual({ id: 7, slugPublico: 'verano-26-27', nombre: 'Verano 26/27', cierreInscripcion: '2026-12-07' });
+  });
+
+  it('con dos abiertos, va el que cierra primero, y uno sin fecha de cierre va último', () => {
+    const { inscripcionAbierta } = temporadaDeCategoria([
+      torneo({ id: 1, estado: 'PUBLICADO' }),
+      torneo({ id: 2, estado: 'PUBLICADO', cierreInscripcion: new Date('2026-12-20') }),
+      torneo({ id: 3, estado: 'PUBLICADO', cierreInscripcion: new Date('2026-12-07') }),
+    ]);
+
+    expect(inscripcionAbierta?.id).toBe(3);
+  });
+
+  it('un torneo suelto con la inscripción abierta también va: se anota cualquiera de la categoría', () => {
+    expect(temporadaDeCategoria([torneo({ id: 4, estado: 'PUBLICADO', etapaId: null })]).inscripcionAbierta?.id).toBe(4);
   });
 });

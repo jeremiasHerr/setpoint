@@ -1,4 +1,4 @@
-import type { FilaDeRanking } from '@setpoint/shared';
+import type { FilaDeRanking, TemporadaDeCategoria } from '@setpoint/shared';
 
 // Ranking por casilleros de etapa con reemplazo (02-dominio.md §7).
 // Lógica pura: recibe movimientos, devuelve puntos. No toca la base.
@@ -80,4 +80,44 @@ export function tablaDeCategoria(jugadores: JugadorDeRanking[], movimientos: Mov
         .map((m) => ({ etapaId: m.etapaId!, puntos: m.puntos, anio: m.fecha.getUTCFullYear() })),
     }))
     .sort((a, b) => a.puesto - b.puesto || a.apellido.localeCompare(b.apellido, 'es'));
+}
+
+// Los estados en los que una edición ya no recibe inscriptos y todavía no cerró: se está jugando.
+const JUGANDOSE = ['INSCRIPCIONES_CERRADAS', 'ZONAS_GENERADAS', 'GRUPOS_EN_CURSO', 'ELIMINATORIAS'];
+
+export type TorneoDeLaTemporada = {
+  id: number;
+  slugPublico: string | null;
+  nombre: string;
+  estado: string;
+  etapaId: number | null;
+  fechaInicio: Date | null;
+  cierreInscripcion: Date | null;
+};
+
+// Lo que pasa en la temporada de una categoría (decisión 159), con sus torneos. En juego, la edición
+// de un torneo del calendario que arrancó más tarde: un torneo suelto no cambia ningún casillero.
+// Con la inscripción abierta, el que cierra primero, sea del calendario o no.
+export function temporadaDeCategoria(torneos: TorneoDeLaTemporada[]): TemporadaDeCategoria {
+  const tiempo = (fecha: Date | null) => fecha?.getTime() ?? 0;
+
+  const enJuego = torneos
+    .filter((t) => t.etapaId !== null && JUGANDOSE.includes(t.estado))
+    .sort((a, b) => tiempo(b.fechaInicio) - tiempo(a.fechaInicio))[0];
+  const abierto = torneos
+    .filter((t) => t.estado === 'PUBLICADO')
+    // Sin fecha de cierre, al final: no se sabe cuándo apura.
+    .sort((a, b) => (tiempo(a.cierreInscripcion) || Infinity) - (tiempo(b.cierreInscripcion) || Infinity))[0];
+
+  return {
+    enJuego: enJuego ? { nombre: enJuego.nombre, etapaId: enJuego.etapaId! } : null,
+    inscripcionAbierta: abierto
+      ? {
+          id: abierto.id,
+          slugPublico: abierto.slugPublico,
+          nombre: abierto.nombre,
+          cierreInscripcion: abierto.cierreInscripcion?.toISOString().slice(0, 10) ?? null,
+        }
+      : null,
+  };
 }

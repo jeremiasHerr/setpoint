@@ -23,11 +23,19 @@ export type FilaDeRanking = {
   casilleros: Casillero[];
 };
 
+// Lo que pasa en la temporada de una categoría, para el encabezado del ranking (decisión 159).
+export type TemporadaDeCategoria = {
+  // La edición de un torneo del calendario que se está jugando: su casillero es el que va a cambiar.
+  enJuego: { nombre: string; etapaId: number } | null;
+  // El próximo con la inscripción abierta, con lo que hace falta para armar su link.
+  inscripcionAbierta: { id: number; slugPublico: string | null; nombre: string; cierreInscripcion: string | null } | null;
+};
+
 export type CategoriaDeRanking = {
   id: number;
   nombre: string;
   filas: FilaDeRanking[];
-};
+} & TemporadaDeCategoria;
 
 export type RankingPublico = {
   organizacion: string;
