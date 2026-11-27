@@ -1,5 +1,5 @@
 import { EstadoInscripcion, EstadoTorneo, type Prisma } from '@prisma/client';
-import type { Contacto, TorneoPublico } from '@setpoint/shared';
+import { nombreCuadroConsuelo, type Contacto, type FaseDelTorneo, type TorneoPublico } from '@setpoint/shared';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
 
@@ -10,7 +10,7 @@ export const NO_PUBLICOS: EstadoTorneo[] = [EstadoTorneo.BORRADOR, EstadoTorneo.
 
 // Lo que hace falta leer de cada torneo para mostrar su convocatoria.
 export const CONVOCATORIA = {
-  organizacion: { select: { nombre: true, slug: true, usaRanking: true, contactos: { orderBy: { orden: 'asc' }, select: { tipo: true, valor: true } } } },
+  organizacion: { select: { nombre: true, slug: true, usaRanking: true, nombreCuadroConsuelo: true, contactos: { orderBy: { orden: 'asc' }, select: { tipo: true, valor: true } } } },
   categoria: { select: { nombre: true, suelta: true } },
   _count: { select: { inscripciones: { where: { estado: { in: OCUPAN_CUPO } } } } },
   // Los de la lista de espera, para contarlos: _count admite un solo filtro por relación.
@@ -19,12 +19,32 @@ export const CONVOCATORIA = {
 
 type TorneoConConvocatoria = Prisma.TorneoGetPayload<{ include: typeof CONVOCATORIA }>;
 
+// La parte del cronograma en la que está el torneo (decisión 160). Un borrador o un cancelado no
+// llegan acá: no son públicos.
+export function faseDelTorneo(estado: EstadoTorneo): FaseDelTorneo {
+  switch (estado) {
+    case EstadoTorneo.INSCRIPCIONES_CERRADAS:
+      return 'sorteo';
+    case EstadoTorneo.ZONAS_GENERADAS:
+    case EstadoTorneo.GRUPOS_EN_CURSO:
+      return 'zonas';
+    case EstadoTorneo.ELIMINATORIAS:
+      return 'cuadros';
+    case EstadoTorneo.FINALIZADO:
+      return 'terminado';
+    default:
+      return 'inscripcion';
+  }
+}
+
 export function aTorneoPublico(torneo: TorneoConConvocatoria): TorneoPublico {
   return {
     id: torneo.id,
     slugPublico: torneo.slugPublico,
     organizacion: {
-      ...torneo.organizacion,
+      nombre: torneo.organizacion.nombre,
+      slug: torneo.organizacion.slug,
+      usaRanking: torneo.organizacion.usaRanking,
       contactos: torneo.organizacion.contactos.map((c) => ({ tipo: c.tipo.toLowerCase() as Contacto['tipo'], valor: c.valor })),
     },
     nombre: torneo.edicion ?? torneo.nombre,
@@ -35,7 +55,12 @@ export function aTorneoPublico(torneo: TorneoConConvocatoria): TorneoPublico {
     cierreInscripcion: torneo.cierreInscripcion?.toISOString().slice(0, 10) ?? null,
     fechaInicio: torneo.fechaInicio?.toISOString().slice(0, 10) ?? null,
     cantidadGrupos: torneo.cantidadGrupos,
+    clasificanPorGrupo: torneo.clasificanPorGrupo,
     tieneCuadroConsuelo: torneo.tieneComplementaria,
+    nombreCuadroConsuelo: nombreCuadroConsuelo(torneo.organizacion.nombreCuadroConsuelo),
+    plazoGruposDias: torneo.plazoGruposDias,
+    plazoPorRondaDias: torneo.plazoPorRondaDias,
+    fase: faseDelTorneo(torneo.estado),
     cupo: torneo.cupo,
     ocupados: torneo._count.inscripciones,
     precio: torneo.precio.toNumber(),
