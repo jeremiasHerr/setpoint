@@ -9,6 +9,7 @@ import { leerSesion } from '../features/auth/sesion';
 import { Numero } from '../components/Numero';
 import { PlanillaRanking } from '../features/ranking/PlanillaRanking';
 import { TablaRanking } from '../features/ranking/TablaRanking';
+import { EncabezadoDeLaTemporada } from '../features/ranking/EncabezadoDeLaTemporada';
 import { useRankingPublico } from '../features/ranking/useRankingPublico';
 import { ErrorApi } from '../lib/api';
 import { Esqueleto } from '../components/Esqueleto';
@@ -73,6 +74,8 @@ function Ranking({ ranking, slug }: { ranking: RankingPublico; slug: string }) {
           ))}
         </div>
       </div>
+
+      <EncabezadoDeLaTemporada slug={slug} categoria={categoria} torneosDelCalendario={ranking.torneosDelCalendario} />
 
       <Campo
         id="buscar-jugador"

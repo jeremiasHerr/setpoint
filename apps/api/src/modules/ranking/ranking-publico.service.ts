@@ -2,7 +2,7 @@ import type { RankingPublico } from '@setpoint/shared';
 import { DEL_PADRON_ACTIVOS } from '../../lib/padron';
 import { prisma } from '../../lib/prisma';
 import { ErrorHttp } from '../../middleware/errores';
-import { tablaDeCategoria } from './ranking';
+import { tablaDeCategoria, temporadaDeCategoria } from './ranking';
 
 // Ranking de todas las categorías de la organización, sin login (F09). Como en el padrón,
 // cada jugador figura en la categoría en la que está hoy y solo con los puntos de esa
@@ -18,7 +18,7 @@ export async function rankingPublico(slug: string): Promise<RankingPublico> {
   }
 
   const organizacionId = organizacion.id;
-  const [etapas, categorias, jugadores, movimientos] = await Promise.all([
+  const [etapas, categorias, jugadores, movimientos, torneos] = await Promise.all([
     prisma.etapa.findMany({ where: { organizacionId, activa: true }, orderBy: { orden: 'asc' }, select: { id: true, nombre: true } }),
     prisma.categoria.findMany({ where: { organizacionId, activa: true, suelta: false }, orderBy: { orden: 'asc' }, select: { id: true, nombre: true } }),
     prisma.jugador.findMany({
@@ -28,6 +28,24 @@ export async function rankingPublico(slug: string): Promise<RankingPublico> {
     prisma.movimientoRanking.findMany({
       where: { organizacionId },
       select: { id: true, jugadorId: true, categoriaId: true, etapaId: true, puntos: true, fecha: true },
+    }),
+    // Para el encabezado de la temporada: los publicados y los que se están jugando (decisión 159).
+    prisma.torneo.findMany({
+      where: {
+        organizacionId,
+        estado: { in: ['PUBLICADO', 'INSCRIPCIONES_CERRADAS', 'ZONAS_GENERADAS', 'GRUPOS_EN_CURSO', 'ELIMINATORIAS'] },
+      },
+      select: {
+        id: true,
+        slugPublico: true,
+        nombre: true,
+        edicion: true,
+        estado: true,
+        etapaId: true,
+        categoriaId: true,
+        fechaInicio: true,
+        cierreInscripcion: true,
+      },
     }),
   ]);
 
@@ -39,7 +57,11 @@ export async function rankingPublico(slug: string): Promise<RankingPublico> {
       const deLaCategoria = jugadores.filter((j) => j.categoriaId === categoria.id);
       const ids = new Set(deLaCategoria.map((j) => j.id));
       const suyos = movimientos.filter((m) => m.categoriaId === categoria.id && ids.has(m.jugadorId));
-      return { ...categoria, filas: tablaDeCategoria(deLaCategoria, suyos) };
+      // El nombre, como en la página del torneo: la edición, o el nombre si es suelto.
+      const suyosTorneos = torneos
+        .filter((t) => t.categoriaId === categoria.id)
+        .map((t) => ({ ...t, nombre: t.edicion ?? t.nombre }));
+      return { ...categoria, filas: tablaDeCategoria(deLaCategoria, suyos), ...temporadaDeCategoria(suyosTorneos) };
     }),
   };
 }
