@@ -1,7 +1,7 @@
-import type { Contacto, PerfilEncontrado, SituacionEnElTorneo, TorneoPublico } from '@setpoint/shared';
+import type { PerfilEncontrado, SituacionEnElTorneo, TorneoPublico } from '@setpoint/shared';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { urlDeWhatsApp } from '../padron/linkPersonal';
+import { ContactosDeLaOrganizacion } from '../torneo-publico/ContactosDeLaOrganizacion';
 import { lugaresLibres } from '../torneo-publico/convocatoria';
 import {
   Aviso,
@@ -57,6 +57,7 @@ export function EncontrarPerfil({ torneo, token, email, nombre, situacion, onRes
     if (lista) anotar.mutate({ jugadorId, vinculaPor }, alTerminar);
     else reservar.mutate({ jugadorId, vinculaPor }, alTerminar);
   };
+  const esGratis = torneo.precio === 0;
   const textoDelBoton = (pagar: string) =>
     enCurso ? (lista ? 'Anotándote…' : 'Reservando…') : lista ? 'Anotarme en la lista de espera' : pagar;
 
@@ -101,7 +102,7 @@ export function EncontrarPerfil({ torneo, token, email, nombre, situacion, onRes
             <span className="text-[15px] text-pizarra-500">{perfil.categoria}</span>
           </div>
         </div>
-        {pie('Ir a pagar con Mercado Pago', perfil.jugadorId, undefined, false)}
+        {pie(esGratis ? 'Inscribirme' : 'Ir a pagar con Mercado Pago', perfil.jugadorId, undefined, false)}
       </>
     );
   }
@@ -137,7 +138,9 @@ export function EncontrarPerfil({ torneo, token, email, nombre, situacion, onRes
             }}
             disabled={enCurso || (!unico && !elegido)}
           >
-            {lista && !enCurso ? 'Soy yo: anotarme en la lista de espera' : textoDelBoton('Soy yo: inscribirme y pagar')}
+            {lista && !enCurso
+              ? 'Soy yo: anotarme en la lista de espera'
+              : textoDelBoton(esGratis ? 'Soy yo: inscribirme' : 'Soy yo: inscribirme y pagar')}
           </BotonPrincipal>
           {lista && <AvisoLista horas={lista.horas} />}
           <BotonSecundario
@@ -221,7 +224,7 @@ export function EncontrarPerfil({ torneo, token, email, nombre, situacion, onRes
           <Titulo>No estás en el padrón de {torneo.organizacion.nombre}</Titulo>
           <Ayuda>Este torneo es solo para los jugadores del circuito. Pedile a la organización que te agregue, y después volvé a este link.</Ayuda>
         </div>
-        {torneo.organizacion.contactos.length > 0 && <Contactos contactos={torneo.organizacion.contactos} torneo={torneo.nombre} />}
+        <ContactosDeLaOrganizacion contactos={torneo.organizacion.contactos} torneo={torneo.nombre} />
         <div className="mt-auto">
           <BotonSecundario onClick={() => setModo('buscar')}>Volver a buscarme</BotonSecundario>
         </div>
@@ -239,7 +242,11 @@ export function EncontrarPerfil({ torneo, token, email, nombre, situacion, onRes
         if (perfilElegido?.vinculado) setModo('vinculado');
       }}
       onNoEsta={() => setModo('no-esta')}
-      pie={elegido && !elegido.vinculado ? pie('Ir a pagar con Mercado Pago', elegido.jugadorId, 'busqueda') : null}
+      pie={
+        elegido && !elegido.vinculado
+          ? pie(esGratis ? 'Inscribirme' : 'Ir a pagar con Mercado Pago', elegido.jugadorId, 'busqueda')
+          : null
+      }
     />
   );
 }
@@ -366,39 +373,4 @@ function ListaPerfiles({
 
 function MarcaVinculado() {
   return <span className="rounded-full bg-linea-suave px-2 py-[3px] text-[13px] text-pizarra-500">vinculado</span>;
-}
-
-// Un link de red social se abre; un usuario ("@polenta") se muestra tal cual.
-const esLink = (valor: string) => /^https?:\/\//i.test(valor);
-
-// El WhatsApp abre el chat con el torneo ya escrito (decisión 091).
-function Contactos({ contactos, torneo }: { contactos: Contacto[]; torneo: string }) {
-  return (
-    <div className="flex flex-col gap-2.5 rounded-tarjeta border border-linea p-4">
-      <span className="text-[15px] text-pizarra-500">Contacto de la organización</span>
-      <ul className="flex flex-col gap-2">
-        {contactos.map((c) => (
-          <li key={`${c.tipo}-${c.valor}`} className="flex flex-col gap-0.5">
-            <span className="text-[12.5px] font-medium text-noche">{c.tipo === 'whatsapp' ? 'whatsapp' : 'red social'}</span>
-            {c.tipo === 'whatsapp' ? (
-              <a
-                href={urlDeWhatsApp(c.valor, `Hola, te escribo por el torneo ${torneo}`)}
-                target="_blank"
-                rel="noreferrer"
-                className="font-mono text-[17px] font-semibold tabular-nums underline underline-offset-[3px]"
-              >
-                {c.valor}
-              </a>
-            ) : esLink(c.valor) ? (
-              <a href={c.valor} target="_blank" rel="noreferrer" className="text-[17px] font-semibold break-words underline underline-offset-[3px]">
-                {c.valor}
-              </a>
-            ) : (
-              <span className="text-[17px] font-semibold break-words">{c.valor}</span>
-            )}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
 }

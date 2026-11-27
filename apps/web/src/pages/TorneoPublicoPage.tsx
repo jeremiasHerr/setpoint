@@ -2,6 +2,7 @@ import { rutaDelTorneo, type TorneoPublico } from '@setpoint/shared';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { EncabezadoPublico } from '../components/EncabezadoPublico';
 import { ConCifras, Numero } from '../components/Numero';
+import { ContactosDeLaOrganizacion } from '../features/torneo-publico/ContactosDeLaOrganizacion';
 import { diaLargo, formato, importe, lugaresLibres } from '../features/torneo-publico/convocatoria';
 import { useTorneoPublico } from '../features/torneo-publico/useTorneoPublico';
 import { ErrorApi } from '../lib/api';
@@ -117,7 +118,11 @@ function Convocatoria({ torneo }: { torneo: TorneoPublico }) {
         <div className="mt-auto flex flex-col gap-3 md:mt-0">
           <div className="flex items-center justify-between gap-3 px-1">
             <p className="text-base text-pizarra-500">Inscripción</p>
-            <Numero className="text-[26px] font-medium tracking-[-0.02em]">{importe(torneo.precio)}</Numero>
+            {torneo.precio === 0 ? (
+              <span className="text-[26px] font-medium tracking-[-0.02em]">Gratis</span>
+            ) : (
+              <Numero className="text-[26px] font-medium tracking-[-0.02em]">{importe(torneo.precio)}</Numero>
+            )}
           </div>
           {libres > 0 || lista ? (
             // La lista de espera sigue el mismo camino que inscribirse: el email y el código.
@@ -125,7 +130,7 @@ function Convocatoria({ torneo }: { torneo: TorneoPublico }) {
               to={`/c/${torneo.organizacion.slug}/torneos/${torneo.id}/inscripcion`}
               className="flex h-[60px] items-center justify-center gap-2.5 rounded-[12px] bg-noche-900 text-white text-lg font-semibold hover:bg-pizarra-700"
             >
-              {lista ? 'Anotarme en la lista de espera' : 'Inscribirme y pagar'}
+              {lista ? 'Anotarme en la lista de espera' : torneo.precio === 0 ? 'Inscribirme' : 'Inscribirme y pagar'}
             </Link>
           ) : (
             <p className="rounded-[12px] bg-niebla px-4 py-3.5 text-[15px] leading-[1.42] text-pizarra-700">
@@ -152,6 +157,8 @@ function Convocatoria({ torneo }: { torneo: TorneoPublico }) {
           </Link>
         </div>
       )}
+
+      <ContactosDeLaOrganizacion contactos={torneo.organizacion.contactos} torneo={torneo.nombre} />
     </>
   );
 }
