@@ -1,10 +1,12 @@
-import { rutaDelTorneo, type TorneoPublico } from '@setpoint/shared';
+import { calcularFormato, rutaDelTorneo, type TorneoPublico } from '@setpoint/shared';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { EncabezadoPublico } from '../components/EncabezadoPublico';
 import { LinkDeVuelta } from '../components/LinkDeVuelta';
 import { ConCifras, Numero } from '../components/Numero';
 import { leerSesion } from '../features/auth/sesion';
+import { ComoSeJuega } from '../features/torneo-publico/ComoSeJuega';
 import { ContactosDeLaOrganizacion } from '../features/torneo-publico/ContactosDeLaOrganizacion';
+import { Cronograma } from '../features/torneo-publico/Cronograma';
 import { diaLargo, formato, importe, lugaresLibres } from '../features/torneo-publico/convocatoria';
 import { useTorneoPublico } from '../features/torneo-publico/useTorneoPublico';
 import { ErrorApi } from '../lib/api';
@@ -51,6 +53,15 @@ function Convocatoria({ torneo }: { torneo: TorneoPublico }) {
   const libres = lugaresLibres(torneo);
   // Con el cupo lleno, si el torneo tiene lista de espera (decisión 081).
   const lista = abierta && libres === 0 ? torneo.listaDeEspera : null;
+  // Las mismas cuentas que ve la organización en Nuevo torneo: zonas, cuadros, rondas y fechas.
+  const cuentas = calcularFormato({
+    cantidadGrupos: torneo.cantidadGrupos,
+    clasificanPorGrupo: torneo.clasificanPorGrupo,
+    tieneComplementaria: torneo.tieneCuadroConsuelo,
+    plazoGruposDias: torneo.plazoGruposDias,
+    plazoPorRondaDias: torneo.plazoPorRondaDias,
+    fechaInicio: torneo.fechaInicio,
+  });
 
   return (
     <>
@@ -58,9 +69,10 @@ function Convocatoria({ torneo }: { torneo: TorneoPublico }) {
       <Vuelta organizacion={torneo.organizacion} />
 
       {/* En la compu, dos columnas: lo que es el torneo a la izquierda y lo que se hace con él a la
-          derecha, fija al bajar (decisión 156). En el celular, una sola columna, como antes. */}
-      <div className="flex flex-1 flex-col gap-5 lg:grid lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start lg:gap-8">
-        <div className="flex flex-col gap-5">
+          derecha, fija al bajar (decisión 156). En el celular, una sola columna: la tarjeta, el botón,
+          cómo se juega, el cronograma y los contactos (decisión 160). */}
+      <div className="flex flex-1 flex-col gap-5 lg:grid lg:grid-cols-[minmax(0,1fr)_340px] lg:grid-rows-[auto_1fr] lg:items-start lg:gap-x-8 lg:gap-y-5">
+        <div className="flex flex-col gap-5 lg:col-start-1 lg:row-start-1">
           <section className="flex flex-col gap-[18px] rounded-superficie bg-noche px-5 py-[22px] lg:gap-6 lg:px-8 lg:py-8">
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2">
@@ -116,7 +128,8 @@ function Convocatoria({ torneo }: { torneo: TorneoPublico }) {
           )}
         </div>
 
-        <aside className="flex flex-1 flex-col gap-5 lg:sticky lg:top-8">
+        {/* En el celular, 'contents': sus piezas se ordenan con las de la izquierda, y los contactos van al final. */}
+        <aside className="contents lg:sticky lg:top-8 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:flex lg:flex-col lg:gap-5">
           {lista && (
             <div className="flex gap-[11px] rounded-[12px] bg-niebla px-4 py-3.5 text-[15px] leading-[1.42] text-pizarra-700">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="mt-px shrink-0 text-pizarra-500" aria-hidden>
@@ -175,8 +188,15 @@ function Convocatoria({ torneo }: { torneo: TorneoPublico }) {
             </div>
           )}
 
-          <ContactosDeLaOrganizacion contactos={torneo.organizacion.contactos} torneo={torneo.nombre} />
+          <div className="order-last lg:order-none">
+            <ContactosDeLaOrganizacion contactos={torneo.organizacion.contactos} torneo={torneo.nombre} />
+          </div>
         </aside>
+
+        <div className="flex flex-col gap-5 lg:col-start-1 lg:row-start-2">
+          <ComoSeJuega torneo={torneo} formato={cuentas} />
+          <Cronograma torneo={torneo} formato={cuentas} />
+        </div>
       </div>
     </>
   );
