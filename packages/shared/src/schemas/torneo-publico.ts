@@ -1,5 +1,8 @@
 import type { Contacto } from './circuito';
 
+// La parte del torneo que se está jugando, para marcarla en el cronograma (decisión 160).
+export type FaseDelTorneo = 'inscripcion' | 'sorteo' | 'zonas' | 'cuadros' | 'terminado';
+
 // La convocatoria de un torneo para cualquiera con el link, sin cuenta: la pantalla El torneo
 // (F12, docs/pantallas/jugador/el-torneo.html). Sin datos de los inscriptos.
 export type TorneoPublico = {
@@ -22,7 +25,15 @@ export type TorneoPublico = {
   cierreInscripcion: string | null;
   fechaInicio: string | null;
   cantidadGrupos: number;
+  clasificanPorGrupo: number;
   tieneCuadroConsuelo: boolean;
+  // Cómo llama el circuito a su cuadro consuelo, ya resuelto: "Complementaria" (07 §1.2).
+  nombreCuadroConsuelo: string;
+  // Los plazos de cada fase, para el cronograma (decisión 160).
+  plazoGruposDias: number;
+  plazoPorRondaDias: number;
+  // En qué parte del cronograma está el torneo, según su estado.
+  fase: FaseDelTorneo;
   cupo: number;
   // Pagadas más reservas sin pagar, como en Inscripciones.
   ocupados: number;
