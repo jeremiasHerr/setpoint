@@ -31,11 +31,14 @@ export function InscripcionPage() {
   const torneo = useTorneoPublico(slug, id);
 
   return (
+    <>
+    <EncabezadoPublico organizacion={torneo.data?.organizacion.nombre} detalle={torneo.data?.categoria} />
     <main className="mx-auto flex min-h-screen max-w-[480px] flex-col gap-5 px-4 pt-5 pb-7">
       {torneo.isPending && <Esqueleto forma="lista" />}
       {torneo.error && <p className="text-[15px] text-pizarra-700">{mensajeDeError(torneo.error)}</p>}
       {torneo.data && <Inscripcion torneo={torneo.data} />}
     </main>
+    </>
   );
 }
 
@@ -62,10 +65,6 @@ function Inscripcion({ torneo }: { torneo: TorneoPublico }) {
 
   return (
     <>
-      <div className="flex items-center justify-between gap-3">
-        <EncabezadoPublico organizacion={torneo.organizacion.nombre} />
-        <span className="rounded-full border border-linea px-2.5 py-1.5 text-[14px] font-medium text-pizarra-500">{torneo.categoria}</span>
-      </div>
       {/* Las páginas públicas no tienen menú: esta vuelve a la del torneo, como la página en vivo (decisión 084). */}
       <div className="flex flex-col gap-1.5">
         <LinkDeVuelta ruta={`/c/${torneo.organizacion.slug}/torneos/${torneo.id}`}>El torneo</LinkDeVuelta>

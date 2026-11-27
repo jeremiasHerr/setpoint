@@ -25,6 +25,9 @@ export function LinkPersonalPage() {
   const noAnda = link.error instanceof ErrorApi && link.error.codigo === 'LINK_NO_ENCONTRADO';
 
   return (
+    <>
+    {/* Sin código encontrado no se sabe de qué organización es: la banda va solo con el logo. */}
+    <EncabezadoPublico organizacion={link.data?.organizacion.nombre} detalle={link.data?.jugador.categoria ?? undefined} />
     <main className="mx-auto flex min-h-screen max-w-[480px] flex-col gap-5 px-4 pt-5 pb-7">
       {link.isPending && <Esqueleto forma="lista" />}
       {noAnda && <LinkQueNoAnda />}
@@ -37,6 +40,7 @@ export function LinkPersonalPage() {
       )}
       {link.data && <LinkEncontrado link={link.data} codigo={codigo} />}
     </main>
+    </>
   );
 }
 
@@ -61,12 +65,6 @@ function LinkEncontrado({ link, codigo }: { link: LinkPersonal; codigo: string }
 
   return (
     <>
-      <div className="flex items-center justify-between gap-3">
-        <EncabezadoPublico organizacion={link.organizacion.nombre} />
-        {link.jugador.categoria && (
-          <span className="rounded-full border border-linea px-2.5 py-1.5 text-[14px] font-medium text-pizarra-500">{link.jugador.categoria}</span>
-        )}
-      </div>
 
       {(!activa || enCurso === 'otra_cuenta') && (
         <div className="flex flex-col gap-2.5 pt-2">
@@ -129,12 +127,10 @@ function LinkEncontrado({ link, codigo }: { link: LinkPersonal; codigo: string }
   );
 }
 
-// Un link regenerado y uno que nunca existió se ven igual. Sin código encontrado no se sabe de qué
-// organización es: el encabezado es de Setpoint.
+// Un link regenerado y uno que nunca existió se ven igual.
 function LinkQueNoAnda() {
   return (
     <>
-      <EncabezadoPublico />
       <div className="flex flex-col gap-3 pt-10">
         <h1 className="text-[28px] leading-[1.1] font-display font-semibold tracking-[-0.02em]">Este link ya no anda</h1>
         <p className="text-base leading-[1.45] text-pizarra-500">

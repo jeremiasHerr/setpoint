@@ -23,7 +23,7 @@ Todo el sistema sale de que hay dos personas usando esto en situaciones opuestas
 
 ## 2. Principios
 
-1. **La atmósfera vive en un solo lugar.** El club de noche, cuando se prenden las luces, pintado y enmarcado, está en el hero de la landing y en ningún otro lado. El producto es claro, sobrio y denso: fondo blanco (`papel`) en las pantallas del organizador y niebla en las públicas, tarjetas papel, bordes de 1px.
+1. **La atmósfera vive en un solo lugar.** El club de noche, cuando se prenden las luces, pintado y enmarcado, está en el hero de la landing y en ningún otro lado. El producto es claro, sobrio y denso: fondo blanco (`papel`) en las pantallas del organizador y niebla en las públicas, tarjetas papel, bordes de 1px. Arriba, una banda `noche-900` marca de quién es la pantalla: la barra del organizador y, en las páginas públicas, la banda del circuito ([decisión 158](decisiones/158-banda-del-circuito.md)). Es una superficie lisa, sin pintura ni textura: la atmósfera sigue siendo solo de la landing.
 2. **El color dice un estado, no decora.** La lona es lo ganado, lo que clasifica y lo que se cobra. El azul es "con fecha" y "en curso", el amarillo "en preparación", el rojo "vencido", el ámbar y el petróleo los dos cuadros. La pelota es solo el logo. La acción no lleva color: el botón principal va en tinta, en el noche de la barra. Si un color aparece por adorno, algo está mal.
 3. **Un objeto gráfico, repetido.** La barra de marcas es la misma en el tablero, en la landing, en el inicio y en el cupo de inscripciones, y es también el logo. La matriz de zona es la misma para el jugador y para el organizador. Nadie tiene que aprender dos lenguajes.
 4. **El número se lee antes que la etiqueta.** Todo dato numérico va en mono y con más peso visual que su rótulo.
@@ -174,7 +174,7 @@ Las marcas de una zona: tres barras de partido jugado y la cuarta, levantada, qu
 - **Splash de la app:** fondo `noche-900` y la marca sola, sin recuadro, en la versión sobre noche ([decisión 107](decisiones/107-splash-en-noche.md)).
 - **Al pasar el mouse**, el set point recorre la zona: el acento arranca en la primera barra, la levanta y pasa a la siguiente, hasta volver a la última, en un segundo. Corre completa aunque el mouse se vaya enseguida, y no vuelve a arrancar hasta terminar. Responde a una acción, como toda animación fuera del demo de la landing, y con "reducir movimiento" no se mueve.
 
-En la app es el mismo dibujo, con cuatro `View` para no sumar `react-native-svg` por un logo, y sin la palabra: va al lado del nombre del circuito. Las páginas públicas de la web llevan el logo sobre claro, con una raya y el nombre del circuito al lado; el logo es un link al Inicio de quien administra o, sin sesión, a la landing ([decisión 157](decisiones/157-el-logo-en-las-paginas-publicas.md)).
+En la app es el mismo dibujo, con cuatro `View` para no sumar `react-native-svg` por un logo, y sin la palabra: va al lado del nombre del circuito. Las páginas públicas de la web llevan el logo sobre noche, en la banda del circuito, con una raya y el nombre del circuito al lado ([decisión 158](decisiones/158-banda-del-circuito.md)); el logo es un link al Inicio de quien administra o, sin sesión, a la landing ([decisión 157](decisiones/157-el-logo-en-las-paginas-publicas.md)).
 
 ### Encabezado del organizador
 

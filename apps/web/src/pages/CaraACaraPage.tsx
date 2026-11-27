@@ -35,6 +35,8 @@ export function CaraACaraPage() {
   const consulta = rivalId === undefined ? rivales : cara;
 
   return (
+    <>
+    <EncabezadoPublico organizacion={rivales.data?.organizacion ?? cara.data?.organizacion} />
     <main className="mx-auto flex min-h-screen max-w-[480px] flex-col gap-[18px] px-4 pt-5 pb-7">
       {consulta.isPending && <Esqueleto forma="lista" />}
       {consulta.error && (
@@ -46,6 +48,7 @@ export function CaraACaraPage() {
       {rivalId === undefined && rivales.data && <ElegirRival datos={rivales.data} slug={slug} />}
       {cara.data && <Comparativa cara={cara.data} slug={slug} />}
     </main>
+    </>
   );
 }
 
@@ -54,7 +57,6 @@ function ElegirRival({ datos, slug }: { datos: RivalesDelJugador; slug: string }
   return (
     <>
       <title>{`Comparar a ${nombre} · ${datos.organizacion}`}</title>
-      <EncabezadoPublico organizacion={datos.organizacion} />
       <section className="flex flex-col gap-1.5">
         <LinkDeVuelta ruta={`/c/${slug}/jugadores/${datos.jugadorId}`}>{nombre}</LinkDeVuelta>
         <h1 className="text-[28px] leading-[1.1] font-display font-semibold tracking-[-0.02em]">
@@ -123,7 +125,6 @@ function Comparativa({ cara, slug }: { cara: CaraACara; slug: string }) {
   return (
     <>
       <title>{`${titulo} · ${cara.organizacion}`}</title>
-      <EncabezadoPublico organizacion={cara.organizacion} />
       <LinkDeVuelta ruta={`/c/${slug}/jugadores/${a.jugadorId}`}>
         {a.nombre} {a.apellido}
       </LinkDeVuelta>
