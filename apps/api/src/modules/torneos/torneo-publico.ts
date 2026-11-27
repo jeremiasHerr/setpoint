@@ -10,7 +10,7 @@ export const NO_PUBLICOS: EstadoTorneo[] = [EstadoTorneo.BORRADOR, EstadoTorneo.
 
 // Lo que hace falta leer de cada torneo para mostrar su convocatoria.
 export const CONVOCATORIA = {
-  organizacion: { select: { nombre: true, slug: true, contactos: { orderBy: { orden: 'asc' }, select: { tipo: true, valor: true } } } },
+  organizacion: { select: { nombre: true, slug: true, usaRanking: true, contactos: { orderBy: { orden: 'asc' }, select: { tipo: true, valor: true } } } },
   categoria: { select: { nombre: true, suelta: true } },
   _count: { select: { inscripciones: { where: { estado: { in: OCUPAN_CUPO } } } } },
   // Los de la lista de espera, para contarlos: _count admite un solo filtro por relación.
