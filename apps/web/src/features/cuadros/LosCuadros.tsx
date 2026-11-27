@@ -25,9 +25,14 @@ export function LosCuadros({ slug, torneoId }: { slug: string; torneoId: string 
   return <Contenido datos={cuadros.data} />;
 }
 
+// Hasta 3 rondas (8 jugadores), los cuadros se reparten el ancho y muestran el marcador a la vista
+// (decisión 161). Con más, las tarjetas no tienen lugar para los sets: quedan de 190, como siempre.
+const RONDAS_PARA_REPARTIR = 3;
+
 function Contenido({ datos }: { datos: Cuadros }) {
   const [elegido, setElegido] = useState<ClaveCuadro>(datos.cuadros[0]?.cuadro ?? 'campeonato');
   const cuadroElegido = datos.cuadros.find((c) => c.cuadro === elegido);
+  const repartido = datos.cuadros.every((c) => c.rondas <= RONDAS_PARA_REPARTIR);
 
   return (
     <section className="flex flex-col gap-4">
@@ -47,14 +52,20 @@ function Contenido({ datos }: { datos: Cuadros }) {
         {cuadroElegido && <CuadroPorRonda key={cuadroElegido.cuadro} cuadro={cuadroElegido} consuelo={datos.nombreCuadroConsuelo} />}
       </div>
 
-      {/* Escritorio: los cuadros completos. Si no entran lado a lado, uno debajo del otro. */}
-      <div className="hidden flex-wrap gap-x-[60px] gap-y-10 overflow-x-auto pb-4 xl:flex">
+      {/* Escritorio: los cuadros completos. Si no entran lado a lado, uno debajo del otro. Con pocas
+          rondas, se reparten el ancho en partes iguales. */}
+      <div
+        className={`hidden gap-x-[60px] gap-y-10 pb-4 ${
+          repartido ? `xl:grid ${datos.cuadros.length > 1 ? 'xl:grid-cols-2' : 'xl:grid-cols-1'}` : 'flex-wrap overflow-x-auto xl:flex'
+        }`}
+      >
         {datos.cuadros.map((c) => (
-          <CuadroCompleto key={c.cuadro} cuadro={c} consuelo={datos.nombreCuadroConsuelo} />
+          <CuadroCompleto key={c.cuadro} cuadro={c} consuelo={datos.nombreCuadroConsuelo} repartido={repartido} />
         ))}
       </div>
 
-      <p className="text-[13px] text-pizarra-500">Tocá cualquier partido para ver el marcador set por set.</p>
+      {/* Con el cuadro repartido, en la compu el marcador ya está a la vista. */}
+      <p className={`text-[13px] text-pizarra-500 ${repartido ? 'xl:hidden' : ''}`}>Tocá cualquier partido para ver el marcador set por set.</p>
     </section>
   );
 }

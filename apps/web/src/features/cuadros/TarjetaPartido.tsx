@@ -13,13 +13,16 @@ type Props = {
   partido: PartidoDelCuadro;
   destacado?: Destacado;
   eleccion?: Eleccion;
+  // Con lugar de sobra: el nombre completo y el marcador set por set, sin tener que tocarla (decisión 161).
+  completo?: boolean;
   className?: string;
 };
 
 // Un partido del cuadro: dos filas con el resultado en sets (design.md §6). Al tocarlo, cada fila
 // muestra los games de cada set.
-export function TarjetaPartido({ partido, destacado, eleccion, className = '' }: Props) {
-  const [abierta, setAbierta] = useState(false);
+export function TarjetaPartido({ partido, destacado, eleccion, completo = false, className = '' }: Props) {
+  const [tocada, setTocada] = useState(false);
+  const abierta = completo || tocada;
   const elegido = eleccion?.elegido === partido.id;
   // Uno que espera a los ganadores de la ronda anterior todavía no se puede elegir.
   const sinJugadores = partido.jugadorA === null || partido.jugadorB === null;
@@ -35,10 +38,10 @@ export function TarjetaPartido({ partido, destacado, eleccion, className = '' }:
   return (
     <button
       type="button"
-      aria-expanded={eleccion ? undefined : abierta}
+      aria-expanded={eleccion || completo ? undefined : abierta}
       aria-current={elegido ? 'true' : undefined}
       disabled={eleccion !== undefined && sinJugadores}
-      onClick={() => (eleccion ? eleccion.alElegir(partido) : setAbierta(!abierta))}
+      onClick={() => (eleccion ? eleccion.alElegir(partido) : setTocada(!tocada))}
       className={`flex flex-col overflow-hidden bg-papel text-left disabled:cursor-default ${elegible ? 'hover:border-pizarra-500' : ''} ${borde} ${className}`}
     >
       {destacado &&
@@ -55,8 +58,8 @@ export function TarjetaPartido({ partido, destacado, eleccion, className = '' }:
             <ConCifras>{cuandoSeJuega(partido)}</ConCifras>
           </span>
         ))}
-      <Fila partido={partido} lado="A" abierta={abierta} destacado={!!destacado} />
-      <Fila partido={partido} lado="B" abierta={abierta} destacado={!!destacado} />
+      <Fila partido={partido} lado="A" abierta={abierta} destacado={!!destacado} completo={completo} />
+      <Fila partido={partido} lado="B" abierta={abierta} destacado={!!destacado} completo={completo} />
       {destacado && partido.sede && (
         <span className="flex h-7 items-center justify-center border-t border-linea-suave bg-niebla text-xs text-pizarra-500">
           {partido.sede}
@@ -80,9 +83,9 @@ export function TarjetaPaseDirecto({ jugador, rotulo, className = '' }: { jugado
   );
 }
 
-type PropsFila = { partido: PartidoDelCuadro; lado: 'A' | 'B'; abierta: boolean; destacado: boolean };
+type PropsFila = { partido: PartidoDelCuadro; lado: 'A' | 'B'; abierta: boolean; destacado: boolean; completo: boolean };
 
-function Fila({ partido, lado, abierta, destacado }: PropsFila) {
+function Fila({ partido, lado, abierta, destacado, completo }: PropsFila) {
   const jugador: JugadorDelCuadro | null = lado === 'A' ? partido.jugadorA : partido.jugadorB;
   const jugado = tieneResultado(partido);
   const gano = jugado && jugador !== null && partido.ganadorId === jugador.jugadorId;
@@ -98,7 +101,7 @@ function Fila({ partido, lado, abierta, destacado }: PropsFila) {
         className={`truncate ${destacado ? 'text-sm' : 'text-[13px]'} ${nombre}`}
         title={jugador ? `${jugador.nombre} ${jugador.apellido}` : undefined}
       >
-        {jugador?.apellido ?? 'a definir'}
+        {jugador ? (completo ? `${jugador.nombre} ${jugador.apellido}` : jugador.apellido) : 'a definir'}
       </span>
       <ConCifras className={`shrink-0 text-xs ${gano ? 'font-semibold' : 'text-pizarra-450'}`}>{marcadorDelLado(partido, lado, abierta)}</ConCifras>
     </span>
