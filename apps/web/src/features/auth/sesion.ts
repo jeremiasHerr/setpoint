@@ -30,6 +30,12 @@ export function leerSesion(): Sesion | null {
   }
 }
 
+// A dónde lleva el logo de las páginas públicas (decisión 157): quien administra vuelve a su Inicio;
+// quien no tiene sesión, a la página de Setpoint.
+export function inicioDeSetpoint() {
+  return leerSesion() ? '/inicio' : '/';
+}
+
 export function borrarSesion() {
   sesionEnMemoria = null;
   try {
