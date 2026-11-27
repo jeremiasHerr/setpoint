@@ -1,5 +1,5 @@
 import type { AvisoDeInscripcion, Cuenta, PerfilDeJugador } from '@setpoint/shared';
-import type { UseQueryResult } from '@tanstack/react-query';
+import { useQueryClient, type UseQueryResult } from '@tanstack/react-query';
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { olvidarCelular } from '../avisos/avisos';
 import { guardarAvisosVistos, leerAvisosVistos } from '../cuenta/avisosVistos';
@@ -36,6 +36,7 @@ function perfilElegido(perfiles: PerfilDeJugador[], jugadorId: number | null) {
 const mismosPerfiles = (a: PerfilDeJugador[], b: PerfilDeJugador[]) => JSON.stringify(a) === JSON.stringify(b);
 
 export function SesionProvider({ children }: { children: ReactNode }) {
+  const queryClient = useQueryClient();
   const [cargando, setCargando] = useState(true);
   const [sesion, setSesion] = useState<Sesion | null>(null);
   const [jugadorIdElegido, setJugadorIdElegido] = useState<number | null>(null);
@@ -89,11 +90,12 @@ export function SesionProvider({ children }: { children: ReactNode }) {
         // Sin esperarlo: sin señal tardaría, y salir no puede depender de la red.
         if (sesion && perfil) void olvidarCelular(perfil.organizacion.slug, sesion.token);
         await borrarSesion();
+        queryClient.clear();
         setSesion(null);
         setJugadorIdElegido(null);
       },
     };
-  }, [cargando, sesion, jugadorIdElegido, cuenta, vistos]);
+  }, [cargando, sesion, jugadorIdElegido, cuenta, vistos, queryClient]);
 
   return <ContextoSesion.Provider value={valor}>{children}</ContextoSesion.Provider>;
 }

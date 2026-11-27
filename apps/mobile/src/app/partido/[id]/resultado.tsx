@@ -4,7 +4,7 @@
 import type { CargaDelResultado, DatosResultadoDelJugador } from '@setpoint/shared';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
-import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Boton } from '../../../components/Boton';
 import { Chip } from '../../../components/Chip';
@@ -23,7 +23,7 @@ export default function CargarResultado() {
 
   return (
     <SafeAreaView style={estilos.pantalla}>
-      <KeyboardAvoidingView style={estilos.pantalla} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <KeyboardAvoidingView style={estilos.pantalla} behavior="padding">
         <ScrollView contentContainerStyle={estilos.contenido} keyboardShouldPersistTaps="handled">
           <View style={estilos.encabezado}>
             <Pressable
@@ -41,7 +41,9 @@ export default function CargarResultado() {
           </View>
 
           {consulta.isPending && <Esqueleto forma="tarjeta" />}
-          {consulta.error && !carga && <ErrorDeCarga error={consulta.error} que="el partido" />}
+          {consulta.error && !carga && (
+            <ErrorDeCarga error={consulta.error} que="el partido" onReintentar={() => void consulta.refetch()} />
+          )}
           {carga && <Contenido carga={carga} recargar={() => void consulta.refetch()} />}
         </ScrollView>
       </KeyboardAvoidingView>
@@ -188,10 +190,11 @@ const estilos = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: colores.linea,
+    backgroundColor: colores.papel,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  apretado: { backgroundColor: colores.niebla },
+  apretado: { backgroundColor: colores.lineaSuave },
   // Un ángulo hecho con dos bordes, apuntando a la izquierda, como en Anotar la fecha.
   flecha: {
     width: 9,
@@ -218,7 +221,7 @@ const estilos = StyleSheet.create({
   pregunta: { fontFamily: fuentes.sans[600], fontSize: 16, color: colores.noche },
   opciones: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   ayuda: { fontFamily: fuentes.sans[400], fontSize: 14, lineHeight: 20, color: colores.pizarra500 },
-  error: { fontFamily: fuentes.sans[400], fontSize: 14, lineHeight: 20, color: colores.rojoTexto },
+  error: { fontFamily: fuentes.sans[500], fontSize: 15, lineHeight: 21, color: colores.noche },
   pie: { marginTop: 'auto', gap: 12 },
   aviso: { borderRadius: 12, backgroundColor: colores.niebla, paddingVertical: 14, paddingHorizontal: 16 },
   textoAviso: { fontFamily: fuentes.sans[400], fontSize: 15, lineHeight: 21, color: colores.pizarra700 },

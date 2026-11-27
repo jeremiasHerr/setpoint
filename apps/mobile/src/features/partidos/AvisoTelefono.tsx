@@ -42,6 +42,6 @@ const estilos = StyleSheet.create({
   },
   titulo: { fontFamily: fuentes.sans[600], fontSize: 20, letterSpacing: -0.4, color: colores.noche },
   texto: { fontFamily: fuentes.sans[400], fontSize: 16, lineHeight: 23, color: colores.pizarra700 },
-  error: { fontFamily: fuentes.sans[400], fontSize: 14, lineHeight: 20, color: colores.rojoTexto },
+  error: { fontFamily: fuentes.sans[500], fontSize: 15, lineHeight: 21, color: colores.noche },
   nota: { fontFamily: fuentes.sans[400], fontSize: 14, lineHeight: 20, color: colores.pizarra500 },
 });

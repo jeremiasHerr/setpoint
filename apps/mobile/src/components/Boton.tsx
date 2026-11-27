@@ -55,11 +55,12 @@ const estilos = StyleSheet.create({
   },
   secundario: {
     height: medidas.toqueSecundario,
+    backgroundColor: colores.papel,
     borderWidth: 1,
     borderColor: colores.linea,
   },
   secundarioApretado: {
-    backgroundColor: colores.niebla,
+    backgroundColor: colores.lineaSuave,
   },
   deshabilitado: {
     opacity: 0.4,

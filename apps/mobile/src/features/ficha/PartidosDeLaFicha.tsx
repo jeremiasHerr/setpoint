@@ -6,7 +6,7 @@ import { Boton } from '../../components/Boton';
 import { Campo } from '../../components/Campo';
 import { Chip } from '../../components/Chip';
 import { colores, fuentes, tabular } from '../../lib/tokens';
-import { NOMBRE_DEL_CUADRO, rotuloDeRonda } from './textos';
+import { rotuloDeRonda } from './textos';
 
 // Los últimos, y el resto se despliega en el lugar.
 const VISIBLES = 5;
@@ -18,17 +18,17 @@ const FILTROS: { clave: Resultado; texto: string }[] = [
   { clave: 'perdidos', texto: 'Perdidos' },
 ];
 
-// "zona C", "final", o en el cuadro consuelo "semis · Cuadro consuelo".
-function donde(partido: PartidoDeLaFicha) {
+// "zona C", "final", o en el cuadro consuelo "semis · Complementaria" (con el nombre del circuito).
+function donde(partido: PartidoDeLaFicha, consuelo: string) {
   if (partido.grupo) return `zona ${partido.grupo}`;
   const ronda = rotuloDeRonda(partido.ronda!, partido.rondas!);
-  return partido.cuadro === 'complementaria' ? `${ronda} · ${NOMBRE_DEL_CUADRO.complementaria}` : ronda;
+  return partido.cuadro === 'complementaria' ? `${ronda} · ${consuelo}` : ronda;
 }
 
 // Sus partidos con resultado, del más reciente al más viejo. El punto verde es un partido ganado; el
 // W.O. figura aunque no cuente en jugados (decisión 073). Se filtran por ganados o perdidos y por el
 // nombre del rival (decisión 146), y cada uno abre el cara a cara con ese rival (decisión 143).
-export function PartidosDeLaFicha({ jugadorId, partidos }: { jugadorId: number; partidos: PartidoDeLaFicha[] }) {
+export function PartidosDeLaFicha({ jugadorId, partidos, consuelo }: { jugadorId: number; partidos: PartidoDeLaFicha[]; consuelo: string }) {
   const [todos, setTodos] = useState(false);
   const [resultado, setResultado] = useState<Resultado>('todos');
   const [busqueda, setBusqueda] = useState('');
@@ -91,7 +91,7 @@ export function PartidosDeLaFicha({ jugadorId, partidos }: { jugadorId: number; 
                     {partido.rival.apellido}
                   </Text>
                   <Text style={estilos.donde} numberOfLines={1}>
-                    {partido.torneo} · {donde(partido)}
+                    {partido.torneo} · {donde(partido, consuelo)}
                   </Text>
                 </View>
                 <Text style={[estilos.marcador, !partido.gano && estilos.marcadorPerdido]}>{partido.marcador}</Text>

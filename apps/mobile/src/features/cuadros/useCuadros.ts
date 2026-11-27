@@ -8,6 +8,7 @@ export function useCuadros(slug: string, torneoId: string) {
   return useQuery({
     queryKey: ['cuadros-publicos', slug, torneoId],
     queryFn: () => pedir<Cuadros>('GET', `/api/publico/${slug}/torneos/${torneoId}/cuadros`),
+    enabled: slug !== '' && torneoId !== '',
     retry: 1,
   });
 }

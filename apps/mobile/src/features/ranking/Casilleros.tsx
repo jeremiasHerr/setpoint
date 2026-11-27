@@ -36,7 +36,9 @@ export function Casilleros({ fila, torneosDelCalendario, variante }: Props) {
             accessibilityLabel={`${torneo.nombre}: ${puntos} puntos`}
             style={[estilos.casillero, oscura ? estilos.casilleroOscuro : estilos.casilleroClaro, enLona && estilos.casilleroLona]}
           >
-            <Text style={[estilos.rotulo, enLona && estilos.textoSobreLona]}>{torneo.nombre.slice(0, 3).toLowerCase()}</Text>
+            <Text style={[estilos.rotulo, oscura && estilos.rotuloOscuro, enLona && estilos.textoSobreLona]}>
+              {torneo.nombre.slice(0, 3).toLowerCase()}
+            </Text>
             <Text
               style={[
                 estilos.puntos,
@@ -75,9 +77,12 @@ const estilos = StyleSheet.create({
     backgroundColor: colores.lona,
   },
   rotulo: {
-    fontFamily: fuentes.mono[400],
+    fontFamily: fuentes.sans[500],
     fontSize: 15,
     color: colores.pizarra500,
+  },
+  rotuloOscuro: {
+    color: colores.pizarra400,
   },
   puntos: {
     fontFamily: fuentes.mono[500],
@@ -91,7 +96,7 @@ const estilos = StyleSheet.create({
     color: colores.noche,
   },
   puntosVacio: {
-    color: colores.pizarra400,
+    color: colores.pizarra450,
   },
   // Texto oscuro sobre el verde lona.
   textoSobreLona: {

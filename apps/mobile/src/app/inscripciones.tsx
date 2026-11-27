@@ -33,7 +33,9 @@ export default function Inscripciones() {
         </View>
 
         {cuenta.isPending && <Esqueleto forma="tarjeta" />}
-        {cuenta.error && !cuenta.data && <ErrorDeCarga error={cuenta.error} que="tus inscripciones" />}
+        {cuenta.error && !cuenta.data && (
+          <ErrorDeCarga error={cuenta.error} que="tus inscripciones" onReintentar={() => void cuenta.refetch()} />
+        )}
 
         {cuenta.data &&
           (aviso ? (

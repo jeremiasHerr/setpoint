@@ -174,7 +174,7 @@ const estilos = StyleSheet.create({
     color: colores.noche,
   },
   gamesPerdidos: {
-    color: colores.pizarra400,
+    color: colores.pizarra450,
   },
   fecha: {
     fontFamily: fuentes.mono[400],

@@ -26,9 +26,19 @@ export function CampoCodigo({ valor, onChange, onCompleto, apagado }: Props) {
   };
 
   return (
-    <Pressable onPress={() => campo.current?.focus()} accessibilityLabel="Código de 6 dígitos" style={estilos.fila}>
+    <Pressable
+      disabled={apagado}
+      onPress={() => {
+        if (!apagado) campo.current?.focus();
+      }}
+      accessibilityLabel="Código de 6 dígitos"
+      style={estilos.fila}
+    >
       {Array.from({ length: LARGO }, (_, i) => (
-        <View key={i} style={[estilos.casilla, i === 3 && estilos.separada, enfocado && i === valor.length && estilos.activa, apagado && estilos.apagada]}>
+        <View
+          key={i}
+          style={[estilos.casilla, i === 3 && estilos.separada, !apagado && enfocado && i === Math.min(valor.length, LARGO - 1) && estilos.activa, apagado && estilos.apagada]}
+        >
           <Text style={[estilos.digito, apagado && estilos.digitoApagado]}>{valor[i] ?? ''}</Text>
         </View>
       ))}
@@ -38,11 +48,11 @@ export function CampoCodigo({ valor, onChange, onCompleto, apagado }: Props) {
         onChangeText={cambiar}
         onFocus={() => setEnfocado(true)}
         onBlur={() => setEnfocado(false)}
+        editable={!apagado}
         keyboardType="number-pad"
         autoComplete="sms-otp"
         textContentType="oneTimeCode"
-        maxLength={LARGO}
-        autoFocus
+        autoFocus={!apagado}
         caretHidden
         style={estilos.oculto}
       />
@@ -83,7 +93,7 @@ const estilos = StyleSheet.create({
     ...tabular,
   },
   digitoApagado: {
-    color: colores.pizarra400,
+    color: colores.pizarra450,
   },
   oculto: {
     position: 'absolute',

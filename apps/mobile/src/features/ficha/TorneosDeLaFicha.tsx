@@ -1,18 +1,18 @@
 import type { TorneoDeLaFicha } from '@setpoint/shared';
 import { StyleSheet, Text, View } from 'react-native';
 import { colores, fuentes, tabular } from '../../lib/tokens';
-import { cantidadDePuntos, hastaDonde, NOMBRE_DEL_CUADRO } from './textos';
+import { cantidadDePuntos, hastaDonde } from './textos';
 
-// Debajo de la instancia: en el cuadro consuelo, el nombre del cuadro, y los puntos si los dio.
-function debajo(torneo: TorneoDeLaFicha) {
+// Debajo de la instancia: en el cuadro consuelo, el nombre configurado por el circuito, y los puntos si los dio.
+function debajo(torneo: TorneoDeLaFicha, consuelo: string) {
   const partes: string[] = [];
-  if (torneo.instancia.tipo === 'cuadro' && torneo.instancia.cuadro === 'complementaria') partes.push(NOMBRE_DEL_CUADRO.complementaria);
+  if (torneo.instancia.tipo === 'cuadro' && torneo.instancia.cuadro === 'complementaria') partes.push(consuelo);
   if (torneo.puntos !== null) partes.push(cantidadDePuntos(torneo.puntos));
   return partes.join(' · ');
 }
 
 // Cada torneo que jugó, del más reciente al más viejo: hasta dónde llegó y cuántos puntos le dio (decisión 071).
-export function TorneosDeLaFicha({ torneos }: { torneos: TorneoDeLaFicha[] }) {
+export function TorneosDeLaFicha({ torneos, consuelo }: { torneos: TorneoDeLaFicha[]; consuelo: string }) {
   return (
     <View style={estilos.seccion}>
       <View style={estilos.encabezado}>
@@ -32,7 +32,7 @@ export function TorneosDeLaFicha({ torneos }: { torneos: TorneoDeLaFicha[] }) {
             </View>
             <View style={estilos.derecha}>
               <Text style={estilos.instancia}>{hastaDonde(torneo.instancia)}</Text>
-              {debajo(torneo) !== '' && <Text style={[estilos.chico, estilos.numeros]}>{debajo(torneo)}</Text>}
+              {debajo(torneo, consuelo) !== '' && <Text style={[estilos.chico, estilos.numeros]}>{debajo(torneo, consuelo)}</Text>}
             </View>
           </View>
         ))
@@ -45,7 +45,7 @@ const estilos = StyleSheet.create({
   seccion: { gap: 4 },
   encabezado: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', paddingBottom: 6 },
   titulo: { fontFamily: fuentes.sans[600], fontSize: 17, letterSpacing: -0.3, color: colores.noche },
-  cantidad: { fontFamily: fuentes.mono[400], fontSize: 12, color: colores.pizarra400, ...tabular },
+  cantidad: { fontFamily: fuentes.mono[400], fontSize: 12, color: colores.pizarra450, ...tabular },
   vacio: { fontFamily: fuentes.sans[400], fontSize: 15, lineHeight: 22, color: colores.pizarra500 },
   fila: {
     minHeight: 52,

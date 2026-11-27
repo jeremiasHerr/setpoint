@@ -127,10 +127,10 @@ const estilos = StyleSheet.create({
     color: colores.pizarra700,
   },
   error: {
-    fontFamily: fuentes.sans[400],
-    fontSize: 14,
-    lineHeight: 20,
-    color: colores.rojoTexto,
+    fontFamily: fuentes.sans[500],
+    fontSize: 15,
+    lineHeight: 21,
+    color: colores.noche,
   },
   botones: {
     flexDirection: 'row',

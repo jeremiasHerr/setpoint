@@ -7,6 +7,7 @@ export function useFicha(slug: string, jugadorId: string) {
   return useQuery({
     queryKey: ['ficha-publica', slug, jugadorId],
     queryFn: () => pedir<FichaDelJugador>('GET', `/api/publico/${slug}/jugadores/${jugadorId}`),
+    enabled: slug !== '' && jugadorId !== '',
     retry: 1,
   });
 }

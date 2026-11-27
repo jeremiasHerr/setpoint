@@ -111,9 +111,10 @@ const estilos = StyleSheet.create({
     gap: 8,
   },
   error: {
-    fontFamily: fuentes.sans[400],
-    fontSize: 14,
-    color: colores.rojoTexto,
+    fontFamily: fuentes.sans[500],
+    fontSize: 15,
+    lineHeight: 21,
+    color: colores.noche,
   },
   pantalla: {
     flex: 1,

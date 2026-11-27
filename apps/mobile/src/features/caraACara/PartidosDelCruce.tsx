@@ -35,7 +35,7 @@ export function PartidosDelCruce({ partidos, apellidoJugador, apellidoRival, con
                 {p.superficie && ` · ${cortaDe(p.superficie)}`}
               </Text>
             </View>
-            <Text style={[estilos.marcador, gane && estilos.ganado]}>{p.marcador}</Text>
+            <Text style={[estilos.marcador, gane && estilos.marcadorGanado]}>{p.marcador}</Text>
           </View>
         );
       })}
@@ -67,4 +67,5 @@ const estilos = StyleSheet.create({
   ganado: { fontFamily: fuentes.sans[600], color: colores.noche },
   detalle: { fontFamily: fuentes.sans[400], fontSize: 14, color: colores.pizarra500 },
   marcador: { fontFamily: fuentes.mono[500], fontSize: 14, color: colores.pizarra500, ...tabular },
+  marcadorGanado: { fontFamily: fuentes.mono[600], color: colores.noche },
 });

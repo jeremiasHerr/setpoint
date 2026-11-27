@@ -18,7 +18,7 @@ export function Campo({ rotulo, ref, onFocus, onBlur, ...props }: Props) {
       <TextInput
         ref={ref}
         accessibilityLabel={rotulo}
-        placeholderTextColor={colores.pizarra400}
+        placeholderTextColor={colores.pizarra450}
         style={[estilos.campo, enfocado && estilos.campoEnfocado]}
         onFocus={(e) => {
           setEnfocado(true);
