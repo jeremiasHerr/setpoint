@@ -7,7 +7,8 @@ export type TorneoPublico = {
   // Lo que va en su link: /inscripcion/<organización>/<slugPublico> (decisión 140).
   slugPublico: string | null;
   // Los contactos los carga la organización en Tu circuito; puede no haber ninguno (decisión 091).
-  organizacion: { nombre: string; slug: string; contactos: Contacto[] };
+  // usaRanking: si el circuito lleva ranking, la página vuelve a él (decisión 156).
+  organizacion: { nombre: string; slug: string; usaRanking: boolean; contactos: Contacto[] };
   // La edición, o el nombre si es un torneo suelto: "Primavera 2026".
   nombre: string;
   categoria: string;
