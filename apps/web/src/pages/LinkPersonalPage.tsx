@@ -134,7 +134,7 @@ function LinkEncontrado({ link, codigo }: { link: LinkPersonal; codigo: string }
 function LinkQueNoAnda() {
   return (
     <>
-      <EncabezadoPublico organizacion="Setpoint" />
+      <EncabezadoPublico />
       <div className="flex flex-col gap-3 pt-10">
         <h1 className="text-[28px] leading-[1.1] font-display font-semibold tracking-[-0.02em]">Este link ya no anda</h1>
         <p className="text-base leading-[1.45] text-pizarra-500">
